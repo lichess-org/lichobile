@@ -1,42 +1,74 @@
 import { User } from './user'
 
+export interface GameData {
+  game: Game
+  player: Player
+  opponent: Player
+  correspondence?: CorrespondenceClockData
+  clock?: ClockData
+  steps: Array<GameStep>
+  tournament?: Tournament
+  note?: string
+  chat?: Array<ChatMsg>
+  possibleMoves?: StringMap
+  possibleDrops?: PossibleDrops
+  userTV?: string
+  tv?: string
+  pref?: any
+  bookmarked?: boolean
+  takebackable?: boolean
+}
+
+export interface OnlineGameData extends GameData {
+  player: OnlinePlayer
+  game: OnlineGame
+  takebackable: boolean
+  watchers?: GameWatchers
+  url: {
+    round: string
+    socket: string
+  }
+}
+export function isOnlineGameData(d: GameData): d is OnlineGameData {
+  return (<OnlineGameData>d).url !== undefined
+}
+
+export interface OfflineGameData extends GameData {
+}
+
 export type GameSource = 'lobby' | 'pool' | 'friend' | 'ai' | 'api' | 'tournament' | 'position' | 'import' | 'offline'
 
 export interface Game {
   id: string
-  fen: string
-  initialFen: string
   variant: Variant
+  initialFen: string
+  fen: string
   player: Color
-  source: GameSource
   status: GameStatus
+  source: GameSource
+  turns: number
+  startedAtTurn: number
+  opening?: Opening
   winner?: Color
   threefold?: boolean
   speed?: Speed
-  startedAtTurn?: number
   rated?: boolean
-  turns?: number
   lastMove?: string
   perf?: PerfKey
   tournamentId?: string
   createdAt?: Timestamp
   boosted?: boolean
   rematch?: string
-  offline?: boolean
   importedBy?: string
-  opening?: Opening
+  // only in mobile app
+  offline?: boolean
 }
 
 export interface OnlineGame extends Game {
   rated: boolean
-  turns: number
   speed: Speed
   perf: PerfKey
-  startedAtTurn: number
   importedBy?: string
-}
-
-export interface OfflineGame extends Game {
 }
 
 export interface Player {
@@ -96,36 +128,6 @@ export interface ClockData {
   increment: number
 }
 
-export interface GameData {
-  game: Game
-  player: Player
-  opponent: Player
-  correspondence?: CorrespondenceClockData
-  clock?: ClockData
-  steps: Array<GameStep>
-  tournament?: Tournament
-  note?: string
-  chat?: Array<ChatMsg>
-  possibleMoves?: StringMap
-  possibleDrops?: PossibleDrops
-  userTV?: string
-  tv?: string
-  pref?: any
-  bookmarked?: boolean
-  takebackable?: boolean
-}
-
-export interface OnlineGameData extends GameData {
-  player: OnlinePlayer
-  game: OnlineGame
-  takebackable: boolean
-  watchers?: GameWatchers
-  url: {
-    round: string
-    socket: string
-  }
-}
-
 export interface ApiEnd {
   winner?: Color
   status: GameStatus
@@ -155,10 +157,6 @@ export interface GameWatchers {
 export interface GameStatus {
   id: number
   name: string
-}
-
-export interface OfflineGameData extends GameData {
-  game: OfflineGame
 }
 
 export interface CheckCount {
@@ -206,8 +204,4 @@ export interface Opening {
   name: string
   fen?: string
   wikiPath?: string
-}
-
-export function isOnlineGameData(d: GameData): d is OnlineGameData {
-  return (<OnlineGameData>d).url !== undefined
 }

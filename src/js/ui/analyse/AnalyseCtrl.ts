@@ -3,14 +3,15 @@ import router from '../../router'
 import Chessground from '../../chessground/Chessground'
 import * as chess from '../../chess'
 import * as chessFormat from '../../utils/chessFormat'
-import { build as makeTree, path as treePath, ops as treeOps, TreeWrapper, Tree } from '../../utils/tree'
+import { build as makeTree, path as treePath, ops as treeOps, TreeWrapper, Tree } from '../shared/tree'
 import redraw from '../../utils/redraw'
 import session from '../../session'
 import sound from '../../sound'
 import socket from '../../socket'
 import { openingSensibleVariants } from '../../lichess/variant'
 import * as gameApi from '../../lichess/game'
-import { isOnlineGameData, Opening } from '../../lichess/interfaces/game'
+import { AnalyseData, AnalyseDataWithTree } from '../../lichess/interfaces/analyse'
+import { Opening } from '../../lichess/interfaces/game'
 import settings from '../../settings'
 import { handleXhrError, oppositeColor, hasNetwork, noop } from '../../utils'
 import promotion from '../shared/offlineRound/promotion'
@@ -26,7 +27,7 @@ import evalSummary from './evalSummaryPopup'
 import analyseSettings from './analyseSettings'
 import ground from './ground'
 import socketHandler from './analyseSocketHandler'
-import { VM, AnalysisData, AnalyseDataWithTree, SanToRole, Source, ExplorerCtrlInterface, CevalCtrlInterface, MenuInterface, CevalEmit } from './interfaces'
+import { VM, SanToRole, Source, ExplorerCtrlInterface, CevalCtrlInterface, MenuInterface, CevalEmit } from './interfaces'
 
 const sanToRole: SanToRole = {
   P: 'pawn',
@@ -37,7 +38,7 @@ const sanToRole: SanToRole = {
 }
 
 export default class AnalyseCtrl {
-  data: AnalysisData
+  data: AnalyseData
   orientation: Color
   source: Source
   vm: VM
@@ -72,7 +73,7 @@ export default class AnalyseCtrl {
     return [<Key>uci.slice(0, 2), <Key>uci.slice(2, 4), <SanChar>uci.slice(4, 5)]
   }
 
-  constructor(data: AnalysisData, source: Source, orientation: Color, shouldGoBack: boolean, ply?: number) {
+  constructor(data: AnalyseData, source: Source, orientation: Color, shouldGoBack: boolean, ply?: number) {
     this.data = data
     this.orientation = orientation
     this.source = source
@@ -91,7 +92,11 @@ export default class AnalyseCtrl {
     this.continuePopup = continuePopup.controller()
 
     this.evalSummary = this.data.analysis ? evalSummary.controller(this) : null
-    this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null
+
+    // TODO
+    // this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null
+    this.notes = null
+
     this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg)
     this.explorer = explorerCtrl(this, true)
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50)
@@ -145,7 +150,10 @@ export default class AnalyseCtrl {
   }
 
   connectGameSocket = () => {
-    if (hasNetwork() && isOnlineGameData(this.data)) {
+    if (hasNetwork() &&
+      this.data.url !== undefined &&
+      this.data.player.version !== undefined)
+    {
       socket.createGame(
         this.data.url.socket,
         this.data.player.version,
@@ -557,7 +565,7 @@ export default class AnalyseCtrl {
 
   isRemoteAnalysable = () => {
     return !this.data.analysis && !this.vm.analysisProgress &&
-      session.isConnected() && isOnlineGameData(this.data) &&
+      session.isConnected() && this.data.url !== undefined &&
       gameApi.analysable(this.data)
   }
 

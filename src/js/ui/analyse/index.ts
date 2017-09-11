@@ -1,19 +1,19 @@
 import socket from '../../socket'
 import settings from '../../settings'
-import { renderContent, overlay, viewOnlyBoard } from './view/analyseView'
 import router from '../../router'
 import redraw from '../../utils/redraw'
 import { handleXhrError } from '../../utils'
-import { gameAnalysis as gameAnalysisXhr } from './analyseXhr'
 import i18n from '../../i18n'
 import { specialFenVariants } from '../../lichess/variant'
 import { emptyFen } from '../../utils/fen'
 import { getAnalyseData, getCurrentAIGame, getCurrentOTBGame } from '../../utils/offlineGames'
 import * as helper from '../helper'
+import { gameTitle, loadingBackbutton, header, backButton as renderBackbutton } from '../shared/common'
 import { makeDefaultData } from './data'
+import { gameAnalysis as gameAnalysisXhr } from './analyseXhr'
+import { renderContent, overlay, viewOnlyBoard } from './view/analyseView'
 import AnalyseCtrl from './AnalyseCtrl'
 import { Source } from './interfaces'
-import { gameTitle, loadingBackbutton, header, backButton as renderBackbutton } from '../shared/common'
 import layout from '../layout'
 
 export interface Attrs {
@@ -29,8 +29,7 @@ export interface State {
   ctrl?: AnalyseCtrl
 }
 
-const AnalyseScreen: Mithril.Component<Attrs, State> = {
-
+export default {
   oninit(vnode) {
     const source = vnode.attrs.source || 'offline'
     const gameId = vnode.attrs.id
@@ -59,7 +58,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
     } else if (source === 'offline' && gameId === 'otb') {
       setTimeout(() => {
         const savedOtbGame = getCurrentOTBGame()
-        const otbData = savedOtbGame && getAnalyseData(savedOtbGame)
+        const otbData = savedOtbGame && getAnalyseData(savedOtbGame, orientation)
         if (!otbData) {
           router.set('/analyse', true)
         } else {
@@ -71,7 +70,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
     } else if (source === 'offline' && gameId === 'ai') {
       setTimeout(() => {
         const savedAiGame = getCurrentAIGame()
-        const aiData = savedAiGame && getAnalyseData(savedAiGame)
+        const aiData = savedAiGame && getAnalyseData(savedAiGame, orientation)
         if (!aiData) {
           router.set('/analyse', true)
         } else {
@@ -139,6 +138,4 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
       )
     }
   }
-}
-
-export default AnalyseScreen
+} as Mithril.Component<Attrs, State>

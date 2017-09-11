@@ -1,7 +1,7 @@
 import settings from '../../../settings'
 import cevalEngine from './cevalEngine'
 import { getNbCores } from '../../../utils/stockfish'
-import { Tree } from '../../../utils/tree'
+import { Tree } from '../../shared/tree'
 import { CevalEmit, CevalCtrlInterface } from '../interfaces'
 
 export default function cevalCtrl(

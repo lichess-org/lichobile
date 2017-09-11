@@ -3,7 +3,8 @@ import { secondsToMinutes } from '../utils'
 import settings from '../settings'
 import { MiniBoardGameObj } from './interfaces'
 import { UserGame } from './interfaces/user'
-import { GameData, OnlineGameData, OfflineGameData } from './interfaces/game'
+import { GameData, OnlineGameData } from './interfaces/game'
+import { AnalyseData } from './interfaces/analyse'
 import i18n from '../i18n'
 
 export const analysableVariants = ['standard', 'crazyhouse', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'antichess', 'horde', 'racingKings']
@@ -23,12 +24,11 @@ export function parsePossibleMoves(possibleMoves?: StringMap): DestsMap {
   return r
 }
 
-// TODO find a better type
-export function playable(data: GameData | OfflineGameData): boolean {
+export function playable(data: GameData | AnalyseData): boolean {
   return data.game.source !== 'import' && data.game.status.id < gameStatus.ids.aborted
 }
 
-export function isPlayerPlaying(data: GameData | OfflineGameData) {
+export function isPlayerPlaying(data: GameData | AnalyseData) {
   return playable(data) && !data.player.spectator
 }
 
@@ -44,7 +44,7 @@ export function mandatory(data: OnlineGameData) {
   return !!data.tournament
 }
 
-export function playedTurns(data: OnlineGameData) {
+export function playedTurns(data: OnlineGameData | AnalyseData) {
   return data.game.turns - data.game.startedAtTurn
 }
 
@@ -79,11 +79,11 @@ export function moretimeable(data: OnlineGameData) {
   return data.clock && isPlayerPlaying(data) && !mandatory(data)
 }
 
-export function imported(data: GameData) {
+export function imported(data: GameData | AnalyseData) {
   return data.game.source === 'import'
 }
 
-export function replayable(data: GameData) {
+export function replayable(data: GameData | AnalyseData) {
   return imported(data) || gameStatus.finished(data)
 }
 
@@ -91,11 +91,11 @@ export function userAnalysable(data: GameData) {
   return settings.analyse.supportedVariants.indexOf(data.game.variant.key) !== -1 && playable(data) && (!data.clock || !isPlayerPlaying(data))
 }
 
-export function analysable(data: OnlineGameData) {
+export function analysable(data: OnlineGameData | AnalyseData) {
   return replayable(data) && playedTurns(data) > 4 && analysableVariants.indexOf(data.game.variant.key) !== -1
 }
 
-export function getPlayer(data: GameData, color?: Color) {
+export function getPlayer(data: GameData | AnalyseData, color?: Color) {
   if (data.player.color === color) return data.player
   if (data.opponent.color === color) return data.opponent
   return null
@@ -123,7 +123,6 @@ export function nbMoves(data: OnlineGameData, color: Color) {
   return Math.floor((data.game.turns + (color === 'white' ? 1 : 0)) / 2)
 }
 
-// TODO find a better type
 export function result(data: GameData) {
   if (gameStatus.finished(data)) switch (data.game.winner) {
     case 'white':
@@ -136,7 +135,8 @@ export function result(data: GameData) {
   return '*'
 }
 
-export function time(data: GameData | MiniBoardGameObj | UserGame) {
+// FIXME
+export function time(data: GameData | MiniBoardGameObj | UserGame | AnalyseData) {
   if (data.clock) {
     const min = secondsToMinutes(data.clock.initial)
     const t = min === 0.25 ? '¼' : min === 0.5 ? '½' : min === 0.75 ? '¾' : min.toString()

@@ -1,7 +1,7 @@
 import storage from '../storage'
 import * as cloneDeep from 'lodash/cloneDeep'
 import * as difference from 'lodash/difference'
-import { AnalysisData, AnalysisStep } from '../ui/analyse/interfaces'
+import { AnalyseData } from '../lichess/interfaces/analyse'
 import { NowPlayingGame } from '../lichess/interfaces'
 import { OnlineGameData, OfflineGameData } from '../lichess/interfaces/game'
 import { GameSituation } from '../chess'
@@ -21,27 +21,32 @@ export function getCurrentOTBGame(): StoredOfflineGame | null {
   return storage.get<StoredOfflineGame>(otbStorageKey)
 }
 
-export function getAnalyseData(data: StoredOfflineGame): AnalysisData | null {
+export function getAnalyseData(data: StoredOfflineGame, orientation: Color): AnalyseData | null {
   if (!data) return null
-  const aData = <AnalysisData>data.data
-  aData.steps = data.situations.map((o: GameSituation) => {
-    const step: AnalysisStep = {
+  const aData = data.data as any
+  aData.orientation = orientation
+  aData.treeParts = data.situations.map((o: GameSituation) => {
+    const node = {
+      // TODO define id
+      id: '',
       fen: o.fen,
       ply: o.ply,
       check: o.check,
       checkCount: o.checkCount,
-      san: o.pgnMoves.length ? o.pgnMoves[o.pgnMoves.length - 1] : null,
-      uci: o.uciMoves.length ? o.uciMoves[o.uciMoves.length - 1] : null,
+      // uciMoves contains at least situation last move
+      uci: o.uciMoves[o.uciMoves.length - 1],
+      san: o.pgnMoves.length ? o.pgnMoves[o.pgnMoves.length - 1] : undefined,
       dests: o.dests,
       drops: o.drops,
       crazy: o.crazyhouse,
       pgnMoves: o.pgnMoves,
       end: o.end,
-      player: o.player
+      player: o.player,
+      children: []
     }
-    return step
+    return node
   })
-  return aData
+  return aData as AnalyseData
 }
 
 export function setCurrentOTBGame(game: StoredOfflineGame): void {

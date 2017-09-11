@@ -2,9 +2,9 @@ import redraw from '../../utils/redraw'
 import evalSummary from './evalSummaryPopup'
 import sound from '../../sound'
 import vibrate from '../../vibrate'
+import { AnalyseDataWithTree } from '../../lichess/interfaces/analyse'
 
 import AnalyseCtrl from './AnalyseCtrl'
-import { AnalyseDataWithTree } from './interfaces'
 
 export default function(ctrl: AnalyseCtrl) {
   return {

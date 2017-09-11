@@ -1,7 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import { hasNetwork, playerName, oppositeColor, noNull, gameIcon, flatten, noop } from '../../../utils'
 import * as chessFormat from '../../../utils/chessFormat'
-import * as treeOps from '../../../utils/tree/ops'
+import * as treeOps from '../../shared/tree/ops'
 import i18n from '../../../i18n'
 import router from '../../../router'
 import * as gameApi from '../../../lichess/game'

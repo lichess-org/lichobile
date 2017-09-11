@@ -2,6 +2,7 @@
 
 import i18n from '../i18n'
 import { GameData } from './interfaces/game'
+import { AnalyseData } from './interfaces/analyse'
 import { VariantKey } from './interfaces/variant'
 
 const ids = {
@@ -20,15 +21,15 @@ const ids = {
   variantEnd: 60
 }
 
-function started(data: GameData) {
+function started(data: GameData | AnalyseData) {
   return data.game.status.id >= ids.started
 }
 
-function finished(data: GameData) {
+function finished(data: GameData | AnalyseData) {
   return data.game.status.id >= ids.mate
 }
 
-function aborted(data: GameData) {
+function aborted(data: GameData | AnalyseData) {
   return data.game.status.id === ids.aborted
 }
 

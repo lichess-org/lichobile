@@ -2,7 +2,6 @@ import i18n from '../../i18n'
 import popupWidget from '../shared/popup'
 import router from '../../router'
 import * as gameApi from '../../lichess/game'
-import { isOnlineGameData } from '../../lichess/interfaces/game'
 import settings from '../../settings'
 import formWidgets from '../shared/form'
 import * as h from 'mithril/hyperscript'
@@ -69,7 +68,7 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
         ctrl.toggleBestMove
       )
     ]) : null,
-    ctrl.source === 'online' && isOnlineGameData(ctrl.data) && gameApi.analysable(ctrl.data) ? h('div.action', {
+    ctrl.source === 'online' && ctrl.data.url !== undefined && gameApi.analysable(ctrl.data) ? h('div.action', {
       key: 'showComments'
     }, [
       formWidgets.renderCheckbox(

@@ -1,6 +1,6 @@
 import { piotr2key } from './piotr'
 import * as isObject from 'lodash/isObject'
-import { AnalysisData } from './interfaces'
+import { AnalyseData } from '../../lichess/interfaces/analyse'
 
 function isString(o: DestsMap | string): o is string {
   return typeof o === 'string'
@@ -42,7 +42,7 @@ export function renderEval(e: number) {
   return (e > 0 ? '+' : '') + e
 }
 
-export function isSynthetic(data: AnalysisData) {
+export function isSynthetic(data: AnalyseData) {
   return data.game.id === 'synthetic'
 }
 

@@ -1,4 +1,4 @@
-import { Pockets } from '../../lichess/interfaces/game'
+import { Pockets } from '../../../lichess/interfaces/game'
 
 export namespace Tree {
   export type Path = string

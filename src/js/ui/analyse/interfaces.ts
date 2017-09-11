@@ -1,17 +1,6 @@
 import * as cg from '../../chessground/interfaces'
-import { GameData } from '../../lichess/interfaces/game'
-import { Tree } from '../../utils/tree'
+import { Tree } from '../shared/tree'
 import AnalyseCtrl from './AnalyseCtrl'
-
-export interface AnalysisData extends GameData {
-  userAnalysis: boolean
-  analysis?: RemoteAnalysis
-  treeParts: Tree.Node[]
-}
-
-export interface AnalyseDataWithTree extends AnalysisData {
-  tree: Tree.Node
-}
 
 export interface RoleToSan {
   [role: string]: SanChar
@@ -22,51 +11,6 @@ export interface SanToRole {
 }
 
 export type Source = 'online' | 'offline'
-
-export interface EvalJugdment {
-  comment: string
-  glyph: Glyph
-  name: string
-}
-
-export interface RemoteAnalysisMove {
-  eval: number
-  best?: string
-  mate?: number
-  variation?: string
-  judgment?: EvalJugdment
-}
-
-export interface RemoteEval {
-  cp: number
-  best?: string
-  mate?: number
-  variation?: string
-  judgment?: EvalJugdment
-}
-
-interface PlayerEvalSummary {
-  acpl: number
-  blunder: number
-  inaccuracy: number
-  mistake: number
-  [i: string]: number
-}
-
-export interface RemoteEvalSummary {
-  white: PlayerEvalSummary
-  black: PlayerEvalSummary
-}
-
-export interface RemoteAnalysis {
-  moves: Array<RemoteAnalysisMove>
-  summary: RemoteEvalSummary
-}
-
-export interface Glyph {
-  symbol: string
-  name: string
-}
 
 export interface CevalWork {
   initialFen: string

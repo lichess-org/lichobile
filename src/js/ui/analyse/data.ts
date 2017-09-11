@@ -1,17 +1,17 @@
 import { getLichessVariant, getInitialFen } from '../../lichess/variant'
+import { AnalyseData } from '../../lichess/interfaces/analyse'
 import { playerFromFen, plyFromFen } from '../../utils/fen'
 import { oppositeColor } from '../../utils'
-import { AnalysisData } from './interfaces'
 
-const emptyPocket = {
-  queen: 0,
-  rook: 0,
-  knight: 0,
-  bishop: 0,
-  pawn: 0
-}
+// const emptyPocket = {
+//   queen: 0,
+//   rook: 0,
+//   knight: 0,
+//   bishop: 0,
+//   pawn: 0
+// }
 
-export function makeDefaultData(variantKey: VariantKey, fen?: string): AnalysisData {
+export function makeDefaultData(variantKey: VariantKey, fen?: string): AnalyseData {
   const player = playerFromFen(fen)
   const ply = plyFromFen(fen)
   const variant = getLichessVariant(variantKey)
@@ -30,8 +30,11 @@ export function makeDefaultData(variantKey: VariantKey, fen?: string): AnalysisD
         name: 'created'
       },
       turns: 0,
+      startedAtTurn: 0,
       variant
     },
+    takebackable: false,
+    orientation: 'white',
     opponent: {
       id: oppositeColor(player),
       color: oppositeColor(player)
@@ -45,23 +48,10 @@ export function makeDefaultData(variantKey: VariantKey, fen?: string): AnalysisD
       destination: true,
       highlight: true
     },
-    steps: [
-      {
-        fen: initialFen,
-        ply,
-        san: null,
-        uci: null,
-        check: false,
-        pgnMoves: [],
-        crazy: variantKey === 'crazyhouse' ? {
-          pockets: [emptyPocket, emptyPocket]
-        } : undefined
-      }
-    ],
     treeParts: [
       {
-        fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-        ply: 0
+        fen: initialFen,
+        ply
       }
     ],
     userAnalysis: true

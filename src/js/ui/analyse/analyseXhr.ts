@@ -1,7 +1,7 @@
 import { fetchJSON, fetchText } from '../../http'
-import { AnalysisData } from './interfaces'
+import { AnalyseData } from '../../lichess/interfaces/analyse'
 
-export function gameAnalysis(gameId: string, color: Color): Promise<AnalysisData> {
+export function gameAnalysis(gameId: string, color: Color): Promise<AnalyseData> {
   return fetchJSON(`/${gameId}/${color}/analysis`)
 }
 

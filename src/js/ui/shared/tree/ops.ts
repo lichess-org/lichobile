@@ -73,8 +73,8 @@ export function countChildrenAndComments(node: Tree.Node) {
 
 export function reconstruct(parts: any): Tree.Node {
   const root = parts[0]
-  let node = root
   root.id = ''
+  let node: Tree.Node = root as Tree.Node
   for (let i = 1, nb = parts.length; i < nb; i++) {
     const n = parts[i]
     if (node.children) node.children.unshift(n)
@@ -91,9 +91,7 @@ export function merge(n1: Tree.Node, n2: Tree.Node): void {
   if (n2.glyphs) n1.glyphs = n2.glyphs
   n2.comments && n2.comments.forEach(c => {
     if (!n1.comments) n1.comments = [c]
-    else if (!n1.comments.filter(d => {
-        return d.text === c.text
-      }).length) n1.comments.push(c)
+    else if (!n1.comments.filter(d => d.text === c.text).length) n1.comments.push(c)
   })
   n2.children.forEach(c => {
     const existing = childById(n1, c.id)

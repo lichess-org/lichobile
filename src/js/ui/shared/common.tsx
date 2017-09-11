@@ -24,6 +24,7 @@ import ViewOnlyBoard from './ViewOnlyBoard'
 import { backArrow } from './icons'
 import { BaseUser, User } from '../../lichess/interfaces/user'
 import { GameData } from '../../lichess/interfaces/game'
+import { AnalyseData } from '../../lichess/interfaces/analyse'
 
 export const LoadingBoard = {
   view() {
@@ -232,7 +233,7 @@ export function userStatus(user: BaseUser) {
   )
 }
 
-export function gameTitle(data: GameData): Mithril.Children {
+export function gameTitle(data: GameData | AnalyseData): Mithril.Children {
   const mode = data.game.offline ? i18n('offline') :
     data.game.rated ? i18n('rated') : i18n('casual')
   const variant = getVariant(data.game.variant.key)

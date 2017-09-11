@@ -2,11 +2,11 @@ import Chessground from '../../chessground/Chessground'
 import * as cg from '../../chessground/interfaces'
 import settings from '../../settings'
 import { batchRequestAnimationFrame } from '../../utils/batchRAF'
+import { AnalyseData } from '../../lichess/interfaces/analyse'
 
-import { AnalysisData } from './interfaces'
 
 function makeConfig(
-  data: AnalysisData,
+  data: AnalyseData,
   config: cg.SetConfig,
   orientation: Color,
   onMove: (orig: Key, dest: Key, capturedPiece?: Piece) => void,
@@ -49,7 +49,7 @@ function makeConfig(
 
 export default {
   make(
-    data: AnalysisData,
+    data: AnalyseData,
     config: cg.SetConfig,
     orientation: Color,
     onMove: (orig: Key, dest: Key, capturedPiece?: Piece) => void,

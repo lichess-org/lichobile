@@ -43,6 +43,8 @@ export default function data(cfg: OfflineDataConfig): OfflineGameData {
       source: 'offline',
       fen: cfg.fen || standardFen,
       player: cfg.player || 'white',
+      turns: 0,
+      startedAtTurn: 0,
       status: {
         id: 20,
         name: 'created'

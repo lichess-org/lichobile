@@ -3,7 +3,7 @@ import popupWidget from '../shared/popup'
 import router from '../../router'
 import * as helper from '../helper'
 import * as gameApi from '../../lichess/game'
-import { GameData } from '../../lichess/interfaces/game'
+import { AnalyseData } from '../../lichess/interfaces/analyse'
 import * as h from 'mithril/hyperscript'
 import { MenuInterface } from './interfaces'
 import AnalyseCtrl from './AnalyseCtrl'
@@ -52,7 +52,7 @@ const advices = [
   ['blunder', 'blunders']
 ]
 
-function renderPlayer(data: GameData, color: Color) {
+function renderPlayer(data: AnalyseData, color: Color) {
   const p = gameApi.getPlayer(data, color)
   if (p) {
     if (p.name) return [p.name]

@@ -1,4 +1,5 @@
 import * as cg from './interfaces'
+import { State } from './state'
 
 export const files: cg.File[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 export const invFiles: cg.File[] = files.slice().reverse()
@@ -59,7 +60,7 @@ export function opposite(color: Color) {
   return color === 'white' ? 'black' : 'white'
 }
 
-export function containsX(xs: any[], x: any) {
+export function containsX<T>(xs: T[], x: T) {
   return xs && xs.indexOf(x) !== -1
 }
 
@@ -67,11 +68,11 @@ export function distance(pos1: NumberPair, pos2: NumberPair) {
   return Math.sqrt(Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2))
 }
 
-export function transform(data: any, pieceColor: Color, translateProp: string) {
-  if (data.otb) {
-    const o = data.orientation
-    const m = data.otbMode
-    const t = data.turnColor
+export function transform(state: State, pieceColor: Color, translateProp: string) {
+  if (state.otb) {
+    const o = state.orientation
+    const m = state.otbMode
+    const t = state.turnColor
     if ((m === 'facing' && o === 'white' && pieceColor === 'black') ||
       (m === 'facing' && o === 'black' && pieceColor === 'white') ||
       (m === 'flip' && o === 'white' && t === 'black') ||

@@ -47,7 +47,7 @@ export default class AnalyseCtrl {
   evalSummary: MenuInterface | null
   notes: NotesCtrl | null
 
-  chessground: Chessground.Controller
+  chessground: Chessground
   ceval: CevalCtrlInterface
   explorer: ExplorerCtrlInterface
   tree: TreeWrapper

@@ -98,7 +98,7 @@ export interface CevalCtrlInterface {
 export interface VM {
   formattedDate: string
   shouldGoBack: boolean
-  cgConfig?: Chessground.SetConfig
+  cgConfig?: cg.SetConfig
   variationMenu?: Tree.Path
   flip: boolean
   smallBoard: boolean

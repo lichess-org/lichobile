@@ -34,14 +34,15 @@ export namespace Tree {
   export interface Node {
     id: string
     ply: Ply
-    uci: Uci
     fen: Fen
     children: Node[]
+    drops?: string | string[] | undefined | null
+    uci?: Uci
+    san?: San
     comments?: Comment[]
     // TODO maybe don't keep both formats for dests & drops
     dests?: string | DestsMap
-    drops: string | string[] | undefined | null
-    check: boolean
+    check?: boolean
     threat?: ClientEval
     ceval?: ClientEval
     eval?: ServerEval
@@ -51,7 +52,6 @@ export namespace Tree {
     parentClock?: Clock
     shapes?: Shape[]
     comp?: boolean
-    san?: string
     threefold?: boolean
     fail?: boolean
     puzzle?: string

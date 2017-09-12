@@ -43,6 +43,19 @@ export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedi
       ctrl.apiMove(o)
       redraw()
     },
+    clockInc(o: { color: Color, time: number }) {
+      if (ctrl.clock) {
+        ctrl.clock.addTime(o.color, o.time)
+      }
+    },
+    cclock(o: { white: number, black: number }) {
+      if (ctrl.data.correspondence && ctrl.correspondenceClock) {
+        ctrl.data.correspondence.white = o.white
+        ctrl.data.correspondence.black = o.black
+        ctrl.correspondenceClock.update(o.white, o.black)
+        redraw()
+      }
+    },
     checkCount(e: { white: number, black: number }) {
       const isWhite = ctrl.data.player.color === 'white'
       ctrl.data.player.checks = isWhite ? e.white : e.black

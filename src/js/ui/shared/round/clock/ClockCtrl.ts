@@ -3,6 +3,8 @@ import { formatClockTime } from './clockView'
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
 
+type Centis = number
+
 interface LastUpdate {
   white: number
   black: number
@@ -61,10 +63,9 @@ export default class ClockCtrl {
     this.data = data
   }
 
-  private setLastUpdate(data: ClockData, delay: number) {
-    this.lastUpdate.white = data.white
-    this.lastUpdate.black = data.black
-    this.lastUpdate.at = Date.now() + 10 * delay
+  public addTime = (color: Color, time: Centis): void => {
+    this.data[color] += time / 100
+    this.setLastUpdate(this.data)
   }
 
   public update(white: number, black: number, delay: number = 0) {
@@ -108,4 +109,11 @@ export default class ClockCtrl {
 
     if (this.data[color] === 0) this.outOfTime()
   }
+
+  private setLastUpdate(data: ClockData, delay: number = 0) {
+    this.lastUpdate.white = data.white
+    this.lastUpdate.black = data.black
+    this.lastUpdate.at = Date.now() + 10 * delay
+  }
+
 }

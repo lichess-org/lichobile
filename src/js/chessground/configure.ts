@@ -26,7 +26,8 @@ export function configureBoard(state: State, config: cg.InitConfig): void {
     state.pieces = fen.read(config.fen)
   }
 
-  if (config.check !== undefined) board.setCheck(state, config.check)
+  if (config.hasOwnProperty('check')) board.setCheck(state, config.check || false)
+  if (config.hasOwnProperty('lastMove') && !config.lastMove) state.lastMove = null
 
   // fix move/premove dests
   if (state.selected) board.setSelected(state, state.selected)
@@ -43,6 +44,9 @@ export function setNewBoardState(d: State, config: cg.SetConfig): void {
     d.pieces = fen.read(config.fen)
   }
 
+  if (config.orientation !== undefined) d.orientation = config.orientation
+  if (config.turnColor !== undefined) d.turnColor = config.turnColor
+
   if (config.dests !== undefined) {
     d.movable.dests = config.dests
   }
@@ -51,12 +55,11 @@ export function setNewBoardState(d: State, config: cg.SetConfig): void {
     d.movable.color = config.movableColor
   }
 
-  if (config.orientation !== undefined) d.orientation = config.orientation
-  if (config.turnColor !== undefined) d.turnColor = config.turnColor
-  if (config.lastMove !== undefined) d.lastMove = config.lastMove
-
   // set check after setting turn color
-  if (config.check !== undefined) board.setCheck(d, config.check)
+  if (config.hasOwnProperty('check')) board.setCheck(d, config.check || false)
+
+  if (config.hasOwnProperty('lastMove') && !config.lastMove) d.lastMove = null
+  else if (config.lastMove) d.lastMove = config.lastMove
 
   // fix move/premove dests
   if (d.selected) {

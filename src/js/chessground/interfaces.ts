@@ -34,7 +34,7 @@ export interface InitConfig {
   movable?: {
     free?: boolean
     color?: Color | 'both' | null
-    dests?: DestsMap
+    dests?: DestsMap | null
     showDests?: boolean
     events?: {
       after?: (orig: Key, dest: Key, metadata: MoveMetadata) => void
@@ -81,7 +81,7 @@ export interface SetConfig {
   check?: Color | boolean
   turnColor?: Color
   movableColor?: Color | null
-  dests?: DestsMap
+  dests?: DestsMap | null
 }
 
 // {white: {pawn: 3 queen: 1}, black: {bishop: 2}}

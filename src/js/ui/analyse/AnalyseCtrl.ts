@@ -189,8 +189,8 @@ export default class AnalyseCtrl {
       turnColor: color,
       orientation: this.vm.flip ? oppositeColor(this.orientation) : this.orientation,
       movableColor: this.gameOver() ? null : color,
-      dests: dests || {},
-      check: s.check,
+      dests: dests || null,
+      check: s.check !== undefined ? s.check : false,
       lastMove: s.uci ? chessFormat.uciToMoveOrDrop(s.uci) : null
     }
 

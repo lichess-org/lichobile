@@ -152,8 +152,8 @@ export default class AnalyseCtrl {
   connectGameSocket = () => {
     if (hasNetwork() &&
       this.data.url !== undefined &&
-      this.data.player.version !== undefined)
-    {
+      this.data.player.version !== undefined
+    ) {
       socket.createGame(
         this.data.url.socket,
         this.data.player.version,

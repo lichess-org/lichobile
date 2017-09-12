@@ -52,18 +52,18 @@ export function build(root: Tree.Node): TreeWrapper {
     return child ? nodeAtPathFrom(child, treePath.tail(path)) : node
   }
 
-  function nodeAtPathOrNull(path: Tree.Path): Tree.Node | undefined {
+  function nodeAtPathOrNull(path: Tree.Path): MaybeNode {
     return nodeAtPathOrNullFrom(root, path)
   }
 
-  function nodeAtPathOrNullFrom(node: Tree.Node, path: Tree.Path): Tree.Node | undefined {
+  function nodeAtPathOrNullFrom(node: Tree.Node, path: Tree.Path): MaybeNode {
     if (path === '') return node
     const child = ops.childById(node, treePath.head(path))
     return child ? nodeAtPathOrNullFrom(child, treePath.tail(path)) : undefined
   }
 
   function longestValidPathFrom(node: Tree.Node, path: Tree.Path): Tree.Path {
-    var id = treePath.head(path)
+    const id = treePath.head(path)
     const child = ops.childById(node, id)
     return child ? id + longestValidPathFrom(child, treePath.tail(path)) : ''
   }
@@ -112,14 +112,14 @@ export function build(root: Tree.Node): TreeWrapper {
   }
 
   function getOpening(nodeList: Tree.Node[]): Tree.Opening | undefined {
-    var opening: Tree.Opening | undefined
-    nodeList.forEach(function(node: Tree.Node) {
+    let opening: Tree.Opening | undefined
+    nodeList.forEach((node: Tree.Node) => {
       opening = node.opening || opening
     })
     return opening
   }
 
-  function updateAt(path: Tree.Path, update: (node: Tree.Node) => void): Tree.Node | undefined {
+  function updateAt(path: Tree.Path, update: (node: Tree.Node) => void): MaybeNode {
     const node = nodeAtPathOrNull(path)
     if (node) {
       update(node)
@@ -169,9 +169,9 @@ export function build(root: Tree.Node): TreeWrapper {
   }
 
   function setCommentAt(comment: Tree.Comment, path: Tree.Path) {
-    return !comment.text ? deleteCommentAt(comment.id, path) : updateAt(path, function(node) {
+    return !comment.text ? deleteCommentAt(comment.id, path) : updateAt(path, (node) => {
       node.comments = node.comments || []
-      const existing = node.comments.find(function(c) {
+      const existing = node.comments.find((c) => {
         return c.id === comment.id
       })
       if (existing) existing.text = comment.text
@@ -180,8 +180,8 @@ export function build(root: Tree.Node): TreeWrapper {
   }
 
   function deleteCommentAt(id: string, path: Tree.Path) {
-    return updateAt(path, function(node) {
-      var comments = (node.comments || []).filter(function(c) {
+    return updateAt(path, (node) => {
+      const comments = (node.comments || []).filter((c) => {
         return c.id !== id
       })
       node.comments = comments.length ? comments : undefined
@@ -189,20 +189,20 @@ export function build(root: Tree.Node): TreeWrapper {
   }
 
   function setGlyphsAt(glyphs: Tree.Glyph[], path: Tree.Path) {
-    return updateAt(path, function(node) {
+    return updateAt(path, (node) => {
       node.glyphs = glyphs
     })
   }
 
   function setClockAt(clock: Tree.Clock | undefined, path: Tree.Path) {
-    return updateAt(path, function(node) {
+    return updateAt(path, (node) => {
       node.clock = clock
     })
   }
 
   function getParentClock(node: Tree.Node, path: Tree.Path): Tree.Clock | undefined {
     if (!('parentClock' in node)) {
-      var parent = path && nodeAtPath(treePath.init(path))
+      const parent = path && nodeAtPath(treePath.init(path))
       if (!parent) node.parentClock = node.clock
       else if (!('clock' in parent)) node.parentClock = undefined
       else node.parentClock = parent.clock
@@ -226,14 +226,14 @@ export function build(root: Tree.Node): TreeWrapper {
     updateAt,
     addNode,
     addNodes,
-    addDests(dests: string, path: Tree.Path, opening?: Tree.Opening) {
-      return updateAt(path, function(node: Tree.Node) {
+    addDests(dests: string, path: Tree.Path, opening?: Tree.Opening): MaybeNode {
+      return updateAt(path, (node: Tree.Node) => {
         node.dests = dests
         if (opening) node.opening = opening
       })
     },
-    setShapes(shapes: Tree.Shape[], path: Tree.Path) {
-      return updateAt(path, function(node: Tree.Node) {
+    setShapes(shapes: Tree.Shape[], path: Tree.Path): MaybeNode {
+      return updateAt(path, (node: Tree.Node) => {
         node.shapes = shapes
       })
     },
@@ -253,7 +253,7 @@ export function build(root: Tree.Node): TreeWrapper {
       ops.merge(root, tree)
     },
     removeCeval() {
-      ops.updateAll(root, function(n) {
+      ops.updateAll(root, (n) => {
         delete n.ceval
         delete n.threat
       })

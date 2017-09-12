@@ -274,7 +274,7 @@ function renderIncomingChallenge(c: Challenge, cDim: CardDim | undefined, cardSt
 
   return (
     <div className="card standard challenge" style={cardStyle}>
-      {renderViewOnlyBoard(c.initialFen, c.color, cDim, undefined, c.variant.key)}
+      {renderViewOnlyBoard(c.initialFen || standardFen, 'white', cDim, undefined, c.variant.key)}
       <div className="infos">
         <div className="icon-game" data-icon={c.perf.icon}></div>
         <div className="description">

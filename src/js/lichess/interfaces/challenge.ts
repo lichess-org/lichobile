@@ -30,10 +30,10 @@ export interface Challenge {
   challenger?: ChallengeUser
   destUser?: ChallengeUser
   variant: Variant
-  initialFen: string
+  initialFen: string | null
   rated: boolean
   timeControl: TimeControl
-  color: Color
+  color: Color | 'random'
   perf: {
     icon: string
     name: string

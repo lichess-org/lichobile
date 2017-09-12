@@ -62,7 +62,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public subTitle: string
   public tv: string
 
-  private lastMoveMillis: number
+  private lastMoveMillis?: number
   private lastDrawOfferAtPly: number
   private tournamentCountInterval: number
   private tournamentClockTime: number

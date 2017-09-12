@@ -43,11 +43,11 @@ export function setNewBoardState(d: State, config: cg.SetConfig): void {
     d.pieces = fen.read(config.fen)
   }
 
-  if (config.dests) {
+  if (config.dests !== undefined) {
     d.movable.dests = config.dests
   }
 
-  if (config.movableColor) {
+  if (config.movableColor !== undefined) {
     d.movable.color = config.movableColor
   }
 

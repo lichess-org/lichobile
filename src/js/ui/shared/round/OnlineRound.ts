@@ -252,12 +252,12 @@ export default class OnlineRound implements OnlineRoundInterface {
     const s = this.plyStep(ply)
     const config: cg.SetConfig = {
       fen: s.fen,
-      lastMove: s.uci ? chessFormat.uciToMove(s.uci) : undefined,
+      lastMove: s.uci ? chessFormat.uciToMove(s.uci) : null,
       check: s.check,
       turnColor: this.vm.ply % 2 === 0 ? 'white' : 'black'
     }
     if (!this.replaying()) {
-      config.movableColor = gameApi.isPlayerPlaying(this.data) ? this.data.player.color : undefined
+      config.movableColor = gameApi.isPlayerPlaying(this.data) ? this.data.player.color : null
       config.dests = gameApi.parsePossibleMoves(this.data.possibleMoves)
     }
     this.chessground.set(config)

@@ -77,10 +77,10 @@ export interface InitConfig {
 export interface SetConfig {
   orientation?: Color
   fen?: string
-  lastMove?: KeyPair
+  lastMove?: KeyPair | null
   check?: Color | boolean
   turnColor?: Color
-  movableColor?: Color
+  movableColor?: Color | null
   dests?: DestsMap
 }
 

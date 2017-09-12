@@ -188,10 +188,10 @@ export default class AnalyseCtrl {
       fen: s.fen,
       turnColor: color,
       orientation: this.vm.flip ? oppositeColor(this.orientation) : this.orientation,
-      movableColor: this.gameOver() ? undefined : color,
+      movableColor: this.gameOver() ? null : color,
       dests: dests || {},
       check: s.check,
-      lastMove: s.uci ? chessFormat.uciToMoveOrDrop(s.uci) : undefined
+      lastMove: s.uci ? chessFormat.uciToMoveOrDrop(s.uci) : null
     }
 
     this.vm.cgConfig = config

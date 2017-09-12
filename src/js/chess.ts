@@ -8,6 +8,8 @@ const worker = new Worker('vendor/scalachess.js')
 worker.postMessage({ topic: 'init', payload: { variant: 'standard'}})
 
 export interface GameSituation {
+  nodeId: string
+  ply: number
   variant: string
   fen: string
   player: Color
@@ -25,7 +27,6 @@ export interface GameSituation {
   crazyhouse?: {
     pockets: Pockets
   }
-  ply: number
 }
 
 export interface InitRequest {

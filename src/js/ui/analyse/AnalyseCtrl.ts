@@ -381,8 +381,7 @@ export default class AnalyseCtrl {
   addNode = ({ situation, path }: chess.MoveResponse) => {
     const curNode = this.node
     const node = {
-      // TODO have chess worker return node ids
-      id: 'TODO',
+      id: situation.nodeId,
       ply: situation.ply,
       fen: situation.fen,
       uci: situation.uciMoves[0],

@@ -61,22 +61,23 @@ export default class ClockCtrl {
     this.data = data
   }
 
-  private setLastUpdate(data: ClockData) {
+  private setLastUpdate(data: ClockData, delay: number) {
     this.lastUpdate.white = data.white
     this.lastUpdate.black = data.black
-    this.lastUpdate.at = Date.now()
+    this.lastUpdate.at = Date.now() + 10 * delay
   }
 
-  public update(white: number, black: number) {
+  public update(white: number, black: number, delay: number = 0) {
     this.data.white = white
     this.data.black = black
-    this.setLastUpdate(this.data)
+    this.setLastUpdate(this.data, delay)
     if (this.els.white) this.els.white.textContent = formatClockTime(this.data.white * 1000)
     if (this.els.black) this.els.black.textContent = formatClockTime(this.data.black * 1000)
   }
 
   public tick(color: Color) {
-    this.data[color] = Math.max(0, this.lastUpdate[color] - (Date.now() - this.lastUpdate.at) / 1000)
+    const diffMs = Math.max(0, Date.now() - this.lastUpdate.at)
+    this.data[color] = Math.max(0, this.lastUpdate[color] - diffMs / 1000)
     const time = this.data[color] * 1000
     const el = this.els[color]
 

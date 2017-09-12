@@ -410,30 +410,6 @@ export default class AnalyseCtrl {
     redraw()
   }
 
-  // toggleVariationMenu = (path?: Path) => {
-  //   this.vm.variationMenu = path
-  // }
-
-  // deleteVariation = (path: Path) => {
-  //   const ply = path[0].ply
-  //   const id = path[0].variation
-  //   if (id) {
-  //     this.analyse.deleteVariation(ply, id)
-  //     if (treePath.contains(path, this.path)) this.jumpToMain(ply - 1)
-  //   }
-  //   this.toggleVariationMenu()
-  // }
-
-  // promoteVariation = (path: Path) => {
-  //   const ply = path[0].ply
-  //   const id = path[0].variation
-  //   if (id) {
-  //     this.analyse.promoteVariation(ply, id)
-  //     if (treePath.contains(path, this.path)) this.jump(this.path.splice(1))
-  //   }
-  //   this.toggleVariationMenu()
-  // }
-
   private allowCeval() {
     return (
       this.source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)

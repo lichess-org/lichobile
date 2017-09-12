@@ -119,7 +119,10 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
     const header = () => headerWidget('lichess.org')
 
     if (challenge) {
-      board = () => viewOnlyBoardContent(challenge.initialFen, challenge.color)
+      board = () => viewOnlyBoardContent(
+        challenge.initialFen || standardFen,
+        'white'
+      )
 
       if (challenge.direction === 'in') {
         overlay = joinPopup(this, challenge)

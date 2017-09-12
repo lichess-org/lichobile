@@ -62,7 +62,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public subTitle: string
   public tv: string
 
-  private lastMoveMillis: number
+  private lastMoveMillis?: number
   private lastDrawOfferAtPly: number
   private tournamentCountInterval: number
   private tournamentClockTime: number
@@ -392,6 +392,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     const playedColor: Color = o.ply % 2 === 0 ? 'black' : 'white'
     const white: Player = d.player.color === 'white' ?  d.player : d.opponent
     const black: Player = d.player.color === 'black' ? d.player : d.opponent
+    const activeColor = d.player.color === d.game.player
 
     if (o.status) {
       d.game.status = o.status
@@ -414,8 +415,8 @@ export default class OnlineRound implements OnlineRoundInterface {
     white.offeringDraw = o.wDraw
     black.offeringDraw = o.bDraw
 
-    d.possibleMoves = d.player.color === d.game.player ? o.dests : undefined
-    d.possibleDrops = d.player.color === d.game.player ? o.drops : undefined
+    d.possibleMoves = activeColor ? o.dests : undefined
+    d.possibleDrops = activeColor ? o.drops : undefined
 
     this.setTitle()
 
@@ -481,8 +482,12 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     if (o.clock) {
       const c = o.clock
-      if (this.clock) this.clock.update(c.white, c.black)
-      else if (this.correspondenceClock) this.correspondenceClock.update(c.white, c.black)
+      if (this.clock) {
+        const delay = (playing && activeColor) ? 0 : (c.lag || 1)
+        this.clock.update(c.white, c.black, delay)
+      } else if (this.correspondenceClock) {
+        this.correspondenceClock.update(c.white, c.black)
+      }
     }
 
     d.game.threefold = !!o.threefold
@@ -526,6 +531,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     this.makeCorrespondenceClock()
     if (this.clock && this.data.clock) this.clock.update(this.data.clock.white, this.data.clock.black)
+    this.lastMoveMillis = undefined
     this.setTitle()
     if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip)
     redraw()
@@ -619,7 +625,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     const opts = {
       ackable: true,
-      withLag: !!this.clock && (millis === undefined),
+      withLag: !!this.clock && (millis === undefined || !this.isClockRunning()),
       millis
     }
 

@@ -8,9 +8,9 @@ export namespace Tree {
     maxDepth: number
     depth: number
     nps: number
-    nodes: number
-    millis: number
-    pvs: PvData[]
+    // nodes: number
+    // millis: number
+    // pvs: PvData[]
     cloud?: boolean
     cp?: number
     mate?: number

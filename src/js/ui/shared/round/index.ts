@@ -1,6 +1,7 @@
 import Chessground from '../../../chessground/Chessground'
 import Replay from '../offlineRound/Replay'
 import { OnlineGameData, OfflineGameData, GameData, GameStatus } from '../../../lichess/interfaces/game'
+import { AnalyseData } from '../../../lichess/interfaces/analyse'
 import { GameSituation } from '../../../chess'
 
 export type Position = 'player' | 'opponent'
@@ -13,7 +14,7 @@ export interface BoardInterface {
 
 export interface PromotingInterface {
   chessground: Chessground
-  data: GameData
+  data: GameData | AnalyseData
   player: () => Color
 }
 

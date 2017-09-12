@@ -49,6 +49,7 @@ export default function cevalEngine(opts: Opts) {
     work.emit({
       work,
       ceval: {
+        fen: work.currentFen,
         depth,
         maxDepth: opts.maxDepth,
         cp,

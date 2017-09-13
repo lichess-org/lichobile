@@ -12,6 +12,9 @@
   display flex
   flex-flow column nowrap
 
+.analyse-table
+  flex-flow column nowrap
+
 .analyse_actions_bar
   flex 0 0 footerHeight
   display flex
@@ -19,6 +22,12 @@
   height initial
   width 100%
   overflow hidden
+
+.analyse-game
+  flex 1 1 auto
+  width 100%
+  display flex
+  flex-flow column nowrap
 
 .analyse-infosBox
   flex 1 1 40%
@@ -37,6 +46,7 @@
     height 40px
 
 .analyse-replay
+  flex 1 1 auto
   position relative
   font-size 0.9rem
   white-space normal
@@ -66,10 +76,10 @@ index
 
 move
   display inline-block
-  font-weight bold
   padding: 0.25em 0.17em
   overflow hidden
   white-space nowrap
+  color #aaa
   &.current, &.active
     border-radius 3px
   &.current
@@ -152,12 +162,9 @@ comment
       color gold
       font-size 20px
 
-.analyse-cevalBox
-  flex 0 0 38px
-  position relative
+.analyse-tabs
+  flex 0 0 25px
   overflow hidden
-  width calc(100% - 5px)
-  margin-right 5px
   display flex
   flex-flow row nowrap
   align-items center
@@ -583,9 +590,6 @@ comment
     color orangeDark
     > eval
       color rgba(orangeDark, 70%)
-
-  .analyse-game
-    background transpBlack02
 
   .analyse-cevalBox, .analyse-infosBox
     background transpBlack3

@@ -1,5 +1,5 @@
+import * as h from 'mithril/hyperscript'
 import * as menu from '../menu'
-import getVariant from '../../lichess/variant'
 import router from '../../router'
 import * as utils from '../../utils'
 import { emptyFen } from '../../utils/fen'
@@ -10,21 +10,17 @@ import * as helper from '../helper'
 import gamesMenu from '../gamesMenu'
 import newGameForm from '../newGameForm'
 import session from '../../session'
-import * as gameApi from '../../lichess/game'
 import challengesApi from '../../lichess/challenges'
 import friendsApi from '../../lichess/friends'
 import i18n from '../../i18n'
 import popupWidget from './popup'
 import { getLanguageNativeName } from '../../utils/langs'
 import friendsPopup from '../friendsPopup'
-import * as h from 'mithril/hyperscript'
 import spinner from '../../spinner'
 import countries from '../../utils/countries'
 import ViewOnlyBoard from './ViewOnlyBoard'
 import { backArrow } from './icons'
 import { BaseUser, User } from '../../lichess/interfaces/user'
-import { GameData } from '../../lichess/interfaces/game'
-import { AnalyseData } from '../../lichess/interfaces/analyse'
 
 export const LoadingBoard = {
   view() {
@@ -42,15 +38,11 @@ export function menuButton() {
   )
 }
 
-export function backButton(title?: string | Mithril.Children) {
-  return (
-    <div key="default-history-backbutton" className="back_button">
-      <button oncreate={helper.ontap(router.backHistory)}>
-        {backArrow}
-      </button>
-      {title ? <div className="title">{title}</div> : null }
-    </div>
-  )
+export function backButton(title?: Mithril.Children, withSub = false): Mithril.Children {
+  return h('div.back_button', { key: 'default-history-backbutton' }, [
+    h('button', { oncreate: helper.ontap(router.backHistory) }, backArrow),
+    title ? h('div.title', { className: withSub ? 'withSub' : '' }, title) : null
+  ])
 }
 
 export function friendsButton() {
@@ -138,7 +130,7 @@ export function headerBtns() {
   }
 }
 
-export function header(title: Mithril.Children, leftButton?: () => Mithril.Children): Mithril.Children {
+export function header(title: Mithril.Children, leftButton?: Mithril.Children): Mithril.Children {
   return h('nav', [
     leftButton ? leftButton : menuButton(),
     title ? <div className="main_header_title" key="title">{title}</div> : null,
@@ -146,7 +138,7 @@ export function header(title: Mithril.Children, leftButton?: () => Mithril.Child
   ])
 }
 
-export function dropShadowHeader(title: Mithril.Children, leftButton?: () => Mithril.Children): Mithril.Children {
+export function dropShadowHeader(title: Mithril.Children, leftButton?: Mithril.Children): Mithril.Children {
   return [
     h('nav', [
       leftButton ? leftButton : menuButton(),
@@ -232,24 +224,6 @@ export function userStatus(user: BaseUser) {
     </div>
   )
 }
-
-export function gameTitle(data: GameData | AnalyseData): Mithril.Children {
-  const mode = data.game.offline ? i18n('offline') :
-    data.game.rated ? i18n('rated') : i18n('casual')
-  const variant = getVariant(data.game.variant.key)
-  const name = variant ? (variant.tinyName || variant.shortName || variant.name) : '?'
-  const icon = data.game.source === 'import' ? '/' :
-    utils.gameIcon(data.game.perf || data.game.variant.key)
-  const time = gameApi.time(data)
-  const text = data.game.source === 'import' ?
-    `Import • ${name}` :
-    `${time} • ${name} • ${mode}`
-  return [
-    <span className="withIcon" data-icon={icon} />,
-    <span>{text}</span>
-  ]
-}
-
 
 export function miniUser(user: User | undefined, mini: any, isOpen: boolean, close: () => void) {
   if (user) {

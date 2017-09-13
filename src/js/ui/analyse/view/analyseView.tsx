@@ -1,11 +1,8 @@
 import * as h from 'mithril/hyperscript'
-import { hasNetwork, playerName, oppositeColor, noNull, gameIcon, flatten, noop } from '../../../utils'
+import { hasNetwork, noNull, flatten, noop } from '../../../utils'
 import * as chessFormat from '../../../utils/chessFormat'
 import * as treeOps from '../../shared/tree/ops'
 import i18n from '../../../i18n'
-import router from '../../../router'
-import * as gameApi from '../../../lichess/game'
-import gameStatusApi from '../../../lichess/status'
 import continuePopup from '../../shared/continuePopup'
 import { view as renderPromotion } from '../../shared/offlineRound/promotion'
 import Board from '../../shared/Board'
@@ -13,16 +10,15 @@ import ViewOnlyBoard from '../../shared/ViewOnlyBoard'
 import { Shape } from '../../shared/BoardBrush'
 import * as helper from '../../helper'
 import { notesView } from '../../shared/round/notes'
-import { formatClockTime } from '../../shared/round/clock/clockView'
 import menu from '../menu'
 import analyseSettings from '../analyseSettings'
-import { renderEval, isSynthetic } from '../util'
-import CrazyPocket from '../../shared/round/crazy/CrazyPocket'
+import { renderEval } from '../util'
 import explorerView from '../explorer/explorerView'
 import evalSummary from '../evalSummaryPopup'
 import settings from '../../../settings'
 
 import AnalyseCtrl from '../AnalyseCtrl'
+import renderTree from './treeView'
 
 export function overlay(ctrl: AnalyseCtrl) {
   return [
@@ -85,7 +81,7 @@ export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Cl
     <div className="analyse-tableWrapper">
       {ctrl.explorer.enabled() ?
         explorerView(ctrl) :
-        renderAnalyseTable(ctrl, isPortrait)
+        renderAnalyseTable(ctrl)
       }
       {renderActionsBar(ctrl)}
     </div>
@@ -159,6 +155,7 @@ const Replay: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
         oncreate={helper.ontapY(e => onReplayTap(ctrl, e!), undefined, getMoveEl)}
       >
         { renderOpeningBox(ctrl) }
+        { renderTree(ctrl) }
       </div>
     )
   }
@@ -245,171 +242,18 @@ const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
   }
 }
 
-function renderAnalyseTable(ctrl: AnalyseCtrl, isPortrait: boolean) {
+function renderAnalyseTable(ctrl: AnalyseCtrl) {
   return (
     <div className="analyse-table" key="analyse">
-      {renderInfosBox(ctrl, isPortrait)}
+      { ctrl.ceval.enabled() ?
+        h(EvalBox, { ctrl }) : null
+      }
       <div className="analyse-game">
         { ctrl.ceval.enabled() ?
           h(EvalBox, { ctrl }) : null
         }
         {h(Replay, { ctrl })}
       </div>
-    </div>
-  )
-}
-
-function renderInfosBox(ctrl: AnalyseCtrl, isPortrait: boolean) {
-
-  return (
-    <div className="analyse-infosBox">
-      { isSynthetic(ctrl.data) ?
-        renderVariantSelector(ctrl) : null
-      }
-      <div className="native_scroller">
-        { isSynthetic(ctrl.data) ?
-          (ctrl.data.game.variant.key === 'crazyhouse' ? renderSyntheticPockets(ctrl) : null) :
-          renderGameInfos(ctrl, isPortrait)
-        }
-      </div>
-    </div>
-  )
-}
-
-function renderVariantSelector(ctrl: AnalyseCtrl) {
-  const variant = ctrl.data.game.variant.key
-  const icon = gameIcon(variant)
-  let availVariants = settings.analyse.availableVariants
-  if (variant === 'fromPosition') {
-    availVariants = availVariants.concat([['From position', 'fromPosition']])
-  }
-  return (
-    <div className="select_input analyse_variant_selector">
-      <label for="variant_selector">
-        <i data-icon={icon} />
-      </label>
-      <select id="variant_selector" value={variant} onchange={(e: Event) => {
-        const val = (e.target as HTMLSelectElement).value
-        settings.analyse.syntheticVariant(val as VariantKey)
-        router.set(`/analyse/variant/${val}`)
-      }}>
-        {availVariants.map(v => {
-          return <option key={v[1]} value={v[1]}>{v[0]}</option>
-        })}
-      </select>
-    </div>
-  )
-}
-
-function getChecksCount(ctrl: AnalyseCtrl, color: Color) {
-  const node = ctrl.node
-  return node && node.checkCount && node.checkCount[oppositeColor(color)]
-}
-
-function renderSyntheticPockets(ctrl: AnalyseCtrl) {
-  const player = ctrl.data.player
-  const opponent = ctrl.data.opponent
-  return (
-    <div className="analyse-gameInfosWrapper synthetic">
-      <div className="analyseOpponent">
-        <div className="analysePlayerName">
-          <span className={'color-icon ' + player.color} />
-          {player.color}
-        </div>
-        {ctrl.node && ctrl.node.crazyhouse ? h(CrazyPocket, {
-          ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
-          crazyData: ctrl.node.crazyhouse,
-          color: player.color,
-          position: 'top'
-        }) : null}
-      </div>
-      <div className="analyseOpponent">
-        <div className="analysePlayerName">
-          <span className={'color-icon ' + opponent.color} />
-          {opponent.color}
-        </div>
-        {ctrl.node && ctrl.node.crazyhouse ? h(CrazyPocket, {
-          ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
-          crazyData: ctrl.node.crazyhouse,
-          color: opponent.color,
-          position: 'bottom'
-        }) : null}
-      </div>
-    </div>
-  )
-}
-
-function renderGameInfos(ctrl: AnalyseCtrl, isPortrait: boolean) {
-  const player = ctrl.data.player
-  const opponent = ctrl.data.opponent
-  if (!player || !opponent) return null
-
-  const isCrazy = ctrl.data.game.variant.key === 'crazyhouse'
-
-  return (
-    <div className="analyse-gameInfosWrapper">
-      <div className="analyseOpponent">
-        <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
-          <span className={'color-icon ' + player.color} />
-          {playerName(player, true)}
-          {helper.renderRatingDiff(player)}
-          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.node && ctrl.node.checkCount ?
-            ' +' + getChecksCount(ctrl, player.color) : null
-          }
-        </div>
-        {ctrl.data.clock && (!isCrazy || !isPortrait) ?
-          <div className="analyseClock">
-            {formatClockTime(ctrl.data.clock[player.color] * 1000, false)}
-            <span className="fa fa-clock-o" />
-          </div> : null
-        }
-        {isCrazy && ctrl.node && ctrl.node.crazyhouse ? h(CrazyPocket, {
-          ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
-          crazyData: ctrl.node.crazyhouse,
-          color: player.color,
-          position: 'top'
-        }) : null}
-      </div>
-      <div className="analyseOpponent">
-        <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
-          <span className={'color-icon ' + opponent.color} />
-          {playerName(opponent, true)}
-          {helper.renderRatingDiff(opponent)}
-          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.node && ctrl.node.checkCount ?
-            ' +' + getChecksCount(ctrl, opponent.color) : null
-          }
-        </div>
-        {ctrl.data.clock && (!isCrazy || !isPortrait) ?
-          <div className="analyseClock">
-            {formatClockTime(ctrl.data.clock[opponent.color] * 1000, false)}
-            <span className="fa fa-clock-o" />
-          </div> : null
-        }
-        {isCrazy && ctrl.node && ctrl.node.crazyhouse ? h(CrazyPocket, {
-          ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
-          crazyData: ctrl.node.crazyhouse,
-          color: opponent.color,
-          position: 'bottom'
-        }) : null}
-      </div>
-      <div className="gameInfos">
-        {ctrl.vm.formattedDate ? ctrl.vm.formattedDate : null}
-        { ctrl.data.game.source === 'import' && ctrl.data.game.importedBy ?
-          <div>Imported by {ctrl.data.game.importedBy}</div> : null
-        }
-      </div>
-      {gameStatusApi.finished(ctrl.data) ? renderStatus(ctrl) : null}
-    </div>
-  )
-}
-
-function renderStatus(ctrl: AnalyseCtrl) {
-  const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner)
-  return (
-    <div key="gameStatus" className="status">
-      {gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key)}
-
-      {winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : null}
     </div>
   )
 }

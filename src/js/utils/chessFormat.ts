@@ -36,3 +36,7 @@ export function uciToDropRole(uci: string): Role {
 export function uciTolastDrop(uci: string): KeyPair {
   return [<Key>uci.substr(2, 2), <Key>uci.substr(2, 2)]
 }
+
+export function fixCrazySan(san: San): San {
+  return san[0] === 'P' ? san.slice(1) : san
+}

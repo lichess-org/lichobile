@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import socket from '../../socket'
 import * as helper from '../helper'
 import { getCurrentOTBGame } from '../../utils/offlineGames'
@@ -6,7 +7,8 @@ import { standardFen } from '../../lichess/variant'
 import settings from '../../settings'
 import i18n from '../../i18n'
 import layout from '../layout'
-import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common'
+import { header as renderHeader, viewOnlyBoardContent } from '../shared/common'
+import GameTitle from '../shared/GameTitle'
 
 import OtbRound from './OtbRound'
 import { overlay, renderContent } from './otbView'
@@ -41,7 +43,7 @@ const OtbScreen: Mithril.Component<Attrs, State> = {
     const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined
 
     if (this.round.data && this.round.chessground) {
-      header = () => renderHeader(gameTitle(this.round.data))
+      header = () => renderHeader(h(GameTitle, { data: this.round.data }))
       content = () => renderContent(this.round, pieceTheme)
     } else {
       const fen = this.round.vm.setupFen || this.round.vm.savedFen || standardFen

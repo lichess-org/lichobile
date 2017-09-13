@@ -27,12 +27,6 @@
   > .native_scroller
     flex 1 1 auto
 
-.analyse-game
-  width 60%
-  max-width 400px
-  display flex
-  flex-flow column nowrap
-
 .analyse-loadingReplay
   flex 1 1 auto
   display flex
@@ -43,21 +37,17 @@
     height 40px
 
 .analyse-replay
-  flex 1 1 auto
   position relative
-  display flex
-  flex-flow column nowrap
   font-size 0.9rem
-  padding-right 5px
+  white-space normal
+  line-height 1.05em
   &.displayPieces
-    > turn
-      > move
-        font-family ChessSansPiratf
+    move
+      font-family ChessSansPiratf
   @media only screen and (orientation: landscape) and (max-height 450px)
     font-size 0.7em
 
 .analyse-openingBox
-  flex 0 0 25px
   line-height 25px
   padding 0 4px
   white-space: nowrap;
@@ -66,36 +56,17 @@
   font-size 0.75em
   background lighten(bgdark, 5%)
 
-turn
-  width 100%
-  display flex
-  flex 0 0 25px
-  > move
-    display flex
-    flex 0 0 44%
-    padding-left 5px
-    padding-right 2px
-    margin 0
-    line-height 25px
-  > index
-    font-size 0.9em
-    line-height 25px
-    margin 0
-    flex 0 0 12%
-    text-align center
-    background lighten(bgdark, 5%)
+.analyse-moveList
+  padding 5px
+  white-space normal
 
 index
   color rgba(textDarkBg, 70%)
-  font-weight lighter
-  margin-right 5px
-  margin-left 5px
-  &:first-child
-    margin-left 0
+  margin-right 0.2em
 
 move
-  display inline-flex
-  margin 0 2px
+  display inline-block
+  padding: 0.25em 0.17em
   overflow hidden
   white-space nowrap
   &.current
@@ -107,69 +78,45 @@ move
       background lighten(bgdark, 10%)
 
 glyph
-  flex 0 1 auto
   font-size 0.85em
-  overflow hidden
-  text-align center
-  align-self center
-  margin-left 3px
-  margin-left 2px
+  margin-left 0.2em
 
 eval
-  flex 1 0 auto
   text-align right
   font-size 0.65em
   font-weight lighter
-  color rgba(textDarkBg, 70%)
+  color rgba(textDarkBg, 75%)
 
 interrupt
-  flex 0 0 auto
-  min-height 25px
-  display flex
-  flex-flow column nowrap
-  font-size 0.8em
-  background lighten(bgdark, 5%)
+  font-size 0.9em
 
 lines
-  display flex
-  align-items center
-  > .menuIcon
-    flex 0 0 13%
-    height 25px
-    font-size 1.5em
-    margin 0
-    display flex
-    justify-content center
-    align-items center
+  display block
+  border-left 2px solid rgba(textDarkBg, 80%)
 
 line
-  flex 0 1 auto
-  width calc(100% - 25px)
   white-space nowrap
   overflow hidden
+  padding-left 7px
+  &:before
+    margin-top: 0.65em;
+    margin-left -7px
+    content: ' ';
+    border-top: 2px solid rgba(textDarkBg, 80%)
+    position: absolute;
+    width: 6px
+    height: 6px
   &.visiting
     white-space normal
   > .nested
     margin-left 5px
 
-.comment
-  flex 1 1 auto
+comment
   font-size 0.8em
-  display flex
-  padding: 0 5px
-  align-items center
-  word-wrap: break-word;
-  &.white
-    border-left 2px solid #ccc
-  &.black
-    border-right 2px solid #ccc
-    justify-content flex-end
-  &.Inaccuracy
-    border-color: #56B4E9;
-  &.Mistake
-    border-color: #E69F00;
-  &.Blunder
-    border-color: #DF5353;
+  color rgba(textDarkBg, 90%)
+  margin 0 0.2em 0 0.1em
+  word-wrap break-word
+  vertical-align 45%
 
 .analyse_variant_selector
   width 100%
@@ -553,13 +500,10 @@ line
     font-family ChessSansPiratf
 
 .view-container.light
-  turn > move
-    background-color #fff
-
   move.active
     background darken(bglight, 10%)
 
-  .analyse-replay > turn > index, interrupt, .analyse-openingBox
+  .analyse-openingBox
     background darken(bglight, 5%)
 
   .analyse_variant_selector
@@ -609,8 +553,6 @@ line
 .view-container.transp
   .analyse-replay
     background-color transpWhite01
-    padding-right 0
-    margin-right 5px
 
   .analyse_variant_selector.select_input
     > label:after
@@ -638,14 +580,11 @@ line
   .analyse-engine_info
     padding-left 5px
 
-  .analyse-openingBox, interrupt
+  .analyse-openingBox
     background rgba(255,255,255,0.1)
 
   .analyse_actions_bar
     background transpBlack
-
-  turn > index
-    background transpBlack3
 
   .explorerTable
     background rgba(0,0,0,0.2)

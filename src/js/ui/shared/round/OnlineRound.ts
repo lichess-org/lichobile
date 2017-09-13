@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import * as throttle from 'lodash/throttle'
 import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
@@ -17,7 +18,7 @@ import { MiniUser } from '../../../lichess/interfaces'
 import { OnlineGameData, Player, ApiEnd } from '../../../lichess/interfaces/game'
 import { MoveRequest, DropRequest, MoveOrDrop, AfterMoveMeta, isMove, isDrop, isMoveRequest, isDropRequest } from '../../../lichess/interfaces/move'
 import * as chessFormat from '../../../utils/chessFormat'
-import { gameTitle } from '../../shared/common'
+import GameTitle from '../../shared/GameTitle'
 
 import ground from './ground'
 import promotion from './promotion'
@@ -291,6 +292,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     return this.jump(this.lastPly())
   }
 
+  // TODO move to view
   public setTitle() {
     if (this.data.tv) {
       this.title = 'Lichess TV'
@@ -299,7 +301,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.title = this.data.userTV
     }
     else if (gameStatus.started(this.data)) {
-      this.title = gameTitle(this.data)
+      this.title = h(GameTitle, { data: this.data })
     }
     else {
       this.title = 'lichess.org'

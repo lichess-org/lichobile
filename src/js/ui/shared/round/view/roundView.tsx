@@ -13,7 +13,8 @@ import * as utils from '../../../../utils'
 import i18n from '../../../../i18n'
 import layout from '../../../layout'
 import * as helper from '../../../helper'
-import { gameTitle, backButton, menuButton, loader, headerBtns, miniUser } from '../../../shared/common'
+import { backButton, menuButton, loader, headerBtns, miniUser } from '../../../shared/common'
+import GameTitle from '../../../shared/GameTitle'
 import Board from '../../../shared/Board'
 import popupWidget from '../../../shared/popup'
 import formWidgets from '../../../shared/form'
@@ -88,7 +89,7 @@ function renderTitle(ctrl: OnlineRound) {
           { ctrl.vm.offlineWatcher ? ' • Offline' : null}
         </h1>
         {!ctrl.data.player.spectator && ctrl.data.game.speed === 'correspondence' ?
-          <h2 className="round-subTitle">
+          <h2 className="header-subTitle">
             {ctrl.subTitle}
           </h2> : null
         }
@@ -112,7 +113,7 @@ function renderHeader(ctrl: OnlineRound) {
         ctrl.data.tournament ?  <span className="fa fa-trophy" /> : null,
         ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
           <span oncreate={(v: Mithril.DOMNode) => tcConfig(ctrl, v)} /> : null,
-        gameTitle(ctrl.data)
+        h(GameTitle, { data: ctrl.data })
       ])
     ]
   } else {

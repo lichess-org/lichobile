@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import socket from '../../socket'
 import settings from '../../settings'
 import router from '../../router'
@@ -8,7 +9,8 @@ import { specialFenVariants } from '../../lichess/variant'
 import { emptyFen } from '../../utils/fen'
 import { getAnalyseData, getCurrentAIGame, getCurrentOTBGame } from '../../utils/offlineGames'
 import * as helper from '../helper'
-import { gameTitle, loadingBackbutton, header, backButton as renderBackbutton } from '../shared/common'
+import { loadingBackbutton, header, backButton as renderBackbutton } from '../shared/common'
+import GameTitle from '../shared/GameTitle'
 import { makeDefaultData } from './data'
 import { gameAnalysis as gameAnalysisXhr } from './analyseXhr'
 import { renderContent, overlay, viewOnlyBoard } from './view/analyseView'
@@ -121,7 +123,9 @@ export default {
     if (this.ctrl) {
 
       const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', this.ctrl.vm.smallBoard)
-      const backButton = this.ctrl.vm.shouldGoBack ? renderBackbutton(gameTitle(this.ctrl.data)) : null
+      const backButton = this.ctrl.vm.shouldGoBack ?
+        renderBackbutton(h(GameTitle, { data: this.ctrl.data, withPlayers: true }), true) : null
+
       const title = this.ctrl.vm.shouldGoBack ? null : i18n('analysis')
 
       return layout.board(

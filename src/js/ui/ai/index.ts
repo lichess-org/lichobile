@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import socket from '../../socket'
 import { getCurrentAIGame } from '../../utils/offlineGames'
 import * as helper from '../helper'
@@ -5,7 +6,8 @@ import { playerFromFen } from '../../utils/fen'
 import { standardFen } from '../../lichess/variant'
 import i18n from '../../i18n'
 import layout from '../layout'
-import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common'
+import { header as renderHeader, viewOnlyBoardContent } from '../shared/common'
+import GameTitle from '../shared/GameTitle'
 
 import { overlay, renderContent } from './aiView'
 import AiRound from './AiRound'
@@ -42,7 +44,7 @@ const AiScreen: Mithril.Component<Attrs, State> = {
     let content: () => Mithril.Children, header: () => Mithril.Children
 
     if (this.round.data && this.round.chessground) {
-      header = () => renderHeader(gameTitle(this.round.data))
+      header = () => renderHeader(h(GameTitle, { data: this.round.data }))
       content = () => renderContent(this.round)
     } else {
       const fen = this.round.vm.setupFen || this.round.vm.savedFen || standardFen

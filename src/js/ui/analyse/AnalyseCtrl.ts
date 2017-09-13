@@ -66,6 +66,7 @@ export default class AnalyseCtrl {
 
   // paths
   initialPath: Tree.Path
+  gamePath?: Tree.Path
 
   private debouncedExplorerSetStep: () => void
 
@@ -105,6 +106,9 @@ export default class AnalyseCtrl {
       (location.hash && parseInt(location.hash.replace(/#/, ''), 10)) ||
       (this.source === 'online' && gameApi.isPlayerPlaying(this.data) ?
         this.tree.lastPly() : this.tree.firstPly())
+
+    this.gamePath = (this.synthetic || this.ongoing) ? undefined :
+      treePath.fromNodeList(treeOps.mainlineNodeList(this.tree.root))
 
     const mainline = treeOps.mainlineNodeList(this.tree.root)
     this.initialPath = treeOps.takePathWhile(mainline, n => n.ply <= initPly)

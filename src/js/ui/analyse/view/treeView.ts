@@ -1,14 +1,12 @@
 import * as h from 'mithril/hyperscript'
 import { fixCrazySan } from '../../../utils/chessFormat'
 import * as gameApi from '../../../lichess/game'
+import { Glyph, CommentAuthor } from '../../../lichess/interfaces/analyse'
 import { ops as treeOps, path as treePath, Tree } from '../../shared/tree'
 import * as helper from '../../helper'
 import { empty } from '../util'
 
 import AnalyseCtrl from '../AnalyseCtrl'
-
-export type Conceal = boolean | 'conceal' | 'hide' | null
-export type ConcealOf = (isMainline: boolean) => (path: Tree.Path, node: Tree.Node) => Conceal
 
 type MaybeVNode = Mithril.BaseNode | null
 
@@ -66,10 +64,9 @@ function renderInlineCommentsOf(ctx: Ctx, node: Tree.Node, rich?: boolean): Mayb
   }).filter(x => !!x)
 }
 
-// TODO
-function commentAuthorText(author?: any): string {
+function commentAuthorText(author?: CommentAuthor): string {
   if (!author) return 'Unknown'
-  if (!author.name) return author
+  if (typeof author === 'string') return author
   return author.name
 }
 
@@ -166,9 +163,8 @@ function nodeClasses(c: AnalyseCtrl, path: Tree.Path): NodeClasses {
   }
 }
 
-// TODO
-function renderGlyphs(glyphs: any): Mithril.BaseNode[] {
-  return glyphs.map((glyph: any) => h('glyph', glyph.symbol))
+function renderGlyphs(glyphs: Glyph[]): Mithril.BaseNode[] {
+  return glyphs.map(glyph => h('glyph', glyph.symbol))
 }
 
 function plyToTurn(ply: Ply): number {

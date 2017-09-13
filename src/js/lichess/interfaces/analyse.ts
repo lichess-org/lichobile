@@ -33,6 +33,8 @@ export interface Glyph {
   name: string
 }
 
+export type CommentAuthor = string | { name: string }
+
 export interface EvalJugdment {
   comment: string
   glyph: Glyph

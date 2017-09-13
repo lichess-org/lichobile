@@ -66,6 +66,7 @@ index
 
 move
   display inline-block
+  font-weight bold
   padding: 0.25em 0.17em
   overflow hidden
   white-space nowrap
@@ -95,21 +96,34 @@ lines
   border-left 2px solid rgba(textDarkBg, 80%)
 
 line
-  white-space nowrap
-  overflow hidden
+  display block
   padding-left 7px
   &:before
-    margin-top: 0.65em;
+    margin-top: 0.75em
     margin-left -7px
-    content: ' ';
+    content: ' '
     border-top: 2px solid rgba(textDarkBg, 80%)
-    position: absolute;
+    position: absolute
     width: 6px
     height: 6px
   &.visiting
     white-space normal
   > .nested
     margin-left 5px
+
+inline
+  display: inline;
+  font-style: italic;
+  font-size: 0.9em;
+  opacity: 0.8;
+  &:before, &:after
+    vertical-align 45%
+  &:before
+    content: '(';
+    margin-left: 2px;
+  &:after
+    content: ')';
+    margin-right: 2px;
 
 comment
   font-size 0.8em

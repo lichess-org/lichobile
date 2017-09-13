@@ -57,12 +57,20 @@ function renderOpening(ctrl: AnalyseCtrl) {
 
 const TABS = [
   {
-    title: 'Game infos',
+    title: 'Game informations',
     className: 'fa fa-info'
   },
   {
     title: 'Move list',
     className: 'fa fa-list-alt'
+  },
+  {
+    title: 'Charts',
+    className: 'fa fa-line-chart'
+  },
+  {
+    title: 'Explorer',
+    className: 'fa fa-book'
   }
 ]
 
@@ -89,7 +97,9 @@ function renderAnalyseTable(ctrl: AnalyseCtrl) {
 
   const tabsContent = [
     h('div', 'coucou'),
-    h(Replay, { ctrl })
+    h(Replay, { ctrl }),
+    h('div', 'TODO'),
+    h('div', 'explorer goes here')
   ]
 
   return h('div.analyse-table', {

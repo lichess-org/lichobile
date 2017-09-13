@@ -178,10 +178,12 @@ comment
   justify-content space-between
   font-size 0.8em
   color #aaa
-  padding 0 0.5em
+  > .tab-title
+    padding 0 0.5em
   > .tabs-navigation
     height 25px
-    > .button
+    > .tab-button
+      padding 0 0.5em
       height 25px
 
 .analyse-engine_info
@@ -195,25 +197,16 @@ comment
     overflow hidden
     text-overflow ellipsis
 
-.analyse-cevalBar
-  position absolute
-  width 0%
-  height 2px
-  top 0
-  left 0
-  background gold
-  transition width linear 800ms
-
 .analyse-curEval
   flex 0 0 auto
-  min-width 55px
-  display flex
-  flex-flow column nowrap
-  justify-content center
-  align-items center
+  min-width 45px
+  color #aaa
   font-weight bold
-  padding 3px 5px
+  font-family Cousine
+  height 25px
+  line-height 25px
   background lighten(bgdark, 12%)
+  text-align center
   > .spinner
     width initial
     height initial

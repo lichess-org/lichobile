@@ -10,7 +10,7 @@ export interface AnalyseData {
   takebackable: boolean
   correspondence?: CorrespondenceClockData
   clock?: ClockData
-  analysis?: RemoteAnalysis
+  analysis?: RemoteEvalSummary
   userAnalysis: boolean
   forecast?: any
   treeParts: Array<Partial<Tree.Node>>
@@ -41,14 +41,6 @@ export interface EvalJugdment {
   name: string
 }
 
-export interface RemoteAnalysisMove {
-  eval: number
-  best?: string
-  mate?: number
-  variation?: string
-  judgment?: EvalJugdment
-}
-
 export interface RemoteEval {
   cp: number
   best?: string
@@ -69,9 +61,3 @@ export interface RemoteEvalSummary {
   white: PlayerEvalSummary
   black: PlayerEvalSummary
 }
-
-export interface RemoteAnalysis {
-  moves: Array<RemoteAnalysisMove>
-  summary: RemoteEvalSummary
-}
-

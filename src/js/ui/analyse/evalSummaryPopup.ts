@@ -75,14 +75,14 @@ function renderEvalSummary(ctrl: AnalyseCtrl) {
       ])),
       h('tbody', [
         advices.map(a => {
-          const nb = d.analysis && d.analysis.summary[color][a[0]]
+          const nb = d.analysis && d.analysis[color][a[0]]
           return h('tr', [
             h('th', nb),
             h('td', i18n(a[1]))
           ])
         }),
         h('tr', [
-          h('th', d.analysis && d.analysis.summary[color].acpl),
+          h('th', d.analysis && d.analysis[color].acpl),
           h('td', i18n('averageCentipawnLoss'))
         ])
       ])

@@ -32,10 +32,10 @@ export default function OpenSlideHandler(
 
   mc.on('panstart', (e: HammerInput) => {
     if (
-      // TODO: fix this in a better way
       e.target.nodeName === 'PIECE' ||
       e.target.nodeName === 'SQUARE' ||
-      e.target.className.startsWith('cg-board manipulable') ||
+      // svg element className is not a string
+      (e.target.className.startsWith && e.target.className.startsWith('cg-board manipulable')) ||
       e.center.x > MAX_EDGE_CAN_SLIDE
     ) {
       state.canSlide = false

@@ -70,11 +70,14 @@ move
   padding: 0.25em 0.17em
   overflow hidden
   white-space nowrap
+  &.current, &.active
+    border-radius 3px
   &.current
-    color orangeDark
-    font-weight bold
-    > eval
-      color rgba(orangeDark, 70%)
+    color #fff
+    background rgba(blue, 0.8)
+    font-weight normal
+    > index
+      color #fff
   &.active
       background lighten(bgdark, 10%)
 

@@ -1,5 +1,4 @@
 import * as h from 'mithril/hyperscript'
-import { noop } from '../../../utils'
 import settings from '../../../settings'
 import * as helper from '../../helper'
 
@@ -22,10 +21,7 @@ export default {
     return h('div#replay.analyse-replay.native_scroller', {
       className: replayClass,
       oncreate: helper.ontapY(e => onReplayTap(ctrl, e!), undefined, getMoveEl)
-    }, [
-      renderOpeningBox(ctrl),
-      renderTree(ctrl)
-    ])
+    }, renderTree(ctrl))
   }
 } as Mithril.Component<{ ctrl: AnalyseCtrl }, {}>
 
@@ -41,16 +37,3 @@ function getMoveEl(e: Event) {
   return target.tagName === 'MOVE' ? target :
     helper.findParentBySelector(target, 'move')
 }
-
-function renderOpeningBox(ctrl: AnalyseCtrl) {
-  const opening = ctrl.tree.getOpening(ctrl.nodeList) || ctrl.data.game.opening
-  if (opening) return h('div', {
-    key: 'opening-box',
-    className: 'analyse-openingBox',
-    oncreate: helper.ontapY(noop, () => window.plugins.toast.show(opening.eco + ' ' + opening.name, 'short', 'center'))
-  }, [
-    h('strong', opening.eco),
-    ' ' + opening.name
-  ])
-}
-

@@ -33,7 +33,7 @@ export interface NodeClasses {
   [key: string]: boolean
 }
 
-export default function(ctrl: AnalyseCtrl): Mithril.Children {
+export default function renderTree(ctrl: AnalyseCtrl): Mithril.Children {
   const root = ctrl.tree.root
   const ctx: Ctx = {
     ctrl,

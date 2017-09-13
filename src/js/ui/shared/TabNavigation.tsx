@@ -1,13 +1,16 @@
 import * as helper from '../helper'
 
 interface TabButton {
-  label: string
+  label?: string
+  title?: string
+  className?: string
 }
 
 interface Attrs {
   buttons: Array<TabButton>
   selectedIndex: number
   onTabChange: (i: number) => void
+  noIndicator?: boolean
 }
 
 export default {
@@ -16,7 +19,8 @@ export default {
     const {
       buttons,
       selectedIndex,
-      onTabChange
+      onTabChange,
+      noIndicator
     } = vnode.attrs
 
     const iWidth = 100 / buttons.length
@@ -34,7 +38,8 @@ export default {
     function renderTab(b: TabButton, i: number) {
       const className = [
         'tab-button',
-        selectedIndex === i ? 'selected' : ''
+        selectedIndex === i ? 'selected' : '',
+        b.className
       ].join(' ')
       const oncreate = helper.ontap(() => onTabChange(i))
       return (
@@ -47,7 +52,9 @@ export default {
     return (
       <div className="tabs-navigation">
         { buttons.map(renderTab) }
-        <div className="tabIndicator" style={indicatorStyle} />
+        { noIndicator ? null :
+          <div className="tabIndicator" style={indicatorStyle} />
+        }
       </div>
     )
   }

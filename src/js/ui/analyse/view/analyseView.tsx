@@ -8,9 +8,11 @@ import menu from '../menu'
 import analyseSettings from '../analyseSettings'
 import explorerView from '../explorer/explorerView'
 import evalSummary from '../evalSummaryPopup'
+import TabNavigation from '../../shared/TabNavigation'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 import { EvalBox } from '../ceval/cevalView'
+import TabView from './TabView'
 import Replay from './Replay'
 import renderBoard from './boardView'
 import renderActionsBar from './actionsView'
@@ -42,17 +44,63 @@ export function overlay(ctrl: AnalyseCtrl) {
   ].filter(noNull)
 }
 
+function renderOpening(ctrl: AnalyseCtrl) {
+  const opening = ctrl.tree.getOpening(ctrl.nodeList) || ctrl.data.game.opening
+  if (opening) return h('div', {
+    key: 'opening-title',
+  }, [
+    h('strong', opening.eco),
+    ' ' + opening.name
+  ])
+}
+
+
+const TABS = [
+  {
+    title: 'Game infos',
+    className: 'fa fa-info'
+  },
+  {
+    title: 'Move list',
+    className: 'fa fa-list-alt'
+  }
+]
+
 function renderAnalyseTabs(ctrl: AnalyseCtrl) {
-  return h('div.analyse-tabs', [
-    ctrl.ceval.enabled() ? h(EvalBox, { ctrl }) : null
+  const curTitle = TABS[ctrl.currentTab].title
+  return h('div.analyse-header', [
+    ctrl.ceval.enabled() ? h(EvalBox, { ctrl }) : null,
+    h('div.analyse-tabs', [
+      h('div.tab-title', [
+        ctrl.currentTab === 1 ?
+          renderOpening(ctrl) || curTitle :
+          curTitle
+      ]),
+      h(TabNavigation, {
+        buttons: TABS,
+        selectedIndex: ctrl.currentTab,
+        onTabChange: ctrl.onTabChange
+      })
+    ])
   ])
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrl) {
+
+  const tabsContent = [
+    h('div', 'coucou'),
+    h(Replay, { ctrl })
+  ]
+
   return h('div.analyse-table', {
     key: 'analyse'
   }, [
     renderAnalyseTabs(ctrl),
-    h('div.analyse-game', h(Replay, { ctrl }))
+    h(TabView, {
+      className: 'analyse-tabsContent',
+      selectedIndex: ctrl.currentTab,
+      content: tabsContent,
+      onTabChange: ctrl.onTabChange
+    })
   ])
 }

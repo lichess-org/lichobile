@@ -53,6 +53,8 @@ export default class AnalyseCtrl {
   explorer: ExplorerCtrlInterface
   tree: TreeWrapper
 
+  currentTab: number = 1
+
   // current tree state, cursor, and denormalized node lists
   path: Tree.Path
   node: Tree.Node
@@ -165,6 +167,15 @@ export default class AnalyseCtrl {
         this.data.url.round
       )
     }
+  }
+
+  onTabChange = (index: number) => {
+    const loc = window.location.search.replace(/\?tab\=\w+$/, '')
+    try {
+      window.history.replaceState(window.history.state, '', loc + '?tab=' + index)
+    } catch (e) { console.error(e) }
+    this.currentTab = index
+    redraw()
   }
 
   flip = () => {

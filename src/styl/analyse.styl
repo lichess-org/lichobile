@@ -15,6 +15,12 @@
 .analyse-table
   flex-flow column nowrap
 
+.analyse-tabsContent
+  flex 1 1 auto
+  > .tab-content
+    // must not have height (don't ask me why)
+    height initial
+
 .analyse_actions_bar
   flex 0 0 footerHeight
   display flex
@@ -22,12 +28,6 @@
   height initial
   width 100%
   overflow hidden
-
-.analyse-game
-  flex 1 1 auto
-  width 100%
-  display flex
-  flex-flow column nowrap
 
 .analyse-infosBox
   flex 1 1 40%
@@ -46,7 +46,6 @@
     height 40px
 
 .analyse-replay
-  flex 1 1 auto
   position relative
   font-size 0.9rem
   white-space normal
@@ -162,7 +161,7 @@ comment
       color gold
       font-size 20px
 
-.analyse-tabs
+.analyse-header
   flex 0 0 25px
   overflow hidden
   display flex
@@ -170,6 +169,20 @@ comment
   align-items center
   align-content center
   background lighten(bgdark, 7%)
+
+.analyse-tabs
+  flex 1 1 auto
+  display flex
+  flex-flow row nowrap
+  align-items center
+  justify-content space-between
+  font-size 0.8em
+  color #aaa
+  padding 0 0.5em
+  > .tabs-navigation
+    height 25px
+    > .button
+      height 25px
 
 .analyse-engine_info
   flex 1 0
@@ -193,13 +206,11 @@ comment
 
 .analyse-curEval
   flex 0 0 auto
-  height 36px
   min-width 55px
   display flex
   flex-flow column nowrap
   justify-content center
   align-items center
-  font-size 16px
   font-weight bold
   padding 3px 5px
   background lighten(bgdark, 12%)

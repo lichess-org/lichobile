@@ -9,40 +9,6 @@ import * as helper from '../../helper'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 
-
-export function renderSyntheticPockets(ctrl: AnalyseCtrl) {
-  const player = ctrl.data.player
-  const opponent = ctrl.data.opponent
-  return (
-    <div className="analyse-gameInfosWrapper synthetic">
-      <div className="analyseOpponent">
-        <div className="analysePlayerName">
-          <span className={'color-icon ' + player.color} />
-          {player.color}
-        </div>
-        {ctrl.node && ctrl.node.crazyhouse ? h(CrazyPocket, {
-          ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
-          crazyData: ctrl.node.crazyhouse,
-          color: player.color,
-          position: 'top'
-        }) : null}
-      </div>
-      <div className="analyseOpponent">
-        <div className="analysePlayerName">
-          <span className={'color-icon ' + opponent.color} />
-          {opponent.color}
-        </div>
-        {ctrl.node && ctrl.node.crazyhouse ? h(CrazyPocket, {
-          ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
-          crazyData: ctrl.node.crazyhouse,
-          color: opponent.color,
-          position: 'bottom'
-        }) : null}
-      </div>
-    </div>
-  )
-}
-
 export function renderGameInfos(ctrl: AnalyseCtrl, isPortrait: boolean) {
   const player = ctrl.data.player
   const opponent = ctrl.data.opponent
@@ -103,6 +69,39 @@ export function renderGameInfos(ctrl: AnalyseCtrl, isPortrait: boolean) {
         }
       </div>
       {gameStatusApi.finished(ctrl.data) ? renderStatus(ctrl) : null}
+    </div>
+  )
+}
+
+export function renderSyntheticPockets(ctrl: AnalyseCtrl) {
+  const player = ctrl.data.player
+  const opponent = ctrl.data.opponent
+  return (
+    <div className="analyse-gameInfosWrapper synthetic">
+      <div className="analyseOpponent">
+        <div className="analysePlayerName">
+          <span className={'color-icon ' + player.color} />
+          {player.color}
+        </div>
+        {ctrl.node && ctrl.node.crazyhouse ? h(CrazyPocket, {
+          ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
+          crazyData: ctrl.node.crazyhouse,
+          color: player.color,
+          position: 'top'
+        }) : null}
+      </div>
+      <div className="analyseOpponent">
+        <div className="analysePlayerName">
+          <span className={'color-icon ' + opponent.color} />
+          {opponent.color}
+        </div>
+        {ctrl.node && ctrl.node.crazyhouse ? h(CrazyPocket, {
+          ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
+          crazyData: ctrl.node.crazyhouse,
+          color: opponent.color,
+          position: 'bottom'
+        }) : null}
+      </div>
     </div>
   )
 }

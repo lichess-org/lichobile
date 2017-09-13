@@ -35,9 +35,9 @@ export default {
         h('span', text)
       ]),
       withPlayers ? h('h2.header-subTitle', [
-        h('span', utils.playerName(data.player, true)),
+        h('span', utils.playerName(data.player, true, true, 12)),
         h('span.swords' , { 'data-icon': 'U' }),
-        h('span', utils.playerName(data.opponent, true))
+        h('span', utils.playerName(data.opponent, true, true, 12))
       ]) : null
     ]
   }

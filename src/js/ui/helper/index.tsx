@@ -379,7 +379,7 @@ export function onKeyboardHide(): void {
 export function renderRatingDiff(player: Player | UserGamePlayer): Mithril.Children {
   if (player.ratingDiff === undefined) return null
   if (player.ratingDiff === 0) return <span className="rp null"> +0</span>
-  if (player.ratingDiff > 0) return <span className="rp up"> + {player.ratingDiff}</span>
+  if (player.ratingDiff > 0) return <span className="rp up"> +{player.ratingDiff}</span>
   if (player.ratingDiff < 0) return <span className="rp down"> {player.ratingDiff}</span>
 
   return null

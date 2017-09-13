@@ -131,10 +131,11 @@ export function lightPlayerName(player?: any, withRating?: boolean) {
 
 // TODO
 // this is too polymorphic to be typed... needs a complete refactoring
-export function playerName(player: any, withRating: boolean = false): string {
+export function playerName(player: any, withRating = false, tr = false, trLenght?: number): string {
   if (player.name || player.username || player.user) {
     let name = player.name || player.username || player.user.username
     if (player.user && player.user.title) name = player.user.title + ' ' + name
+    if (tr) name = truncate(name, trLenght || 100)
     if (withRating && (player.user || player.rating)) {
       name += ' (' + (player.rating || player.user.rating)
       if (player.provisional) name += '?'
@@ -296,4 +297,8 @@ export function displayTime(time: string): string {
   if (time === '0.25') return '¼'
 
   return time
+}
+
+export function truncate(text: string, len: number): string {
+  return text.length > len ? text.slice(0, len) + '…' : text
 }

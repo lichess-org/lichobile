@@ -8,7 +8,7 @@ export const defaults: Tab[] = [
   {
     id: 'infos',
     title: 'Game informations',
-    className: 'fa fa-info'
+    className: 'fa fa-info-circle'
   },
   {
     id: 'moves',
@@ -25,6 +25,6 @@ export const explorer: Tab = {
 
 export const charts: Tab = {
   id: 'charts',
-  title: 'Charts',
+  title: 'Stats',
   className: 'fa fa-line-chart'
 }

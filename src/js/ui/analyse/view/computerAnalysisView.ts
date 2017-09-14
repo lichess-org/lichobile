@@ -1,42 +1,51 @@
 import * as h from 'mithril/hyperscript'
 import i18n  from '../../../i18n'
 import * as gameApi from '../../../lichess/game'
+import { playerName } from '../../../utils'
 import { AnalyseData } from '../../../lichess/interfaces/analyse'
-import * as helper from '../../helper'
+import { renderRatingDiff } from '../../helper'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 
 export default function renderComputerAnalysis(ctrl: AnalyseCtrl): Mithril.BaseNode {
   return h('div.analyse-computerAnalysis.native_scroller', [
     ctrl.data.analysis ?
-      renderEvalSummary(ctrl) : h('div', 'Request computer analysis')
+      h(AcplSummary, { d: ctrl.data }) : h('div', 'Request computer analysis')
   ])
 }
 
-function renderEvalSummary(ctrl: AnalyseCtrl): Mithril.BaseNode {
-  const d = ctrl.data
+const AcplSummary: Mithril.Component<{ d: AnalyseData }, {}> = {
+  onbeforeupdate({ attrs }, { attrs: oldattrs }) {
+    return attrs.d.analysis !== oldattrs.d.analysis
+  },
 
-  return h('div.evalSummary', ['white', 'black'].map((color: Color) => {
-    return h('table', [
-      h('thead', h('tr', [
-        h('th', h('span.light.color-icon.' + color)),
-        h('td', renderPlayer(d, color))
-      ])),
-      h('tbody', [
-        advices.map(a => {
-          const nb = d.analysis && d.analysis[color][a[0]]
-          return h('tr', [
-            h('th', nb),
-            h('td', i18n(a[1]))
+  view({ attrs }) {
+    const { d } = attrs
+
+    return h('div.evalSummary', ['white', 'black'].map((color: Color) => {
+      const p = gameApi.getPlayer(d, color)
+
+      return h('table', [
+        h('thead', h('tr', [
+          h('th', h('span.light.color-icon.' + color)),
+          h('td', [playerName(p), p ? renderRatingDiff(p) : null])
+        ])),
+        h('tbody', [
+          advices.map(a => {
+            const nb = d.analysis && d.analysis[color][a[0]]
+            return h('tr', [
+              h('th', nb),
+              h('td', i18n(a[1]))
+            ])
+          }),
+          h('tr', [
+            h('th', d.analysis && d.analysis[color].acpl),
+            h('td', i18n('averageCentipawnLoss'))
           ])
-        }),
-        h('tr', [
-          h('th', d.analysis && d.analysis[color].acpl),
-          h('td', i18n('averageCentipawnLoss'))
         ])
       ])
-    ])
-  }))
+    }))
+  }
 }
 
 const advices = [
@@ -44,14 +53,3 @@ const advices = [
   ['mistake', 'mistakes'],
   ['blunder', 'blunders']
 ]
-
-function renderPlayer(data: AnalyseData, color: Color) {
-  const p = gameApi.getPlayer(data, color)
-  if (p) {
-    if (p.name) return [p.name]
-    if (p.ai) return ['Stockfish level ' + p.ai]
-    if (p.user) return [p.user.username, helper.renderRatingDiff(p)]
-  }
-  return ['Anonymous']
-}
-

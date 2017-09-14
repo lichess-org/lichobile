@@ -122,7 +122,7 @@ export default {
 
     if (this.ctrl) {
 
-      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', this.ctrl.vm.smallBoard)
+      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', this.ctrl.settings.s.smallBoard)
       const backButton = this.ctrl.vm.shouldGoBack ?
         renderBackbutton(h(GameTitle, { data: this.ctrl.data, withPlayers: true }), true) : null
 

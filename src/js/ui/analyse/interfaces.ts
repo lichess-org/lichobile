@@ -43,12 +43,7 @@ export interface VM {
   formattedDate: string
   shouldGoBack: boolean
   cgConfig?: cg.SetConfig
-  variationMenu?: Tree.Path
-  flip: boolean
-  smallBoard: boolean
   analysisProgress: boolean
-  showBestMove: boolean
-  showComments: boolean
   computingPGN: boolean
   replaying: boolean
 }

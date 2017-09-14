@@ -33,12 +33,15 @@ export interface NodeClasses {
   [key: string]: boolean
 }
 
+// number of plies to show in variation lines
+const LINES_PLIES = 6
+
 export default function renderTree(ctrl: AnalyseCtrl): Mithril.Children {
   const root = ctrl.tree.root
   const ctx: Ctx = {
     ctrl,
     truncateComments: false,
-    showComputer: ctrl.vm.showComments,
+    showComputer: ctrl.settings.s.showComments,
     showGlyphs: true,
     showEval: true
   }
@@ -53,7 +56,7 @@ export default function renderTree(ctrl: AnalyseCtrl): Mithril.Children {
 }
 
 function renderInlineCommentsOf(ctx: Ctx, node: Tree.Node, rich?: boolean): MaybeVNode[] {
-  if (!ctx.ctrl.vm.showComments || empty(node.comments)) return []
+  if (!ctx.ctrl.settings.s.showComments || empty(node.comments)) return []
   return node.comments!.map(comment => {
     if (comment.by === 'lichess' && !ctx.showComputer) return null
     const by = node.comments![1] ? h('span.by', commentAuthorText(comment.by)) : null
@@ -124,7 +127,7 @@ function renderLines(ctx: Ctx, nodes: Tree.Node[], opts: Opts): Mithril.BaseNode
       parentPath: opts.parentPath,
       isMainline: false,
       withIndex: true,
-      truncate: n.comp && !treePath.contains(ctx.ctrl.path, opts.parentPath + n.id) ? 3 : undefined
+      truncate: n.comp && !treePath.contains(ctx.ctrl.path, opts.parentPath + n.id) ? LINES_PLIES : undefined
     }))
   }))
 }

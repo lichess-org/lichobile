@@ -24,7 +24,7 @@ import crazyValid from './crazy/crazyValid'
 import ExplorerCtrl from './explorer/ExplorerCtrl'
 import menu from './menu'
 import evalSummary from './evalSummaryPopup'
-import analyseSettings from './analyseSettings'
+import analyseSettings, { ISettingsCtrl } from './analyseSettings'
 import ground from './ground'
 import socketHandler from './analyseSocketHandler'
 import { VM, SanToRole, Source, IExplorerCtrl, CevalCtrlInterface, MenuInterface, CevalEmit } from './interfaces'
@@ -42,12 +42,12 @@ export default class AnalyseCtrl {
   orientation: Color
   source: Source
   vm: VM
-  settings: MenuInterface
+
+  settings: ISettingsCtrl
   menu: MenuInterface
   continuePopup: ContinuePopupController
   evalSummary: MenuInterface | null
   notes: NotesCtrl | null
-
   chessground: Chessground
   ceval: CevalCtrlInterface
   explorer: IExplorerCtrl
@@ -121,12 +121,7 @@ export default class AnalyseCtrl {
       shouldGoBack,
       formattedDate: gameMoment.format('L LT'),
       cgConfig: undefined,
-      variationMenu: undefined,
-      flip: false,
-      smallBoard: settings.analyse.smallBoard(),
       analysisProgress: false,
-      showBestMove: settings.analyse.showBestMove(),
-      showComments: settings.analyse.showComments(),
       computingPGN: false,
       replaying: false
     }
@@ -179,19 +174,6 @@ export default class AnalyseCtrl {
     redraw()
   }
 
-  flip = () => {
-    this.vm.flip = !this.vm.flip
-    this.chessground.set({
-      orientation: this.vm.flip ? oppositeColor(this.orientation) : this.orientation
-    })
-  }
-
-  toggleBoardSize = () => {
-    const newVal = !this.vm.smallBoard
-    settings.analyse.smallBoard(newVal)
-    this.vm.smallBoard = newVal
-  }
-
   initCeval = () => {
     if (this.ceval.enabled()) {
       if (this.ceval.isInit()) {
@@ -220,7 +202,7 @@ export default class AnalyseCtrl {
     const config = {
       fen: node.fen,
       turnColor: color,
-      orientation: this.vm.flip ? oppositeColor(this.orientation) : this.orientation,
+      orientation: this.settings.s.flip ? oppositeColor(this.orientation) : this.orientation,
       movableColor: this.gameOver() ? null : color,
       dests: dests || null,
       check: !!node.check,
@@ -502,14 +484,6 @@ export default class AnalyseCtrl {
     return this.data.analysis || this.ceval.enabled()
   }
 
-  toggleBestMove = () => {
-    this.vm.showBestMove = !this.vm.showBestMove
-  }
-
-  toggleComments = () => {
-    this.vm.showComments = !this.vm.showComments
-  }
-
   sharePGN = () => {
     if (!this.vm.computingPGN) {
       this.vm.computingPGN = true
@@ -552,6 +526,9 @@ export default class AnalyseCtrl {
         })
       }
     }
+  }
+
+  toggleComputerAnalysis = () => {
   }
 
   isRemoteAnalysable = () => {

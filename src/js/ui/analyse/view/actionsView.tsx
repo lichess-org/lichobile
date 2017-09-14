@@ -18,13 +18,13 @@ export default function renderActionsBar(ctrl: AnalyseCtrl) {
       }
       <button className="action_bar_button" data-icon="B" key="flipBoard"
         oncreate={helper.ontap(
-          ctrl.flip,
+          ctrl.settings.flip,
           () => window.plugins.toast.show(i18n('flipBoard'), 'short', 'bottom')
         )}
       />
-      <button className={'action_bar_button fa fa-' + (ctrl.vm.smallBoard ? 'compress' : 'expand')} key="expand-compress"
+      <button className={'action_bar_button fa fa-' + (ctrl.settings.s.smallBoard ? 'compress' : 'expand')} key="expand-compress"
         oncreate={helper.ontap(
-          ctrl.toggleBoardSize,
+          ctrl.settings.toggleBoardSize,
           () => window.plugins.toast.show('Expand/compress board', 'short', 'bottom')
         )}
       />

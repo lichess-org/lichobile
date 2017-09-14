@@ -35,7 +35,7 @@ export const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
     return (
       <div className="analyse-curEval">
         { pearl }
-        { ctrl.vm.showBestMove && ceval && ceval.bestSan ?
+        { ctrl.settings.s.showBestMove && ceval && ceval.bestSan ?
         <div className="analyse-bestMove">
           best {ceval.bestSan}
         </div> : null

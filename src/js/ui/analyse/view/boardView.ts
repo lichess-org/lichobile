@@ -14,13 +14,13 @@ export default function renderBoard(ctrl: AnalyseCtrl, isPortrait: boolean, boun
 
   let nextBest: string | undefined
   let curBestShape: Shape[] = [], pastBestShape: Shape[] = []
-  if (ctrl.currentTab !== 2 && ctrl.ceval.enabled() && ctrl.vm.showBestMove) {
+  if (ctrl.currentTab !== 2 && ctrl.ceval.enabled() && ctrl.settings.s.showBestMove) {
     nextBest = ctrl.nextNodeBest()
     curBestShape = nextBest ? moveOrDropShape(nextBest, 'paleBlue', player) :
     ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
     []
   }
-  if (ctrl.vm.showComments) {
+  if (ctrl.settings.s.showComments) {
     pastBestShape = rEval && rEval.best ?
     moveOrDropShape(rEval.best, 'paleGreen', player) : []
   }
@@ -34,13 +34,13 @@ export default function renderBoard(ctrl: AnalyseCtrl, isPortrait: boolean, boun
   nextMoveShape : flatten([pastBestShape, curBestShape].filter(noNull))
 
   return h(Board, {
-    key: ctrl.vm.smallBoard ? 'board-small' : 'board-full',
+    key: ctrl.settings.s.smallBoard ? 'board-small' : 'board-full',
     variant: ctrl.data.game.variant.key,
     chessground: ctrl.chessground,
     bounds,
     isPortrait,
     shapes,
-    wrapperClasses: ctrl.vm.smallBoard ? 'halfsize' : ''
+    wrapperClasses: ctrl.settings.s.smallBoard ? 'halfsize' : ''
   })
 }
 

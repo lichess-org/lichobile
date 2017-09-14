@@ -23,19 +23,11 @@ import cevalCtrl from './ceval/cevalCtrl'
 import crazyValid from './crazy/crazyValid'
 import ExplorerCtrl from './explorer/ExplorerCtrl'
 import menu, { IMainMenuCtrl } from './menu'
-import evalSummary from './evalSummaryPopup'
 import analyseSettings, { ISettingsCtrl } from './analyseSettings'
 import ground from './ground'
 import socketHandler from './analyseSocketHandler'
-import { SanToRole, Source, IExplorerCtrl, CevalCtrlInterface, MenuInterface, CevalEmit } from './interfaces'
-
-const sanToRole: SanToRole = {
-  P: 'pawn',
-  N: 'knight',
-  B: 'bishop',
-  R: 'rook',
-  Q: 'queen'
-}
+import { Source, IExplorerCtrl, CevalCtrlInterface, CevalEmit } from './interfaces'
+import * as tabs from './tabs'
 
 export default class AnalyseCtrl {
   data: AnalyseData
@@ -45,7 +37,6 @@ export default class AnalyseCtrl {
   settings: ISettingsCtrl
   menu: IMainMenuCtrl
   continuePopup: ContinuePopupController
-  evalSummary: MenuInterface | null
   notes: NotesCtrl | null
   chessground: Chessground
   ceval: CevalCtrlInterface
@@ -68,7 +59,7 @@ export default class AnalyseCtrl {
   gamePath?: Tree.Path
 
   // various view state flags
-  currentTab: number = 1
+  currentTabIndex: number = 1
   replaying: boolean = false
   cgConfig?: cg.SetConfig
   shouldGoBack: boolean
@@ -80,12 +71,20 @@ export default class AnalyseCtrl {
     return [<Key>uci.slice(0, 2), <Key>uci.slice(2, 4), <SanChar>uci.slice(4, 5)]
   }
 
-  constructor(data: AnalyseData, source: Source, orientation: Color, shouldGoBack: boolean, ply?: number) {
+  constructor(
+    data: AnalyseData,
+    source: Source,
+    orientation: Color,
+    shouldGoBack: boolean,
+    ply?: number,
+    tab?: number
+  ) {
     this.data = data
     this.orientation = orientation
     this.source = source
     this.synthetic = util.isSynthetic(data)
     this.initialPath = treePath.root
+    this.currentTabIndex = tab !== undefined ? tab : 1
 
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
       window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center')
@@ -97,8 +96,6 @@ export default class AnalyseCtrl {
     this.settings = analyseSettings.controller(this)
     this.menu = menu.controller(this)
     this.continuePopup = continuePopup.controller()
-
-    this.evalSummary = this.data.analysis ? evalSummary.controller(this) : null
 
     // TODO
     // this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null
@@ -167,6 +164,26 @@ export default class AnalyseCtrl {
     this.onMainline = this.tree.pathIsMainline(path)
   }
 
+  availableTabs = (): tabs.Tab[] => {
+    let val = tabs.defaults
+
+    if (hasNetwork()) val = val.concat([tabs.explorer])
+    if (gameApi.analysable(this.data)) val = val.concat([tabs.charts])
+
+    return val
+  }
+
+  // TODO maybe have a dynamic currentTabIndex() too
+  currentTab = (): tabs.Tab => {
+    const a = this.availableTabs()
+    const tab = a[this.currentTabIndex]
+    if (!tab) {
+      this.currentTabIndex = 1
+      return a[1]
+    }
+    else return tab
+  }
+
   onTabChange = (index: number) => {
     const loc = window.location.search.replace(/\?tab\=\w+$/, '')
     try {
@@ -174,8 +191,8 @@ export default class AnalyseCtrl {
     } catch (e) {
       console.error(e)
     }
-    this.currentTab = index
-    if (this.currentTab === 2) this.explorer.setStep()
+    this.currentTabIndex = index
+    if (this.currentTab().id === 'explorer') this.explorer.setStep()
     redraw()
   }
 
@@ -256,13 +273,13 @@ export default class AnalyseCtrl {
     if (uci[1] === '@') {
       this.chessground.apiNewPiece({
         color: this.chessground.state.movable.color as Color,
-        role: sanToRole[uci[0]]
+        role: util.sanToRole[uci[0]]
       }, move[1])
     } else if (!move[2]) {
       this.sendMove(move[0], move[1])
     }
     else {
-      this.sendMove(move[0], move[1], sanToRole[move[2].toUpperCase()])
+      this.sendMove(move[0], move[1], util.sanToRole[move[2].toUpperCase()])
     }
     this.explorer.loading(true)
   }

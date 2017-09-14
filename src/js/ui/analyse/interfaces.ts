@@ -1,5 +1,4 @@
 import { Tree } from '../shared/tree'
-import AnalyseCtrl from './AnalyseCtrl'
 
 export interface RoleToSan {
   [role: string]: SanChar
@@ -36,13 +35,6 @@ export interface CevalCtrlInterface {
   enabled(): boolean
   toggle(): void
   cores: number
-}
-
-export interface MenuInterface {
-  open: () => void
-  close: () => void
-  isOpen: () => boolean
-  root: AnalyseCtrl
 }
 
 export interface IExplorerCtrl {

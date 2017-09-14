@@ -121,6 +121,7 @@ function onOffline() {
   // it doesn't mean necessarily the network is off
   if (isForeground() && !hasNetwork()) {
     socket.disconnect()
+    redraw()
   }
 }
 

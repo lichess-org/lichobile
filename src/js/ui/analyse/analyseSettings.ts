@@ -6,7 +6,6 @@ import * as gameApi from '../../lichess/game'
 import settings from '../../settings'
 import { oppositeColor } from '../../utils'
 import formWidgets from '../shared/form'
-import { MenuInterface } from './interfaces'
 import AnalyseCtrl from './AnalyseCtrl'
 
 export interface ISettingsCtrl {
@@ -78,7 +77,7 @@ export default {
     }
   },
 
-  view(ctrl: MenuInterface) {
+  view(ctrl: ISettingsCtrl) {
     return popupWidget(
       'analyse_menu',
       undefined,

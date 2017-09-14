@@ -25,6 +25,7 @@ export interface Attrs {
   fen?: string
   variant?: VariantKey
   ply?: number
+  tab?: number
 }
 
 export interface State {
@@ -39,6 +40,7 @@ export default {
     const fenArg = vnode.attrs.fen
     const variant = vnode.attrs.variant
     const ply = vnode.attrs.ply
+    const tab = vnode.attrs.tab
 
     const shouldGoBack = gameId !== undefined || fenArg !== undefined
 
@@ -48,7 +50,7 @@ export default {
       .then(cfg => {
         const elapsed = performance.now() - now
         setTimeout(() => {
-          this.ctrl = new AnalyseCtrl(cfg, source, orientation, shouldGoBack, ply)
+          this.ctrl = new AnalyseCtrl(cfg, source, orientation, shouldGoBack, ply, tab)
           redraw()
         }, Math.max(400 - elapsed, 0))
       })
@@ -65,7 +67,7 @@ export default {
           router.set('/analyse', true)
         } else {
           otbData.player.spectator = true
-          this.ctrl = new AnalyseCtrl(otbData, source, orientation, shouldGoBack, ply)
+          this.ctrl = new AnalyseCtrl(otbData, source, orientation, shouldGoBack, ply, tab)
           redraw()
         }
       }, 400)
@@ -77,7 +79,7 @@ export default {
           router.set('/analyse', true)
         } else {
           aiData.player.spectator = true
-          this.ctrl = new AnalyseCtrl(aiData, source, orientation, shouldGoBack, ply)
+          this.ctrl = new AnalyseCtrl(aiData, source, orientation, shouldGoBack, ply, tab)
           redraw()
         }
       }, 400)
@@ -94,7 +96,7 @@ export default {
         router.set(url, true)
         redraw()
       } else {
-        this.ctrl = new AnalyseCtrl(makeDefaultData(variant, fenArg), source, orientation, shouldGoBack, ply)
+        this.ctrl = new AnalyseCtrl(makeDefaultData(variant, fenArg), source, orientation, shouldGoBack, ply, tab)
         redraw()
       }
     }

@@ -6,7 +6,6 @@ import ViewOnlyBoard from '../../shared/ViewOnlyBoard'
 import { notesView } from '../../shared/round/notes'
 import menu from '../menu'
 import analyseSettings from '../analyseSettings'
-import evalSummary from '../evalSummaryPopup'
 import TabNavigation from '../../shared/TabNavigation'
 
 import AnalyseCtrl from '../AnalyseCtrl'
@@ -14,6 +13,7 @@ import { EvalBox } from '../ceval/cevalView'
 import renderExplorer from '../explorer/explorerView'
 import TabView from './TabView'
 import Replay from './Replay'
+import renderComputerAnalysis from './computerAnalysisView'
 import renderBoard from './boardView'
 import renderGameInfos from './gameInfosView'
 import renderActionsBar from './actionsView'
@@ -40,7 +40,6 @@ export function overlay(ctrl: AnalyseCtrl) {
     menu.view(ctrl.menu),
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notesView(ctrl.notes) : null,
-    ctrl.evalSummary ? evalSummary.view(ctrl.evalSummary) : null,
     continuePopup.view(ctrl.continuePopup)
   ].filter(noNull)
 }
@@ -55,53 +54,43 @@ function renderOpening(ctrl: AnalyseCtrl) {
   ])
 }
 
-
-const TABS = [
-  {
-    title: 'Game informations',
-    className: 'fa fa-info'
-  },
-  {
-    title: 'Move list',
-    className: 'fa fa-list-alt'
-  },
-  {
-    title: 'Explorer',
-    className: 'fa fa-book'
-  },
-  {
-    title: 'Charts',
-    className: 'fa fa-line-chart'
-  }
-]
-
 function renderAnalyseTabs(ctrl: AnalyseCtrl) {
-  const curTitle = TABS[ctrl.currentTab].title
+
+  const curTitle = ctrl.currentTab().title
+
   return h('div.analyse-header', [
     ctrl.ceval.enabled() ? h(EvalBox, { ctrl }) : null,
     h('div.analyse-tabs', [
       h('div.tab-title', [
-        ctrl.currentTab === 1 ?
-          renderOpening(ctrl) || curTitle :
-          curTitle
+        ctrl.currentTab().id === 'explorer' ?
+        renderOpening(ctrl) || curTitle :
+        curTitle
       ]),
       h(TabNavigation, {
-        buttons: TABS,
-        selectedIndex: ctrl.currentTab,
+        buttons: ctrl.availableTabs(),
+        selectedIndex: ctrl.currentTabIndex,
         onTabChange: ctrl.onTabChange
       })
     ])
   ])
 }
 
+function renderReplay(ctrl: AnalyseCtrl) {
+  return h(Replay, { ctrl })
+}
+
+const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.BaseNode } = {
+  infos: renderGameInfos,
+  moves: renderReplay,
+  explorer: renderExplorer,
+  charts: renderComputerAnalysis
+}
+
 function renderAnalyseTable(ctrl: AnalyseCtrl) {
 
-  const tabsContent = [
-    renderGameInfos(ctrl),
-    h(Replay, { ctrl }),
-    renderExplorer(ctrl),
-    h('div', 'TODO')
-  ]
+  const tabsContent = ctrl.availableTabs().map(t =>
+    TabsContentRendererMap[t.id](ctrl)
+  )
 
   return h('div.analyse-table', {
     key: 'analyse'
@@ -109,7 +98,7 @@ function renderAnalyseTable(ctrl: AnalyseCtrl) {
     renderAnalyseTabs(ctrl),
     h(TabView, {
       className: 'analyse-tabsContent',
-      selectedIndex: ctrl.currentTab,
+      selectedIndex: ctrl.currentTabIndex,
       content: tabsContent,
       onTabChange: ctrl.onTabChange
     })

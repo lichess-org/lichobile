@@ -1,6 +1,7 @@
-import { piotr2key } from './piotr'
 import * as isObject from 'lodash/isObject'
 import { AnalyseData } from '../../lichess/interfaces/analyse'
+import { piotr2key } from './piotr'
+import { SanToRole } from './interfaces'
 
 function isString(o: DestsMap | string): o is string {
   return typeof o === 'string'
@@ -57,3 +58,12 @@ export function autoScroll(movelist: HTMLElement | null) {
     }
   })
 }
+
+export const sanToRole: SanToRole = {
+  P: 'pawn',
+  N: 'knight',
+  B: 'bishop',
+  R: 'rook',
+  Q: 'queen'
+}
+

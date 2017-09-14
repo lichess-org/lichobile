@@ -1,5 +1,4 @@
 import redraw from '../../utils/redraw'
-import evalSummary from './evalSummaryPopup'
 import sound from '../../sound'
 import vibrate from '../../vibrate'
 import { AnalyseDataWithTree } from '../../lichess/interfaces/analyse'
@@ -19,7 +18,6 @@ export default function(ctrl: AnalyseCtrl) {
 
       if (data.tree.eval) {
         ctrl.menu.s.analysisProgress = false
-        ctrl.evalSummary = ctrl.data.analysis ? evalSummary.controller(ctrl) : null
         sound.dong()
         vibrate.quick()
         redraw()

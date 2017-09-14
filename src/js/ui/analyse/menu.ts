@@ -109,14 +109,7 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
     ctrl.menu.s.analysisProgress ? h('div.analysisProgress', [
       h('span', 'Analysis in progress'),
       spinner.getVdom()
-    ]) : null,
-    ctrl.data.analysis ? h('button', {
-      key: 'open_analysis_summary',
-      oncreate: helper.ontap(() => {
-        ctrl.menu.close()
-        ctrl.evalSummary!.open()
-      })
-    }, [h('span.fa.fa-line-chart'), 'Analysis summary']) : null
+    ]) : null
   ])
 }
 

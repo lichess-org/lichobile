@@ -24,8 +24,8 @@ export interface Attrs {
   color?: Color
   fen?: string
   variant?: VariantKey
-  ply?: number
-  tab?: number
+  ply?: string
+  tab?: string
 }
 
 export interface State {
@@ -39,8 +39,8 @@ export default {
     const orientation: Color = vnode.attrs.color || 'white'
     const fenArg = vnode.attrs.fen
     const variant = vnode.attrs.variant
-    const ply = vnode.attrs.ply
-    const tab = Number(vnode.attrs.tab)
+    const ply = Number(vnode.attrs.ply) || undefined
+    const tab = Number(vnode.attrs.tab) || undefined
 
     const shouldGoBack = gameId !== undefined || fenArg !== undefined
 

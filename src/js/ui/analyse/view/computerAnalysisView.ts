@@ -3,14 +3,27 @@ import i18n  from '../../../i18n'
 import * as gameApi from '../../../lichess/game'
 import { playerName } from '../../../utils'
 import { AnalyseData } from '../../../lichess/interfaces/analyse'
-import { renderRatingDiff } from '../../helper'
+import { viewportDim, renderRatingDiff } from '../../helper'
 
 import AnalyseCtrl from '../AnalyseCtrl'
+import AcplChart from '../charts/acpl'
 
 export default function renderComputerAnalysis(ctrl: AnalyseCtrl): Mithril.BaseNode {
+  const vw = viewportDim().vw
+
   return h('div.analyse-computerAnalysis.native_scroller', [
-    ctrl.data.analysis ?
-      h(AcplSummary, { d: ctrl.data }) : h('div', 'Request computer analysis')
+    ctrl.data.analysis ? [
+      h('svg#acpl-chart.acpl-chart', {
+        width: vw,
+        height: 200,
+        oncreate({ dom }: Mithril.DOMNode) {
+          setTimeout(() => {
+            AcplChart(dom as SVGElement, ctrl.data)
+          }, 300)
+        }
+      }),
+      h(AcplSummary, { d: ctrl.data })
+    ] : h('div', 'Request computer analysis')
   ])
 }
 

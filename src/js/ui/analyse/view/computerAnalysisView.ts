@@ -15,7 +15,7 @@ export default function renderComputerAnalysis(ctrl: AnalyseCtrl): Mithril.BaseN
     ctrl.data.analysis ? [
       h('svg#acpl-chart.acpl-chart', {
         width: vw,
-        height: 130,
+        height: 100,
         oncreate({ dom }: Mithril.DOMNode) {
           setTimeout(() => {
             AcplChart(dom as SVGElement, ctrl.data)

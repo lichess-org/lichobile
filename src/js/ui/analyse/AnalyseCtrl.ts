@@ -171,7 +171,9 @@ export default class AnalyseCtrl {
     const loc = window.location.search.replace(/\?tab\=\w+$/, '')
     try {
       window.history.replaceState(window.history.state, '', loc + '?tab=' + index)
-    } catch (e) { console.error(e) }
+    } catch (e) {
+      console.error(e)
+    }
     this.currentTab = index
     if (this.currentTab === 2) this.explorer.setStep()
     redraw()

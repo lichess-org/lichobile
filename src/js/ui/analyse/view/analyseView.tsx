@@ -6,12 +6,12 @@ import ViewOnlyBoard from '../../shared/ViewOnlyBoard'
 import { notesView } from '../../shared/round/notes'
 import menu from '../menu'
 import analyseSettings from '../analyseSettings'
-import explorerView from '../explorer/explorerView'
 import evalSummary from '../evalSummaryPopup'
 import TabNavigation from '../../shared/TabNavigation'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 import { EvalBox } from '../ceval/cevalView'
+import renderExplorer from '../explorer/explorerView'
 import TabView from './TabView'
 import Replay from './Replay'
 import renderBoard from './boardView'
@@ -22,7 +22,7 @@ export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Cl
   return h.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
     renderBoard(ctrl, isPortrait, bounds),
     h('div.analyse-tableWrapper', [
-      ctrl.explorer.enabled() ? explorerView(ctrl) : renderAnalyseTable(ctrl),
+      renderAnalyseTable(ctrl),
       renderActionsBar(ctrl)
     ])
   ])
@@ -66,12 +66,12 @@ const TABS = [
     className: 'fa fa-list-alt'
   },
   {
-    title: 'Charts',
-    className: 'fa fa-line-chart'
-  },
-  {
     title: 'Explorer',
     className: 'fa fa-book'
+  },
+  {
+    title: 'Charts',
+    className: 'fa fa-line-chart'
   }
 ]
 
@@ -99,8 +99,8 @@ function renderAnalyseTable(ctrl: AnalyseCtrl) {
   const tabsContent = [
     renderGameInfos(ctrl),
     h(Replay, { ctrl }),
-    h('div', 'TODO'),
-    h('div', 'explorer goes here')
+    renderExplorer(ctrl),
+    h('div', 'TODO')
   ]
 
   return h('div.analyse-table', {

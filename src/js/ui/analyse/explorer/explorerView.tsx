@@ -5,6 +5,34 @@ import { ExplorerMove, isTablebaseData } from '../interfaces'
 import AnalyseCtrl from '../AnalyseCtrl'
 import OpeningTable, { showEmpty, getTR } from './OpeningTable'
 
+export default function renderExplorer(ctrl: AnalyseCtrl) {
+  const data = ctrl.explorer.current()
+  const config = ctrl.explorer.config
+  const configOpened = config.open()
+  const loading = !configOpened && ctrl.explorer.loading()
+  const className = helper.classSet({
+    explorerTable: true,
+    loading
+  })
+  return (
+    <div id="explorerTable" className={className} key="explorer">
+      <div className="explorer-fixedTitle">{showTitle(ctrl)}</div>
+      { loading ? <div key="loader" className="spinner_overlay">
+        <div className="spinner fa fa-hourglass-half" />
+      </div> : null
+      }
+      { configOpened ? showConfig(ctrl) : null }
+      { !configOpened && ctrl.explorer.failing() ? failing() : null }
+      { !configOpened && !ctrl.explorer.failing() ? show(ctrl) : null }
+      { configOpened || (data && data.opening) ?
+        <span key={configOpened ? 'config-onpen' : 'config-close'} className="toconf" data-icon={configOpened ? 'L' : '%'}
+          oncreate={helper.ontap(config.toggleOpen)}
+        /> : null
+      }
+    </div>
+  )
+}
+
 function onTablebaseTap(ctrl: AnalyseCtrl, e: Event) {
   const el = getTR(e)
   const uci = el && el.dataset['uci']
@@ -81,17 +109,14 @@ function showDtz(stm: string, move: ExplorerMove) {
   }, 'DTZ ' + Math.abs(move.dtz))
 }
 
-function showGameEnd(ctrl: AnalyseCtrl, title: string) {
+function showGameEnd(title: string) {
   return h('div.explorer-data.empty', {
     key: 'explorer-game-end' + title
   }, [
     h('div.title', 'Game over'),
     h('div.message', [
       h('i[data-icon=]'),
-      h('h3', title),
-      h('button.button.text[data-icon=L]', {
-        oncreate: helper.ontapY(ctrl.explorer.toggle)
-      }, 'Close')
+      h('h3', title)
     ])
   ])
 }
@@ -115,9 +140,9 @@ function show(ctrl: AnalyseCtrl) {
         </div>
       )
     }
-    else if (data.checkmate) return showGameEnd(ctrl, 'Checkmate')
-    else if (data.stalemate) return showGameEnd(ctrl, 'Stalemate')
-    else if (data.variant_win || data.variant_loss) return showGameEnd(ctrl, 'Variant end')
+    else if (data.checkmate) return showGameEnd('Checkmate')
+    else if (data.stalemate) return showGameEnd('Stalemate')
+    else if (data.variant_win || data.variant_loss) return showGameEnd('Variant end')
     else return showEmpty(ctrl)
   }
   return <div key="explorer-no-data" />
@@ -140,31 +165,3 @@ function failing() {
   ])
 }
 
-export default function(ctrl: AnalyseCtrl) {
-  if (!ctrl.explorer.enabled()) return null
-  const data = ctrl.explorer.current()
-  const config = ctrl.explorer.config
-  const configOpened = config.open()
-  const loading = !configOpened && ctrl.explorer.loading()
-  const className = helper.classSet({
-    explorerTable: true,
-    loading
-  })
-  return (
-    <div id="explorerTable" className={className} key="explorer">
-      <div className="explorer-fixedTitle">{showTitle(ctrl)}</div>
-      { loading ? <div key="loader" className="spinner_overlay">
-        <div className="spinner fa fa-hourglass-half" />
-      </div> : null
-      }
-      { configOpened ? showConfig(ctrl) : null }
-      { !configOpened && ctrl.explorer.failing() ? failing() : null }
-      { !configOpened && !ctrl.explorer.failing() ? show(ctrl) : null }
-      { configOpened || (data && data.opening) ?
-        <span key={configOpened ? 'config-onpen' : 'config-close'} className="toconf" data-icon={configOpened ? 'L' : '%'}
-          oncreate={helper.ontap(config.toggleOpen)}
-        /> : null
-      }
-    </div>
-  )
-}

@@ -1,18 +1,10 @@
 import i18n from '../../../i18n'
-import { hasNetwork } from '../../../utils'
 import * as helper from '../../helper'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 
 
 export default function renderActionsBar(ctrl: AnalyseCtrl) {
-
-  const explorerBtnClass = [
-    'action_bar_button',
-    'fa',
-    'fa-book',
-    ctrl.explorer && ctrl.explorer.enabled() ? 'highlight' : ''
-  ].join(' ')
 
   return (
     <section className="actions_bar analyse_actions_bar">
@@ -22,14 +14,6 @@ export default function renderActionsBar(ctrl: AnalyseCtrl) {
       {ctrl.ceval.allowed ?
         <button className="action_bar_button fa fa-gear" key="analyseSettings"
           oncreate={helper.ontap(ctrl.settings.open)}
-        /> : null
-      }
-      {hasNetwork() ?
-        <button className={explorerBtnClass} key="explorer"
-          oncreate={helper.ontap(
-            ctrl.explorer.toggle,
-            () => window.plugins.toast.show('Opening explorer & endgame tablebase', 'short', 'bottom')
-          )}
         /> : null
       }
       <button className="action_bar_button" data-icon="B" key="flipBoard"

@@ -21,13 +21,13 @@ import { getPGN } from '../shared/round/roundXhr'
 import * as util from './util'
 import cevalCtrl from './ceval/cevalCtrl'
 import crazyValid from './crazy/crazyValid'
-import explorerCtrl from './explorer/explorerCtrl'
+import ExplorerCtrl from './explorer/ExplorerCtrl'
 import menu from './menu'
 import evalSummary from './evalSummaryPopup'
 import analyseSettings from './analyseSettings'
 import ground from './ground'
 import socketHandler from './analyseSocketHandler'
-import { VM, SanToRole, Source, ExplorerCtrlInterface, CevalCtrlInterface, MenuInterface, CevalEmit } from './interfaces'
+import { VM, SanToRole, Source, IExplorerCtrl, CevalCtrlInterface, MenuInterface, CevalEmit } from './interfaces'
 
 const sanToRole: SanToRole = {
   P: 'pawn',
@@ -50,7 +50,7 @@ export default class AnalyseCtrl {
 
   chessground: Chessground
   ceval: CevalCtrlInterface
-  explorer: ExplorerCtrlInterface
+  explorer: IExplorerCtrl
   tree: TreeWrapper
 
   currentTab: number = 1
@@ -101,7 +101,7 @@ export default class AnalyseCtrl {
     this.notes = null
 
     this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg)
-    this.explorer = explorerCtrl(this, true)
+    this.explorer = ExplorerCtrl(this)
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50)
 
     const initPly = Number(ply) ||
@@ -175,6 +175,7 @@ export default class AnalyseCtrl {
       window.history.replaceState(window.history.state, '', loc + '?tab=' + index)
     } catch (e) { console.error(e) }
     this.currentTab = index
+    if (this.currentTab === 2) this.explorer.setStep()
     redraw()
   }
 

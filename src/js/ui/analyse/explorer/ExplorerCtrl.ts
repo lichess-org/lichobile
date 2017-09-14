@@ -1,40 +1,22 @@
 import * as stream from 'mithril/stream'
 import redraw from '../../../utils/redraw'
 import * as debounce from 'lodash/debounce'
-import router from '../../../router'
 import explorerConfig from './explorerConfig'
 import { openingXhr, tablebaseXhr } from './explorerXhr'
 import { isSynthetic } from '../util'
 import * as gameApi from '../../../lichess/game'
-import { ExplorerCtrlInterface, ExplorerData } from '../interfaces'
+import { IExplorerCtrl, ExplorerData } from '../interfaces'
 import AnalyseCtrl from '../AnalyseCtrl'
 
-function tablebaseRelevant(fen: string) {
-  const parts = fen.split(/\s/)
-  const pieceCount = parts[0].split(/[nbrqkp]/i).length - 1
-  return pieceCount <= 7
-}
+export default function ExplorerCtrl(
+  root: AnalyseCtrl
+): IExplorerCtrl {
 
-export default function(root: AnalyseCtrl, allow: boolean): ExplorerCtrlInterface {
-
-  const allowed = stream(allow)
-  const enabled = stream(false)
   const loading = stream(true)
   const failing = stream(false)
   const current: Mithril.Stream<ExplorerData> = stream({
     moves: []
   })
-
-  function open() {
-    router.backbutton.stack.push(close)
-    enabled(true)
-  }
-
-  function close(fromBB?: string) {
-    if (fromBB !== 'backbutton' && enabled()) router.backbutton.stack.pop()
-    enabled(false)
-    setTimeout(() => root && root.debouncedScroll(), 200)
-  }
 
   let cache: {[index: string]: ExplorerData} = {}
 
@@ -103,7 +85,6 @@ export default function(root: AnalyseCtrl, allow: boolean): ExplorerCtrlInterfac
   }
 
   function setStep() {
-    if (!enabled()) return
     const node = root.node
     if (node.ply > 50 && !tablebaseRelevant(node.fen)) {
       setResult(node.fen, empty)
@@ -122,18 +103,17 @@ export default function(root: AnalyseCtrl, allow: boolean): ExplorerCtrlInterfac
   }
 
   return {
-    allowed,
-    enabled,
     setStep,
     loading,
     failing,
     config,
     withGames,
-    current,
-    toggle() {
-      if (enabled()) close()
-      else open()
-      setStep()
-    }
+    current
   }
+}
+
+function tablebaseRelevant(fen: string) {
+  const parts = fen.split(/\s/)
+  const pieceCount = parts[0].split(/[nbrqkp]/i).length - 1
+  return pieceCount <= 7
 }

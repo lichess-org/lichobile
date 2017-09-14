@@ -14,7 +14,7 @@ export default function renderBoard(ctrl: AnalyseCtrl, isPortrait: boolean, boun
 
   let nextBest: string | undefined
   let curBestShape: Shape[] = [], pastBestShape: Shape[] = []
-  if (!ctrl.explorer.enabled() && ctrl.ceval.enabled() && ctrl.vm.showBestMove) {
+  if (ctrl.currentTab !== 2 && ctrl.ceval.enabled() && ctrl.vm.showBestMove) {
     nextBest = ctrl.nextNodeBest()
     curBestShape = nextBest ? moveOrDropShape(nextBest, 'paleBlue', player) :
     ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
@@ -25,7 +25,7 @@ export default function renderBoard(ctrl: AnalyseCtrl, isPortrait: boolean, boun
     moveOrDropShape(rEval.best, 'paleGreen', player) : []
   }
 
-  const nextStep = ctrl.explorer.enabled() && ctrl.node && treeOps.nodeAtPly(ctrl.nodeList, ctrl.node.ply + 1)
+  const nextStep = ctrl.currentTab === 2 && ctrl.node && treeOps.nodeAtPly(ctrl.nodeList, ctrl.node.ply + 1)
 
   const nextMoveShape: Shape[] = nextStep && nextStep.uci ?
     moveOrDropShape(nextStep.uci, 'palePurple', player) : []

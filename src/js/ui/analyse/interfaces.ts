@@ -60,16 +60,13 @@ export interface MenuInterface {
   root: AnalyseCtrl
 }
 
-export interface ExplorerCtrlInterface {
-  allowed: Mithril.Stream<boolean>
-  enabled: Mithril.Stream<boolean>
+export interface IExplorerCtrl {
   setStep(): void
   loading: Mithril.Stream<boolean>
   failing: Mithril.Stream<boolean>
   config: any
   withGames: boolean
   current: Mithril.Stream<ExplorerData>
-  toggle(): void
 }
 
 export interface ExplorerMove {

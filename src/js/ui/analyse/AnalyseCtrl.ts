@@ -198,6 +198,8 @@ export default class AnalyseCtrl {
       console.error(e)
     }
     this._currentTabIndex = index
+    const cur = this.currentTab(this.availableTabs())
+    if (cur.id === 'moves') this.debouncedScroll()
     this.explorer.setStep()
     redraw()
   }

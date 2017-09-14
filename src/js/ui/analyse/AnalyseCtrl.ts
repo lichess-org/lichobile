@@ -59,11 +59,12 @@ export default class AnalyseCtrl {
   gamePath?: Tree.Path
 
   // various view state flags
-  currentTabIndex: number = 1
   replaying: boolean = false
   cgConfig?: cg.SetConfig
   shouldGoBack: boolean
   formattedDate: string
+
+  private _currentTabIndex: number = 0
 
   private debouncedExplorerSetStep: () => void
 
@@ -84,7 +85,8 @@ export default class AnalyseCtrl {
     this.source = source
     this.synthetic = util.isSynthetic(data)
     this.initialPath = treePath.root
-    this.currentTabIndex = tab !== undefined ? tab : 1
+    this._currentTabIndex = tab !== undefined ? tab :
+      this.synthetic ? 0 : 1
 
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
       window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center')
@@ -129,6 +131,11 @@ export default class AnalyseCtrl {
     }
 
     this.showGround()
+
+    if (this.currentTab(this.availableTabs()).id === 'explorer') {
+      this.debouncedExplorerSetStep()
+    }
+
     setTimeout(this.debouncedScroll, 250)
     setTimeout(this.initCeval, 1000)
     window.plugins.insomnia.keepAwake()
@@ -167,21 +174,20 @@ export default class AnalyseCtrl {
   availableTabs = (): tabs.Tab[] => {
     let val = tabs.defaults
 
+    if (this.synthetic) val = val.filter(t => t.id !== 'infos')
     if (hasNetwork()) val = val.concat([tabs.explorer])
     if (gameApi.analysable(this.data)) val = val.concat([tabs.charts])
 
     return val
   }
 
-  // TODO maybe have a dynamic currentTabIndex() too
-  currentTab = (): tabs.Tab => {
-    const a = this.availableTabs()
-    const tab = a[this.currentTabIndex]
-    if (!tab) {
-      this.currentTabIndex = 1
-      return a[1]
-    }
-    else return tab
+  currentTabIndex = (avail: tabs.Tab[]): number => {
+    if (this._currentTabIndex > avail.length - 1) return avail.length - 1
+    else return this._currentTabIndex
+  }
+
+  currentTab = (avail: tabs.Tab[]): tabs.Tab => {
+    return avail[this.currentTabIndex(avail)]
   }
 
   onTabChange = (index: number) => {
@@ -191,8 +197,8 @@ export default class AnalyseCtrl {
     } catch (e) {
       console.error(e)
     }
-    this.currentTabIndex = index
-    if (this.currentTab().id === 'explorer') this.explorer.setStep()
+    this._currentTabIndex = index
+    if (this.currentTab(this.availableTabs()).id === 'explorer') this.explorer.setStep()
     redraw()
   }
 

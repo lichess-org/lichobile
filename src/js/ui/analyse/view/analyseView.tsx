@@ -8,6 +8,7 @@ import menu from '../menu'
 import analyseSettings from '../analyseSettings'
 import TabNavigation from '../../shared/TabNavigation'
 
+import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
 import { EvalBox } from '../ceval/cevalView'
 import renderExplorer from '../explorer/explorerView'
@@ -19,10 +20,12 @@ import renderGameInfos from './gameInfosView'
 import renderActionsBar from './actionsView'
 
 export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: ClientRect) {
+  const availTabs = ctrl.availableTabs()
+
   return h.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
-    renderBoard(ctrl, isPortrait, bounds),
+    renderBoard(ctrl, isPortrait, bounds, availTabs),
     h('div.analyse-tableWrapper', [
-      renderAnalyseTable(ctrl),
+      renderAnalyseTable(ctrl, availTabs),
       renderActionsBar(ctrl)
     ])
   ])
@@ -54,21 +57,21 @@ function renderOpening(ctrl: AnalyseCtrl) {
   ])
 }
 
-function renderAnalyseTabs(ctrl: AnalyseCtrl) {
+function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: Tab[]) {
 
-  const curTitle = ctrl.currentTab().title
+  const curTitle = ctrl.currentTab(availTabs).title
 
   return h('div.analyse-header', [
     ctrl.ceval.enabled() ? h(EvalBox, { ctrl }) : null,
     h('div.analyse-tabs', [
       h('div.tab-title', [
-        ctrl.currentTab().id === 'moves' ?
+        ctrl.currentTab(availTabs).id === 'moves' ?
           renderOpening(ctrl) || curTitle :
         curTitle
       ]),
       h(TabNavigation, {
-        buttons: ctrl.availableTabs(),
-        selectedIndex: ctrl.currentTabIndex,
+        buttons: availTabs,
+        selectedIndex: ctrl.currentTabIndex(availTabs),
         onTabChange: ctrl.onTabChange
       })
     ])
@@ -86,19 +89,19 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Bas
   charts: renderComputerAnalysis
 }
 
-function renderAnalyseTable(ctrl: AnalyseCtrl) {
+function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[]) {
 
-  const tabsContent = ctrl.availableTabs().map(t =>
+  const tabsContent = availTabs.map(t =>
     TabsContentRendererMap[t.id](ctrl)
   )
 
   return h('div.analyse-table', {
     key: 'analyse'
   }, [
-    renderAnalyseTabs(ctrl),
+    renderAnalyseTabs(ctrl, availTabs),
     h(TabView, {
       className: 'analyse-tabsContent',
-      selectedIndex: ctrl.currentTabIndex,
+      selectedIndex: ctrl.currentTabIndex(availTabs),
       content: tabsContent,
       onTabChange: ctrl.onTabChange
     })

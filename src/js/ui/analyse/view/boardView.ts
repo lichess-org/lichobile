@@ -5,16 +5,23 @@ import Board from '../../shared/Board'
 import { Shape } from '../../shared/BoardBrush'
 import * as treeOps from '../../shared/tree/ops'
 
+import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
 
-export default function renderBoard(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: ClientRect) {
+export default function renderBoard(
+  ctrl: AnalyseCtrl,
+  isPortrait: boolean,
+  bounds: ClientRect,
+  availTabs: Tab[]
+) {
+  const curTab = ctrl.currentTab(availTabs)
   const player = ctrl.data.game.player
   const ceval = ctrl.node && ctrl.node.ceval
   const rEval = ctrl.node && ctrl.node.eval
 
   let nextBest: string | undefined
   let curBestShape: Shape[] = [], pastBestShape: Shape[] = []
-  if (ctrl.currentTab().id !== 'explorer' && ctrl.ceval.enabled() && ctrl.settings.s.showBestMove) {
+  if (curTab.id !== 'explorer' && ctrl.ceval.enabled() && ctrl.settings.s.showBestMove) {
     nextBest = ctrl.nextNodeBest()
     curBestShape = nextBest ? moveOrDropShape(nextBest, 'paleBlue', player) :
     ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
@@ -25,7 +32,7 @@ export default function renderBoard(ctrl: AnalyseCtrl, isPortrait: boolean, boun
     moveOrDropShape(rEval.best, 'paleGreen', player) : []
   }
 
-  const nextStep = ctrl.currentTab().id === 'explorer' && ctrl.node && treeOps.nodeAtPly(ctrl.nodeList, ctrl.node.ply + 1)
+  const nextStep = curTab.id === 'explorer' && ctrl.node && treeOps.nodeAtPly(ctrl.nodeList, ctrl.node.ply + 1)
 
   const nextMoveShape: Shape[] = nextStep && nextStep.uci ?
     moveOrDropShape(nextStep.uci, 'palePurple', player) : []

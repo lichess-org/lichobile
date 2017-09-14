@@ -85,6 +85,7 @@ export default function ExplorerCtrl(
   }
 
   function setStep() {
+    if (root.currentTab(root.availableTabs()).id !== 'explorer') return
     const node = root.node
     if (node.ply > 50 && !tablebaseRelevant(node.fen)) {
       setResult(node.fen, empty)

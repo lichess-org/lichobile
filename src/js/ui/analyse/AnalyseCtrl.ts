@@ -198,7 +198,7 @@ export default class AnalyseCtrl {
       console.error(e)
     }
     this._currentTabIndex = index
-    if (this.currentTab(this.availableTabs()).id === 'explorer') this.explorer.setStep()
+    this.explorer.setStep()
     redraw()
   }
 

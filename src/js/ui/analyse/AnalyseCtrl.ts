@@ -138,12 +138,8 @@ export default class AnalyseCtrl {
     window.plugins.insomnia.keepAwake()
   }
 
-  setPath = (path: Tree.Path): void => {
-    this.path = path
-    this.nodeList = this.tree.getNodeList(path)
-    this.node = treeOps.last(this.nodeList) as Tree.Node
-    this.mainline = treeOps.mainlineNodeList(this.tree.root)
-    this.onMainline = this.tree.pathIsMainline(path)
+  canDrop = () => {
+    return true
   }
 
   player = () => {
@@ -162,6 +158,14 @@ export default class AnalyseCtrl {
         this.data.url.round
       )
     }
+  }
+
+  setPath = (path: Tree.Path): void => {
+    this.path = path
+    this.nodeList = this.tree.getNodeList(path)
+    this.node = treeOps.last(this.nodeList) as Tree.Node
+    this.mainline = treeOps.mainlineNodeList(this.tree.root)
+    this.onMainline = this.tree.pathIsMainline(path)
   }
 
   onTabChange = (index: number) => {
@@ -184,54 +188,7 @@ export default class AnalyseCtrl {
     }
   }
 
-  private startCeval = () => {
-    if (this.ceval.enabled() && this.canUseCeval()) {
-      this.ceval.start(this.path, this.nodeList)
-    }
-  }
-
-  private showGround() {
-    const node = this.node
-
-    if (this.data.game.variant.key === 'threeCheck' && !node.checkCount) {
-      node.checkCount = util.readCheckCount(node.fen)
-    }
-
-    const color: Color = node.ply % 2 === 0 ? 'white' : 'black'
-    const dests = util.readDests(node.dests)
-    const config = {
-      fen: node.fen,
-      turnColor: color,
-      orientation: this.settings.s.flip ? oppositeColor(this.orientation) : this.orientation,
-      movableColor: this.gameOver() ? null : color,
-      dests: dests || null,
-      check: !!node.check,
-      lastMove: node.uci ? chessFormat.uciToMoveOrDrop(node.uci) : null
-    }
-
-    this.vm.cgConfig = config
-    this.data.game.player = color
-    if (!this.chessground) {
-      this.chessground = ground.make(this.data, config, this.orientation, this.userMove, this.userNewPiece)
-    } else {
-      this.chessground.set(config)
-    }
-
-    if (!dests) this.getNodeSituation()
-  }
-
   debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200)
-
-  private updateHref = debounce(() => {
-    const step = this.node
-    if (step) {
-      try {
-        window.history.replaceState(window.history.state, '', '#' + step.ply)
-      } catch (e) { console.error(e) }
-    }
-  }, 750)
-
-  private debouncedStartCeval = debounce(this.startCeval, 800)
 
   jump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
     this.setPath(path)
@@ -245,16 +202,12 @@ export default class AnalyseCtrl {
     this.ceval.stop()
     this.debouncedExplorerSetStep()
     this.updateHref()
-    this.debouncedStartCeval()
+    this.startCeval()
     promotion.cancel(this.chessground, this.vm.cgConfig)
   }
 
   userJump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
     this.jump(path, direction)
-  }
-
-  private mainlinePathToPly(ply: Ply): Tree.Path {
-    return treeOps.takePathWhile(this.mainline, n => n.ply <= ply)
   }
 
   jumpToMain = (ply: number) => {
@@ -263,25 +216,6 @@ export default class AnalyseCtrl {
 
   jumpToIndex = (index: number) => {
     this.jumpToMain(index + 1 + (this.data.game.startedAtTurn || 0))
-  }
-
-  private canGoForward() {
-    return this.node.children.length > 0
-  }
-
-  private next() {
-    if (!this.canGoForward()) return false
-
-    const child = this.node.children[0]
-    if (child) this.userJump(this.path + child.id, 'forward')
-
-    return true
-  }
-
-  private prev() {
-    this.userJump(treePath.init(this.path), 'backward')
-
-    return true
   }
 
   fastforward = () => {
@@ -316,7 +250,135 @@ export default class AnalyseCtrl {
     this.debouncedScroll()
   }
 
-  canDrop = () => {
+  explorerMove = (uci: string) => {
+    const move = AnalyseCtrl.decomposeUci(uci)
+    if (uci[1] === '@') {
+      this.chessground.apiNewPiece({
+        color: this.chessground.state.movable.color as Color,
+        role: sanToRole[uci[0]]
+      }, move[1])
+    } else if (!move[2]) {
+      this.sendMove(move[0], move[1])
+    }
+    else {
+      this.sendMove(move[0], move[1], sanToRole[move[2].toUpperCase()])
+    }
+    this.explorer.loading(true)
+  }
+
+  isRemoteAnalysable = () => {
+    return !this.data.analysis && !this.vm.analysisProgress &&
+      session.isConnected() && this.data.url !== undefined &&
+      gameApi.analysable(this.data)
+  }
+
+  mergeAnalysisData(data: AnalyseDataWithTree): void {
+    this.tree.merge(data.tree)
+    this.data.analysis = data.analysis
+    redraw()
+  }
+
+  gameOver() {
+    if (!this.node) return false
+    // step.end boolean is fetched async for online games (along with the dests)
+    if (this.node.end === undefined) {
+      if (this.node.check) {
+        const san = this.node.san
+        const checkmate = san && san[san.length - 1] === '#'
+        return checkmate
+      }
+    } else {
+      return this.node.end
+    }
+  }
+
+  canUseCeval = () => {
+    return !this.gameOver()
+  }
+
+  nextNodeBest() {
+    return treeOps.withMainlineChild(this.node, (n: Tree.Node) => n.eval ? n.eval.best : undefined)
+  }
+
+  hasAnyComputerAnalysis = () => {
+    return this.data.analysis || this.ceval.enabled()
+  }
+
+  sharePGN = () => {
+    if (!this.vm.computingPGN) {
+      this.vm.computingPGN = true
+      if (this.source === 'online') {
+        getPGN(this.data.game.id)
+        .then((pgn: string) => {
+          this.vm.computingPGN = false
+          redraw()
+          window.plugins.socialsharing.share(pgn)
+        })
+        .catch(e => {
+          this.vm.computingPGN = false
+          redraw()
+          handleXhrError(e)
+        })
+      } else {
+        const endSituation = this.tree.lastNode()
+        const white = this.data.player.color === 'white' ?
+        (this.data.game.id === 'offline_ai' ? session.appUser('Anonymous') : 'Anonymous') :
+        (this.data.game.id === 'offline_ai' ? this.data.opponent.username : 'Anonymous')
+        const black = this.data.player.color === 'black' ?
+        (this.data.game.id === 'offline_ai' ? session.appUser('Anonymous') : 'Anonymous') :
+        (this.data.game.id === 'offline_ai' ? this.data.opponent.username : 'Anonymous')
+        chess.pgnDump({
+          variant: this.data.game.variant.key,
+          initialFen: this.data.game.initialFen,
+          pgnMoves: endSituation.pgnMoves || [],
+          white,
+          black
+        })
+        .then((res: chess.PgnDumpResponse) => {
+          this.vm.computingPGN = false
+          redraw()
+          window.plugins.socialsharing.share(res.pgn)
+        })
+        .catch(e => {
+          this.vm.computingPGN = false
+          redraw()
+          console.error(e)
+        })
+      }
+    }
+  }
+
+  // ---
+
+  private updateHref = debounce(() => {
+    const step = this.node
+    if (step) {
+      try {
+        window.history.replaceState(window.history.state, '', '#' + step.ply)
+      } catch (e) { console.error(e) }
+    }
+  }, 750)
+
+  private mainlinePathToPly(ply: Ply): Tree.Path {
+    return treeOps.takePathWhile(this.mainline, n => n.ply <= ply)
+  }
+
+  private canGoForward() {
+    return this.node.children.length > 0
+  }
+
+  private next() {
+    if (!this.canGoForward()) return false
+
+    const child = this.node.children[0]
+    if (child) this.userJump(this.path + child.id, 'forward')
+
+    return true
+  }
+
+  private prev() {
+    this.userJump(treePath.init(this.path), 'backward')
+
     return true
   }
 
@@ -360,23 +422,7 @@ export default class AnalyseCtrl {
     } else this.jump(this.path)
   }
 
-  explorerMove = (uci: string) => {
-    const move = AnalyseCtrl.decomposeUci(uci)
-    if (uci[1] === '@') {
-      this.chessground.apiNewPiece({
-        color: this.chessground.state.movable.color as Color,
-        role: sanToRole[uci[0]]
-      }, move[1])
-    } else if (!move[2]) {
-      this.sendMove(move[0], move[1])
-    }
-    else {
-      this.sendMove(move[0], move[1], sanToRole[move[2].toUpperCase()])
-    }
-    this.explorer.loading(true)
-  }
-
-  addNode = ({ situation, path }: chess.MoveResponse) => {
+  private addNode = ({ situation, path }: chess.MoveResponse) => {
     const curNode = this.node
     const node = {
       id: situation.nodeId,
@@ -458,90 +504,42 @@ export default class AnalyseCtrl {
     })
   }
 
-  gameOver() {
-    if (!this.node) return false
-    // step.end boolean is fetched async for online games (along with the dests)
-    if (this.node.end === undefined) {
-      if (this.node.check) {
-        const san = this.node.san
-        const checkmate = san && san[san.length - 1] === '#'
-        return checkmate
-      }
+  private startCeval = debounce(() => {
+    if (this.ceval.enabled() && this.canUseCeval()) {
+      this.ceval.start(this.path, this.nodeList)
+    }
+  }, 800)
+
+  private showGround() {
+    const node = this.node
+
+    if (this.data.game.variant.key === 'threeCheck' && !node.checkCount) {
+      node.checkCount = util.readCheckCount(node.fen)
+    }
+
+    const color: Color = node.ply % 2 === 0 ? 'white' : 'black'
+    const dests = util.readDests(node.dests)
+    const config = {
+      fen: node.fen,
+      turnColor: color,
+      orientation: this.settings.s.flip ? oppositeColor(this.orientation) : this.orientation,
+      movableColor: this.gameOver() ? null : color,
+      dests: dests || null,
+      check: !!node.check,
+      lastMove: node.uci ? chessFormat.uciToMoveOrDrop(node.uci) : null
+    }
+
+    this.vm.cgConfig = config
+    this.data.game.player = color
+    if (!this.chessground) {
+      this.chessground = ground.make(this.data, config, this.orientation, this.userMove, this.userNewPiece)
     } else {
-      return this.node.end
+      this.chessground.set(config)
     }
+
+    if (!dests) this.getNodeSituation()
   }
 
-  canUseCeval = () => {
-    return !this.gameOver()
-  }
-
-  nextNodeBest() {
-    return treeOps.withMainlineChild(this.node, (n: Tree.Node) => n.eval ? n.eval.best : undefined)
-  }
-
-  hasAnyComputerAnalysis = () => {
-    return this.data.analysis || this.ceval.enabled()
-  }
-
-  sharePGN = () => {
-    if (!this.vm.computingPGN) {
-      this.vm.computingPGN = true
-      if (this.source === 'online') {
-        getPGN(this.data.game.id)
-        .then((pgn: string) => {
-          this.vm.computingPGN = false
-          redraw()
-          window.plugins.socialsharing.share(pgn)
-        })
-        .catch(e => {
-          this.vm.computingPGN = false
-          redraw()
-          handleXhrError(e)
-        })
-      } else {
-        const endSituation = this.tree.lastNode()
-        const white = this.data.player.color === 'white' ?
-        (this.data.game.id === 'offline_ai' ? session.appUser('Anonymous') : 'Anonymous') :
-        (this.data.game.id === 'offline_ai' ? this.data.opponent.username : 'Anonymous')
-        const black = this.data.player.color === 'black' ?
-        (this.data.game.id === 'offline_ai' ? session.appUser('Anonymous') : 'Anonymous') :
-        (this.data.game.id === 'offline_ai' ? this.data.opponent.username : 'Anonymous')
-        chess.pgnDump({
-          variant: this.data.game.variant.key,
-          initialFen: this.data.game.initialFen,
-          pgnMoves: endSituation.pgnMoves || [],
-          white,
-          black
-        })
-        .then((res: chess.PgnDumpResponse) => {
-          this.vm.computingPGN = false
-          redraw()
-          window.plugins.socialsharing.share(res.pgn)
-        })
-        .catch(e => {
-          this.vm.computingPGN = false
-          redraw()
-          console.error(e)
-        })
-      }
-    }
-  }
-
-  toggleComputerAnalysis = () => {
-  }
-
-  isRemoteAnalysable = () => {
-    return !this.data.analysis && !this.vm.analysisProgress &&
-      session.isConnected() && this.data.url !== undefined &&
-      gameApi.analysable(this.data)
-  }
-
-  mergeAnalysisData(data: AnalyseDataWithTree): void {
-    this.tree.merge(data.tree)
-    this.data.analysis = data.analysis
-    redraw()
-  }
 
   private getNodeSituation = debounce(() => {
     if (this.node && !this.node.dests) {

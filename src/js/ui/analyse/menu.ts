@@ -13,7 +13,7 @@ import AnalyseCtrl from './AnalyseCtrl'
 
 export default {
 
-  controller: function(root: AnalyseCtrl) {
+  controller(root: AnalyseCtrl) {
     let isOpen = false
 
     function open() {
@@ -27,16 +27,14 @@ export default {
     }
 
     return {
-      open: open,
-      close: close,
-      isOpen: function() {
-        return isOpen
-      },
+      open,
+      close,
+      isOpen: () => isOpen,
       root
     }
   },
 
-  view: function(ctrl: MenuInterface) {
+  view(ctrl: MenuInterface) {
     return popupWidget(
       'analyse_menu',
       undefined,

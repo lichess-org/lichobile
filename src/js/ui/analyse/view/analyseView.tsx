@@ -1,4 +1,5 @@
 import * as h from 'mithril/hyperscript'
+import i18n from '../../../i18n'
 import { noNull } from '../../../utils'
 import continuePopup from '../../shared/continuePopup'
 import { view as renderPromotion } from '../../shared/offlineRound/promotion'
@@ -59,7 +60,7 @@ function renderOpening(ctrl: AnalyseCtrl) {
 
 function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: Tab[]) {
 
-  const curTitle = ctrl.currentTab(availTabs).title
+  const curTitle = i18n(ctrl.currentTab(availTabs).title)
 
   return h('div.analyse-header', [
     ctrl.ceval.enabled() ? h(EvalBox, { ctrl }) : null,
@@ -86,7 +87,7 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Bas
   infos: renderGameInfos,
   moves: renderReplay,
   explorer: renderExplorer,
-  charts: renderComputerAnalysis
+  computer: renderComputerAnalysis
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[]) {

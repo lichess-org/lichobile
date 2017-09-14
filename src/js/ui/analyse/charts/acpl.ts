@@ -22,7 +22,7 @@ export default function AcplChart(element: SVGElement, aData: AnalyseData) {
   .rangeRound([0, width])
 
   const y = scaleLinear()
-  .domain([-1.1, 1.1])
+  .domain([-1, 1])
   .rangeRound([height, 0])
 
   const line = d3Area<Point>()
@@ -31,7 +31,7 @@ export default function AcplChart(element: SVGElement, aData: AnalyseData) {
 
   const area = d3Area<Point>()
   .x((_, i) => x(i))
-  .y1(d => d.acpl <= 0 ? y(0) : y(d.acpl))
+  .y1(d => d.acpl >= 0 ? y(d.acpl) : y(0))
 
   g.datum(graphData)
 

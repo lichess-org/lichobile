@@ -1,12 +1,13 @@
-
 .acpl-chart
-  background-color lighten(bgdark, 30%)
+  background linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 20%, rgba(128, 128, 128, 0.2) 50%, rgba(255, 255, 255, 0) 80%, rgba(255, 255, 255, 0) 100%)
   .area.above
-    fill: #fff
+    fill: rgba(#fff, 0.8)
   .area.below
     fill: #000
-  .zeroline, .line
+  .line
     stroke orange
+  .zeroline
+    stroke rgba(#fff, 0.3)
 
 .analyseSettings
   label[for='showComments']
@@ -511,12 +512,11 @@ comment
 .evalSummary
   display flex
   flex-flow row wrap
-  padding 10px
+  justify-content space-around
+  padding 1em
+  font-size 0.9em
   > table
-    &:first-child
-      margin-bottom 10px
-    > tbody
-      font-size 0.9em
+    width 48%
   th
     padding-right 1em
     text-align center

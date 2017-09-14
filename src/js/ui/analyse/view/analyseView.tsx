@@ -62,8 +62,8 @@ function renderAnalyseTabs(ctrl: AnalyseCtrl) {
     ctrl.ceval.enabled() ? h(EvalBox, { ctrl }) : null,
     h('div.analyse-tabs', [
       h('div.tab-title', [
-        ctrl.currentTab().id === 'explorer' ?
-        renderOpening(ctrl) || curTitle :
+        ctrl.currentTab().id === 'moves' ?
+          renderOpening(ctrl) || curTitle :
         curTitle
       ]),
       h(TabNavigation, {

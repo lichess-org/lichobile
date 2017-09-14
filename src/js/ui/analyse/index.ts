@@ -40,7 +40,7 @@ export default {
     const fenArg = vnode.attrs.fen
     const variant = vnode.attrs.variant
     const ply = vnode.attrs.ply
-    const tab = vnode.attrs.tab
+    const tab = Number(vnode.attrs.tab)
 
     const shouldGoBack = gameId !== undefined || fenArg !== undefined
 

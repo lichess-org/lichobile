@@ -193,9 +193,17 @@ comment
   justify-content space-between
   font-size 0.9em
   color #aaa
+  min-width 0 // fix white-space nowrap
   > .tab-title
+    flex 1 1 auto
     padding 0 0.5em
+    overflow hidden
+    white-space nowrap
+    > div
+      overflow hidden
+      text-overflow ellipsis
   > .tabs-navigation
+    flex 0 0 auto
     height 25px
     > .tab-button
       padding 0 0.5em

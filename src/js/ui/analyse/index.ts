@@ -123,10 +123,10 @@ export default {
     if (this.ctrl) {
 
       const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', this.ctrl.settings.s.smallBoard)
-      const backButton = this.ctrl.vm.shouldGoBack ?
+      const backButton = this.ctrl.shouldGoBack ?
         renderBackbutton(h(GameTitle, { data: this.ctrl.data, withPlayers: true }), true) : null
 
-      const title = this.ctrl.vm.shouldGoBack ? null : i18n('analysis')
+      const title = this.ctrl.shouldGoBack ? null : i18n('analysis')
 
       return layout.board(
         () => header(title, backButton),

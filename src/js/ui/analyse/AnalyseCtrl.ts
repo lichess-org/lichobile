@@ -1,6 +1,7 @@
 import * as debounce from 'lodash/debounce'
 import router from '../../router'
 import Chessground from '../../chessground/Chessground'
+import * as cg from '../../chessground/interfaces'
 import * as chess from '../../chess'
 import * as chessFormat from '../../utils/chessFormat'
 import { build as makeTree, path as treePath, ops as treeOps, TreeWrapper, Tree } from '../shared/tree'
@@ -26,7 +27,7 @@ import evalSummary from './evalSummaryPopup'
 import analyseSettings, { ISettingsCtrl } from './analyseSettings'
 import ground from './ground'
 import socketHandler from './analyseSocketHandler'
-import { VM, SanToRole, Source, IExplorerCtrl, CevalCtrlInterface, MenuInterface, CevalEmit } from './interfaces'
+import { SanToRole, Source, IExplorerCtrl, CevalCtrlInterface, MenuInterface, CevalEmit } from './interfaces'
 
 const sanToRole: SanToRole = {
   P: 'pawn',
@@ -40,7 +41,6 @@ export default class AnalyseCtrl {
   data: AnalyseData
   orientation: Color
   source: Source
-  vm: VM
 
   settings: ISettingsCtrl
   menu: IMainMenuCtrl
@@ -67,9 +67,12 @@ export default class AnalyseCtrl {
   initialPath: Tree.Path
   gamePath?: Tree.Path
 
-  // view state flags
+  // various view state flags
   currentTab: number = 1
   replaying: boolean = false
+  cgConfig?: cg.SetConfig
+  shouldGoBack: boolean
+  formattedDate: string
 
   private debouncedExplorerSetStep: () => void
 
@@ -118,11 +121,9 @@ export default class AnalyseCtrl {
     this.setPath(this.initialPath)
 
     const gameMoment = window.moment(this.data.game.createdAt)
-    this.vm = {
-      shouldGoBack,
-      formattedDate: gameMoment.format('L LT'),
-      cgConfig: undefined,
-    }
+
+    this.shouldGoBack = shouldGoBack
+    this.formattedDate = gameMoment.format('L LT')
 
     if (this.isRemoteAnalysable()) {
       this.connectGameSocket()
@@ -201,7 +202,7 @@ export default class AnalyseCtrl {
     this.debouncedExplorerSetStep()
     this.updateHref()
     this.startCeval()
-    promotion.cancel(this.chessground, this.vm.cgConfig)
+    promotion.cancel(this.chessground, this.cgConfig)
   }
 
   userJump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
@@ -483,7 +484,7 @@ export default class AnalyseCtrl {
       lastMove: node.uci ? chessFormat.uciToMoveOrDrop(node.uci) : null
     }
 
-    this.vm.cgConfig = config
+    this.cgConfig = config
     this.data.game.player = color
     if (!this.chessground) {
       this.chessground = ground.make(this.data, config, this.orientation, this.userMove, this.userNewPiece)

@@ -1,4 +1,3 @@
-import * as cg from '../../chessground/interfaces'
 import { Tree } from '../shared/tree'
 import AnalyseCtrl from './AnalyseCtrl'
 
@@ -37,12 +36,6 @@ export interface CevalCtrlInterface {
   enabled(): boolean
   toggle(): void
   cores: number
-}
-
-export interface VM {
-  formattedDate: string
-  shouldGoBack: boolean
-  cgConfig?: cg.SetConfig
 }
 
 export interface MenuInterface {

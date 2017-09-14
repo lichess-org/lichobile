@@ -50,7 +50,7 @@ export default function renderGameInfos(ctrl: AnalyseCtrl) {
         }) : null}
       </div>
       <div className="gameInfos">
-        {ctrl.vm.formattedDate ? ctrl.vm.formattedDate : null}
+        {ctrl.formattedDate ? ctrl.formattedDate : null}
         { ctrl.data.game.source === 'import' && ctrl.data.game.importedBy ?
           <div>Imported by {ctrl.data.game.importedBy}</div> : null
         }

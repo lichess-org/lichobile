@@ -12,7 +12,7 @@ interface ReplayDataSet extends DOMStringMap {
 let pieceNotation: boolean
 export default {
   onbeforeupdate({ attrs }) {
-    return !attrs.ctrl.vm.replaying
+    return !attrs.ctrl.replaying
   },
   view({ attrs }) {
     const { ctrl } = attrs

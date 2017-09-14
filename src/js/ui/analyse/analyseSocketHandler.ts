@@ -12,13 +12,13 @@ export default function(ctrl: AnalyseCtrl) {
 
       ctrl.mergeAnalysisData(data)
 
-      if (!ctrl.vm.analysisProgress) {
-        ctrl.vm.analysisProgress = true
+      if (!ctrl.menu.s.analysisProgress) {
+        ctrl.menu.s.analysisProgress = true
         redraw()
       }
 
       if (data.tree.eval) {
-        ctrl.vm.analysisProgress = false
+        ctrl.menu.s.analysisProgress = false
         ctrl.evalSummary = ctrl.data.analysis ? evalSummary.controller(ctrl) : null
         sound.dong()
         vibrate.quick()

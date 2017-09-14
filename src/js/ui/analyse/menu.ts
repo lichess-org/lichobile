@@ -19,6 +19,7 @@ export interface IMainMenuCtrl {
   root: AnalyseCtrl
   s: {
     computingPGN: boolean
+    analysisProgress: boolean
   }
 }
 
@@ -38,7 +39,8 @@ export default {
     }
 
     const s = {
-      computingPGN: false
+      computingPGN: false,
+      analysisProgress: false
     }
 
     return {
@@ -98,13 +100,13 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
       oncreate: helper.ontap(() => {
         return requestComputerAnalysis(ctrl.data.game.id)
         .then(() => {
-          ctrl.vm.analysisProgress = true
+          ctrl.menu.s.analysisProgress = true
           redraw()
         })
         .catch(handleXhrError)
       })
     }, [h('span.fa.fa-bar-chart'), i18n('requestAComputerAnalysis')]) : null,
-    ctrl.vm.analysisProgress ? h('div.analysisProgress', [
+    ctrl.menu.s.analysisProgress ? h('div.analysisProgress', [
       h('span', 'Analysis in progress'),
       spinner.getVdom()
     ]) : null,

@@ -43,8 +43,6 @@ export interface VM {
   formattedDate: string
   shouldGoBack: boolean
   cgConfig?: cg.SetConfig
-  analysisProgress: boolean
-  replaying: boolean
 }
 
 export interface MenuInterface {

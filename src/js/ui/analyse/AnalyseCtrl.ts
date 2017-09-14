@@ -52,8 +52,6 @@ export default class AnalyseCtrl {
   explorer: IExplorerCtrl
   tree: TreeWrapper
 
-  currentTab: number = 1
-
   // current tree state, cursor, and denormalized node lists
   path: Tree.Path
   node: Tree.Node
@@ -68,6 +66,10 @@ export default class AnalyseCtrl {
   // paths
   initialPath: Tree.Path
   gamePath?: Tree.Path
+
+  // view state flags
+  currentTab: number = 1
+  replaying: boolean = false
 
   private debouncedExplorerSetStep: () => void
 
@@ -120,8 +122,6 @@ export default class AnalyseCtrl {
       shouldGoBack,
       formattedDate: gameMoment.format('L LT'),
       cgConfig: undefined,
-      analysisProgress: false,
-      replaying: false
     }
 
     if (this.isRemoteAnalysable()) {
@@ -217,33 +217,33 @@ export default class AnalyseCtrl {
   }
 
   fastforward = () => {
-    this.vm.replaying = true
+    this.replaying = true
     const more = this.next()
     if (!more) {
-      this.vm.replaying = false
+      this.replaying = false
       this.debouncedScroll()
     }
     return more
   }
 
   stopff = () => {
-    this.vm.replaying = false
+    this.replaying = false
     this.next()
     this.debouncedScroll()
   }
 
   rewind = () => {
-    this.vm.replaying = true
+    this.replaying = true
     const more = this.prev()
     if (!more) {
-      this.vm.replaying = false
+      this.replaying = false
       this.debouncedScroll()
     }
     return more
   }
 
   stoprewind = () => {
-    this.vm.replaying = false
+    this.replaying = false
     this.prev()
     this.debouncedScroll()
   }
@@ -265,7 +265,7 @@ export default class AnalyseCtrl {
   }
 
   isRemoteAnalysable = () => {
-    return !this.data.analysis && !this.vm.analysisProgress &&
+    return !this.data.analysis && !this.menu.s.analysisProgress &&
       session.isConnected() && this.data.url !== undefined &&
       gameApi.analysable(this.data)
   }

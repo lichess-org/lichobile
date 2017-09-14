@@ -3,7 +3,7 @@ import { renderEval } from '../util'
 
 export const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
   onbeforeupdate({ attrs }) {
-    return !attrs.ctrl.vm.replaying
+    return !attrs.ctrl.replaying
   },
   view({ attrs }) {
     const { ctrl } = attrs
@@ -28,7 +28,7 @@ export const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
       percent = 0
     }
     else  {
-      pearl = ctrl.vm.replaying ? '' : spinnerPearl
+      pearl = ctrl.replaying ? '' : spinnerPearl
       percent = 0
     }
 

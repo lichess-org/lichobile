@@ -35,12 +35,12 @@ const AcplSummary: Mithril.Component<{ d: AnalyseData }, {}> = {
   view({ attrs }) {
     const { d } = attrs
 
-    return h('div.evalSummary', ['white', 'black'].map((color: Color) => {
+    return h('div.analyse-evalSummary', ['white', 'black'].map((color: Color) => {
       const p = gameApi.getPlayer(d, color)
 
       return h('table', [
         h('thead', h('tr', [
-          h('th', h('span.light.color-icon.' + color)),
+          h('th', h('span.color-icon.' + color)),
           h('td', [playerName(p), p ? renderRatingDiff(p) : null])
         ])),
         h('tbody', [

@@ -15,6 +15,7 @@ import { EvalBox } from '../ceval/cevalView'
 import TabView from './TabView'
 import Replay from './Replay'
 import renderBoard from './boardView'
+import renderGameInfos from './gameInfosView'
 import renderActionsBar from './actionsView'
 
 export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: ClientRect) {
@@ -96,7 +97,7 @@ function renderAnalyseTabs(ctrl: AnalyseCtrl) {
 function renderAnalyseTable(ctrl: AnalyseCtrl) {
 
   const tabsContent = [
-    h('div', 'coucou'),
+    renderGameInfos(ctrl),
     h(Replay, { ctrl }),
     h('div', 'TODO'),
     h('div', 'explorer goes here')

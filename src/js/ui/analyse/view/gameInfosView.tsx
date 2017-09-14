@@ -1,7 +1,6 @@
 import * as h from 'mithril/hyperscript'
 import * as utils from '../../../utils'
 import i18n from '../../../i18n'
-import { formatClockTime } from '../../shared/round/clock/clockView'
 import * as gameApi from '../../../lichess/game'
 import gameStatusApi from '../../../lichess/status'
 import CrazyPocket from '../../shared/round/crazy/CrazyPocket'
@@ -9,7 +8,7 @@ import * as helper from '../../helper'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 
-export function renderGameInfos(ctrl: AnalyseCtrl, isPortrait: boolean) {
+export default function renderGameInfos(ctrl: AnalyseCtrl) {
   const player = ctrl.data.player
   const opponent = ctrl.data.opponent
   if (!player || !opponent) return null
@@ -17,7 +16,7 @@ export function renderGameInfos(ctrl: AnalyseCtrl, isPortrait: boolean) {
   const isCrazy = ctrl.data.game.variant.key === 'crazyhouse'
 
   return (
-    <div className="analyse-gameInfosWrapper">
+    <div className="analyse-gameInfos">
       <div className="analyseOpponent">
         <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
           <span className={'color-icon ' + player.color} />
@@ -27,12 +26,6 @@ export function renderGameInfos(ctrl: AnalyseCtrl, isPortrait: boolean) {
             ' +' + getChecksCount(ctrl, player.color) : null
           }
         </div>
-        {ctrl.data.clock && (!isCrazy || !isPortrait) ?
-          <div className="analyseClock">
-            {formatClockTime(ctrl.data.clock[player.color] * 1000, false)}
-            <span className="fa fa-clock-o" />
-          </div> : null
-        }
         {isCrazy && ctrl.node && ctrl.node.crazyhouse ? h(CrazyPocket, {
           ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
           crazyData: ctrl.node.crazyhouse,
@@ -49,12 +42,6 @@ export function renderGameInfos(ctrl: AnalyseCtrl, isPortrait: boolean) {
             ' +' + getChecksCount(ctrl, opponent.color) : null
           }
         </div>
-        {ctrl.data.clock && (!isCrazy || !isPortrait) ?
-          <div className="analyseClock">
-            {formatClockTime(ctrl.data.clock[opponent.color] * 1000, false)}
-            <span className="fa fa-clock-o" />
-          </div> : null
-        }
         {isCrazy && ctrl.node && ctrl.node.crazyhouse ? h(CrazyPocket, {
           ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
           crazyData: ctrl.node.crazyhouse,
@@ -77,7 +64,7 @@ export function renderSyntheticPockets(ctrl: AnalyseCtrl) {
   const player = ctrl.data.player
   const opponent = ctrl.data.opponent
   return (
-    <div className="analyse-gameInfosWrapper synthetic">
+    <div className="analyse-gameInfos synthetic">
       <div className="analyseOpponent">
         <div className="analysePlayerName">
           <span className={'color-icon ' + player.color} />

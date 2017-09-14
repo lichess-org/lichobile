@@ -226,26 +226,18 @@ comment
   font-weight normal
   line-height 1.2
 
-.analyse-gameInfosWrapper
-  padding 5px
-  font-size 0.8em
-  @media only screen and (min-width: 600px)
-    font-size 1em
-  @media only screen and (orientation landscape) and (min-width: 801px)
-    font-size 0.9em
-  @media only screen and (orientation landscape) and (min-width: 1025px)
-    font-size 1em
-  @media only screen and (orientation: landscape) and (max-height 450px)
-    font-size 0.7em
+.analyse-gameInfos
+  padding 2em 1em
 
 .analyseGameInfosWrapper
   display flex
   border-bottom 1px solid lighten(bgdark, 15%)
 
-.analyse-gameInfosWrapper
+.analyse-gameInfos
   display flex
   flex-flow column wrap
   justify-content flex-start
+  align-items center
   > .gameInfos
     font-size 0.9em
   > .status

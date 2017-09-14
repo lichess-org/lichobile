@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import router from '../../router'
 import redraw from '../../utils/redraw'
 import i18n from '../../i18n'
@@ -7,13 +8,23 @@ import * as gameApi from '../../lichess/game'
 import { handleXhrError } from '../../utils'
 import { requestComputerAnalysis } from './analyseXhr'
 import * as helper from '../helper'
-import * as h from 'mithril/hyperscript'
-import { MenuInterface } from './interfaces'
+
+import pgnExport from './pgnExport'
 import AnalyseCtrl from './AnalyseCtrl'
+
+export interface IMainMenuCtrl {
+  open: () => void
+  close: () => void
+  isOpen: () => boolean
+  root: AnalyseCtrl
+  s: {
+    computingPGN: boolean
+  }
+}
 
 export default {
 
-  controller(root: AnalyseCtrl) {
+  controller(root: AnalyseCtrl): IMainMenuCtrl {
     let isOpen = false
 
     function open() {
@@ -26,15 +37,20 @@ export default {
       isOpen = false
     }
 
+    const s = {
+      computingPGN: false
+    }
+
     return {
       open,
       close,
       isOpen: () => isOpen,
-      root
+      root,
+      s
     }
   },
 
-  view(ctrl: MenuInterface) {
+  view(ctrl: IMainMenuCtrl) {
     return popupWidget(
       'analyse_menu',
       undefined,
@@ -48,7 +64,7 @@ export default {
 function renderAnalyseMenu(ctrl: AnalyseCtrl) {
 
   const sharePGN = helper.ontap(
-    ctrl.sharePGN,
+    () => pgnExport(ctrl),
     () => window.plugins.toast.show('Share PGN', 'short', 'bottom')
   )
 
@@ -67,7 +83,7 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? h('button', {
       key: 'sharePGN',
       oncreate: sharePGN
-    }, ctrl.vm.computingPGN ? spinner.getVdom('monochrome') : [h('span.fa.fa-share-alt'), i18n('sharePGN')]) : null,
+    }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : [h('span.fa.fa-share-alt'), i18n('sharePGN')]) : null,
     ctrl.notes ? h('button', {
       key: 'notes',
       oncreate: helper.ontap(() => {

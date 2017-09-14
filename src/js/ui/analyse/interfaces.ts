@@ -44,7 +44,6 @@ export interface VM {
   shouldGoBack: boolean
   cgConfig?: cg.SetConfig
   analysisProgress: boolean
-  computingPGN: boolean
   replaying: boolean
 }
 

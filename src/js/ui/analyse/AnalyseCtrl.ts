@@ -13,16 +13,15 @@ import * as gameApi from '../../lichess/game'
 import { AnalyseData, AnalyseDataWithTree } from '../../lichess/interfaces/analyse'
 import { Opening } from '../../lichess/interfaces/game'
 import settings from '../../settings'
-import { handleXhrError, oppositeColor, hasNetwork, noop } from '../../utils'
+import { oppositeColor, hasNetwork, noop } from '../../utils'
 import promotion from '../shared/offlineRound/promotion'
 import continuePopup, { Controller as ContinuePopupController } from '../shared/continuePopup'
 import { NotesCtrl } from '../shared/round/notes'
-import { getPGN } from '../shared/round/roundXhr'
 import * as util from './util'
 import cevalCtrl from './ceval/cevalCtrl'
 import crazyValid from './crazy/crazyValid'
 import ExplorerCtrl from './explorer/ExplorerCtrl'
-import menu from './menu'
+import menu, { IMainMenuCtrl } from './menu'
 import evalSummary from './evalSummaryPopup'
 import analyseSettings, { ISettingsCtrl } from './analyseSettings'
 import ground from './ground'
@@ -44,7 +43,7 @@ export default class AnalyseCtrl {
   vm: VM
 
   settings: ISettingsCtrl
-  menu: MenuInterface
+  menu: IMainMenuCtrl
   continuePopup: ContinuePopupController
   evalSummary: MenuInterface | null
   notes: NotesCtrl | null
@@ -122,7 +121,6 @@ export default class AnalyseCtrl {
       formattedDate: gameMoment.format('L LT'),
       cgConfig: undefined,
       analysisProgress: false,
-      computingPGN: false,
       replaying: false
     }
 
@@ -302,50 +300,6 @@ export default class AnalyseCtrl {
 
   hasAnyComputerAnalysis = () => {
     return this.data.analysis || this.ceval.enabled()
-  }
-
-  sharePGN = () => {
-    if (!this.vm.computingPGN) {
-      this.vm.computingPGN = true
-      if (this.source === 'online') {
-        getPGN(this.data.game.id)
-        .then((pgn: string) => {
-          this.vm.computingPGN = false
-          redraw()
-          window.plugins.socialsharing.share(pgn)
-        })
-        .catch(e => {
-          this.vm.computingPGN = false
-          redraw()
-          handleXhrError(e)
-        })
-      } else {
-        const endSituation = this.tree.lastNode()
-        const white = this.data.player.color === 'white' ?
-        (this.data.game.id === 'offline_ai' ? session.appUser('Anonymous') : 'Anonymous') :
-        (this.data.game.id === 'offline_ai' ? this.data.opponent.username : 'Anonymous')
-        const black = this.data.player.color === 'black' ?
-        (this.data.game.id === 'offline_ai' ? session.appUser('Anonymous') : 'Anonymous') :
-        (this.data.game.id === 'offline_ai' ? this.data.opponent.username : 'Anonymous')
-        chess.pgnDump({
-          variant: this.data.game.variant.key,
-          initialFen: this.data.game.initialFen,
-          pgnMoves: endSituation.pgnMoves || [],
-          white,
-          black
-        })
-        .then((res: chess.PgnDumpResponse) => {
-          this.vm.computingPGN = false
-          redraw()
-          window.plugins.socialsharing.share(res.pgn)
-        })
-        .catch(e => {
-          this.vm.computingPGN = false
-          redraw()
-          console.error(e)
-        })
-      }
-    }
   }
 
   // ---

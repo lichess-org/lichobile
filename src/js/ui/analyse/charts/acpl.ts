@@ -9,7 +9,7 @@ interface Point {
   acpl: number
 }
 
-export default function AcplChart(element: SVGElement, aData: AnalyseData) {
+export default function drawAcplChart(element: SVGElement, aData: AnalyseData) {
   const graph = select(element)
   const graphData = makeSerieData(aData)
   const margin = {top: 10, right: 20, bottom: 10, left: 20}

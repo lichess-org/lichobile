@@ -9,29 +9,39 @@ import * as helper from '../../helper'
 
 import { requestComputerAnalysis } from '../analyseXhr'
 import AnalyseCtrl from '../AnalyseCtrl'
-import AcplChart from '../charts/acpl'
+import drawAcplChart from '../charts/acpl'
 
 export default function renderComputerAnalysis(ctrl: AnalyseCtrl): Mithril.BaseNode {
+
+  return h('div.analyse-computerAnalysis.native_scroller',
+    ctrl.data.analysis ? renderAnalysis(ctrl) : renderAnalysisRequest(ctrl)
+  )
+}
+
+function renderAnalysis(ctrl: AnalyseCtrl) {
   const vw = helper.viewportDim().vw
 
-  return h('div.analyse-computerAnalysis.native_scroller', [
-    ctrl.data.analysis ? [
-      h('svg#acpl-chart.acpl-chart', {
-        width: vw,
-        height: 100,
-        oncreate({ dom }: Mithril.DOMNode) {
-          setTimeout(() => {
-            AcplChart(dom as SVGElement, ctrl.data)
-          }, 300)
-        }
-      }),
-      h(AcplSummary, { d: ctrl.data })
-    ] : renderAnalysisRequest(ctrl)
+  return h.fragment({
+    key: 'analysis'
+  }, [
+    h('svg#acpl-chart.acpl-chart', {
+      key: 'chart',
+      width: vw,
+      height: 100,
+      oncreate({ dom }: Mithril.DOMNode) {
+        setTimeout(() => {
+          drawAcplChart(dom as SVGElement, ctrl.data)
+        }, 300)
+      }
+    }),
+    h(AcplSummary, { d: ctrl.data })
   ])
 }
 
 function renderAnalysisRequest(ctrl: AnalyseCtrl) {
-  return h('div.analyse-requestComputer', [
+  return h('div.analyse-requestComputer', {
+    key: 'request-analysis'
+  }, [
     ctrl.analysisProgress ? h('div.analysisProgress', [
       h('span', 'Analysis in progress'),
       spinner.getVdom()

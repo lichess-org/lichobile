@@ -26,5 +26,5 @@ export const explorer: Tab = {
 export const charts: Tab = {
   id: 'computer',
   title: 'computerAnalysis',
-  className: 'fa fa-line-chart'
+  className: 'fa fa-bar-chart'
 }

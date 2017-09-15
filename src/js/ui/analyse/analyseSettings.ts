@@ -3,6 +3,7 @@ import i18n from '../../i18n'
 import popupWidget from '../shared/popup'
 import router from '../../router'
 import * as gameApi from '../../lichess/game'
+import { isOnlineAnalyseData } from '../../lichess/interfaces/analyse'
 import settings from '../../settings'
 import { oppositeColor } from '../../utils'
 import formWidgets from '../shared/form'
@@ -112,7 +113,7 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
         ctrl.settings.toggleBestMove
       )
     ]) : null,
-    ctrl.source === 'online' && ctrl.data.url !== undefined && gameApi.analysable(ctrl.data) ? h('div.action', {
+    ctrl.source === 'online' && isOnlineAnalyseData(ctrl.data) && gameApi.analysable(ctrl.data) ? h('div.action', {
       key: 'showComments'
     }, [
       formWidgets.renderCheckbox(

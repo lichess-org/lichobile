@@ -24,6 +24,16 @@ export interface AnalyseData {
   }
 }
 
+export interface OnlineAnalyseData extends AnalyseData {
+  url: {
+    round: string
+    socket: string
+  }
+}
+export function isOnlineAnalyseData(d: AnalyseData): d is OnlineAnalyseData {
+  return (<OnlineAnalyseData>d).url !== undefined
+}
+
 export interface AnalyseDataWithTree extends AnalyseData {
   tree: Tree.Node
 }

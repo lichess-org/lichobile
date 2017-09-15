@@ -1,12 +1,9 @@
 import * as h from 'mithril/hyperscript'
 import router from '../../router'
-import redraw from '../../utils/redraw'
 import i18n from '../../i18n'
 import popupWidget from '../shared/popup'
 import spinner from '../../spinner'
 import * as gameApi from '../../lichess/game'
-import { handleXhrError } from '../../utils'
-import { requestComputerAnalysis } from './analyseXhr'
 import * as helper from '../helper'
 
 import pgnExport from './pgnExport'
@@ -19,7 +16,6 @@ export interface IMainMenuCtrl {
   root: AnalyseCtrl
   s: {
     computingPGN: boolean
-    analysisProgress: boolean
   }
 }
 
@@ -94,22 +90,7 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
           ctrl.notes.open()
         }
       })
-    }, [h('span.fa.fa-pencil'), i18n('notes')]) : null,
-    ctrl.isRemoteAnalysable() ? h('button', {
-      key: 'requestAComputerAnalysis',
-      oncreate: helper.ontap(() => {
-        return requestComputerAnalysis(ctrl.data.game.id)
-        .then(() => {
-          ctrl.menu.s.analysisProgress = true
-          redraw()
-        })
-        .catch(handleXhrError)
-      })
-    }, [h('span.fa.fa-bar-chart'), i18n('requestAComputerAnalysis')]) : null,
-    ctrl.menu.s.analysisProgress ? h('div.analysisProgress', [
-      h('span', 'Analysis in progress'),
-      spinner.getVdom()
-    ]) : null
+    }, [h('span.fa.fa-pencil'), i18n('notes')]) : null
   ])
 }
 

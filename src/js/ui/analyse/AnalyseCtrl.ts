@@ -11,7 +11,7 @@ import sound from '../../sound'
 import socket from '../../socket'
 import { openingSensibleVariants } from '../../lichess/variant'
 import * as gameApi from '../../lichess/game'
-import { AnalyseData, AnalyseDataWithTree } from '../../lichess/interfaces/analyse'
+import { AnalyseData, AnalyseDataWithTree, isOnlineAnalyseData } from '../../lichess/interfaces/analyse'
 import { Opening } from '../../lichess/interfaces/game'
 import settings from '../../settings'
 import { oppositeColor, hasNetwork, noop } from '../../utils'
@@ -62,6 +62,7 @@ export default class AnalyseCtrl {
   replaying: boolean = false
   cgConfig?: cg.SetConfig
   shouldGoBack: boolean
+  analysisProgress: boolean = false
   formattedDate: string
 
   private _currentTabIndex: number = 0
@@ -124,7 +125,10 @@ export default class AnalyseCtrl {
     this.shouldGoBack = shouldGoBack
     this.formattedDate = gameMoment.format('L LT')
 
-    if (this.isRemoteAnalysable()) {
+    if (
+      !this.data.analysis && session.isConnected() &&
+      isOnlineAnalyseData(this.data) && gameApi.analysable(this.data)
+    ) {
       this.connectGameSocket()
     } else {
       socket.createDefault()
@@ -176,7 +180,9 @@ export default class AnalyseCtrl {
 
     if (this.synthetic) val = val.filter(t => t.id !== 'infos')
     if (hasNetwork()) val = val.concat([tabs.explorer])
-    if (gameApi.analysable(this.data)) val = val.concat([tabs.charts])
+    if (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data)) {
+      val = val.concat([tabs.charts])
+    }
 
     return val
   }
@@ -290,12 +296,6 @@ export default class AnalyseCtrl {
       this.sendMove(move[0], move[1], util.sanToRole[move[2].toUpperCase()])
     }
     this.explorer.loading(true)
-  }
-
-  isRemoteAnalysable = () => {
-    return !this.data.analysis && !this.menu.s.analysisProgress &&
-      session.isConnected() && this.data.url !== undefined &&
-      gameApi.analysable(this.data)
   }
 
   mergeAnalysisData(data: AnalyseDataWithTree): void {

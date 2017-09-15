@@ -4,7 +4,7 @@ import settings from '../settings'
 import { MiniBoardGameObj } from './interfaces'
 import { UserGame } from './interfaces/user'
 import { GameData, OnlineGameData } from './interfaces/game'
-import { AnalyseData } from './interfaces/analyse'
+import { AnalyseData, OnlineAnalyseData } from './interfaces/analyse'
 import i18n from '../i18n'
 
 export const analysableVariants = ['standard', 'crazyhouse', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'antichess', 'horde', 'racingKings']
@@ -91,7 +91,7 @@ export function userAnalysable(data: GameData) {
   return settings.analyse.supportedVariants.indexOf(data.game.variant.key) !== -1 && playable(data) && (!data.clock || !isPlayerPlaying(data))
 }
 
-export function analysable(data: OnlineGameData | AnalyseData) {
+export function analysable(data: OnlineGameData | OnlineAnalyseData) {
   return replayable(data) && playedTurns(data) > 4 && analysableVariants.indexOf(data.game.variant.key) !== -1
 }
 

@@ -15,7 +15,7 @@ export default function drawAcplChart(element: SVGElement, aData: AnalyseData) {
 
   const graph = select(element)
   const graphData = makeSerieData(aData)
-  const margin = {top: 10, right: 20, bottom: 10, left: 20}
+  const margin = {top: 10, right: 10, bottom: 10, left: 10}
   const width = +graph.attr('width') - margin.left - margin.right
   const height = +graph.attr('height') - margin.top - margin.bottom
   const g = graph.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')

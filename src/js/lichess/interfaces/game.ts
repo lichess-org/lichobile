@@ -60,6 +60,11 @@ export interface Game {
   boosted?: boolean
   rematch?: string
   importedBy?: string
+  // only for analyse
+  division?: {
+    middle?: number | null
+    end?: number | null
+  }
   // only in mobile app
   offline?: boolean
 }

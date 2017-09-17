@@ -10,12 +10,31 @@ interface Point {
 }
 
 export default function drawAcplChart(element: SVGElement, aData: AnalyseData) {
+  const opening = aData.game.opening
+  const division = aData.game.division
+
   const graph = select(element)
   const graphData = makeSerieData(aData)
   const margin = {top: 10, right: 20, bottom: 10, left: 20}
   const width = +graph.attr('width') - margin.left - margin.right
   const height = +graph.attr('height') - margin.top - margin.bottom
   const g = graph.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+
+  function addDivisionLine(xPos: number, name: string) {
+    g.append('line')
+    .attr('class', 'division ' + name)
+    .attr('x1', xPos)
+    .attr('x2', xPos)
+    .attr('y1', y(-1))
+    .attr('y2', y(1))
+
+    g.append('text')
+    .attr('class', 'chart-legend')
+    .attr('transform', 'rotate(90)')
+    .attr('y', -xPos)
+    .attr('dy', '-0.4em')
+    .text(name)
+  }
 
   const x = scaleLinear()
   .domain([0, graphData.length])
@@ -65,6 +84,19 @@ export default function drawAcplChart(element: SVGElement, aData: AnalyseData) {
   g.append('path')
   .attr('class', 'line')
   .attr('d', line)
+
+  if (division) {
+    if (opening && opening.ply) {
+      addDivisionLine(x(opening.ply), 'Opening')
+    }
+    if (division.middle) {
+      addDivisionLine(x(division.middle), 'Middlegame')
+    }
+    if (division.end) {
+      addDivisionLine(x(division.end), 'Endgame')
+    }
+  }
+
 }
 
 function makeSerieData(d: AnalyseData): Point[] {

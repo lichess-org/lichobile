@@ -169,7 +169,8 @@ const perfIconsMap: {[index: string]: string} = {
   horde: '_',
   fromPosition: '*',
   racingKings: '',
-  crazyhouse: ''
+  crazyhouse: '',
+  ultraBullet: '{'
 }
 
 export function gameIcon(perf?: string): string {

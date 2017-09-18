@@ -306,5 +306,5 @@ export function truncate(text: string, len: number): string {
 
 export function safeStringToNum(s: string | null | undefined): number | undefined {
   const n = Number(s)
-  return n !== NaN ? n : undefined
+  return isNaN(n) ? undefined : n
 }

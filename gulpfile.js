@@ -1,22 +1,25 @@
-var path = require('path');
-var source = require('vinyl-source-stream');
-var minimist = require('minimist');
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var preprocess = require('gulp-preprocess');
-var watchify = require('watchify');
-var browserify = require('browserify');
-var babelify = require('babelify');
-var tsify = require('tsify');
-var stylus = require('gulp-stylus');
-var autoprefixer = require('gulp-autoprefixer');
-var rename = require('gulp-rename');
-var uglify = require('gulp-uglify');
-var sourcemaps = require('gulp-sourcemaps');
-var buffer = require('vinyl-buffer')
+const path = require('path');
+const source = require('vinyl-source-stream');
+const minimist = require('minimist');
+const gulp = require('gulp');
+const gutil = require('gulp-util');
+const preprocess = require('gulp-preprocess');
+const watchify = require('watchify');
+const browserify = require('browserify');
+const babelify = require('babelify');
+const tsify = require('tsify');
+const stylus = require('gulp-stylus');
+const autoprefixer = require('gulp-autoprefixer');
+const rename = require('gulp-rename');
+const uglify = require('gulp-uglify');
+const sourcemaps = require('gulp-sourcemaps');
+const buffer = require('vinyl-buffer')
+
+const SRC = 'src'
+const DEST = 'www'
 
 // command line options
-var minimistOptions = {
+const minimistOptions = {
   string: ['env', 'mode', 'target'],
   default: {
     env: 'env.json',
@@ -24,33 +27,38 @@ var minimistOptions = {
     target: 'browser'
   }
 };
-var options = minimist(process.argv.slice(2), minimistOptions);
+const options = minimist(process.argv.slice(2), minimistOptions);
 
-var paths = {
+const paths = {
   styles: ['src/styl/reset.styl', 'src/styl/common.styl', 'src/styl/form.styl',
-    'src/styl/overlay.styl', 'src/styl/overlay-popup.styl', 'src/styl/*.styl'
+    'src/styl/overlay.styl', 'src/styl/overlay-popup.styl', 'src/styl/*.styl',
+    'src/js/**/*.styl'
   ]
 };
 
-function buildHtml(src, dest, context) {
+gulp.task('html', () => {
+  const context = require('./' + options.env);
+  context.TARGET = options.target;
+  context.MODE = options.mode;
+
   console.log(context);
-  return gulp.src(path.join(src, 'index.html'))
+  return gulp.src(path.join(SRC, 'index.html'))
     .pipe(preprocess({context: context}))
-    .pipe(gulp.dest(dest));
-}
+    .pipe(gulp.dest(DEST));
+});
 
-function buildStyl(src, dest, mode) {
-  return gulp.src(src)
-    .pipe(stylus({
-      compress: mode === 'release'
-    }))
-    .pipe(autoprefixer({ browsers: ['and_chr >= 50', 'ios_saf >= 9']}))
-    .pipe(rename('app.css'))
-    .pipe(gulp.dest(dest + '/css/compiled/'));
-}
+gulp.task('styl', () => {
+  return gulp.src('src/styl/index.styl')
+  .pipe(stylus({
+    compress: options.mode === 'release'
+  }))
+  .pipe(autoprefixer({ browsers: ['and_chr >= 50', 'ios_saf >= 9']}))
+  .pipe(rename('app.css'))
+  .pipe(gulp.dest(DEST + '/css/compiled/'));
+});
 
-function buildScripts(src, dest) {
-  return browserify(src + '/js/main.ts', { debug: true })
+gulp.task('scripts', () => {
+  return browserify(SRC + '/js/main.ts', { debug: true })
     .plugin(tsify)
     .transform(babelify, {
       extensions: ['.tsx', '.ts', '.js', '.jsx'],
@@ -61,32 +69,17 @@ function buildScripts(src, dest) {
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(uglify())
-    .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
+    .on('error', error => gutil.log(gutil.colors.red(error.message)))
     .pipe(sourcemaps.write('../'))
-    .pipe(gulp.dest(dest));
-}
+    .pipe(gulp.dest(DEST));
 
-gulp.task('html', function() {
-  var context = require('./' + options.env);
-  context.TARGET = options.target;
-  context.MODE = options.mode;
-
-  return buildHtml('src', 'www', context);
 });
 
-gulp.task('styl', function() {
-  return buildStyl('src/styl/index.styl', 'www', options.mode);
-});
-
-gulp.task('scripts', function() {
-  return buildScripts('./src', 'www');
-});
-
-gulp.task('watch-scripts', function() {
-  var opts = watchify.args;
+gulp.task('watch-scripts', () => {
+  const opts = watchify.args;
   opts.debug = true;
 
-  var bundleStream = watchify(
+  const bundleStream = watchify(
     browserify('./src/js/main.ts', opts)
     .plugin(tsify)
     .transform(babelify, {
@@ -98,7 +91,7 @@ gulp.task('watch-scripts', function() {
   function rebundle() {
     return bundleStream
       .bundle()
-      .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
+      .on('error', error => gutil.log(gutil.colors.red(error.message)))
       .pipe(source('app.js'))
       .pipe(gulp.dest('./www'));
   }
@@ -110,7 +103,7 @@ gulp.task('watch-scripts', function() {
 });
 
 // Watch Files For Changes
-gulp.task('launch-watch', function() {
+gulp.task('launch-watch', () => {
   gulp.watch(paths.styles, ['styl']);
   gulp.watch(['src/index.html', 'env.json'], ['html']);
 });

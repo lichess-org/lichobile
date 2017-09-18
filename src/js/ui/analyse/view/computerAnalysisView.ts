@@ -24,7 +24,7 @@ function renderAnalysis(ctrl: AnalyseCtrl) {
   return h.fragment({
     key: 'analysis'
   }, [
-    h('svg#acpl-chart.acpl-chart', {
+    h('svg#acpl-chart.analyse-acplChart', {
       key: 'chart',
       width: vw,
       height: 100,

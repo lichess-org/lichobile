@@ -19,7 +19,7 @@ export const defaults: Tab[] = [
 
 export const explorer: Tab = {
   id: 'explorer',
-  title: 'Explorer',
+  title: 'Opening explorer & tablebase',
   className: 'fa fa-book'
 }
 

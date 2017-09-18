@@ -1,6 +1,5 @@
 import * as h from 'mithril/hyperscript'
 import i18n from '../../../i18n'
-import { noNull } from '../../../utils'
 import continuePopup from '../../shared/continuePopup'
 import { view as renderPromotion } from '../../shared/offlineRound/promotion'
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard'
@@ -45,7 +44,7 @@ export function overlay(ctrl: AnalyseCtrl) {
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notesView(ctrl.notes) : null,
     continuePopup.view(ctrl.continuePopup)
-  ].filter(noNull)
+  ]
 }
 
 function renderOpening(ctrl: AnalyseCtrl) {

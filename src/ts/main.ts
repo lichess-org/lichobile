@@ -1,4 +1,4 @@
-/// <reference path="../dts/index.d.ts" />
+/// <reference path="dts/index.d.ts" />
 
 'use strict'
 
@@ -40,7 +40,7 @@ function main() {
   helper.viewportDim()
 
   // iOs needs this to auto-rotate
-  window.shouldRotateToOrientation = function() {
+  window.shouldRotateToOrientation = () => {
     return true
   }
 
@@ -56,7 +56,7 @@ function main() {
   document.addEventListener('resume', onResume, false)
   document.addEventListener('pause', onPause, false)
   document.addEventListener('backbutton', router.backbutton, false)
-  window.addEventListener('unload', function() {
+  window.addEventListener('unload', () => {
     socket.destroy()
     socket.terminate()
   })
@@ -77,7 +77,7 @@ function main() {
       window.StatusBar.backgroundColorByHexString('#151A1E')
   }
 
-  setTimeout(function() {
+  setTimeout(() => {
     window.navigator.splashscreen.hide()
   }, 500)
 }

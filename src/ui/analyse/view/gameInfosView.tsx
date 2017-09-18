@@ -17,7 +17,7 @@ export default function renderGameInfos(ctrl: AnalyseCtrl) {
   const isCrazy = ctrl.data.game.variant.key === 'crazyhouse'
 
   return (
-    <div className="analyse-gameInfos">
+    <div className="analyse-gameInfos native_scroller">
       <div className="analyseOpponent">
         <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
           <span className={'color-icon ' + player.color} />

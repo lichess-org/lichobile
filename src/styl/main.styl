@@ -89,28 +89,37 @@ main
   &.active
     background headerBgDarkActive
 
+.header-subTitle
+  font-size 0.8em
+  opacity 0.9
+  overflow hidden
+  text-overflow ellipsis
+
 .back_button
   flex 0 1 auto
   display flex
   flex-flow row nowrap
   height headerHeight
-  font-size 1.1rem
   overflow hidden
   white-space nowrap
   text-overflow ellipsis
   padding 0
   > button
     margin 0
-    margin-right 5px
     height headerHeight
-    padding 0 18px
+    padding 0 16px
     > .svg-icon-wrapper
       width 24px
       height 24px
     &.active
       background headerBgDarkActive
   > .title
-    line-height headerHeight
+    &.withSub
+      font-size 1rem
+    font-size 1.1rem
+    display flex
+    flex-flow column nowrap
+    justify-content center
     padding-right 10px
     overflow hidden
     text-overflow ellipsis

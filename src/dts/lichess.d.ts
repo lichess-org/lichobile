@@ -26,6 +26,11 @@ declare type BoardPos = {
   bottom: number
 }
 
+declare type Uci = string
+declare type San = string
+declare type Fen = string
+declare type Ply = number
+
 declare type DestsMap = {
   [index: string]: Array<Key>
 }

@@ -1,0 +1,59 @@
+import { getLichessVariant, getInitialFen } from '../../lichess/variant'
+import { AnalyseData } from '../../lichess/interfaces/analyse'
+import { playerFromFen, plyFromFen } from '../../utils/fen'
+import { oppositeColor } from '../../utils'
+
+// const emptyPocket = {
+//   queen: 0,
+//   rook: 0,
+//   knight: 0,
+//   bishop: 0,
+//   pawn: 0
+// }
+
+export function makeDefaultData(variantKey: VariantKey, fen?: string): AnalyseData {
+  const player = playerFromFen(fen)
+  const ply = plyFromFen(fen)
+  const variant = getLichessVariant(variantKey)
+
+  const initialFen = fen || getInitialFen(variantKey)
+
+  return {
+    game: {
+      fen: initialFen,
+      id: 'synthetic',
+      initialFen: initialFen,
+      player,
+      source: 'offline',
+      status: {
+        id: 10,
+        name: 'created'
+      },
+      turns: 0,
+      startedAtTurn: 0,
+      variant
+    },
+    takebackable: false,
+    orientation: 'white',
+    opponent: {
+      id: oppositeColor(player),
+      color: oppositeColor(player)
+    },
+    player: {
+      color: player,
+      id: player
+    },
+    pref: {
+      animationDuration: 300,
+      destination: true,
+      highlight: true
+    },
+    treeParts: [
+      {
+        fen: initialFen,
+        ply
+      }
+    ],
+    userAnalysis: true
+  }
+}

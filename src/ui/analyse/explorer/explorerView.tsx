@@ -58,7 +58,7 @@ function showTablebase(ctrl: AnalyseCtrl, title: string, moves: Array<ExplorerMo
   return [
     <div className="title">{title}</div>,
     <table className="explorerTablebase"
-      oncreate={helper.ontap(e => onTablebaseTap(ctrl, e!), undefined, undefined, getTR)}
+      oncreate={helper.ontapXY(e => onTablebaseTap(ctrl, e!), undefined, getTR)}
     >
       <tbody>
       {moves.map((move: ExplorerMove) => {

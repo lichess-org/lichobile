@@ -30,6 +30,9 @@ explorerHeaderBg = lighten(bgdark, 1%)
       font-size 25px
   tbody, > .message
     transition: opacity 0.13s;
+  thead
+    > tr
+      background darkBlue
   th, .title
     color #ccc
     text-transform: capitalize;
@@ -202,12 +205,6 @@ explorerHeaderBg = lighten(bgdark, 1%)
 .view-container.light
   .explorerTable
     background themeBgLight
-    thead
-      > tr
-        background blue
-    th, .title
-      background blue
-      color #fff
     tr
       &:nth-child(even)
         background #fafafa

@@ -6,6 +6,38 @@
   flex 1 1 auto
   display flex
 
+.analyse-header
+  flex 0 0 25px
+  overflow hidden
+  display flex
+  flex-flow row nowrap
+  align-items center
+  align-content center
+
+.analyse-tabs
+  flex 1 1 auto
+  display flex
+  flex-flow row nowrap
+  align-items center
+  justify-content space-between
+  font-size 0.9em
+  min-width 0 // fix white-space nowrap
+  > .tab-title
+    flex 1 1 auto
+    padding 0 0.5em
+    overflow hidden
+    white-space nowrap
+    > div
+      overflow hidden
+      text-overflow ellipsis
+  > .tabs-navigation
+    background inherit
+    flex 0 0 auto
+    height 25px
+    > .tab-button
+      padding 0 0.5em
+      height 25px
+
 .analyse-tableWrapper
   margin-top 5px
   flex 1 1 auto
@@ -165,38 +197,6 @@ comment
       color gold
       font-size 20px
 
-.analyse-header
-  flex 0 0 25px
-  overflow hidden
-  display flex
-  flex-flow row nowrap
-  align-items center
-  align-content center
-
-.analyse-tabs
-  flex 1 1 auto
-  display flex
-  flex-flow row nowrap
-  align-items center
-  justify-content space-between
-  font-size 0.9em
-  min-width 0 // fix white-space nowrap
-  > .tab-title
-    flex 1 1 auto
-    padding 0 0.5em
-    overflow hidden
-    white-space nowrap
-    > div
-      overflow hidden
-      text-overflow ellipsis
-  > .tabs-navigation
-    background inherit
-    flex 0 0 auto
-    height 25px
-    > .tab-button
-      padding 0 0.5em
-      height 25px
-
 .analyse-engine_info
   flex 1 0
   font-size 0.65em
@@ -316,13 +316,16 @@ comment
   .analyse-tabsContent
     background #fff
 
-  .analyse-header
+  .analyse-table, .analyse-header
     background headerBgDark
+
+  .analyse-header
     color #ccc
 
   move
     color inherit
     &.current
+      background blue
       color #fff
 
   move.active

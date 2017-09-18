@@ -20,7 +20,7 @@ export default {
     const replayClass = 'analyse-replay native_scroller' + (pieceNotation ? ' displayPieces' : '')
     return h('div#replay.analyse-replay.native_scroller', {
       className: replayClass,
-      oncreate: helper.ontapY(e => onReplayTap(ctrl, e!), undefined, getMoveEl)
+      oncreate: helper.ontapXY(e => onReplayTap(ctrl, e!), undefined, getMoveEl)
     }, renderTree(ctrl))
   }
 } as Mithril.Component<{ ctrl: AnalyseCtrl }, {}>

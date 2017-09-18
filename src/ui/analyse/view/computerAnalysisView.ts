@@ -42,7 +42,7 @@ function renderAnalysisRequest(ctrl: AnalyseCtrl) {
   return h('div.analyse-requestComputer', {
     key: 'request-analysis'
   }, [
-    ctrl.analysisProgress ? h('div.analysisProgress', [
+    ctrl.analysisProgress ? h('div.analyse-requestProgress', [
       h('span', 'Analysis in progress'),
       spinner.getVdom()
     ]) : h('button.fatButton', {

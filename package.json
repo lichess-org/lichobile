@@ -35,7 +35,6 @@
     "gulp-uglify": "~2.0.0",
     "gulp-util": "~3.0.7",
     "jest": "^20.0.4",
-    "merge-stream": "^1.0.1",
     "minimist": "~1.2.0",
     "ncp": "~2.0.0",
     "tsify": "~2.0.3",

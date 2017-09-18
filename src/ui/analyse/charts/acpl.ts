@@ -10,7 +10,6 @@ interface Point {
 }
 
 export default function drawAcplChart(element: SVGElement, aData: AnalyseData, curPly: number) {
-  const opening = aData.game.opening
   const division = aData.game.division
 
   const svg = select(element)
@@ -99,9 +98,7 @@ export default function drawAcplChart(element: SVGElement, aData: AnalyseData, c
   .attr('d', line)
 
   if (division) {
-    if (opening && opening.ply) {
-      addDivisionLine(x(opening.ply), 'Opening')
-    }
+    addDivisionLine(x(0), 'Opening')
     if (division.middle) {
       addDivisionLine(x(division.middle), 'Middlegame')
     }

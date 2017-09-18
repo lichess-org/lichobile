@@ -32,7 +32,7 @@ const options = minimist(process.argv.slice(2), minimistOptions);
 const paths = {
   styles: ['src/styl/reset.styl', 'src/styl/common.styl', 'src/styl/form.styl',
     'src/styl/overlay.styl', 'src/styl/overlay-popup.styl', 'src/styl/*.styl',
-    'src/ts/**/*.styl'
+    'src/**/*.styl'
   ]
 };
 
@@ -48,7 +48,7 @@ gulp.task('html', () => {
 });
 
 gulp.task('styl', () => {
-  return gulp.src('src/styl/index.styl')
+  return gulp.src(SRC + '/styl/index.styl')
   .pipe(stylus({
     compress: options.mode === 'release'
   }))
@@ -58,7 +58,7 @@ gulp.task('styl', () => {
 });
 
 gulp.task('scripts', () => {
-  return browserify(SRC + '/ts/main.ts', { debug: true })
+  return browserify(SRC + '/main.ts', { debug: true })
     .plugin(tsify)
     .transform(babelify, {
       extensions: ['.tsx', '.ts', '.js', '.jsx'],
@@ -80,7 +80,7 @@ gulp.task('watch-scripts', () => {
   opts.debug = true;
 
   const bundleStream = watchify(
-    browserify('./src/ts/main.ts', opts)
+    browserify(SRC + '/main.ts', opts)
     .plugin(tsify)
     .transform(babelify, {
       extensions: ['.tsx', '.ts', '.js', '.jsx'],

@@ -32,10 +32,10 @@ export default function renderBoard(
     moveOrDropShape(rEval.best, 'paleGreen', player) : []
   }
 
-  const nextStep = curTab.id === 'explorer' && ctrl.node && treeOps.nodeAtPly(ctrl.nodeList, ctrl.node.ply + 1)
+  const nextUci = curTab.id === 'explorer' && ctrl.node && treeOps.withMainlineChild(ctrl.node, n => n.uci)
 
-  const nextMoveShape: Shape[] = nextStep && nextStep.uci ?
-    moveOrDropShape(nextStep.uci, 'palePurple', player) : []
+  const nextMoveShape: Shape[] = nextUci ?
+    moveOrDropShape(nextUci, 'palePurple', player) : []
 
   const shapes: Shape[] = nextMoveShape.length > 0 ?
   nextMoveShape : flatten([pastBestShape, curBestShape].filter(noNull))

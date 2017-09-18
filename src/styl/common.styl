@@ -331,3 +331,28 @@ span.fa
     &:before
       font-size 16px
 
+signal
+  display: inline-block;
+  height: 1.5em;
+  width: 2.25em;
+  overflow: visible;
+  white-space: nowrap;
+  > i
+    width: 20%;
+    margin-left: 1px;
+    display: inline-block;
+    height: 40%;
+    background-color: green
+
+signal > i:nth-child(2) { height: 60%; }
+signal > i:nth-child(3) { height: 80%; }
+signal > i:nth-child(4) { height: 100%; }
+
+signal.q1 > i
+  background-color: #dc322f;
+
+signal.q2 > i
+  background-color: #d59120;
+
+signal > i.off
+  background-color darken(#fff, 40%)

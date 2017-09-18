@@ -343,8 +343,16 @@ comment
     color #ccc
 
 .view-container.transp
-  .analyse-replay
-    background-color transpWhite01
+
+  .analyse-header
+    background-color transpBlack06
+
+  .analyse-tabsContent
+    background-color transpBlack05
+
+  .analyse-tabs
+    > .tabs-navigation
+      background-color initial
 
   .analyse_variant_selector.select_input
     > label:after
@@ -354,13 +362,20 @@ comment
   eval
     color rgba(textTransp, 0.7)
 
-  move.current
-    color orangeDark
-    > eval
-      color rgba(orangeDark, 70%)
+  move
+    color #ddd
+
+  line > move
+    color darken(#fff, 35%)
+
+  index
+    color transpWhite04
+
+  comment
+    color transpWhite05
 
   .analyse-cevalBox, .analyse-infosBox
-    background transpBlack3
+    background transpBlack03
 
   .analyse-curEval
     background transparent
@@ -373,4 +388,4 @@ comment
     background rgba(255,255,255,0.1)
 
   .analyse_actions_bar
-    background transpBlack
+    background transpBlack06

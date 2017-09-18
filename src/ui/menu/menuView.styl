@@ -10,6 +10,8 @@
   left 0
 
 #side_menu
+  background #222
+  color #DFDFDF
   position absolute
   visibility hidden
   top 0
@@ -22,8 +24,6 @@
     width 50%
   @media only screen and (min-width 960px)
     width 35%
-  background #222
-  color #DFDFDF
   overflow hidden
   z-index 100
   box-shadow: 2px 0px 3px rgba(0, 0, 0, 0.3)
@@ -140,28 +140,19 @@
   color #8a8a8a
   padding 15px 15px 10px
 
-signal
-  display: inline-block;
-  height: 1.5em;
-  width: 2.25em;
-  overflow: visible;
-  white-space: nowrap;
-  > i
-    width: 20%;
-    margin-left: 1px;
-    display: inline-block;
-    height: 40%;
-    background-color: green
+.view-container.transp
+  #side_menu
+    background #111
 
-signal > i:nth-child(2) { height: 60%; }
-signal > i:nth-child(3) { height: 80%; }
-signal > i:nth-child(4) { height: 100%; }
+  .side_menu_header
+    background #000
 
-signal.q1 > i
-  background-color: #dc322f;
+  .menu-toggleButton
+    background #1b1b1b
+    &.side_link.active
+      background lighten(#1b1b1b, 3%)
 
-signal.q2 > i
-  background-color: #d59120;
+  .side_link
+    &.active
+      background lighten(#111, 3%)
 
-signal > i.off
-  background-color darken(#fff, 40%)

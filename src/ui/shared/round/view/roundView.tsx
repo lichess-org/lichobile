@@ -3,6 +3,7 @@ import * as range from 'lodash/range'
 import socket from '../../../../socket'
 import session from '../../../../session'
 import variantApi from '../../../../lichess/variant'
+import * as playerApi from '../../../../lichess/player'
 import * as gameApi from '../../../../lichess/game'
 import { perfTypes } from '../../../../lichess/perfs'
 import gameStatusApi from '../../../../lichess/status'
@@ -211,7 +212,7 @@ function renderClock(ctrl: ClockCtrl, color: Color, isBerserk: boolean, runningC
 
 function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Material, position: Position, isPortrait: boolean, isCrazy: boolean) {
   const user = player.user
-  const playerName = utils.playerName(player, !isPortrait)
+  const playerName = playerApi.playerName(player, !isPortrait)
   const togglePopup = user ? () => ctrl.openUserPopup(position, user.id) : utils.noop
   const vConf = user ?
     helper.ontap(togglePopup, () => userInfos(user, player, playerName, position)) :

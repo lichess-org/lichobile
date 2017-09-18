@@ -1,8 +1,8 @@
 import i18n from './i18n'
-import { lightPlayerName } from './utils'
 import settings from './settings'
 import session from './session'
 import router from './router'
+import { lightPlayerName } from './lichess/player'
 import challengesApi from './lichess/challenges'
 import { fetchText } from './http'
 

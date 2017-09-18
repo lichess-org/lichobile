@@ -1,5 +1,6 @@
 import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import * as utils from '../../utils'
+import * as playerApi from '../../lichess/player'
 import * as gameApi from '../../lichess/game'
 import gameStatus from '../../lichess/status'
 import { UserGamePlayer, UserGameWithDate } from '../../lichess/interfaces/user'
@@ -109,9 +110,9 @@ function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, 
   let playerName: string
   // TODO fetch title info from server; refactor
   if (player.userId) playerName = player.userId
-  else if (!player.aiLevel) playerName = utils.playerName(player)
+  else if (!player.aiLevel) playerName = playerApi.playerName(player)
   else if (player.aiLevel) {
-    playerName = utils.aiName({ ai: player.aiLevel })
+    playerName = playerApi.aiName({ ai: player.aiLevel })
   }
   else playerName = 'Anonymous'
 

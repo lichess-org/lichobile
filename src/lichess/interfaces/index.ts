@@ -22,6 +22,12 @@ export interface HookData {
   }
 }
 
+export interface LightPlayer {
+  name: string
+  title?: string
+  rating?: number
+}
+
 export type ModeId = 0 | 1 // casual | rated
 export type TimeModeId = 0 | 1 | 2 // unlimited | realTime | correspondence
 

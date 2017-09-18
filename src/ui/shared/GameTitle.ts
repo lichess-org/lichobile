@@ -3,6 +3,7 @@ import * as utils from '../../utils'
 import i18n from '../../i18n'
 import { GameData } from '../../lichess/interfaces/game'
 import { AnalyseData } from '../../lichess/interfaces/analyse'
+import * as playerApi from '../../lichess/player'
 import * as gameApi from '../../lichess/game'
 import getVariant from '../../lichess/variant'
 
@@ -35,9 +36,9 @@ export default {
         h('span', text)
       ]),
       withPlayers ? h('h2.header-subTitle', [
-        h('span', utils.playerName(data.player, true, true, 12)),
+        h('span', playerApi.playerName(data.player, true, true, 12)),
         h('span.swords' , { 'data-icon': 'U' }),
-        h('span', utils.playerName(data.opponent, true, true, 12))
+        h('span', playerApi.playerName(data.opponent, true, true, 12))
       ]) : null
     ]
   }

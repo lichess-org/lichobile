@@ -1,6 +1,6 @@
 import * as h from 'mithril/hyperscript'
-import * as utils from '../../utils'
 import challengesApi from '../../lichess/challenges'
+import { lightPlayerName } from '../../lichess/player'
 import { CorrespondenceSeek } from '../../lichess/interfaces'
 import { Challenge } from '../../lichess/interfaces/challenge'
 import * as helper from '../helper'
@@ -88,7 +88,7 @@ function renderPool(pool: CorrespondenceSeek[], ctrl: CorrespondenceCtrl) {
 }
 
 function renderChallenge(ctrl: CorrespondenceCtrl, c: Challenge) {
-  const playerName = c.destUser && utils.lightPlayerName(c.destUser)
+  const playerName = c.destUser && lightPlayerName(c.destUser)
   return (
     <li id={c.id} key={'challenge' + c.id} className="list_item sendingChallenge"
       oncreate={helper.ontapY(

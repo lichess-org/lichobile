@@ -2,6 +2,7 @@ import * as h from 'mithril/hyperscript'
 import * as IScroll from 'iscroll'
 import * as utils from '../utils'
 import { syncWithNowPlayingGames, getOfflineGames } from '../utils/offlineGames'
+import { playerName as liPlayerName } from '../lichess/player'
 import { OnlineGameData } from '../lichess/interfaces/game'
 import { NowPlayingGame } from '../lichess/interfaces'
 import { Challenge } from '../lichess/interfaces/challenge'
@@ -229,7 +230,7 @@ function savedGameDataToCardData(data: OnlineGameData): NowPlayingGame {
 
 function renderGame(g: NowPlayingGame, cDim: CardDim | undefined, cardStyle: Object) {
   const icon = g.opponent.ai ? 'n' : utils.gameIcon(g.perf)
-  const playerName = utils.playerName(g.opponent, false)
+  const playerName = liPlayerName(g.opponent, false)
   const cardClass = [
     'card',
     'standard',

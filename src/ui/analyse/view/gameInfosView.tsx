@@ -1,6 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import * as utils from '../../../utils'
 import i18n from '../../../i18n'
+import { playerName } from '../../../lichess/player'
 import * as gameApi from '../../../lichess/game'
 import gameStatusApi from '../../../lichess/status'
 import CrazyPocket from '../../shared/round/crazy/CrazyPocket'
@@ -20,7 +21,7 @@ export default function renderGameInfos(ctrl: AnalyseCtrl) {
       <div className="analyseOpponent">
         <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
           <span className={'color-icon ' + player.color} />
-          {utils.playerName(player, true)}
+          {playerName(player, true)}
           {helper.renderRatingDiff(player)}
           { ctrl.data.game.variant.key === 'threeCheck' && ctrl.node && ctrl.node.checkCount ?
             ' +' + getChecksCount(ctrl, player.color) : null
@@ -36,7 +37,7 @@ export default function renderGameInfos(ctrl: AnalyseCtrl) {
       <div className="analyseOpponent">
         <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
           <span className={'color-icon ' + opponent.color} />
-          {utils.playerName(opponent, true)}
+          {playerName(opponent, true)}
           {helper.renderRatingDiff(opponent)}
           { ctrl.data.game.variant.key === 'threeCheck' && ctrl.node && ctrl.node.checkCount ?
             ' +' + getChecksCount(ctrl, opponent.color) : null

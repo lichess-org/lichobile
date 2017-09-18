@@ -17,6 +17,7 @@
   font-size 0.9em
 
 .analyse-tabsContent
+  background #262626
   flex 1 1 auto
   > .tab-content
     // must not have height (don't ask me why)
@@ -29,7 +30,6 @@
   height initial
   width 100%
   overflow hidden
-  background lighten(bgdark, 7%)
 
 .analyse-infosBox
   flex 1 1 40%
@@ -123,7 +123,7 @@ line
   &.visiting
     white-space normal
   > move
-    color textDarkBg
+    color rgba(textDarkBg, 90%)
   > .nested
     margin-left 5px
 
@@ -172,7 +172,6 @@ comment
   flex-flow row nowrap
   align-items center
   align-content center
-  background lighten(bgdark, 7%)
 
 .analyse-tabs
   flex 1 1 auto
@@ -192,6 +191,7 @@ comment
       overflow hidden
       text-overflow ellipsis
   > .tabs-navigation
+    background inherit
     flex 0 0 auto
     height 25px
     > .tab-button

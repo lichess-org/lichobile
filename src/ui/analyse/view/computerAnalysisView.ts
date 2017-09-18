@@ -1,6 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import i18n  from '../../../i18n'
 import redraw from '../../../utils/redraw'
+import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import * as gameApi from '../../../lichess/game'
 import spinner from '../../../spinner'
 import { playerName, handleXhrError } from '../../../utils'
@@ -12,7 +13,6 @@ import AnalyseCtrl from '../AnalyseCtrl'
 import drawAcplChart from '../charts/acpl'
 
 export default function renderComputerAnalysis(ctrl: AnalyseCtrl): Mithril.BaseNode {
-
   return h('div.analyse-computerAnalysis.native_scroller',
     ctrl.data.analysis ? renderAnalysis(ctrl) : renderAnalysisRequest(ctrl)
   )
@@ -30,34 +30,19 @@ function renderAnalysis(ctrl: AnalyseCtrl) {
       height: 100,
       oncreate({ dom }: Mithril.DOMNode) {
         setTimeout(() => {
-          drawAcplChart(dom as SVGElement, ctrl.data)
+          this.updateCurPly = drawAcplChart(dom as SVGElement, ctrl.data, ctrl.node.ply)
         }, 300)
+      },
+      onupdate() {
+        if (this.updateCurPly) batchRequestAnimationFrame(() =>
+          this.updateCurPly(ctrl.node.ply)
+        )
       }
     }),
     h(AcplSummary, { d: ctrl.data })
   ])
 }
 
-function renderAnalysisRequest(ctrl: AnalyseCtrl) {
-  return h('div.analyse-requestComputer', {
-    key: 'request-analysis'
-  }, [
-    ctrl.analysisProgress ? h('div.analyse-requestProgress', [
-      h('span', 'Analysis in progress'),
-      spinner.getVdom()
-    ]) : h('button.fatButton', {
-      oncreate: helper.ontap(() => {
-        return requestComputerAnalysis(ctrl.data.game.id)
-        .then(() => {
-          ctrl.analysisProgress = true
-          redraw()
-        })
-        .catch(handleXhrError)
-      })
-    }, [h('span.fa.fa-bar-chart'), i18n('requestAComputerAnalysis')])
-  ])
-
-}
 const AcplSummary: Mithril.Component<{ d: AnalyseData }, {}> = {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
     return attrs.d.analysis !== oldattrs.d.analysis
@@ -90,6 +75,26 @@ const AcplSummary: Mithril.Component<{ d: AnalyseData }, {}> = {
       ])
     }))
   }
+}
+
+function renderAnalysisRequest(ctrl: AnalyseCtrl) {
+  return h('div.analyse-requestComputer', {
+    key: 'request-analysis'
+  }, [
+    ctrl.analysisProgress ? h('div.analyse-requestProgress', [
+      h('span', 'Analysis in progress'),
+      spinner.getVdom()
+    ]) : h('button.fatButton', {
+      oncreate: helper.ontap(() => {
+        return requestComputerAnalysis(ctrl.data.game.id)
+        .then(() => {
+          ctrl.analysisProgress = true
+          redraw()
+        })
+        .catch(handleXhrError)
+      })
+    }, [h('span.fa.fa-bar-chart'), i18n('requestAComputerAnalysis')])
+  ])
 }
 
 const advices = [

@@ -9,16 +9,16 @@ interface Point {
   acpl: number
 }
 
-export default function drawAcplChart(element: SVGElement, aData: AnalyseData) {
+export default function drawAcplChart(element: SVGElement, aData: AnalyseData, curPly: number) {
   const opening = aData.game.opening
   const division = aData.game.division
 
-  const graph = select(element)
+  const svg = select(element)
   const graphData = makeSerieData(aData)
   const margin = {top: 10, right: 10, bottom: 10, left: 10}
-  const width = +graph.attr('width') - margin.left - margin.right
-  const height = +graph.attr('height') - margin.top - margin.bottom
-  const g = graph.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+  const width = +svg.attr('width') - margin.left - margin.right
+  const height = +svg.attr('height') - margin.top - margin.bottom
+  const g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
   function addDivisionLine(xPos: number, name: string) {
     g.append('line')
@@ -34,6 +34,19 @@ export default function drawAcplChart(element: SVGElement, aData: AnalyseData) {
     .attr('y', -xPos)
     .attr('dy', '-0.4em')
     .text(name)
+  }
+
+  function setCurrentPly(ply: number) {
+    const xply = ply - 1
+    const p = graphData[xply]
+    g.selectAll('.dot').remove()
+    if (p) {
+      g.append('circle')
+      .attr('class', 'dot')
+      .attr('cx', x(xply))
+      .attr('cy', y(p.acpl))
+      .attr('r', 3)
+    }
   }
 
   const x = scaleLinear()
@@ -97,6 +110,9 @@ export default function drawAcplChart(element: SVGElement, aData: AnalyseData) {
     }
   }
 
+  setCurrentPly(curPly)
+
+  return setCurrentPly
 }
 
 function makeSerieData(d: AnalyseData): Point[] {

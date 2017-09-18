@@ -3,7 +3,7 @@ import socket from '../../socket'
 import settings from '../../settings'
 import router from '../../router'
 import redraw from '../../utils/redraw'
-import { handleXhrError } from '../../utils'
+import { handleXhrError, safeStringToNum } from '../../utils'
 import i18n from '../../i18n'
 import { specialFenVariants } from '../../lichess/variant'
 import { emptyFen } from '../../utils/fen'
@@ -39,8 +39,8 @@ export default {
     const orientation: Color = vnode.attrs.color || 'white'
     const fenArg = vnode.attrs.fen
     const variant = vnode.attrs.variant
-    const ply = Number(vnode.attrs.ply) || undefined
-    const tab = Number(vnode.attrs.tab) || undefined
+    const ply = safeStringToNum(vnode.attrs.ply)
+    const tab = safeStringToNum(vnode.attrs.tab)
 
     const shouldGoBack = gameId !== undefined || fenArg !== undefined
 

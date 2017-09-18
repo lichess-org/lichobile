@@ -303,3 +303,8 @@ export function displayTime(time: string): string {
 export function truncate(text: string, len: number): string {
   return text.length > len ? text.slice(0, len) + '…' : text
 }
+
+export function safeStringToNum(s: string | null | undefined): number | undefined {
+  const n = Number(s)
+  return n !== NaN ? n : undefined
+}

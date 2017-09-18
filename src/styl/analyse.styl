@@ -180,7 +180,6 @@ comment
   align-items center
   justify-content space-between
   font-size 0.9em
-  color #aaa
   min-width 0 // fix white-space nowrap
   > .tab-title
     flex 1 1 auto
@@ -314,6 +313,18 @@ comment
     height 100%
 
 .view-container.light
+  .analyse-tabsContent
+    background #fff
+
+  .analyse-header
+    background headerBgDark
+    color #ccc
+
+  move
+    color inherit
+    &.current
+      color #fff
+
   move.active
     background darken(bglight, 10%)
 
@@ -325,14 +336,8 @@ comment
     text-shadow: 0 1px 0 #FFF;
     color: #848484;
 
-  .analyse-cevalBox
-    background darken(bglight, 7%)
   .analyse-curEval
-    background darken(bglight, 9%)
-
-  .explorer-fixedTitle
-    background blue
-    color #fff
+    color #ccc
 
 .view-container.transp
   .analyse-replay

@@ -138,7 +138,6 @@ explorerHeaderBg = lighten(bgdark, 1%)
   background explorerHeaderBg
   padding 0 7px
   padding-right 28px
-  color #ccc
 
 .explorerConfig
   font-size 0.75em
@@ -202,6 +201,7 @@ explorerHeaderBg = lighten(bgdark, 1%)
 
 .view-container.light
   .explorerTable
+    background themeBgLight
     thead
       > tr
         background blue
@@ -222,6 +222,10 @@ explorerHeaderBg = lighten(bgdark, 1%)
     .toconf
       color #fff
 
+  .explorer-fixedTitle
+    background headerBgDark
+    color #ccc
+
   .explorerBar
     border-color #ccc
 
@@ -241,5 +245,5 @@ explorerHeaderBg = lighten(bgdark, 1%)
     .black
       background lighten(#000, 10%)
 
-  .explorer-fixedTitle, .explorerTable th, .explorerTable .title
+  .explorerTable th, .explorerTable .title
     background rgba(0,0,0,0.4)

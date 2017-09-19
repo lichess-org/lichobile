@@ -135,7 +135,7 @@ eval
   color rgba(textDarkBg, 75%)
 
 interrupt
-  font-size 0.8em
+  font-size 0.9em
 
 lines
   display block
@@ -155,7 +155,7 @@ line
   &.visiting
     white-space normal
   > move
-    color rgba(textDarkBg, 90%)
+    color textDarkBg
   > .nested
     margin-left 5px
 
@@ -356,17 +356,14 @@ comment
 
   .analyse_variant_selector.select_input
     > label:after
-      color rgba(#ddd, 0.7)
+      color rgba(textTransp, 0.7)
     background transparent
 
-  eval
-    color rgba(textTransp, 0.7)
-
   move
-    color #ddd
+    color textTransp
 
   line > move
-    color darken(#fff, 35%)
+    color rgba(textTransp, 0.7)
 
   index
     color transpWhite04

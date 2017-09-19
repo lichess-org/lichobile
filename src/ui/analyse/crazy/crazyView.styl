@@ -5,7 +5,8 @@
   flex-flow row nowrap
   justify-content space-around
   padding 0.5em 0
-
+  @media only screen and (orientation: landscape)
+    flex 0 0 calc((100vw - 100vh - 56px) / 9 + 10px + 1em)
   > .pocket
     width: calc(100vw / 11 * 5);
     height: calc(100vw / 11 + 10px);

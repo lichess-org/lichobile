@@ -20,7 +20,8 @@ export default function renderComputerAnalysis(ctrl: AnalyseCtrl): Mithril.BaseN
 }
 
 function renderAnalysis(ctrl: AnalyseCtrl) {
-  const vw = helper.viewportDim().vw
+  const isPortrait = helper.isPortrait()
+  const vd = helper.viewportDim()
 
   return h.fragment({
     key: 'analysis'
@@ -29,7 +30,7 @@ function renderAnalysis(ctrl: AnalyseCtrl) {
     h('div.analyse-computerAnalysis_chartPlaceholder', spinner.getVdom()) :
     h('svg#acpl-chart.analyse-acplChart', {
       key: 'chart',
-      width: vw,
+      width: isPortrait ? vd.vw : vd.vw - vd.vh + 56,
       height: 100,
       oncreate({ dom }: Mithril.DOMNode) {
         setTimeout(() => {

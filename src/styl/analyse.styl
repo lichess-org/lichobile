@@ -49,6 +49,7 @@
 .analyse-table
   flex-flow column nowrap
   font-size 0.9em
+  overflow hidden
 
 .analyse-tabsContent
   background lighten(bgdark, 5%)
@@ -56,6 +57,8 @@
   > .tab-content
     // must not have height (don't ask me why)
     height initial
+    @media only screen and (orientation: landscape)
+      width calc(100vw - 100vh + 56px)
 
 .analyse_actions_bar
   flex 0 0 40px

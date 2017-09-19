@@ -31,7 +31,7 @@ export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Cl
     renderBoard(ctrl, isPortrait, bounds, availTabs),
     h('div.analyse-tableWrapper', [
       ctrl.data.game.variant.key === 'crazyhouse' ? renderCrazy(ctrl) : null,
-      renderAnalyseTable(ctrl, availTabs),
+      renderAnalyseTable(ctrl, availTabs, isPortrait),
       renderActionsBar(ctrl)
     ])
   ])
@@ -129,7 +129,7 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Bas
   computer: renderComputerAnalysis
 }
 
-function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[]) {
+function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[], isPortrait: boolean) {
 
   const tabsContent = availTabs.map(t =>
     TabsContentRendererMap[t.id](ctrl)
@@ -143,7 +143,8 @@ function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[]) {
       className: 'analyse-tabsContent',
       selectedIndex: ctrl.currentTabIndex(availTabs),
       content: tabsContent,
-      onTabChange: ctrl.onTabChange
+      onTabChange: ctrl.onTabChange,
+      isPortrait
     })
   ])
 }

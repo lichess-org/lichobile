@@ -14,6 +14,7 @@ interface Attrs {
   content: Mithril.BaseNode[]
   onTabChange: (i: number) => void
   className?: string
+  isPortrait: boolean
 }
 
 interface State {
@@ -57,13 +58,14 @@ export default {
   },
 
   view({ attrs }) {
+    const vd = viewportDim()
     const curIndex = attrs.selectedIndex
-    const vw = viewportDim().vw
-    const width = attrs.content.length * 100
-    const shift = -(curIndex * vw)
+    const totWidth = attrs.isPortrait ? vd.vw : vd.vw - vd.vh + 56
+    const width = attrs.content.length * totWidth
+    const shift = -(curIndex * totWidth)
 
     const style = {
-      width: `${width}vw`,
+      width: `${width}px`,
       transform: `translateX(${shift}px)`
     }
 

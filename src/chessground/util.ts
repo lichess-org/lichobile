@@ -99,7 +99,8 @@ export const translateAway = translate([-99999, -99999])
 export const translate3dAway = translate3d([-99999, -99999])
 
 export function eventPosition(e: TouchEvent): NumberPair {
-  return [e.targetTouches[0].clientX, e.targetTouches[0].clientY]
+  const touch = e.targetTouches[0]
+  return [touch.clientX, touch.clientY]
 }
 
 export function computeSquareBounds(orientation: Color, bounds: ClientRect, key: Key) {

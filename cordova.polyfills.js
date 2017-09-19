@@ -127,7 +127,9 @@
   // notification
   window.navigator.notification = {};
   window.navigator.notification.alert = window.alert.bind(window);
-  window.navigator.notification.confirm = window.confirm.bind(window);
+  window.navigator.notification.confirm = function(message, callback) {
+    if (window.confirm(message)) callback()
+  }
   window.navigator.notification.prompt = window.prompt.bind(window);
   window.navigator.notification.beep = noop;
 

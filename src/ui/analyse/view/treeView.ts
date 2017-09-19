@@ -4,7 +4,7 @@ import * as gameApi from '../../../lichess/game'
 import { Glyph, CommentAuthor } from '../../../lichess/interfaces/analyse'
 import { ops as treeOps, path as treePath, Tree } from '../../shared/tree'
 import * as helper from '../../helper'
-import { empty } from '../util'
+import { plyToTurn, empty } from '../util'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 
@@ -168,10 +168,6 @@ function nodeClasses(c: AnalyseCtrl, path: Tree.Path): NodeClasses {
 
 function renderGlyphs(glyphs: Glyph[]): Mithril.BaseNode[] {
   return glyphs.map(glyph => h('glyph', glyph.symbol))
-}
-
-function plyToTurn(ply: Ply): number {
-  return Math.floor((ply - 1) / 2) + 1
 }
 
 function renderIndexText(ply: Ply, withDots?: boolean): string {

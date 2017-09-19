@@ -1,4 +1,6 @@
 import * as isObject from 'lodash/isObject'
+import { fixCrazySan } from '../../utils/chessFormat'
+import { Tree } from '../shared/tree'
 import { AnalyseData } from '../../lichess/interfaces/analyse'
 import { piotr2key } from './piotr'
 import { SanToRole } from './interfaces'
@@ -67,3 +69,13 @@ export const sanToRole: SanToRole = {
   Q: 'queen'
 }
 
+export function plyToTurn(ply: number): number {
+  return Math.floor((ply - 1) / 2) + 1
+}
+
+export function nodeFullName(node: Tree.Node) {
+  if (node.san) return plyToTurn(node.ply) + (
+    node.ply % 2 === 1 ? '.' : '...'
+  ) + ' ' + fixCrazySan(node.san)
+  return 'Initial position'
+}

@@ -6,10 +6,6 @@ const SCROLL_TOLERANCE_X = 4
 const SCROLL_TOLERANCE_Y = 4
 const ACTIVE_CLASS = 'active'
 
-function hasContextMenu() {
-  return window.cordova.platformId !== 'ios'
-}
-
 interface Boundaries {
   minX: number
   maxX: number
@@ -19,8 +15,8 @@ interface Boundaries {
 
 export default function ButtonHandler(
   el: HTMLElement,
-  tapHandler: (e?: Event) => void,
-  holdHandler?: () => void,
+  tapHandler: (e?: TouchEvent) => void,
+  holdHandler?: (e?: TouchEvent) => void,
   repeatHandler?: () => boolean,
   scrollX?: boolean,
   scrollY?: boolean,
@@ -69,7 +65,7 @@ export default function ButtonHandler(
     setTimeout(() => {
       if (active && activeElement) activeElement.classList.add(ACTIVE_CLASS)
     }, 30)
-    if (!hasContextMenu()) holdTimeoutID = setTimeout(onHold, HOLD_DURATION)
+    holdTimeoutID = setTimeout(() => onHold(e), HOLD_DURATION)
     if (repeatHandler) repeatTimeoutId = setTimeout(() => {
       batchRequestAnimationFrame(onRepeat)
     }, 150)
@@ -110,14 +106,16 @@ export default function ButtonHandler(
   }
 
   function onContextMenu(e: TouchEvent) {
+    // just disable it since we handle manually holdHandler
+    // because contextmenu does not work in iOS and chrome dev tools
+    // (it fires a MouseEvent in the latter)
     e.preventDefault()
     e.stopPropagation()
-    if (holdTimeoutID === undefined) onHold()
   }
 
-  function onHold() {
+  function onHold(e: TouchEvent) {
     if (holdHandler) {
-      holdHandler()
+      holdHandler(e)
       active = false
       if (activeElement) activeElement.classList.remove(ACTIVE_CLASS)
     }

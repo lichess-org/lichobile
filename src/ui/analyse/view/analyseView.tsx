@@ -12,6 +12,7 @@ import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
 import { EvalBox } from '../ceval/cevalView'
 import renderExplorer from '../explorer/explorerView'
+import { view as renderContextMenu } from '../contextMenu'
 import TabView from './TabView'
 import Replay from './Replay'
 import renderComputerAnalysis from './computerAnalysisView'
@@ -43,7 +44,8 @@ export function overlay(ctrl: AnalyseCtrl) {
     menu.view(ctrl.menu),
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notesView(ctrl.notes) : null,
-    continuePopup.view(ctrl.continuePopup)
+    continuePopup.view(ctrl.continuePopup),
+    renderContextMenu(ctrl)
   ]
 }
 

@@ -57,6 +57,7 @@ export default class AnalyseCtrl {
   // paths
   initialPath: Tree.Path
   gamePath?: Tree.Path
+  contextMenu: Tree.Path | null = null
 
   // various view state flags
   replaying: boolean = false
@@ -167,14 +168,6 @@ export default class AnalyseCtrl {
     }
   }
 
-  setPath = (path: Tree.Path): void => {
-    this.path = path
-    this.nodeList = this.tree.getNodeList(path)
-    this.node = treeOps.last(this.nodeList) as Tree.Node
-    this.mainline = treeOps.mainlineNodeList(this.tree.root)
-    this.onMainline = this.tree.pathIsMainline(path)
-  }
-
   availableTabs = (): tabs.Tab[] => {
     let val = tabs.defaults
 
@@ -208,6 +201,34 @@ export default class AnalyseCtrl {
     if (cur.id === 'moves') this.debouncedScroll()
     this.explorer.setStep()
     redraw()
+  }
+
+  setPath = (path: Tree.Path): void => {
+    this.path = path
+    this.nodeList = this.tree.getNodeList(path)
+    this.node = treeOps.last(this.nodeList) as Tree.Node
+    this.mainline = treeOps.mainlineNodeList(this.tree.root)
+    this.onMainline = this.tree.pathIsMainline(path)
+  }
+
+  promote(path: Tree.Path, toMainline: boolean): void {
+    this.tree.promoteAt(path, toMainline)
+    this.contextMenu = null
+    this.jump(path)
+  }
+
+  deleteNode(path: Tree.Path): void {
+    const node = this.tree.nodeAtPath(path)
+    if (!node) return
+    const count = treeOps.countChildrenAndComments(node)
+    if (count.nodes >= 10 || count.comments > 0) {
+      navigator.notification.confirm(
+        `Delete ${count.nodes} move(s)` + (count.comments ? ` and ${count.comments} comment(s)` : '') + '?',
+        () => this._deleteNode(path)
+      )
+    } else {
+      this._deleteNode(path)
+    }
   }
 
   initCeval = () => {
@@ -300,7 +321,6 @@ export default class AnalyseCtrl {
 
   mergeAnalysisData(data: AnalyseDataWithTree): void {
     this.tree.merge(data.tree)
-    // if (!this.showComputer()) this.tree.removeComputerVariations()
     this.data.analysis = data.analysis
     redraw()
   }
@@ -332,6 +352,13 @@ export default class AnalyseCtrl {
   }
 
   // ---
+
+  private _deleteNode = (path: Tree.Path) => {
+    this.tree.deleteNodeAt(path)
+    this.contextMenu = null
+    if (treePath.contains(this.path, path)) this.userJump(treePath.init(path))
+    else this.jump(this.path)
+  }
 
   private updateHref = debounce(() => {
     const step = this.node
@@ -522,7 +549,6 @@ export default class AnalyseCtrl {
 
     if (!dests) this.getNodeSituation()
   }
-
 
   private getNodeSituation = debounce(() => {
     if (this.node && !this.node.dests) {

@@ -1,7 +1,7 @@
 import * as utils from '../../utils'
 import * as helper from '../helper'
 
-export default function(
+export default function popup(
   classes: Object | string,
   headerF: (() => Mithril.Children) | undefined,
   contentF: () => Mithril.Children,

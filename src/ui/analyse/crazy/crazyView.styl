@@ -12,4 +12,15 @@
     > piece
       width calc(100vw / 11)
       height calc(100vw / 11)
+      &:after
+        font-size calc(100vw / 11 / 3)
+        line-height calc(100vw / 11 / 3)
+        padding 0.25em 0.3em
+    @media only screen and (orientation: landscape)
+      width: calc((100vw - 100vh - 56px) / 9 * 5);
+      height: calc((100vw - 100vh - 56px) / 9 + 10px);
+      max-height initial
+      > piece
+        width calc((100vw - 100vh -56px) / 9)
+        height calc((100vw - 100vh -56px) / 9)
 

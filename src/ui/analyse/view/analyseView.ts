@@ -29,8 +29,8 @@ export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Cl
 
   return h.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
     renderBoard(ctrl, isPortrait, bounds, availTabs),
-    ctrl.data.game.variant.key === 'crazyhouse' ? renderCrazy(ctrl) : null,
     h('div.analyse-tableWrapper', [
+      ctrl.data.game.variant.key === 'crazyhouse' ? renderCrazy(ctrl) : null,
       renderAnalyseTable(ctrl, availTabs),
       renderActionsBar(ctrl)
     ])

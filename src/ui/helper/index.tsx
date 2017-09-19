@@ -20,6 +20,9 @@ let cachedIsPortrait: boolean | undefined
 let cachedViewportAspectIs43: boolean
 let cachedViewportDim: ViewportDim | null = null
 
+export const headerHeight = 56
+export const footerHeight = 45
+
 export function onPageEnter(anim: (el: HTMLElement) => void) {
   return ({ dom }: Mithril.DOMNode) => anim(dom as HTMLElement)
 }
@@ -271,8 +274,6 @@ export function isPortrait(): boolean {
 export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mode: string, halfsize: boolean = false): ClientRect  {
   const { vh, vw } = viewportDim
   const is43 = is43Aspect()
-  const headerHeight = 56
-  const footerHeight = 45
 
   if (isPortrait) {
     if (halfsize) {

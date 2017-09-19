@@ -1,7 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import { EDGE_SLIDE_THRESHOLD } from '../../menu/OpenSlideHandler'
 import * as Hammer from 'hammerjs'
-import { viewportDim, findParentBySelector } from '../../helper'
+import { viewportDim, findParentBySelector, headerHeight } from '../../helper'
 
 /*
  * We cannot do simple object identity check currently on analysis data
@@ -60,7 +60,7 @@ export default {
   view({ attrs }) {
     const vd = viewportDim()
     const curIndex = attrs.selectedIndex
-    const totWidth = attrs.isPortrait ? vd.vw : vd.vw - vd.vh + 56
+    const totWidth = attrs.isPortrait ? vd.vw : vd.vw - vd.vh + headerHeight
     const width = attrs.content.length * totWidth
     const shift = -(curIndex * totWidth)
 

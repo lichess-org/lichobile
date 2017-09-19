@@ -30,7 +30,7 @@ function renderAnalysis(ctrl: AnalyseCtrl) {
     h('div.analyse-computerAnalysis_chartPlaceholder', spinner.getVdom()) :
     h('svg#acpl-chart.analyse-acplChart', {
       key: 'chart',
-      width: isPortrait ? vd.vw : vd.vw - vd.vh + 56,
+      width: isPortrait ? vd.vw : vd.vw - vd.vh + helper.headerHeight,
       height: 100,
       oncreate({ dom }: Mithril.DOMNode) {
         setTimeout(() => {

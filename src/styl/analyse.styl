@@ -58,7 +58,7 @@
     // must not have height (don't ask me why)
     height initial
     @media only screen and (orientation: landscape)
-      width calc(100vw - 100vh + 56px)
+      width 'calc(100vw - 100vh + %s)' % headerHeight
 
 .analyse_actions_bar
   flex 0 0 40px

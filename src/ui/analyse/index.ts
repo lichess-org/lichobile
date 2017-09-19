@@ -13,7 +13,7 @@ import { loadingBackbutton, header, backButton as renderBackbutton } from '../sh
 import GameTitle from '../shared/GameTitle'
 import { makeDefaultData } from './data'
 import { gameAnalysis as gameAnalysisXhr } from './analyseXhr'
-import { renderContent, overlay, viewOnlyBoard } from './view/analyseView'
+import { renderContent, overlay, viewOnlyBoard, renderVariantSelector } from './view/analyseView'
 import AnalyseCtrl from './AnalyseCtrl'
 import { Source } from './interfaces'
 import layout from '../layout'
@@ -128,10 +128,13 @@ export default {
       const backButton = this.ctrl.shouldGoBack ?
         renderBackbutton(h(GameTitle, { data: this.ctrl.data, withPlayers: true }), true) : null
 
-      const title = this.ctrl.shouldGoBack ? null : i18n('analysis')
+      const title = this.ctrl.shouldGoBack ? null : [
+        h('span', i18n('analysis')),
+        renderVariantSelector(this.ctrl)
+      ]
 
       return layout.board(
-        () => header(title, backButton),
+        () => header(title, backButton, 'withSub'),
         () => renderContent(this.ctrl!, isPortrait, bounds),
         () => overlay(this.ctrl!)
       )

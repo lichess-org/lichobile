@@ -130,10 +130,13 @@ export function headerBtns() {
   }
 }
 
-export function header(title: Mithril.Children, leftButton?: Mithril.Children): Mithril.Children {
+export function header(title: Mithril.Children, leftButton?: Mithril.Children, titleClass?: string): Mithril.Children {
   return h('nav', [
     leftButton ? leftButton : menuButton(),
-    title ? <div className="main_header_title" key="title">{title}</div> : null,
+    title ? h('div.main_header_title', {
+      key: title,
+      className: titleClass || ''
+    }, title) : null,
     headerBtns()
   ])
 }

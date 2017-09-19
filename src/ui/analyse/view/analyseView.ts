@@ -1,5 +1,8 @@
 import * as h from 'mithril/hyperscript'
+import router from '../../../router'
 import i18n from '../../../i18n'
+import settings from '../../../settings'
+import * as utils from '../../../utils'
 import continuePopup from '../../shared/continuePopup'
 import { view as renderPromotion } from '../../shared/offlineRound/promotion'
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard'
@@ -47,6 +50,34 @@ export function overlay(ctrl: AnalyseCtrl) {
     continuePopup.view(ctrl.continuePopup),
     renderContextMenu(ctrl)
   ]
+}
+
+export function renderVariantSelector(ctrl: AnalyseCtrl) {
+  const variant = ctrl.data.game.variant.key
+  const icon = utils.gameIcon(variant)
+  let availVariants = settings.analyse.availableVariants
+  if (variant === 'fromPosition') {
+    availVariants = availVariants.concat([['From position', 'fromPosition']])
+  }
+  return (
+    h('div.select_input.analyse-variant_selector', [
+      h('label', {
+        'for': 'variant_selector'
+      }, [h(`i[data-icon=${icon}]`)]),
+      h('select#variant_selector', {
+        value: variant,
+        onchange: (e: Event) => {
+          const val = (e.target as HTMLSelectElement).value
+          settings.analyse.syntheticVariant(val as VariantKey)
+          router.set(`/analyse/variant/${val}`)
+        }
+      }, availVariants.map(v =>
+        h('option', {
+          key: v[1], value: v[1]
+        }, v[0])
+      ))
+    ])
+  )
 }
 
 function renderOpening(ctrl: AnalyseCtrl) {

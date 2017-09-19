@@ -97,7 +97,7 @@ export default function drawAcplChart(element: SVGElement, aData: AnalyseData, c
   .attr('class', 'line')
   .attr('d', line)
 
-  if (division) {
+  if (division && (division.middle || division.end)) {
     addDivisionLine(x(0), 'Opening')
     if (division.middle) {
       addDivisionLine(x(division.middle), 'Middlegame')

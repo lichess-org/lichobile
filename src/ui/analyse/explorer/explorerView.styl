@@ -1,7 +1,6 @@
-explorerHeaderBg = lighten(bgdark, 1%)
+explorerHeaderBg = lighten(headerBgDark, 2%)
 
 .explorerTable
-  background bgdark
   height 100%
   width 100%
   position relative
@@ -32,14 +31,14 @@ explorerHeaderBg = lighten(bgdark, 1%)
     transition: opacity 0.13s;
   thead
     > tr
-      background darkBlue
+      background-color explorerHeaderBg
   th, .title
     color #ccc
     text-transform: capitalize;
     font-weight normal
     font-size: 12px;
-    line-height: 22px;
-    background darkBlue
+    line-height: 25px;
+    background-color explorerHeaderBg
     text-align: left;
     padding-left: 7px;
   th
@@ -48,9 +47,9 @@ explorerHeaderBg = lighten(bgdark, 1%)
     &.explorerMove-result
       padding-left 15px
   tr
-    transition: background-color 0.13s;
+    transition: background-color 0.13s
     &:nth-child(even)
-      background: lighten(bgdark, 5%)
+      background-color: lighten(bgdark, 15%)
   td
     vertical-align middle
     padding-left: 7px;
@@ -67,17 +66,17 @@ explorerHeaderBg = lighten(bgdark, 1%)
       padding-right: 7px;
       padding-left 15px
   .white
-    background: #bbb;
+    background-color: #bbb;
     color: #222;
     box-shadow: 0 -5px 7px rgba(0,0,0,0.25) inset;
   .draws, .black
     color: #fff;
     box-shadow: 0 5px 7px rgba(255,255,255,0.2) inset;
   .draws
-    background: #666;
+    background-color: #666;
     color: #ddd;
   .black
-    background: #333;
+    background-color: #333;
     box-shadow: 0 5px 7px rgba(255,255,255,0.1) inset;
   .games
     font-size 0.8em
@@ -138,7 +137,7 @@ explorerHeaderBg = lighten(bgdark, 1%)
   overflow hidden
   white-space nowrap
   text-overflow ellipsis
-  background explorerHeaderBg
+  background-color explorerHeaderBg
   padding 0 7px
   padding-right 28px
 
@@ -204,24 +203,23 @@ explorerHeaderBg = lighten(bgdark, 1%)
 
 .view-container.light
   .explorerTable
-    background themeBgLight
+    background-color themeBgLight
+    th, thead > tr, .explorer-fixedTitle
+      color #ccc
+      background-color darkBlue
     tr
       &:nth-child(even)
-        background #fafafa
+        background-color #fafafa
     .white
-      background: #fff;
+      background-color: #fff;
       box-shadow: 0 -5px 7px rgba(0,0,0,0.1) inset;
     .draws
-      background: #a0a0a0;
+      background-color: #a0a0a0;
     .black
-      background: #555;
+      background-color: #555;
       color: #ddd;
     .toconf
       color #fff
-
-  .explorer-fixedTitle
-    background headerBgDark
-    color #ccc
 
   .explorerBar
     border-color #ccc
@@ -230,21 +228,18 @@ explorerHeaderBg = lighten(bgdark, 1%)
     span
       border-color #ccc
       &.selected
-        background blue
+        background-color blue
 
 .view-container.transp
   .explorerTable
-    background rgba(0,0,0,0.2)
+    thead > tr
+      background-color inherit
     tr
-      background transpWhite01
       &:nth-child(even)
-        background transpWhite015
+        background-color transpWhite015
     .black
-      background lighten(#000, 10%)
+      background-color lighten(#000, 10%)
 
-  .explorer-fixedTitle
-    background transparent
+  .explorerTable th, .explorerTable .title, .explorer-fixedTitle
+    background-color transpBlack06
     color #ccc
-
-  .explorerTable th, .explorerTable .title
-    background rgba(0,0,0,0.4)

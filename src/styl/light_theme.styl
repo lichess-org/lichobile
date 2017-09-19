@@ -102,29 +102,6 @@
     background darken(themeBgLight, 4%)
     color textMediumGray
 
-  .main_header
-    &.board
-      background themeBgLight
-      box-shadow none
-      .back_button, .main_header_button
-        color textLightBg
-        &.active
-          background darken(themeBgLight, 8%)
-      .back_button
-        > button
-          &.active
-            background darken(themeBgLight, 8%)
-      .chip
-        color #eee
-        background gold
-        border-color #eee
-      .main_header_title
-        color textLightBg
-    &:not(.board)
-      .game_menu_button
-        &.new_challenge:before
-          background transparent
-
   .radio_list
     input.radio:checked + label
       background-color darken(bglight, 10%)

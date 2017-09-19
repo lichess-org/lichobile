@@ -7,6 +7,7 @@
   display flex
 
 .analyse-header
+  background-color headerBgDark
   flex 0 0 25px
   overflow hidden
   display flex
@@ -39,7 +40,7 @@
       height 25px
 
 .analyse-tableWrapper
-  margin-top 5px
+  margin-top 3px
   flex 1 1 auto
   display flex
   flex-flow column nowrap
@@ -316,11 +317,15 @@ comment
   .analyse-tabsContent
     background #fff
 
-  .analyse-table, .analyse-header
-    background headerBgDark
-
   .analyse-header
-    color #ccc
+    background lighten(darkBlue, 15%)
+    color #ddd
+
+  .analyse-tabs
+    .tabIndicator
+      background-color #fff
+    .tab-button.selected
+      color #fff
 
   move
     color inherit

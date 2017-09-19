@@ -15,6 +15,7 @@ import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
 import { EvalBox } from '../ceval/cevalView'
 import renderExplorer from '../explorer/explorerView'
+import renderCrazy from '../crazy/crazyView'
 import { view as renderContextMenu } from '../contextMenu'
 import TabView from './TabView'
 import Replay from './Replay'
@@ -28,6 +29,7 @@ export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Cl
 
   return h.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
     renderBoard(ctrl, isPortrait, bounds, availTabs),
+    ctrl.data.game.variant.key === 'crazyhouse' ? renderCrazy(ctrl) : null,
     h('div.analyse-tableWrapper', [
       renderAnalyseTable(ctrl, availTabs),
       renderActionsBar(ctrl)
@@ -78,6 +80,11 @@ export function renderVariantSelector(ctrl: AnalyseCtrl) {
       ))
     ])
   )
+}
+
+export function getChecksCount(ctrl: AnalyseCtrl, color: Color) {
+  const node = ctrl.node
+  return node && node.checkCount && node.checkCount[utils.oppositeColor(color)]
 }
 
 function renderOpening(ctrl: AnalyseCtrl) {

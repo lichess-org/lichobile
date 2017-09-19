@@ -12,8 +12,8 @@ export interface Attrs {
   crazyData: {
     pockets: Pockets
   }
-  position: string
   color: Color
+  position?: string
   customPieceTheme?: string
 }
 
@@ -49,7 +49,7 @@ const CrazyPocket: Mithril.Component<Attrs, State> = {
     const className = [
       customPieceTheme || settings.general.theme.piece(),
       'pocket',
-      position
+      position || ''
     ].join(' ')
 
     return (

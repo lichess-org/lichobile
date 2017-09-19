@@ -264,37 +264,6 @@ comment
 .analyseOpponent
   text-align left
   margin-bottom 0.5em
-  > .pocket
-    width 100%
-    height calc(40vw / 6 + 10px)
-    > piece
-      width calc(40vw / 6)
-      height calc(40vw / 6)
-      &:after
-        padding: 3px 5px 4px 5px;
-        font-weight: bold;
-        border-radius: 1px;
-        font-size: 10px;
-        line-height: 10px;
-        padding: 1px 2px 2px 2px;
-  @media only screen and (orientation portrait) and (min-width 600px)
-    > .pocket > piece:after
-      font-size 18px
-      line-height 18px
-      padding 2px 3px 3px 3px
-  @media only screen and (orientation: landscape)
-    > .pocket
-      height 'calc(((100vw - 100vh - %s) * 40 / 100) / 6 + 10px)' % headerHeight
-      max-width initial
-      > piece
-        width 'calc(((100vw - 100vh - %s) * 40 / 100) / 6 + 10px)' % headerHeight
-        height 'calc(((100vw - 100vh - %s) * 40 / 100) / 6 + 10px)' % headerHeight
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
-    > .pocket
-      height 'calc(((100vw - (100vh - %s - 12vh)) * 40 / 100) / 6 + 10px)' % headerHeight
-      > piece
-        width 'calc(((100vw - (100vh - %s - 12vh)) * 40 / 100) / 6 + 10px)' % headerHeight
-        height 'calc(((100vw - (100vh - %s - 12vh)) * 40 / 100) / 6 + 10px)' % headerHeight
 
 .analyseClock
   font-family Cousine

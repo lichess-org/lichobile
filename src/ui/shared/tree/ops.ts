@@ -20,7 +20,7 @@ export function findInMainline(fromNode: Tree.Node, predicate: (node: Tree.Node)
 // returns a list of nodes collected from the original one
 export function collect(fromNode: Tree.Node, pickChild: (node: Tree.Node) => Tree.Node | undefined): Tree.Node[] {
   let nodes = [fromNode], n = fromNode, c
-  while(c = pickChild(n)) {
+  while (c = pickChild(n)) {
     nodes.push(c)
     n = c
   }
@@ -73,10 +73,19 @@ export function countChildrenAndComments(node: Tree.Node) {
 
 export function reconstruct(parts: any): Tree.Node {
   const root = parts[0]
+  // adapt to offline format which use crazyhouse field name
+  if (root.crazy !== undefined) {
+    root.crazyhouse = root.crazy
+    root.crazy = undefined
+  }
   root.id = ''
   let node: Tree.Node = root as Tree.Node
   for (let i = 1, nb = parts.length; i < nb; i++) {
     const n = parts[i]
+    if (n.crazy !== undefined) {
+      n.crazyhouse = n.crazy
+      n.crazy = undefined
+    }
     if (node.children) node.children.unshift(n)
     else node.children = [n]
     node = n

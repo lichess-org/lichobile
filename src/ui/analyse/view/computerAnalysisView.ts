@@ -1,12 +1,12 @@
 import * as h from 'mithril/hyperscript'
 import i18n  from '../../../i18n'
+import { handleXhrError, shallowEqual } from '../../../utils'
 import redraw from '../../../utils/redraw'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import * as gameApi from '../../../lichess/game'
 import spinner from '../../../spinner'
-import { handleXhrError } from '../../../utils'
 import { playerName } from '../../../lichess/player'
-import { AnalyseData } from '../../../lichess/interfaces/analyse'
+import { AnalyseData, RemoteEvalSummary } from '../../../lichess/interfaces/analyse'
 import * as helper from '../../helper'
 
 import { requestComputerAnalysis } from '../analyseXhr'
@@ -25,6 +25,8 @@ function renderAnalysis(ctrl: AnalyseCtrl) {
   return h.fragment({
     key: 'analysis'
   }, [
+    ctrl.analysisProgress ?
+    h('div.analyse-computerAnalysis_chartPlaceholder', spinner.getVdom()) :
     h('svg#acpl-chart.analyse-acplChart', {
       key: 'chart',
       width: vw,
@@ -40,17 +42,17 @@ function renderAnalysis(ctrl: AnalyseCtrl) {
         )
       }
     }),
-    h(AcplSummary, { d: ctrl.data })
+    h(AcplSummary, { d: ctrl.data, analysis: ctrl.data.analysis! })
   ])
 }
 
-const AcplSummary: Mithril.Component<{ d: AnalyseData }, {}> = {
+const AcplSummary: Mithril.Component<{ d: AnalyseData, analysis: RemoteEvalSummary }, {}> = {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
-    return attrs.d.analysis !== oldattrs.d.analysis
+    return !shallowEqual(attrs.analysis, oldattrs.analysis)
   },
 
   view({ attrs }) {
-    const { d } = attrs
+    const { d, analysis } = attrs
 
     return h('div.analyse-evalSummary', ['white', 'black'].map((color: Color) => {
       const p = gameApi.getPlayer(d, color)
@@ -62,14 +64,14 @@ const AcplSummary: Mithril.Component<{ d: AnalyseData }, {}> = {
         ])),
         h('tbody', [
           advices.map(a => {
-            const nb = d.analysis && d.analysis[color][a[0]]
+            const nb = analysis && analysis[color][a[0]]
             return h('tr', [
               h('th', nb),
               h('td', i18n(a[1]))
             ])
           }),
           h('tr', [
-            h('th', d.analysis && d.analysis[color].acpl),
+            h('th', analysis && analysis[color].acpl),
             h('td', i18n('averageCentipawnLoss'))
           ])
         ])

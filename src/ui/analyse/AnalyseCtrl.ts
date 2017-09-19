@@ -300,6 +300,7 @@ export default class AnalyseCtrl {
 
   mergeAnalysisData(data: AnalyseDataWithTree): void {
     this.tree.merge(data.tree)
+    // if (!this.showComputer()) this.tree.removeComputerVariations()
     this.data.analysis = data.analysis
     redraw()
   }

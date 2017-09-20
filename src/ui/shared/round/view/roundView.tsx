@@ -284,7 +284,7 @@ function tvChannelSelector(ctrl: OnlineRound) {
   const icon = utils.gameIcon(channel)
 
   return (
-    h('div.select_input.round-tvChannelSelector', [
+    h('div.select_input.main_header-selector.round-tvChannelSelector', [
       h('label', {
         'for': 'channel_selector'
       }, h(`i[data-icon=${icon}]`)),

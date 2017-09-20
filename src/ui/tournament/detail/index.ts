@@ -35,7 +35,7 @@ export default {
     }
 
     const header = () => headerWidget(null,
-      backButton(this.ctrl.tournament ? this.ctrl.tournament.fullName : null)
+      backButton(this.ctrl.tournament ? this.ctrl.tournament.fullName : undefined)
     )
     const body = () => tournamentBody(this.ctrl)
     const footer = () => renderFooter(this.ctrl)

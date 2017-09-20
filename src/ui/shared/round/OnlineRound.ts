@@ -1,12 +1,9 @@
-import * as h from 'mithril/hyperscript'
 import * as throttle from 'lodash/throttle'
 import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
 import { saveOfflineGameData, removeOfflineGameData } from '../../../utils/offlineGames'
 import { hasNetwork, boardOrientation, formatTimeInSecs } from '../../../utils'
-import i18n from '../../../i18n'
-import gameStatus from '../../../lichess/status'
 import session from '../../../session'
 import socket from '../../../socket'
 import router from '../../../router'
@@ -18,7 +15,6 @@ import { MiniUser } from '../../../lichess/interfaces'
 import { OnlineGameData, Player, ApiEnd } from '../../../lichess/interfaces/game'
 import { MoveRequest, DropRequest, MoveOrDrop, AfterMoveMeta, isMove, isDrop, isMoveRequest, isDropRequest } from '../../../lichess/interfaces/move'
 import * as chessFormat from '../../../utils/chessFormat'
-import GameTitle from '../../shared/GameTitle'
 
 import ground from './ground'
 import promotion from './promotion'
@@ -148,8 +144,6 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.data.url.round,
       this.data.userTV
     )
-
-    this.setTitle()
 
     document.addEventListener('resume', this.onResume)
     window.plugins.insomnia.keepAwake()
@@ -292,30 +286,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     return this.jump(this.lastPly())
   }
 
-  // TODO move to view
-  public setTitle() {
-    if (this.data.tv) {
-      this.title = 'Lichess TV'
-    }
-    else if (this.data.userTV) {
-      this.title = this.data.userTV
-    }
-    else if (gameStatus.started(this.data)) {
-      this.title = h(GameTitle, { data: this.data })
-    }
-    else {
-      this.title = 'lichess.org'
-    }
-
-    if (gameStatus.finished(this.data)) {
-      this.subTitle = i18n('gameOver')
-    } else if (gameApi.isPlayerTurn(this.data)) {
-      this.subTitle = i18n('yourTurn')
-    } else {
-      this.subTitle = i18n('waitingForOpponent')
-    }
-  }
-
   public isClockRunning(): boolean {
     return !!this.data.clock && gameApi.playable(this.data) &&
       ((this.data.game.turns - this.data.game.startedAtTurn) > 1 || this.data.clock.running)
@@ -419,8 +389,6 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     d.possibleMoves = activeColor ? o.dests : undefined
     d.possibleDrops = activeColor ? o.drops : undefined
-
-    this.setTitle()
 
     if (!this.replaying()) {
       this.vm.ply++
@@ -534,7 +502,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.makeCorrespondenceClock()
     if (this.clock && this.data.clock) this.clock.update(this.data.clock.white, this.data.clock.black)
     this.lastMoveMillis = undefined
-    this.setTitle()
     if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip)
     redraw()
   }

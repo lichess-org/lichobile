@@ -38,10 +38,10 @@ export function menuButton() {
   )
 }
 
-export function backButton(title?: Mithril.Children, withSub = false): Mithril.Children {
+export function backButton(title?: Mithril.BaseNode | string): Mithril.Children {
   return h('div.back_button', { key: 'default-history-backbutton' }, [
     h('button', { oncreate: helper.ontap(router.backHistory) }, backArrow),
-    title ? h('div.title', { className: withSub ? 'withSub' : '' }, title) : null
+    title !== undefined ? typeof title === 'string' ? h('div.main_header_title', title) : title : null
   ])
 }
 

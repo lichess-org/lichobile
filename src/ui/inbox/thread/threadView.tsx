@@ -10,7 +10,7 @@ import { ThreadState, Post, ThreadAttrs } from '../interfaces'
 export default function view(vnode: Mithril.Vnode<ThreadAttrs, ThreadState>) {
   const ctrl = vnode.state as ThreadState
   const headerCtrl = () => headerWidget(null,
-    backButton(ctrl.thread() ? ctrl.thread().name : null)
+    backButton(ctrl.thread() ? ctrl.thread().name : undefined)
   )
   const bodyCtrl = () => threadBody(ctrl)
   return layout.free(headerCtrl, bodyCtrl, undefined, undefined)

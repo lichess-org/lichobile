@@ -61,41 +61,14 @@ export function renderMaterial(material: Material) {
   )
 }
 
-function tcConfig(ctrl: OnlineRound, vnode: Mithril.DOMNode) {
-  if (ctrl.data.tournament) {
-    const el = vnode.dom as HTMLElement
-    el.textContent =
-      utils.formatTimeInSecs(Math.round(ctrl.data.tournament.secondsToFinish)) + ' • '
-    ctrl.vm.tClockEl = el
-  }
-}
-
 function renderTitle(ctrl: OnlineRound) {
   if (ctrl.vm.offlineWatcher || socket.isConnected()) {
-    const className = 'main_header_title playing' +
-      (!ctrl.data.player.spectator && ctrl.data.game.speed === 'correspondence' ?
-        ' withSub' : '')
-    return (
-      <div key="playingTitle" className={className}>
-        <h1 className="round-title">
-          { session.isKidMode() ? <span className="kiddo">😊</span> : null }
-          {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
-          {ctrl.data.tournament ?
-            <span className="fa fa-trophy" /> : null
-          }
-          {ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
-            <span oncreate={(v: Mithril.DOMNode) => tcConfig(ctrl, v)} /> : null
-          }
-          {ctrl.title}
-          { ctrl.vm.offlineWatcher ? ' • Offline' : null}
-        </h1>
-        {!ctrl.data.player.spectator && ctrl.data.game.speed === 'correspondence' ?
-          <h2 className="header-subTitle">
-            {ctrl.subTitle}
-          </h2> : null
-        }
-      </div>
-    )
+    return h(GameTitle, {
+      key: 'playingTitle',
+      data: ctrl.data,
+      kidMode: session.isKidMode(),
+      subTitle: ctrl.data.tournament ? 'tournament' : 'date'
+    })
   } else {
     return (
       <div key="reconnectingTitle" className="main_header_title reconnecting">
@@ -110,12 +83,7 @@ function renderHeader(ctrl: OnlineRound) {
   let children
   if (!ctrl.data.tv && !ctrl.data.userTV && ctrl.data.player.spectator) {
     children = [
-      backButton([
-        ctrl.data.tournament ?  <span className="fa fa-trophy" /> : null,
-        ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
-          <span oncreate={(v: Mithril.DOMNode) => tcConfig(ctrl, v)} /> : null,
-        h(GameTitle, { data: ctrl.data })
-      ])
+      backButton(renderTitle(ctrl))
     ]
   } else {
     children = [

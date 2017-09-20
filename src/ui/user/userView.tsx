@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import userPerfs from '../../lichess/perfs'
 import { dropShadowHeader, backButton as renderBackbutton } from '../shared/common'
 import { getLanguageNativeName } from '../../utils/langs'
@@ -17,10 +18,10 @@ export function header(user: UserFullProfile, ctrl: UserCtrl) {
     <span className={'userStatus patron ' + status} data-icon="" /> :
     <span className={'fa fa-circle userStatus ' + status} />
 
-  const title = [
+  const title = h('div.title', [
     icon,
     <span>{(user.title ? `${user.title} ` : '') + user.username}</span>
-  ]
+  ])
 
   const backButton = !ctrl.isMe() ? renderBackbutton(title) : null
   return dropShadowHeader(backButton ? null : title, backButton)

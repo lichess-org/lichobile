@@ -163,7 +163,65 @@ export default {
     variant: localstorageprop<VariantKey>('settings.otb.variant', 'standard'),
     availableVariants: offlineAvailableVariants,
     whitePlayer: localstorageprop('settings.otb.whitePlayer', 'White'),
-    blackPlayer: localstorageprop('settings.otb.blackPlayer', 'Black')
+    blackPlayer: localstorageprop('settings.otb.blackPlayer', 'Black'),
+
+    availableClocks: [
+      ['No Clock', 'none'],
+      ['Sudden Death', 'simple'],
+      ['Increment', 'increment'],
+      ['Increment with Handicap', 'handicapInc'],
+      ['Simple Delay', 'delay'],
+      ['Bronstein Delay', 'bronstein'],
+      ['Hourglass', 'hourglass'],
+      ['Stage', 'stage']
+    ],
+
+    clockType: localstorageprop('settings.otb.clockType', 'none'),
+
+    simple: {
+      time: localstorageprop('settings.otb.simple.time', '5')
+    },
+
+    increment: {
+      time: localstorageprop('settings.otb.increment.time', '3'),
+      increment: localstorageprop('settings.otb.increment.increment', '2')
+    },
+
+    handicapInc: {
+      topTime: localstorageprop('settings.otb.handicapInc.topTime', '3'),
+      topIncrement: localstorageprop('settings.otb.handicapInc.topIncrement', '2'),
+      bottomTime: localstorageprop('settings.otb.handicapInc.bottomTime', '3'),
+      bottomIncrement: localstorageprop('settings.otb.handicapInc.bottomIncrement', '2')
+    },
+
+    delay: {
+      time: localstorageprop('settings.otb.delay.time', '3'),
+      increment: localstorageprop('settings.otb.delay.increment', '2')
+    },
+
+    bronstein: {
+      time: localstorageprop('settings.otb.bronstein.time', '3'),
+      increment: localstorageprop('settings.otb.bronstein.increment', '2')
+    },
+
+    hourglass: {
+      time: localstorageprop('settings.otb.hourglass.time', '5')
+    },
+
+    stage: {
+      stages: localstorageprop('settings.otb.stage.stages', [{time: '120', moves: '40'}, {time: '60', moves: null}]),
+      increment: localstorageprop('settings.otb.stage.increment', '30')
+    },
+
+    availableTimes: [['0', '0'], ['½', '0.5'], ['¾', '0.75'], ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'], ['6', '6'], ['7', '7'], ['8', '8'], ['9', '9'], ['10', '10'], ['15', '15'], ['20', '20'], ['25', '25'], ['30', '30'], ['45', '45'], ['60', '60'], ['90', '90'], ['120', '120'], ['150', '150'], ['180', '180']
+    ],
+
+    availableIncrements: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+      '10', '15', '20', '25', '30', '45', '60', '90', '120', '150', '180'
+    ],
+
+    availableMoves: ['5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60'
+    ]
   },
 
   clock: {

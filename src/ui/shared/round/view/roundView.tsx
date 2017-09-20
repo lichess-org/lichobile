@@ -1,5 +1,6 @@
 import * as h from 'mithril/hyperscript'
 import * as range from 'lodash/range'
+import redraw from '../../../../utils/redraw'
 import socket from '../../../../socket'
 import session from '../../../../session'
 import variantApi from '../../../../lichess/variant'
@@ -18,7 +19,6 @@ import { backButton, menuButton, loader, headerBtns, miniUser } from '../../../s
 import GameTitle from '../../../shared/GameTitle'
 import Board from '../../../shared/Board'
 import popupWidget from '../../../shared/popup'
-import formWidgets from '../../../shared/form'
 import Clock from '../clock/clockView'
 import ClockCtrl from '../clock/ClockCtrl'
 import promotion from '../promotion'
@@ -63,12 +63,20 @@ export function renderMaterial(material: Material) {
 
 function renderTitle(ctrl: OnlineRound) {
   if (ctrl.vm.offlineWatcher || socket.isConnected()) {
-    return h(GameTitle, {
-      key: 'playingTitle',
-      data: ctrl.data,
-      kidMode: session.isKidMode(),
-      subTitle: ctrl.data.tournament ? 'tournament' : 'date'
-    })
+    if (ctrl.data.tv) {
+      return h('div.main_header_title.withSub', [
+        h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), 'Lichess TV']),
+        h('h2.header-subTitle', tvChannelSelector(ctrl))
+      ])
+    }
+    else {
+      return h(GameTitle, {
+        key: 'playingTitle',
+        data: ctrl.data,
+        kidMode: session.isKidMode(),
+        subTitle: ctrl.data.tournament ? 'tournament' : 'date'
+      })
+    }
   } else {
     return (
       <div key="reconnectingTitle" className="main_header_title reconnecting">
@@ -266,11 +274,29 @@ function tvChannelSelector(ctrl: OnlineRound) {
   const channels = perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]])
   channels.unshift(['Top rated', 'best'])
   channels.push(['Computer', 'computer'])
+  const channel = settings.tv.channel()
+  const icon = utils.gameIcon(channel)
 
-  return h('div.action', h('div.select_input',
-    formWidgets.renderSelect('TV channel', 'tvChannel', channels, settings.tv.channel,
-      false, ctrl.onTVChannelChange)
-  ))
+  return (
+    h('div.select_input.round-tvChannelSelector', [
+      h('label', {
+        'for': 'channel_selector'
+      }, h(`i[data-icon=${icon}]`)),
+      h('select#channel_selector', {
+        value: channel,
+        onchange(e: Event) {
+          const val = (e.target as HTMLSelectElement).value
+          settings.tv.channel(val)
+          ctrl.onTVChannelChange && ctrl.onTVChannelChange()
+          setTimeout(redraw, 10)
+        }
+      }, channels.map(v =>
+        h('option', {
+          key: v[1], value: v[1]
+        }, v[0])
+      ))
+    ])
+  )
 }
 
 function renderGameRunningActions(ctrl: OnlineRound) {
@@ -278,8 +304,7 @@ function renderGameRunningActions(ctrl: OnlineRound) {
     let controls = [
       gameButton.shareLink(ctrl),
       ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
-      ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
-      ctrl.data.tv ? tvChannelSelector(ctrl) : null
+      ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null
     ]
 
     return <div className="game_controls">{controls}</div>
@@ -350,8 +375,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
         ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
         ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
         gameButton.sharePGN(ctrl),
-        gameButton.analysisBoard(ctrl),
-        ctrl.data.tv ? tvChannelSelector(ctrl) : null
+        gameButton.analysisBoard(ctrl)
       ]
     }
     else {

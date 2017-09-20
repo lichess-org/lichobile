@@ -61,7 +61,7 @@ const VariantPerfScreen: Mithril.Component<Attrs, State> = {
     const userId = vnode.attrs.id
     const variant = vnode.attrs.variant
     const header = () => headerWidget(null,
-      backButton(userId + ' ' + shortPerfTitle(variant) + ' stats')
+      backButton(userId + ' ' + shortPerfTitle(variant as PerfKey) + ' stats')
     )
 
     return layout.free(header, () => renderBody(ctrl))

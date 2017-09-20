@@ -3,6 +3,7 @@ import { secondsToMinutes } from '../utils'
 import settings from '../settings'
 import gameStatus from './status'
 import getVariant from './variant'
+import { shortPerfTitle } from './perfs'
 import { MiniBoardGameObj } from './interfaces'
 import { UserGame } from './interfaces/user'
 import { GameData, OnlineGameData } from './interfaces/game'
@@ -156,8 +157,9 @@ export function title(data: GameData | AnalyseData): string {
     i18n('offline') :
     data.game.rated ? i18n('rated') : i18n('casual')
 
+  const perf = data.game.perf && shortPerfTitle(data.game.perf)
   const variant = getVariant(data.game.variant.key)
-  const name = variant ? (variant.tinyName || variant.shortName || variant.name) : '?'
+  const name = perf || (variant ? (variant.tinyName || variant.shortName || variant.name) : '?')
   const t = time(data)
   return data.game.source === 'import' ?
     `Import • ${name}` :

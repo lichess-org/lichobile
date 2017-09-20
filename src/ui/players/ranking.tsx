@@ -65,7 +65,7 @@ function renderBody(ctrl: State) {
   const keys = Object.keys(ctrl.ranking()) as RankingKey[]
   const categories = keys
     .filter(k => k !== 'online')
-    .map(k => renderRankingCategory(ctrl, k))
+    .map((k: PerfKey) => renderRankingCategory(ctrl, k))
   return (
     <div id="allRanking" className="native_scroller page">
       {categories}
@@ -73,7 +73,7 @@ function renderBody(ctrl: State) {
   )
 }
 
-function renderRankingCategory(ctrl: State, key: RankingKey) {
+function renderRankingCategory(ctrl: State, key: PerfKey) {
   const ranking = ctrl.ranking()
   if (ranking) {
     const toggleDataIcon = ctrl.catOpenedMap()[key] ? 'S' : 'R'

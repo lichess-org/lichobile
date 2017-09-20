@@ -51,7 +51,7 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
         }
       })
 
-      // console.info('engine search pos: ', `position fen ${fen} moves ${moves}`)
+      // console.info('engine search pos: ', `position fen ${initialFen} moves ${moves}`)
 
       setOption('Threads', getNbCores())
       .then(() => cmd(`position fen ${initialFen} moves ${moves}`))

@@ -3,7 +3,7 @@ import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
 import { saveOfflineGameData, removeOfflineGameData } from '../../../utils/offlineGames'
-import { hasNetwork, boardOrientation, formatTimeInSecs } from '../../../utils'
+import { hasNetwork, boardOrientation } from '../../../utils'
 import session from '../../../session'
 import socket from '../../../socket'
 import router from '../../../router'
@@ -61,8 +61,6 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   private lastMoveMillis?: number
   private lastDrawOfferAtPly: number
-  private tournamentCountInterval: number
-  private tournamentClockTime: number
   private clockIntervId: number
 
   public constructor(
@@ -132,11 +130,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (this.clock) this.clockIntervId = setInterval(this.clockTick, 100)
     else if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick, 6000)
 
-    if (this.data.tournament) {
-      this.tournamentClockTime = performance.now()
-      this.tournamentCountInterval = setInterval(this.tournamentTick, 100)
-    }
-
     socket.createGame(
       this.data.url.socket,
       this.data.player.version,
@@ -149,23 +142,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     window.plugins.insomnia.keepAwake()
 
     redraw()
-  }
-
-  private tournamentTick = () => {
-    if (this.data.tournament && this.data.tournament.secondsToFinish > 0) {
-      const now = performance.now()
-      const ttl = this.data.tournament.secondsToFinish
-      const elapsed = (now - this.tournamentClockTime) / 1000
-      this.tournamentClockTime = now
-      this.data.tournament.secondsToFinish = ttl - elapsed
-      if (this.vm.tClockEl) {
-        this.vm.tClockEl.textContent =
-          formatTimeInSecs(Math.round(ttl)) +
-        ' • '
-      }
-    } else {
-      clearInterval(this.tournamentCountInterval)
-    }
   }
 
   public openUserPopup = (position: string, userId: string) => {
@@ -562,7 +538,6 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   public unload() {
     clearInterval(this.clockIntervId)
-    clearInterval(this.tournamentCountInterval)
     document.removeEventListener('resume', this.onResume)
     if (this.chat) this.chat.unload()
     if (this.notes) this.notes.unload()

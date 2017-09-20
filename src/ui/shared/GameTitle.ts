@@ -55,10 +55,15 @@ export default {
         subEls = window.moment(data.game.createdAt).calendar()
       }
     }
-    else if (subTitle === 'tournament' && isGameData(data) && data.tournament && data.tournament.secondsToFinish) {
+    else if (subTitle === 'tournament' && isGameData(data) && data.tournament) {
       subEls = [
         h('span.fa.fa-trophy'),
-        h(CountdownTimer, { seconds: data.tournament.secondsToFinish })
+        data.tournament.secondsToFinish ?
+          h(CountdownTimer, { seconds: data.tournament.secondsToFinish }) :
+          h('span', [
+            data.tournament.name,
+            data.game.createdAt ? (' (' + window.moment(data.game.createdAt).calendar() + ')') : null
+          ])
       ]
     }
 

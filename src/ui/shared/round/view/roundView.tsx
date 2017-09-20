@@ -6,7 +6,7 @@ import session from '../../../../session'
 import variantApi from '../../../../lichess/variant'
 import * as playerApi from '../../../../lichess/player'
 import * as gameApi from '../../../../lichess/game'
-import { perfTypes } from '../../../../lichess/perfs'
+import * as perfApi from '../../../../lichess/perfs'
 import gameStatusApi from '../../../../lichess/status'
 import { Player } from '../../../../lichess/interfaces/game'
 import { User } from '../../../../lichess/interfaces/user'
@@ -277,7 +277,7 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
 }
 
 function tvChannelSelector(ctrl: OnlineRound) {
-  const channels = perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]])
+  const channels = perfApi.perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]])
   channels.unshift(['Top rated', 'best'])
   channels.push(['Computer', 'computer'])
   const channel = settings.tv.channel()
@@ -409,17 +409,19 @@ function gameInfos(ctrl: OnlineRound) {
   const time = gameApi.time(data)
   const mode = data.game.rated ? i18n('rated') : i18n('casual')
   const icon = utils.gameIcon(data.game.perf)
-  const variant = h('span.variant', {
+  const withLink = !['standard', 'fromPosition'].includes(data.game.variant.key)
+  const perf = h('span.perf', {
+    className: withLink ? 'withLink' : '',
     oncreate: helper.ontap(
       () => {
-        const link = variantApi(data.game.variant.key).link
-        if (link)
-          window.open(link, '_blank')
-      },
-      () => window.plugins.toast.show(data.game.variant.title!, 'short', 'center')
+        if (withLink) {
+          const link = variantApi(data.game.variant.key).link
+          if (link) window.open(link, '_blank')
+        }
+      }
     )
-  }, data.game.variant.name)
-  const infos = [time + ' • ', variant, h('br'), mode]
+  }, perfApi.perfTitle(data.game.perf))
+  const infos = [time + ' • ', perf, h('br'), mode]
   return [
     h('div.icon-game', {
       'data-icon': icon ? icon : ''

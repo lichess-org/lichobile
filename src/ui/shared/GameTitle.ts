@@ -7,7 +7,6 @@ import { GameData } from '../../lichess/interfaces/game'
 import { AnalyseData } from '../../lichess/interfaces/analyse'
 import * as playerApi from '../../lichess/player'
 import * as gameApi from '../../lichess/game'
-import getVariant from '../../lichess/variant'
 import CountdownTimer from './CountdownTimer'
 
 interface Attrs {
@@ -27,16 +26,9 @@ export default {
 
   view({ attrs }) {
     const { data, subTitle, kidMode } = attrs
-    const mode = data.game.offline ? i18n('offline') :
-    data.game.rated ? i18n('rated') : i18n('casual')
-    const variant = getVariant(data.game.variant.key)
-    const name = variant ? (variant.tinyName || variant.shortName || variant.name) : '?'
     const icon = data.game.source === 'import' ? '/' :
     utils.gameIcon(data.game.perf || data.game.variant.key)
-    const time = gameApi.time(data)
-    const text = data.game.source === 'import' ?
-    `Import • ${name}` :
-    `${time} • ${name} • ${mode}`
+    const text = gameApi.title(data)
 
     let subEls: Mithril.Children = null
     if (subTitle === 'players') {

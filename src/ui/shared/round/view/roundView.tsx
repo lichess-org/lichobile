@@ -69,6 +69,12 @@ function renderTitle(ctrl: OnlineRound) {
         h('h2.header-subTitle', tvChannelSelector(ctrl))
       ])
     }
+    else if (ctrl.data.userTV) {
+      return h('div.main_header_title.withSub', [
+        h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), ctrl.data.userTV]),
+        h('h2.header-subTitle', [h(`span.withIcon[data-icon=${utils.gameIcon(ctrl.data.game.perf)}]`), gameApi.title(ctrl.data)])
+      ])
+    }
     else {
       return h(GameTitle, {
         key: 'playingTitle',

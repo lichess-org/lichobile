@@ -3,7 +3,7 @@ import clockSettings from './clockSettings'
 import { formatTimeInSecs } from '../../utils'
 
 import { IChessClockCtrl } from './ChessClockCtrl'
-import { ClockType, Side, IChessClock, IStageClock } from './interfaces'
+import { ClockType, Side, IChessClock, IStageClock } from '../shared/clock/interfaces'
 
 export function renderClockSettingsOverlay(ctrl: IChessClockCtrl) {
   return [

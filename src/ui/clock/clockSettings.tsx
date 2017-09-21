@@ -6,7 +6,7 @@ import * as helper from '../helper'
 import router from '../../router'
 import * as utils from '../../utils'
 
-import { IChessClock, ClockType } from './interfaces'
+import { IChessClock, ClockType } from '../shared/clock/interfaces'
 
 interface IClockSettingsCtrl {
   open(): void

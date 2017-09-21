@@ -1,4 +1,4 @@
-import settings from '../../settings'
+import settings from '../../../settings'
 import HandicapIncClock from './clocks/HandicapIncClock'
 import DelayClock from './clocks/DelayClock'
 import BronsteinClock from './clocks/BronsteinClock'

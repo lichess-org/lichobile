@@ -26,7 +26,7 @@ const SearchScreen: Mithril.Component<Attrs, State> = {
 
   view() {
     return layout.free(
-      () => headerWidget(i18n('search')),
+      () => headerWidget(i18n('advancedSearch')),
       () => renderSearchForm(this.ctrl)
     )
   }

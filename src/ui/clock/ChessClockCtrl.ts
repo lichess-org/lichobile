@@ -1,10 +1,10 @@
 import router from '../../router'
 import settings from '../../settings'
 import clockSettings from './clockSettings'
-import clockSet from './clockSet'
+import clockSet from '../shared/clock/clockSet'
 import * as stream from 'mithril/stream'
 
-import { ClockType, IChessClock, IStageClock } from './interfaces'
+import { ClockType, IChessClock, IStageClock } from '../shared/clock/interfaces'
 
 export interface IChessClockCtrl {
   hideStatusBar: () => void

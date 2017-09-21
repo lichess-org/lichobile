@@ -1,14 +1,16 @@
-import redraw from '../../../utils/redraw'
-import sound from '../../../sound'
+import redraw from '../../../../utils/redraw'
+import sound from '../../../../sound'
 import * as stream from 'mithril/stream'
 
 import { Side, IChessClock } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
-export default function HandicapIncClock(topTimeParam: number, topIncrement: number, bottomTimeParam: number, bottomIncrement: number): IChessClock {
-  const topTime: Mithril.Stream<number> = (topTimeParam !== 0) ? stream(topTimeParam) : stream(topIncrement)
-  const bottomTime: Mithril.Stream<number> = (bottomTimeParam !== 0) ? stream(bottomTimeParam) : stream(bottomIncrement)
+export default function BronsteinClock(time: number, increment: number): IChessClock {
+  const topTime: Mithril.Stream<number> = (time !== 0) ? stream(time) : stream(increment)
+  const bottomTime: Mithril.Stream<number> = (time !== 0) ? stream(time) : stream(increment)
+  const topDelay: Mithril.Stream<number> = stream(increment)
+  const bottomDelay: Mithril.Stream<number> = stream(increment)
   const activeSide: Mithril.Stream<Side | undefined> = stream(undefined)
   const flagged: Mithril.Stream<Side | undefined> = stream(undefined)
   const isRunning: Mithril.Stream<boolean> = stream(false)
@@ -22,6 +24,7 @@ export default function HandicapIncClock(topTimeParam: number, topIncrement: num
       const elapsed = now - topTimestamp
       topTimestamp = now
       topTime(Math.max(topTime() - elapsed, 0))
+      topDelay(Math.max(topDelay() - elapsed, 0))
       if (topTime() <= 0) {
         flagged('top')
         sound.dong()
@@ -32,6 +35,7 @@ export default function HandicapIncClock(topTimeParam: number, topIncrement: num
       const elapsed = now - bottomTimestamp
       bottomTimestamp = now
       bottomTime(Math.max(bottomTime() - elapsed, 0))
+      bottomDelay(Math.max(bottomDelay() - elapsed, 0))
       if (bottomTime() <= 0) {
         flagged('bottom')
         sound.dong()
@@ -49,18 +53,25 @@ export default function HandicapIncClock(topTimeParam: number, topIncrement: num
 
     if (side === 'top') {
       if (activeSide() === 'top') {
-        topTime(topTime() + topIncrement)
+        activeSide('bottom')
+        topTime(topTime() + (increment - topDelay()))
+        topDelay(increment)
       }
       bottomTimestamp = performance.now()
       activeSide('bottom')
-    } else if (side === 'bottom') {
+    }
+    else {
       if (activeSide() === 'bottom') {
-        bottomTime(bottomTime() + bottomIncrement)
+        activeSide('top')
+        bottomTime(bottomTime() + (increment - bottomDelay()))
+        bottomDelay(increment)
       }
       topTimestamp = performance.now()
       activeSide('top')
     }
-    clearInterval(clockInterval)
+    if (clockInterval) {
+      clearInterval(clockInterval)
+    }
     clockInterval = setInterval(tick, CLOCK_TICK_STEP)
     isRunning(true)
     redraw()
@@ -73,14 +84,15 @@ export default function HandicapIncClock(topTimeParam: number, topIncrement: num
     }
     else {
       isRunning(true)
+      clockInterval = setInterval(tick, CLOCK_TICK_STEP)
       if (activeSide() === 'top') {
         topTimestamp = performance.now()
       } else {
         bottomTimestamp = performance.now()
       }
-      clockInterval = setInterval(tick, CLOCK_TICK_STEP)
     }
   }
+
 
   return {
     topTime,

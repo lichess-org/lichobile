@@ -1,5 +1,5 @@
-import redraw from '../../../utils/redraw'
-import sound from '../../../sound'
+import redraw from '../../../../utils/redraw'
+import sound from '../../../../sound'
 import * as stream from 'mithril/stream'
 
 import { Side, Stage, IStageClock } from '../interfaces'

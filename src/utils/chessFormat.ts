@@ -40,3 +40,7 @@ export function uciTolastDrop(uci: string): KeyPair {
 export function fixCrazySan(san: San): San {
   return san[0] === 'P' ? san.slice(1) : san
 }
+
+export function decomposeUci(uci: Uci): [Key, Key, string] {
+  return [uci.slice(0, 2) as Key, uci.slice(2, 4) as Key, uci.slice(4, 5)]
+}

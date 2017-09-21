@@ -2,20 +2,22 @@ import settings from '../../../settings'
 import cevalEngine from './cevalEngine'
 import { getNbCores } from '../../../utils/stockfish'
 import { Tree } from '../../shared/tree'
-import { Emit, ICevalCtrl } from './interfaces'
+import { Work, ICevalCtrl } from './interfaces'
 
 export default function CevalCtrl(
   variant: VariantKey,
   allowed: boolean,
-  emit: (res: Emit) => void): ICevalCtrl {
+  emit: (res: Tree.ClientEval, work: Work) => void
+): ICevalCtrl {
 
   let initialized = false
 
   const minDepth = 8
   const maxDepth = 20
+  const multiPv = 3
   const cores = getNbCores()
 
-  const engine = cevalEngine({ minDepth, maxDepth, cores })
+  const engine = cevalEngine({ minDepth, maxDepth, cores, multiPv })
 
   let started = false
   let isEnabled = settings.analyse.enableCeval()
@@ -24,8 +26,8 @@ export default function CevalCtrl(
     return allowed && isEnabled
   }
 
-  function onEmit(res: Emit) {
-    emit(res)
+  function onEmit(res: Tree.ClientEval, work: Work) {
+    emit(res, work)
   }
 
   function start(path: Tree.Path, steps: Tree.Node[]) {
@@ -36,17 +38,21 @@ export default function CevalCtrl(
     if (step.ceval && step.ceval.depth >= maxDepth) {
       return
     }
-    engine.start({
+    const work = {
       initialFen: steps[0].fen,
       currentFen: step.fen,
-      moves: steps.slice(1).map((s) => fixCastle(s.uci!, s.san!)).join(' '),
-      path: path,
-      steps: steps,
+      moves: steps.slice(1).map((s) => fixCastle(s.uci!, s.san!)),
+      maxDepth,
+      path,
       ply: step.ply,
-      emit: function(res) {
-        if (enabled()) onEmit(res)
+      multiPv,
+      threatMode: false,
+      emit(res: Tree.ClientEval) {
+        if (enabled()) onEmit(res, work)
       }
-    })
+    }
+
+    engine.start(work)
     started = true
   }
 
@@ -93,6 +99,8 @@ export default function CevalCtrl(
       return initialized
     },
     cores,
+    multiPv,
+    variant,
     start,
     stop,
     destroy,

@@ -1,10 +1,37 @@
 import * as h from 'mithril/hyperscript'
+import * as range from 'lodash/range'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 import { renderEval } from '../util'
+import pv2san from './pv2san'
 
 export default function renderCeval(ctrl: AnalyseCtrl) {
-  return h('div', 'todo')
+  if (!ctrl.ceval.enabled()) return h('div.ceval-notEnabled', 'not enabled')
+
+  const multiPv = ctrl.ceval.multiPv
+  const node = ctrl.node
+  if (node.ceval) {
+    const pvs = node.ceval.pvs
+    return h('div.ceval-pv_box.native_scroller', {
+      key: 'ceval-pvs',
+      'data-fen': node.fen
+    }, range(multiPv).map((i) => {
+      if (!pvs[i]) return h('div.pv')
+        const san = pv2san(ctrl.ceval.variant, node.fen, false, pvs[i].moves, pvs[i].mate)
+      return h('div.ceval-pv', {
+        'data-uci': pvs[i].moves[0],
+        className: i % 2 ? 'even' : 'odd'
+      }, [
+        multiPv > 1 ? h('strong.ceval-pv_eval', pvs[i].mate !== undefined ? ('#' + pvs[i].mate) : renderEval(pvs[i].cp!)) : null,
+        h('div.ceval-pv-line', san)
+      ])
+    }))
+  }
+  else {
+    return h('div.ceval-pv_box.native_scroller.loading', {
+      key: 'ceval-loading'
+    }, spinnerPearl())
+  }
 }
 
 export const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
@@ -34,21 +61,18 @@ export const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
       percent = 0
     }
     else  {
-      pearl = ctrl.replaying ? '' : spinnerPearl
+      pearl = ctrl.replaying ? '' : spinnerPearl()
       percent = 0
     }
 
     return (
-      <div className="analyse-curEval">
+      <div className="ceval-curEval">
         { pearl }
-        { ctrl.settings.s.showBestMove && ceval && ceval.bestSan ?
-        <div className="analyse-bestMove">
-          best {ceval.bestSan}
-        </div> : null
-        }
       </div>
     )
   }
 }
 
-const spinnerPearl = <div className="spinner fa fa-hourglass-half"></div>
+function spinnerPearl() {
+ return h('div.spinner.fa.fa-hourglass-half')
+}

@@ -1,10 +1,13 @@
+import * as Signal from 'signals'
+
+import { Tree } from '../../shared/tree/interfaces'
 import { Work } from './interfaces'
 import { setOption, setVariant } from '../../../utils/stockfish'
-import * as Signal from 'signals'
 
 interface Opts {
   minDepth: number
   maxDepth: number
+  multiPv: number
   cores: number
 }
 
@@ -18,6 +21,10 @@ const EVAL_REGEX = new RegExp(''
   + /pv (.+)/.source)
 
 export default function cevalEngine(opts: Opts) {
+
+  let curEval: Tree.ClientEval | null = null
+  let expectedPvs = 1
+
   // after a 'go' command, stockfish will be continue to emit until the 'bestmove'
   // message, reached by depth or after a 'stop' command
   // finished here means stockfish has emited the bestmove and is ready for
@@ -37,34 +44,62 @@ export default function cevalEngine(opts: Opts) {
       finished = true
     }
     if (stopped) return
-    if (/currmovenumber|lowerbound|upperbound/.test(text)) return
     // console.log(text)
-    const matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*nps (\d+) .*pv (.+)/)
+
+    const matches = text.match(EVAL_REGEX)
     if (!matches) return
-    const depth = parseInt(matches[1])
+
+    const depth = parseInt(matches[1]),
+      multiPv = parseInt(matches[2]),
+      isMate = matches[3] === 'mate',
+      evalType = matches[5],
+      nodes = parseInt(matches[6]),
+      elapsedMs: number = parseInt(matches[7]),
+      moves = matches[8].split(' ')
+
+    let ev = parseInt(matches[4])
+
+    // Track max pv index to determine when pv prints are done.
+    if (expectedPvs < multiPv) expectedPvs = multiPv
+
     if (depth < opts.minDepth) return
-    let cp: number | undefined
-    let mate: number | undefined
-    if (matches[2] === 'cp') cp = parseFloat(matches[3])
-    else mate = parseFloat(matches[3])
-    if (work.ply % 2 === 1) {
-      if (matches[2] === 'cp' && cp !== undefined) cp = -cp
-      else if (mate !== undefined) mate = -mate
+
+    let pivot = work.threatMode ? 0 : 1
+    if (work.ply % 2 === pivot) ev = -ev
+
+    // For now, ignore most upperbound/lowerbound messages.
+    // The exception is for multiPV, sometimes non-primary PVs
+    // only have an upperbound.
+    // See: https://github.com/ddugovic/Stockfish/issues/228
+    if (evalType && multiPv === 1) return
+
+    let pvData = {
+      moves,
+      cp: isMate ? undefined : ev,
+      mate: isMate ? ev : undefined,
+      depth
     }
-    const nps = parseInt(matches[4], 10)
-    const best = matches[5].split(' ')[0]
-    work.emit({
-      work,
-      ceval: {
+
+    if (multiPv === 1) {
+      curEval = {
         fen: work.currentFen,
+        maxDepth: work.maxDepth,
         depth,
-        maxDepth: opts.maxDepth,
-        cp,
-        mate,
-        best,
-        nps
+        knps: nodes / elapsedMs,
+        nodes,
+        cp: isMate ? undefined : ev,
+        mate: isMate ? ev : undefined,
+        pvs: [pvData],
+        millis: elapsedMs
       }
-    })
+    } else if (curEval) {
+      curEval.pvs.push(pvData)
+      curEval.depth = Math.min(curEval.depth, depth)
+    }
+
+    if (multiPv === expectedPvs && curEval) {
+      work.emit(curEval)
+    }
   }
 
   function stop(): Promise<{}> {
@@ -98,7 +133,8 @@ export default function cevalEngine(opts: Opts) {
     finished = false
 
     return setOption('Threads', opts.cores)
-    .then(() => send(['position', 'fen', work.initialFen, 'moves', work.moves].join(' ')))
+    .then(() => setOption('MultiPV', work.multiPv))
+    .then(() => send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' ')))
     .then(() => send('go depth ' + opts.maxDepth))
   }
 

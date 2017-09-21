@@ -1,18 +1,15 @@
 import { Tree } from '../../shared/tree'
 
 export interface Work {
+  path: string
+  maxDepth: number
+  multiPv: number
+  ply: number
+  threatMode: boolean
   initialFen: string
   currentFen: string
-  moves: string
-  path: Tree.Path
-  steps: Tree.Node[]
-  ply: number
-  emit: (res: Emit) => void
-}
-
-export interface Emit {
-  work: Work
-  ceval: Tree.ClientEval
+  moves: string[]
+  emit: (ev: Tree.ClientEval) => void
 }
 
 export interface ICevalCtrl {
@@ -25,5 +22,6 @@ export interface ICevalCtrl {
   enabled(): boolean
   toggle(): void
   cores: number
+  multiPv: number
+  variant: VariantKey
 }
-

@@ -20,7 +20,7 @@ import continuePopup, { Controller as ContinuePopupController } from '../shared/
 import { NotesCtrl } from '../shared/round/notes'
 import * as util from './util'
 import CevalCtrl from './ceval/CevalCtrl'
-import { ICevalCtrl, Emit as CevalEmit } from './ceval/interfaces'
+import { ICevalCtrl, Work as CevalWork } from './ceval/interfaces'
 import crazyValid from './crazy/crazyValid'
 import ExplorerCtrl from './explorer/ExplorerCtrl'
 import { IExplorerCtrl } from './explorer/interfaces'
@@ -475,44 +475,18 @@ export default class AnalyseCtrl {
       .indexOf(this.data.game.variant.key) !== -1
   }
 
-  private onCevalMsg = (res: CevalEmit) => {
-    this.tree.updateAt(res.work.path, (node: Tree.Node) => {
-      if (node.ceval && node.ceval.depth >= res.ceval.depth) return
+  private onCevalMsg = (ceval: Tree.ClientEval, work: CevalWork) => {
+    this.tree.updateAt(work.path, (node: Tree.Node) => {
+      if (node.ceval && node.ceval.depth >= ceval.depth) return
 
       if (node.ceval === undefined)
-        node.ceval = <Tree.ClientEval>Object.assign({}, res.ceval)
+        node.ceval = <Tree.ClientEval>Object.assign({}, ceval)
       else
-        node.ceval = <Tree.ClientEval>Object.assign(node.ceval, res.ceval)
+        node.ceval = <Tree.ClientEval>Object.assign(node.ceval, ceval)
 
-      // get best move in pgn format
-      if (node.ceval === undefined || node.ceval.best !== res.ceval.best) {
-        if (!res.ceval.best.includes('@')) {
-          const move = chessFormat.uciToMove(res.ceval.best)
-          chess.move({
-            variant: this.data.game.variant.key,
-            fen: node.fen,
-            orig: move[0],
-            dest: move[1],
-            promotion: chessFormat.uciToProm(res.ceval.best),
-            path: this.path
-          })
-          .then((data: chess.MoveResponse) => {
-            if (node.ceval) node.ceval.bestSan = data.situation.pgnMoves[0]
-            if (res.work.path === this.path) {
-              redraw()
-            }
-          })
-          .catch((err) => {
-            console.error('ceval move err', err)
-          })
-        }
+      if (work.path === this.path) {
+        redraw()
       }
-
-      if (res.ceval.best.includes('@')) {
-        node.ceval.bestSan = res.ceval.best
-      }
-
-      redraw()
     })
   }
 

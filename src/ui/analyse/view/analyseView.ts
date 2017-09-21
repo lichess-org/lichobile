@@ -66,7 +66,8 @@ export function renderVariantSelector(ctrl: AnalyseCtrl) {
       h('label', {
         'for': 'variant_selector'
       }, h(`i[data-icon=${icon}]`)),
-      h('select#variant_selector', {
+      h('select', {
+        id: 'variant_selector',
         value: variant,
         onchange: (e: Event) => {
           const val = (e.target as HTMLSelectElement).value

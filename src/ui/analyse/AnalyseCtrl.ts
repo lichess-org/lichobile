@@ -510,7 +510,6 @@ export default class AnalyseCtrl {
       }
 
       redraw()
-
     })
   }
 

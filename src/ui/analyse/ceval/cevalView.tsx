@@ -1,5 +1,11 @@
+import * as h from 'mithril/hyperscript'
+
 import AnalyseCtrl from '../AnalyseCtrl'
 import { renderEval } from '../util'
+
+export default function renderCeval(ctrl: AnalyseCtrl) {
+  return h('div', 'todo')
+}
 
 export const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
   onbeforeupdate({ attrs }) {

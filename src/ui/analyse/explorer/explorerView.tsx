@@ -1,7 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import * as helper from '../../helper'
 import explorerConfig from './explorerConfig'
-import { ExplorerMove, isTablebaseData } from '../interfaces'
+import { Move, isTablebaseData } from './interfaces'
 import AnalyseCtrl from '../AnalyseCtrl'
 import OpeningTable, { showEmpty, getTR } from './OpeningTable'
 
@@ -52,7 +52,7 @@ function showTitle(ctrl: AnalyseCtrl): Mithril.Children {
 }
 
 
-function showTablebase(ctrl: AnalyseCtrl, title: string, moves: Array<ExplorerMove>, fen: string) {
+function showTablebase(ctrl: AnalyseCtrl, title: string, moves: Array<Move>, fen: string) {
   let stm = fen.split(/\s/)[1]
   if (!moves.length) return null
   return [
@@ -61,7 +61,7 @@ function showTablebase(ctrl: AnalyseCtrl, title: string, moves: Array<ExplorerMo
       oncreate={helper.ontapXY(e => onTablebaseTap(ctrl, e!), undefined, getTR)}
     >
       <tbody>
-      {moves.map((move: ExplorerMove) => {
+      {moves.map((move: Move) => {
         return <tr data-uci={move.uci} key={move.uci}>
           <td>{move.san}</td>
           <td>
@@ -75,7 +75,7 @@ function showTablebase(ctrl: AnalyseCtrl, title: string, moves: Array<ExplorerMo
   ]
 }
 
-function winner(stm: string, move: ExplorerMove) {
+function winner(stm: string, move: Move) {
   if ((stm[0] === 'w' && move.wdl < 0) || (stm[0] === 'b' && move.wdl > 0))
     return 'white'
   else if ((stm[0] === 'b' && move.wdl < 0) || (stm[0] === 'w' && move.wdl > 0))
@@ -84,14 +84,14 @@ function winner(stm: string, move: ExplorerMove) {
     return null
 }
 
-function showDtm(stm: string, move: ExplorerMove) {
+function showDtm(stm: string, move: Move) {
   if (move.dtm) return h('result.' + winner(stm, move), {
     title: 'Mate in ' + Math.abs(move.dtm) + ' half-moves (Depth To Mate)'
   }, 'DTM ' + Math.abs(move.dtm))
   else return null
 }
 
-function showDtz(stm: string, move: ExplorerMove) {
+function showDtz(stm: string, move: Move) {
   if (move.checkmate) return h('result.' + winner(stm, move), 'Checkmate')
   else if (move.stalemate) return h('result.draws', 'Stalemate')
   else if (move.variant_win) return h('result.' + winner(stm, move), 'Variant loss')
@@ -131,12 +131,12 @@ function show(ctrl: AnalyseCtrl) {
     if (moves.length) {
       return (
         <div key="explorer-tablebase" className="explorer-data">
-          {showTablebase(ctrl, 'Winning', moves.filter((move: ExplorerMove) => move.wdl === -2), data.fen)}
-          {showTablebase(ctrl, 'Unknown', moves.filter((move: ExplorerMove) => move.wdl === null), data.fen)}
-          {showTablebase(ctrl, 'Win prevented by 50-move rule', moves.filter((move: ExplorerMove) => move.wdl === -1), data.fen)}
-          {showTablebase(ctrl, 'Drawn', moves.filter((move: ExplorerMove) => move.wdl === 0), data.fen)}
-          {showTablebase(ctrl, 'Loss saved by 50-move rule', moves.filter((move: ExplorerMove) => move.wdl === 1), data.fen)}
-          {showTablebase(ctrl, 'Losing', moves.filter((move: ExplorerMove) => move.wdl === 2), data.fen)}
+          {showTablebase(ctrl, 'Winning', moves.filter((move: Move) => move.wdl === -2), data.fen)}
+          {showTablebase(ctrl, 'Unknown', moves.filter((move: Move) => move.wdl === null), data.fen)}
+          {showTablebase(ctrl, 'Win prevented by 50-move rule', moves.filter((move: Move) => move.wdl === -1), data.fen)}
+          {showTablebase(ctrl, 'Drawn', moves.filter((move: Move) => move.wdl === 0), data.fen)}
+          {showTablebase(ctrl, 'Loss saved by 50-move rule', moves.filter((move: Move) => move.wdl === 1), data.fen)}
+          {showTablebase(ctrl, 'Losing', moves.filter((move: Move) => move.wdl === 2), data.fen)}
         </div>
       )
     }

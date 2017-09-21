@@ -5,7 +5,7 @@ import explorerConfig from './explorerConfig'
 import { openingXhr, tablebaseXhr } from './explorerXhr'
 import { isSynthetic } from '../util'
 import * as gameApi from '../../../lichess/game'
-import { IExplorerCtrl, ExplorerData } from '../interfaces'
+import { IExplorerCtrl, ExplorerData } from './interfaces'
 import AnalyseCtrl from '../AnalyseCtrl'
 
 export default function ExplorerCtrl(

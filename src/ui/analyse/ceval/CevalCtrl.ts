@@ -2,12 +2,12 @@ import settings from '../../../settings'
 import cevalEngine from './cevalEngine'
 import { getNbCores } from '../../../utils/stockfish'
 import { Tree } from '../../shared/tree'
-import { CevalEmit, CevalCtrlInterface } from '../interfaces'
+import { Emit, ICevalCtrl } from './interfaces'
 
-export default function cevalCtrl(
+export default function CevalCtrl(
   variant: VariantKey,
   allowed: boolean,
-  emit: (res: CevalEmit) => void): CevalCtrlInterface {
+  emit: (res: Emit) => void): ICevalCtrl {
 
   let initialized = false
 
@@ -24,7 +24,7 @@ export default function cevalCtrl(
     return allowed && isEnabled
   }
 
-  function onEmit(res: CevalEmit) {
+  function onEmit(res: Emit) {
     emit(res)
   }
 

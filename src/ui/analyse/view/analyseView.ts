@@ -13,7 +13,7 @@ import TabNavigation from '../../shared/TabNavigation'
 
 import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
-import { EvalBox } from '../ceval/cevalView'
+import renderCeval, { EvalBox } from '../ceval/cevalView'
 import renderExplorer from '../explorer/explorerView'
 import renderCrazy from '../crazy/crazyView'
 import { view as renderContextMenu } from '../contextMenu'
@@ -127,7 +127,8 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Bas
   infos: renderGameInfos,
   moves: renderReplay,
   explorer: renderExplorer,
-  computer: renderComputerAnalysis
+  computer: renderComputerAnalysis,
+  ceval: renderCeval
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[], isPortrait: boolean) {

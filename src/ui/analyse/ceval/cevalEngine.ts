@@ -1,4 +1,4 @@
-import { CevalWork } from '../interfaces'
+import { Work } from './interfaces'
 import { setOption, setVariant } from '../../../utils/stockfish'
 import * as Signal from 'signals'
 
@@ -9,6 +9,13 @@ interface Opts {
 }
 
 const output = new Signal()
+
+const EVAL_REGEX = new RegExp(''
+  + /^info depth (\d+) seldepth \d+ multipv (\d+) /.source
+  + /score (cp|mate) ([-\d]+) /.source
+  + /(?:(upper|lower)bound )?nodes (\d+) nps \S+ /.source
+  + /(?:hashfull \d+ )?tbhits \d+ time (\S+) /.source
+  + /pv (.+)/.source)
 
 export default function cevalEngine(opts: Opts) {
   // after a 'go' command, stockfish will be continue to emit until the 'bestmove'
@@ -22,9 +29,9 @@ export default function cevalEngine(opts: Opts) {
 
   // we may have several start requests queued while we wait for previous
   // eval to complete
-  let startQueue: Array<CevalWork> = []
+  let startQueue: Array<Work> = []
 
-  function processOutput(text: string, work: CevalWork) {
+  function processOutput(text: string, work: Work) {
     if (text.indexOf('bestmove') === 0) {
       console.info('stockfish analysis done', text)
       finished = true
@@ -82,7 +89,7 @@ export default function cevalEngine(opts: Opts) {
     })
   }
 
-  function launchEval(work: CevalWork) {
+  function launchEval(work: Work) {
 
     output.removeAll()
     output.add((msg: string) => processOutput(msg, work))
@@ -118,7 +125,7 @@ export default function cevalEngine(opts: Opts) {
       .catch(err => console.error('stockfish init error', err))
     },
 
-    start(work: CevalWork) {
+    start(work: Work) {
       startQueue.push(work)
       stop().then(doStart)
     },

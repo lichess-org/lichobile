@@ -17,6 +17,12 @@ export const defaults: Tab[] = [
   }
 ]
 
+export const ceval: Tab = {
+  id: 'ceval',
+  title: 'Local Stockfish 8',
+  className: 'fa fa-cogs'
+}
+
 export const explorer: Tab = {
   id: 'explorer',
   title: 'Opening explorer & tablebase',

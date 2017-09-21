@@ -1,5 +1,5 @@
 import { fetchJSON } from '../../../http'
-import { ExplorerData } from '../interfaces'
+import { ExplorerData } from './interfaces'
 
 const explorerEndpoint = 'https://expl.lichess.org'
 const tablebaseEndpoint = 'https://tablebase.lichess.org'

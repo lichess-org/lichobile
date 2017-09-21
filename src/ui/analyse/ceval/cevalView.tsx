@@ -17,7 +17,7 @@ export default function renderCeval(ctrl: AnalyseCtrl) {
       'data-fen': node.fen
     }, range(multiPv).map((i) => {
       if (!pvs[i]) return h('div.pv')
-        const san = pv2san(ctrl.ceval.variant, node.fen, false, pvs[i].moves, pvs[i].mate)
+      const san = pv2san(ctrl.ceval.variant, node.fen, false, pvs[i].moves, pvs[i].mate)
       return h('div.ceval-pv', {
         'data-uci': pvs[i].moves[0],
         className: i % 2 ? 'even' : 'odd'

@@ -20,7 +20,8 @@
       font-size 14px
 
 .ceval-pv_box
-  padding 10px
+  font-size 0.9em
+  padding 0 10px
   &.loading
     display flex
     justify-content center
@@ -30,8 +31,11 @@
 
 .ceval-pv
   display flex
-  flex-fow row wrap
-  margin-bottom 1em
+  flex-flow row nowrap
+  padding 0.5em 0
+  &.active
+    opacity 0.9
 
 .ceval-pv_eval
-  margin-right 1em
+  flex 0 0 33px
+  margin-right 0.5em

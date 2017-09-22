@@ -22,6 +22,7 @@ export interface Work {
 export interface ICevalCtrl {
   init(): Promise<void>
   isInit(): boolean
+  isSearching(): boolean
   start(path: Tree.Path, steps: Tree.Node[]): void
   stop(): void
   destroy(): void
@@ -34,4 +35,12 @@ export interface ICevalCtrl {
   setCores(c: number): void
   setMultiPv(pv: number): void
   toggleInfinite(): void
+}
+
+export interface IEngine {
+  init(variant: VariantKey): Promise<void>
+  start(work: Work): void
+  stop(): void
+  exit(): Promise<void>
+  isSearching(): boolean
 }

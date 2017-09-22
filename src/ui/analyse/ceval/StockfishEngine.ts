@@ -1,7 +1,7 @@
 import * as Signal from 'signals'
 
 import { Tree } from '../../shared/tree/interfaces'
-import { Work } from './interfaces'
+import { Work, IEngine } from './interfaces'
 import { setOption, setVariant } from '../../../utils/stockfish'
 
 interface Opts {
@@ -17,7 +17,7 @@ const EVAL_REGEX = new RegExp(''
   + /(?:hashfull \d+ )?tbhits \d+ time (\S+) /.source
   + /pv (.+)/.source)
 
-export default function StockfishEngine(opts: Opts) {
+export default function StockfishEngine(opts: Opts): IEngine {
 
   let curEval: Tree.ClientEval | null = null
   let expectedPvs = 1
@@ -149,12 +149,6 @@ export default function StockfishEngine(opts: Opts) {
     init(variant: VariantKey) {
       return Stockfish.init()
       .then(() => init(variant))
-      // stockfish plugin will reject if already inited
-      .catch(() => {
-        return Stockfish.exit()
-        .then(() => Stockfish.init(), () => Stockfish.init())
-        .then(() => init(variant))
-      })
       .catch(err => console.error('stockfish init error', err))
     },
 
@@ -170,6 +164,10 @@ export default function StockfishEngine(opts: Opts) {
       finished = true
       stopped = false
       return Stockfish.exit()
+    },
+
+    isSearching() {
+      return !finished && !stopped
     }
   }
 }

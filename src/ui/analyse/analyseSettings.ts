@@ -117,6 +117,22 @@ export default {
 function renderAnalyseSettings(ctrl: AnalyseCtrl) {
 
   return h('div.analyseSettings', [
+    h('div.action', {
+      key: 'showBestMove'
+    }, [
+      formWidgets.renderCheckbox(
+        i18n('showBestMove'), 'showBestMove', settings.analyse.showBestMove,
+        ctrl.settings.toggleBestMove
+      )
+    ]),
+    ctrl.source === 'online' && isOnlineAnalyseData(ctrl.data) && gameApi.analysable(ctrl.data) ? h('div.action', {
+      key: 'showComments'
+    }, [
+      formWidgets.renderCheckbox(
+        i18n('keyShowOrHideComments'), 'showComments', settings.analyse.showComments,
+        ctrl.settings.toggleComments
+      )
+    ]) : null,
     ctrl.ceval.allowed ? h('div.action', {
       key: 'enableCeval'
     }, [
@@ -125,18 +141,13 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
         v => {
           ctrl.ceval.toggle()
           if (v) ctrl.initCeval()
-          else ctrl.ceval.destroy()
+          else {
+            ctrl.ceval.destroy()
+            ctrl.resetTabs()
+          }
         }
       ),
       h('small.caution', i18n('localEvalCaution'))
-    ]) : null,
-    ctrl.ceval.allowed ? h('div.action', {
-      key: 'showBestMove'
-    }, [
-      formWidgets.renderCheckbox(
-        i18n('showBestMove'), 'showBestMove', settings.analyse.showBestMove,
-        ctrl.settings.toggleBestMove
-      )
     ]) : null,
     ctrl.ceval.allowed ? h('div.action', {
       key: 'infiniteAnalysis'
@@ -160,14 +171,6 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
       formWidgets.renderSlider(
         'Processor cores', 'ceval.cores', 1, getNbCores(), 1, settings.analyse.cevalCores,
         ctrl.settings.cevalSetCores
-      )
-    ]) : null,
-    ctrl.source === 'online' && isOnlineAnalyseData(ctrl.data) && gameApi.analysable(ctrl.data) ? h('div.action', {
-      key: 'showComments'
-    }, [
-      formWidgets.renderCheckbox(
-        i18n('keyShowOrHideComments'), 'showComments', settings.analyse.showComments,
-        ctrl.settings.toggleComments
       )
     ]) : null
   ])

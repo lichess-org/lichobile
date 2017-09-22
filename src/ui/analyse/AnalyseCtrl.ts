@@ -156,6 +156,7 @@ export default class AnalyseCtrl {
     setTimeout(this.debouncedScroll, 250)
     setTimeout(this.initCeval, 1000)
     window.plugins.insomnia.keepAwake()
+    document.addEventListener('pause', this.onPause)
   }
 
   canDrop = () => {
@@ -212,9 +213,12 @@ export default class AnalyseCtrl {
     this._currentTabIndex = index
     const cur = this.currentTab(this.availableTabs())
     if (cur.id === 'moves') this.debouncedScroll()
-    this.explorer.setStep()
+    else if (cur.id === 'explorer') this.explorer.setStep()
     redraw()
   }
+
+  // call this when removing a tab, to avoid a lazy tab loading indefinitely
+  resetTabs = () => this.onTabChange(this.currentTabIndex(this.availableTabs()))
 
   setPath = (path: Tree.Path): void => {
     this.path = path
@@ -585,4 +589,15 @@ export default class AnalyseCtrl {
       })
     }
   }, 50)
+
+  private onPause = () => {
+    if (this.ceval.isSearching() && this.ceval.opts.infinite) {
+      window.cordova.plugins.notification.local.schedule({
+        title: 'Stockfish engine is running.',
+        text: 'It will stop after 10 minutes of inactivity.',
+        icon: 'res://mipmap/icon',
+        smallIcon: 'res://drawable/ic_stat_onesignal_default'
+      })
+    }
+  }
 }

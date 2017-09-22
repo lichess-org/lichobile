@@ -33,12 +33,6 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
     init() {
       return Stockfish.init()
       .then(onInit)
-      .catch(() => {
-        // trying to init an already init stockfish will return an error
-        return Stockfish.exit()
-        .then(() => Stockfish.init(), () => Stockfish.init())
-        .then(onInit)
-      })
       .catch(console.error.bind(console))
     },
 

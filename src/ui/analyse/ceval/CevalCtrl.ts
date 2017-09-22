@@ -107,6 +107,9 @@ export default function CevalCtrl(
     isInit() {
       return initialized
     },
+    isSearching() {
+      return engine.isSearching()
+    },
     maxDepth,
     variant,
     start,

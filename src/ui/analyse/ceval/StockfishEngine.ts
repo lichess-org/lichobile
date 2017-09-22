@@ -4,9 +4,9 @@ import { Tree } from '../../shared/tree/interfaces'
 import { Work, IEngine } from './interfaces'
 import { setOption, setVariant } from '../../../utils/stockfish'
 
-interface Opts {
-  minDepth: number
-}
+// interface Opts {
+//   minDepth: number
+// }
 
 const output = new Signal()
 
@@ -17,7 +17,7 @@ const EVAL_REGEX = new RegExp(''
   + /(?:hashfull \d+ )?tbhits \d+ time (\S+) /.source
   + /pv (.+)/.source)
 
-export default function StockfishEngine(opts: Opts): IEngine {
+export default function StockfishEngine(): IEngine {
 
   let curEval: Tree.ClientEval | null = null
   let expectedPvs = 1
@@ -39,6 +39,7 @@ export default function StockfishEngine(opts: Opts): IEngine {
     if (text.indexOf('bestmove') === 0) {
       console.info('stockfish analysis done', text)
       finished = true
+      work.emit()
     }
     if (stopped) return
     // console.log(text)
@@ -59,7 +60,7 @@ export default function StockfishEngine(opts: Opts): IEngine {
     // Track max pv index to determine when pv prints are done.
     if (expectedPvs < multiPv) expectedPvs = multiPv
 
-    if (depth < opts.minDepth) return
+    // if (depth < opts.minDepth) return
 
     let pivot = work.threatMode ? 0 : 1
     if (work.ply % 2 === pivot) ev = -ev

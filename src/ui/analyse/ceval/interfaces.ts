@@ -16,7 +16,7 @@ export interface Work {
   initialFen: string
   currentFen: string
   moves: string[]
-  emit: (ev: Tree.ClientEval) => void
+  emit: (ev?: Tree.ClientEval) => void
 }
 
 export interface ICevalCtrl {
@@ -30,6 +30,7 @@ export interface ICevalCtrl {
   enabled(): boolean
   toggle(): void
   variant: VariantKey
+  minDepth: number
   maxDepth: number
   opts: Opts
   setCores(c: number): void

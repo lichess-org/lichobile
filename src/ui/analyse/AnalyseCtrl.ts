@@ -157,6 +157,8 @@ export default class AnalyseCtrl {
     setTimeout(this.initCeval, 1000)
     window.plugins.insomnia.keepAwake()
     document.addEventListener('pause', this.onPause)
+    document.addEventListener('resume', this.onResume)
+    window.addEventListener('unload', this.onUnload)
   }
 
   canDrop = () => {
@@ -368,6 +370,12 @@ export default class AnalyseCtrl {
     return this.data.analysis || this.ceval.enabled()
   }
 
+  unload = () => {
+    if (this.ceval) this.ceval.destroy()
+    document.removeEventListener('pause', this.onPause)
+    document.removeEventListener('resume', this.onResume)
+  }
+
   // ---
 
   private _deleteNode = (path: Tree.Path) => {
@@ -489,19 +497,31 @@ export default class AnalyseCtrl {
       .indexOf(this.data.game.variant.key) !== -1
   }
 
-  private onCevalMsg = (ceval: Tree.ClientEval, work: CevalWork) => {
-    this.tree.updateAt(work.path, (node: Tree.Node) => {
-      if (node.ceval && node.ceval.depth >= ceval.depth) return
+  private onCevalMsg = (work: CevalWork, ceval?: Tree.ClientEval) => {
+    if (ceval) {
+      this.tree.updateAt(work.path, (node: Tree.Node) => {
+        if (node.ceval && node.ceval.depth >= ceval.depth) return
 
-      if (node.ceval === undefined)
-        node.ceval = <Tree.ClientEval>Object.assign({}, ceval)
-      else
-        node.ceval = <Tree.ClientEval>Object.assign(node.ceval, ceval)
+        if (node.ceval === undefined) {
+          node.ceval = <Tree.ClientEval>Object.assign({}, ceval)
+        }
+        else {
+          node.ceval = <Tree.ClientEval>Object.assign(node.ceval, ceval)
+        }
 
-      if (work.path === this.path) {
-        redraw()
-      }
-    })
+        if (node.ceval.pvs.length > 0) {
+          node.ceval.best = node.ceval.pvs[0].moves[0]
+        }
+
+        if (work.path === this.path) {
+          redraw()
+        }
+      })
+    }
+    // no ceval means stockfish has finished, just redraw
+    else {
+      if (this.currentTab(this.availableTabs()).id === 'ceval') redraw()
+    }
   }
 
   private startCeval = debounce(() => {
@@ -595,9 +615,19 @@ export default class AnalyseCtrl {
       window.cordova.plugins.notification.local.schedule({
         title: 'Stockfish engine is running.',
         text: 'It will stop after 10 minutes of inactivity.',
+        at: new Date(Date.now() + 1000 * 30),
         icon: 'res://mipmap/icon',
         smallIcon: 'res://drawable/ic_stat_onesignal_default'
       })
     }
+  }
+
+  private onResume = () => {
+    window.cordova.plugins.notification.local.cancelAll()
+  }
+
+  private onUnload = () => {
+    // no better way to not trigger notif when killing app?
+    window.cordova.plugins.notification.local.cancelAll()
   }
 }

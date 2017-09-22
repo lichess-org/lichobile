@@ -16,8 +16,8 @@ export namespace Tree {
     mate?: number
     retried?: boolean
     // maybe not keep here
-    best?: string
-    bestSan?: string
+    best?: Uci
+    bestSan?: San
   }
 
   export interface ServerEval {
@@ -89,4 +89,8 @@ export namespace Tree {
 
   export interface Shape {
   }
+}
+
+export function isClientEval(ev: Tree.ServerEval | Tree.ClientEval): ev is Tree.ClientEval {
+  return (ev as Tree.ClientEval).depth !== undefined
 }

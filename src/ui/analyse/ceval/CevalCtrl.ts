@@ -6,7 +6,7 @@ import { Opts, Work, ICevalCtrl } from './interfaces'
 export default function CevalCtrl(
   variant: VariantKey,
   allowed: boolean,
-  emit: (res: Tree.ClientEval, work: Work) => void,
+  emit: (work: Work, res?: Tree.ClientEval) => void,
   initOpts: Opts
 ): ICevalCtrl {
 
@@ -21,7 +21,7 @@ export default function CevalCtrl(
     infinite: initOpts.infinite
   }
 
-  const engine = StockfishEngine({ minDepth })
+  const engine = StockfishEngine()
 
   let started = false
   let isEnabled = settings.analyse.enableCeval()
@@ -30,8 +30,8 @@ export default function CevalCtrl(
     return allowed && isEnabled
   }
 
-  function onEmit(res: Tree.ClientEval, work: Work) {
-    emit(res, work)
+  function onEmit(work: Work, res?: Tree.ClientEval) {
+    emit(work, res)
   }
 
   function start(path: Tree.Path, nodes: Tree.Node[]) {
@@ -52,8 +52,8 @@ export default function CevalCtrl(
       ply: step.ply,
       multiPv: opts.multiPv,
       threatMode: false,
-      emit(res: Tree.ClientEval) {
-        if (enabled()) onEmit(res, work)
+      emit(res?: Tree.ClientEval) {
+        if (enabled()) onEmit(work, res)
       }
     }
 
@@ -111,6 +111,7 @@ export default function CevalCtrl(
       return engine.isSearching()
     },
     maxDepth,
+    minDepth,
     variant,
     start,
     stop,

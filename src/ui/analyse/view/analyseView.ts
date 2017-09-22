@@ -100,15 +100,12 @@ function renderOpening(ctrl: AnalyseCtrl) {
 
 function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: Tab[]) {
 
-  const curTitle = i18n(ctrl.currentTab(availTabs).title)
   const curTab = ctrl.currentTab(availTabs)
 
   return h('div.analyse-header', [
     ctrl.ceval.enabled() && curTab.id !== 'ceval' ? h(EvalBox, { ctrl }) : null,
     h('div.analyse-tabs', [
-      h('div.tab-title', [
-        curTab.id === 'moves' ? renderOpening(ctrl) || curTitle : curTitle
-      ]),
+      h('div.tab-title', renderTabTitle(ctrl, curTab)),
       h(TabNavigation, {
         buttons: availTabs,
         selectedIndex: ctrl.currentTabIndex(availTabs),
@@ -116,6 +113,16 @@ function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: Tab[]) {
       })
     ])
   ])
+}
+
+function renderTabTitle(ctrl: AnalyseCtrl, curTab: Tab) {
+  const curTitle = i18n(curTab.title)
+  if (curTab.id === 'moves') return renderOpening(ctrl) || curTitle
+  else if (curTab.id === 'ceval') return [
+    h('span', curTitle),
+    ctrl.ceval.isSearching() ? h('div.ceval-spinner', 'analyzing ', h('span.fa.fa-spinner.fa-pulse')) : null
+  ]
+  else return curTitle
 }
 
 function renderReplay(ctrl: AnalyseCtrl) {

@@ -114,7 +114,7 @@ export default {
     window.plugins.insomnia.allowSleepAgain()
     socket.destroy()
     if (this.ctrl) {
-      if (this.ctrl.ceval) this.ctrl.ceval.destroy()
+      this.ctrl.unload()
       this.ctrl = undefined
     }
   },

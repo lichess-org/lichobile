@@ -32,15 +32,10 @@
   > .spinner
     width initial
     height initial
-    font-size 16px
+    font-size 1em
     padding 0
     margin 0
     text-align center
-  @media only screen and (orientation: landscape) and (max-height 450px)
-    min-width 50px
-    font-size 16px
-    > .spinner
-      font-size 14px
 
 .ceval-pv_box
   font-size 0.9em
@@ -63,3 +58,12 @@
 .ceval-pv_eval
   flex 0 0 33px
   margin-right 0.5em
+
+.ceval-spinner
+  display inline
+  margin-left 1em
+  opacity 0.7
+  > .fa-pulse
+    will-change transform
+    // 5s otherwise the phone would spend more cpu time to rotate than to analyse...
+    animation fa-spin 5s infinite steps(8)

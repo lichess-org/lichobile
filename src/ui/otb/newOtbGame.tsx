@@ -11,7 +11,7 @@ import * as stream from 'mithril/stream'
 import redraw from '../../utils/redraw'
 import * as utils from '../../utils'
 import { OtbRoundInterface } from '../shared/round'
-import { ClockType } from './interfaces'
+import { ClockType } from '../shared/clock/interfaces'
 
 export interface NewOtbGameCtrl {
   open: () => void

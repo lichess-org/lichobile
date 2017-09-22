@@ -6,6 +6,7 @@ import * as gameApi from '../../lichess/game'
 import { isOnlineAnalyseData } from '../../lichess/interfaces/analyse'
 import settings from '../../settings'
 import { oppositeColor } from '../../utils'
+import { getNbCores } from '../../utils/stockfish'
 import formWidgets from '../shared/form'
 import AnalyseCtrl from './AnalyseCtrl'
 
@@ -16,6 +17,9 @@ export interface ISettingsCtrl {
     showBestMove: boolean
     showComments: boolean
     flip: boolean
+    cevalMultiPvs: number
+    cevalCores: number
+    cevalInfinite: boolean
   }
   open(): void
   close(fBB?: string): void
@@ -23,6 +27,9 @@ export interface ISettingsCtrl {
   toggleBoardSize(): void
   toggleBestMove(): void
   toggleComments(): void
+  cevalSetMultiPv(pv: number): void
+  cevalSetCores(c: number): void
+  cevalToggleInfinite(): void
   flip(): void
 }
 
@@ -45,7 +52,10 @@ export default {
       smallBoard: settings.analyse.smallBoard(),
       showBestMove: settings.analyse.showBestMove(),
       showComments: settings.analyse.showComments(),
-      flip: false
+      flip: false,
+      cevalMultiPvs: settings.analyse.cevalMultiPvs(),
+      cevalCores: settings.analyse.cevalCores(),
+      cevalInfinite: settings.analyse.cevalInfinite()
     }
 
     return {
@@ -74,6 +84,21 @@ export default {
         root.chessground.set({
           orientation: s.flip ? oppositeColor(root.orientation) : root.orientation
         })
+      },
+      cevalSetMultiPv(pv: number) {
+        settings.analyse.cevalMultiPvs(pv)
+        s.cevalMultiPvs = pv
+        root.ceval.setMultiPv(pv)
+      },
+      cevalSetCores(c: number) {
+        settings.analyse.cevalCores(c)
+        s.cevalCores = c
+        root.ceval.setCores(c)
+      },
+      cevalToggleInfinite() {
+        s.cevalInfinite = !s.cevalInfinite
+        settings.analyse.cevalInfinite(s.cevalInfinite)
+        root.ceval.toggleInfinite()
       }
     }
   },
@@ -111,6 +136,30 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
       formWidgets.renderCheckbox(
         i18n('showBestMove'), 'showBestMove', settings.analyse.showBestMove,
         ctrl.settings.toggleBestMove
+      )
+    ]) : null,
+    ctrl.ceval.allowed ? h('div.action', {
+      key: 'infiniteAnalysis'
+    }, [
+      formWidgets.renderCheckbox(
+        'Infinite analysis', 'ceval.infinite', settings.analyse.cevalInfinite,
+        ctrl.settings.cevalToggleInfinite
+      )
+    ]) : null,
+    ctrl.ceval.allowed ? h('div.action', {
+      key: 'cevalMultiPvs'
+    }, [
+      formWidgets.renderSlider(
+        'Analysis lines', 'ceval.multipv', 1, 5, 1, settings.analyse.cevalMultiPvs,
+        ctrl.settings.cevalSetMultiPv
+      )
+    ]) : null,
+    ctrl.ceval.allowed ? h('div.action', {
+      key: 'cevalCores'
+    }, [
+      formWidgets.renderSlider(
+        'Processor cores', 'ceval.cores', 1, getNbCores(), 1, settings.analyse.cevalCores,
+        ctrl.settings.cevalSetCores
       )
     ]) : null,
     ctrl.source === 'online' && isOnlineAnalyseData(ctrl.data) && gameApi.analysable(ctrl.data) ? h('div.action', {

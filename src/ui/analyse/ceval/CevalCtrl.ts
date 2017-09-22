@@ -1,23 +1,27 @@
 import settings from '../../../settings'
-import cevalEngine from './cevalEngine'
-import { getNbCores } from '../../../utils/stockfish'
+import StockfishEngine from './StockfishEngine'
 import { Tree } from '../../shared/tree'
-import { Work, ICevalCtrl } from './interfaces'
+import { Opts, Work, ICevalCtrl } from './interfaces'
 
 export default function CevalCtrl(
   variant: VariantKey,
   allowed: boolean,
-  emit: (res: Tree.ClientEval, work: Work) => void
+  emit: (res: Tree.ClientEval, work: Work) => void,
+  initOpts: Opts
 ): ICevalCtrl {
 
   let initialized = false
 
-  const minDepth = 8
-  const maxDepth = 20
-  const multiPv = 3
-  const cores = getNbCores()
+  const minDepth = 6
+  const maxDepth = 22
 
-  const engine = cevalEngine({ minDepth, maxDepth, cores, multiPv })
+  const opts = {
+    multiPv: initOpts.multiPv,
+    cores: initOpts.cores,
+    infinite: initOpts.infinite
+  }
+
+  const engine = StockfishEngine({ minDepth })
 
   let started = false
   let isEnabled = settings.analyse.enableCeval()
@@ -30,22 +34,23 @@ export default function CevalCtrl(
     emit(res, work)
   }
 
-  function start(path: Tree.Path, steps: Tree.Node[]) {
+  function start(path: Tree.Path, nodes: Tree.Node[]) {
     if (!enabled()) {
       return
     }
-    const step = steps[steps.length - 1]
+    const step = nodes[nodes.length - 1]
     if (step.ceval && step.ceval.depth >= maxDepth) {
       return
     }
     const work = {
-      initialFen: steps[0].fen,
+      initialFen: nodes[0].fen,
       currentFen: step.fen,
-      moves: steps.slice(1).map((s) => fixCastle(s.uci!, s.san!)),
-      maxDepth,
+      moves: nodes.slice(1).map((s) => fixCastle(s.uci!, s.san!)),
+      maxDepth: effectiveMaxDepth(),
+      cores: opts.cores,
       path,
       ply: step.ply,
-      multiPv,
+      multiPv: opts.multiPv,
       threatMode: false,
       emit(res: Tree.ClientEval) {
         if (enabled()) onEmit(res, work)
@@ -54,6 +59,10 @@ export default function CevalCtrl(
 
     engine.start(work)
     started = true
+  }
+
+  function effectiveMaxDepth() {
+    return opts.infinite ? 99 : maxDepth
   }
 
   function stop() {
@@ -98,8 +107,7 @@ export default function CevalCtrl(
     isInit() {
       return initialized
     },
-    cores,
-    multiPv,
+    maxDepth,
     variant,
     start,
     stop,
@@ -108,6 +116,16 @@ export default function CevalCtrl(
     enabled,
     toggle() {
       isEnabled = settings.analyse.enableCeval()
-    }
+    },
+    setCores(c: number) {
+      opts.cores = c
+    },
+    setMultiPv(pv: number) {
+      opts.multiPv = pv
+    },
+    toggleInfinite() {
+      opts.infinite = !opts.infinite
+    },
+    opts
   }
 }

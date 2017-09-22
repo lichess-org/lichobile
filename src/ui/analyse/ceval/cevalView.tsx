@@ -6,13 +6,36 @@ import { renderEval } from '../util'
 import pv2san from './pv2san'
 
 export default function renderCeval(ctrl: AnalyseCtrl) {
-  if (!ctrl.ceval.enabled()) return h('div.ceval-notEnabled', 'not enabled')
+  if (!ctrl.ceval.enabled()) return h('div.ceval-notEnabled', 'Computer eval is disabled')
 
-  const multiPv = ctrl.ceval.multiPv
+  return h('div.ceval-Wrapper', [
+    renderCevalInfos(ctrl),
+    renderCevalPvs(ctrl)
+  ])
+}
+
+function renderCevalInfos(ctrl: AnalyseCtrl) {
+  const node = ctrl.node
+  const ceval = node.ceval
+  const maxDepth = ctrl.ceval.maxDepth
+  const isInfinite = ctrl.settings.s.cevalInfinite
+
+  if (!ceval) return null
+
+  return h('div.ceval-infos', [
+    h('div.depth', [h('strong', 'Depth: '), ceval.depth + (isInfinite ? '' : `/${maxDepth}`)]),
+    h('div.knps', [h('strong', 'kn/s: '), Math.round(ceval.knps)]),
+    h('div.nodes', [h('strong', 'nodes: '), Math.round(ceval.nodes / 1000) + 'k']),
+    h('div.time', [h('strong', 'time: '), Math.round(ceval.millis / 1000) + 's'])
+  ])
+}
+
+function renderCevalPvs(ctrl: AnalyseCtrl) {
+  const multiPv = ctrl.ceval.opts.multiPv
   const node = ctrl.node
   if (node.ceval) {
     const pvs = node.ceval.pvs
-    return h('div.ceval-pv_box.native_scroller', {
+    return h('div.ceval-pv_box', {
       key: 'ceval-pvs',
       'data-fen': node.fen
     }, range(multiPv).map((i) => {

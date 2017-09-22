@@ -107,7 +107,17 @@ export default class AnalyseCtrl {
     // this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null
     this.notes = null
 
-    this.ceval = CevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg)
+    this.ceval = CevalCtrl(
+      this.data.game.variant.key,
+      this.allowCeval(),
+      this.onCevalMsg,
+      {
+        multiPv: this.settings.s.cevalMultiPvs,
+        cores: this.settings.s.cevalCores,
+        infinite: this.settings.s.cevalInfinite
+      }
+    )
+
     this.explorer = ExplorerCtrl(this)
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50)
 

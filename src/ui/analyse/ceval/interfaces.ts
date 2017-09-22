@@ -1,8 +1,15 @@
 import { Tree } from '../../shared/tree'
 
+export interface Opts {
+  multiPv: number
+  cores: number
+  infinite: boolean
+}
+
 export interface Work {
   path: string
   maxDepth: number
+  cores: number
   multiPv: number
   ply: number
   threatMode: boolean
@@ -21,7 +28,10 @@ export interface ICevalCtrl {
   allowed: boolean
   enabled(): boolean
   toggle(): void
-  cores: number
-  multiPv: number
   variant: VariantKey
+  maxDepth: number
+  opts: Opts
+  setCores(c: number): void
+  setMultiPv(pv: number): void
+  toggleInfinite(): void
 }

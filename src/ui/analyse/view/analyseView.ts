@@ -101,14 +101,13 @@ function renderOpening(ctrl: AnalyseCtrl) {
 function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: Tab[]) {
 
   const curTitle = i18n(ctrl.currentTab(availTabs).title)
+  const curTab = ctrl.currentTab(availTabs)
 
   return h('div.analyse-header', [
-    ctrl.ceval.enabled() ? h(EvalBox, { ctrl }) : null,
+    ctrl.ceval.enabled() && curTab.id !== 'ceval' ? h(EvalBox, { ctrl }) : null,
     h('div.analyse-tabs', [
       h('div.tab-title', [
-        ctrl.currentTab(availTabs).id === 'moves' ?
-          renderOpening(ctrl) || curTitle :
-        curTitle
+        curTab.id === 'moves' ? renderOpening(ctrl) || curTitle : curTitle
       ]),
       h(TabNavigation, {
         buttons: availTabs,

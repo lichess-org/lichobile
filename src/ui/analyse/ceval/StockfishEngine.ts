@@ -6,9 +6,6 @@ import { setOption, setVariant } from '../../../utils/stockfish'
 
 interface Opts {
   minDepth: number
-  maxDepth: number
-  multiPv: number
-  cores: number
 }
 
 const output = new Signal()
@@ -20,7 +17,7 @@ const EVAL_REGEX = new RegExp(''
   + /(?:hashfull \d+ )?tbhits \d+ time (\S+) /.source
   + /pv (.+)/.source)
 
-export default function cevalEngine(opts: Opts) {
+export default function StockfishEngine(opts: Opts) {
 
   let curEval: Tree.ClientEval | null = null
   let expectedPvs = 1
@@ -132,10 +129,10 @@ export default function cevalEngine(opts: Opts) {
     stopped = false
     finished = false
 
-    return setOption('Threads', opts.cores)
+    return setOption('Threads', work.cores)
     .then(() => setOption('MultiPV', work.multiPv))
     .then(() => send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' ')))
-    .then(() => send('go depth ' + opts.maxDepth))
+    .then(() => send('go depth ' + work.maxDepth))
   }
 
   // take the last work in queue and clear the queue just after

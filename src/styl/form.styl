@@ -144,6 +144,46 @@ input[type='checkbox']:checked:after
   align-items center
   min-height 30px
 
+.forms-rangeSlider
+  display flex
+  flex-flow row nowrap
+  justify-content space-between
+  align-items center
+  > label
+    flex 1 0 auto
+  > input
+    width 40%
+  > .forms-sliderValue
+    flex 0 0 45px
+    text-align right
+
+input[type=range]
+  height: 25px;
+  -webkit-appearance: none;
+  &::-webkit-slider-runnable-track
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 0px 0px 0px #000000;
+    background: #bbb
+    border-radius: 1px;
+    border: 0px solid #000000;
+  &::-webkit-slider-thumb
+    box-shadow 0px 2px 5px 0px rgba(0, 0, 0, 0.3)
+    border: 1px solid #aaa
+    height: 18px;
+    width: 18px;
+    border-radius: 25px;
+    background: #fff
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -7px;
+  &:focus
+    outline: none;
+  &:focus::-webkit-slider-runnable-track
+    background: gold
+
 button.fat
   display block
   width 80%

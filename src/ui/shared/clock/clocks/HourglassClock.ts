@@ -1,17 +1,19 @@
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
-import * as stream from 'mithril/stream'
 
-import { Side, IChessClock } from '../interfaces'
+import { Side, IChessClock, IChessBasicClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
 export default function HourglassClock(time: number): IChessClock {
-  const topTime: Mithril.Stream<number> = stream(time / 2)
-  const bottomTime: Mithril.Stream<number> = stream(time / 2)
-  const activeSide: Mithril.Stream<Side | undefined> = stream(undefined)
-  const flagged: Mithril.Stream<Side | undefined> = stream(undefined)
-  const isRunning: Mithril.Stream<boolean> = stream(false)
+  let state: IChessBasicClockState = {
+    topTime: time/2,
+    bottomTime: time/2,
+    activeSide: undefined,
+    flagged: undefined,
+    isRunning: false
+  }
+
   let clockInterval: number
   let topTimestamp: number
   let bottomTimestamp: number
@@ -21,10 +23,10 @@ export default function HourglassClock(time: number): IChessClock {
     if (activeSide() === 'top') {
       const elapsed = now - topTimestamp
       topTimestamp = now
-      topTime(Math.max(topTime() - elapsed, 0))
-      bottomTime(time - topTime())
+      state.topTime = Math.max(state.topTime - elapsed, 0)
+      state.bottomTime = time - state.topTime
       if (topTime() <= 0) {
-        flagged('top')
+        state.flagged = 'top'
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -32,10 +34,10 @@ export default function HourglassClock(time: number): IChessClock {
     else if (activeSide() === 'bottom') {
       const elapsed = now - bottomTimestamp
       bottomTimestamp = now
-      bottomTime(Math.max(bottomTime() - elapsed, 0))
-      topTime(time - bottomTime())
+      state.bottomTime = Math.max(state.bottomTime - elapsed, 0)
+      state.topTime = time - state.bottomTime
       if (bottomTime() <= 0) {
-        flagged('bottom')
+        state.flagged = 'bottom'
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -51,27 +53,27 @@ export default function HourglassClock(time: number): IChessClock {
 
     if (side === 'top') {
       bottomTimestamp = performance.now()
-      activeSide('bottom')
+      state.activeSide = 'bottom'
     }
     else {
       topTimestamp = performance.now()
-      activeSide('top')
+      state.activeSide = 'top'
     }
     if (clockInterval) {
       clearInterval(clockInterval)
     }
     clockInterval = setInterval(tick, CLOCK_TICK_STEP)
-    isRunning(true)
+    state.isRunning = true
     redraw()
   }
 
   function startStop () {
     if (isRunning()) {
-      isRunning(false)
+      state.isRunning = false
       clearInterval(clockInterval)
     }
     else {
-      isRunning(true)
+      state.isRunning = true
       clockInterval = setInterval(tick, CLOCK_TICK_STEP)
       if (activeSide() === 'top') {
         topTimestamp = performance.now()
@@ -81,14 +83,44 @@ export default function HourglassClock(time: number): IChessClock {
     }
   }
 
+  function activeSide(): Side | undefined {
+     return state.activeSide;
+  }
+
+  function flagged(): Side | undefined {
+     return state.flagged;
+  }
+
+  function isRunning(): boolean {
+    return state.isRunning;
+  }
+
+  function getState(): IChessBasicClockState {
+    return state
+  }
+
+  function setState(newState: IChessBasicClockState): void {
+    state = newState
+  }
+
+  function topTime(): number {
+    return state.topTime
+  }
+
+  function bottomTime(): number {
+    return state.bottomTime
+  }
+
   return {
-    topTime,
-    bottomTime,
+    getState,
+    setState,
     activeSide,
     flagged,
     isRunning,
     clockHit,
     startStop,
+    topTime,
+    bottomTime,
     clear() {
       clearInterval(clockInterval)
     }

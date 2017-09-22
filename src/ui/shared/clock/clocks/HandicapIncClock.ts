@@ -1,17 +1,21 @@
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
-import * as stream from 'mithril/stream'
 
-import { Side, IChessClock } from '../interfaces'
+import { Side, IChessClock, IChessHandicapIncClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
 export default function HandicapIncClock(topTimeParam: number, topIncrement: number, bottomTimeParam: number, bottomIncrement: number): IChessClock {
-  const topTime: Mithril.Stream<number> = (topTimeParam !== 0) ? stream(topTimeParam) : stream(topIncrement)
-  const bottomTime: Mithril.Stream<number> = (bottomTimeParam !== 0) ? stream(bottomTimeParam) : stream(bottomIncrement)
-  const activeSide: Mithril.Stream<Side | undefined> = stream(undefined)
-  const flagged: Mithril.Stream<Side | undefined> = stream(undefined)
-  const isRunning: Mithril.Stream<boolean> = stream(false)
+  let state: IChessHandicapIncClockState = {
+    topTime: (topTimeParam !== 0) ? topTimeParam : topIncrement,
+    bottomTime: (bottomTimeParam !== 0) ? bottomTimeParam : bottomIncrement,
+    topIncrement: topIncrement,
+    bottomIncrement: bottomIncrement,
+    activeSide: undefined,
+    flagged: undefined,
+    isRunning: false
+  }
+
   let clockInterval: number
   let topTimestamp: number
   let bottomTimestamp: number
@@ -21,9 +25,9 @@ export default function HandicapIncClock(topTimeParam: number, topIncrement: num
     if (activeSide() === 'top') {
       const elapsed = now - topTimestamp
       topTimestamp = now
-      topTime(Math.max(topTime() - elapsed, 0))
+      state.topTime = Math.max(state.topTime - elapsed, 0)
       if (topTime() <= 0) {
-        flagged('top')
+        state.flagged = 'top'
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -31,9 +35,9 @@ export default function HandicapIncClock(topTimeParam: number, topIncrement: num
     else if (activeSide() === 'bottom') {
       const elapsed = now - bottomTimestamp
       bottomTimestamp = now
-      bottomTime(Math.max(bottomTime() - elapsed, 0))
+      state.bottomTime = Math.max(state.bottomTime - elapsed, 0)
       if (bottomTime() <= 0) {
-        flagged('bottom')
+        state.flagged = 'bottom'
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -49,30 +53,30 @@ export default function HandicapIncClock(topTimeParam: number, topIncrement: num
 
     if (side === 'top') {
       if (activeSide() === 'top') {
-        topTime(topTime() + topIncrement)
+        state.topTime = state.topTime + state.topIncrement
       }
       bottomTimestamp = performance.now()
-      activeSide('bottom')
+      state.activeSide = 'bottom'
     } else if (side === 'bottom') {
       if (activeSide() === 'bottom') {
-        bottomTime(bottomTime() + bottomIncrement)
+        state.bottomTime = state.bottomTime + state.bottomIncrement
       }
       topTimestamp = performance.now()
-      activeSide('top')
+    state.activeSide = 'top'
     }
     clearInterval(clockInterval)
     clockInterval = setInterval(tick, CLOCK_TICK_STEP)
-    isRunning(true)
+    state.isRunning = true
     redraw()
   }
 
   function startStop () {
     if (isRunning()) {
-      isRunning(false)
+      state.isRunning = false
       clearInterval(clockInterval)
     }
     else {
-      isRunning(true)
+      state.isRunning = true
       if (activeSide() === 'top') {
         topTimestamp = performance.now()
       } else {
@@ -82,14 +86,44 @@ export default function HandicapIncClock(topTimeParam: number, topIncrement: num
     }
   }
 
+  function activeSide(): Side | undefined {
+     return state.activeSide;
+  }
+
+  function flagged(): Side | undefined {
+     return state.flagged;
+  }
+
+  function isRunning(): boolean {
+    return state.isRunning;
+  }
+
+  function getState(): IChessHandicapIncClockState {
+    return state
+  }
+
+  function setState(newState: IChessHandicapIncClockState): void {
+    state = newState
+  }
+
+  function topTime(): number {
+    return state.topTime
+  }
+
+  function bottomTime(): number {
+    return state.bottomTime
+  }
+
   return {
-    topTime,
-    bottomTime,
+    getState,
+    setState,
     activeSide,
     flagged,
     isRunning,
     clockHit,
     startStop,
+    topTime,
+    bottomTime,
     clear() {
       clearInterval(clockInterval)
     }

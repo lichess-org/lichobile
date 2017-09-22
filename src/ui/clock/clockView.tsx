@@ -77,7 +77,6 @@ export function clockBody(ctrl: IChessClockCtrl) {
 }
 
 function renderMoves(moves: number | null) {
-  console.log(moves)
   if (moves !== null) {
     return (
       <div className="clockStageInfo">

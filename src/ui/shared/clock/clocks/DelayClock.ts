@@ -1,19 +1,22 @@
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
-import * as stream from 'mithril/stream'
 
-import { Side, IChessClock } from '../interfaces'
+import { Side, IChessClock, IChessDelayClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
 export default function DelayClock(time: number, increment: number): IChessClock {
-  const topTime: Mithril.Stream<number> = (time !== 0) ? stream(time) : stream(increment)
-  const bottomTime: Mithril.Stream<number> = (time !== 0) ? stream(time) : stream(increment)
-  const topDelay: Mithril.Stream<number> = stream(increment)
-  const bottomDelay: Mithril.Stream<number> = stream(increment)
-  const activeSide: Mithril.Stream<Side | undefined> = stream(undefined)
-  const flagged: Mithril.Stream<Side | undefined> = stream(undefined)
-  const isRunning: Mithril.Stream<boolean> = stream(false)
+  let state: IChessDelayClockState = {
+    topTime: (time !== 0) ? time : increment,
+    bottomTime: (time !== 0) ? time : increment,
+    topDelay: increment,
+    bottomDelay: increment,
+    increment: increment,
+    activeSide: undefined,
+    flagged: undefined,
+    isRunning: false
+  }
+
   let clockInterval: number
   let topTimestamp: number
   let bottomTimestamp: number
@@ -23,12 +26,12 @@ export default function DelayClock(time: number, increment: number): IChessClock
     if (activeSide() === 'top') {
       const elapsed = now - topTimestamp
       topTimestamp = now
-      if (Math.floor(topDelay()) > 0) {
-        topDelay(topDelay() - elapsed)
+      if (Math.floor(state.topDelay) > 0) {
+        state.topDelay = state.topDelay - elapsed
       } else {
-        topTime(Math.max(topTime() - elapsed, 0))
-        if (topTime() <= 0) {
-          flagged('top')
+        state.topTime = Math.max(state.topTime - elapsed, 0)
+        if (state.topTime <= 0) {
+          state.flagged = 'top'
           sound.dong()
           clearInterval(clockInterval)
         }
@@ -37,12 +40,12 @@ export default function DelayClock(time: number, increment: number): IChessClock
     else if (activeSide() === 'bottom') {
       const elapsed = now - bottomTimestamp
       bottomTimestamp = now
-      if (bottomDelay() > 0) {
-        bottomDelay(bottomDelay() - elapsed)
+      if (state.bottomDelay > 0) {
+        state.bottomDelay = state.bottomDelay - elapsed
       } else {
-        bottomTime(Math.max(bottomTime() - elapsed, 0))
+        state.bottomTime = Math.max(state.bottomTime - elapsed, 0)
         if (bottomTime() <= 0) {
-          flagged('bottom')
+          state.flagged = 'bottom'
           sound.dong()
           clearInterval(clockInterval)
         }
@@ -58,33 +61,31 @@ export default function DelayClock(time: number, increment: number): IChessClock
     sound.clock()
 
     if (side === 'top') {
-      if (activeSide() === 'top') {
-        topTime(topTime())
-        topDelay(increment)
+      if (state.activeSide === 'top') {
+        state.topDelay = state.increment
       }
       bottomTimestamp = performance.now()
-      activeSide('bottom')
+      state.activeSide = 'bottom'
     } else if (side === 'bottom') {
-      if (activeSide() === 'bottom') {
-        bottomTime(bottomTime())
-        bottomDelay(increment)
+      if (state.activeSide === 'bottom') {
+        state.bottomDelay = state.increment
       }
       topTimestamp = performance.now()
-      activeSide('top')
+      state.activeSide = 'top'
     }
     clearInterval(clockInterval)
     clockInterval = setInterval(tick, CLOCK_TICK_STEP)
-    isRunning(true)
+    state.isRunning = true
     redraw()
   }
 
   function startStop () {
-    if (isRunning()) {
-      isRunning(false)
+    if (state.isRunning) {
+      state.isRunning = false
       clearInterval(clockInterval)
     }
     else {
-      isRunning(true)
+      state.isRunning = true
       clockInterval = setInterval(tick, CLOCK_TICK_STEP)
       if (activeSide() === 'top') {
         topTimestamp = performance.now()
@@ -94,14 +95,44 @@ export default function DelayClock(time: number, increment: number): IChessClock
     }
   }
 
+  function activeSide(): Side | undefined {
+    return state.activeSide;
+  }
+
+  function flagged(): Side | undefined {
+    return state.flagged;
+  }
+
+  function isRunning(): boolean {
+    return state.isRunning;
+  }
+
+  function getState(): IChessDelayClockState {
+    return state
+  }
+
+  function setState(newState: IChessDelayClockState): void {
+    state = newState
+  }
+
+  function topTime(): number {
+    return state.topTime
+  }
+
+  function bottomTime(): number {
+    return state.bottomTime
+  }
+
   return {
-    topTime,
-    bottomTime,
+    getState,
+    setState,
     activeSide,
     flagged,
     isRunning,
     clockHit,
     startStop,
+    topTime,
+    bottomTime,
     clear() {
       clearInterval(clockInterval)
     }

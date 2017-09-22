@@ -3,6 +3,9 @@ import { oppositeColor } from '../../../utils'
 import i18n from '../../../i18n'
 import { standardFen } from '../../../lichess/variant'
 import { OfflineGameData } from '../../../lichess/interfaces/game'
+import settings from '../../../settings'
+import clockSet from '../../otb/clockSet'
+import { ClockType } from '../clock/interfaces'
 
 const standardVariant: Variant = {
   key: 'standard',
@@ -34,6 +37,9 @@ export default function data(cfg: OfflineDataConfig): OfflineGameData {
     spectator: false
   }
 
+  const clockType = settings.otb.clock.clockType() as ClockType
+  const clockObj = clockSet[clockType]()
+
   return {
     game: {
       id: cfg.id,
@@ -63,6 +69,7 @@ export default function data(cfg: OfflineDataConfig): OfflineGameData {
       destination: true,
       centerPiece: cfg.pref && cfg.pref.centerPiece || false
     },
-    steps: []
+    steps: [],
+    offlineClock: clockObj
   }
 }

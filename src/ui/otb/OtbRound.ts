@@ -23,7 +23,7 @@ import actions from './actions'
 import newGameMenu, { NewOtbGameCtrl } from './newOtbGame'
 import importGamePopup, { Controller as ImportGameController } from './importGamePopup'
 
-import {IChessClock} from '../shared/clock/interfaces'
+// import { IChessClock, IStageClock } from '../shared/clock/interfaces'
 
 interface InitPayload {
   variant: VariantKey
@@ -40,7 +40,6 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public chessground: Chessground
   public replay: Replay
   public vm: OtbVM
-  public clockObj: IChessClock
 
   public constructor(
     saved?: StoredOfflineGame | null,

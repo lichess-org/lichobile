@@ -1,9 +1,10 @@
-import settings from '../../../settings'
-import HandicapIncClock from './clocks/HandicapIncClock'
-import DelayClock from './clocks/DelayClock'
-import BronsteinClock from './clocks/BronsteinClock'
-import HourglassClock from './clocks/HourglassClock'
-import StageClock from './clocks/StageClock'
+import settings from '../../settings'
+import HandicapIncClock from '../shared/clock/clocks/HandicapIncClock'
+import DelayClock from '../shared/clock/clocks/DelayClock'
+import BronsteinClock from '../shared/clock/clocks/BronsteinClock'
+import HourglassClock from '../shared/clock/clocks/HourglassClock'
+import StageClock from '../shared/clock/clocks/StageClock'
+
 
 const MILLIS = 1000
 const MINUTE_MILLIS = 60 * 1000
@@ -17,6 +18,8 @@ function IncrementClock(time: number, increment: number) {
 }
 
 export default {
+  none: () => null,
+  
   simple: () => SimpleClock(
     Number(settings.clock.simple.time()) * MINUTE_MILLIS
   ),

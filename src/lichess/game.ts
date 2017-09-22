@@ -1,11 +1,13 @@
-import gameStatus from './status'
+import i18n from '../i18n'
 import { secondsToMinutes } from '../utils'
 import settings from '../settings'
+import gameStatus from './status'
+import getVariant from './variant'
+import { shortPerfTitle } from './perfs'
 import { MiniBoardGameObj } from './interfaces'
 import { UserGame } from './interfaces/user'
 import { GameData, OnlineGameData } from './interfaces/game'
 import { AnalyseData, OnlineAnalyseData } from './interfaces/analyse'
-import i18n from '../i18n'
 
 export const analysableVariants = ['standard', 'crazyhouse', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'antichess', 'horde', 'racingKings']
 
@@ -148,6 +150,20 @@ export function time(data: GameData | MiniBoardGameObj | UserGame | AnalyseData)
   else {
     return '∞'
   }
+}
+
+export function title(data: GameData | AnalyseData): string {
+  const mode = data.game.offline ?
+    i18n('offline') :
+    data.game.rated ? i18n('rated') : i18n('casual')
+
+  const perf = data.game.perf && shortPerfTitle(data.game.perf)
+  const variant = getVariant(data.game.variant.key)
+  const name = perf || (variant ? (variant.tinyName || variant.shortName || variant.name) : '?')
+  const t = time(data)
+  return data.game.source === 'import' ?
+    `Import • ${name}` :
+    `${t} • ${name} • ${mode}`
 }
 
 export function publicUrl(data: GameData) {

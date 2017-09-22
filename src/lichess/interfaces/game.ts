@@ -106,6 +106,7 @@ interface Tournament {
   berserkable: boolean
   secondsToFinish: number
   nbSecondsForFirstMove: number
+  name: string
   ranks?: {
     white: string
     black: string

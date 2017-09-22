@@ -1,4 +1,4 @@
-.round-title
+.header-gameTitle
   > .kiddo
     margin-right 5px
     font-size 20px
@@ -280,9 +280,10 @@
     margin-left 10px
     text-align left
     text-transform uppercase
-  .variant
+  .perf
     padding 7px 0
-    text-decoration underline
+    &.withLink
+      text-decoration underline
     &.active
       background-color darken(#fff, 5%)
 
@@ -512,3 +513,6 @@
   &[data-icon='2']:before
     display inline-block
     transform rotate(-90deg)
+
+.round-tvChannelSelector
+  font-size 1em

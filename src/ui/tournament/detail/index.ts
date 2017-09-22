@@ -1,9 +1,9 @@
 import * as h from 'mithril/hyperscript'
 import socket from '../../../socket'
 import i18n from '../../../i18n'
-import { header as headerWidget, backButton } from '../../shared/common'
+import { header as headerWidget, backButton, connectingHeader } from '../../shared/common'
 import layout from '../../layout'
-import { tournamentBody, renderPlayerInfoOverlay, renderFAQOverlay, renderFooter } from './tournamentView'
+import { tournamentBody, renderPlayerInfoOverlay, renderFAQOverlay, renderFooter, timeInfo } from './tournamentView'
 
 import passwordForm from './passwordForm'
 import TournamentCtrl from './TournamentCtrl'
@@ -34,9 +34,27 @@ export default {
       )
     }
 
-    const header = () => headerWidget(null,
-      backButton(this.ctrl.tournament ? this.ctrl.tournament.fullName : null)
-    )
+    const tournament = this.ctrl.tournament
+    let header: () => Mithril.Children
+
+    if (tournament) {
+      header = () => headerWidget(null,
+        backButton(h('div.main_header_title.withSub', [
+          h('h1', [
+            h('span.fa.fa-trophy'),
+            this.ctrl.tournament.fullName
+          ]),
+          h('h2.header-subTitle.tournament-subtTitle',
+          !tournament.isFinished && !tournament.isStarted ?
+            timeInfo('created', tournament.secondsToStart, 'Starting in') :
+            timeInfo('started', tournament.secondsToFinish, '')
+          )
+        ]))
+      )
+    } else {
+      header = connectingHeader
+    }
+
     const body = () => tournamentBody(this.ctrl)
     const footer = () => renderFooter(this.ctrl)
     const faqOverlay = () => renderFAQOverlay(this.ctrl)

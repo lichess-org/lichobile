@@ -13,7 +13,7 @@ import TabNavigation from '../../shared/TabNavigation'
 
 import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
-import { EvalBox } from '../ceval/cevalView'
+import renderCeval, { EvalBox } from '../ceval/cevalView'
 import renderExplorer from '../explorer/explorerView'
 import renderCrazy from '../crazy/crazyView'
 import { view as renderContextMenu } from '../contextMenu'
@@ -62,11 +62,12 @@ export function renderVariantSelector(ctrl: AnalyseCtrl) {
     availVariants = availVariants.concat([['From position', 'fromPosition']])
   }
   return (
-    h('div.select_input.analyse-variant_selector', [
+    h('div.select_input.main_header-selector', [
       h('label', {
         'for': 'variant_selector'
-      }, [h(`i[data-icon=${icon}]`)]),
-      h('select#variant_selector', {
+      }, h(`i[data-icon=${icon}]`)),
+      h('select', {
+        id: 'variant_selector',
         value: variant,
         onchange: (e: Event) => {
           const val = (e.target as HTMLSelectElement).value
@@ -100,14 +101,13 @@ function renderOpening(ctrl: AnalyseCtrl) {
 function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: Tab[]) {
 
   const curTitle = i18n(ctrl.currentTab(availTabs).title)
+  const curTab = ctrl.currentTab(availTabs)
 
   return h('div.analyse-header', [
-    ctrl.ceval.enabled() ? h(EvalBox, { ctrl }) : null,
+    ctrl.ceval.enabled() && curTab.id !== 'ceval' ? h(EvalBox, { ctrl }) : null,
     h('div.analyse-tabs', [
       h('div.tab-title', [
-        ctrl.currentTab(availTabs).id === 'moves' ?
-          renderOpening(ctrl) || curTitle :
-        curTitle
+        curTab.id === 'moves' ? renderOpening(ctrl) || curTitle : curTitle
       ]),
       h(TabNavigation, {
         buttons: availTabs,
@@ -126,7 +126,8 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Bas
   infos: renderGameInfos,
   moves: renderReplay,
   explorer: renderExplorer,
-  computer: renderComputerAnalysis
+  computer: renderComputerAnalysis,
+  ceval: renderCeval
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[], isPortrait: boolean) {

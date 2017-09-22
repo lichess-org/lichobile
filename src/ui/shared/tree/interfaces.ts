@@ -7,15 +7,16 @@ export namespace Tree {
     fen: string
     maxDepth: number
     depth: number
-    nps: number
-    // nodes: number
-    // millis: number
-    // pvs: PvData[]
+    knps: number
+    nodes: number
+    millis: number
+    pvs: PvData[]
     cloud?: boolean
     cp?: number
     mate?: number
     retried?: boolean
-    best: string
+    // maybe not keep here
+    best?: string
     bestSan?: string
   }
 

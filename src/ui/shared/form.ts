@@ -8,38 +8,6 @@ type SelectOptionGroup = Array<SelectOption>
 
 type LichessPropOption = [number, string, string | undefined]
 
-function renderOption(label: string, value: string, storedValue: string, labelArg?: string, labelArg2?: string) {
-  const l = labelArg && labelArg2 ? i18n(label, labelArg, labelArg2) :
-    labelArg ? i18n(label, labelArg) : i18n(label)
-  return h('option', {
-    key: value,
-    value,
-    selected: storedValue === value
-  }, l)
-}
-
-function renderLichessPropOption(label: string, value: number, storedValue: number, labelArg?: string) {
-  const l = labelArg ? i18n(label, labelArg) : i18n(label)
-  return h('option', {
-    key: value,
-    value,
-    selected: storedValue === value
-  }, l)
-}
-
-
-function renderOptionGroup(label: string, value: string | SelectOptionGroup, storedValue: string, labelArg: string, labelArg2: string): Mithril.Children {
-  if (typeof value === 'string') {
-    return renderOption(label, value, storedValue, labelArg, labelArg2)
-  }
-  else {
-    return h('optgroup', {
-      key: label,
-      label
-    }, value.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])))
-  }
-}
-
 export default {
 
   renderRadio(
@@ -168,5 +136,67 @@ export default {
         }
       }, options.map(e => renderOptionGroup(e[0] as string, e[1], storedValue, e[2] as string, e[3] as string)))
     ]
+  },
+
+  renderSlider(
+    label: string,
+    name: string,
+    min: number,
+    max: number,
+    step: number,
+    prop: SettingsProp<number>,
+    onChange: (v: number) => void
+  ) {
+    const value = prop()
+    return h('div.forms-rangeSlider', [
+      h('label', { 'for': name }, label),
+      h('input[type=range]', {
+        id: name,
+        value,
+        min,
+        max,
+        step,
+        oninput(e: Event) {
+          const val = (e.target as HTMLInputElement).value
+          const nval = ~~val
+          prop(nval)
+          onChange(nval)
+          setTimeout(redraw, 10)
+        }
+      }),
+      h('div.forms-sliderValue', value + ' / ' + max)
+    ])
+  }
+}
+
+function renderOption(label: string, value: string, storedValue: string, labelArg?: string, labelArg2?: string) {
+  const l = labelArg && labelArg2 ? i18n(label, labelArg, labelArg2) :
+    labelArg ? i18n(label, labelArg) : i18n(label)
+  return h('option', {
+    key: value,
+    value,
+    selected: storedValue === value
+  }, l)
+}
+
+function renderLichessPropOption(label: string, value: number, storedValue: number, labelArg?: string) {
+  const l = labelArg ? i18n(label, labelArg) : i18n(label)
+  return h('option', {
+    key: value,
+    value,
+    selected: storedValue === value
+  }, l)
+}
+
+
+function renderOptionGroup(label: string, value: string | SelectOptionGroup, storedValue: string, labelArg: string, labelArg2: string): Mithril.Children {
+  if (typeof value === 'string') {
+    return renderOption(label, value, storedValue, labelArg, labelArg2)
+  }
+  else {
+    return h('optgroup', {
+      key: label,
+      label
+    }, value.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])))
   }
 }

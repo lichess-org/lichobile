@@ -1,11 +1,12 @@
 import * as h from 'mithril/hyperscript'
 import * as range from 'lodash/range'
+import redraw from '../../../../utils/redraw'
 import socket from '../../../../socket'
 import session from '../../../../session'
 import variantApi from '../../../../lichess/variant'
 import * as playerApi from '../../../../lichess/player'
 import * as gameApi from '../../../../lichess/game'
-import { perfTypes } from '../../../../lichess/perfs'
+import * as perfApi from '../../../../lichess/perfs'
 import gameStatusApi from '../../../../lichess/status'
 import { Player } from '../../../../lichess/interfaces/game'
 import { User } from '../../../../lichess/interfaces/user'
@@ -18,7 +19,6 @@ import { backButton, menuButton, loader, headerBtns, miniUser } from '../../../s
 import GameTitle from '../../../shared/GameTitle'
 import Board from '../../../shared/Board'
 import popupWidget from '../../../shared/popup'
-import formWidgets from '../../../shared/form'
 import Clock from '../clock/clockView'
 import ClockCtrl from '../clock/ClockCtrl'
 import promotion from '../promotion'
@@ -61,41 +61,28 @@ export function renderMaterial(material: Material) {
   )
 }
 
-function tcConfig(ctrl: OnlineRound, vnode: Mithril.DOMNode) {
-  if (ctrl.data.tournament) {
-    const el = vnode.dom as HTMLElement
-    el.textContent =
-      utils.formatTimeInSecs(Math.round(ctrl.data.tournament.secondsToFinish)) + ' • '
-    ctrl.vm.tClockEl = el
-  }
-}
-
 function renderTitle(ctrl: OnlineRound) {
   if (ctrl.vm.offlineWatcher || socket.isConnected()) {
-    const className = 'main_header_title playing' +
-      (!ctrl.data.player.spectator && ctrl.data.game.speed === 'correspondence' ?
-        ' withSub' : '')
-    return (
-      <div key="playingTitle" className={className}>
-        <h1 className="round-title">
-          { session.isKidMode() ? <span className="kiddo">😊</span> : null }
-          {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
-          {ctrl.data.tournament ?
-            <span className="fa fa-trophy" /> : null
-          }
-          {ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
-            <span oncreate={(v: Mithril.DOMNode) => tcConfig(ctrl, v)} /> : null
-          }
-          {ctrl.title}
-          { ctrl.vm.offlineWatcher ? ' • Offline' : null}
-        </h1>
-        {!ctrl.data.player.spectator && ctrl.data.game.speed === 'correspondence' ?
-          <h2 className="header-subTitle">
-            {ctrl.subTitle}
-          </h2> : null
-        }
-      </div>
-    )
+    if (ctrl.data.tv) {
+      return h('div.main_header_title.withSub', [
+        h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), 'Lichess TV']),
+        h('h2.header-subTitle', tvChannelSelector(ctrl))
+      ])
+    }
+    else if (ctrl.data.userTV) {
+      return h('div.main_header_title.withSub', [
+        h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), ctrl.data.userTV]),
+        h('h2.header-subTitle', [h(`span.withIcon[data-icon=${utils.gameIcon(ctrl.data.game.perf)}]`), gameApi.title(ctrl.data)])
+      ])
+    }
+    else {
+      return h(GameTitle, {
+        key: 'playingTitle',
+        data: ctrl.data,
+        kidMode: session.isKidMode(),
+        subTitle: ctrl.data.tournament ? 'tournament' : 'date'
+      })
+    }
   } else {
     return (
       <div key="reconnectingTitle" className="main_header_title reconnecting">
@@ -110,12 +97,7 @@ function renderHeader(ctrl: OnlineRound) {
   let children
   if (!ctrl.data.tv && !ctrl.data.userTV && ctrl.data.player.spectator) {
     children = [
-      backButton([
-        ctrl.data.tournament ?  <span className="fa fa-trophy" /> : null,
-        ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
-          <span oncreate={(v: Mithril.DOMNode) => tcConfig(ctrl, v)} /> : null,
-        h(GameTitle, { data: ctrl.data })
-      ])
+      backButton(renderTitle(ctrl))
     ]
   } else {
     children = [
@@ -295,14 +277,32 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
 }
 
 function tvChannelSelector(ctrl: OnlineRound) {
-  const channels = perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]])
+  const channels = perfApi.perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]])
   channels.unshift(['Top rated', 'best'])
   channels.push(['Computer', 'computer'])
+  const channel = settings.tv.channel()
+  const icon = utils.gameIcon(channel)
 
-  return h('div.action', h('div.select_input',
-    formWidgets.renderSelect('TV channel', 'tvChannel', channels, settings.tv.channel,
-      false, ctrl.onTVChannelChange)
-  ))
+  return (
+    h('div.select_input.main_header-selector.round-tvChannelSelector', [
+      h('label', {
+        'for': 'channel_selector'
+      }, h(`i[data-icon=${icon}]`)),
+      h('select#channel_selector', {
+        value: channel,
+        onchange(e: Event) {
+          const val = (e.target as HTMLSelectElement).value
+          settings.tv.channel(val)
+          ctrl.onTVChannelChange && ctrl.onTVChannelChange()
+          setTimeout(redraw, 10)
+        }
+      }, channels.map(v =>
+        h('option', {
+          key: v[1], value: v[1]
+        }, v[0])
+      ))
+    ])
+  )
 }
 
 function renderGameRunningActions(ctrl: OnlineRound) {
@@ -310,8 +310,7 @@ function renderGameRunningActions(ctrl: OnlineRound) {
     let controls = [
       gameButton.shareLink(ctrl),
       ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
-      ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
-      ctrl.data.tv ? tvChannelSelector(ctrl) : null
+      ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null
     ]
 
     return <div className="game_controls">{controls}</div>
@@ -382,8 +381,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
         ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
         ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
         gameButton.sharePGN(ctrl),
-        gameButton.analysisBoard(ctrl),
-        ctrl.data.tv ? tvChannelSelector(ctrl) : null
+        gameButton.analysisBoard(ctrl)
       ]
     }
     else {
@@ -411,17 +409,19 @@ function gameInfos(ctrl: OnlineRound) {
   const time = gameApi.time(data)
   const mode = data.game.rated ? i18n('rated') : i18n('casual')
   const icon = utils.gameIcon(data.game.perf)
-  const variant = h('span.variant', {
+  const withLink = !['standard', 'fromPosition'].includes(data.game.variant.key)
+  const perf = h('span.perf', {
+    className: withLink ? 'withLink' : '',
     oncreate: helper.ontap(
       () => {
-        const link = variantApi(data.game.variant.key).link
-        if (link)
-          window.open(link, '_blank')
-      },
-      () => window.plugins.toast.show(data.game.variant.title!, 'short', 'center')
+        if (withLink) {
+          const link = variantApi(data.game.variant.key).link
+          if (link) window.open(link, '_blank')
+        }
+      }
     )
-  }, data.game.variant.name)
-  const infos = [time + ' • ', variant, h('br'), mode]
+  }, perfApi.perfTitle(data.game.perf))
+  const infos = [time + ' • ', perf, h('br'), mode]
   return [
     h('div.icon-game', {
       'data-icon': icon ? icon : ''

@@ -126,15 +126,17 @@ export default {
 
       const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', this.ctrl.settings.s.smallBoard)
       const backButton = this.ctrl.shouldGoBack ?
-        renderBackbutton(h(GameTitle, { data: this.ctrl.data, withPlayers: true }), true) : null
+        renderBackbutton(h(GameTitle, { data: this.ctrl.data, subTitle: 'players' })) : null
 
-      const title = this.ctrl.shouldGoBack ? null : [
+      const title = this.ctrl.shouldGoBack ? null : h('div.main_header_title.withSub', {
+        key: 'title-selector'
+      }, [
         h('span', i18n('analysis')),
         renderVariantSelector(this.ctrl)
-      ]
+      ])
 
       return layout.board(
-        () => header(title, backButton, 'withSub'),
+        () => header(title, backButton),
         () => renderContent(this.ctrl!, isPortrait, bounds),
         () => overlay(this.ctrl!)
       )

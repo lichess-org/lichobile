@@ -48,7 +48,8 @@ export default function data(cfg: OfflineDataConfig): OfflineGameData {
       status: {
         id: 20,
         name: 'created'
-      }
+      },
+      createdAt: Date.now()
     },
     player,
     opponent: {

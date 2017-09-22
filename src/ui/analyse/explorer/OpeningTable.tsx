@@ -1,7 +1,7 @@
 import router from '../../../router'
 import * as helper from '../../helper'
 import { OnlineGameData } from '../../../lichess/interfaces/game'
-import { ExplorerData, ExplorerGame, ExplorerMove, ExplorerPlayer } from '../interfaces'
+import { ExplorerData, Game, Move, Player } from './interfaces'
 import AnalyseCtrl from '../AnalyseCtrl'
 import settings from '../../../settings'
 import * as xhr from '../../../xhr'
@@ -63,7 +63,7 @@ export function getTR(e: Event): HTMLElement {
     helper.findParentBySelector(target, 'tr')
 }
 
-function resultBar(move: ExplorerMove) {
+function resultBar(move: Move) {
   const sum = move.white + move.draws + move.black
   function section(key: string) {
     const num: number = (move as any)[key]
@@ -104,7 +104,7 @@ function link(ctrl: AnalyseCtrl, e: Event) {
   }
 }
 
-function showGameTable(ctrl: AnalyseCtrl, type: string, games: Array<ExplorerGame>) {
+function showGameTable(ctrl: AnalyseCtrl, type: string, games: Array<Game>) {
   if (!ctrl.explorer.withGames || !games.length) return null
   return (
     <table className="games"
@@ -116,16 +116,16 @@ function showGameTable(ctrl: AnalyseCtrl, type: string, games: Array<ExplorerGam
         </tr>
       </thead>
       <tbody>
-      { games.map((game: ExplorerGame) => {
+      { games.map((game: Game) => {
         return (
           <tr key={game.id} data-id={game.id}>
             <td>
-              {[game.white, game.black].map((p: ExplorerPlayer) =>
+              {[game.white, game.black].map((p: Player) =>
                 <span>{p.rating}</span>
               )}
             </td>
             <td>
-              {[game.white, game.black].map((p: ExplorerPlayer) =>
+              {[game.white, game.black].map((p: Player) =>
                 <span>{p.name}</span>
               )}
             </td>
@@ -143,7 +143,7 @@ function showGameTable(ctrl: AnalyseCtrl, type: string, games: Array<ExplorerGam
   )
 }
 
-function showMoveTable(ctrl: AnalyseCtrl, moves: Array<ExplorerMove>) {
+function showMoveTable(ctrl: AnalyseCtrl, moves: Array<Move>) {
   if (!moves.length) return null
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
   return (

@@ -17,7 +17,7 @@ main
   position relative
   background headerBgDark
   height headerHeight
-  color lighten(textDarkBg, 25%)
+  color headerBgDarkColor
   > nav
     height 100%
     overflow hidden
@@ -36,6 +36,29 @@ main
         padding-right 15px
         > .chip
           right 5px
+
+.main_header-selector
+  width 100%
+  height 25px
+  line-height 25px
+  margin 0
+  padding 0
+  box-shadow none
+  background transparent
+  color darken(headerBgDarkColor, 5%)
+  > select
+    background transparent
+    height 100%
+    padding-left 20px
+    padding-right 0
+    font-size 1em
+    line-height 25px
+  > label
+    font-size 1.2em
+    &:after
+      content ''
+    > i
+      color gold
 
 .main_header_drop_shadow
   position: absolute;
@@ -91,6 +114,7 @@ main
     background headerBgDarkActive
 
 .header-subTitle
+  width 100%
   font-size 0.8em
   opacity 0.9
   overflow hidden
@@ -114,7 +138,7 @@ main
       height 24px
     &.active
       background headerBgDarkActive
-  > .title
+  > .title, .main_header_title
     &.withSub
       font-size 1rem
       display flex
@@ -123,6 +147,7 @@ main
       line-height initial
     font-size 1.1rem
     padding-right 10px
+    padding-left 2px
     overflow hidden
     text-overflow ellipsis
     line-height headerHeight
@@ -144,8 +169,8 @@ main
 
 .main_header.board
   .chip
-    color bgdark
-    border-color bgdark
+    color headerBgDark
+    border-color headerBgDark
 
 .friends_button
   position relative

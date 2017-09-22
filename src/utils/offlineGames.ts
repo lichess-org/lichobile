@@ -24,11 +24,10 @@ export function getCurrentOTBGame(): StoredOfflineGame | null {
 export function getAnalyseData(data: StoredOfflineGame, orientation: Color): AnalyseData | null {
   if (!data) return null
   const aData = data.data as any
-  aData.orientation = orientation
+  (aData as AnalyseData).orientation = orientation
   aData.treeParts = data.situations.map((o: GameSituation) => {
     const node = {
-      // TODO define id
-      id: '',
+      id: o.nodeId,
       fen: o.fen,
       ply: o.ply,
       check: o.check,
@@ -38,7 +37,7 @@ export function getAnalyseData(data: StoredOfflineGame, orientation: Color): Ana
       san: o.pgnMoves.length ? o.pgnMoves[o.pgnMoves.length - 1] : undefined,
       dests: o.dests,
       drops: o.drops,
-      crazy: o.crazyhouse,
+      crazyhouse: o.crazyhouse,
       pgnMoves: o.pgnMoves,
       end: o.end,
       player: o.player,

@@ -52,6 +52,6 @@ export default {
   },
 
   view() {
-    return h('strong', formatTimeInSecs(this.seconds))
+    return h('strong.countdown-timer', formatTimeInSecs(this.seconds))
   }
 } as Mithril.Component<Attrs, State>

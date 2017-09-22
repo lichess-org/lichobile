@@ -1,3 +1,6 @@
+import { GameData } from './game'
+import { AnalyseData } from './analyse'
+
 export interface Pool {
   id: string
   lim: number
@@ -154,4 +157,7 @@ export function isPoolMember(conf: PoolMember | SeekSetup): conf is PoolMember {
 
 export function isSeekSetup(conf: PoolMember | SeekSetup): conf is SeekSetup {
   return (conf as SeekSetup).timeMode !== undefined
+}
+export function isGameData(data: GameData | AnalyseData): data is GameData {
+  return (data as GameData).steps !== undefined
 }

@@ -1,6 +1,14 @@
 .analyseSettings
+  font-size 0.9em
   label[for='showComments']
     text-transform capitalize
+
+  .ceval-multipv
+    display flex
+    justify-content space-between
+    > .slider
+      width 30%
+      height 20px
 
 .analyse-table, .explorerTable
   flex 1 1 auto
@@ -185,28 +193,6 @@ comment
   word-wrap break-word
   vertical-align 45%
 
-.analyse-variant_selector
-  width 100%
-  height 25px
-  line-height 25px
-  margin 0
-  padding 0
-  background transparent
-  box-shadow none
-  color #8a8a8a
-  > select
-    height 100%
-    padding-left 20px
-    padding-right 0
-    font-size 1em
-    line-height 25px
-  > label
-    font-size 1.2em
-    &:after
-      content ''
-    > i
-      color gold
-
 .analyse-engine_info
   flex 1 0
   font-size 0.65em
@@ -217,35 +203,6 @@ comment
     white-space nowrap
     overflow hidden
     text-overflow ellipsis
-
-.analyse-curEval
-  flex 0 0 auto
-  min-width 45px
-  color #aaa
-  font-weight bold
-  font-family Cousine
-  height 25px
-  line-height 25px
-  background lighten(bgdark, 12%)
-  text-align center
-  > .spinner
-    width initial
-    height initial
-    font-size 16px
-    padding 0
-    margin 0
-    text-align center
-  @media only screen and (orientation: landscape) and (max-height 450px)
-    min-width 50px
-    font-size 16px
-    > .spinner
-      font-size 14px
-
-.analyse-bestMove
-  font-size 0.5rem
-  opacity 0.8
-  font-weight normal
-  line-height 1.2
 
 .analyse-gameInfos
   padding 2em 1em

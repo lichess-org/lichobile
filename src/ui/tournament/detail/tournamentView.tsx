@@ -28,26 +28,14 @@ export function renderPlayerInfoOverlay(ctrl: TournamentCtrl) {
 
 export function tournamentBody(ctrl: TournamentCtrl) {
   const data = ctrl.tournament
-
   if (!data) return null
 
-  let body: Mithril.Children
-
-  if (data.isFinished) {
-    body = tournamentContentFinished(ctrl)
-  }
-  else if (!data.isStarted) {
-    body = tournamentContentCreated(ctrl)
-  }
-  else {
-    body = tournamentContentStarted(ctrl)
-  }
-
-  return (
-    <div class="tournamentContainer native_scroller page withFooter">
-      {body}
-    </div>
-  )
+  return h('div.tournamentContainer.native_scroller.page.withFooter', [
+    tournamentHeader(data),
+    data.podium ? tournamentPodium(data.podium) : null,
+    tournamentLeaderboard(ctrl),
+    data.featured ? tournamentFeaturedGame(ctrl) : null
+  ])
 }
 
 export function renderFooter(ctrl: TournamentCtrl) {
@@ -70,33 +58,16 @@ export function renderFooter(ctrl: TournamentCtrl) {
   )
 }
 
-function tournamentContentFinished(ctrl: TournamentCtrl) {
-  const data = ctrl.tournament
+export function timeInfo(key: string, seconds?: number, preceedingText?: string) {
+  if (seconds === undefined) return null
+
   return [
-    tournamentHeader(data, 'finished'),
-    data.podium ? tournamentPodium(data.podium) : null,
-    tournamentLeaderboard(ctrl)
+    preceedingText ? (preceedingText + ' ') : null,
+    h(CountdownTimer, { key, seconds })
   ]
 }
 
-function tournamentContentCreated(ctrl: TournamentCtrl) {
-  const data = ctrl.tournament
-  return [
-    tournamentHeader(data, 'created', data.secondsToStart, 'Starts in'),
-    tournamentLeaderboard(ctrl)
-  ]
-}
-
-function tournamentContentStarted(ctrl: TournamentCtrl) {
-  const data = ctrl.tournament
-  return [
-      tournamentHeader(data, 'started', data.secondsToFinish, ''),
-      tournamentLeaderboard(ctrl),
-      data.featured ? tournamentFeaturedGame(ctrl) : ''
-  ]
-}
-
-function tournamentHeader(data: Tournament, key: string, seconds?: number, timeText?: string) {
+function tournamentHeader(data: Tournament) {
   const variant = variantDisplay(data)
   const control = formatTournamentTimeControl(data.clock)
   const conditionsClass = [
@@ -110,9 +81,6 @@ function tournamentHeader(data: Tournament, key: string, seconds?: number, timeT
         <strong className="tournamentInfo withIcon" data-icon={gameIcon(variantKey(data))}>
           {variant + ' • ' + control + ' • ' + formatTournamentDuration(data.minutes) }
         </strong>
-        <div className="timeInfo">
-          {timeInfo(key, seconds, timeText)}
-        </div>
       </div>
       <div className="tournamentCreatorInfo">
         { data.createdBy === 'lichess' ? i18n('tournamentOfficial') : i18n('by', data.createdBy) }
@@ -194,14 +162,6 @@ function variantKey(data: Tournament) {
   return variant
 }
 
-function timeInfo(key: string, seconds?: number, preceedingText?: string) {
-  if (seconds === undefined) return null
-
-  return [
-    preceedingText ? (preceedingText + ' ') : null,
-    h(CountdownTimer, { key, seconds })
-  ]
-}
 
 function getLeaderboardItemEl(e: Event) {
   const target = e.target as HTMLElement

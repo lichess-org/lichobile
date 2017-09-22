@@ -1,46 +1,82 @@
 import * as h from 'mithril/hyperscript'
 import * as utils from '../../utils'
 import i18n from '../../i18n'
+import gameStatusApi from '../../lichess/status'
+import { isGameData } from '../../lichess/interfaces'
 import { GameData } from '../../lichess/interfaces/game'
 import { AnalyseData } from '../../lichess/interfaces/analyse'
 import * as playerApi from '../../lichess/player'
 import * as gameApi from '../../lichess/game'
-import getVariant from '../../lichess/variant'
+import CountdownTimer from './CountdownTimer'
 
 interface Attrs {
   data: GameData | AnalyseData,
-  withPlayers?: boolean
+  subTitle?: 'players' | 'date' | 'tournament'
+  kidMode?: boolean
 }
 
 export default {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
-    return attrs.data !== oldattrs.data || attrs.withPlayers !== oldattrs.withPlayers
+    // careful with that, mutability doesn't help, but it should be easy to know
+    // what changes here
+    return attrs.subTitle !== oldattrs.subTitle ||
+      attrs.kidMode !== oldattrs.kidMode ||
+      attrs.data.game.player !== oldattrs.data.game.player
   },
 
   view({ attrs }) {
-    const { data, withPlayers } = attrs
-    const mode = data.game.offline ? i18n('offline') :
-    data.game.rated ? i18n('rated') : i18n('casual')
-    const variant = getVariant(data.game.variant.key)
-    const name = variant ? (variant.tinyName || variant.shortName || variant.name) : '?'
+    const { data, subTitle, kidMode } = attrs
     const icon = data.game.source === 'import' ? '/' :
     utils.gameIcon(data.game.perf || data.game.variant.key)
-    const time = gameApi.time(data)
-    const text = data.game.source === 'import' ?
-    `Import • ${name}` :
-    `${time} • ${name} • ${mode}`
+    const text = gameApi.title(data)
 
-    return [
-      h('h1', [
-        h('span.withIcon', { 'data-icon': icon }),
-        h('span', text)
-      ]),
-      withPlayers ? h('h2.header-subTitle', [
+    let subEls: Mithril.Children = null
+    if (subTitle === 'players') {
+      subEls = [
         h('span', playerApi.playerName(data.player, true, true, 12)),
         h('span.swords' , { 'data-icon': 'U' }),
         h('span', playerApi.playerName(data.opponent, true, true, 12))
-      ]) : null
-    ]
+      ]
+    }
+    else if (subTitle === 'date') {
+      if (isGameData(data) && !data.player.spectator && data.game.speed === 'correspondence') {
+        if (gameStatusApi.finished(data)) {
+          subEls = i18n('gameOver')
+        } else if (gameApi.isPlayerTurn(data)) {
+          subEls = i18n('yourTurn')
+        } else {
+          subEls = i18n('waitingForOpponent')
+        }
+      }
+      else if (gameApi.playable(data)) {
+        subEls = i18n('playingRightNow')
+      }
+      else if (data.game.createdAt) {
+        subEls = window.moment(data.game.createdAt).calendar()
+      }
+    }
+    else if (subTitle === 'tournament' && isGameData(data) && data.tournament) {
+      subEls = [
+        h('span.fa.fa-trophy'),
+        data.tournament.secondsToFinish ?
+          h(CountdownTimer, { seconds: data.tournament.secondsToFinish }) :
+          h('span', [
+            data.tournament.name,
+            data.game.createdAt ? (' (' + window.moment(data.game.createdAt).calendar() + ')') : null
+          ])
+      ]
+    }
+
+    return h('div.main_header_title', {
+      className: subTitle !== undefined ? 'withSub' : ''
+    }, [
+      h('h1.header-gameTitle', [
+        kidMode ? h('span.kiddo', '😊') : null,
+        h('span.withIcon', { 'data-icon': icon }),
+        h('span', text)
+      ]),
+      subEls ? h('h2.header-subTitle', subEls) : null
+    ])
   }
 
 } as Mithril.Component<Attrs, {}>

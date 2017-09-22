@@ -19,14 +19,16 @@ import promotion from '../shared/offlineRound/promotion'
 import continuePopup, { Controller as ContinuePopupController } from '../shared/continuePopup'
 import { NotesCtrl } from '../shared/round/notes'
 import * as util from './util'
-import cevalCtrl from './ceval/cevalCtrl'
+import CevalCtrl from './ceval/CevalCtrl'
+import { ICevalCtrl, Work as CevalWork } from './ceval/interfaces'
 import crazyValid from './crazy/crazyValid'
 import ExplorerCtrl from './explorer/ExplorerCtrl'
+import { IExplorerCtrl } from './explorer/interfaces'
 import menu, { IMainMenuCtrl } from './menu'
 import analyseSettings, { ISettingsCtrl } from './analyseSettings'
 import ground from './ground'
 import socketHandler from './analyseSocketHandler'
-import { Source, IExplorerCtrl, CevalCtrlInterface, CevalEmit } from './interfaces'
+import { Source } from './interfaces'
 import * as tabs from './tabs'
 
 export default class AnalyseCtrl {
@@ -39,7 +41,7 @@ export default class AnalyseCtrl {
   continuePopup: ContinuePopupController
   notes: NotesCtrl | null
   chessground: Chessground
-  ceval: CevalCtrlInterface
+  ceval: ICevalCtrl
   explorer: IExplorerCtrl
   tree: TreeWrapper
 
@@ -105,7 +107,17 @@ export default class AnalyseCtrl {
     // this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null
     this.notes = null
 
-    this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg)
+    this.ceval = CevalCtrl(
+      this.data.game.variant.key,
+      this.allowCeval(),
+      this.onCevalMsg,
+      {
+        multiPv: this.settings.s.cevalMultiPvs,
+        cores: this.settings.s.cevalCores,
+        infinite: this.settings.s.cevalInfinite
+      }
+    )
+
     this.explorer = ExplorerCtrl(this)
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50)
 
@@ -172,10 +184,11 @@ export default class AnalyseCtrl {
     let val = tabs.defaults
 
     if (this.synthetic) val = val.filter(t => t.id !== 'infos')
-    if (hasNetwork()) val = val.concat([tabs.explorer])
+    if (this.ceval.enabled()) val = val.concat([tabs.ceval])
     if (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data)) {
       val = val.concat([tabs.charts])
     }
+    if (hasNetwork()) val = val.concat([tabs.explorer])
 
     return val
   }
@@ -472,45 +485,18 @@ export default class AnalyseCtrl {
       .indexOf(this.data.game.variant.key) !== -1
   }
 
-  private onCevalMsg = (res: CevalEmit) => {
-    this.tree.updateAt(res.work.path, (node: Tree.Node) => {
-      if (node.ceval && node.ceval.depth >= res.ceval.depth) return
+  private onCevalMsg = (ceval: Tree.ClientEval, work: CevalWork) => {
+    this.tree.updateAt(work.path, (node: Tree.Node) => {
+      if (node.ceval && node.ceval.depth >= ceval.depth) return
 
       if (node.ceval === undefined)
-        node.ceval = <Tree.ClientEval>Object.assign({}, res.ceval)
+        node.ceval = <Tree.ClientEval>Object.assign({}, ceval)
       else
-        node.ceval = <Tree.ClientEval>Object.assign(node.ceval, res.ceval)
+        node.ceval = <Tree.ClientEval>Object.assign(node.ceval, ceval)
 
-      // get best move in pgn format
-      if (node.ceval === undefined || node.ceval.best !== res.ceval.best) {
-        if (!res.ceval.best.includes('@')) {
-          const move = chessFormat.uciToMove(res.ceval.best)
-          chess.move({
-            variant: this.data.game.variant.key,
-            fen: node.fen,
-            orig: move[0],
-            dest: move[1],
-            promotion: chessFormat.uciToProm(res.ceval.best),
-            path: this.path
-          })
-          .then((data: chess.MoveResponse) => {
-            if (node.ceval) node.ceval.bestSan = data.situation.pgnMoves[0]
-            if (res.work.path === this.path) {
-              redraw()
-            }
-          })
-          .catch((err) => {
-            console.error('ceval move err', err)
-          })
-        }
+      if (work.path === this.path) {
+        redraw()
       }
-
-      if (res.ceval.best.includes('@')) {
-        node.ceval.bestSan = res.ceval.best
-      }
-
-      redraw()
-
     })
   }
 

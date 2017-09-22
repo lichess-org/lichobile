@@ -21,15 +21,15 @@ const ids = {
   variantEnd: 60
 }
 
-function started(data: GameData | AnalyseData) {
+function started(data: GameData | AnalyseData): boolean {
   return data.game.status.id >= ids.started
 }
 
-function finished(data: GameData | AnalyseData) {
+function finished(data: GameData | AnalyseData): boolean {
   return data.game.status.id >= ids.mate
 }
 
-function aborted(data: GameData | AnalyseData) {
+function aborted(data: GameData | AnalyseData): boolean {
   return data.game.status.id === ids.aborted
 }
 

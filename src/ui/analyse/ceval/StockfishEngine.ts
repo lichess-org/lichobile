@@ -1,16 +1,27 @@
-import { CevalWork } from '../interfaces'
-import { setOption, setVariant } from '../../../utils/stockfish'
 import * as Signal from 'signals'
+
+import { Tree } from '../../shared/tree/interfaces'
+import { Work } from './interfaces'
+import { setOption, setVariant } from '../../../utils/stockfish'
 
 interface Opts {
   minDepth: number
-  maxDepth: number
-  cores: number
 }
 
 const output = new Signal()
 
-export default function cevalEngine(opts: Opts) {
+const EVAL_REGEX = new RegExp(''
+  + /^info depth (\d+) seldepth \d+ multipv (\d+) /.source
+  + /score (cp|mate) ([-\d]+) /.source
+  + /(?:(upper|lower)bound )?nodes (\d+) nps \S+ /.source
+  + /(?:hashfull \d+ )?tbhits \d+ time (\S+) /.source
+  + /pv (.+)/.source)
+
+export default function StockfishEngine(opts: Opts) {
+
+  let curEval: Tree.ClientEval | null = null
+  let expectedPvs = 1
+
   // after a 'go' command, stockfish will be continue to emit until the 'bestmove'
   // message, reached by depth or after a 'stop' command
   // finished here means stockfish has emited the bestmove and is ready for
@@ -22,42 +33,70 @@ export default function cevalEngine(opts: Opts) {
 
   // we may have several start requests queued while we wait for previous
   // eval to complete
-  let startQueue: Array<CevalWork> = []
+  let startQueue: Array<Work> = []
 
-  function processOutput(text: string, work: CevalWork) {
+  function processOutput(text: string, work: Work) {
     if (text.indexOf('bestmove') === 0) {
       console.info('stockfish analysis done', text)
       finished = true
     }
     if (stopped) return
-    if (/currmovenumber|lowerbound|upperbound/.test(text)) return
     // console.log(text)
-    const matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*nps (\d+) .*pv (.+)/)
+
+    const matches = text.match(EVAL_REGEX)
     if (!matches) return
-    const depth = parseInt(matches[1])
+
+    const depth = parseInt(matches[1]),
+      multiPv = parseInt(matches[2]),
+      isMate = matches[3] === 'mate',
+      evalType = matches[5],
+      nodes = parseInt(matches[6]),
+      elapsedMs: number = parseInt(matches[7]),
+      moves = matches[8].split(' ')
+
+    let ev = parseInt(matches[4])
+
+    // Track max pv index to determine when pv prints are done.
+    if (expectedPvs < multiPv) expectedPvs = multiPv
+
     if (depth < opts.minDepth) return
-    let cp: number | undefined
-    let mate: number | undefined
-    if (matches[2] === 'cp') cp = parseFloat(matches[3])
-    else mate = parseFloat(matches[3])
-    if (work.ply % 2 === 1) {
-      if (matches[2] === 'cp' && cp !== undefined) cp = -cp
-      else if (mate !== undefined) mate = -mate
+
+    let pivot = work.threatMode ? 0 : 1
+    if (work.ply % 2 === pivot) ev = -ev
+
+    // For now, ignore most upperbound/lowerbound messages.
+    // The exception is for multiPV, sometimes non-primary PVs
+    // only have an upperbound.
+    // See: https://github.com/ddugovic/Stockfish/issues/228
+    if (evalType && multiPv === 1) return
+
+    let pvData = {
+      moves,
+      cp: isMate ? undefined : ev,
+      mate: isMate ? ev : undefined,
+      depth
     }
-    const nps = parseInt(matches[4], 10)
-    const best = matches[5].split(' ')[0]
-    work.emit({
-      work,
-      ceval: {
+
+    if (multiPv === 1) {
+      curEval = {
         fen: work.currentFen,
+        maxDepth: work.maxDepth,
         depth,
-        maxDepth: opts.maxDepth,
-        cp,
-        mate,
-        best,
-        nps
+        knps: nodes / elapsedMs,
+        nodes,
+        cp: isMate ? undefined : ev,
+        mate: isMate ? ev : undefined,
+        pvs: [pvData],
+        millis: elapsedMs
       }
-    })
+    } else if (curEval) {
+      curEval.pvs.push(pvData)
+      curEval.depth = Math.min(curEval.depth, depth)
+    }
+
+    if (multiPv === expectedPvs && curEval) {
+      work.emit(curEval)
+    }
   }
 
   function stop(): Promise<{}> {
@@ -82,7 +121,7 @@ export default function cevalEngine(opts: Opts) {
     })
   }
 
-  function launchEval(work: CevalWork) {
+  function launchEval(work: Work) {
 
     output.removeAll()
     output.add((msg: string) => processOutput(msg, work))
@@ -90,9 +129,10 @@ export default function cevalEngine(opts: Opts) {
     stopped = false
     finished = false
 
-    return setOption('Threads', opts.cores)
-    .then(() => send(['position', 'fen', work.initialFen, 'moves', work.moves].join(' ')))
-    .then(() => send('go depth ' + opts.maxDepth))
+    return setOption('Threads', work.cores)
+    .then(() => setOption('MultiPV', work.multiPv))
+    .then(() => send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' ')))
+    .then(() => send('go depth ' + work.maxDepth))
   }
 
   // take the last work in queue and clear the queue just after
@@ -118,7 +158,7 @@ export default function cevalEngine(opts: Opts) {
       .catch(err => console.error('stockfish init error', err))
     },
 
-    start(work: CevalWork) {
+    start(work: Work) {
       startQueue.push(work)
       stop().then(doStart)
     },

@@ -1,19 +1,28 @@
 import { UserFullProfile } from './interfaces/user'
 
-export const perfTypes = [
-  ['bullet', 'Bullet', 'Bullet'],
-  ['blitz', 'Blitz', 'Blitz'],
-  ['classical', 'Classical', 'Classic'],
-  ['correspondence', 'Correspondence', 'Corresp.'],
-  ['crazyhouse', 'Crazyhouse', 'Crazy'],
-  ['chess960', 'Chess960', '960'],
-  ['kingOfTheHill', 'King Of The Hill', 'KotH'],
-  ['threeCheck', 'Three-check', '3check'],
-  ['antichess', 'Antichess', 'Antichess'],
-  ['atomic', 'Atomic', 'Atomic'],
-  ['horde', 'Horde', 'Horde'],
-  ['racingKings', 'Racing Kings', 'Racing']
-]
+interface Perf {
+  name: string
+  shortName: string
+}
+
+const perfMap: { [k: string]: Perf } = {
+  bullet: { name: 'Bullet', shortName: 'Bullet' },
+  blitz: { name: 'Blitz', shortName: 'Blitz' },
+  classical: { name: 'Classical', shortName: 'Classic' },
+  correspondence: { name: 'Correspondence', shortName: 'Corresp.' },
+  crazyhouse: { name: 'Crazyhouse', shortName: 'Crazy' },
+  chess960: { name: 'Chess960', shortName: '960' },
+  kingOfTheHill: { name: 'King Of The Hill', shortName: 'KotH' },
+  threeCheck: { name: 'Three-check', shortName: '3check' },
+  antichess: { name: 'Antichess', shortName: 'Antichess' },
+  atomic: { name: 'Atomic', shortName: 'Atomic' },
+  horde: { name: 'Horde', shortName: 'Horde' },
+  racingKings: { name: 'Racing Kings', shortName: 'Racing' }
+}
+
+export const perfTypes = Object.keys(perfMap).map(k =>
+  [k, perfMap[k].name, perfMap[k].shortName]
+)
 
 export default function userPerfs(user: UserFullProfile) {
   const res = perfTypes.map(p => {
@@ -34,18 +43,14 @@ export default function userPerfs(user: UserFullProfile) {
   return res
 }
 
-export function perfTitle(perf: string) {
-  return perfTypes.reduce((prev, curr) => {
-    if (curr[0] === perf) return curr[1]
-    else return prev
-  }, '')
+export function perfTitle(key: PerfKey): string {
+  const p = perfMap[key]
+  return p ? p.name : ''
 }
 
-export function shortPerfTitle(perf: string) {
-  return perfTypes.reduce((prev, curr) => {
-    if (curr[0] === perf) return curr[2]
-    else return prev
-  }, '')
+export function shortPerfTitle(key: PerfKey) {
+  const p = perfMap[key]
+  return p ? p.shortName : ''
 }
 
 // https://github.com/ornicar/lila/blob/master/modules/rating/src/main/Glicko.scala#L31

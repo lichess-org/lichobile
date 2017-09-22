@@ -117,12 +117,26 @@ function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: Tab[]) {
 
 function renderTabTitle(ctrl: AnalyseCtrl, curTab: Tab) {
   const curTitle = i18n(curTab.title)
-  if (curTab.id === 'moves') return renderOpening(ctrl) || curTitle
-  else if (curTab.id === 'ceval') return [
-    h('span', curTitle),
-    ctrl.ceval.isSearching() ? h('div.ceval-spinner', 'analyzing ', h('span.fa.fa-spinner.fa-pulse')) : null
-  ]
-  else return curTitle
+  let children: Mithril.Children
+  let key: string
+  if (curTab.id === 'moves') {
+    const op = renderOpening(ctrl)
+    children = [op || curTitle]
+    key = op ? 'opening' : curTab.id
+  }
+  else if (curTab.id === 'ceval') {
+    children = [
+      h('span', curTitle),
+      ctrl.ceval.isSearching() ? h('div.ceval-spinner', 'analyzing ', h('span.fa.fa-spinner.fa-pulse')) : null
+    ]
+    key = ctrl.ceval.isSearching() ? 'searching-ceval' : curTab.id
+  }
+  else {
+    children = [curTitle]
+    key = curTab.id
+  }
+
+  return h.fragment({ key }, children)
 }
 
 function renderReplay(ctrl: AnalyseCtrl) {

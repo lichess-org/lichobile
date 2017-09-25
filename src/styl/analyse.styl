@@ -134,6 +134,10 @@
 .analyse-moveList
   padding 5px
   white-space normal
+  &.ios
+    comment
+      vertical-align initial
+
 
 index
   color rgba(textDarkBg, 50%)
@@ -205,8 +209,9 @@ inline
     margin-right: 2px;
 
 comment
+  display inline
   font-size 0.8em
-  color rgba(textDarkBg, 90%)
+  color rgba(textDarkBg, 0.8)
   margin 0 0.2em 0 0.1em
   word-wrap break-word
   vertical-align 45%
@@ -282,6 +287,12 @@ comment
       color #ddd
       &.selected
         color #fff
+
+  comment
+    color rgba(textLightBg, 0.5)
+
+  index
+    color rgba(textLightBg, 0.5)
 
   move
     color inherit

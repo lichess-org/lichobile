@@ -20,17 +20,15 @@ export default function renderBoard(
   const rEval = ctrl.node && ctrl.node.eval
 
   let nextBest: string | undefined
-  let curBestShape: Shape[] = [], pastBestShape: Shape[] = []
-  if (curTab.id !== 'explorer' && ctrl.ceval.enabled() && ctrl.settings.s.showBestMove) {
+  let curBestShape: Shape[] = []
+  if (curTab.id !== 'explorer' && ctrl.settings.s.showBestMove) {
     nextBest = ctrl.nextNodeBest()
     curBestShape = nextBest ? moveOrDropShape(nextBest, 'paleBlue', player) :
     ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
     []
   }
-  if (ctrl.settings.s.showComments) {
-    pastBestShape = rEval && rEval.best ?
+  const pastBestShape = rEval && rEval.best ?
     moveOrDropShape(rEval.best, 'paleGreen', player) : []
-  }
 
   const nextUci = curTab.id === 'explorer' && ctrl.node && treeOps.withMainlineChild(ctrl.node, n => n.uci)
 

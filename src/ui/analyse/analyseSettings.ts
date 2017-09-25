@@ -119,22 +119,6 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
   const cores = getNbCores()
 
   return h('div.analyseSettings', [
-    h('div.action', {
-      key: 'showBestMove'
-    }, [
-      formWidgets.renderCheckbox(
-        i18n('showBestMove'), 'showBestMove', settings.analyse.showBestMove,
-        ctrl.settings.toggleBestMove
-      )
-    ]),
-    ctrl.source === 'online' && isOnlineAnalyseData(ctrl.data) && gameApi.analysable(ctrl.data) ? h('div.action', {
-      key: 'showComments'
-    }, [
-      formWidgets.renderCheckbox(
-        i18n('keyShowOrHideComments'), 'showComments', settings.analyse.showComments,
-        ctrl.settings.toggleComments
-      )
-    ]) : null,
     ctrl.ceval.allowed ? h('div.action', {
       key: 'enableCeval'
     }, [
@@ -150,6 +134,22 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
         }
       ),
       h('small.caution', i18n('localEvalCaution'))
+    ]) : null,
+    h('div.action', {
+      key: 'showBestMove'
+    }, [
+      formWidgets.renderCheckbox(
+        i18n('showBestMove'), 'showBestMove', settings.analyse.showBestMove,
+        ctrl.settings.toggleBestMove
+      )
+    ]),
+    ctrl.source === 'online' && isOnlineAnalyseData(ctrl.data) && gameApi.analysable(ctrl.data) ? h('div.action', {
+      key: 'showComments'
+    }, [
+      formWidgets.renderCheckbox(
+        i18n('keyShowOrHideComments'), 'showComments', settings.analyse.showComments,
+        ctrl.settings.toggleComments
+      )
     ]) : null,
     ctrl.ceval.allowed ? h('div.action', {
       key: 'infiniteAnalysis'

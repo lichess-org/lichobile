@@ -250,17 +250,26 @@ comment
     background lighten(darkBlue, 15%)
     color #ddd
 
+  .ceval-curEval
+    background lighten(darkBlue, 5%)
+    color #ddd
+
   .analyse-tabs
     .tabIndicator
       background-color #fff
-    .tab-button.selected
-      color #fff
+    .tab-button
+      color #ddd
+      &.selected
+        color #fff
 
   move
     color inherit
     &.current
       background blue
       color #fff
+
+  line > move
+    color rgba(textLightBg, 0.7)
 
   move.active
     background darken(bglight, 10%)
@@ -272,9 +281,6 @@ comment
     background: themeBgLight
     text-shadow: 0 1px 0 #FFF;
     color: #848484;
-
-  .analyse-curEval
-    color #ccc
 
 .view-container.transp
 
@@ -308,7 +314,7 @@ comment
   .analyse-cevalBox, .analyse-infosBox
     background transpBlack03
 
-  .analyse-curEval
+  .ceval-curEval
     background transparent
     border-right 1px solid transpWhite01
 

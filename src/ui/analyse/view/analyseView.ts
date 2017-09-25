@@ -62,7 +62,7 @@ export function renderVariantSelector(ctrl: AnalyseCtrl) {
     availVariants = availVariants.concat([['From position', 'fromPosition']])
   }
   return (
-    h('div.select_input.main_header-selector', [
+    h('div.select_input.main_header-selector.header-subTitle', [
       h('label', {
         'for': 'variant_selector'
       }, h(`i[data-icon=${icon}]`)),

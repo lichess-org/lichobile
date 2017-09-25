@@ -94,6 +94,25 @@
     width 40px
     height 40px
 
+.analyse-replayWrapper
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+
+.analyse-fixedBar
+  background-color lighten(headerBgDark, 5%)
+  flex 0 0 25px
+  display flex
+  padding 0 10px
+  flex-flow row nowrap
+  justify-content space-between
+  align-items center
+
+.analyse-checkCount
+  > span:first-child
+    margin-right 0.5em
+
 .analyse-replay
   position relative
   font-size 0.9rem

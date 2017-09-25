@@ -19,6 +19,7 @@ import renderCrazy from '../crazy/crazyView'
 import { view as renderContextMenu } from '../contextMenu'
 import TabView from './TabView'
 import Replay from './Replay'
+import Clocks from './Clocks'
 import renderComputerAnalysis from './computerAnalysisView'
 import renderBoard from './boardView'
 import renderGameInfos from './gameInfosView'
@@ -143,8 +144,22 @@ function renderTabTitle(ctrl: AnalyseCtrl, curTab: Tab) {
   return h.fragment({ key }, children)
 }
 
+function renderCheckCount(whitePov: boolean, checkCount: { white: number, black: number }) {
+  const w = h('span.color-icon.white', '+' + checkCount.black)
+  const b = h('span.color-icon.black', '+' + checkCount.white)
+  return h('div.analyse-checkCount', whitePov ? [w, b] : [b, w])
+}
+
 function renderReplay(ctrl: AnalyseCtrl) {
-  return h(Replay, { ctrl })
+  const checkCount = ctrl.node.checkCount
+  const showFb = ctrl.node.clock || checkCount
+  return h('div.analyse-replayWrapper', [
+    showFb ? h('div.analyse-fixedBar', [
+      h(Clocks, { ctrl }),
+      checkCount ? renderCheckCount(ctrl.bottomColor() === 'white', checkCount) : null
+    ]) : null,
+    h(Replay, { ctrl })
+  ])
 }
 
 const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.BaseNode } = {

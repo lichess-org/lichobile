@@ -169,6 +169,10 @@ export default class AnalyseCtrl {
     return this.data.game.player
   }
 
+  bottomColor(): Color {
+    return this.settings.s.flip ? oppositeColor(this.data.orientation) : this.data.orientation
+  }
+
   connectGameSocket = () => {
     if (hasNetwork() &&
       this.data.url !== undefined &&

@@ -23,7 +23,7 @@ function renderCevalInfos(ctrl: AnalyseCtrl) {
 
   if (!ceval) return null
 
-  return h('div.ceval-infos', [
+  return h('div.analyse-fixedBar.ceval-infos', [
     h('div.depth', [h('strong', 'Depth: '), ceval.depth + (isInfinite ? '' : `/${maxDepth}`)]),
     h('div.knps', [h('strong', 'kn/s: '), Math.round(ceval.knps)]),
     h('div.nodes', [h('strong', 'nodes: '), Math.round(ceval.nodes / 1000) + 'k']),

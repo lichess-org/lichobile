@@ -14,7 +14,7 @@ import TabNavigation from '../../shared/TabNavigation'
 import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
 import renderCeval, { EvalBox } from '../ceval/cevalView'
-import renderExplorer from '../explorer/explorerView'
+import renderExplorer, { getTitle as getExplorerTitle } from '../explorer/explorerView'
 import renderCrazy from '../crazy/crazyView'
 import { view as renderContextMenu } from '../contextMenu'
 import TabView from './TabView'
@@ -130,6 +130,10 @@ function renderTabTitle(ctrl: AnalyseCtrl, curTab: Tab) {
       ctrl.ceval.isSearching() ? h('div.ceval-spinner', 'analyzing ', h('span.fa.fa-spinner.fa-pulse')) : null
     ]
     key = ctrl.ceval.isSearching() ? 'searching-ceval' : curTab.id
+  }
+  else if (curTab.id === 'explorer') {
+    children = [getExplorerTitle(ctrl)]
+    key = curTab.id
   }
   else {
     children = [curTitle]

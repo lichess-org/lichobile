@@ -14,9 +14,14 @@ export default function renderExplorer(ctrl: AnalyseCtrl) {
     explorerTable: true,
     loading
   })
+  const opening = ctrl.tree.getOpening(ctrl.nodeList) || ctrl.data.game.opening
   return (
     <div id="explorerTable" className={className} key="explorer">
-      <div className="explorer-fixedTitle">{showTitle(ctrl)}</div>
+      { data && data.opening ?
+      <div className="explorer-fixedTitle">
+        { opening ? opening.eco + ' ' + opening.name : '' }
+      </div> : null
+      }
       { loading ? <div key="loader" className="spinner_overlay">
         <div className="spinner fa fa-hourglass-half" />
       </div> : null
@@ -33,24 +38,23 @@ export default function renderExplorer(ctrl: AnalyseCtrl) {
   )
 }
 
-function onTablebaseTap(ctrl: AnalyseCtrl, e: Event) {
-  const el = getTR(e)
-  const uci = el && el.dataset['uci']
-  if (uci) ctrl.explorerMove(uci)
-}
-
-function showTitle(ctrl: AnalyseCtrl): Mithril.Children {
+export function getTitle(ctrl: AnalyseCtrl): Mithril.Children {
   const data = ctrl.explorer.current()
-  const opening = ctrl.tree.getOpening(ctrl.nodeList) || ctrl.data.game.opening
   if (ctrl.data.game.variant.key === 'standard' || ctrl.data.game.variant.key === 'fromPosition') {
     if (data && data.tablebase) return 'Endgame tablebase'
-    else return opening ? opening.eco + ' ' + opening.name : 'Opening explorer'
+    else return 'Opening explorer'
   } else {
     const what = data && data.tablebase ? ' endgame tablebase' :  ' opening explorer'
     return ctrl.data.game.variant.name + what
   }
 }
 
+
+function onTablebaseTap(ctrl: AnalyseCtrl, e: Event) {
+  const el = getTR(e)
+  const uci = el && el.dataset['uci']
+  if (uci) ctrl.explorerMove(uci)
+}
 
 function showTablebase(ctrl: AnalyseCtrl, title: string, moves: Array<Move>, fen: string) {
   let stm = fen.split(/\s/)[1]

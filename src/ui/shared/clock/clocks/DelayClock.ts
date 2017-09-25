@@ -1,7 +1,7 @@
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
 
-import { Side, IChessClock, IChessDelayClockState } from '../interfaces'
+import { ClockType, Side, IChessClock, IChessDelayClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
@@ -123,7 +123,10 @@ export default function DelayClock(time: number, increment: number): IChessClock
     return state.bottomTime
   }
 
+  const clockType: ClockType = 'delay'
+
   return {
+    clockType,
     getState,
     setState,
     activeSide,
@@ -138,4 +141,3 @@ export default function DelayClock(time: number, increment: number): IChessClock
     }
   }
 }
-

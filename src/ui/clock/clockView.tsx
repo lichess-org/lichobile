@@ -1,9 +1,9 @@
 import * as helper from '../helper'
 import clockSettings from './clockSettings'
-import { formatTimeInSecs } from '../../utils'
+import { formatTime, isStageClock } from '../shared/clock/utils'
 
 import { IChessClockCtrl } from './ChessClockCtrl'
-import { ClockType, Side, IChessClock, IStageClock } from '../shared/clock/interfaces'
+import { Side } from '../shared/clock/interfaces'
 
 export function renderClockSettingsOverlay(ctrl: IChessClockCtrl) {
   return [
@@ -92,16 +92,4 @@ function onClockTouch(ctrl: IChessClockCtrl, side: Side) {
   if (((ctrl.clockObj().activeSide() !== 'top') && (side === 'bottom')) || ((ctrl.clockObj().activeSide() !== 'bottom') && (side === 'top'))) {
     ctrl.clockTap(side)
   }
-}
-
-function formatTime(clockType: ClockType, time: number) {
-  if (clockType === 'hourglass') {
-    return formatTimeInSecs(Math.round(time))
-  } else {
-    return formatTimeInSecs(Math.floor(time))
-  }
-}
-
-function isStageClock(c: IChessClock | IStageClock): c is IStageClock {
-  return (c as IStageClock).topMoves !== undefined
 }

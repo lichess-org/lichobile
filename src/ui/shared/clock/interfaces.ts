@@ -4,6 +4,7 @@ export type Side = 'top' | 'bottom'
 export type ClockType = 'simple' | 'increment' | 'handicapInc' | 'delay' | 'bronstein' | 'hourglass' | 'stage'
 
 export interface IChessClock {
+  clockType: ClockType
   getState(): ClockState
   setState(state: ClockState): void
   topTime(): number
@@ -52,3 +53,9 @@ export interface IChessStageClockState extends IChessBasicClockState {
 }
 
 export type ClockState = IChessBasicClockState | IChessHandicapIncClockState | IChessDelayClockState | IChessStageClockState;
+
+export interface AntagonistTimeData {
+  clockType: ClockType
+  time: number
+  moves: number | null
+}

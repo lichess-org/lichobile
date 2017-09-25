@@ -19,44 +19,44 @@ function IncrementClock(time: number, increment: number) {
 
 export default {
   none: () => null,
-  
+
   simple: () => SimpleClock(
-    Number(settings.clock.simple.time()) * MINUTE_MILLIS
+    Number(settings.otb.clock.simple.time()) * MINUTE_MILLIS
   ),
 
   increment: () => IncrementClock(
-    Number(settings.clock.increment.time()) * MINUTE_MILLIS,
-    Number(settings.clock.increment.increment()) * MILLIS
+    Number(settings.otb.clock.increment.time()) * MINUTE_MILLIS,
+    Number(settings.otb.clock.increment.increment()) * MILLIS
   ),
 
   handicapInc: () => HandicapIncClock(
-    Number(settings.clock.handicapInc.topTime()) * MINUTE_MILLIS,
-    Number(settings.clock.handicapInc.topIncrement()) * MILLIS,
-    Number(settings.clock.handicapInc.bottomTime()) * MINUTE_MILLIS,
-    Number(settings.clock.handicapInc.bottomIncrement()) * MILLIS
+    Number(settings.otb.clock.handicapInc.topTime()) * MINUTE_MILLIS,
+    Number(settings.otb.clock.handicapInc.topIncrement()) * MILLIS,
+    Number(settings.otb.clock.handicapInc.bottomTime()) * MINUTE_MILLIS,
+    Number(settings.otb.clock.handicapInc.bottomIncrement()) * MILLIS
   ),
 
   delay: () => DelayClock(
-    Number(settings.clock.delay.time()) * MINUTE_MILLIS,
-    Number(settings.clock.delay.increment()) * MILLIS
+    Number(settings.otb.clock.delay.time()) * MINUTE_MILLIS,
+    Number(settings.otb.clock.delay.increment()) * MILLIS
   ),
 
   bronstein: () => BronsteinClock(
-    Number(settings.clock.bronstein.time()) * MINUTE_MILLIS,
-    Number(settings.clock.bronstein.increment()) * MILLIS
+    Number(settings.otb.clock.bronstein.time()) * MINUTE_MILLIS,
+    Number(settings.otb.clock.bronstein.increment()) * MILLIS
   ),
 
   hourglass: () => HourglassClock(
-    Number(settings.clock.hourglass.time()) * MINUTE_MILLIS
+    Number(settings.otb.clock.hourglass.time()) * MINUTE_MILLIS
   ),
 
   stage: () => StageClock(
-    settings.clock.stage.stages().map((s: { time: string, moves: string }) => {
+    settings.otb.clock.stage.stages().map((s: { time: string, moves: string }) => {
       return {
         time: Number(s.time),
         moves: s.moves !== null ? Number(s.moves) : null
       }
     }),
-    Number(settings.clock.stage.increment()) * MILLIS
+    Number(settings.otb.clock.stage.increment()) * MILLIS
   )
 }

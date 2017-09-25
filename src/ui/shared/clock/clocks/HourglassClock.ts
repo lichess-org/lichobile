@@ -1,7 +1,7 @@
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
 
-import { Side, IChessClock, IChessBasicClockState } from '../interfaces'
+import { ClockType, Side, IChessClock, IChessBasicClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
@@ -111,7 +111,10 @@ export default function HourglassClock(time: number): IChessClock {
     return state.bottomTime
   }
 
+  const clockType: ClockType = 'hourglass'
+
   return {
+    clockType,
     getState,
     setState,
     activeSide,

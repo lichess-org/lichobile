@@ -1,7 +1,7 @@
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
 
-import { Side, IChessClock, IChessHandicapIncClockState } from '../interfaces'
+import { ClockType, Side, IChessClock, IChessHandicapIncClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
@@ -15,7 +15,7 @@ export default function HandicapIncClock(topTimeParam: number, topIncrement: num
     flagged: undefined,
     isRunning: false
   }
-
+  
   let clockInterval: number
   let topTimestamp: number
   let bottomTimestamp: number
@@ -114,7 +114,10 @@ export default function HandicapIncClock(topTimeParam: number, topIncrement: num
     return state.bottomTime
   }
 
+  const clockType: ClockType = 'handicapInc'
+
   return {
+    clockType,
     getState,
     setState,
     activeSide,

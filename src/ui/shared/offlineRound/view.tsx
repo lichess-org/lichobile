@@ -11,6 +11,8 @@ import CrazyPocket from '../../shared/round/crazy/CrazyPocket'
 import { OfflineRoundInterface, Position, Material } from '../round'
 import settings from '../../../settings'
 import Replay from './Replay'
+import { AntagonistTimeData } from '../clock/interfaces'
+import { formatTime } from '../clock/utils'
 
 let pieceNotation: boolean
 
@@ -25,7 +27,7 @@ function getChecksCount(ctrl: OfflineRoundInterface, color: Color) {
 
 type OfflineGameType = 'ai' | 'otb'
 
-export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.Children, material: Material, position: Position, isPortrait: boolean, otbFlip?: boolean, customPieceTheme?: string) {
+export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.Children, material: Material, position: Position, isPortrait: boolean, otbFlip?: boolean, customPieceTheme?: string, timeData?: AntagonistTimeData | null) {
   const sit = ctrl.replay.situation()
   const isCrazy = !!sit.crazyhouse
   const key = isPortrait ? position + '-portrait' : position + '-landscape'
@@ -45,6 +47,7 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
       <div key="infos" className={'antagonistInfos offline' + (isCrazy ? ' crazy' : '')}>
         <div className="antagonistUser">
           {content}
+          {timeData ? formatTime(timeData.clockType, timeData.time/1000) : ''}
         </div>
         { !isCrazy ? <div className="ratingAndMaterial">
           {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}

@@ -117,7 +117,6 @@ export default {
                   {formWidgets.renderSelect('Clock', 'clock', settings.otb.availableClocks, settings.otb.clock.clockType, false, onChange)}
                 </div>
                 {clockSettingsView[settings.otb.clock.clockType() as ClockType](ctrl)}
-                }
               </div>
               <div className="popupActionWrapper">
                 <button className="popupAction" data-icon="E"

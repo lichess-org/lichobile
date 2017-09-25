@@ -11,6 +11,8 @@ import newGameMenu from './newOtbGame'
 import importGamePopup from './importGamePopup'
 import settings from '../../settings'
 import OtbRound from './OtbRound'
+import { isStageClock } from '../shared/clock/utils'
+import { AntagonistTimeData } from '../shared/clock/interfaces'
 
 export function overlay(ctrl: OtbRound) {
   return [
@@ -48,11 +50,26 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
 
   const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
 
+  const clock = ctrl.data.offlineClock
+  let topTimeData: AntagonistTimeData | null = null
+  let bottomTimeData: AntagonistTimeData | null = null
+
+  if (clock) {
+    if (!isStageClock (clock)) {
+      topTimeData = {clockType: clock.clockType, time: clock.topTime(), moves: null}
+      bottomTimeData = {clockType: clock.clockType, time: clock.bottomTime(), moves: null}
+    }
+    else {
+      topTimeData = {clockType: clock.clockType, time: clock.topTime(), moves: clock.topMoves()}
+      bottomTimeData = {clockType: clock.clockType, time: clock.bottomTime(), moves: clock.bottomMoves()}
+    }
+  }
+
   if (isPortrait)
     return h.fragment({ key: orientationKey }, [
-      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme),
+      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, topTimeData),
       board,
-      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme),
+      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, bottomTimeData),
       renderGameActionsBar(ctrl)
     ])
   else

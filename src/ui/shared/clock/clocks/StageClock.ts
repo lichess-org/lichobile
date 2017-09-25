@@ -1,7 +1,7 @@
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
 
-import { Side, Stage, IStageClock, IChessStageClockState } from '../interfaces'
+import { ClockType, Side, IStageClock, Stage, IChessStageClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 const MINUTE_MILLIS = 60 * 1000
@@ -153,7 +153,10 @@ export default function StageClock(stages: Stage[], increment: number): IStageCl
     return state.bottomTime
   }
 
+  const clockType: ClockType = 'stage'
+
   return {
+    clockType,
     getState,
     setState,
     activeSide,

@@ -12,6 +12,7 @@ export interface AnalyseData {
   clock?: ClockData
   analysis?: RemoteEvalSummary
   userAnalysis: boolean
+  tournament?: Tournament
   forecast?: any
   treeParts: Array<Partial<Tree.Node>>
   evalPut?: boolean
@@ -70,4 +71,10 @@ interface PlayerEvalSummary {
 export interface RemoteEvalSummary {
   white: PlayerEvalSummary
   black: PlayerEvalSummary
+}
+
+interface Tournament {
+  id: string
+  name: string
+  running: boolean
 }

@@ -35,16 +35,18 @@ export default function drawAcplChart(element: SVGElement, aData: AnalyseData, c
     .text(name)
   }
 
-  function setCurrentPly(ply: number) {
-    const xply = ply - 1
-    const p = graphData[xply]
+  function setCurrentPly(ply: number | null) {
     g.selectAll('.dot').remove()
-    if (p) {
-      g.append('circle')
-      .attr('class', 'dot')
-      .attr('cx', x(xply))
-      .attr('cy', y(p.acpl))
-      .attr('r', 3)
+    if (ply !== null) {
+      const xply = ply - 1
+      const p = graphData[xply]
+      if (p) {
+        g.append('circle')
+        .attr('class', 'dot')
+        .attr('cx', x(xply))
+        .attr('cy', y(p.acpl))
+        .attr('r', 3)
+      }
     }
   }
 

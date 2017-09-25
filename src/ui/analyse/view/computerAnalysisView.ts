@@ -38,9 +38,10 @@ function renderAnalysis(ctrl: AnalyseCtrl) {
         }, 300)
       },
       onupdate() {
-        if (this.updateCurPly) batchRequestAnimationFrame(() =>
-          this.updateCurPly(ctrl.node.ply)
-        )
+        if (this.updateCurPly) batchRequestAnimationFrame(() => {
+          if (ctrl.onMainline) this.updateCurPly(ctrl.node.ply)
+          else this.updateCurPly(null)
+        })
       }
     }),
     h(AcplSummary, { d: ctrl.data, analysis: ctrl.data.analysis! })

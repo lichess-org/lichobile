@@ -77,7 +77,6 @@ export interface OnlineGame extends Game {
 }
 
 export interface Player {
-  id: string
   color: Color
   rating?: number
   user?: User

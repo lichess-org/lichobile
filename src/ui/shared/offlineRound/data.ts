@@ -28,7 +28,6 @@ export default function data(cfg: OfflineDataConfig): OfflineGameData {
   const confColor = cfg.color || 'white'
 
   const player = {
-    id: 'player',
     color: confColor,
     username: cfg.id === 'offline_ai' ? session.appUser(i18n(confColor)) : i18n(confColor),
     spectator: false
@@ -53,7 +52,6 @@ export default function data(cfg: OfflineDataConfig): OfflineGameData {
     },
     player,
     opponent: {
-      id: 'opponent',
       color: oppositeColor(confColor),
       username: i18n(oppositeColor(confColor))
     },

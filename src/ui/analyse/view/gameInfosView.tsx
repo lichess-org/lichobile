@@ -14,7 +14,9 @@ export default function renderGameInfos(ctrl: AnalyseCtrl) {
 
   return (
     <div className="analyse-gameInfos native_scroller">
-      <div className="analyseOpponent">
+      <div className="analyseOpponent"
+        oncreate={helper.ontap(() => player.user && router.set(`/@/${player.user.id}/`))}
+      >
         <div className="analysePlayerName">
           <span className={'color-icon ' + player.color} />
           {playerName(player, true)}
@@ -22,7 +24,9 @@ export default function renderGameInfos(ctrl: AnalyseCtrl) {
           {player.berserk ? <span data-icon="`" /> : null }
         </div>
       </div>
-      <div className="analyseOpponent">
+      <div className="analyseOpponent"
+        oncreate={helper.ontap(() => opponent.user && router.set(`/@/${opponent.user.id}/`))}
+      >
         <div className="analysePlayerName">
           <span className={'color-icon ' + opponent.color} />
           {playerName(opponent, true)}

@@ -6,7 +6,7 @@ import { initBoard, configureBoard, setNewBoardState } from './configure'
 import fen from './fen'
 import { renderBoard, makeCoords, makeSymmCoords } from './render'
 import { anim, skip as skipAnim } from './anim'
-import drag from './drag'
+import * as drag from './drag'
 
 export default class Chessground {
   public state: State

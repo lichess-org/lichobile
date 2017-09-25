@@ -1,5 +1,5 @@
 import settings from '../../../../settings'
-import chessgroundDrag from '../../../../chessground/drag'
+import * as chessgroundDrag from '../../../../chessground/drag'
 import { Pockets } from '../../../../lichess/interfaces/game'
 
 import { BoardInterface } from '../'

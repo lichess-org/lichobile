@@ -24,16 +24,7 @@ export interface DragCurrent {
   scheduledAnimationFrame?: boolean
 }
 
-function removeDragElements(dom: cg.DOM) {
-  if (dom.elements.shadow) {
-    dom.elements.shadow.style.transform = util.translate3dAway
-  }
-  if (dom.elements.ghost) {
-    dom.elements.ghost.style.transform = util.translateAway
-  }
-}
-
-function dragNewPiece(ctrl: Chessground, piece: Piece, e: TouchEvent, force?: boolean): void {
+export function dragNewPiece(ctrl: Chessground, piece: Piece, e: TouchEvent, force?: boolean): void {
 
   const key: Key = 'a0'
   const s = ctrl.state
@@ -77,7 +68,7 @@ function dragNewPiece(ctrl: Chessground, piece: Piece, e: TouchEvent, force?: bo
   processDrag(ctrl)
 }
 
-function start(ctrl: Chessground, e: TouchEvent) {
+export function start(ctrl: Chessground, e: TouchEvent) {
   // support one finger touch only
   if (e.touches && e.touches.length > 1) return
   e.preventDefault()
@@ -130,6 +121,81 @@ function start(ctrl: Chessground, e: TouchEvent) {
     if (hadPredrop) board.unsetPredrop(state)
   }
   ctrl.redraw()
+}
+
+export function move(ctrl: Chessground, e: TouchEvent) {
+  if (e.touches && e.touches.length > 1) return
+  const state = ctrl.state
+
+  if (state.draggable.preventDefault) e.preventDefault()
+
+  const cur = state.draggable.current
+  if (!cur) return
+
+  if (cur.orig) {
+    cur.epos = util.eventPosition(e)
+    if (!cur.started && util.distance(cur.epos, cur.rel) >= state.draggable.distance) {
+      cur.started = true
+      processDrag(ctrl)
+    }
+  }
+}
+
+export function end(ctrl: Chessground, e: TouchEvent) {
+  const state = ctrl.state
+  const draggable = state.draggable
+  const cur = draggable.current
+
+  if (!cur) return
+
+  // we don't want that end event since the target is different from the drag
+  // touchstart
+  if (cur.originTarget !== e.target && !cur.newPiece) {
+    return
+  }
+  if (state.draggable.preventDefault) {
+    e.preventDefault()
+  }
+  const dest = cur.over
+  board.unsetPremove(state)
+  board.unsetPredrop(state)
+  // regular drag'n drop move (or crazy drop)
+  if (cur.started && dest) {
+    if (cur.newPiece) {
+      board.dropNewPiece(state, cur.orig, dest, cur.force)
+    }
+    else {
+      board.userMove(state, cur.orig, dest)
+    }
+  }
+  // board editor mode: delete any piece dropped off the board
+  else if (cur.started && draggable.deleteOnDropOff) {
+    delete state.pieces[cur.orig]
+    setTimeout(state.events.change, 0)
+  }
+  // crazy invalid drop (no dest): delete the piece
+  else if (cur.newPiece) {
+    delete state.pieces[cur.orig]
+  }
+
+  if (cur && cur.orig === cur.previouslySelected && (cur.orig === dest || !dest)) {
+    board.unselect(state)
+  }
+
+  state.draggable.current = null
+
+  // must perform it in same raf callback or browser may skip it
+  ctrl.state.batchRAF(() => removeDragElements(ctrl.dom!))
+  ctrl.redraw()
+}
+
+export function cancel(ctrl: Chessground) {
+  const state = ctrl.state
+  removeDragElements(ctrl.dom!)
+  if (state.draggable.current) {
+    state.draggable.current = null
+    board.unselect(state)
+  }
 }
 
 function processDrag(ctrl: Chessground) {
@@ -210,84 +276,12 @@ function processDrag(ctrl: Chessground) {
   })
 }
 
-function move(ctrl: Chessground, e: TouchEvent) {
-  if (e.touches && e.touches.length > 1) return
-  const state = ctrl.state
-
-  if (state.draggable.preventDefault) e.preventDefault()
-
-  const cur = state.draggable.current
-  if (!cur) return
-
-  if (cur.orig) {
-    cur.epos = util.eventPosition(e)
-    if (!cur.started && util.distance(cur.epos, cur.rel) >= state.draggable.distance) {
-      cur.started = true
-      processDrag(ctrl)
-    }
+function removeDragElements(dom: cg.DOM) {
+  if (dom.elements.shadow) {
+    dom.elements.shadow.style.transform = util.translate3dAway
+  }
+  if (dom.elements.ghost) {
+    dom.elements.ghost.style.transform = util.translateAway
   }
 }
 
-function end(ctrl: Chessground, e: TouchEvent) {
-  const state = ctrl.state
-  const dom = ctrl.dom!
-  const draggable = state.draggable
-  const cur = draggable.current
-  if (!cur) return
-  // we don't want that end event since the target is different from the drag
-  // touchstart
-  if (e.type === 'touchend' && cur.originTarget !== e.target &&
-    !cur.newPiece) {
-    return
-  }
-  if (state.draggable.preventDefault) {
-    e.preventDefault()
-  }
-  const dest = cur.over
-  removeDragElements(dom)
-  board.unsetPremove(state)
-  board.unsetPredrop(state)
-  // regular drag'n drop move (or crazy drop)
-  if (cur.started && dest) {
-    if (cur.newPiece) {
-      board.dropNewPiece(state, cur.orig, dest, cur.force)
-    }
-    else {
-      board.userMove(state, cur.orig, dest)
-    }
-  }
-  // board editor mode: delete any piece dropped off the board
-  else if (cur.started && draggable.deleteOnDropOff) {
-    delete state.pieces[cur.orig]
-    setTimeout(state.events.change, 0)
-  }
-  // crazy invalid drop (no dest): delete the piece
-  else if (cur.newPiece) {
-    delete state.pieces[cur.orig]
-  }
-
-  if (cur && cur.orig === cur.previouslySelected && (cur.orig === dest || !dest)) {
-    board.unselect(state)
-  }
-
-  state.draggable.current = null
-  ctrl.redraw()
-}
-
-function cancel(ctrl: Chessground) {
-  const state = ctrl.state
-  removeDragElements(ctrl.dom!)
-  if (state.draggable.current) {
-    state.draggable.current = null
-    board.unselect(state)
-  }
-}
-
-export default {
-  dragNewPiece,
-  start,
-  move,
-  end,
-  cancel,
-  processDrag // must be exposed for board editors
-}

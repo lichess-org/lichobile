@@ -1,6 +1,6 @@
 import * as debounce from 'lodash/debounce'
 import Chessground from '../../chessground/Chessground'
-import cgDrag from '../../chessground/drag'
+import * as cgDrag from '../../chessground/drag'
 import router from '../../router'
 import redraw from '../../utils/redraw'
 import settings from '../../settings'

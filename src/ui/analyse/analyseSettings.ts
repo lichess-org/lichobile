@@ -116,6 +116,8 @@ export default {
 
 function renderAnalyseSettings(ctrl: AnalyseCtrl) {
 
+  const cores = getNbCores()
+
   return h('div.analyseSettings', [
     h('div.action', {
       key: 'showBestMove'
@@ -165,11 +167,11 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
         ctrl.settings.cevalSetMultiPv
       )
     ]) : null,
-    ctrl.ceval.allowed ? h('div.action', {
+    ctrl.ceval.allowed && cores > 1 ? h('div.action', {
       key: 'cevalCores'
     }, [
       formWidgets.renderSlider(
-        'Processor cores', 'ceval.cores', 1, getNbCores(), 1, settings.analyse.cevalCores,
+        'Processor cores', 'ceval.cores', 1, cores, 1, settings.analyse.cevalCores,
         ctrl.settings.cevalSetCores
       )
     ]) : null

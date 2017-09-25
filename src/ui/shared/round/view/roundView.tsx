@@ -117,14 +117,15 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait)
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait)
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game')
+  const tournament = ctrl.data.tournament
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessground: ctrl.chessground,
     bounds,
     isPortrait,
-    alert: !!ctrl.data.tournament && !ctrl.data.player.spectator && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
-      i18n('youHaveNbSecondsToMakeYourFirstMove', ctrl.data.tournament.nbSecondsForFirstMove) : undefined
+    alert: !!tournament && tournament.nbSecondsForFirstMove && !ctrl.data.player.spectator && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
+      i18n('youHaveNbSecondsToMakeYourFirstMove', tournament.nbSecondsForFirstMove) : undefined
   })
 
   const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'

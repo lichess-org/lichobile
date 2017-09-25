@@ -103,9 +103,9 @@ export interface OnlinePlayer extends Player {
 
 interface Tournament {
   id: string
-  berserkable: boolean
-  secondsToFinish: number
-  nbSecondsForFirstMove: number
+  berserkable?: boolean
+  secondsToFinish?: number
+  nbSecondsForFirstMove?: number
   name: string
   ranks?: {
     white: string

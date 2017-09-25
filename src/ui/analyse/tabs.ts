@@ -32,5 +32,5 @@ export const explorer: Tab = {
 export const charts: Tab = {
   id: 'computer',
   title: 'computerAnalysis',
-  className: 'fa fa-bar-chart'
+  className: 'fa fa-area-chart'
 }

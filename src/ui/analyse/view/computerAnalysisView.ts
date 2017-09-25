@@ -98,7 +98,7 @@ function renderAnalysisRequest(ctrl: AnalyseCtrl) {
         })
         .catch(handleXhrError)
       })
-    }, [h('span.fa.fa-bar-chart'), i18n('requestAComputerAnalysis')])
+    }, [i18n('requestAComputerAnalysis')])
   ])
 }
 

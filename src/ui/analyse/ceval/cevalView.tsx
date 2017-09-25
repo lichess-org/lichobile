@@ -46,7 +46,7 @@ function formatTime(millis: number) {
 function renderCevalPvs(ctrl: AnalyseCtrl) {
   const multiPv = ctrl.ceval.opts.multiPv
   const node = ctrl.node
-  if (node.ceval) {
+  if (node.ceval && !ctrl.gameOver()) {
     const pvs = node.ceval.pvs
     return h('div.ceval-pv_box', {
       key: 'ceval-pvs',
@@ -58,10 +58,15 @@ function renderCevalPvs(ctrl: AnalyseCtrl) {
         'data-uci': pvs[i].moves[0],
         className: i % 2 ? 'even' : 'odd'
       }, [
-        multiPv > 1 ? h('strong.ceval-pv_eval', pvs[i].mate !== undefined ? ('#' + pvs[i].mate) : renderEval(pvs[i].cp!)) : null,
+        h('strong.ceval-pv_eval', pvs[i].mate !== undefined ? ('#' + pvs[i].mate) : renderEval(pvs[i].cp!)),
         h('div.ceval-pv-line', san)
       ])
     }))
+  }
+  else if (ctrl.gameOver()) {
+    return h('div.ceval-pv_box.native_scroller.loading', {
+      key: 'ceval-gameover'
+    }, '-')
   }
   else {
     return h('div.ceval-pv_box.native_scroller.loading', {
@@ -77,10 +82,11 @@ export const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
   view({ attrs }) {
     const { ctrl } = attrs
     const node = ctrl.node
-    if (!node) return null
-
     const { ceval } = node
     const fav = node.eval || ceval
+
+    if (!ctrl.ceval.enabled() && !fav) return null
+
     let pearl: Mithril.Children
 
     if (fav && (!isClientEval(fav) || fav.depth >= ctrl.ceval.minDepth) && fav.cp !== undefined) {

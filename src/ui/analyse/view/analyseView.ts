@@ -103,7 +103,7 @@ function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: Tab[]) {
   const curTab = ctrl.currentTab(availTabs)
 
   return h('div.analyse-header', [
-    ctrl.ceval.enabled() && curTab.id !== 'ceval' ? h(EvalBox, { ctrl }) : null,
+    curTab.id !== 'ceval' ? h(EvalBox, { ctrl }) : null,
     h('div.analyse-tabs', [
       h('div.tab-title', renderTabTitle(ctrl, curTab)),
       h(TabNavigation, {

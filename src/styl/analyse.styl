@@ -53,6 +53,8 @@
   display flex
   flex-flow column nowrap
   min-width 0 // fix width bug on landscape
+  @media only screen and (orientation: landscape)
+    margin-top 0
 
 .analyse-table
   flex-flow column nowrap
@@ -100,8 +102,6 @@
   &.displayPieces
     move
       font-family ChessSansPiratf
-  @media only screen and (orientation: landscape) and (max-height 450px)
-    font-size 0.7em
 
 .analyse-openingBox
   line-height 25px
@@ -206,14 +206,8 @@ comment
 
 .analyse-gameInfos
   padding 2em 1em
-
-.analyseGameInfosWrapper
   display flex
-  border-bottom 1px solid lighten(bgdark, 15%)
-
-.analyse-gameInfos
-  display flex
-  flex-flow column wrap
+  flex-flow column nowrap
   justify-content flex-start
   align-items center
   > .gameInfos

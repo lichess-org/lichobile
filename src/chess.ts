@@ -20,7 +20,7 @@ export interface GameSituation {
   status?: GameStatus
   winner?: Color
   check: boolean
-  checkCount: CheckCount
+  checkCount?: CheckCount
   pgnMoves: Array<string>
   uciMoves: Array<string>
   promotion?: string

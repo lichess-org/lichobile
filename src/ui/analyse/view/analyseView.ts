@@ -84,11 +84,6 @@ export function renderVariantSelector(ctrl: AnalyseCtrl) {
   )
 }
 
-export function getChecksCount(ctrl: AnalyseCtrl, color: Color) {
-  const node = ctrl.node
-  return node && node.checkCount && node.checkCount[utils.oppositeColor(color)]
-}
-
 function renderOpening(ctrl: AnalyseCtrl) {
   const opening = ctrl.tree.getOpening(ctrl.nodeList) || ctrl.data.game.opening
   if (opening) return h('div', {

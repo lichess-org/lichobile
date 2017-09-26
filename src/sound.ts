@@ -15,7 +15,7 @@ let shouldPlay: boolean
 let lla: LLA
 let media: Readonly<Media>
 
-if (window.cordova.platformId === 'ios')
+if (window.cordova.platformId === 'ios') {
   media = {
     move: 'sounds/move.aifc',
     capture: 'sounds/capture.aifc',
@@ -25,7 +25,8 @@ if (window.cordova.platformId === 'ios')
     berserk: 'sounds/berserk.aifc',
     clock: 'sounds/clock.aifc'
   }
-else
+}
+else {
   media = {
     move: 'sounds/move.mp3',
     capture: 'sounds/capture.mp3',
@@ -35,8 +36,7 @@ else
     berserk: 'sounds/berserk.mp3',
     clock: 'sounds/clock.mp3'
   }
-
-
+}
 
 document.addEventListener('deviceready', () => {
 
@@ -49,27 +49,13 @@ document.addEventListener('deviceready', () => {
     lla = window.plugins.LowLatencyAudio
   }
 
-  lla.preloadFX('move', media.move, () => {}, (err) => {
-    console.log(err)
-  })
-  lla.preloadFX('capture', media.capture, () => {}, (err) => {
-    console.log(err)
-  })
-  lla.preloadFX('explosion', media.explosion, () => {}, (err) => {
-    console.log(err)
-  })
-  lla.preloadFX('lowtime', media.lowtime, () => {}, (err) => {
-    console.log(err)
-  })
-  lla.preloadFX('dong', media.dong, () => {}, (err) => {
-    console.log(err)
-  })
-  lla.preloadFX('berserk', media.berserk, () => {}, (err) => {
-    console.log(err)
-  })
-  lla.preloadFX('clock', media.clock, () => {}, (err) => {
-    console.log(err)
-  })
+  lla.preloadFX('move', media.move)
+  lla.preloadFX('capture', media.capture)
+  lla.preloadFX('explosion', media.explosion)
+  lla.preloadFX('lowtime', media.lowtime)
+  lla.preloadFX('dong', media.dong)
+  lla.preloadFX('berserk', media.berserk)
+  lla.preloadFX('clock', media.clock)
 }, false)
 
 

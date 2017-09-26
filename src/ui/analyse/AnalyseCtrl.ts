@@ -156,9 +156,6 @@ export default class AnalyseCtrl {
     setTimeout(this.debouncedScroll, 250)
     setTimeout(this.initCeval, 1000)
     window.plugins.insomnia.keepAwake()
-    document.addEventListener('pause', this.onPause)
-    document.addEventListener('resume', this.onResume)
-    window.addEventListener('unload', this.onUnload)
   }
 
   canDrop = () => {
@@ -376,8 +373,6 @@ export default class AnalyseCtrl {
 
   unload = () => {
     if (this.ceval) this.ceval.destroy()
-    document.removeEventListener('pause', this.onPause)
-    document.removeEventListener('resume', this.onResume)
   }
 
   // ---
@@ -613,25 +608,4 @@ export default class AnalyseCtrl {
       })
     }
   }, 50)
-
-  private onPause = () => {
-    if (this.ceval.isSearching() && this.ceval.opts.infinite) {
-      window.cordova.plugins.notification.local.schedule({
-        title: 'Stockfish engine is running.',
-        text: 'It will stop after 10 minutes of inactivity.',
-        at: new Date(Date.now() + 1000 * 30),
-        icon: 'res://mipmap/icon',
-        smallIcon: 'res://drawable/ic_stat_onesignal_default'
-      })
-    }
-  }
-
-  private onResume = () => {
-    window.cordova.plugins.notification.local.cancelAll()
-  }
-
-  private onUnload = () => {
-    // no better way to not trigger notif when killing app?
-    window.cordova.plugins.notification.local.cancelAll()
-  }
 }

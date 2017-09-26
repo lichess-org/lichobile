@@ -157,7 +157,8 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
       formWidgets.renderCheckbox(
         'Infinite analysis', 'ceval.infinite', settings.analyse.cevalInfinite,
         ctrl.settings.cevalToggleInfinite
-      )
+      ),
+      h('small.caution', 'It will stop after 10 minutes when in background')
     ]) : null,
     ctrl.ceval.allowed ? h('div.action', {
       key: 'cevalMultiPvs'

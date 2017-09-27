@@ -20,6 +20,7 @@ import continuePopup, { Controller as ContinuePopupController } from '../shared/
 import { NotesCtrl } from '../shared/round/notes'
 import * as util from './util'
 import CevalCtrl from './ceval/CevalCtrl'
+import RetroCtrl, { IRetroCtrl } from './retrospect/RetroCtrl'
 import { ICevalCtrl, Work as CevalWork } from './ceval/interfaces'
 import crazyValid from './crazy/crazyValid'
 import ExplorerCtrl from './explorer/ExplorerCtrl'
@@ -42,6 +43,7 @@ export default class AnalyseCtrl {
   notes: NotesCtrl | null
   chessground: Chessground
   ceval: ICevalCtrl
+  retro: IRetroCtrl | null
   explorer: IExplorerCtrl
   tree: TreeWrapper
 
@@ -106,6 +108,8 @@ export default class AnalyseCtrl {
     // TODO
     // this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null
     this.notes = null
+
+    this.retro = null
 
     this.ceval = CevalCtrl(
       this.data.game.variant.key,
@@ -261,6 +265,13 @@ export default class AnalyseCtrl {
     }
   }
 
+  toggleRetro = (): void => {
+    if (this.retro) this.retro = null
+    else {
+      this.retro = RetroCtrl(this)
+    }
+  }
+
   debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200)
 
   jump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
@@ -367,8 +378,16 @@ export default class AnalyseCtrl {
     return treeOps.withMainlineChild(this.node, (n: Tree.Node) => n.eval ? n.eval.best : undefined)
   }
 
+  mainlinePathToPly(ply: Ply): Tree.Path {
+    return treeOps.takePathWhile(this.mainline, n => n.ply <= ply)
+  }
+
   hasAnyComputerAnalysis = () => {
     return this.data.analysis || this.ceval.enabled()
+  }
+
+  hasFullComputerAnalysis = (): boolean => {
+    return Object.keys(this.mainline[0].eval || {}).length > 0
   }
 
   unload = () => {
@@ -392,10 +411,6 @@ export default class AnalyseCtrl {
       } catch (e) { console.error(e) }
     }
   }, 750)
-
-  private mainlinePathToPly(ply: Ply): Tree.Path {
-    return treeOps.takePathWhile(this.mainline, n => n.ply <= ply)
-  }
 
   private canGoForward() {
     return this.node.children.length > 0

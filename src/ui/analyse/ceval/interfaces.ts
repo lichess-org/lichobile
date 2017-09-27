@@ -1,5 +1,15 @@
 import { Tree } from '../../shared/tree'
 
+export interface NodeEvals {
+  client?: Tree.ClientEval
+  server?: Tree.ServerEval
+}
+
+export interface Eval {
+  cp?: number
+  mate?: number
+}
+
 export interface Opts {
   multiPv: number
   cores: number

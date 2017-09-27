@@ -20,6 +20,7 @@ import { view as renderContextMenu } from '../contextMenu'
 import TabView from './TabView'
 import Replay from './Replay'
 import Clocks from './Clocks'
+import retroView from '../retrospect/retroView'
 import renderComputerAnalysis from './computerAnalysisView'
 import renderBoard from './boardView'
 import renderGameInfos from './gameInfosView'
@@ -50,6 +51,7 @@ export function overlay(ctrl: AnalyseCtrl) {
     menu.view(ctrl.menu),
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notesView(ctrl.notes) : null,
+    ctrl.retro ? retroView(ctrl) : null,
     continuePopup.view(ctrl.continuePopup),
     renderContextMenu(ctrl)
   ]

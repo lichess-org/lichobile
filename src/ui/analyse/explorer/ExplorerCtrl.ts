@@ -48,7 +48,12 @@ export default function ExplorerCtrl(
   }
 
   const fetchOpening = debounce((fen: string): Promise<void> => {
-    return openingXhr(effectiveVariant, fen, config.data, withGames)
+    const conf = {
+      db: config.data.db.selected(),
+      speeds: config.data.speed.selected(),
+      ratings: config.data.rating.selected()
+    }
+    return openingXhr(effectiveVariant, fen, conf, withGames)
     .then((res: ExplorerData) => {
       res.opening = true
       res.fen = fen
@@ -109,7 +114,18 @@ export default function ExplorerCtrl(
     failing,
     config,
     withGames,
-    current
+    current,
+    fetchMasterOpening: (function() {
+      const masterCache: {[fen: string]: ExplorerData } = {}
+      return function(fen: string) {
+        if (masterCache[fen]) return Promise.resolve(masterCache[fen])
+        return openingXhr('standard', fen, { db: 'masters' }, false)
+        .then((res) => {
+          masterCache[fen] = res
+          return res
+        })
+      }
+    })()
   }
 }
 

@@ -116,11 +116,8 @@
   justify-content space-between
   align-items center
 
-.analyse-checkCount
-  > span:first-child
-    margin-right 0.5em
-
 .analyse-replay
+  flex 1 1 auto
   position relative
   font-size 0.9rem
   white-space normal
@@ -128,6 +125,10 @@
   &.displayPieces
     move
       font-family ChessSansPiratf
+
+.analyse-checkCount
+  > span:first-child
+    margin-right 0.5em
 
 .analyse-openingBox
   line-height 25px

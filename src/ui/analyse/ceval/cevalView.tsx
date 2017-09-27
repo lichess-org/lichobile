@@ -48,7 +48,7 @@ function renderCevalPvs(ctrl: AnalyseCtrl) {
   const node = ctrl.node
   if (node.ceval && !ctrl.gameOver()) {
     const pvs = node.ceval.pvs
-    return h('div.ceval-pv_box', {
+    return h('div.ceval-pv_box.native_scroller', {
       key: 'ceval-pvs',
       'data-fen': node.fen
     }, range(multiPv).map((i) => {

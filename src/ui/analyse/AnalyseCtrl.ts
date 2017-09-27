@@ -284,6 +284,7 @@ export default class AnalyseCtrl {
     else {
       this.stopCevalImmediately()
       this.retro = RetroCtrl(this)
+      this.retro.jumpToNext()
     }
   }
 
@@ -304,7 +305,9 @@ export default class AnalyseCtrl {
     promotion.cancel(this.chessground, this.cgConfig)
     if (pathChanged) {
       if (this.retro) this.retro.onJump()
-      else this.debouncedStartCeval()
+      else {
+        this.debouncedStartCeval()
+      }
     }
   }
 

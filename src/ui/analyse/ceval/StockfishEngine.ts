@@ -128,7 +128,7 @@ export default function StockfishEngine(): IEngine {
     startQueue = []
     output.removeAll()
     finished = true
-    stopped = false
+    stopped = true
   }
 
   function launchEval(work: Work) {

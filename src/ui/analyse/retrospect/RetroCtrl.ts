@@ -201,8 +201,6 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
     return fb === 'find' || fb === 'fail'
   }
 
-  jumpToNext()
-
   function onMergeAnalysisData() {
     if (isSolving() && !vm.current) jumpToNext()
   }

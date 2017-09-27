@@ -1,4 +1,3 @@
-
 .analyse-retro_box
   position absolute
   bottom 0
@@ -8,6 +7,8 @@
   display flex
   flex-flow column nowrap
   background lighten(bgdark, 5%)
+  &.minimized
+    height 25px
 
   > .title
     flex 0 0 25px
@@ -89,3 +90,7 @@
     height: 4px;
     transition: width 0.5s;
     max-width: 100%;
+
+.retro-actions
+  flex 0 0 auto
+  display flex

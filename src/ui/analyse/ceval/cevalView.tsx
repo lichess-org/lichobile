@@ -1,5 +1,6 @@
 import * as h from 'mithril/hyperscript'
 import * as range from 'lodash/range'
+import i18n from '../../../i18n'
 import { isClientEval } from '../../shared/tree/interfaces'
 
 import AnalyseCtrl from '../AnalyseCtrl'
@@ -66,7 +67,7 @@ function renderCevalPvs(ctrl: AnalyseCtrl) {
   else if (ctrl.gameOver()) {
     return h('div.ceval-pv_box.native_scroller.loading', {
       key: 'ceval-gameover'
-    }, '-')
+    }, [h('span.fa.fa-info'), i18n('gameOver')])
   }
   else {
     return h('div.ceval-pv_box.native_scroller.loading', {

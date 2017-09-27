@@ -10,8 +10,9 @@ import AnalyseCtrl from '../AnalyseCtrl'
 export type Feedback = 'find' | 'eval' | 'win' | 'fail' | 'view'
 
 interface VM {
-  current: any,
+  current: any
   feedback: Feedback
+  minimized: boolean
 }
 
 export interface IRetroCtrl {
@@ -30,6 +31,7 @@ export interface IRetroCtrl {
   completion(): [number, number]
   reset(): void
   close(): void
+  toggleWindow(): void
   node(): Tree.Node
   pieceTheme: string
 }
@@ -44,7 +46,8 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
 
   const vm: VM = {
     current: null,
-    feedback: 'find'
+    feedback: 'find',
+    minimized: false
   }
 
   function isPlySolved(ply: Ply): boolean {
@@ -225,6 +228,9 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
     },
     pieceTheme: settings.general.theme.piece(),
     close: root.toggleRetro,
+    toggleWindow() {
+      vm.minimized = !vm.minimized
+    },
     node: () => root.node
   }
 }

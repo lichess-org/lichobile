@@ -2,7 +2,6 @@ import * as h from 'mithril/hyperscript'
 import i18n from '../../../i18n'
 import { oppositeColor } from '../../../utils'
 import spinner from '../../../spinner'
-import { closeIcon } from '../../shared/icons'
 import { Tree } from '../../shared/tree'
 import * as helper from '../../helper'
 import { renderIndexAndMove } from '../view/moveView'
@@ -13,7 +12,9 @@ export default function retroView(root: AnalyseCtrl): Mithril.BaseNode | undefin
   const ctrl = root.retro
   if (!ctrl) return
   const fb = ctrl.vm.feedback
-  return h('div.analyse-retro_box', [
+  return h('div.analyse-retro_box', {
+    className: ctrl.vm.minimized ? 'minimized' : ''
+  }, [
     renderTitle(ctrl),
     h('div.retro-feedback.native_scroller.' + fb, renderFeedback(root, fb))
   ])
@@ -192,8 +193,15 @@ function renderTitle(ctrl: IRetroCtrl): Mithril.BaseNode {
   return h('div.title', [
     h('span', 'Learn from your mistakes'),
     h('span', Math.min(completion[0] + 1, completion[1]) + ' / ' + completion[1]),
-    h('button.close', {
-      oncreate: helper.ontap(ctrl.close)
-    }, closeIcon)
+    h('div.retro-actions', [
+      h('button.window-button', {
+        oncreate: helper.ontap(ctrl.toggleWindow)
+      }, h('span.fa', {
+        className: ctrl.vm.minimized ? 'fa-window-maximize' : 'fa-window-minimize'
+      })),
+      h('button.window-button', {
+        oncreate: helper.ontap(ctrl.close)
+      }, h('span.fa.fa-window-close'))
+    ])
   ])
 }

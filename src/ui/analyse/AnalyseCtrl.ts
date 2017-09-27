@@ -192,7 +192,7 @@ export default class AnalyseCtrl {
     let val = tabs.defaults
 
     if (this.synthetic) val = val.filter(t => t.id !== 'infos')
-    if (this.ceval.enabled()) val = val.concat([tabs.ceval])
+    if (!this.retro && this.ceval.enabled()) val = val.concat([tabs.ceval])
     if (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data)) {
       val = val.concat([tabs.charts])
     }

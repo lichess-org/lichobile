@@ -34,7 +34,7 @@ export default function CevalCtrl(
     emit(work, res)
   }
 
-  function start(path: Tree.Path, nodes: Tree.Node[], forceOneLine: boolean) {
+  function start(path: Tree.Path, nodes: Tree.Node[], forceOneLine18: boolean) {
     if (!enabled()) {
       return
     }
@@ -46,12 +46,12 @@ export default function CevalCtrl(
       initialFen: nodes[0].fen,
       currentFen: step.fen,
       moves: nodes.slice(1).map((s) => fixCastle(s.uci!, s.san!)),
-      maxDepth: effectiveMaxDepth(),
+      maxDepth: forceOneLine18 ? 18 : effectiveMaxDepth(),
       cores: opts.cores,
       path,
       ply: step.ply,
       multiPv: opts.multiPv,
-      forceOneLine,
+      forceOneLine18,
       threatMode: false,
       emit(res?: Tree.ClientEval) {
         if (enabled()) onEmit(work, res)

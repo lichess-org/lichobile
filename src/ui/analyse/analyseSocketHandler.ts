@@ -22,7 +22,7 @@ export default function(ctrl: AnalyseCtrl) {
         setTimeout(() => {
           ctrl.retroGlowing = false
           redraw()
-        }, 1000 * 15)
+        }, 1000 * 8)
         sound.dong()
         vibrate.quick()
         redraw()

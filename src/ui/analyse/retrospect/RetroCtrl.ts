@@ -130,7 +130,6 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
           root.ceval.toggle()
           root.initCeval()
         } else {
-          console.log('retro start')
           root.startCeval()
         }
         checkCeval()

@@ -280,7 +280,13 @@ export default class AnalyseCtrl {
   toggleRetro = (): void => {
     if (this.retro) {
       this.retro = null
-      this.startCeval()
+      // retro toggle ceval only if not enabled
+      // we use stored settings to see if it was previously enabled or not
+      if (settings.analyse.enableCeval()) {
+        this.startCeval()
+      } else {
+        this.ceval.toggle()
+      }
     }
     else {
       this.stopCevalImmediately()

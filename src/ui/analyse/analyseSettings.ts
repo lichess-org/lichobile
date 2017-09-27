@@ -134,8 +134,13 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
           else {
             ctrl.ceval.destroy()
             ctrl.resetTabs()
+            if (ctrl.retro) {
+              ctrl.retro.close()
+              ctrl.retro = null
+            }
           }
-        }
+        },
+        !!ctrl.retro
       ),
       h('small.caution', i18n('localEvalCaution'))
     ]) : null,

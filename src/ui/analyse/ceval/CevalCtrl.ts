@@ -123,7 +123,7 @@ export default function CevalCtrl(
     allowed,
     enabled,
     toggle() {
-      isEnabled = settings.analyse.enableCeval()
+      isEnabled = !isEnabled
     },
     setCores(c: number) {
       opts.cores = c

@@ -29,9 +29,11 @@ export default function renderActionsBar(ctrl: AnalyseCtrl) {
         )}
       />
       <button key="backward" className="action_bar_button fa fa-backward"
+        disabled={!!ctrl.retro}
         oncreate={helper.ontap(ctrl.stoprewind, undefined, ctrl.rewind)}
       />
       <button key="forward" className="action_bar_button fa fa-forward"
+        disabled={!!ctrl.retro}
         oncreate={helper.ontap(ctrl.stopff, undefined, ctrl.fastforward)}
       />
     </section>

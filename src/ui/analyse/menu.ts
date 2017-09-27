@@ -35,8 +35,7 @@ export default {
     }
 
     const s = {
-      computingPGN: false,
-      analysisProgress: false
+      computingPGN: false
     }
 
     return {
@@ -82,6 +81,13 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
       key: 'sharePGN',
       oncreate: sharePGN
     }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : [h('span.fa.fa-share-alt'), i18n('sharePGN')]) : null,
+    ctrl.data.analysis && !ctrl.retro ? h('button', {
+      key: 'retro',
+      oncreate: helper.ontap(() => {
+        ctrl.menu.close()
+        ctrl.toggleRetro()
+      })
+    }, [h('span.fa.fa-play'), 'Learn from your mistakes']) : null,
     ctrl.notes ? h('button', {
       key: 'notes',
       oncreate: helper.ontap(() => {

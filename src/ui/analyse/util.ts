@@ -4,6 +4,7 @@ import { Tree } from '../shared/tree'
 import { AnalyseData } from '../../lichess/interfaces/analyse'
 import { piotr2key } from './piotr'
 import { SanToRole } from './interfaces'
+import { Eval, NodeEvals } from './ceval/interfaces'
 
 function isString(o: DestsMap | string): o is string {
   return typeof o === 'string'
@@ -43,6 +44,21 @@ export function empty(a?: any) {
 export function renderEval(e: number) {
   e = Math.max(Math.min(Math.round(e / 10) / 10, 99), -99)
   return (e > 0 ? '+' : '') + e
+}
+
+const serverNodes = 4e6
+export function getBestEval(evs: NodeEvals): Eval | undefined {
+  const serverEv = evs.server, localEv = evs.client
+
+  if (!serverEv) return localEv
+  if (!localEv) return serverEv
+
+  // Prefer localEv if it exeeds fishnet node limit or finds a better mate.
+  if (localEv.nodes > serverNodes ||
+    (typeof localEv.mate !== 'undefined' && (typeof serverEv.mate === 'undefined' || Math.abs(localEv.mate) < Math.abs(serverEv.mate))))
+  return localEv
+
+  return serverEv
 }
 
 export function isSynthetic(data: AnalyseData) {

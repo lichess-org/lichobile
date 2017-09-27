@@ -55,6 +55,7 @@ export default function StockfishEngine(): IEngine {
       elapsedMs: number = parseInt(matches[7]),
       moves = matches[8].split(' ')
 
+
     let ev = parseInt(matches[4])
 
     // Track max pv index to determine when pv prints are done.
@@ -95,12 +96,12 @@ export default function StockfishEngine(): IEngine {
       curEval.depth = Math.min(curEval.depth, depth)
     }
 
-    if (multiPv === expectedPvs && curEval) {
+    if ((multiPv === 1 || multiPv === expectedPvs) && curEval) {
       work.emit(curEval)
     }
   }
 
-  function stop(): Promise<{}> {
+  function stopWhenFinished(): Promise<{}> {
     return new Promise((resolve) => {
       if (finished) {
         stopped = true
@@ -122,6 +123,14 @@ export default function StockfishEngine(): IEngine {
     })
   }
 
+  function stopImmediately() {
+    send('stop')
+    startQueue = []
+    output.removeAll()
+    finished = true
+    stopped = true
+  }
+
   function launchEval(work: Work) {
 
     output.removeAll()
@@ -131,7 +140,7 @@ export default function StockfishEngine(): IEngine {
     finished = false
 
     return setOption('Threads', work.cores)
-    .then(() => setOption('MultiPV', work.multiPv))
+    .then(() => setOption('MultiPV', work.forceOneLine ? 1 : work.multiPv))
     .then(() => send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' ')))
     .then(() => send('go depth ' + work.maxDepth))
   }
@@ -155,15 +164,14 @@ export default function StockfishEngine(): IEngine {
 
     start(work: Work) {
       startQueue.push(work)
-      stop().then(doStart)
+      stopWhenFinished().then(doStart)
     },
 
-    stop,
+    stopWhenFinished,
+    stopImmediately,
 
     exit() {
-      output.removeAll()
-      finished = true
-      stopped = false
+      stopImmediately()
       return Stockfish.exit()
     },
 

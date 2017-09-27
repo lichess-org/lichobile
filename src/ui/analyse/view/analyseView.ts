@@ -20,6 +20,7 @@ import { view as renderContextMenu } from '../contextMenu'
 import TabView from './TabView'
 import Replay from './Replay'
 import Clocks from './Clocks'
+import retroView from '../retrospect/retroView'
 import renderComputerAnalysis from './computerAnalysisView'
 import renderBoard from './boardView'
 import renderGameInfos from './gameInfosView'
@@ -181,6 +182,7 @@ function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[], isPortrait: boo
       content: tabsContent,
       onTabChange: ctrl.onTabChange,
       isPortrait
-    })
+    }),
+    ctrl.retro ? retroView(ctrl) : null
   ])
 }

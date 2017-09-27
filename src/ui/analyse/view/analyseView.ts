@@ -51,7 +51,6 @@ export function overlay(ctrl: AnalyseCtrl) {
     menu.view(ctrl.menu),
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notesView(ctrl.notes) : null,
-    ctrl.retro ? retroView(ctrl) : null,
     continuePopup.view(ctrl.continuePopup),
     renderContextMenu(ctrl)
   ]
@@ -183,6 +182,7 @@ function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[], isPortrait: boo
       content: tabsContent,
       onTabChange: ctrl.onTabChange,
       isPortrait
-    })
+    }),
+    ctrl.retro ? retroView(ctrl) : null
   ])
 }

@@ -34,7 +34,7 @@ export default function CevalCtrl(
     emit(work, res)
   }
 
-  function start(path: Tree.Path, nodes: Tree.Node[]) {
+  function start(path: Tree.Path, nodes: Tree.Node[], forceOneLine: boolean) {
     if (!enabled()) {
       return
     }
@@ -51,6 +51,7 @@ export default function CevalCtrl(
       path,
       ply: step.ply,
       multiPv: opts.multiPv,
+      forceOneLine,
       threatMode: false,
       emit(res?: Tree.ClientEval) {
         if (enabled()) onEmit(work, res)
@@ -63,12 +64,6 @@ export default function CevalCtrl(
 
   function effectiveMaxDepth() {
     return opts.infinite ? 99 : maxDepth
-  }
-
-  function stop() {
-    if (!enabled() || !started) return
-    engine.stop()
-    started = false
   }
 
   function destroy() {
@@ -114,7 +109,16 @@ export default function CevalCtrl(
     minDepth,
     variant,
     start,
-    stop,
+    stopWhenFinished() {
+      if (!enabled() || !started) return
+      engine.stopWhenFinished()
+      started = false
+    },
+    stopImmediately() {
+      if (!enabled() || !started) return
+      engine.stopImmediately()
+      started = false
+    },
     destroy,
     allowed,
     enabled,

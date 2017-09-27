@@ -81,6 +81,10 @@ export default {
       },
       flip() {
         s.flip = !s.flip
+        if (root.retro) {
+          root.retro = null
+          root.toggleRetro()
+        }
         root.chessground.set({
           orientation: s.flip ? oppositeColor(root.orientation) : root.orientation
         })

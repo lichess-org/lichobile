@@ -2,6 +2,7 @@ import * as h from 'mithril/hyperscript'
 import i18n from '../../../i18n'
 import { oppositeColor } from '../../../utils'
 import spinner from '../../../spinner'
+import { closeIcon } from '../../shared/icons'
 import { Tree } from '../../shared/tree'
 import * as helper from '../../helper'
 import { renderIndexAndMove } from '../view/moveView'
@@ -12,9 +13,9 @@ export default function retroView(root: AnalyseCtrl): Mithril.BaseNode | undefin
   const ctrl = root.retro
   if (!ctrl) return
   const fb = ctrl.vm.feedback
-  return h('div.retro_box', [
+  return h('div.analyse-retro_box', [
     renderTitle(ctrl),
-    h('div.feedback.' + fb, renderFeedback(root, fb))
+    h('div.retro-feedback.native_scroller.' + fb, renderFeedback(root, fb))
   ])
 }
 
@@ -30,7 +31,7 @@ function skipOrViewSolution(ctrl: IRetroCtrl) {
 }
 
 function jumpToNext(ctrl: IRetroCtrl) {
-  return h('a.half.continue', {
+  return h('button.retro-half.retro-continue', {
     oncreate: helper.ontap(ctrl.jumpToNext)
   }, [
     h('i[data-icon=G]'),
@@ -42,9 +43,9 @@ const minDepth = 8
 const maxDepth = 18
 
 function renderEvalProgress(node: Tree.Node): Mithril.BaseNode {
-  return h('div.progress', h('div', {
-    attrs: {
-      style: `width: ${node.ceval ? (100 * Math.max(0, node.ceval.depth - minDepth) / (maxDepth - minDepth)) + '%' : 0}`
+  return h('div.retro-progress', h('div', {
+    style: {
+      width: `${node.ceval ? (100 * Math.max(0, node.ceval.depth - minDepth) / (maxDepth - minDepth)) + '%' : 0}`
     }
   }))
 }
@@ -52,9 +53,11 @@ function renderEvalProgress(node: Tree.Node): Mithril.BaseNode {
 const feedback = {
   find(ctrl: IRetroCtrl): Mithril.BaseNode[] {
     return [
-      h('div.player', [
-        h('div.no-square', h('piece.king.' + ctrl.color)),
-        h('div.instruction', [
+      h('div.retro-player', [
+        h('div.piece-no-square', {
+          className: ctrl.pieceTheme
+        }, h('piece.king.' + ctrl.color)),
+        h('div.retro-instruction', [
           h('strong', [
             ...renderIndexAndMove({
               withDots: true,
@@ -72,9 +75,9 @@ const feedback = {
   // user has browsed away from the move to solve
   offTrack(ctrl: IRetroCtrl): Mithril.BaseNode[] {
     return [
-      h('div.player', [
-        h('div.icon.off', '!'),
-        h('div.instruction', [
+      h('div.retro-player', [
+        h('div.retro-icon.off', '!'),
+        h('div.retro-instruction', [
           h('strong', 'You browsed away'),
           h('div.choices.off', [
             h('button', {
@@ -87,9 +90,9 @@ const feedback = {
   },
   fail(ctrl: IRetroCtrl): Mithril.BaseNode[] {
     return [
-      h('div.player', [
-        h('div.icon', '✗'),
-        h('div.instruction', [
+      h('div.retro-player', [
+        h('div.retro-icon', '✗'),
+        h('div.retro-instruction', [
           h('strong', 'You can do better'),
           h('em', 'Try another move for ' + ctrl.color),
           skipOrViewSolution(ctrl)
@@ -99,10 +102,10 @@ const feedback = {
   },
   win(ctrl: IRetroCtrl): Mithril.BaseNode[] {
     return [
-      h('div.half.top',
-        h('div.player', [
-          h('div.icon', '✓'),
-          h('div.instruction', h('strong', i18n('goodMove')))
+      h('div.retro-half.top',
+        h('div.retro-player', [
+          h('div.retro-icon', '✓'),
+          h('div.retro-instruction', h('strong', i18n('goodMove')))
         ])
       ),
       jumpToNext(ctrl)
@@ -110,10 +113,10 @@ const feedback = {
   },
   view(ctrl: IRetroCtrl): Mithril.BaseNode[] {
     return [
-      h('div.half.top',
-        h('div.player', [
-          h('div.icon', '✓'),
-          h('div.instruction', [
+      h('div.retro-half.top',
+        h('div.retro-player', [
+          h('div.retro-icon', '✓'),
+          h('div.retro-instruction', [
             h('strong', 'Solution:'),
             h('em', [
               'Best move was ',
@@ -131,9 +134,9 @@ const feedback = {
   },
   eval(ctrl: IRetroCtrl): Mithril.BaseNode[] {
     return [
-      h('div.half.top',
-        h('div.player.center', [
-          h('div.instruction', [
+      h('div.retro-half.top',
+        h('div.retro-player.center', [
+          h('div.retro-instruction', [
             h('strong', 'Evaluating your move'),
             renderEvalProgress(ctrl.node())
           ])
@@ -143,18 +146,20 @@ const feedback = {
   },
   end(ctrl: IRetroCtrl, flip: () => void, hasFullComputerAnalysis: () => boolean): Mithril.BaseNode[] {
     if (!hasFullComputerAnalysis()) return [
-      h('div.half.top',
-        h('div.player', [
-          h('div.icon', spinner.getVdom()),
-          h('div.instruction', 'Waiting for analysis...')
+      h('div.retro-half.top',
+        h('div.retro-player', [
+          h('div.retro-icon', spinner.getVdom()),
+          h('div.retro-instruction', 'Waiting for analysis...')
         ])
       )
     ]
     const nothing = !ctrl.completion()[1]
     return [
-      h('div.player', [
-        h('div.no-square', h('piece.king.' + ctrl.color)),
-        h('div.instruction', [
+      h('div.retro-player', [
+        h('div.piece-no-square', {
+          className: ctrl.pieceTheme
+        }, h('piece.king.' + ctrl.color)),
+        h('div.retro-instruction', [
           h('em', nothing ?
             'No mistakes found for ' + ctrl.color :
             'Done reviewing ' + ctrl.color + ' mistakes'),
@@ -187,8 +192,8 @@ function renderTitle(ctrl: IRetroCtrl): Mithril.BaseNode {
   return h('div.title', [
     h('span', 'Learn from your mistakes'),
     h('span', Math.min(completion[0] + 1, completion[1]) + ' / ' + completion[1]),
-    h('span.close[data-icon=L]', {
+    h('button.close', {
       oncreate: helper.ontap(ctrl.close)
-    })
+    }, closeIcon)
   ])
 }

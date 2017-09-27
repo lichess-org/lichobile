@@ -311,7 +311,7 @@ span.fa
     padding-right: 15px;
   &:last-child
     border-right none
-  &.disabled
+  &.disabled, &:disabled
     &:before
       opacity 1
     color rgba(buttonGray, 0.4)
@@ -359,3 +359,12 @@ signal > i.off
 
 .countdown-timer
   font-family Cousine
+
+.piece-no-square
+  width: 64px;
+  height: 64px;
+  position relative
+  margin-right: 10px;
+  > piece
+    width 100%
+    height 100%

@@ -258,16 +258,31 @@ export default class AnalyseCtrl {
   initCeval = () => {
     if (this.ceval.enabled()) {
       if (this.ceval.isInit()) {
-        this.startCeval()
+        this.debouncedStartCeval()
       } else {
-        this.ceval.init().then(this.startCeval)
+        this.ceval.init().then(this.debouncedStartCeval)
       }
     }
   }
 
+  startCeval = () => {
+    if (this.ceval.enabled() && this.canUseCeval()) {
+      this.ceval.start(this.path, this.nodeList, !!this.retro)
+    }
+  }
+
+  stopCevalImmediately = () => {
+    this.ceval.stopImmediately()
+    this.debouncedStartCeval.cancel()
+  }
+
   toggleRetro = (): void => {
-    if (this.retro) this.retro = null
+    if (this.retro) {
+      this.retro = null
+      this.startCeval()
+    }
     else {
+      this.stopCevalImmediately()
       this.retro = RetroCtrl(this)
     }
   }
@@ -275,19 +290,22 @@ export default class AnalyseCtrl {
   debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200)
 
   jump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
+    const pathChanged = path !== this.path
     this.setPath(path)
-    // this.toggleVariationMenu()
     this.showGround()
     this.fetchOpening()
     if (this.node && this.node.san && direction === 'forward') {
       if (this.node.san.indexOf('x') !== -1) sound.throttledCapture()
       else sound.throttledMove()
     }
-    this.ceval.stop()
+    this.ceval.stopWhenFinished()
     this.debouncedExplorerSetStep()
     this.updateHref()
-    this.startCeval()
     promotion.cancel(this.chessground, this.cgConfig)
+    if (pathChanged) {
+      if (this.retro) this.retro.onJump()
+      else this.debouncedStartCeval()
+    }
   }
 
   userJump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
@@ -353,6 +371,7 @@ export default class AnalyseCtrl {
   mergeAnalysisData(data: AnalyseDataWithTree): void {
     this.tree.merge(data.tree)
     this.data.analysis = data.analysis
+    if (this.retro) this.retro.onMergeAnalysisData()
     redraw()
   }
 
@@ -528,6 +547,7 @@ export default class AnalyseCtrl {
         }
 
         if (work.path === this.path) {
+          if (this.retro) this.retro.onCeval()
           redraw()
         }
       })
@@ -538,11 +558,7 @@ export default class AnalyseCtrl {
     }
   }
 
-  private startCeval = debounce(() => {
-    if (this.ceval.enabled() && this.canUseCeval()) {
-      this.ceval.start(this.path, this.nodeList)
-    }
-  }, 800)
+  private debouncedStartCeval = debounce(this.startCeval, 800)
 
   private showGround() {
     const node = this.node
@@ -590,7 +606,7 @@ export default class AnalyseCtrl {
         if (path === this.path) {
           this.showGround()
           redraw()
-          if (this.gameOver()) this.ceval.stop()
+          if (this.gameOver()) this.stopCevalImmediately()
         }
       })
       .catch(err => console.error('get dests error', err))

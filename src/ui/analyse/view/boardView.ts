@@ -21,13 +21,13 @@ export default function renderBoard(
 
   let nextBest: string | undefined
   let curBestShape: Shape[] = []
-  if (curTab.id !== 'explorer' && ctrl.settings.s.showBestMove) {
+  if (curTab.id !== 'explorer' && !ctrl.retro && ctrl.settings.s.showBestMove) {
     nextBest = ctrl.nextNodeBest()
     curBestShape = nextBest ? moveOrDropShape(nextBest, 'paleBlue', player) :
-    ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
-    []
+      ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
+      []
   }
-  const pastBestShape = rEval && rEval.best ?
+  const pastBestShape = !ctrl.retro && rEval && rEval.best ?
     moveOrDropShape(rEval.best, 'paleGreen', player) : []
 
   const nextUci = curTab.id === 'explorer' && ctrl.node && treeOps.withMainlineChild(ctrl.node, n => n.uci)
@@ -35,8 +35,12 @@ export default function renderBoard(
   const nextMoveShape: Shape[] = nextUci ?
     moveOrDropShape(nextUci, 'palePurple', player) : []
 
+  const badNode = ctrl.retro && ctrl.retro.showBadNode()
+  const badMoveShape: Shape[] = badNode && badNode.uci ?
+    moveOrDropShape(badNode.uci, 'paleRed', player) : []
+
   const shapes: Shape[] = nextMoveShape.length > 0 ?
-  nextMoveShape : flatten([pastBestShape, curBestShape].filter(noNull))
+  nextMoveShape : flatten([pastBestShape, curBestShape, badMoveShape].filter(noNull))
 
   return h(Board, {
     key: ctrl.settings.s.smallBoard ? 'board-small' : 'board-full',

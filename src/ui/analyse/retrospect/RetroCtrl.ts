@@ -1,4 +1,5 @@
 import redraw from '../../../utils/redraw'
+import settings from '../../../settings'
 import { evalSwings } from '../nodeFinder'
 import * as winningChances from '../ceval/winningChances'
 import { path as treePath, Tree } from '../../shared/tree'
@@ -22,7 +23,7 @@ export interface IRetroCtrl {
   skip(): void
   viewSolution(): void
   hideComputerLine(node: Tree.Node): boolean
-  showBadNode(): void
+  showBadNode(): Tree.Node | undefined
   onCeval(): void
   onMergeAnalysisData(): void
   isSolving(): boolean
@@ -30,6 +31,7 @@ export interface IRetroCtrl {
   reset(): void
   close(): void
   node(): Tree.Node
+  pieceTheme: string
 }
 
 export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
@@ -124,6 +126,9 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
         if (!root.ceval.enabled()) {
           root.ceval.toggle()
           root.initCeval()
+        } else {
+          console.log('retro start')
+          root.startCeval()
         }
         checkCeval()
       }
@@ -142,6 +147,7 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
       cur = vm.current
     if (!cur || vm.feedback !== 'eval' || cur.fault.node.ply !== node.ply) return
     if (isCevalReady(node)) {
+      root.stopCevalImmediately()
       const diff = winningChances.povDiff(color, node.ceval!, cur.prev.node.eval)
       if (diff > -0.035) onWin()
       else onFail()
@@ -219,6 +225,7 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
       solvedPlies = []
       jumpToNext()
     },
+    pieceTheme: settings.general.theme.piece(),
     close: root.toggleRetro,
     node: () => root.node
   }

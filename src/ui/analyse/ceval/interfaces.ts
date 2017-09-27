@@ -23,6 +23,7 @@ export interface Work {
   multiPv: number
   ply: number
   threatMode: boolean
+  forceOneLine?: boolean
   initialFen: string
   currentFen: string
   moves: string[]
@@ -33,8 +34,9 @@ export interface ICevalCtrl {
   init(): Promise<void>
   isInit(): boolean
   isSearching(): boolean
-  start(path: Tree.Path, steps: Tree.Node[]): void
-  stop(): void
+  start(path: Tree.Path, steps: Tree.Node[], forceOneLine: boolean): void
+  stopWhenFinished(): void
+  stopImmediately(): void
   destroy(): void
   allowed: boolean
   enabled(): boolean
@@ -51,7 +53,8 @@ export interface ICevalCtrl {
 export interface IEngine {
   init(variant: VariantKey): Promise<void>
   start(work: Work): void
-  stop(): void
+  stopWhenFinished(): void
+  stopImmediately(): void
   exit(): Promise<void>
   isSearching(): boolean
 }

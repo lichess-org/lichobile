@@ -18,6 +18,11 @@ export default function(ctrl: AnalyseCtrl) {
 
       if (data.tree.eval) {
         ctrl.analysisProgress = false
+        ctrl.retroGlowing = true
+        setTimeout(() => {
+          ctrl.retroGlowing = false
+          redraw()
+        }, 1000 * 15)
         sound.dong()
         vibrate.quick()
         redraw()

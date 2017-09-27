@@ -68,6 +68,7 @@ export default class AnalyseCtrl {
   cgConfig?: cg.SetConfig
   shouldGoBack: boolean
   analysisProgress: boolean = false
+  retroGlowing: boolean = false
   formattedDate: string
 
   private _currentTabIndex: number = 0

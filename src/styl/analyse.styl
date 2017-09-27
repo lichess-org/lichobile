@@ -65,8 +65,14 @@
   background lighten(bgdark, 5%)
   flex 1 1 auto
   > .tab-content
-    // must not have height (don't ask me why)
+    // must not have height, use flex to stretch content to the max height instead
     height initial
+    display flex
+    > div
+      width 100%
+    > .native_scroller
+      // same: let flex compute height
+      height initial
     @media only screen and (orientation: landscape)
       width 'calc(100vw - 100vh + %s)' % headerHeight
 
@@ -95,10 +101,11 @@
     height 40px
 
 .analyse-replayWrapper
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-flow: column nowrap;
+  display: flex
+  flex-flow column nowrap
+  > .native_scroller
+    // flex height
+    height initial
 
 .analyse-fixedBar
   background-color lighten(headerBgDark, 5%)
@@ -137,7 +144,6 @@
   &.ios
     comment
       vertical-align initial
-
 
 index
   color rgba(textDarkBg, 50%)
@@ -228,11 +234,12 @@ comment
     text-overflow ellipsis
 
 .analyse-gameInfos
-  padding 2em 1em
   display flex
   flex-flow column nowrap
   justify-content flex-start
   align-items center
+  padding 2em 1em
+  width 100%
   > .gameInfos
     font-size 0.9em
   > .status

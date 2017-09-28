@@ -5,26 +5,35 @@ import { area as d3Area } from 'd3-shape'
 import { AnalyseData } from '../../../lichess/interfaces/analyse'
 
 interface Point {
-  acpl: number
+  ply: number
+  y: number
 }
 
-export default function drawAcplChart(element: SVGElement, aData: AnalyseData, curPly: number) {
+interface Series {
+  white: Point[]
+  black: Point[]
+}
+
+export default function drawMoveTimesChart(element: SVGElement, aData: AnalyseData, curPly: number) {
   const division = aData.game.division
+  const moveCentis = aData.game.moveCentis
+  if (!moveCentis) return
 
   const svg = select(element)
-  const graphData = makeSerieData(aData)
   const margin = {top: 10, right: 10, bottom: 10, left: 10}
   const width = +svg.attr('width') - margin.left - margin.right
   const height = +svg.attr('height') - margin.top - margin.bottom
   const g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+
+  const { max, series } = makeSerieData(aData, moveCentis)
 
   function addDivisionLine(xPos: number, name: string) {
     g.append('line')
     .attr('class', 'division ' + name)
     .attr('x1', xPos)
     .attr('x2', xPos)
-    .attr('y1', y(-1))
-    .attr('y2', y(1))
+    .attr('y1', y(-max))
+    .attr('y2', y(max))
 
     g.append('text')
     .attr('class', 'chart-legend')
@@ -37,65 +46,53 @@ export default function drawAcplChart(element: SVGElement, aData: AnalyseData, c
   function setCurrentPly(ply: number | null) {
     g.selectAll('.dot').remove()
     if (ply !== null) {
-      const xply = ply - 1
-      const p = graphData[xply]
+      const isWhite = !!(ply & 1)
+      const p = isWhite ? series.white.find(p => p.ply === ply) : series.black.find(p => p.ply === ply)
       if (p) {
         g.append('circle')
         .attr('class', 'dot')
-        .attr('cx', x(xply))
-        .attr('cy', y(p.acpl))
+        .attr('cx', x(ply))
+        .attr('cy', y(p.y))
         .attr('r', 3)
       }
     }
   }
 
   const x = scaleLinear()
-  .domain([0, graphData.length])
+  .domain([0, series.white.length + series.black.length])
   .rangeRound([0, width])
 
   const y = scaleLinear()
-  .domain([-1, 1])
+  .domain([-max, max])
   .rangeRound([height, 0])
 
   const line = d3Area<Point>()
-  .x((_, i) => x(i))
-  .y(d => y(d.acpl))
+  .x(d => x(d.ply))
+  .y(d => y(d.y))
 
   const area = d3Area<Point>()
-  .x((_, i) => x(i))
-  .y1(d => d.acpl >= 0 ? y(d.acpl) : y(0))
-
-  g.datum(graphData)
-
-  g.append('line')
-  .attr('class', 'zeroline')
-  .attr('x1', 0)
-  .attr('x2', width)
-  .attr('y1', y(0))
-  .attr('y2', y(0))
-
-  g.append('clipPath')
-  .attr('id', 'clip-below')
-  .append('path')
-  .attr('d', area.y0(d => y(d.acpl)))
-
-  g.append('clipPath')
-  .attr('id', 'clip-above')
-  .append('path')
-  .attr('d', area.y0(y(0)))
+  .x(d => x(d.ply))
+  .y0(y(0))
+  .y1(d => y(d.y))
 
   g.append('path')
+  .datum(series.white)
   .attr('class', 'area above')
-  .attr('clip-path', 'url(#clip-above)')
   .attr('d', area)
 
   g.append('path')
+  .datum(series.black)
   .attr('class', 'area below')
-  .attr('clip-path', 'url(#clip-below)')
-  .attr('d', area.y0(d => d.acpl <= 0 ? y(d.acpl) : y(0)))
+  .attr('d', area)
 
   g.append('path')
   .attr('class', 'line')
+  .datum(series.white)
+  .attr('d', line)
+
+  g.append('path')
+  .attr('class', 'line')
+  .datum(series.black)
   .attr('d', line)
 
   if (division && (division.middle || division.end)) {
@@ -113,27 +110,33 @@ export default function drawAcplChart(element: SVGElement, aData: AnalyseData, c
   return setCurrentPly
 }
 
-function makeSerieData(d: AnalyseData): Point[] {
-  return d.treeParts.slice(1).map((node) => {
-    const ply = node.ply!
-    const color = ply & 1
+function makeSerieData(data: AnalyseData, moveCentis: number[]): { max: number, series: Series } {
+  const series: Series = {
+    white: [],
+    black: []
+  }
 
-    let cp: number
+  const tree = data.treeParts
+  const logC = Math.pow(Math.log(3), 2)
+  let ply = 0, max = 0
 
-    if (node.eval && node.eval.mate) {
-      cp = node.eval.mate > 0 ? Infinity : -Infinity
-    } else if (node.san && node.san.indexOf('#') > 0) {
-      cp = color === 1 ? Infinity : -Infinity
-      if (d.game.variant.key === 'antichess') cp = -cp
-    } else if (node.eval && node.eval.cp !== undefined) {
-      cp = node.eval.cp
-    } else return {
-      acpl: 0
-    }
+  moveCentis.forEach((time, i) => {
+    const node = tree[i + 1]
+    ply = node ? node.ply! : ply + 1
+
+    const isWhite = !!(ply & 1)
+
+    const y = Math.pow(Math.log(.005 * Math.min(time, 12e4) + 3), 2) - logC
+    max = Math.max(y, max)
 
     const point = {
-      acpl: 2 / (1 + Math.exp(-0.004 * cp)) - 1
+      ply,
+      y: isWhite ? y : -y
     }
-    return point
+
+    if (isWhite) series.white.push(point)
+    else series.black.push(point)
   })
+
+  return { max, series }
 }

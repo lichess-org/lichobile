@@ -61,6 +61,7 @@ export interface Game {
   rematch?: string
   importedBy?: string
   // only for analyse
+  moveCentis?: number[]
   division?: {
     middle?: number | null
     end?: number | null
@@ -94,6 +95,7 @@ export interface Player {
   version?: number
   checks?: number
   ratingDiff?: number
+  blurs?: { nb: number, percent: number }
 }
 
 export interface OnlinePlayer extends Player {

@@ -21,7 +21,7 @@ import TabView from './TabView'
 import Replay from './Replay'
 import Clocks from './Clocks'
 import retroView from '../retrospect/retroView'
-import renderComputerAnalysis from './computerAnalysisView'
+import renderGameAnalysis from './gameAnalysis'
 import renderBoard from './boardView'
 import renderGameInfos from './gameInfosView'
 import renderActionsBar from './actionsView'
@@ -162,7 +162,7 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Bas
   infos: renderGameInfos,
   moves: renderReplay,
   explorer: renderExplorer,
-  computer: renderComputerAnalysis,
+  analysis: renderGameAnalysis,
   ceval: renderCeval
 }
 

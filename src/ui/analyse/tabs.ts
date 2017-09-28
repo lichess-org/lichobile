@@ -30,7 +30,7 @@ export const explorer: Tab = {
 }
 
 export const charts: Tab = {
-  id: 'computer',
-  title: 'computerAnalysis',
+  id: 'analysis',
+  title: 'gameAnalysis',
   className: 'fa fa-area-chart'
 }

@@ -277,8 +277,9 @@ export default class AnalyseCtrl {
     this.debouncedStartCeval.cancel()
   }
 
-  toggleRetro = (): void => {
+  toggleRetro = (fromBB?: string): void => {
     if (this.retro) {
+      if (fromBB !== 'backbutton') router.backbutton.stack.pop()
       this.retro = null
       // retro toggle ceval only if not enabled
       // we use stored settings to see if it was previously enabled or not
@@ -293,6 +294,7 @@ export default class AnalyseCtrl {
     else {
       this.stopCevalImmediately()
       this.retro = RetroCtrl(this)
+      router.backbutton.stack.push(this.toggleRetro)
       this.retro.jumpToNext()
     }
   }

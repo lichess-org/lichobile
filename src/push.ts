@@ -6,19 +6,21 @@ import { lightPlayerName } from './lichess/player'
 import challengesApi from './lichess/challenges'
 import { fetchText } from './http'
 
+interface Payload {
+  title: string
+  body: string
+  additionalData: any
+}
+
 interface NotificationReceivedData {
   isAppInFocus: boolean
-  payload: {
-    additionalData: any
-  }
+  payload: Payload
 }
 
 interface NotificationOpenedData {
   isAppInFocus: boolean
   notification: {
-    payload: {
-      additionalData: any
-    }
+    payload: Payload
   }
 }
 
@@ -33,6 +35,9 @@ function notificationReceivedCallback(data: NotificationReceivedData) {
             i18n('userAcceptsYourChallenge', lightPlayerName(additionalData.userData.joiner)), 'long', 'top')
           break
         case 'corresAlarm':
+        case 'gameTakebackOffer':
+        case 'gameDrawOffer':
+          window.plugins.toast.show(data.payload.title + '. ' + data.payload.body + '.', 'long', 'top')
           break
         case 'gameMove':
         case 'gameFinish':
@@ -60,12 +65,10 @@ function notificationOpenedCallback(data: NotificationOpenedData) {
           router.set(`/challenge/${additionalData.userData.challengeId}`)
           break
         case 'corresAlarm':
-          router.set(`/game/${additionalData.userData.fullId}`)
-          break
         case 'gameMove':
-          router.set(`/game/${additionalData.userData.fullId}`)
-          break
         case 'gameFinish':
+        case 'gameTakebackOffer':
+        case 'gameDrawOffer':
           router.set(`/game/${additionalData.userData.fullId}`)
           break
         case 'newMessage':

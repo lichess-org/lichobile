@@ -113,7 +113,7 @@ function renderMoveTimes(ctrl: AnalyseCtrl, vd: helper.ViewportDim, isPortrait: 
     h('svg#moveTimes-chart.analyse-chart', {
       key: 'movetimes-chart',
       width: isPortrait ? vd.vw : vd.vw - vd.vh + helper.headerHeight,
-      height: 100,
+      height: 150,
       oncreate({ dom }: Mithril.DOMNode) {
         setTimeout(() => {
           this.updateCurPly = drawMoveTimesChart(dom as SVGElement, ctrl.data, ctrl.node.ply)

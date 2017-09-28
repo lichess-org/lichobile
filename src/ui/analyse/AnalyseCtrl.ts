@@ -284,7 +284,9 @@ export default class AnalyseCtrl {
       // we use stored settings to see if it was previously enabled or not
       if (settings.analyse.enableCeval()) {
         this.startCeval()
-      } else {
+      }
+      // ceval not enabled if no moves were to review
+      else if (this.ceval.enabled()) {
         this.ceval.toggle()
       }
     }

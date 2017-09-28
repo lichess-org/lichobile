@@ -1,4 +1,5 @@
 import { select } from 'd3-selection'
+import { axisLeft } from 'd3-axis'
 import { scaleLinear } from 'd3-scale'
 import { area as d3Area } from 'd3-shape'
 
@@ -20,7 +21,7 @@ export default function drawMoveTimesChart(element: SVGElement, aData: AnalyseDa
   if (!moveCentis) return
 
   const svg = select(element)
-  const margin = {top: 10, right: 10, bottom: 10, left: 10}
+  const margin = {top: 10, right: 10, bottom: 10, left: 25}
   const width = +svg.attr('width') - margin.left - margin.right
   const height = +svg.attr('height') - margin.top - margin.bottom
   const g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
@@ -75,6 +76,24 @@ export default function drawMoveTimesChart(element: SVGElement, aData: AnalyseDa
   .y0(y(0))
   .y1(d => y(d.y))
 
+  const maxCentis = Math.max.apply(Math, moveCentis) / 100
+  const legendScale = scaleLinear()
+  .domain([-maxCentis, maxCentis])
+  .rangeRound([height, 0])
+
+  const yAxis = axisLeft<number>(legendScale)
+  .tickFormat(d => String(Math.abs(d)))
+
+  g.append('g')
+  .call(yAxis)
+  .append('text')
+  .attr('class', 'legend')
+  .attr('transform', 'rotate(-90)')
+  .attr('y', 6)
+  .attr('dy', '0.71em')
+  .attr('text-anchor', 'end')
+  .text('Seconds')
+
   g.append('path')
   .datum(series.white)
   .attr('class', 'area above')
@@ -96,7 +115,6 @@ export default function drawMoveTimesChart(element: SVGElement, aData: AnalyseDa
   .attr('d', line)
 
   if (division && (division.middle || division.end)) {
-    addDivisionLine(x(0), 'Opening')
     if (division.middle) {
       addDivisionLine(x(division.middle), 'Middlegame')
     }

@@ -22,33 +22,33 @@ export default {
       blackCentis = parentClock
     }
     const whitePov = ctrl.bottomColor() === 'white'
-    const whiteEl = renderClock(whiteCentis!, isWhiteTurn)
-    const blackEl = renderClock(blackCentis!, !isWhiteTurn)
+    const whiteEl = renderClock('white', whiteCentis!, isWhiteTurn)
+    const blackEl = renderClock('black', blackCentis!, !isWhiteTurn)
 
-    return h('div.analyse-clocks', [
-      h('span.fa.fa-clock-o')
-    ].concat(whitePov ? [blackEl, whiteEl] : [whiteEl, blackEl]))
+    return h('div.analyse-clocks', whitePov ?
+      [blackEl, whiteEl] : [whiteEl, blackEl]
+    )
   }
 } as Mithril.Component<{ ctrl: AnalyseCtrl }, {}>
 
-function renderClock(centis: number, current: boolean): Mithril.BaseNode {
+function renderClock(color: Color, centis: number, current: boolean): Mithril.BaseNode {
   return h('div.analyse-clock', {
     className: current ? 'current' : '',
-  }, clockContent(centis))
+  }, [h('span.color-icon.' + color), clockContent(centis)])
 }
 
-function clockContent(centis: number): Array<string | Mithril.BaseNode> {
-  if (centis === undefined) return ['-']
+function clockContent(centis: number): Mithril.BaseNode {
+  if (centis === undefined) return h('span.time', ['-'])
   const date = new Date(centis * 10),
   millis = date.getUTCMilliseconds(),
   sep = ':',
   baseStr = pad2(date.getUTCMinutes()) + sep + pad2(date.getUTCSeconds())
-  if (centis >= 360000) return [Math.floor(centis / 360000) + sep + baseStr]
+  if (centis >= 360000) return h('span.time', [Math.floor(centis / 360000) + sep + baseStr])
   const tenthsStr = Math.floor(millis / 100).toString()
-  return [
+  return h('span.time', [
     baseStr,
     h('tenths', '.' + tenthsStr)
-  ]
+  ])
 }
 
 function pad2(num: number): string {

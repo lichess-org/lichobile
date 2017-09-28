@@ -175,8 +175,7 @@ export default {
     if (gameApi.userAnalysable(d) || gameApi.replayable(d)) {
       return h('button', {
         oncreate: helper.ontap(() => {
-          socket.send('rematch-no')
-          router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}`)
+          router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}?ply=${ctrl.vm.ply}`)
         })
       }, [h('span[data-icon=A].withIcon'), i18n('analysis')])
     }
@@ -187,8 +186,7 @@ export default {
     if (gameApi.userAnalysable(d) || gameApi.replayable(d)) {
       return h('button.action_bar_button[data-icon=A]', {
         oncreate: helper.ontap(() => {
-          socket.send('rematch-no')
-          router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}`)
+          router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}?ply=${ctrl.vm.ply}`)
         })
       })
     }

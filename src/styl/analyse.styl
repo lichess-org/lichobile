@@ -283,21 +283,11 @@ comment
   .analyse-tabsContent
     background #fff
 
-  .analyse-header
-    background lighten(darkBlue, 15%)
-    color #ddd
-
   .ceval-curEval
-    background lighten(darkBlue, 5%)
-    color #ddd
+    color headerBgDarkColor
 
   .analyse-tabs
-    .tabIndicator
-      background-color #fff
-    .tab-button
-      color #ddd
-      &.selected
-        color #fff
+    color darken(headerBgDarkColor, 10%)
 
   comment
     color rgba(textLightBg, 0.5)
@@ -310,6 +300,8 @@ comment
     &.current
       background blue
       color #fff
+      > index
+        color #fff
 
   line > move
     color rgba(textLightBg, 0.7)

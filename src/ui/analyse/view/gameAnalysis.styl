@@ -27,11 +27,14 @@
   .chart-legend
     font-size 0.5em
     fill rgba(#fff, 0.6)
-  .domain, line
+  .domain
     stroke rgba(#fff, 0.6)
-  .legend, text
+  .tick
     font-size 0.7em
-    fill rgba(#fff, 0.6)
+    > text
+      fill rgba(#fff, 0.6)
+    > line
+      stroke rgba(#fff, 0.6)
   .dot
     stroke orange
     fill #fff
@@ -78,3 +81,10 @@
       fill rgba(#000, 0.6)
     .chart-legend
       fill rgba(#000, 0.7)
+    .domain
+      stroke rgba(#000, 0.6)
+    .tick
+      > line
+        stroke rgba(#000, 0.6)
+      > text
+        fill rgba(#000, 0.6)

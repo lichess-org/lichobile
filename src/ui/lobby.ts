@@ -194,7 +194,11 @@ function cancelSeeking(fromBB?: string) {
 
 function sendHook(setup: HumanSeekSetup) {
   currentSetup = setup
-  hookId = null
+  if (hookId) {
+    // normally can't create hook if already have a hook
+    socket.send('cancel', hookId)
+    hookId = null
+  }
   socket.createLobby(() => {
     if (hookId) return // hook already created!
     xhr.seekGame(setup)

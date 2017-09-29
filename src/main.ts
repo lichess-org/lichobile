@@ -18,6 +18,7 @@ import settings from './settings'
 import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
 import * as helper from './ui/helper'
+import lobby from './ui/lobby'
 import router from './router'
 import socket from './socket'
 import push from './push'
@@ -141,6 +142,7 @@ function onResume() {
 
 function onPause() {
   setBackground()
+  lobby.cancelSeeking()
   socket.disconnect()
 }
 

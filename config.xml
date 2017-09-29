@@ -10,11 +10,11 @@
     <access origin="https://veloce.github.io" />
     <access origin="https://listage.ovh" />
     <icon src="res/icon.png" />
+    <hook src="scripts/link_locales.js" type="before_prepare" />
     <platform name="android">
+        <hook src="scripts/android/copy_icons.js" type="after_prepare" />
         <hook src="scripts/android/add_to_manifest.js" type="after_prepare" />
         <hook src="scripts/android/remove_permissions.js" type="after_prepare" />
-        <hook src="scripts/copy_icons.js" type="after_prepare" />
-        <hook src="scripts/link_locales.js" type="before_prepare" />
         <icon density="ldpi" src="res/android/icons/icon-36.png" />
         <icon density="mdpi" src="res/android/icons/icon-48.png" />
         <icon density="hdpi" src="res/android/icons/icon-72.png" />

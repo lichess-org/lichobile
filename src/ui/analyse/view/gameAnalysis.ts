@@ -93,7 +93,7 @@ function renderAnalysisRequest(ctrl: AnalyseCtrl) {
       h('span', 'Analysis in progress'),
       spinner.getVdom()
     ]) : h('button.fatButton', {
-      oncreate: helper.ontap(() => {
+      oncreate: helper.ontapXY(() => {
         return requestComputerAnalysis(ctrl.data.game.id)
         .then(() => {
           ctrl.analysisProgress = true

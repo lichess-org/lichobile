@@ -53,7 +53,7 @@
         "chess.js": "git://github.com/veloce/chess.js#8f9b37d2",
         "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",
         "cordova-android": "~6.2.2",
-        "cordova-ios": "^4.4.0",
+        "cordova-ios": "^4.5.1",
         "cordova-plugin-app-event": "git+https://github.com/katzer/cordova-plugin-app-event.git#1.2.1",
         "cordova-plugin-appversion": "~1.0.0",
         "cordova-plugin-crosswalk-webview": "~2.3.0",

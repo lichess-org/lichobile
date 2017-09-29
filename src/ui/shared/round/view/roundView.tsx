@@ -62,7 +62,9 @@ export function renderMaterial(material: Material) {
 }
 
 function renderTitle(ctrl: OnlineRound) {
+  const data = ctrl.data
   if (ctrl.vm.offlineWatcher || socket.isConnected()) {
+    const isCorres = !data.player.spectator && data.game.speed === 'correspondence'
     if (ctrl.data.tv) {
       return h('div.main_header_title.withSub', [
         h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), 'Lichess TV']),
@@ -77,15 +79,14 @@ function renderTitle(ctrl: OnlineRound) {
     }
     else {
       return h(GameTitle, {
-        key: 'playingTitle',
         data: ctrl.data,
         kidMode: session.isKidMode(),
-        subTitle: ctrl.data.tournament ? 'tournament' : 'date'
+        subTitle: ctrl.data.tournament ? 'tournament' : isCorres ? 'corres' : 'date'
       })
     }
   } else {
     return (
-      <div key="reconnectingTitle" className="main_header_title reconnecting">
+      <div className="main_header_title reconnecting">
         {loader}
       </div>
     )

@@ -88,6 +88,7 @@ export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedi
     },
     endData(o: ApiEnd) {
       ctrl.endWithData(o)
+      redraw()
     },
     rematchOffer(by: Color) {
       ctrl.data.player.offeringRematch = by === ctrl.data.player.color

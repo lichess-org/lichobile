@@ -460,7 +460,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
 
     if (this.data.game.speed === 'correspondence') {
-      session.refresh()
+      session.backgroundRefresh()
       saveOfflineGameData(this.id, this.data)
     }
   }
@@ -512,7 +512,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       if (d.game.turns > 1) {
         sound.dong()
         vibrate.quick()
-        session.refresh()
+        session.backgroundRefresh()
       }
 
       this.showActions()

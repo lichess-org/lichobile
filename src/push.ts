@@ -1,5 +1,4 @@
 import settings from './settings'
-import session from './session'
 import router from './router'
 import challengesApi from './lichess/challenges'
 import { fetchText } from './http'
@@ -55,7 +54,6 @@ function notificationReceivedCallback(data: NotificationReceivedData) {
     if (data.isAppInFocus) {
       switch (additionalData.userData.type) {
         case 'challengeAccept':
-          session.refresh()
           sendLocalNotif(
             data.payload.title,
             data.payload.body,
@@ -65,15 +63,13 @@ function notificationReceivedCallback(data: NotificationReceivedData) {
         case 'corresAlarm':
         case 'gameTakebackOffer':
         case 'gameDrawOffer':
+        case 'gameMove':
+        case 'gameFinish':
           sendLocalNotif(
             data.payload.title,
             data.payload.body,
             `/game/${additionalData.userData.fullId}`
           )
-          break
-        case 'gameMove':
-        case 'gameFinish':
-          session.refresh()
           break
         case 'newMessage':
           sendLocalNotif(

@@ -160,7 +160,7 @@ function createGame(
         })
       }
     },
-    onOpen: session.refresh,
+    onOpen: session.backgroundRefresh,
     events: Object.assign({}, defaultHandlers, handlers)
   }
   const opts: SocketConfig = {
@@ -191,7 +191,7 @@ function createTournament(
   let url = '/tournament/' + tournamentId + `/socket/v${apiVersion}`
   const socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers),
-    onOpen: session.refresh
+    onOpen: session.backgroundRefresh
   }
   const opts = {
     options: {
@@ -220,7 +220,7 @@ function createChallenge(
 ) {
   const socketHandlers = {
     onOpen: () => {
-      session.refresh()
+      session.backgroundRefresh()
       onOpen()
     },
     events: Object.assign({}, defaultHandlers, handlers)
@@ -252,7 +252,7 @@ function createLobby(
 ) {
   const socketHandlers = {
     onOpen: () => {
-      session.refresh()
+      session.backgroundRefresh()
       onOpen()
     },
     events: Object.assign({}, defaultHandlers, handlers)
@@ -279,7 +279,7 @@ function createDefault() {
   if (hasNetwork()) {
     const socketHandlers = {
       events: defaultHandlers,
-      onOpen: session.refresh
+      onOpen: session.backgroundRefresh
     }
     const opts = {
       options: {

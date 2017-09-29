@@ -111,7 +111,10 @@ function notificationOpenedCallback(data: NotificationOpenedData) {
 }
 
 function sendLocalNotif(title: string, text: string, route: string) {
-  if (!router.get().startsWith(route)) {
+  // for important pushs, we still want to display them as a notification
+  // push received on ios is always shown; on android it's only when app in
+  // background
+  if (cordova.platformId === 'android' && !router.get().startsWith(route)) {
     window.cordova.plugins.notification.local.schedule({
       title,
       text,

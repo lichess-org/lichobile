@@ -9,6 +9,7 @@
     <access origin="https://sentry.io" />
     <access origin="https://veloce.github.io" />
     <access origin="https://listage.ovh" />
+    <icon src="res/icon.png" />
     <platform name="android">
         <hook src="scripts/android/add_to_manifest.js" type="after_prepare" />
         <hook src="scripts/android/remove_permissions.js" type="after_prepare" />
@@ -103,6 +104,7 @@
     <engine name="android" spec="~6.2.2" />
     <engine name="ios" spec="^4.4.0" />
     <plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" spec="https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface" />
+    <plugin name="cordova-plugin-app-event" spec="git+https://github.com/katzer/cordova-plugin-app-event.git#1.2.1" />
     <plugin name="cordova-plugin-appversion" spec="~1.0.0" />
     <plugin name="cordova-plugin-crosswalk-webview" spec="~2.3.0">
         <variable name="XWALK_MODE" value="embedded" />
@@ -127,6 +129,7 @@
     <plugin name="cordova-plugin-x-socialsharing" spec="~5.1.3" />
     <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
     <plugin name="cordova-universal-links-plugin" spec="~1.2.1" />
+    <plugin name="de.appplant.cordova.plugin.local-notification" spec="git+https://github.com/katzer/cordova-plugin-local-notifications.git#0.8.5" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
     <plugin name="onesignal-cordova-plugin" spec="~2.0.11" />
 </widget>

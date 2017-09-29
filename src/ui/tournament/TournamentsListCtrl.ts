@@ -9,7 +9,7 @@ export default class TournamentsListCtrl {
   currentTab: number
   startPositions: BoardPositionCategory[]
 
-  constructor(defaultTab: number) {
+  constructor(defaultTab?: number) {
     this.currentTab = defaultTab || 0
 
     xhr.currentTournaments()

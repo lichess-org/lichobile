@@ -159,7 +159,8 @@
       },
       cancelAll: function() {
         console.log('Local notifications canceled')
-      }
+      },
+      on: noop
     }
   }
 

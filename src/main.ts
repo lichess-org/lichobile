@@ -51,6 +51,15 @@ function main() {
     onOnline()
   }
 
+  window.cordova.plugins.notification.local.on('click', (notification: LocalNotification) => {
+    try {
+      const data = JSON.parse(notification.data)
+      if (data && data.notifType === 'route') {
+        router.set(data.route)
+      }
+    } catch (_) {}
+  })
+
   document.addEventListener('online', onOnline, false)
   document.addEventListener('offline', onOffline, false)
   document.addEventListener('resume', onResume, false)

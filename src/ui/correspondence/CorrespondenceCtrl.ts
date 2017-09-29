@@ -14,7 +14,7 @@ export default class CorrespondenceCtrl {
   pool: CorrespondenceSeek[]
   sendingChallenges: Challenge[]
 
-  constructor(defaultTab: number) {
+  constructor(defaultTab?: number) {
     this.currentTab = defaultTab || 0
     this.pool = []
     this.sendingChallenges = []

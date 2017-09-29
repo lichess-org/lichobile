@@ -4,6 +4,7 @@ import * as Vnode from 'mithril/render/vnode'
 import signals from './signals'
 import * as isFunction from 'lodash/isFunction'
 import session from './session'
+import { serializeQueryParameters } from './utils'
 import redraw from './utils/redraw'
 
 interface Backbutton {
@@ -70,6 +71,11 @@ function replaceState(path: string) {
   try {
     window.history.replaceState(window.history.state, '', '?=' + path)
   } catch (e) { console.error(e) }
+}
+
+function setStateParams(params: StringMap) {
+  const path = get().replace(/\?.+$/, '')
+  replaceState(path + `?${serializeQueryParameters(params)}`)
 }
 
 const backbutton = (() => {
@@ -139,6 +145,7 @@ export default {
   get,
   set,
   replaceState,
+  setStateParams,
   backHistory,
   getViewSlideDirection(): string {
     return viewSlideDirection

@@ -1,5 +1,4 @@
 import * as h from 'mithril/hyperscript'
-import router from '../../router'
 import * as utils from '../../utils'
 import i18n from '../../i18n'
 import Board from '../shared/Board'
@@ -83,7 +82,7 @@ function renderGameActionsBar(ctrl: OtbRound) {
       />
       <button data-icon="A" className="action_bar_button"
         oncreate={helper.ontap(
-          () => router.set(`/analyse/offline/otb/${ctrl.data.player.color}`),
+          ctrl.goToAnalysis,
           () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')
         )}
       />

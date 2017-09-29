@@ -7,6 +7,7 @@ import { handleXhrError, safeStringToNum } from '../../utils'
 import i18n from '../../i18n'
 import { specialFenVariants } from '../../lichess/variant'
 import { emptyFen } from '../../utils/fen'
+import spinner from '../../spinner'
 import { getAnalyseData, getCurrentAIGame, getCurrentOTBGame } from '../../utils/offlineGames'
 import * as helper from '../helper'
 import { loadingBackbutton, header, backButton as renderBackbutton } from '../shared/common'
@@ -26,6 +27,8 @@ export interface Attrs {
   variant?: VariantKey
   ply?: string
   tab?: string
+  // fen used for placeholder board while loading
+  curFen?: string
 }
 
 export interface State {
@@ -145,7 +148,10 @@ export default {
       const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', isSmall)
       return layout.board(
         loadingBackbutton,
-        () => viewOnlyBoard(vnode.attrs.color || 'white', bounds, isSmall, emptyFen)
+        () => [
+          viewOnlyBoard(vnode.attrs.color || 'white', bounds, isSmall, vnode.attrs.curFen || emptyFen),
+          h('div.analyse-tableWrapper', spinner.getVdom())
+        ]
       )
     }
   }

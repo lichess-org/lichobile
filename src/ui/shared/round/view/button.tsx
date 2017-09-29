@@ -1,6 +1,6 @@
 import * as h from 'mithril/hyperscript'
 import * as throttle from 'lodash/throttle'
-import { handleXhrError, hasNetwork, boardOrientation } from '../../../../utils'
+import { handleXhrError, hasNetwork } from '../../../../utils'
 import * as gameApi from '../../../../lichess/game'
 import router from '../../../../router'
 import gameStatus from '../../../../lichess/status'
@@ -174,9 +174,7 @@ export default {
     const d = ctrl.data
     if (gameApi.userAnalysable(d) || gameApi.replayable(d)) {
       return h('button', {
-        oncreate: helper.ontap(() => {
-          router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}?ply=${ctrl.vm.ply}`)
-        })
+        oncreate: helper.ontap(ctrl.goToAnalysis)
       }, [h('span[data-icon=A].withIcon'), i18n('analysis')])
     }
     return null
@@ -185,9 +183,7 @@ export default {
     const d = ctrl.data
     if (gameApi.userAnalysable(d) || gameApi.replayable(d)) {
       return h('button.action_bar_button[data-icon=A]', {
-        oncreate: helper.ontap(() => {
-          router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}?ply=${ctrl.vm.ply}`)
-        })
+        oncreate: helper.ontap(ctrl.goToAnalysis)
       })
     }
     return null

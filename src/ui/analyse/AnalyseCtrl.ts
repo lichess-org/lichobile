@@ -126,8 +126,7 @@ export default class AnalyseCtrl {
     this.explorer = ExplorerCtrl(this)
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50)
 
-    const initPly = Number(ply) ||
-      (location.hash && parseInt(location.hash.replace(/#/, ''), 10)) ||
+    const initPly = ply ||
       (this.source === 'online' && gameApi.isPlayerPlaying(this.data) ?
         this.tree.lastPly() : this.tree.firstPly())
 
@@ -212,14 +211,9 @@ export default class AnalyseCtrl {
   }
 
   onTabChange = (index: number) => {
-    const loc = window.location.search.replace(/\?tab\=\w+$/, '')
-    try {
-      window.history.replaceState(window.history.state, '', loc + '?tab=' + index)
-    } catch (e) {
-      console.error(e)
-    }
     this._currentTabIndex = index
     const cur = this.currentTab(this.availableTabs())
+    this.updateHref()
     if (cur.id === 'moves') this.debouncedScroll()
     else if (cur.id === 'explorer') this.explorer.setStep()
     redraw()
@@ -391,7 +385,7 @@ export default class AnalyseCtrl {
 
   gameOver() {
     if (!this.node) return false
-    // step.end boolean is fetched async for online games (along with the dests)
+    // node.end boolean is fetched async for online games (along with the dests)
     if (this.node.end === undefined) {
       if (this.node.check) {
         const san = this.node.san
@@ -437,13 +431,12 @@ export default class AnalyseCtrl {
   }
 
   private updateHref = debounce(() => {
-    const step = this.node
-    if (step) {
-      try {
-        window.history.replaceState(window.history.state, '', '#' + step.ply)
-      } catch (e) { console.error(e) }
-    }
-  }, 750)
+    router.setStateParams({
+      tab: String(this._currentTabIndex),
+      ply: String(this.node.ply),
+      curFen: this.node.fen
+    })
+  }, 200)
 
   private canGoForward() {
     return this.node.children.length > 0

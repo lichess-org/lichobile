@@ -21,6 +21,7 @@ export interface PromotingInterface {
 export interface RoundInterface extends BoardInterface {
   firstPly(): number
   lastPly(): number
+  goToAnalysis(): void
 
   jump(ply: number): boolean
   jumpFirst(): boolean

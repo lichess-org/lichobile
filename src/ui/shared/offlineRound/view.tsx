@@ -1,5 +1,4 @@
 import * as h from 'mithril/hyperscript'
-import router from '../../../router'
 import * as utils from '../../../utils'
 import i18n from '../../../i18n'
 import * as gameApi from '../../../lichess/game'
@@ -22,8 +21,6 @@ function getChecksCount(ctrl: OfflineRoundInterface, color: Color) {
   else
     return 0
 }
-
-type OfflineGameType = 'ai' | 'otb'
 
 export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.Children, material: Material, position: Position, isPortrait: boolean, otbFlip?: boolean, customPieceTheme?: string) {
   const sit = ctrl.replay.situation()
@@ -66,7 +63,7 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
 }
 
 
-export function renderGameActionsBar(ctrl: OfflineRoundInterface, type: OfflineGameType) {
+export function renderGameActionsBar(ctrl: OfflineRoundInterface) {
   return (
     <section key="actionsBar" className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-h"
@@ -80,7 +77,7 @@ export function renderGameActionsBar(ctrl: OfflineRoundInterface, type: OfflineG
       />
       <button data-icon="A" className="action_bar_button"
         oncreate={helper.ontap(
-          () => router.set(`/analyse/offline/${type}/${ctrl.data.player.color}`),
+          ctrl.goToAnalysis,
           () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')
         )}
       />
@@ -96,14 +93,14 @@ export function renderGameActionsBar(ctrl: OfflineRoundInterface, type: OfflineG
   )
 }
 
-export function renderGameActionsBarTablet(ctrl: OfflineRoundInterface, type: OfflineGameType) {
+export function renderGameActionsBarTablet(ctrl: OfflineRoundInterface) {
   return (
     <section className="actions_bar">
       <button className="action_bar_button" data-icon="U"
         oncreate={helper.ontap(ctrl.newGameMenu.open, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
       />
       <button data-icon="A" className="action_bar_button"
-        oncreate={helper.ontap(() => router.set(`/analyse/offline/${type}/${ctrl.data.player.color}`))}
+        oncreate={helper.ontap(ctrl.goToAnalysis)}
       />
       <button className="fa fa-share-alt action_bar_button"
         oncreate={helper.ontap(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}

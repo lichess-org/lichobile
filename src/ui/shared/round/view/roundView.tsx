@@ -66,19 +66,24 @@ function renderTitle(ctrl: OnlineRound) {
   if (ctrl.vm.offlineWatcher || socket.isConnected()) {
     const isCorres = !data.player.spectator && data.game.speed === 'correspondence'
     if (ctrl.data.tv) {
-      return h('div.main_header_title.withSub', [
+      return h('div.main_header_title.withSub', {
+        key: 'tv'
+      }, [
         h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), 'Lichess TV']),
         h('h2.header-subTitle', tvChannelSelector(ctrl))
       ])
     }
     else if (ctrl.data.userTV) {
-      return h('div.main_header_title.withSub', [
+      return h('div.main_header_title.withSub', {
+        key: 'user-tv'
+      }, [
         h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), ctrl.data.userTV]),
         h('h2.header-subTitle', [h(`span.withIcon[data-icon=${utils.gameIcon(ctrl.data.game.perf)}]`), gameApi.title(ctrl.data)])
       ])
     }
     else {
       return h(GameTitle, {
+        key: 'playing-title',
         data: ctrl.data,
         kidMode: session.isKidMode(),
         subTitle: ctrl.data.tournament ? 'tournament' : isCorres ? 'corres' : 'date'
@@ -86,7 +91,7 @@ function renderTitle(ctrl: OnlineRound) {
     }
   } else {
     return (
-      <div className="main_header_title reconnecting">
+      <div key="reconnecting-title" className="main_header_title reconnecting">
         {loader}
       </div>
     )

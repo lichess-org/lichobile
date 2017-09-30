@@ -50,7 +50,7 @@ export interface ICevalCtrl {
 }
 
 export interface IEngine {
-  init(variant: VariantKey): Promise<void>
+  init(): Promise<void>
   start(work: Work): void
   stop(): void
   exit(): Promise<void>

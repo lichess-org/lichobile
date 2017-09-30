@@ -21,7 +21,7 @@ export default function CevalCtrl(
     infinite: initOpts.infinite
   }
 
-  const engine = StockfishEngine()
+  const engine = StockfishEngine(variant)
 
   let started = false
   let isEnabled = settings.analyse.enableCeval()
@@ -95,7 +95,7 @@ export default function CevalCtrl(
 
   return {
     init() {
-      return engine.init(variant).then(() => {
+      return engine.init().then(() => {
         initialized = true
       })
     },

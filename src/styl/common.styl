@@ -55,7 +55,7 @@ textarea
 span.fa
   margin-right 5px
 
-.disabled
+.disabled, &:disabled
   opacity 0.5
 
 .hide
@@ -312,9 +312,7 @@ span.fa
   &:last-child
     border-right none
   &.disabled, &:disabled
-    &:before
-      opacity 1
-    color rgba(buttonGray, 0.4)
+    opacity 0.5
   &.active
     background darkBlue
     color #ccc

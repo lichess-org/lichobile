@@ -8,10 +8,9 @@
   flex-flow column nowrap
   background lighten(bgdark, 5%)
   &.minimized
-    height 25px
-
+    height 28px
   > .title
-    flex 0 0 25px
+    flex 0 0 28px
     background-color darkBlue
     color headerBgDarkColor
     display flex
@@ -31,7 +30,6 @@
   display flex
   align-items center
   margin-left 10px
-
   > .piece-no-square
     flex 0 0 64px
 
@@ -51,7 +49,6 @@
 
     > button
       padding 0.5em 0
-
 
 .retro-half
   width 100%
@@ -102,4 +99,10 @@
 
 .view-container.transp
   .analyse-retro_box
-    background #222
+    background transparent
+    > .title
+      background-color rgba(#000, 0.9)
+
+  .retro-feedback
+    background-color #f5f5f5
+    color textDarkGray

@@ -10,6 +10,7 @@ import AnalyseCtrl from '../AnalyseCtrl'
 export type Feedback = 'find' | 'eval' | 'win' | 'fail' | 'view'
 
 interface VM {
+  color: Color
   current: any
   feedback: Feedback
   minimized: boolean
@@ -17,7 +18,6 @@ interface VM {
 
 export interface IRetroCtrl {
   vm: VM
-  color: Color
   isPlySolved(ply: number): boolean
   onJump(): void
   jumpToNext(): void
@@ -30,6 +30,7 @@ export interface IRetroCtrl {
   isSolving(): boolean
   completion(): [number, number]
   reset(): void
+  flip(): void
   close(): void
   toggleWindow(): void
   node(): Tree.Node
@@ -39,7 +40,6 @@ export interface IRetroCtrl {
 export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
 
   const game = root.data.game
-  const color = root.bottomColor()
   let candidateNodes: Tree.Node[] = []
   const explorerCancelPlies: number[] = []
   let solvedPlies: number[] = []
@@ -47,7 +47,8 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
   const vm: VM = {
     current: null,
     feedback: 'find',
-    minimized: false
+    minimized: false,
+    color: root.bottomColor()
   }
 
   function isPlySolved(ply: Ply): boolean {
@@ -150,7 +151,7 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
     if (!cur || vm.feedback !== 'eval' || cur.fault.node.ply !== node.ply) return
     if (isCevalReady(node)) {
       root.stopCevalImmediately()
-      const diff = winningChances.povDiff(color, node.ceval!, cur.prev.node.eval)
+      const diff = winningChances.povDiff(vm.color, node.ceval!, cur.prev.node.eval)
       if (diff > -0.035) onWin()
       else onFail()
     }
@@ -190,7 +191,7 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
   }
 
   function hideComputerLine(node: Tree.Node): boolean {
-    return (node.ply % 2 === 0) !== (color === 'white') && !isPlySolved(node.ply)
+    return (node.ply % 2 === 0) !== (vm.color === 'white') && !isPlySolved(node.ply)
   }
 
   function showBadNode(): Tree.Node | undefined {
@@ -207,9 +208,13 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
     if (isSolving() && !vm.current) jumpToNext()
   }
 
+  function reset() {
+    solvedPlies = []
+    jumpToNext()
+  }
+
   return {
     vm,
-    color,
     isPlySolved,
     onJump,
     jumpToNext,
@@ -221,10 +226,12 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
     onMergeAnalysisData,
     isSolving,
     completion: () => [solvedPlies.length, candidateNodes.length],
-    reset() {
-      solvedPlies = []
-      jumpToNext()
+    flip() {
+      root.settings.flip()
+      vm.color = root.bottomColor()
+      reset()
     },
+    reset,
     pieceTheme: settings.general.theme.piece(),
     close: root.toggleRetro,
     toggleWindow() {

@@ -57,7 +57,7 @@ const feedback = {
       h('div.retro-player', [
         h('div.piece-no-square', {
           className: ctrl.pieceTheme
-        }, h('piece.king.' + ctrl.color)),
+        }, h('piece.king.' + ctrl.vm.color)),
         h('div.retro-instruction', [
           h('strong', [
             ...renderIndexAndMove({
@@ -67,7 +67,7 @@ const feedback = {
             }, ctrl.vm.current.fault.node),
             ' was played'
           ]),
-          h('em', 'Find a better move for ' + ctrl.color),
+          h('em', 'Find a better move for ' + ctrl.vm.color),
           skipOrViewSolution(ctrl)
         ])
       ])
@@ -95,7 +95,7 @@ const feedback = {
         h('div.retro-icon', '✗'),
         h('div.retro-instruction', [
           h('strong', 'You can do better'),
-          h('em', 'Try another move for ' + ctrl.color),
+          h('em', 'Try another move for ' + ctrl.vm.color),
           skipOrViewSolution(ctrl)
         ])
       ])
@@ -145,7 +145,7 @@ const feedback = {
       )
     ]
   },
-  end(ctrl: IRetroCtrl, flip: () => void, hasFullComputerAnalysis: () => boolean): Mithril.BaseNode[] {
+  end(ctrl: IRetroCtrl, hasFullComputerAnalysis: () => boolean): Mithril.BaseNode[] {
     if (!hasFullComputerAnalysis()) return [
       h('div.retro-half.top',
         h('div.retro-player', [
@@ -159,32 +159,35 @@ const feedback = {
       h('div.retro-player', [
         h('div.piece-no-square', {
           className: ctrl.pieceTheme
-        }, h('piece.king.' + ctrl.color)),
+        }, h('piece.king.' + ctrl.vm.color)),
         h('div.retro-instruction', [
           h('em', nothing ?
-            'No mistakes found for ' + ctrl.color :
-            'Done reviewing ' + ctrl.color + ' mistakes'),
+            'No mistakes found for ' + ctrl.vm.color :
+            'Done reviewing ' + ctrl.vm.color + ' mistakes'),
           h('div.choices.end', [
             nothing ? null : h('button', {
               oncreate: helper.ontap(ctrl.reset)
             }, 'Do it again'),
             h('button', {
-              oncreate: helper.ontap(flip)
-            }, 'Review ' + oppositeColor(ctrl.color) + ' mistakes')
+              oncreate: helper.ontap(ctrl.flip)
+            }, 'Review ' + oppositeColor(ctrl.vm.color) + ' mistakes')
           ])
         ])
       ])
     ]
-  },
+  }
 }
 
 function renderFeedback(root: AnalyseCtrl, fb: Feedback) {
   const ctrl: IRetroCtrl = root.retro!
   const current = ctrl.vm.current
-  if (ctrl.isSolving() && current && root.path !== current.prev.path)
-  return feedback.offTrack(ctrl)
-  if (fb === 'find') return current ? feedback.find(ctrl) :
-    feedback.end(ctrl, root.settings.flip, root.hasFullComputerAnalysis)
+  if (ctrl.isSolving() && current && root.path !== current.prev.path) {
+    return feedback.offTrack(ctrl)
+  }
+  if (fb === 'find') {
+    return current ? feedback.find(ctrl) :
+      feedback.end(ctrl, root.hasFullComputerAnalysis)
+  }
   return feedback[fb](ctrl)
 }
 

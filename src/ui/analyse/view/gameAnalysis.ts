@@ -25,7 +25,7 @@ export default function renderGameAnalysis(ctrl: AnalyseCtrl): Mithril.BaseNode 
 }
 
 function renderAnalysis(ctrl: AnalyseCtrl, vd: helper.ViewportDim, isPortrait: boolean) {
-  return h.fragment({
+  return h('div.analyse-computerAnalysis', {
     key: 'analysis'
   }, [
     h('strong.title', i18n('computerAnalysis')),
@@ -86,7 +86,7 @@ const AcplSummary: Mithril.Component<{ d: AnalyseData, analysis: RemoteEvalSumma
 }
 
 function renderAnalysisRequest(ctrl: AnalyseCtrl) {
-  return h('div.analyse-requestComputer', {
+  return h('div.analyse-computerAnalysis', {
     key: 'request-analysis'
   }, [
     ctrl.analysisProgress ? h('div.analyse-requestProgress', [
@@ -106,7 +106,7 @@ function renderAnalysisRequest(ctrl: AnalyseCtrl) {
 }
 
 function renderMoveTimes(ctrl: AnalyseCtrl, vd: helper.ViewportDim, isPortrait: boolean) {
-  return h.fragment({
+  return h('div.analyse-moveTimes', {
     key: 'move-times'
   }, [
     h('strong.title', i18n('moveTimes')),

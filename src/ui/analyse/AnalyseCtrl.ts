@@ -267,7 +267,7 @@ export default class AnalyseCtrl {
   }
 
   stopCevalImmediately = () => {
-    this.ceval.stopImmediately()
+    this.ceval.stop()
     this.debouncedStartCeval.cancel()
   }
 
@@ -304,7 +304,7 @@ export default class AnalyseCtrl {
       if (this.node.san.indexOf('x') !== -1) sound.throttledCapture()
       else sound.throttledMove()
     }
-    this.ceval.stopWhenFinished()
+    this.ceval.stop()
     this.debouncedExplorerSetStep()
     this.updateHref()
     promotion.cancel(this.chessground, this.cgConfig)

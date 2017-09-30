@@ -109,14 +109,9 @@ export default function CevalCtrl(
     minDepth,
     variant,
     start,
-    stopWhenFinished() {
+    stop() {
       if (!enabled() || !started) return
-      engine.stopWhenFinished()
-      started = false
-    },
-    stopImmediately() {
-      if (!enabled() || !started) return
-      engine.stopImmediately()
+      engine.stop()
       started = false
     },
     destroy,

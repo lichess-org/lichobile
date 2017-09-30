@@ -101,7 +101,7 @@ export default function StockfishEngine(): IEngine {
     }
   }
 
-  function stopWhenFinished(): Promise<{}> {
+  function stop(): Promise<void> {
     return new Promise((resolve) => {
       if (finished) {
         stopped = true
@@ -121,14 +121,6 @@ export default function StockfishEngine(): IEngine {
         }
       }
     })
-  }
-
-  function stopImmediately() {
-    send('stop')
-    startQueue = []
-    output.removeAll()
-    finished = true
-    stopped = true
   }
 
   function launchEval(work: Work) {
@@ -155,6 +147,10 @@ export default function StockfishEngine(): IEngine {
     }
   }
 
+  function isSearching() {
+    return !finished && !stopped
+  }
+
   return {
     init(variant: VariantKey) {
       return Stockfish.init()
@@ -164,20 +160,17 @@ export default function StockfishEngine(): IEngine {
 
     start(work: Work) {
       startQueue.push(work)
-      stopWhenFinished().then(doStart)
+      stop().then(doStart)
     },
 
-    stopWhenFinished,
-    stopImmediately,
+    stop,
 
     exit() {
-      stopImmediately()
+      stop()
       return Stockfish.exit()
     },
 
-    isSearching() {
-      return !finished && !stopped
-    }
+    isSearching
   }
 }
 

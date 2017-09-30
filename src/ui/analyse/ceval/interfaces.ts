@@ -35,8 +35,7 @@ export interface ICevalCtrl {
   isInit(): boolean
   isSearching(): boolean
   start(path: Tree.Path, steps: Tree.Node[], forceOneLine: boolean): void
-  stopWhenFinished(): void
-  stopImmediately(): void
+  stop(): void
   destroy(): void
   allowed: boolean
   enabled(): boolean
@@ -53,8 +52,7 @@ export interface ICevalCtrl {
 export interface IEngine {
   init(variant: VariantKey): Promise<void>
   start(work: Work): void
-  stopWhenFinished(): void
-  stopImmediately(): void
+  stop(): void
   exit(): Promise<void>
   isSearching(): boolean
 }

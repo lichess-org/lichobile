@@ -81,7 +81,7 @@
   &.current
     color orangeDark
     font-weight bold
-  &.active
+  &.active, &:active
     background-color lighten(bgdark, 8%)
 
 .rp.null
@@ -104,7 +104,7 @@
     display flex
     height 18px
     margin-top 2px
-  &.active
+  &.active, &:active
     background-color lighten(bgdark, 8%)
   &.offline
     max-width 100%
@@ -284,7 +284,7 @@
     padding 7px 0
     &.withLink
       text-decoration underline
-    &.active
+    &.active, &:active
       background-color darken(#fff, 5%)
 
 .player_controls
@@ -309,7 +309,7 @@
     padding 10px
     button
       background-color #fff
-      &.active
+      &.active, &:active
         background-color darken(#fff, 3%)
       &.binary_choice[data-icon=E]
         border-right 1px solid selectBg
@@ -346,13 +346,13 @@
       color: green
       margin-right 10px
       border-radius: 3px 0 0 3px;
-      &.active
+      &.active, &:active
         background green
         color #fff
     &.decline
       color: red
       border-radius: 0 3px 3px 0;
-      &.active
+      &.active, &:active
         background red
         color #fff
 

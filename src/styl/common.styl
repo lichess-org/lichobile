@@ -90,7 +90,7 @@ span.fa
   transform translateY(-50%)
 
 .button
-  &.active
+  &.active, &:active
     background lighten(bgdark, 5%)
 
 /* lists */
@@ -117,11 +117,11 @@ span.fa
     border-bottom none
   &.odd
     background-color lighten(bgdark, 2%)
-  &.active
+  &.active, &:active
     background lighten(bgdark, 5%)
   &.bglight
     border-bottom-color darken(bglight, 15%)
-    &.active
+    &.active, &:active
       background-color darken(bglight, 5%)
 
 .list_item.odd, .list_item.even
@@ -285,7 +285,7 @@ span.fa
     text-align center
     padding 10px 0
     background lighten(bgdark, 5%)
-    &.active
+    &.active, &:active
       background lighten(bgdark, 10%)
 
 
@@ -313,7 +313,7 @@ span.fa
     border-right none
   &.disabled, &:disabled
     opacity 0.5
-  &.active
+  &.active, &:active
     background darkBlue
     color #ccc
   &.empty::before

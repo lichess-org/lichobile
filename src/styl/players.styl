@@ -14,7 +14,7 @@
         height 24px
         position relative
       margin 0
-      &.active
+      &.active, &:active
         background lighten(bgdark, 8%)
   > .modal_content
     color textDarkBg
@@ -78,7 +78,7 @@
   padding 10px 0
   display flex
   justify-content space-between
-  &.active
+  &.active, &:active
     background lighten(bgdark, 8%)
   @media only screen and (min-width 600px)
     font-size 0.9rem
@@ -109,7 +109,7 @@
       background-color themeBgLight
     .list_item
       border-bottom-color borderLightGray
-      &.active
+      &.active, &:active
         background-color darken(bglight, 5%)
 
 .view-container.transp
@@ -123,5 +123,5 @@
       background-color transpBlack05
     .list_item
       border-bottom-color transpWhite01
-      &.active
+      &.active, &:active
         background-color transpWhite02

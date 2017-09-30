@@ -26,7 +26,7 @@
       border-color #e2e2e2
 
   .button
-    &.active
+    &.active, &:active
       background activeBgLight
 
   .overlay
@@ -52,7 +52,7 @@
     border-bottom-color #ddd
     &.odd
       background-color darken(bglight, 5%)
-    &.active
+    &.active, &:active
       background-color darken(bglight, 5%)
 
   .ranking
@@ -64,11 +64,11 @@
   .antagonistInfos
     .rating
       color textLightBg
-    &.active
+    &.active, &:active
       background-color activeBgLight
 
   .replayMove
-    &.active
+    &.active, &:active
       background-color darken(themeBgLight, 12%)
 
   .clock
@@ -98,7 +98,7 @@
     &.highlight
       background blue
       color #fff
-    &.active
+    &.active, &:active
       background darken(themeBgLight, 8%)
 
   .gameMovesList
@@ -110,7 +110,7 @@
       background-color darken(bglight, 10%)
 
   .profilePerf
-    &.active
+    &.active, &:active
       background darken(bglight, 5%)
     > .rating
       color textDarkGray
@@ -129,11 +129,11 @@
       background-color darken(bglight, 5%)
 
   .rankingPlayer
-    &.active
+    &.active, &:active
       background darken(bglight, 5%)
 
   .followingPlayerAction
-    &.active
+    &.active, &:active
       background darken(bglight, 5%)
 
   .tabIndicator
@@ -148,7 +148,7 @@
   .moreButton
     > button
       background darken(bglight, 5%)
-      &.active
+      &.active, &:active
         background darken(bglight, 2%)
 
   #tournamentPlayerInfoModal

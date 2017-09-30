@@ -4,6 +4,11 @@ interface XNavigator extends Navigator {
   hardwareConcurrency: number
 }
 
+export function send(text: string) {
+  console.info('[stockfish <<]', text)
+  return Stockfish.cmd(text)
+}
+
 export function setOption(name: string, value: string | number | boolean) {
   return Stockfish.cmd(`setoption name ${name} value ${value}`)
 }

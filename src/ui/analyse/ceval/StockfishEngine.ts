@@ -1,10 +1,7 @@
-import * as Signal from 'signals'
-
 import { Tree } from '../../shared/tree/interfaces'
 import { Work, IEngine } from './interfaces'
-import { setOption, setVariant } from '../../../utils/stockfish'
+import { send, setOption, setVariant } from '../../../utils/stockfish'
 
-const output = new Signal()
 const EVAL_REGEX = new RegExp(''
   + /^info depth (\d+) seldepth \d+ multipv (\d+) /.source
   + /score (cp|mate) ([-\d]+) /.source
@@ -15,13 +12,14 @@ const EVAL_REGEX = new RegExp(''
 export default function StockfishEngine(variant: VariantKey): IEngine {
 
   let stopTimeoutId: number
+  let readyPromise: Promise<void> = Promise.resolve()
 
   let curEval: Tree.ClientEval | null = null
   let expectedPvs = 1
 
   // after a 'go' command, stockfish will be continue to emit until the 'bestmove'
   // message, reached by depth or after a 'stop' command
-  // finished here means stockfish has emited the bestmove and is ready for
+  // finished here means stockfish has emited 'bestmove' and is ready for
   // another command
   let finished = true
 
@@ -32,13 +30,86 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
   // eval to complete
   let startQueue: Array<Work> = []
 
-  function processOutput(text: string, work: Work) {
+  /*
+   * Init engine with default options and variant
+   */
+  function init() {
+    return Stockfish.init()
+    .then(() => {
+      return send('uci')
+      .then(() => setOption('Ponder', 'false'))
+      .then(() => setVariant(variant))
+    })
+    .catch(err => console.error('stockfish init error', err))
+  }
+
+  /*
+   * Stop current command if not already stopped, then ddd a search command to
+   * the queue.
+   * The search will start when stockfish is ready (after reinit if it takes more
+   * than 5s to stop current search)
+   */
+  function start(work: Work) {
+    stop()
+    startQueue.push(work)
+
+    clearTimeout(stopTimeoutId)
+    const timeout: PromiseLike<void> = new Promise((_, reject) => {
+      stopTimeoutId = setTimeout(reject, 5 * 1000)
+    })
+
+    Promise.race([readyPromise, timeout])
+    .then(search)
+    .catch(() => {
+      reset().then(search)
+    })
+  }
+
+  /*
+   * Sends 'stop' command to stockfish if not already stopped
+   */
+  function stop() {
+    if (!stopped) {
+      stopped = true
+      send('stop')
+    }
+  }
+
+  /*
+   * Actual search is launched here, according to work opts, using the last work
+   * queued
+   */
+  function search() {
+    const work = startQueue.pop()
+    if (work) {
+      stopped = false
+      finished = false
+      startQueue = []
+
+      readyPromise = new Promise((resolve) => {
+        Stockfish.output((msg: string) => processOutput(msg, work, resolve))
+      })
+
+      return setOption('Threads', work.cores)
+      .then(() => setOption('MultiPV', work.forceOneLine ? 1 : work.multiPv))
+      .then(() => send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' ')))
+      .then(() => send('go depth ' + work.maxDepth))
+    }
+  }
+
+  /*
+   * Stockfish output processing done here
+   * Calls the 'resolve' function of the 'ready' Promise when 'bestmove' uci
+   * command is sent by stockfish
+   */
+  function processOutput(text: string, work: Work, rdyResolve: () => void) {
     if (text.indexOf('bestmove') === 0) {
       console.info('[stockfish >>]', text)
       finished = true
+      rdyResolve()
       work.emit()
     }
-    if (stopped) return
+    if (finished || stopped) return
     // console.log(text)
 
     const matches = text.match(EVAL_REGEX)
@@ -98,93 +169,8 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
     }
   }
 
-  /*
-   * Init engine with default options and variant
-   */
-  function init() {
-    return Stockfish.init()
-    .then(() => {
-      Stockfish.output(output.dispatch)
-      return send('uci')
-      .then(() => setOption('Ponder', 'false'))
-      .then(() => setVariant(variant))
-    })
-    .catch(err => console.error('stockfish init error', err))
-  }
-
-  /*
-   * Sends 'stop' command to stockfish
-   *
-   * Returns a Promise that will be fulfilled when stockfish is ready again
-   * to process another 'go' command.
-   */
-  function stop(): Promise<void> {
-    return new Promise((resolve) => {
-      if (finished) {
-        stopped = true
-        resolve()
-      } else {
-        function listen(msg: string) {
-          if (msg.indexOf('bestmove') === 0) {
-            output.remove(listen)
-            finished = true
-            resolve()
-          }
-        }
-        output.add(listen)
-        if (!stopped) {
-          stopped = true
-          send('stop')
-        }
-      }
-    })
-  }
-
-  /*
-   * Take the last work in queue and clear the queue just after
-   * to ensure we send to stockfish only one position to evaluate at a time
-   */
-  function doStart() {
-    const work = startQueue.pop()
-    if (work) {
-      startQueue = []
-      output.removeAll()
-      output.add((msg: string) => processOutput(msg, work))
-
-      stopped = false
-      finished = false
-
-      return setOption('Threads', work.cores)
-      .then(() => setOption('MultiPV', work.forceOneLine ? 1 : work.multiPv))
-      .then(() => send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' ')))
-      .then(() => send('go depth ' + work.maxDepth))
-    }
-  }
-
-  /*
-   * Add a search command to the queue
-   * The search will start when stockfish is ready (after reinit if it takes more
-   * than 5s to stop current search)
-   */
-  function start(work: Work) {
-    startQueue.push(work)
-
-    const timeout: PromiseLike<void> = new Promise((_, reject) => {
-      stopTimeoutId = setTimeout(reject, 5 * 1000)
-    })
-
-    Promise.race([
-      stop(),
-      timeout
-    ])
-    .then(doStart)
-    .catch(() => {
-      reset().then(doStart)
-    })
-  }
 
   function exit() {
-    output.removeAll()
     return Stockfish.exit()
   }
 
@@ -198,12 +184,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
     stop,
     exit,
     isSearching() {
-      return !finished && !stopped
+      return !finished
     }
   }
-}
-
-function send(text: string) {
-  console.info('[stockfish <<]', text)
-  return Stockfish.cmd(text)
 }

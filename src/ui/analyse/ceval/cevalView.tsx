@@ -67,7 +67,7 @@ function renderCevalPvs(ctrl: AnalyseCtrl) {
   else if (ctrl.gameOver()) {
     return h('div.ceval-pv_box.native_scroller.loading', {
       key: 'ceval-gameover'
-    }, [h('span.fa.fa-info'), i18n('gameOver')])
+    }, [h('span.fa.fa-info-circle'), i18n('gameOver')])
   }
   else {
     return h('div.ceval-pv_box.native_scroller.loading', {

@@ -9,7 +9,10 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
   > div
     width 100%
   .empty
-    text-align: center;
+    flex 1 1 auto
+    display flex
+    justify-content center
+    align-items center
   .spinner_overlay
     position: absolute;
     top: 0;
@@ -108,14 +111,12 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
     text-align: center;
     font-size 0.9em
     font-style: italic;
-    i
-      font-size: 22px;
-      display: inline-block;
-      margin: 10px 0 0;
-      opacity: 0.7;
-    h3
+    > i
+      font-size: 1.5em
+      opacity: 0.7
+    > h3
       font-weight: bold;
-    p
+    > p
       white-space: normal;
       padding: 0 10px;
   &.loading

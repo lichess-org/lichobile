@@ -159,13 +159,13 @@ function showConfig(ctrl: AnalyseCtrl) {
 }
 
 function failing() {
-  return h('div.failing.message', {
+  return h('div.explorer-data.empty', {
     key: 'failing'
-  }, [
+  }, h('div.failing.message', [
     h('i[data-icon=,]'),
     h('h3', 'Oops, sorry!'),
     h('p', 'The explorer is temporarily'),
     h('p', 'out of service. Try again soon!')
-  ])
+  ]))
 }
 

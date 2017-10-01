@@ -1,4 +1,5 @@
 import * as h from 'mithril/hyperscript'
+import i18n from '../../../i18n'
 import * as helper from '../../helper'
 import explorerConfig from './explorerConfig'
 import { Move, isTablebaseData } from './interfaces'
@@ -117,7 +118,6 @@ function showGameEnd(title: string) {
   return h('div.explorer-data.empty', {
     key: 'explorer-game-end' + title
   }, [
-    h('div.title', 'Game over'),
     h('div.message', [
       h('h3', [
         h('i.withIcon[data-icon=]'),

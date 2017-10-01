@@ -119,8 +119,10 @@ function showGameEnd(title: string) {
   }, [
     h('div.title', 'Game over'),
     h('div.message', [
-      h('i[data-icon=]'),
-      h('h3', title)
+      h('h3', [
+        h('i.withIcon[data-icon=]'),
+        title
+      ])
     ])
   ])
 }
@@ -162,8 +164,10 @@ function failing() {
   return h('div.explorer-data.empty', {
     key: 'failing'
   }, h('div.failing.message', [
-    h('i[data-icon=,]'),
-    h('h3', 'Oops, sorry!'),
+    h('h3', [
+      h('i.withIcon[data-icon=,]'),
+      'Oops, sorry!'
+    ]),
     h('p', 'The explorer is temporarily'),
     h('p', 'out of service. Try again soon!')
   ]))

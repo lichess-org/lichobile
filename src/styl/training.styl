@@ -5,16 +5,31 @@
   min-width: 0;
 
 .training-table
+  height initial
   flex 1 1 auto
   display flex
   flex-flow column nowrap
+  font-size 0.9em
 
 .training-explanation
-  padding 1em
+  padding 5px
   flex 1 1 auto
   display flex
-  align-items center
+  flex-flow column nowrap
   justify-content center
+  > .player
+    display flex
+    justify-content center
+    align-items center
+    > .piece-no-square
+      width: 40px
+      height: 40px
+  > .fatButton
+    opacity 0.7
+    width initial
+    margin 5px auto
+    font-size 0.8em
+    padding 0.5em
 
 .training-control
   align-self stretch
@@ -33,22 +48,15 @@
   flex-flow column nowrap
   > strong
     font-size 1.1em
-  > .choices
-    margin-top 1em
-    display flex
-    flex-flow column nowrap
-    align-items flex-start
-    > button
-      padding 0.5em 0
 
 .training-icon
   display: block;
-  width: 64px;
-  height: 64px;
+  width: 40px;
+  height: 40px;
   margin-right: 10px;
   font-size: 50px;
-  font-size: 64px;
-  line-height: 64px;
+  font-size: 40px;
+  line-height: 40px;
   text-align: center;
   &.fail, &.loss
     color red
@@ -127,3 +135,8 @@
   .training-control
     &.continue
       background-color transpWhite03
+
+  .training-explanation
+    > .fatButton
+      opacity 0.6
+      box-shadow none

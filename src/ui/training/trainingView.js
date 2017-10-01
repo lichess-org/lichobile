@@ -66,7 +66,7 @@ function renderContent(ctrl) {
   return h.fragment({ key }, [
     board,
     h('div.training-tableWrapper', [
-      h('div.training-table', [
+      h('div.training-table.native_scroller', [
         ctrl.data.mode === 'view' ? renderResult(ctrl) : renderExplanation(ctrl),
       ]),
       renderActionsBar(ctrl)
@@ -77,20 +77,18 @@ function renderContent(ctrl) {
 function renderExplanation(ctrl) {
   const hasComment = ctrl.data.comment !== undefined
   return h('div.training-explanation', hasComment ? renderCommentary(ctrl) : [
-    h('div.piece-no-square', {
-      className: ctrl.pieceTheme
-    }, h('piece.king.' + ctrl.data.puzzle.color)),
-    h('div.training-instruction', [
-      h('strong',i18n(ctrl.chessground.state.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')),
-      h('p',i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')),
-      h('div.choices', [
-        ctrl.data.mode === 'view' ?
-          null :
-          h('button', {
-            oncreate: helper.ontap(ctrl.giveUp, () => window.plugins.toast.show(i18n('giveUp'), 'short', 'bottom'))
-          }, i18n('viewTheSolution'))
-      ])
-    ])
+    h('div.player', [
+      h('div.piece-no-square', {
+        className: ctrl.pieceTheme
+      }, h('piece.king.' + ctrl.data.puzzle.color)),
+      h('div.training-instruction', [
+        h('strong',i18n(ctrl.chessground.state.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')),
+        h('p',i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')),
+      ]),
+    ]),
+    ctrl.data.mode === 'view' ?
+      null :
+      h('button.fatButton', { oncreate: helper.ontap(ctrl.giveUp) }, i18n('resign'))
   ])
 }
 

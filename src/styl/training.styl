@@ -1,33 +1,55 @@
-.trainingSection
-  height "calc((100% - 100vw - %s) / 2)" % footerHeight
-  padding 0 10px
-  display flex
-  justify-content space-between
-  align-items center
-  font-size 0.9rem
-  overflow hidden
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4)
-    height "calc((100% - 98vw - %s) / 2)" % footerHeight
-  @media only screen and (orientation: landscape)
-    padding 0
-    flex 1 0 auto
-    height initial
-    margin-bottom 10px
-  > .puzzle
-    padding 5px 0
-    &:before
-      font-size 1.2em
+.training-tableWrapper
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  min-width: 0;
 
-.table
-  > .trainingTable
-    padding 0 10px
-    flex 1 1 auto
+.training-table
+  flex 1 1 auto
+  display flex
+  flex-flow column nowrap
+
+.training-explanation
+  padding 1em
+  flex 1 1 auto
+  display flex
+  align-items center
+  justify-content center
+
+.training-control
+  align-self stretch
+  width 50%
+  font-size: 1.2em;
+  color: #fff;
+  display flex
+  justify-content center
+  align-items center
+  padding 0 1em
+  &.continue
+    background: rgba(56,147,232,0.8);
+
+.training-instruction
+  display flex
+  flex-flow column nowrap
+  > strong
+    font-size 1.1em
+  > .choices
+    margin-top 1em
     display flex
     flex-flow column nowrap
-    justify-content space-between
+    align-items flex-start
+    > button
+      padding 0.5em 0
 
-.puzzleComment
-  text-align center
+.training-icon
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin-right: 10px;
+  font-size: 50px;
+  font-size: 64px;
+  line-height: 64px;
+  text-align: center;
   &.fail, &.loss
     color red
   &.great, &.win
@@ -36,6 +58,13 @@
 .puzzleRatingDiff
   margin-left 10px
   font-size 1.5em
+
+.training-half
+  width 100%
+  flex 1 1 50%
+  display flex
+  justify-content center
+  align-items center
 
 .trainingPlayer
   .player
@@ -86,3 +115,15 @@
     stroke blue
   .legend
     fill blue
+
+
+.view-container.light
+  .training-control
+    &.retry
+      color textLightBg
+
+
+.view-container.transp
+  .training-control
+    &.continue
+      background-color transpWhite03

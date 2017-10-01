@@ -57,10 +57,18 @@
 
   .tab-button
     color rgba(textTransp, 0.9)
+    &.selected
+      color gold
 
-  .main_header_button.active, .action_bar_button.active, .antagonistInfos.active,
-  .back_button > button.active, .tab-button:active, .tab-button.active, .profilePerf.active,
-  move.active, .rankingPlayer.active, .button.active, .followingPlayerAction.active
+  .main_header_button.active, .main_header_button:active,
+  .action_bar_button.active, .action_bar_button:active,
+  .antagonistInfos.active, .antagonistInfos:active,
+  .back_button > button.active, .back_button > button:active,
+  .tab-button.active, .tab-button:active,
+  .profilePerf.active, .profilePerf:active,
+  .rankingPlayer.active, .rankingPlayer:active,
+  .button.active, .button:active,
+  .followingPlayerAction.active, .followingPlayerAction:active
     background-color transpWhite01
 
   .action_bar_button

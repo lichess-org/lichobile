@@ -158,7 +158,7 @@ move
   padding: 0.25em 0.17em
   overflow hidden
   white-space nowrap
-  &.current, &.active
+  &.current, &.active, &:active
     border-radius 3px
   &.current
     color #fff
@@ -301,6 +301,8 @@ comment
 
   move
     color inherit
+    &.active, &:active
+      background darken(bglight, 10%)
     &.current
       background blue
       color #fff
@@ -309,9 +311,6 @@ comment
 
   line > move
     color rgba(textLightBg, 0.7)
-
-  move.active
-    background darken(bglight, 10%)
 
   .analyse-openingBox
     background darken(bglight, 5%)
@@ -343,6 +342,8 @@ comment
 
   move
     color textTransp
+    &.active, &:active
+      background-color transpWhite01
 
   line > move
     color rgba(textTransp, 0.7)

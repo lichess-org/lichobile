@@ -13,13 +13,30 @@ interface Attrs {
   noIndicator?: boolean
 }
 
+interface State {
+  onTap: (e: TouchEvent) => void
+}
+
+interface TabDataSet extends DOMStringMap {
+  index: string
+}
+
 export default {
+  oninit({ attrs }) {
+    this.onTap = (e: TouchEvent) => {
+      const el = helper.getButton(e)
+      let i
+      if (el && (i = (el.dataset as TabDataSet).index)) {
+        attrs.onTabChange(Number(i))
+      }
+    }
+  },
+
   view(vnode) {
 
     const {
       buttons,
       selectedIndex,
-      onTabChange,
       noIndicator
     } = vnode.attrs
 
@@ -41,16 +58,17 @@ export default {
         selectedIndex === i ? 'selected' : '',
         b.className
       ].join(' ')
-      const oncreate = helper.ontap(() => onTabChange(i))
       return (
-        <button className={className} oncreate={oncreate} style={buttonStyle}>
+        <button data-index={i} className={className} style={buttonStyle}>
           {b.label}
         </button>
       )
     }
 
     return (
-      <div className="tabs-navigation">
+      <div className="tabs-navigation"
+        oncreate={helper.ontap(this.onTap)}
+      >
         { buttons.map(renderTab) }
         { noIndicator ? null :
           <div className="tabIndicator" style={indicatorStyle} />
@@ -58,4 +76,4 @@ export default {
       </div>
     )
   }
-} as Mithril.Component<Attrs, {}>
+} as Mithril.Component<Attrs, State>

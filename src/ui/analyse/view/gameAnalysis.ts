@@ -30,7 +30,7 @@ function renderAnalysis(ctrl: AnalyseCtrl, vd: helper.ViewportDim, isPortrait: b
   }, [
     h('strong.title', i18n('computerAnalysis')),
     ctrl.analysisProgress ?
-    h('div.analyse-gameAnalysis_chartPlaceholder', spinner.getVdom()) :
+    h('div.analyse-gameAnalysis_chartPlaceholder', spinner.getVdom('monochrome')) :
     h('svg#acpl-chart.analyse-chart', {
       key: 'chart',
       width: isPortrait ? vd.vw : vd.vw - vd.vh + helper.headerHeight,
@@ -91,7 +91,7 @@ function renderAnalysisRequest(ctrl: AnalyseCtrl) {
   }, [
     ctrl.analysisProgress ? h('div.analyse-requestProgress', [
       h('span', 'Analysis in progress'),
-      spinner.getVdom()
+      spinner.getVdom('monochrome')
     ]) : h('button.fatButton', {
       oncreate: helper.ontapXY(() => {
         return requestComputerAnalysis(ctrl.data.game.id)

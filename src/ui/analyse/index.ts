@@ -150,7 +150,7 @@ export default {
         loadingBackbutton,
         () => [
           viewOnlyBoard(vnode.attrs.color || 'white', bounds, isSmall, vnode.attrs.curFen || emptyFen),
-          h('div.analyse-tableWrapper', spinner.getVdom())
+          h('div.analyse-tableWrapper', spinner.getVdom('monochrome'))
         ]
       )
     }

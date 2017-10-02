@@ -46,6 +46,7 @@ export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedi
     clockInc(o: { color: Color, time: number }) {
       if (ctrl.clock) {
         ctrl.clock.addTime(o.color, o.time)
+        redraw()
       }
     },
     cclock(o: { white: number, black: number }) {

@@ -66,9 +66,9 @@ function renderContent(ctrl) {
   return h.fragment({ key }, [
     board,
     h('div.training-tableWrapper', [
-      h('div.training-table.native_scroller', [
+      h('div.training-table.native_scroller',
         ctrl.data.mode === 'view' ? renderResult(ctrl) : renderExplanation(ctrl),
-      ]),
+      ),
       renderActionsBar(ctrl)
     ])
   ])
@@ -137,7 +137,7 @@ function renderCommentary(ctrl) {
   switch (ctrl.data.comment) {
     case 'retry':
       return [
-        h('div.training-icon.loss', '!'),
+        h('div.training-icon', '!'),
         h('div.training-instruction', [
           h('strong', i18n('goodMove')),
           h('span', i18n('butYouCanDoBetter'))
@@ -151,13 +151,17 @@ function renderCommentary(ctrl) {
           h('span', i18n('keepGoing'))
         ])
       ]
-    // case 'fail':
-    //   return h('div.puzzleComment.fail', [
-    //     h('h3.puzzleState.withIcon[data-icon=k]', h('strong', i18n('puzzleFailed'))),
-    //     ctrl.data.mode === 'try' ? h('span', i18n('butYouCanKeepTrying')) : null
-    //   ])
-    // default:
-    //   return ctrl.data.comment
+    case 'fail':
+      return [
+        h('div.training-half', [
+          h('div.training-icon.loss', '✗'),
+          h('div.training-instruction', [
+            h('strong', i18n('puzzleFailed')),
+            ctrl.data.mode === 'try' ? h('span', i18n('butYouCanKeepTrying')) : null
+          ])
+        ]),
+        h('div.training-half')
+      ]
   }
 }
 

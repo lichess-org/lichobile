@@ -9,13 +9,17 @@ const emptyTd = <td className="move">...</td>
 let pieceNotation: boolean
 
 function renderTd(step: GameStep | null, curPly: number, orEmpty: boolean) {
-  return step ? (
+  if (!step || !step.san) return (orEmpty ? emptyTd : null)
+
+  const san = step.san[0] === 'P' ? step.san.slice(1) : step.san.replace('x', 'х')
+
+  return (
     <td className={'replayMove' + (step.ply === curPly ? ' current' : '')}
       data-ply={step.ply}
     >
-      {step.san}
+      {san}
     </td>
-  ) : (orEmpty ? emptyTd : null)
+  )
 }
 
 function renderTr(index: number, pairs: StepPair[], curPly: number) {

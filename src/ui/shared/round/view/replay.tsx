@@ -11,7 +11,7 @@ let pieceNotation: boolean
 function renderTd(step: GameStep | null, curPly: number, orEmpty: boolean) {
   if (!step || !step.san) return (orEmpty ? emptyTd : null)
 
-  const san = step.san[0] === 'P' ? step.san.slice(1) : step.san.replace('x', 'х')
+  const san = step.san[0] === 'P' ? step.san.slice(1) : step.san
 
   return (
     <td className={'replayMove' + (step.ply === curPly ? ' current' : '')}

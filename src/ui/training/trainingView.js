@@ -23,13 +23,12 @@ export default function view(vnode) {
       () => router.set(`/game/${ctrl.data.puzzle.gameId}/${ctrl.data.puzzle.color}`),
       () => window.plugins.toast.show(i18n('fromGameLink', ctrl.data.puzzle.gameId), 'short', 'bottom')
     ) : () => {}
-    header = () => renderHeader(h('div.main_header_title.withSub', [
-      h('h1', i18n('training')),
-      h('h2.header-subTitle', {
-        oncreate: viewGame
-      }, [
-        '#', ctrl.data.puzzle.id,
-        ' • ', 'Rating: ', ctrl.data.mode === 'view' ? ctrl.data.puzzle.rating : '?',
+    header = () => renderHeader(h('div.main_header_title.withSub', {
+      oncreate: viewGame
+    }, [
+      h('h1', i18n('puzzleId', ctrl.data.puzzle.id)),
+      h('h2.header-subTitle', [
+        i18n('rating'), ' ' + (ctrl.data.mode === 'view' ? ctrl.data.puzzle.rating : '?'),
         ' • ', i18n('playedXTimes', ctrl.data.puzzle.attempts)
       ])
     ]))

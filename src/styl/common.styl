@@ -22,7 +22,7 @@ button, .li-button
   user-select none
   background-color transparent
   transition opacity 50ms
-  &:active
+  &.active
     opacity 0.8
   &.disabled
     opacity 1
@@ -116,11 +116,11 @@ span.fa
     border-bottom none
   &.odd
     background-color lighten(bgdark, 2%)
-  &.active, &:active
+  &.active
     background lighten(bgdark, 5%)
   &.bglight
     border-bottom-color darken(bglight, 15%)
-    &.active, &:active
+    &.active
       background-color darken(bglight, 5%)
 
 .list_item.odd, .list_item.even
@@ -187,7 +187,7 @@ span.fa
   color #8a8a8a
   font-weight bold
   border-radius 2px
-  &.active, &:active
+  &.active
     background linear-gradient(to bottom,rgba(44,44,44,1),rgba(40,40,40,1) 100%);
 
 .globalSpinner
@@ -284,7 +284,7 @@ span.fa
     text-align center
     padding 10px 0
     background lighten(bgdark, 5%)
-    &.active, &:active
+    &.active
       background lighten(bgdark, 10%)
 
 
@@ -312,7 +312,7 @@ span.fa
     border-right none
   &.disabled, &:disabled
     opacity 0.5
-  &.active, &:active
+  &.active
     background darkBlue
     color #ccc
   &.empty::before

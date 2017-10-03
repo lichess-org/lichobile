@@ -158,7 +158,7 @@ move
   padding: 0.25em 0.17em
   overflow hidden
   white-space nowrap
-  &.current, &.active, &:active
+  &.current, &.active
     border-radius 3px
   &.current
     color #fff
@@ -166,7 +166,7 @@ move
     font-weight normal
     > index
       color #fff
-  &.active, &:active
+  &.active
       background lighten(bgdark, 10%)
 
 glyph
@@ -301,7 +301,7 @@ comment
 
   move
     color inherit
-    &.active, &:active
+    &.active
       background darken(bglight, 10%)
     &.current
       background blue
@@ -342,7 +342,7 @@ comment
 
   move
     color textTransp
-    &.active, &:active
+    &.active
       background-color transpWhite01
 
   line > move

@@ -20,8 +20,7 @@ export default function view(vnode) {
   }
   else {
     const viewGame = ctrl.data.puzzle.gameId ? helper.ontap(
-      () => router.set(`/game/${ctrl.data.puzzle.gameId}/${ctrl.data.puzzle.color}`),
-      () => window.plugins.toast.show(i18n('fromGameLink', ctrl.data.puzzle.gameId), 'short', 'bottom')
+      () => router.set(`/game/${ctrl.data.puzzle.gameId}/${ctrl.data.puzzle.color}`)
     ) : () => {}
     header = () => renderHeader(h('div.main_header_title.withSub', {
       oncreate: viewGame

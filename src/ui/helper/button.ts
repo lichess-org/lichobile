@@ -64,6 +64,8 @@ export default function ButtonHandler(
     }
     active = true
     clearTimeout(activeTimeoutId)
+    // for ios: need to set it bc/ :active doesn't reset when moving away
+    activeElement.classList.add(ACTIVE_CLASS)
     holdTimeoutID = setTimeout(() => onHold(e), HOLD_DURATION)
     if (repeatHandler) repeatTimeoutId = setTimeout(() => {
       batchRequestAnimationFrame(onRepeat)
@@ -79,6 +81,7 @@ export default function ButtonHandler(
         clearTimeout(holdTimeoutID)
         clearTimeout(repeatTimeoutId)
         removeFromBatchAnimationFrame(onRepeat)
+        activeElement.classList.remove(ACTIVE_CLASS)
       }
     }
   }
@@ -89,8 +92,7 @@ export default function ButtonHandler(
     removeFromBatchAnimationFrame(onRepeat)
     if (active && activeElement) {
       clearTimeout(holdTimeoutID)
-      activeElement.classList.add(ACTIVE_CLASS)
-      activeTimeoutId = setTimeout(() => activeElement && activeElement.classList.remove(ACTIVE_CLASS), 100)
+      activeTimeoutId = setTimeout(() => activeElement && activeElement.classList.remove(ACTIVE_CLASS), 80)
       tapHandler(e)
       active = false
     }
@@ -101,6 +103,9 @@ export default function ButtonHandler(
     clearTimeout(repeatTimeoutId)
     removeFromBatchAnimationFrame(onRepeat)
     active = false
+    if (activeElement) {
+      activeElement.classList.remove(ACTIVE_CLASS)
+    }
   }
 
   function onContextMenu(e: TouchEvent) {
@@ -115,6 +120,9 @@ export default function ButtonHandler(
     if (holdHandler) {
       holdHandler(e)
       active = false
+      if (activeElement) {
+        activeElement.classList.remove(ACTIVE_CLASS)
+      }
     }
   }
 

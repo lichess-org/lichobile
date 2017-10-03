@@ -144,8 +144,10 @@ export default function ButtonHandler(
     )
   }
 
-  el.addEventListener('touchstart', onTouchStart, false)
-  el.addEventListener('touchmove', onTouchMove, false)
+  const passiveConf: any = { passive: true }
+
+  el.addEventListener('touchstart', onTouchStart, passiveConf)
+  el.addEventListener('touchmove', onTouchMove, passiveConf)
   el.addEventListener('touchend', onTouchEnd, false)
   el.addEventListener('touchcancel', onTouchCancel, false)
   el.addEventListener('contextmenu', onContextMenu, false)

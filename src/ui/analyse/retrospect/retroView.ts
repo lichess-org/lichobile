@@ -32,7 +32,7 @@ function skipOrViewSolution(ctrl: IRetroCtrl) {
 }
 
 function jumpToNext(ctrl: IRetroCtrl) {
-  return h('button.retro-half.retro-continue', {
+  return h('div.li-button.retro-half.retro-continue', {
     oncreate: helper.ontap(ctrl.jumpToNext)
   }, [
     h('i[data-icon=G]'),

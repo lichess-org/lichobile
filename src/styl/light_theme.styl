@@ -1,3 +1,5 @@
+bglightOdd = darken(themeBgLight, 5%)
+
 .view-container.light
   main
     color textLightBg
@@ -43,9 +45,9 @@
   .list_item
     border-bottom-color #ddd
     &.odd
-      background-color darken(bglight, 5%)
+      background-color bglightOdd
     &.active
-      background-color darken(bglight, 5%)
+      background-color themeBgLightActive
 
   .ranking
     border-bottom-color borderLightGray
@@ -91,7 +93,7 @@
       background blue
       color #fff
     &.active
-      background darken(themeBgLight, 8%)
+      background-color themeBgLightActive
 
   .gameMovesList
     background darken(themeBgLight, 4%)
@@ -103,7 +105,7 @@
 
   .profilePerf
     &.active
-      background darken(bglight, 5%)
+      background themeBgLightActive
     > .rating
       color textDarkGray
       > .nb
@@ -115,18 +117,18 @@
     margin-top -1px
 
   .userGame
-    background-color bglight
+    background-color themeBgLight
     color textLightBg
     &.odd
-      background-color darken(bglight, 5%)
+      background-color bglightOdd
 
   .rankingPlayer
     &.active
-      background darken(bglight, 5%)
+      background themeBgLightActive
 
   .followingPlayerAction
     &.active
-      background darken(bglight, 5%)
+      background themeBgLightActive
 
   .tabIndicator
     height 3px
@@ -139,9 +141,7 @@
 
   .moreButton
     > button
-      background darken(bglight, 5%)
-      &.active
-        background darken(bglight, 2%)
+      background themeBgLightActive
 
   #tournamentPlayerInfoModal
     > header

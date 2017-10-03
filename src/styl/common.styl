@@ -284,9 +284,6 @@ span.fa
     text-align center
     padding 10px 0
     background lighten(bgdark, 5%)
-    &.active
-      background lighten(bgdark, 10%)
-
 
 .actions_bar
   display flex
@@ -328,6 +325,10 @@ span.fa
     &:before
       font-size 16px
 
+.action_create_button
+  flex 1 1 25%
+  text-align right
+
 signal
   display: inline-block;
   height: 1.5em;
@@ -367,7 +368,6 @@ signal > i.off
     height 100%
 
 .window-button
-  display flex
   font-size 1.1em
   .fa
     margin-right 0

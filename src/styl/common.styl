@@ -15,12 +15,15 @@ body
 .allow_select
   user-select text
 
-button
+button, .li-button
   border none
   outline none
   -webkit-tap-highlight-color rgba(0,0,0,0)
   user-select none
   background-color transparent
+  transition opacity 50ms
+  &:active
+    opacity 0.8
   &.disabled
     opacity 1
     &::before
@@ -88,10 +91,6 @@ span.fa
   position relative
   top 50%
   transform translateY(-50%)
-
-.button
-  &.active, &:active
-    background lighten(bgdark, 5%)
 
 /* lists */
 .items_list_block

@@ -123,10 +123,10 @@ function renderActionsBar(ctrl) {
 
 function renderViewControls(ctrl) {
   return [
-    h('button.training-control.retry', {
+    h('div.li-button.training-control.retry', {
       oncreate: helper.ontap(ctrl.retry)
     }, [h('span.fa.fa-refresh'), i18n('retryThisPuzzle')]),
-    h('button.training-control.continue', {
+    h('div.li-button.training-control.continue', {
       oncreate: helper.ontap(ctrl.newPuzzle.bind(ctrl, true))
     }, [h('span.fa.fa-play'), i18n('continueTraining')])
   ]

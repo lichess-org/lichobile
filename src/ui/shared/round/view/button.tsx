@@ -2,6 +2,7 @@ import * as h from 'mithril/hyperscript'
 import * as throttle from 'lodash/throttle'
 import { handleXhrError, hasNetwork } from '../../../../utils'
 import * as gameApi from '../../../../lichess/game'
+import session from '../../../../session'
 import router from '../../../../router'
 import gameStatus from '../../../../lichess/status'
 import { OnlineGameData } from '../../../../lichess/interfaces/game'
@@ -22,6 +23,13 @@ export default {
       'data-icon': icon,
       oncreate: helper.ontap(onTap ? onTap : () => { socket.send(socketMsg) })
     }, i18n(hint)) : null
+  },
+  bookmark: function(ctrl: OnlineRound) {
+    return session.isConnected() ? h('button', {
+      key: 'shareGameLink',
+      oncreate: helper.ontap(ctrl.toggleBookmark),
+      'data-icon': ctrl.data.bookmarked ? 't' : 's'
+    }, [i18n('bookmarkThisGame')]) : null
   },
   shareLink: function(ctrl: OnlineRound) {
     return h('button', {

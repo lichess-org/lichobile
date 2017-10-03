@@ -3,7 +3,6 @@ import * as range from 'lodash/range'
 import redraw from '../../../../utils/redraw'
 import socket from '../../../../socket'
 import session from '../../../../session'
-import variantApi from '../../../../lichess/variant'
 import * as playerApi from '../../../../lichess/player'
 import * as gameApi from '../../../../lichess/game'
 import * as perfApi from '../../../../lichess/perfs'
@@ -315,6 +314,7 @@ function tvChannelSelector(ctrl: OnlineRound) {
 function renderGameRunningActions(ctrl: OnlineRound) {
   if (ctrl.data.player.spectator) {
     let controls = [
+      gameButton.bookmark(ctrl),
       gameButton.shareLink(ctrl),
       ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
       ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null
@@ -366,6 +366,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
     if (ctrl.data.player.spectator) {
       buttons = [
         gameButton.returnToTournament(ctrl),
+        gameButton.bookmark(ctrl),
         gameButton.shareLink(ctrl),
         gameButton.sharePGN(ctrl),
         gameButton.analysisBoard(ctrl)
@@ -375,6 +376,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
       buttons = [
         gameButton.returnToTournament(ctrl),
         gameButton.withdrawFromTournament(ctrl, tournamentId),
+        gameButton.bookmark(ctrl),
         gameButton.shareLink(ctrl),
         gameButton.sharePGN(ctrl),
         gameButton.analysisBoard(ctrl)
@@ -384,6 +386,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
   else {
     if (ctrl.data.player.spectator) {
       buttons = [
+        gameButton.bookmark(ctrl),
         gameButton.shareLink(ctrl),
         ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
         ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
@@ -393,6 +396,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
     }
     else {
       buttons = [
+        gameButton.bookmark(ctrl),
         gameButton.shareLink(ctrl),
         gameButton.sharePGN(ctrl),
         gameButton.newOpponent(ctrl),
@@ -405,49 +409,34 @@ function renderGameEndedActions(ctrl: OnlineRound) {
   }
   return (
     <div className="game_controls">
-      <div className="result">{resultDom}</div>
       <div className="control buttons">{buttons}</div>
     </div>
   )
 }
 
-function gameInfos(ctrl: OnlineRound) {
-  const data = ctrl.data
-  const time = gameApi.time(data)
-  const mode = data.game.rated ? i18n('rated') : i18n('casual')
-  const icon = utils.gameIcon(data.game.perf)
-  const withLink = !['standard', 'fromPosition'].includes(data.game.variant.key)
-  const perf = h('span.perf', {
-    className: withLink ? 'withLink' : '',
-    oncreate: helper.ontap(
-      () => {
-        if (withLink) {
-          const link = variantApi(data.game.variant.key).link
-          if (link) window.open(link, '_blank')
-        }
-      }
-    )
-  }, perfApi.perfTitle(data.game.perf))
-  const infos = [time + ' • ', perf, h('br'), mode]
-  return [
-    h('div.icon-game', {
-      'data-icon': icon ? icon : ''
-    }),
-    h('div.game-title.no_select', infos),
-    session.isConnected() ? h('button.star', {
-      oncreate: helper.ontap(
-        ctrl.toggleBookmark,
-        () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'center')
-      ),
-      'data-icon': data.bookmarked ? 't' : 's'
-    }) : null
-  ]
-}
-
 function renderGamePopup(ctrl: OnlineRound) {
   return popupWidget(
     'player_controls',
-    () => gameInfos(ctrl),
+    () => {
+      if (ctrl.data.tv || ctrl.data.userTV) {
+        return [
+          h('span.withIcon', {
+            'data-icon': utils.gameIcon(ctrl.data.game.perf)
+          }),
+          gameApi.title(ctrl.data)
+        ]
+      }
+      else if (!gameApi.playable(ctrl.data)) {
+        const result = gameApi.result(ctrl.data)
+        const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner)
+        const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
+          (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
+        return gameStatusApi.aborted(ctrl.data) ? [] : [
+          h('strong', result), h('br')
+        ].concat([h('em.resultStatus', status)])
+      }
+      else return null
+    },
     gameApi.playable(ctrl.data) ?
       () => renderGameRunningActions(ctrl) : () => renderGameEndedActions(ctrl),
     ctrl.vm.showingActions,

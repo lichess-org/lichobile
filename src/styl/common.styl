@@ -15,6 +15,17 @@ body
 .allow_select
   user-select text
 
+.withLink
+  text-decoration underline
+  &:after
+    content: "\f08e"
+    margin-left 5px
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+
 button, .li-button
   border none
   outline none

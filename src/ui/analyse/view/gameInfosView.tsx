@@ -14,7 +14,7 @@ export default function renderGameInfos(ctrl: AnalyseCtrl) {
 
   return (
     <div className="analyse-gameInfos native_scroller">
-      <div className="analyseOpponent"
+      <div className="analyseOpponent li-button"
         oncreate={helper.ontapXY(() => player.user && router.set(`/@/${player.user.id}/`))}
       >
         <div className="analysePlayerName">
@@ -24,7 +24,7 @@ export default function renderGameInfos(ctrl: AnalyseCtrl) {
           {player.berserk ? <span data-icon="`" /> : null }
         </div>
       </div>
-      <div className="analyseOpponent"
+      <div className="analyseOpponent li-button"
         oncreate={helper.ontapXY(() => opponent.user && router.set(`/@/${opponent.user.id}/`))}
       >
         <div className="analysePlayerName">
@@ -42,7 +42,7 @@ export default function renderGameInfos(ctrl: AnalyseCtrl) {
       </div>
       {gameStatusApi.finished(ctrl.data) ? renderStatus(ctrl) : null}
       { ctrl.data.tournament ?
-        <div className="analyse-tournamentInfo"
+        <div className="analyse-tournamentInfo li-button"
           oncreate={helper.ontapXY(() => ctrl.data.tournament && router.set(`/tournament/${ctrl.data.tournament.id}`))}
         >
           <span className="fa fa-trophy" />

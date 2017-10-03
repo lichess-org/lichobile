@@ -131,7 +131,6 @@ export function backdropOpacity(el: HTMLElement, opacity: number) {
   el.style.opacity = `${opacity}`
 }
 
-export const backdropCloseHandler = ontap((e: Event) => {
-  e.preventDefault()
+export const backdropCloseHandler = ontap(() => {
   close()
 })

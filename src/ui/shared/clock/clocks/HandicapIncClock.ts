@@ -7,6 +7,7 @@ const CLOCK_TICK_STEP = 100
 
 export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement: number, blackTimeParam: number, blackIncrement: number): IChessClock {
   let state: IChessHandicapIncClockState = {
+    clockType: 'handicapInc',
     whiteTime: (whiteTimeParam !== 0) ? whiteTimeParam : whiteIncrement,
     blackTime: (blackTimeParam !== 0) ? blackTimeParam : blackIncrement,
     whiteIncrement: whiteIncrement,

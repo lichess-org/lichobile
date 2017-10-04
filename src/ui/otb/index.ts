@@ -37,6 +37,7 @@ const OtbScreen: Mithril.Component<Attrs, State> = {
   oncreate: helper.viewFadeIn,
   onremove() {
     window.plugins.insomnia.allowSleepAgain()
+    this.round.save()
   },
   view() {
     let content: () => Mithril.Children, header: () => Mithril.Children

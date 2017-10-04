@@ -8,6 +8,7 @@ const MINUTE_MILLIS = 60 * 1000
 
 export default function StageClock(stages: Stage[], increment: number): IStageClock {
   let state: IChessStageClockState = {
+    clockType: 'stage',
     whiteTime: Number(stages[0].time) * MINUTE_MILLIS,
     blackTime: Number(stages[0].time) * MINUTE_MILLIS,
     whiteMoves: Number(stages[0].moves),

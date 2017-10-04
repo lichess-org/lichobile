@@ -7,6 +7,7 @@ const CLOCK_TICK_STEP = 100
 
 export default function HourglassClock(time: number): IChessClock {
   let state: IChessBasicClockState = {
+    clockType: 'hourglass',
     whiteTime: time/2,
     blackTime: time/2,
     activeSide: undefined,

@@ -102,8 +102,18 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
       this.replay.init(variant, initialFen, situations, ply)
     }
 
-    const clockType = settings.otb.clock.clockType() as ClockType
-    this.clock = clockSet[clockType]()
+    if (data.offlineClock) {
+      const clockType = data.offlineClock.clockType as ClockType
+      this.clock = clockSet[clockType]()
+      this.clock.setState(data.offlineClock)    
+    }
+    else {
+      const clockType = settings.otb.clock.clockType() as ClockType
+      this.clock = clockSet[clockType]()
+    }
+    
+    if (this.clock)
+      data.offlineClock = this.clock.getState()
 
     if (!this.chessground) {
       this.chessground = ground.make(this.data, this.replay.situation(), this.userMove, this.onUserNewPiece, this.onMove, this.onNewPiece)

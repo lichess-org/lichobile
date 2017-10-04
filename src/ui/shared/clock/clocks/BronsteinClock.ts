@@ -7,6 +7,7 @@ const CLOCK_TICK_STEP = 100
 
 export default function BronsteinClock(time: number, increment: number): IChessClock {
   let state: IChessDelayClockState = {
+    clockType: 'bronstein',
     whiteTime: (time !== 0) ? time : increment,
     blackTime: (time !== 0) ? time : increment,
     whiteDelay: increment,

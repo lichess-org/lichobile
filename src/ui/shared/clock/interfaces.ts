@@ -25,6 +25,7 @@ export interface IStageClock extends IChessClock {
 }
 
 export interface IChessBasicClockState {
+  clockType: ClockType
   whiteTime: number
   blackTime: number
   activeSide: Side | undefined

@@ -80,7 +80,7 @@ export default function BronsteinClock(time: number, increment: number): IChessC
     redraw()
   }
 
-  function startSwhite () {
+  function startStop () {
     if (state.isRunning) {
       state.isRunning = false
       clearInterval(clockInterval)
@@ -134,7 +134,7 @@ export default function BronsteinClock(time: number, increment: number): IChessC
     flagged,
     isRunning,
     clockHit,
-    startSwhite,
+    startStop,
     whiteTime,
     blackTime,
     clear() {

@@ -230,6 +230,8 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   }
 
   public onGameEnd = () => {
+    if(this.clock.isRunning())
+      this.clock.startStop()
     this.chessground.stop()
     setTimeout(() => {
       this.actions.open()

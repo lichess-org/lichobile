@@ -70,7 +70,7 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
     redraw()
   }
 
-  function startSwhite () {
+  function startStop () {
     if (isRunning()) {
       state.isRunning = false
       clearInterval(clockInterval)
@@ -124,7 +124,7 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
     flagged,
     isRunning,
     clockHit,
-    startSwhite,
+    startStop,
     whiteTime,
     blackTime,
     clear() {

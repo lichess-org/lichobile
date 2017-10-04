@@ -67,7 +67,7 @@ export default function HourglassClock(time: number): IChessClock {
     redraw()
   }
 
-  function startSwhite () {
+  function startStop () {
     if (isRunning()) {
       state.isRunning = false
       clearInterval(clockInterval)
@@ -121,7 +121,7 @@ export default function HourglassClock(time: number): IChessClock {
     flagged,
     isRunning,
     clockHit,
-    startSwhite,
+    startStop,
     whiteTime,
     blackTime,
     clear() {

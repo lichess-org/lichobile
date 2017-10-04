@@ -101,7 +101,7 @@ export default function StageClock(stages: Stage[], increment: number): IStageCl
     redraw()
   }
 
-  function startSwhite () {
+  function startStop () {
     if (state.isRunning) {
       state.isRunning = false
       clearInterval(clockInterval)
@@ -163,7 +163,7 @@ export default function StageClock(stages: Stage[], increment: number): IStageCl
     flagged,
     isRunning,
     clockHit,
-    startSwhite,
+    startStop,
     whiteTime,
     blackTime,
     whiteMoves,

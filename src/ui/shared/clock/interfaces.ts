@@ -13,7 +13,7 @@ export interface IChessClock {
   flagged(): Side | undefined
   isRunning(): boolean
   clockHit(side: Side): void
-  startSwhite(): void
+  startStop(): void
   clear(): void
 }
 

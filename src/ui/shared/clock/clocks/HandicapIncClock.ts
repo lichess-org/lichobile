@@ -5,39 +5,39 @@ import { ClockType, Side, IChessClock, IChessHandicapIncClockState } from '../in
 
 const CLOCK_TICK_STEP = 100
 
-export default function HandicapIncClock(topTimeParam: number, topIncrement: number, bottomTimeParam: number, bottomIncrement: number): IChessClock {
+export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement: number, blackTimeParam: number, blackIncrement: number): IChessClock {
   let state: IChessHandicapIncClockState = {
-    topTime: (topTimeParam !== 0) ? topTimeParam : topIncrement,
-    bottomTime: (bottomTimeParam !== 0) ? bottomTimeParam : bottomIncrement,
-    topIncrement: topIncrement,
-    bottomIncrement: bottomIncrement,
+    whiteTime: (whiteTimeParam !== 0) ? whiteTimeParam : whiteIncrement,
+    blackTime: (blackTimeParam !== 0) ? blackTimeParam : blackIncrement,
+    whiteIncrement: whiteIncrement,
+    blackIncrement: blackIncrement,
     activeSide: undefined,
     flagged: undefined,
     isRunning: false
   }
   
   let clockInterval: number
-  let topTimestamp: number
-  let bottomTimestamp: number
+  let whiteTimestamp: number
+  let blackTimestamp: number
 
   function tick () {
     const now = performance.now()
-    if (activeSide() === 'top') {
-      const elapsed = now - topTimestamp
-      topTimestamp = now
-      state.topTime = Math.max(state.topTime - elapsed, 0)
-      if (topTime() <= 0) {
-        state.flagged = 'top'
+    if (activeSide() === 'white') {
+      const elapsed = now - whiteTimestamp
+      whiteTimestamp = now
+      state.whiteTime = Math.max(state.whiteTime - elapsed, 0)
+      if (whiteTime() <= 0) {
+        state.flagged = 'white'
         sound.dong()
         clearInterval(clockInterval)
       }
     }
-    else if (activeSide() === 'bottom') {
-      const elapsed = now - bottomTimestamp
-      bottomTimestamp = now
-      state.bottomTime = Math.max(state.bottomTime - elapsed, 0)
-      if (bottomTime() <= 0) {
-        state.flagged = 'bottom'
+    else if (activeSide() === 'black') {
+      const elapsed = now - blackTimestamp
+      blackTimestamp = now
+      state.blackTime = Math.max(state.blackTime - elapsed, 0)
+      if (blackTime() <= 0) {
+        state.flagged = 'black'
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -51,18 +51,18 @@ export default function HandicapIncClock(topTimeParam: number, topIncrement: num
     }
     sound.clock()
 
-    if (side === 'top') {
-      if (activeSide() === 'top') {
-        state.topTime = state.topTime + state.topIncrement
+    if (side === 'white') {
+      if (activeSide() === 'white') {
+        state.whiteTime = state.whiteTime + state.whiteIncrement
       }
-      bottomTimestamp = performance.now()
-      state.activeSide = 'bottom'
-    } else if (side === 'bottom') {
-      if (activeSide() === 'bottom') {
-        state.bottomTime = state.bottomTime + state.bottomIncrement
+      blackTimestamp = performance.now()
+      state.activeSide = 'black'
+    } else if (side === 'black') {
+      if (activeSide() === 'black') {
+        state.blackTime = state.blackTime + state.blackIncrement
       }
-      topTimestamp = performance.now()
-    state.activeSide = 'top'
+      whiteTimestamp = performance.now()
+    state.activeSide = 'white'
     }
     clearInterval(clockInterval)
     clockInterval = setInterval(tick, CLOCK_TICK_STEP)
@@ -70,17 +70,17 @@ export default function HandicapIncClock(topTimeParam: number, topIncrement: num
     redraw()
   }
 
-  function startStop () {
+  function startSwhite () {
     if (isRunning()) {
       state.isRunning = false
       clearInterval(clockInterval)
     }
     else {
       state.isRunning = true
-      if (activeSide() === 'top') {
-        topTimestamp = performance.now()
+      if (activeSide() === 'white') {
+        whiteTimestamp = performance.now()
       } else {
-        bottomTimestamp = performance.now()
+        blackTimestamp = performance.now()
       }
       clockInterval = setInterval(tick, CLOCK_TICK_STEP)
     }
@@ -106,12 +106,12 @@ export default function HandicapIncClock(topTimeParam: number, topIncrement: num
     state = newState
   }
 
-  function topTime(): number {
-    return state.topTime
+  function whiteTime(): number {
+    return state.whiteTime
   }
 
-  function bottomTime(): number {
-    return state.bottomTime
+  function blackTime(): number {
+    return state.blackTime
   }
 
   const clockType: ClockType = 'handicapInc'
@@ -124,9 +124,9 @@ export default function HandicapIncClock(topTimeParam: number, topIncrement: num
     flagged,
     isRunning,
     clockHit,
-    startStop,
-    topTime,
-    bottomTime,
+    startSwhite,
+    whiteTime,
+    blackTime,
     clear() {
       clearInterval(clockInterval)
     }

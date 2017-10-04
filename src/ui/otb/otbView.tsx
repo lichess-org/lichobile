@@ -51,25 +51,25 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
   const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
 
   const clock = ctrl.data.offlineClock
-  let topTimeData: AntagonistTimeData | null = null
-  let bottomTimeData: AntagonistTimeData | null = null
+  let whiteTimeData: AntagonistTimeData
+  let blackTimeData: AntagonistTimeData
 
   if (clock) {
     if (!isStageClock (clock)) {
-      topTimeData = {clockType: clock.clockType, time: clock.topTime(), moves: null}
-      bottomTimeData = {clockType: clock.clockType, time: clock.bottomTime(), moves: null}
+      whiteTimeData = {clockType: clock.clockType, time: clock.whiteTime(), moves: null}
+      blackTimeData = {clockType: clock.clockType, time: clock.blackTime(), moves: null}
     }
     else {
-      topTimeData = {clockType: clock.clockType, time: clock.topTime(), moves: clock.topMoves()}
-      bottomTimeData = {clockType: clock.clockType, time: clock.bottomTime(), moves: clock.bottomMoves()}
+      whiteTimeData = {clockType: clock.clockType, time: clock.whiteTime(), moves: clock.whiteMoves()}
+      blackTimeData = {clockType: clock.clockType, time: clock.blackTime(), moves: clock.blackMoves()}
     }
   }
 
   if (isPortrait)
     return h.fragment({ key: orientationKey }, [
-      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, topTimeData),
+      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, whiteTimeData),
       board,
-      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, bottomTimeData),
+      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, blackTimeData),
       renderGameActionsBar(ctrl)
     ])
   else
@@ -95,26 +95,26 @@ function renderGameActionsBar(ctrl: OtbRound) {
       <button className="action_bar_button" data-icon="U"
         oncreate={helper.ontap(
           ctrl.newGameMenu.open,
-          () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
+          () => window.plugins.toast.show(i18n('createAGame'), 'short', 'black')
         )}
       />
       <button data-icon="A" className="action_bar_button"
         oncreate={helper.ontap(
           () => router.set(`/analyse/offline/otb/${ctrl.data.player.color}`),
-          () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')
+          () => window.plugins.toast.show(i18n('analysis'), 'short', 'black')
         )}
       />
       <button className="fa fa-share-alt action_bar_button"
         oncreate={helper.ontap(
           ctrl.sharePGN,
-          () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom')
+          () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'black')
         )}
       />
       {utils.hasNetwork() ?
         <button className="fa fa-cloud-upload action_bar_button"
           oncreate={helper.ontap(
             ctrl.importGamePopup.open,
-            () => window.plugins.toast.show(i18n('Import game to lichess'), 'short', 'bottom')
+            () => window.plugins.toast.show(i18n('Import game to lichess'), 'short', 'black')
           )}
         /> : null
       }

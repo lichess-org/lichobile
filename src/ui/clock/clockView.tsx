@@ -14,63 +14,63 @@ export function renderClockSettingsOverlay(ctrl: IChessClockCtrl) {
 export function clockBody(ctrl: IChessClockCtrl) {
   const clock = ctrl.clockObj()
   if (!clock) return null
-  const topActive = clock.activeSide() === 'top'
-  const bottomActive = clock.activeSide() === 'bottom'
-  const topFlagged = clock.flagged() === 'top'
-  const bottomFlagged = clock.flagged() === 'bottom'
-  const flagged = topFlagged || bottomFlagged
+  const whiteActive = clock.activeSide() === 'white'
+  const blackActive = clock.activeSide() === 'black'
+  const whiteFlagged = clock.flagged() === 'white'
+  const blackFlagged = clock.flagged() === 'black'
+  const flagged = whiteFlagged || blackFlagged
 
-  const topClockClass = [
+  const whiteClockClass = [
     'clockTapArea',
-    'top',
-    topActive ? 'active' : '',
+    'white',
+    whiteActive ? 'active' : '',
     clock.isRunning() ? 'running' : '',
-    topFlagged ? 'flagged' : ''
+    whiteFlagged ? 'flagged' : ''
   ].join(' ')
 
-  const bottomClockClass = [
+  const blackClockClass = [
     'clockTapArea',
-    'bottom',
-    bottomActive ? 'active' : '',
+    'black',
+    blackActive ? 'active' : '',
     clock.isRunning() ? 'running' : '',
-    bottomFlagged ? 'flagged' : ''
+    blackFlagged ? 'flagged' : ''
   ].join(' ')
 
-  const topClockTimeClass = [
+  const whiteClockTimeClass = [
     'clockTime',
-    topFlagged ? 'flagged' : '',
-    clock.topTime() >= 3600 ? 'long' : ''
+    whiteFlagged ? 'flagged' : '',
+    clock.whiteTime() >= 3600 ? 'long' : ''
   ].join(' ')
 
-  const bottomClockTimeClass = [
+  const blackClockTimeClass = [
     'clockTime',
-    bottomFlagged ? 'flagged' : '',
-    clock.bottomTime() >= 3600 ? 'long' : ''
+    blackFlagged ? 'flagged' : '',
+    clock.blackTime() >= 3600 ? 'long' : ''
   ].join(' ')
 
   return (
     <div className="clockContainer">
-      <div key="topClockTapArea" className={topClockClass} oncreate={helper.ontouch(() => onClockTouch(ctrl, 'top'))}>
-        { isStageClock(clock) ? renderMoves(clock.topMoves()) : null }
+      <div key="whiteClockTapArea" className={whiteClockClass} oncreate={helper.ontouch(() => onClockTouch(ctrl, 'white'))}>
+        { isStageClock(clock) ? renderMoves(clock.whiteMoves()) : null }
         <div className="clockTapAreaContent">
-          <span className={topClockTimeClass}>
-            { topFlagged ? 'b' : formatTime(ctrl.clockType(), clock.topTime() / 1000) }
+          <span className={whiteClockTimeClass}>
+            { whiteFlagged ? 'b' : formatTime(ctrl.clockType(), clock.whiteTime() / 1000) }
           </span>
         </div>
       </div>
       <div className="clockControls">
-        { !flagged && clock.activeSide() ? <span key="running-play-pause" className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} oncreate={helper.ontap(() => ctrl.startStop())} /> : <span key="disabled-pause" className="fa fa-pause disabled" /> }
+        { !flagged && clock.activeSide() ? <span key="running-play-pause" className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} oncreate={helper.ontap(() => ctrl.startSwhite())} /> : <span key="disabled-pause" className="fa fa-pause disabled" /> }
         <span key="refresh" className={'fa fa-refresh' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={helper.ontap(ctrl.reload)} />
         <span key="settings" className={'fa fa-cog' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={helper.ontap(ctrl.clockSettingsCtrl.open)} />
         <span hey="home" className={'fa fa-home' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={helper.ontap(ctrl.goHome)} />
       </div>
-      <div key="bottomClockTapArea" className={bottomClockClass} oncreate={helper.ontouch(() => onClockTouch(ctrl, 'bottom'))}>
+      <div key="blackClockTapArea" className={blackClockClass} oncreate={helper.ontouch(() => onClockTouch(ctrl, 'black'))}>
         <div className="clockTapAreaContent">
-          <span className={bottomClockTimeClass}>
-            { bottomFlagged ? 'b' : formatTime(ctrl.clockType(), clock.bottomTime() / 1000) }
+          <span className={blackClockTimeClass}>
+            { blackFlagged ? 'b' : formatTime(ctrl.clockType(), clock.blackTime() / 1000) }
           </span>
         </div>
-        { isStageClock(clock) ? renderMoves(clock.bottomMoves()) : null }
+        { isStageClock(clock) ? renderMoves(clock.blackMoves()) : null }
       </div>
     </div>
   )
@@ -89,7 +89,7 @@ function renderMoves(moves: number | null) {
 }
 
 function onClockTouch(ctrl: IChessClockCtrl, side: Side) {
-  if (((ctrl.clockObj().activeSide() !== 'top') && (side === 'bottom')) || ((ctrl.clockObj().activeSide() !== 'bottom') && (side === 'top'))) {
+  if (((ctrl.clockObj().activeSide() !== 'white') && (side === 'black')) || ((ctrl.clockObj().activeSide() !== 'black') && (side === 'white'))) {
     ctrl.clockTap(side)
   }
 }

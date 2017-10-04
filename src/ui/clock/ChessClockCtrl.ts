@@ -8,12 +8,12 @@ import { ClockType, IChessClock, IStageClock } from '../shared/clock/interfaces'
 
 export interface IChessClockCtrl {
   hideStatusBar: () => void
-  startStop: () => void
+  startSwhite: () => void
   clockSettingsCtrl: any
   clockObj: Mithril.Stream<IChessClock | IStageClock>
   reload: () => void
   goHome: () => void
-  clockTap: (side: 'top' | 'bottom') => void
+  clockTap: (side: 'white' | 'black') => void
   clockType: Mithril.Stream<ClockType>
 }
 
@@ -30,12 +30,12 @@ export default function ChessClockCtrl(): IChessClockCtrl {
 
   const clockSettingsCtrl = clockSettings.controller(reload, clockObj)
 
-  function clockTap(side: 'top' | 'bottom') {
+  function clockTap(side: 'white' | 'black') {
     clockObj().clockHit(side)
   }
 
-  function startStop () {
-    clockObj().startStop()
+  function startSwhite () {
+    clockObj().startSwhite()
   }
 
   function goHome() {
@@ -59,7 +59,7 @@ export default function ChessClockCtrl(): IChessClockCtrl {
 
   return {
     hideStatusBar,
-    startStop,
+    startSwhite,
     clockSettingsCtrl,
     clockObj,
     reload,

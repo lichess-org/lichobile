@@ -10,5 +10,5 @@ export function formatTime(clockType: ClockType, time: number) {
 }
 
 export function isStageClock(c: IChessClock | IStageClock): c is IStageClock {
-  return (c as IStageClock).topMoves !== undefined
+  return (c as IStageClock).whiteMoves !== undefined
 }

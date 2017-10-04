@@ -7,10 +7,10 @@ const CLOCK_TICK_STEP = 100
 
 export default function BronsteinClock(time: number, increment: number): IChessClock {
   let state: IChessDelayClockState = {
-    topTime: (time !== 0) ? time : increment,
-    bottomTime: (time !== 0) ? time : increment,
-    topDelay: increment,
-    bottomDelay: increment,
+    whiteTime: (time !== 0) ? time : increment,
+    blackTime: (time !== 0) ? time : increment,
+    whiteDelay: increment,
+    blackDelay: increment,
     increment: increment,
     activeSide: undefined,
     flagged: undefined,
@@ -18,29 +18,29 @@ export default function BronsteinClock(time: number, increment: number): IChessC
   }
 
   let clockInterval: number
-  let topTimestamp: number
-  let bottomTimestamp: number
+  let whiteTimestamp: number
+  let blackTimestamp: number
 
   function tick () {
     const now = performance.now()
-    if (state.activeSide === 'top') {
-      const elapsed = now - topTimestamp
-      topTimestamp = now
-      state.topTime = Math.max(state.topTime - elapsed, 0)
-      state.topDelay = Math.max(state.topDelay - elapsed, 0)
-      if (state.topTime <= 0) {
-        state.flagged = 'top'
+    if (state.activeSide === 'white') {
+      const elapsed = now - whiteTimestamp
+      whiteTimestamp = now
+      state.whiteTime = Math.max(state.whiteTime - elapsed, 0)
+      state.whiteDelay = Math.max(state.whiteDelay - elapsed, 0)
+      if (state.whiteTime <= 0) {
+        state.flagged = 'white'
         sound.dong()
         clearInterval(clockInterval)
       }
     }
-    else if (activeSide() === 'bottom') {
-      const elapsed = now - bottomTimestamp
-      bottomTimestamp = now
-      state.bottomTime = Math.max(state.bottomTime - elapsed, 0)
-      state.bottomDelay = Math.max(state.bottomDelay - elapsed, 0)
-      if (state.bottomTime <= 0) {
-        state.flagged = 'bottom'
+    else if (activeSide() === 'black') {
+      const elapsed = now - blackTimestamp
+      blackTimestamp = now
+      state.blackTime = Math.max(state.blackTime - elapsed, 0)
+      state.blackDelay = Math.max(state.blackDelay - elapsed, 0)
+      if (state.blackTime <= 0) {
+        state.flagged = 'black'
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -54,23 +54,23 @@ export default function BronsteinClock(time: number, increment: number): IChessC
     }
     sound.clock()
 
-    if (side === 'top') {
-      if (state.activeSide === 'top') {
-        state.activeSide = 'bottom'
-        state.topTime = state.topTime + (state.increment - state.topDelay)
-        state.topDelay = state.increment
+    if (side === 'white') {
+      if (state.activeSide === 'white') {
+        state.activeSide = 'black'
+        state.whiteTime = state.whiteTime + (state.increment - state.whiteDelay)
+        state.whiteDelay = state.increment
       }
-      bottomTimestamp = performance.now()
-      state.activeSide = 'bottom'
+      blackTimestamp = performance.now()
+      state.activeSide = 'black'
     }
     else {
-      if (state.activeSide === 'bottom') {
-        state.activeSide = 'top'
-        state.bottomTime = state.bottomTime + (state.increment - state.bottomDelay)
-        state.bottomDelay = state.increment
+      if (state.activeSide === 'black') {
+        state.activeSide = 'white'
+        state.blackTime = state.blackTime + (state.increment - state.blackDelay)
+        state.blackDelay = state.increment
       }
-      topTimestamp = performance.now()
-      state.activeSide = 'top'
+      whiteTimestamp = performance.now()
+      state.activeSide = 'white'
     }
     if (clockInterval) {
       clearInterval(clockInterval)
@@ -80,7 +80,7 @@ export default function BronsteinClock(time: number, increment: number): IChessC
     redraw()
   }
 
-  function startStop () {
+  function startSwhite () {
     if (state.isRunning) {
       state.isRunning = false
       clearInterval(clockInterval)
@@ -88,10 +88,10 @@ export default function BronsteinClock(time: number, increment: number): IChessC
     else {
       state.isRunning = true
       clockInterval = setInterval(tick, CLOCK_TICK_STEP)
-      if (state.activeSide === 'top') {
-        topTimestamp = performance.now()
+      if (state.activeSide === 'white') {
+        whiteTimestamp = performance.now()
       } else {
-        bottomTimestamp = performance.now()
+        blackTimestamp = performance.now()
       }
     }
   }
@@ -116,12 +116,12 @@ export default function BronsteinClock(time: number, increment: number): IChessC
     state = newState
   }
 
-  function topTime(): number {
-    return state.topTime
+  function whiteTime(): number {
+    return state.whiteTime
   }
 
-  function bottomTime(): number {
-    return state.bottomTime
+  function blackTime(): number {
+    return state.blackTime
   }
 
   const clockType: ClockType = 'bronstein'
@@ -134,9 +134,9 @@ export default function BronsteinClock(time: number, increment: number): IChessC
     flagged,
     isRunning,
     clockHit,
-    startStop,
-    topTime,
-    bottomTime,
+    startSwhite,
+    whiteTime,
+    blackTime,
     clear() {
       clearInterval(clockInterval)
     }

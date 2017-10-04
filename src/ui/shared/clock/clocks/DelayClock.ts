@@ -7,10 +7,10 @@ const CLOCK_TICK_STEP = 100
 
 export default function DelayClock(time: number, increment: number): IChessClock {
   let state: IChessDelayClockState = {
-    topTime: (time !== 0) ? time : increment,
-    bottomTime: (time !== 0) ? time : increment,
-    topDelay: increment,
-    bottomDelay: increment,
+    whiteTime: (time !== 0) ? time : increment,
+    blackTime: (time !== 0) ? time : increment,
+    whiteDelay: increment,
+    blackDelay: increment,
     increment: increment,
     activeSide: undefined,
     flagged: undefined,
@@ -18,34 +18,34 @@ export default function DelayClock(time: number, increment: number): IChessClock
   }
 
   let clockInterval: number
-  let topTimestamp: number
-  let bottomTimestamp: number
+  let whiteTimestamp: number
+  let blackTimestamp: number
 
   function tick () {
     const now = performance.now()
-    if (activeSide() === 'top') {
-      const elapsed = now - topTimestamp
-      topTimestamp = now
-      if (Math.floor(state.topDelay) > 0) {
-        state.topDelay = state.topDelay - elapsed
+    if (activeSide() === 'white') {
+      const elapsed = now - whiteTimestamp
+      whiteTimestamp = now
+      if (Math.floor(state.whiteDelay) > 0) {
+        state.whiteDelay = state.whiteDelay - elapsed
       } else {
-        state.topTime = Math.max(state.topTime - elapsed, 0)
-        if (state.topTime <= 0) {
-          state.flagged = 'top'
+        state.whiteTime = Math.max(state.whiteTime - elapsed, 0)
+        if (state.whiteTime <= 0) {
+          state.flagged = 'white'
           sound.dong()
           clearInterval(clockInterval)
         }
       }
     }
-    else if (activeSide() === 'bottom') {
-      const elapsed = now - bottomTimestamp
-      bottomTimestamp = now
-      if (state.bottomDelay > 0) {
-        state.bottomDelay = state.bottomDelay - elapsed
+    else if (activeSide() === 'black') {
+      const elapsed = now - blackTimestamp
+      blackTimestamp = now
+      if (state.blackDelay > 0) {
+        state.blackDelay = state.blackDelay - elapsed
       } else {
-        state.bottomTime = Math.max(state.bottomTime - elapsed, 0)
-        if (bottomTime() <= 0) {
-          state.flagged = 'bottom'
+        state.blackTime = Math.max(state.blackTime - elapsed, 0)
+        if (blackTime() <= 0) {
+          state.flagged = 'black'
           sound.dong()
           clearInterval(clockInterval)
         }
@@ -60,18 +60,18 @@ export default function DelayClock(time: number, increment: number): IChessClock
     }
     sound.clock()
 
-    if (side === 'top') {
-      if (state.activeSide === 'top') {
-        state.topDelay = state.increment
+    if (side === 'white') {
+      if (state.activeSide === 'white') {
+        state.whiteDelay = state.increment
       }
-      bottomTimestamp = performance.now()
-      state.activeSide = 'bottom'
-    } else if (side === 'bottom') {
-      if (state.activeSide === 'bottom') {
-        state.bottomDelay = state.increment
+      blackTimestamp = performance.now()
+      state.activeSide = 'black'
+    } else if (side === 'black') {
+      if (state.activeSide === 'black') {
+        state.blackDelay = state.increment
       }
-      topTimestamp = performance.now()
-      state.activeSide = 'top'
+      whiteTimestamp = performance.now()
+      state.activeSide = 'white'
     }
     clearInterval(clockInterval)
     clockInterval = setInterval(tick, CLOCK_TICK_STEP)
@@ -79,7 +79,7 @@ export default function DelayClock(time: number, increment: number): IChessClock
     redraw()
   }
 
-  function startStop () {
+  function startSwhite () {
     if (state.isRunning) {
       state.isRunning = false
       clearInterval(clockInterval)
@@ -87,10 +87,10 @@ export default function DelayClock(time: number, increment: number): IChessClock
     else {
       state.isRunning = true
       clockInterval = setInterval(tick, CLOCK_TICK_STEP)
-      if (activeSide() === 'top') {
-        topTimestamp = performance.now()
+      if (activeSide() === 'white') {
+        whiteTimestamp = performance.now()
       } else {
-        bottomTimestamp = performance.now()
+        blackTimestamp = performance.now()
       }
     }
   }
@@ -115,12 +115,12 @@ export default function DelayClock(time: number, increment: number): IChessClock
     state = newState
   }
 
-  function topTime(): number {
-    return state.topTime
+  function whiteTime(): number {
+    return state.whiteTime
   }
 
-  function bottomTime(): number {
-    return state.bottomTime
+  function blackTime(): number {
+    return state.blackTime
   }
 
   const clockType: ClockType = 'delay'
@@ -133,9 +133,9 @@ export default function DelayClock(time: number, increment: number): IChessClock
     flagged,
     isRunning,
     clockHit,
-    startStop,
-    topTime,
-    bottomTime,
+    startSwhite,
+    whiteTime,
+    blackTime,
     clear() {
       clearInterval(clockInterval)
     }

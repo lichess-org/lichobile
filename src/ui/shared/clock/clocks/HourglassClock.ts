@@ -7,37 +7,37 @@ const CLOCK_TICK_STEP = 100
 
 export default function HourglassClock(time: number): IChessClock {
   let state: IChessBasicClockState = {
-    topTime: time/2,
-    bottomTime: time/2,
+    whiteTime: time/2,
+    blackTime: time/2,
     activeSide: undefined,
     flagged: undefined,
     isRunning: false
   }
 
   let clockInterval: number
-  let topTimestamp: number
-  let bottomTimestamp: number
+  let whiteTimestamp: number
+  let blackTimestamp: number
 
   function tick () {
     const now = performance.now()
-    if (activeSide() === 'top') {
-      const elapsed = now - topTimestamp
-      topTimestamp = now
-      state.topTime = Math.max(state.topTime - elapsed, 0)
-      state.bottomTime = time - state.topTime
-      if (topTime() <= 0) {
-        state.flagged = 'top'
+    if (activeSide() === 'white') {
+      const elapsed = now - whiteTimestamp
+      whiteTimestamp = now
+      state.whiteTime = Math.max(state.whiteTime - elapsed, 0)
+      state.blackTime = time - state.whiteTime
+      if (whiteTime() <= 0) {
+        state.flagged = 'white'
         sound.dong()
         clearInterval(clockInterval)
       }
     }
-    else if (activeSide() === 'bottom') {
-      const elapsed = now - bottomTimestamp
-      bottomTimestamp = now
-      state.bottomTime = Math.max(state.bottomTime - elapsed, 0)
-      state.topTime = time - state.bottomTime
-      if (bottomTime() <= 0) {
-        state.flagged = 'bottom'
+    else if (activeSide() === 'black') {
+      const elapsed = now - blackTimestamp
+      blackTimestamp = now
+      state.blackTime = Math.max(state.blackTime - elapsed, 0)
+      state.whiteTime = time - state.blackTime
+      if (blackTime() <= 0) {
+        state.flagged = 'black'
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -51,13 +51,13 @@ export default function HourglassClock(time: number): IChessClock {
     }
     sound.clock()
 
-    if (side === 'top') {
-      bottomTimestamp = performance.now()
-      state.activeSide = 'bottom'
+    if (side === 'white') {
+      blackTimestamp = performance.now()
+      state.activeSide = 'black'
     }
     else {
-      topTimestamp = performance.now()
-      state.activeSide = 'top'
+      whiteTimestamp = performance.now()
+      state.activeSide = 'white'
     }
     if (clockInterval) {
       clearInterval(clockInterval)
@@ -67,7 +67,7 @@ export default function HourglassClock(time: number): IChessClock {
     redraw()
   }
 
-  function startStop () {
+  function startSwhite () {
     if (isRunning()) {
       state.isRunning = false
       clearInterval(clockInterval)
@@ -75,10 +75,10 @@ export default function HourglassClock(time: number): IChessClock {
     else {
       state.isRunning = true
       clockInterval = setInterval(tick, CLOCK_TICK_STEP)
-      if (activeSide() === 'top') {
-        topTimestamp = performance.now()
+      if (activeSide() === 'white') {
+        whiteTimestamp = performance.now()
       } else {
-        bottomTimestamp = performance.now()
+        blackTimestamp = performance.now()
       }
     }
   }
@@ -103,12 +103,12 @@ export default function HourglassClock(time: number): IChessClock {
     state = newState
   }
 
-  function topTime(): number {
-    return state.topTime
+  function whiteTime(): number {
+    return state.whiteTime
   }
 
-  function bottomTime(): number {
-    return state.bottomTime
+  function blackTime(): number {
+    return state.blackTime
   }
 
   const clockType: ClockType = 'hourglass'
@@ -121,9 +121,9 @@ export default function HourglassClock(time: number): IChessClock {
     flagged,
     isRunning,
     clockHit,
-    startStop,
-    topTime,
-    bottomTime,
+    startSwhite,
+    whiteTime,
+    blackTime,
     clear() {
       clearInterval(clockInterval)
     }

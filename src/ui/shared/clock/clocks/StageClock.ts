@@ -8,12 +8,12 @@ const MINUTE_MILLIS = 60 * 1000
 
 export default function StageClock(stages: Stage[], increment: number): IStageClock {
   let state: IChessStageClockState = {
-    topTime: Number(stages[0].time) * MINUTE_MILLIS,
-    bottomTime: Number(stages[0].time) * MINUTE_MILLIS,
-    topMoves: Number(stages[0].moves),
-    bottomMoves: Number(stages[0].moves),
-    topStage: 0,
-    bottomStage: 0,
+    whiteTime: Number(stages[0].time) * MINUTE_MILLIS,
+    blackTime: Number(stages[0].time) * MINUTE_MILLIS,
+    whiteMoves: Number(stages[0].moves),
+    blackMoves: Number(stages[0].moves),
+    whiteStage: 0,
+    blackStage: 0,
     stages: stages,
     increment: increment,
     activeSide: undefined,
@@ -22,27 +22,27 @@ export default function StageClock(stages: Stage[], increment: number): IStageCl
   }
 
   let clockInterval: number
-  let topTimestamp: number
-  let bottomTimestamp: number
+  let whiteTimestamp: number
+  let blackTimestamp: number
 
   function tick () {
     const now = performance.now()
-    if (state.activeSide === 'top') {
-      const elapsed = now - topTimestamp
-      topTimestamp = now
-      state.topTime = Math.max(state.topTime - elapsed, 0)
-      if (state.topTime <= 0) {
-        state.flagged = 'top'
+    if (state.activeSide === 'white') {
+      const elapsed = now - whiteTimestamp
+      whiteTimestamp = now
+      state.whiteTime = Math.max(state.whiteTime - elapsed, 0)
+      if (state.whiteTime <= 0) {
+        state.flagged = 'white'
         sound.dong()
         clearInterval(clockInterval)
       }
     }
-    else if (state.activeSide === 'bottom') {
-      const elapsed = now - bottomTimestamp
-      bottomTimestamp = now
-      state.bottomTime = Math.max(state.bottomTime - elapsed, 0)
-      if (state.bottomTime <= 0) {
-        state.flagged = 'bottom'
+    else if (state.activeSide === 'black') {
+      const elapsed = now - blackTimestamp
+      blackTimestamp = now
+      state.blackTime = Math.max(state.blackTime - elapsed, 0)
+      if (state.blackTime <= 0) {
+        state.flagged = 'black'
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -56,42 +56,42 @@ export default function StageClock(stages: Stage[], increment: number): IStageCl
     }
     sound.clock()
 
-    const tm = state.topMoves
-    const bm = state.bottomMoves
+    const tm = state.whiteMoves
+    const bm = state.blackMoves
 
-    if (side === 'top') {
-      if (state.activeSide === 'top') {
+    if (side === 'white') {
+      if (state.activeSide === 'white') {
         if (tm !== null)
-          state.topMoves = tm - 1
-        state.topTime = state.topTime + state.increment
-        if (state.topMoves === 0) {
-          state.topStage = state.topStage + 1
-          state.topTime = state.topTime + Number(state.stages[state.topStage].time) * MINUTE_MILLIS
-          if (state.topStage === (state.stages.length - 1))
-            state.topMoves = null
+          state.whiteMoves = tm - 1
+        state.whiteTime = state.whiteTime + state.increment
+        if (state.whiteMoves === 0) {
+          state.whiteStage = state.whiteStage + 1
+          state.whiteTime = state.whiteTime + Number(state.stages[state.whiteStage].time) * MINUTE_MILLIS
+          if (state.whiteStage === (state.stages.length - 1))
+            state.whiteMoves = null
           else
-            state.topMoves = state.stages[state.topStage].moves
+            state.whiteMoves = state.stages[state.whiteStage].moves
         }
       }
-      bottomTimestamp = performance.now()
-      state.activeSide = 'bottom'
+      blackTimestamp = performance.now()
+      state.activeSide = 'black'
     }
     else {
-      if (state.activeSide === 'bottom') {
+      if (state.activeSide === 'black') {
         if (bm !== null)
-          state.bottomMoves = bm - 1
-        state.bottomTime = state.bottomTime + state.increment
-        if (state.bottomMoves === 0) {
-          state.bottomStage = state.bottomStage + 1
-          state.bottomTime = state.bottomTime + Number(state.stages[state.bottomStage].time) * MINUTE_MILLIS
-          if (state.bottomStage === (state.stages.length - 1))
-            state.bottomMoves = null
+          state.blackMoves = bm - 1
+        state.blackTime = state.blackTime + state.increment
+        if (state.blackMoves === 0) {
+          state.blackStage = state.blackStage + 1
+          state.blackTime = state.blackTime + Number(state.stages[state.blackStage].time) * MINUTE_MILLIS
+          if (state.blackStage === (state.stages.length - 1))
+            state.blackMoves = null
           else
-            state.bottomMoves = state.stages[state.bottomStage].moves
+            state.blackMoves = state.stages[state.blackStage].moves
         }
       }
-      topTimestamp = performance.now()
-      state.activeSide = 'top'
+      whiteTimestamp = performance.now()
+      state.activeSide = 'white'
     }
     if (clockInterval) {
       clearInterval(clockInterval)
@@ -101,7 +101,7 @@ export default function StageClock(stages: Stage[], increment: number): IStageCl
     redraw()
   }
 
-  function startStop () {
+  function startSwhite () {
     if (state.isRunning) {
       state.isRunning = false
       clearInterval(clockInterval)
@@ -109,10 +109,10 @@ export default function StageClock(stages: Stage[], increment: number): IStageCl
     else {
       state.isRunning = true
       clockInterval = setInterval(tick, CLOCK_TICK_STEP)
-      if (state.activeSide === 'top') {
-        topTimestamp = performance.now()
+      if (state.activeSide === 'white') {
+        whiteTimestamp = performance.now()
       } else {
-        bottomTimestamp = performance.now()
+        blackTimestamp = performance.now()
       }
     }
   }
@@ -137,20 +137,20 @@ export default function StageClock(stages: Stage[], increment: number): IStageCl
     state = newState
   }
 
-  function topMoves(): number | null {
-    return state.topMoves
+  function whiteMoves(): number | null {
+    return state.whiteMoves
   }
 
-  function bottomMoves(): number | null {
-    return state.bottomMoves
+  function blackMoves(): number | null {
+    return state.blackMoves
   }
 
-  function topTime() : number{
-    return state.topTime
+  function whiteTime() : number{
+    return state.whiteTime
   }
 
-  function bottomTime(): number {
-    return state.bottomTime
+  function blackTime(): number {
+    return state.blackTime
   }
 
   const clockType: ClockType = 'stage'
@@ -163,11 +163,11 @@ export default function StageClock(stages: Stage[], increment: number): IStageCl
     flagged,
     isRunning,
     clockHit,
-    startStop,
-    topTime,
-    bottomTime,
-    topMoves,
-    bottomMoves,
+    startSwhite,
+    whiteTime,
+    blackTime,
+    whiteMoves,
+    blackMoves,
     clear() {
       clearInterval(clockInterval)
     }

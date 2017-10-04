@@ -1,5 +1,5 @@
 
-export type Side = 'top' | 'bottom'
+export type Side = 'white' | 'black'
 
 export type ClockType = 'simple' | 'increment' | 'handicapInc' | 'delay' | 'bronstein' | 'hourglass' | 'stage'
 
@@ -7,47 +7,47 @@ export interface IChessClock {
   clockType: ClockType
   getState(): ClockState
   setState(state: ClockState): void
-  topTime(): number
-  bottomTime(): number
+  whiteTime(): number
+  blackTime(): number
   activeSide(): Side | undefined
   flagged(): Side | undefined
   isRunning(): boolean
   clockHit(side: Side): void
-  startStop(): void
+  startSwhite(): void
   clear(): void
 }
 
 export interface Stage { time: number, moves: number | null }
 
 export interface IStageClock extends IChessClock {
-  topMoves(): number | null
-  bottomMoves(): number | null
+  whiteMoves(): number | null
+  blackMoves(): number | null
 }
 
 export interface IChessBasicClockState {
-  topTime: number
-  bottomTime: number
+  whiteTime: number
+  blackTime: number
   activeSide: Side | undefined
   flagged: Side | undefined
   isRunning: boolean
 }
 
 export interface IChessHandicapIncClockState extends IChessBasicClockState {
-  topIncrement: number
-  bottomIncrement: number
+  whiteIncrement: number
+  blackIncrement: number
 }
 
 export interface IChessDelayClockState extends IChessBasicClockState {
-  topDelay: number
-  bottomDelay: number
+  whiteDelay: number
+  blackDelay: number
   increment: number
 }
 
 export interface IChessStageClockState extends IChessBasicClockState {
-  topMoves: number | null
-  bottomMoves: number | null
-  topStage: number
-  bottomStage: number
+  whiteMoves: number | null
+  blackMoves: number | null
+  whiteStage: number
+  blackStage: number
   stages: Stage[]
   increment: number
 }

@@ -414,29 +414,34 @@ function renderGameEndedActions(ctrl: OnlineRound) {
   )
 }
 
+function renderPopupTitle(ctrl: OnlineRound) {
+  return [
+    h('span.withIcon', {
+      'data-icon': utils.gameIcon(ctrl.data.game.perf)
+    }),
+    gameApi.title(ctrl.data)
+  ]
+}
+
+function renderStatus(ctrl: OnlineRound) {
+  const result = gameApi.result(ctrl.data)
+  const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner)
+  const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
+    (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
+  return gameStatusApi.aborted(ctrl.data) ? [] : [
+    h('strong', result), h('br')
+  ].concat([h('em.resultStatus', status)])
+}
+
 function renderGamePopup(ctrl: OnlineRound) {
+  const header = ctrl.data.tv ?
+    () => renderPopupTitle(ctrl) :
+    !gameApi.playable(ctrl.data) ?
+      () => renderStatus(ctrl) : undefined
+
   return popupWidget(
     'player_controls',
-    () => {
-      if (ctrl.data.tv) {
-        return [
-          h('span.withIcon', {
-            'data-icon': utils.gameIcon(ctrl.data.game.perf)
-          }),
-          gameApi.title(ctrl.data)
-        ]
-      }
-      else if (!gameApi.playable(ctrl.data)) {
-        const result = gameApi.result(ctrl.data)
-        const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner)
-        const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
-          (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
-        return gameStatusApi.aborted(ctrl.data) ? [] : [
-          h('strong', result), h('br')
-        ].concat([h('em.resultStatus', status)])
-      }
-      else return null
-    },
+    header,
     gameApi.playable(ctrl.data) ?
       () => renderGameRunningActions(ctrl) : () => renderGameEndedActions(ctrl),
     ctrl.vm.showingActions,

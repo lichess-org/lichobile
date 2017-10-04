@@ -1,5 +1,5 @@
 import { User } from './user'
-import { IChessClock, IStageClock } from '../../ui/shared/clock/interfaces'
+import { ClockState } from '../../ui/shared/clock/interfaces'
 
 export interface GameData {
   game: Game
@@ -35,7 +35,7 @@ export function isOnlineGameData(d: GameData): d is OnlineGameData {
 }
 
 export interface OfflineGameData extends GameData {
-  offlineClock: IChessClock | IStageClock
+  offlineClock?: ClockState
 }
 
 export type GameSource = 'lobby' | 'pool' | 'friend' | 'ai' | 'api' | 'tournament' | 'position' | 'import' | 'offline'

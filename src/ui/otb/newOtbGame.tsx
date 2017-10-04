@@ -116,6 +116,7 @@ export default {
                 <div className="select_input">
                   {formWidgets.renderSelect('Clock', 'clock', settings.otb.availableClocks, settings.otb.clock.clockType, false, onChange)}
                 </div>
+                {console.log(settings.otb.clock.clockType())}
                 {clockSettingsView[settings.otb.clock.clockType() as ClockType](ctrl)}
               </div>
               <div className="popupActionWrapper">
@@ -144,6 +145,9 @@ export default {
 }
 
 const clockSettingsView = {
+  none(_ : NewOtbGameCtrl) {
+    return('')
+  },
   simple(_: NewOtbGameCtrl) {
     return (
       <div key="simpleSettings" className="clockSettingParameters">

@@ -23,7 +23,8 @@ import actions from './actions'
 import newGameMenu, { NewOtbGameCtrl } from './newOtbGame'
 import importGamePopup, { Controller as ImportGameController } from './importGamePopup'
 
-// import { IChessClock, IStageClock } from '../shared/clock/interfaces'
+import { IChessClock, IStageClock, ClockType } from '../shared/clock/interfaces'
+import clockSet from './clockSet'
 
 interface InitPayload {
   variant: VariantKey
@@ -40,6 +41,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public chessground: Chessground
   public replay: Replay
   public vm: OtbVM
+  public clock: IChessClock | IStageClock
 
   public constructor(
     saved?: StoredOfflineGame | null,
@@ -100,6 +102,9 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
       this.replay.init(variant, initialFen, situations, ply)
     }
 
+    const clockType = settings.otb.clock.clockType() as ClockType
+    this.clock = clockSet[clockType]()
+
     if (!this.chessground) {
       this.chessground = ground.make(this.data, this.replay.situation(), this.userMove, this.onUserNewPiece, this.onMove, this.onNewPiece)
     } else {
@@ -117,6 +122,9 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
       payload.fen = setupFen
     }
 
+    const clockType = settings.otb.clock.clockType() as ClockType
+    this.clock = clockSet[clockType]()
+    
     chess.init(payload)
     .then((data: chess.InitResponse) => {
       this.init(makeData({
@@ -128,7 +136,8 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
         color: this.data && oppositeColor(this.data.player.color) || data.setup.player,
         pref: {
           centerPiece: true
-        }
+        },
+        clock: this.clock.getState()
       }), [data.setup], 0)
     })
     .then(() => {
@@ -202,6 +211,8 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   }
 
   public onReplayAdded = (sit: chess.GameSituation) => {
+    const lastMovePlayer = sit.player === 'white' ? 'black' : 'white'
+    this.clock.clockHit(lastMovePlayer)
     this.data.game.fen = sit.fen
     this.apply(sit)
     setResult(this, sit.status)

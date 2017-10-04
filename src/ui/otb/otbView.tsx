@@ -23,6 +23,11 @@ export function overlay(ctrl: OtbRound) {
   ]
 }
 
+interface TimeData {
+  white: AntagonistTimeData | null
+  black: AntagonistTimeData | null
+}
+
 export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
   const flip = settings.otb.flipPieces()
   const wrapperClasses = helper.classSet({
@@ -50,26 +55,29 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
 
   const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
 
-  const clock = ctrl.data.offlineClock
-  let whiteTimeData: AntagonistTimeData
-  let blackTimeData: AntagonistTimeData
+  const clock = ctrl.clock
+  
+  let timeData: TimeData = {
+    white: null,
+    black: null
+  }
 
   if (clock) {
     if (!isStageClock (clock)) {
-      whiteTimeData = {clockType: clock.clockType, time: clock.whiteTime(), moves: null}
-      blackTimeData = {clockType: clock.clockType, time: clock.blackTime(), moves: null}
+      timeData.white = {clockType: clock.clockType, time: clock.whiteTime(), moves: null}
+      timeData.black = {clockType: clock.clockType, time: clock.blackTime(), moves: null}
     }
     else {
-      whiteTimeData = {clockType: clock.clockType, time: clock.whiteTime(), moves: clock.whiteMoves()}
-      blackTimeData = {clockType: clock.clockType, time: clock.blackTime(), moves: clock.blackMoves()}
+      timeData.white = { clockType: clock.clockType, time: clock.whiteTime(), moves: clock.whiteMoves() }
+      timeData.black = { clockType: clock.clockType, time: clock.blackTime(), moves: clock.blackMoves() }
     }
   }
 
   if (isPortrait)
     return h.fragment({ key: orientationKey }, [
-      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, whiteTimeData),
+      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, timeData[ctrl.data.opponent.color]),
       board,
-      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, blackTimeData),
+      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, timeData[ctrl.data.player.color]),
       renderGameActionsBar(ctrl)
     ])
   else
@@ -77,9 +85,9 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
       board,
       <section key="table" className="table">
         <section className="playersTable offline">
-          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme)}
+          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, timeData[ctrl.data.opponent.color])}
           {replayTable}
-          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme)}
+          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, timeData[ctrl.data.opponent.color])}
         </section>
         {renderGameActionsBar(ctrl)}
       </section>

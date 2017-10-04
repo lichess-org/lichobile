@@ -418,7 +418,7 @@ function renderGamePopup(ctrl: OnlineRound) {
   return popupWidget(
     'player_controls',
     () => {
-      if (ctrl.data.tv || ctrl.data.userTV) {
+      if (ctrl.data.tv) {
         return [
           h('span.withIcon', {
             'data-icon': utils.gameIcon(ctrl.data.game.perf)

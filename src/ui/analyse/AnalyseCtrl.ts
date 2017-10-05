@@ -75,10 +75,6 @@ export default class AnalyseCtrl {
 
   private debouncedExplorerSetStep: () => void
 
-  public static decomposeUci(uci: string): [Key, Key, SanChar] {
-    return [<Key>uci.slice(0, 2), <Key>uci.slice(2, 4), <SanChar>uci.slice(4, 5)]
-  }
-
   constructor(
     data: AnalyseData,
     source: Source,
@@ -126,9 +122,7 @@ export default class AnalyseCtrl {
     this.explorer = ExplorerCtrl(this)
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50)
 
-    const initPly = ply ||
-      (this.source === 'online' && gameApi.isPlayerPlaying(this.data) ?
-        this.tree.lastPly() : this.tree.firstPly())
+    const initPly = ply || this.tree.lastPly()
 
     this.gamePath = (this.synthetic || this.ongoing) ? undefined :
       treePath.fromNodeList(treeOps.mainlineNodeList(this.tree.root))
@@ -361,7 +355,7 @@ export default class AnalyseCtrl {
   }
 
   explorerMove = (uci: string) => {
-    const move = AnalyseCtrl.decomposeUci(uci)
+    const move = chessFormat.decomposeUci(uci)
     if (uci[1] === '@') {
       this.chessground.apiNewPiece({
         color: this.chessground.state.movable.color as Color,

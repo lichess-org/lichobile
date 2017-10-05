@@ -57,7 +57,7 @@ function onTap(ctrl: IUserGamesCtrl, e: Event) {
         if (mePlaying || (g.source !== 'import' && g.status.id < gameStatus.ids.aborted))
           router.set(`/game/${id}/${userColor}`)
         else
-          router.set(`/analyse/online/${id}/${userColor}`)
+          router.set(`/analyse/online/${id}/${userColor}?curFen=${g.fen}`)
       }
     }
   }

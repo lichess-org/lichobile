@@ -3,8 +3,9 @@
   display flex
   flex-flow row nowrap
   justify-content space-around
+  align-items center
   @media only screen and (orientation: landscape)
-    flex 0 0 'calc((100vw - 100vh - %s) / 9 + 10px + 1em)' % headerHeight
+    flex 0 0 'calc((100vw - 100vh - %s) / 9 + 10px + 4px)' % headerHeight
   > .pocket
     width: calc(100vw / 11 * 5);
     height: calc(100vw / 11 + 11px);

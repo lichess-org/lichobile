@@ -92,7 +92,7 @@ export default {
     }
 
     return (
-      <div className="modal dark" id="tournamentPlayerInfoModal" oncreate={helper.slidesInLeft}>
+      <div className="modal" id="tournamentPlayerInfoModal" oncreate={helper.slidesInLeft}>
         <header>
           <button className="modal_close"
             oncreate={helper.ontap(helper.slidesOutRight(ctrl.close, 'tournamentPlayerInfoModal'))}

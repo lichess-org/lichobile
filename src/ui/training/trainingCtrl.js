@@ -310,7 +310,7 @@ export default function ctrl(vnode) {
 
   this.goToAnalysis = function() {
     const fen = this.data.replay.history[0].fen
-    router.set(`/analyse/variant/standard/fen/${encodeURIComponent(fen)}?color=${this.data.puzzle.color}`)
+    router.set(`/analyse/variant/standard/fen/${encodeURIComponent(fen)}?color=${this.data.puzzle.color}&goBack=1`)
   }.bind(this)
 
   if (vnode.attrs.id) {

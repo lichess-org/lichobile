@@ -9,54 +9,61 @@ import StageClock from '../shared/clock/clocks/StageClock'
 const MILLIS = 1000
 const MINUTE_MILLIS = 60 * 1000
 
-function SimpleClock(time: number) {
-  return IncrementClock(time, 0)
+function SimpleClock(time: number, onFlag: (color: Color) => void) {
+  return IncrementClock(time, 0, onFlag)
 }
 
-function IncrementClock(time: number, increment: number) {
-  return HandicapIncClock(time, increment, time, increment)
+function IncrementClock(time: number, increment: number, onFlag: (color: Color) => void) {
+  return HandicapIncClock(time, increment, time, increment, onFlag)
 }
 
 export default {
-  none: () => null,
+  none: (_: (color: Color) => void) => null,
 
-  simple: () => SimpleClock(
-    Number(settings.otb.clock.simple.time()) * MINUTE_MILLIS
+  simple: (onFlag: (color: Color) => void) => SimpleClock(
+    Number(settings.otb.clock.simple.time()) * MINUTE_MILLIS,
+    onFlag
   ),
 
-  increment: () => IncrementClock(
+  increment: (onFlag: (color: Color) => void) => IncrementClock(
     Number(settings.otb.clock.increment.time()) * MINUTE_MILLIS,
-    Number(settings.otb.clock.increment.increment()) * MILLIS
+    Number(settings.otb.clock.increment.increment()) * MILLIS,
+    onFlag
   ),
 
-  handicapInc: () => HandicapIncClock(
+  handicapInc: (onFlag: (color: Color) => void) => HandicapIncClock(
     Number(settings.otb.clock.handicapInc.topTime()) * MINUTE_MILLIS,
     Number(settings.otb.clock.handicapInc.topIncrement()) * MILLIS,
     Number(settings.otb.clock.handicapInc.bottomTime()) * MINUTE_MILLIS,
-    Number(settings.otb.clock.handicapInc.bottomIncrement()) * MILLIS
+    Number(settings.otb.clock.handicapInc.bottomIncrement()) * MILLIS,
+    onFlag
   ),
 
-  delay: () => DelayClock(
+  delay: (onFlag: (color: Color) => void) => DelayClock(
     Number(settings.otb.clock.delay.time()) * MINUTE_MILLIS,
-    Number(settings.otb.clock.delay.increment()) * MILLIS
+    Number(settings.otb.clock.delay.increment()) * MILLIS,
+    onFlag
   ),
 
-  bronstein: () => BronsteinClock(
+  bronstein: (onFlag: (color: Color) => void) => BronsteinClock(
     Number(settings.otb.clock.bronstein.time()) * MINUTE_MILLIS,
-    Number(settings.otb.clock.bronstein.increment()) * MILLIS
+    Number(settings.otb.clock.bronstein.increment()) * MILLIS,
+    onFlag
   ),
 
-  hourglass: () => HourglassClock(
-    Number(settings.otb.clock.hourglass.time()) * MINUTE_MILLIS
+  hourglass: (onFlag: (color: Color) => void) => HourglassClock(
+    Number(settings.otb.clock.hourglass.time()) * MINUTE_MILLIS,
+    onFlag
   ),
 
-  stage: () => StageClock(
+  stage: (onFlag: (color: Color) => void) => StageClock(
     settings.otb.clock.stage.stages().map((s: { time: string, moves: string }) => {
       return {
         time: Number(s.time),
         moves: s.moves !== null ? Number(s.moves) : null
       }
     }),
-    Number(settings.otb.clock.stage.increment()) * MILLIS
+    Number(settings.otb.clock.stage.increment()) * MILLIS,
+    onFlag
   )
 }

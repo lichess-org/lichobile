@@ -1,11 +1,11 @@
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
 
-import { ClockType, Side, IChessClock, IChessHandicapIncClockState } from '../interfaces'
+import { ClockType, IChessClock, IChessHandicapIncClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
-export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement: number, blackTimeParam: number, blackIncrement: number): IChessClock {
+export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement: number, blackTimeParam: number, blackIncrement: number, onFlag: (color: Color) => void): IChessClock {
   let state: IChessHandicapIncClockState = {
     clockType: 'handicapInc',
     whiteTime: (whiteTimeParam !== 0) ? whiteTimeParam : whiteIncrement,
@@ -16,7 +16,7 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
     flagged: undefined,
     isRunning: false
   }
-  
+
   let clockInterval: number
   let whiteTimestamp: number
   let blackTimestamp: number
@@ -29,6 +29,7 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
       state.whiteTime = Math.max(state.whiteTime - elapsed, 0)
       if (whiteTime() <= 0) {
         state.flagged = 'white'
+        onFlag(state.flagged)
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -39,6 +40,7 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
       state.blackTime = Math.max(state.blackTime - elapsed, 0)
       if (blackTime() <= 0) {
         state.flagged = 'black'
+        onFlag(state.flagged)
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -46,7 +48,7 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
     redraw()
   }
 
-  function clockHit(side: Side) {
+  function clockHit(side: Color) {
     if (flagged()) {
       return
     }
@@ -87,11 +89,11 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
     }
   }
 
-  function activeSide(): Side | undefined {
+  function activeSide(): Color | undefined {
      return state.activeSide;
   }
 
-  function flagged(): Side | undefined {
+  function flagged(): Color | undefined {
      return state.flagged;
   }
 

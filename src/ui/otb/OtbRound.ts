@@ -104,14 +104,14 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
 
     if (data.offlineClock) {
       const clockType = data.offlineClock.clockType as ClockType
-      this.clock = clockSet[clockType]()
-      this.clock.setState(data.offlineClock)    
+      this.clock = clockSet[clockType](this.onFlag)
+      this.clock.setState(data.offlineClock)
     }
     else {
       const clockType = settings.otb.clock.clockType() as ClockType
-      this.clock = clockSet[clockType]()
+      this.clock = clockSet[clockType](this.onFlag)
     }
-    
+
     if (this.clock)
       data.offlineClock = this.clock.getState()
 
@@ -133,8 +133,8 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     }
 
     const clockType = settings.otb.clock.clockType() as ClockType
-    this.clock = clockSet[clockType]()
-    
+    this.clock = clockSet[clockType](this.onFlag)
+
     chess.init(payload)
     .then((data: chess.InitResponse) => {
       this.init(makeData({
@@ -204,6 +204,13 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
 
   private onNewPiece = () => {
     sound.move()
+  }
+
+  private onFlag = (color: Color) => {
+    const winner = color === 'white' ? 'black' : 'white'
+    setResult(this, {id: 35, name: 'outoftime'}, winner)
+    this.onGameEnd()
+    this.save()
   }
 
   public apply(sit: chess.GameSituation) {

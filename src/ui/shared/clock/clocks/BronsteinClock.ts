@@ -1,11 +1,11 @@
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
 
-import { ClockType, Side, IChessClock, IChessDelayClockState } from '../interfaces'
+import { ClockType, IChessClock, IChessDelayClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
-export default function BronsteinClock(time: number, increment: number): IChessClock {
+export default function BronsteinClock(time: number, increment: number, onFlag: (color: Color) => void): IChessClock {
   let state: IChessDelayClockState = {
     clockType: 'bronstein',
     whiteTime: (time !== 0) ? time : increment,
@@ -31,6 +31,7 @@ export default function BronsteinClock(time: number, increment: number): IChessC
       state.whiteDelay = Math.max(state.whiteDelay - elapsed, 0)
       if (state.whiteTime <= 0) {
         state.flagged = 'white'
+        onFlag(state.flagged)
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -42,6 +43,7 @@ export default function BronsteinClock(time: number, increment: number): IChessC
       state.blackDelay = Math.max(state.blackDelay - elapsed, 0)
       if (state.blackTime <= 0) {
         state.flagged = 'black'
+        onFlag(state.flagged)
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -49,7 +51,7 @@ export default function BronsteinClock(time: number, increment: number): IChessC
     redraw()
   }
 
-  function clockHit(side: Side) {
+  function clockHit(side: Color) {
     if (state.flagged) {
       return
     }
@@ -97,11 +99,11 @@ export default function BronsteinClock(time: number, increment: number): IChessC
     }
   }
 
-  function activeSide(): Side | undefined {
+  function activeSide(): Color | undefined {
     return state.activeSide;
   }
 
-  function flagged(): Side | undefined {
+  function flagged(): Color | undefined {
     return state.flagged;
   }
 

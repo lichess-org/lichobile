@@ -1,11 +1,11 @@
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
 
-import { ClockType, Side, IChessClock, IChessBasicClockState } from '../interfaces'
+import { ClockType, IChessClock, IChessBasicClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
-export default function HourglassClock(time: number): IChessClock {
+export default function HourglassClock(time: number, onFlag: (color: Color) => void): IChessClock {
   let state: IChessBasicClockState = {
     clockType: 'hourglass',
     whiteTime: time/2,
@@ -28,6 +28,7 @@ export default function HourglassClock(time: number): IChessClock {
       state.blackTime = time - state.whiteTime
       if (whiteTime() <= 0) {
         state.flagged = 'white'
+        onFlag(state.flagged)
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -39,6 +40,7 @@ export default function HourglassClock(time: number): IChessClock {
       state.whiteTime = time - state.blackTime
       if (blackTime() <= 0) {
         state.flagged = 'black'
+        onFlag(state.flagged)
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -46,7 +48,7 @@ export default function HourglassClock(time: number): IChessClock {
     redraw()
   }
 
-  function clockHit(side: Side) {
+  function clockHit(side: Color) {
     if (flagged()) {
       return
     }
@@ -84,11 +86,11 @@ export default function HourglassClock(time: number): IChessClock {
     }
   }
 
-  function activeSide(): Side | undefined {
+  function activeSide(): Color | undefined {
      return state.activeSide;
   }
 
-  function flagged(): Side | undefined {
+  function flagged(): Color | undefined {
      return state.flagged;
   }
 

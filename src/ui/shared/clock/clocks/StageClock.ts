@@ -1,12 +1,12 @@
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
 
-import { ClockType, Side, IStageClock, Stage, IChessStageClockState } from '../interfaces'
+import { ClockType, IStageClock, Stage, IChessStageClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 const MINUTE_MILLIS = 60 * 1000
 
-export default function StageClock(stages: Stage[], increment: number): IStageClock {
+export default function StageClock(stages: Stage[], increment: number, onFlag: (color: Color) => void): IStageClock {
   let state: IChessStageClockState = {
     clockType: 'stage',
     whiteTime: Number(stages[0].time) * MINUTE_MILLIS,
@@ -34,6 +34,7 @@ export default function StageClock(stages: Stage[], increment: number): IStageCl
       state.whiteTime = Math.max(state.whiteTime - elapsed, 0)
       if (state.whiteTime <= 0) {
         state.flagged = 'white'
+        onFlag(state.flagged)
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -44,6 +45,7 @@ export default function StageClock(stages: Stage[], increment: number): IStageCl
       state.blackTime = Math.max(state.blackTime - elapsed, 0)
       if (state.blackTime <= 0) {
         state.flagged = 'black'
+        onFlag(state.flagged)
         sound.dong()
         clearInterval(clockInterval)
       }
@@ -51,7 +53,7 @@ export default function StageClock(stages: Stage[], increment: number): IStageCl
     redraw()
   }
 
-  function clockHit(side: Side) {
+  function clockHit(side: Color) {
     if (flagged()) {
       return
     }
@@ -118,11 +120,11 @@ export default function StageClock(stages: Stage[], increment: number): IStageCl
     }
   }
 
-  function activeSide(): Side | undefined {
+  function activeSide(): Color | undefined {
     return state.activeSide
   }
 
-  function flagged(): Side | undefined {
+  function flagged(): Color | undefined {
     return state.flagged
   }
 

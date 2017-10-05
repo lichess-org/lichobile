@@ -1,21 +1,34 @@
-import router from '../../../router'
-import { gameIcon } from '../../../utils'
-import * as helper from '../../helper'
-import i18n from '../../../i18n'
-
-import { IRelationCtrl } from './followingCtrl'
-import { Related } from '../../../lichess/interfaces/user'
+import router from '../../router'
+import { gameIcon } from '../../utils'
+import i18n from '../../i18n'
+import spinner from '../../spinner'
+import { Related } from '../../lichess/interfaces/user'
+import * as helper from '../helper'
+import { IRelationCtrl } from './interfaces'
 
 export function renderBody(ctrl: IRelationCtrl) {
-  if (ctrl.related().length) {
+  const rel = ctrl.related()
+
+  if (!rel) {
+    return (
+      <div className="followingListEmpty">
+        {spinner.getVdom('monochrome')}
+      </div>
+    )
+  }
+  else if (rel.length) {
     const paginator = ctrl.paginator()
     const nextPage = paginator && paginator.nextPage
     return (
       <ul className="native_scroller page">
-        {ctrl.related().map(p => renderPlayer(ctrl, p))}
+        {rel.map(p => renderPlayer(ctrl, p))}
         {nextPage ?
-          <li className="list_item followingList moreFollow" oncreate={helper.ontapY(() => ctrl.loadNextPage(nextPage))}> ... </li> :
-          null
+          <li
+            className="list_item followingList moreFollow"
+            oncreate={helper.ontapY(() => ctrl.loadNextPage(nextPage))}
+          >
+          {ctrl.isLoadingNextPage() ? spinner.getVdom('monochrome') : '...'}
+          </li> : null
         }
       </ul>
     )
@@ -28,7 +41,7 @@ export function renderBody(ctrl: IRelationCtrl) {
   }
 }
 
-export function renderPlayer(ctrl: IRelationCtrl, obj: Related) {
+function renderPlayer(ctrl: IRelationCtrl, obj: Related) {
   const status = obj.online ? 'online' : 'offline'
   const perfKey = obj.perfs && Object.keys(obj.perfs)[0]
   const perf = obj.perfs && obj.perfs[perfKey]

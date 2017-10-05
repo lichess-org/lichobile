@@ -2,8 +2,9 @@ import * as helper from '../../helper'
 import layout from '../../layout'
 import { header } from '../../shared/common'
 
-import FollowingCtrl, { IRelationCtrl } from './followingCtrl'
-import { renderBody } from './followingView'
+import FollowingCtrl from './followingCtrl'
+import { IRelationCtrl } from '../interfaces'
+import { renderBody } from '../relatedView'
 
 interface Attrs {
   id: string
@@ -13,7 +14,7 @@ interface State {
   ctrl: IRelationCtrl
 }
 
-const FollowersScreen: Mithril.Component<Attrs, State> = {
+export default {
   oncreate: helper.viewFadeIn,
 
   oninit(vnode) {
@@ -25,7 +26,4 @@ const FollowersScreen: Mithril.Component<Attrs, State> = {
       () => renderBody(this.ctrl)
     )
   }
-}
-
-export default FollowersScreen
-
+} as Mithril.Component<Attrs, State>

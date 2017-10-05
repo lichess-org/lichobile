@@ -1,6 +1,7 @@
 import settings from '../../../settings'
-import StockfishEngine from './StockfishEngine'
 import { Tree } from '../../shared/tree'
+import { getNbCores } from '../../../utils/stockfish'
+import StockfishEngine from './StockfishEngine'
 import { Opts, Work, ICevalCtrl } from './interfaces'
 
 export default function CevalCtrl(
@@ -34,7 +35,7 @@ export default function CevalCtrl(
     emit(work, res)
   }
 
-  function start(path: Tree.Path, nodes: Tree.Node[], forceOneLine18: boolean) {
+  function start(path: Tree.Path, nodes: Tree.Node[], forceRetroOpts: boolean) {
     if (!enabled()) {
       return
     }
@@ -46,12 +47,11 @@ export default function CevalCtrl(
       initialFen: nodes[0].fen,
       currentFen: step.fen,
       moves: nodes.slice(1).map((s) => fixCastle(s.uci!, s.san!)),
-      maxDepth: forceOneLine18 ? 18 : effectiveMaxDepth(),
-      cores: opts.cores,
+      maxDepth: forceRetroOpts ? 18 : effectiveMaxDepth(),
+      cores: forceRetroOpts ? getNbCores() : opts.cores,
       path,
       ply: step.ply,
-      multiPv: opts.multiPv,
-      forceOneLine18,
+      multiPv: forceRetroOpts ? 1 : opts.multiPv,
       threatMode: false,
       emit(res?: Tree.ClientEval) {
         if (enabled()) onEmit(work, res)

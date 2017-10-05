@@ -91,7 +91,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
       })
 
       return setOption('Threads', work.cores)
-      .then(() => setOption('MultiPV', work.forceOneLine ? 1 : work.multiPv))
+      .then(() => setOption('MultiPV', work.multiPv))
       .then(() => send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' ')))
       .then(() => send('go depth ' + work.maxDepth))
     }

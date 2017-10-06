@@ -1,11 +1,11 @@
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
 
-import { ClockType, IChessClock, IChessHandicapIncClockState } from '../interfaces'
+import { ClockType, IBasicClock, IChessHandicapIncClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
-export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement: number, blackTimeParam: number, blackIncrement: number, onFlag: (color: Color) => void): IChessClock {
+export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement: number, blackTimeParam: number, blackIncrement: number, onFlag: (color: Color) => void): IBasicClock {
   let state: IChessHandicapIncClockState = {
     clockType: 'handicapInc',
     whiteTime: (whiteTimeParam !== 0) ? whiteTimeParam : whiteIncrement,
@@ -117,6 +117,10 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
     return state.blackTime
   }
 
+  function getTime(color: Color): number {
+    return color === 'white' ? whiteTime() : blackTime()
+  }
+
   const clockType: ClockType = 'handicapInc'
 
   return {
@@ -130,6 +134,7 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
     startStop,
     whiteTime,
     blackTime,
+    getTime,
     clear() {
       clearInterval(clockInterval)
     }

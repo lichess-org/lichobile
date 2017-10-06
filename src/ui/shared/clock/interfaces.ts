@@ -3,12 +3,13 @@ export type Side = 'white' | 'black'
 
 export type ClockType = 'simple' | 'increment' | 'handicapInc' | 'delay' | 'bronstein' | 'hourglass' | 'stage'
 
-export interface IChessClock {
+export interface IBasicClock {
   clockType: ClockType
   getState(): ClockState
   setState(state: ClockState): void
   whiteTime(): number
   blackTime(): number
+  getTime(color: Color): number
   activeSide(): Side | undefined
   flagged(): Side | undefined
   isRunning(): boolean
@@ -19,10 +20,12 @@ export interface IChessClock {
 
 export interface Stage { time: number, moves: number | null }
 
-export interface IStageClock extends IChessClock {
+export interface IStageClock extends IBasicClock {
   whiteMoves(): number | null
   blackMoves(): number | null
 }
+
+export type IChessClock = IBasicClock | IStageClock
 
 export interface IChessBasicClockState {
   clockType: ClockType

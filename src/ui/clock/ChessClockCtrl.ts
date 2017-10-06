@@ -4,13 +4,13 @@ import clockSettings from './clockSettings'
 import clockSet from './clockSet'
 import * as stream from 'mithril/stream'
 
-import { ClockType, IChessClock, IStageClock } from '../shared/clock/interfaces'
+import { ClockType, IChessClock } from '../shared/clock/interfaces'
 
 export interface IChessClockCtrl {
   hideStatusBar: () => void
   startStop: () => void
   clockSettingsCtrl: any
-  clockObj: Mithril.Stream<IChessClock | IStageClock>
+  clockObj: Mithril.Stream<IChessClock>
   reload: () => void
   goHome: () => void
   clockTap: (side: 'white' | 'black') => void

@@ -1,11 +1,11 @@
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
 
-import { ClockType, IChessClock, IChessDelayClockState } from '../interfaces'
+import { ClockType, IBasicClock, IChessDelayClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
-export default function BronsteinClock(time: number, increment: number, onFlag: (color: Color) => void): IChessClock {
+export default function BronsteinClock(time: number, increment: number, onFlag: (color: Color) => void): IBasicClock {
   let state: IChessDelayClockState = {
     clockType: 'bronstein',
     whiteTime: (time !== 0) ? time : increment,
@@ -127,6 +127,10 @@ export default function BronsteinClock(time: number, increment: number, onFlag: 
     return state.blackTime
   }
 
+  function getTime(color: Color): number {
+    return color === 'white' ? whiteTime() : blackTime()
+  }
+
   const clockType: ClockType = 'bronstein'
 
   return {
@@ -140,6 +144,7 @@ export default function BronsteinClock(time: number, increment: number, onFlag: 
     startStop,
     whiteTime,
     blackTime,
+    getTime,
     clear() {
       clearInterval(clockInterval)
     }

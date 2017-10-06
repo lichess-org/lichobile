@@ -1,11 +1,11 @@
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
 
-import { ClockType, IChessClock, IChessBasicClockState } from '../interfaces'
+import { ClockType, IBasicClock, IChessBasicClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
-export default function HourglassClock(time: number, onFlag: (color: Color) => void): IChessClock {
+export default function HourglassClock(time: number, onFlag: (color: Color) => void): IBasicClock {
   let state: IChessBasicClockState = {
     clockType: 'hourglass',
     whiteTime: time/2,
@@ -114,6 +114,10 @@ export default function HourglassClock(time: number, onFlag: (color: Color) => v
     return state.blackTime
   }
 
+  function getTime(color: Color): number {
+    return color === 'white' ? whiteTime() : blackTime()
+  }
+
   const clockType: ClockType = 'hourglass'
 
   return {
@@ -127,6 +131,7 @@ export default function HourglassClock(time: number, onFlag: (color: Color) => v
     startStop,
     whiteTime,
     blackTime,
+    getTime,
     clear() {
       clearInterval(clockInterval)
     }

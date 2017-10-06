@@ -27,8 +27,8 @@ export function contains(p1: Tree.Path, p2: Tree.Path): boolean {
 }
 
 export function fromNodeList(nodes: Tree.Node[]): Tree.Path {
-  var path = ''
-  for (var i in nodes) path += nodes[i].id
+  let path = ''
+  for (let i in nodes) path += nodes[i].id
   return path
 }
 

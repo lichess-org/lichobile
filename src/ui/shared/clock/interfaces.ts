@@ -57,9 +57,3 @@ export interface IChessStageClockState extends IChessBasicClockState {
 }
 
 export type ClockState = IChessBasicClockState | IChessHandicapIncClockState | IChessDelayClockState | IChessStageClockState;
-
-export interface AntagonistTimeData {
-  clockType: ClockType
-  time: number
-  moves: number | null
-}

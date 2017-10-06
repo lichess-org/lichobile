@@ -10,8 +10,8 @@ import CrazyPocket from '../../shared/round/crazy/CrazyPocket'
 import { OfflineRoundInterface, Position, Material } from '../round'
 import settings from '../../../settings'
 import Replay from './Replay'
-import { AntagonistTimeData } from '../clock/interfaces'
-import { formatTime } from '../clock/utils'
+import { IChessClock } from '../clock/interfaces'
+import { formatClockTime } from '../round/clock/clockView'
 
 let pieceNotation: boolean
 
@@ -24,7 +24,7 @@ function getChecksCount(ctrl: OfflineRoundInterface, color: Color) {
     return 0
 }
 
-export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.Children, material: Material, position: Position, isPortrait: boolean, otbFlip?: boolean, customPieceTheme?: string, timeData?: AntagonistTimeData | null) {
+export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.Children, material: Material, position: Position, isPortrait: boolean, otbFlip?: boolean, customPieceTheme?: string, clock?: IChessClock | null) {
   const sit = ctrl.replay.situation()
   const isCrazy = !!sit.crazyhouse
   const key = isPortrait ? position + '-portrait' : position + '-landscape'
@@ -44,7 +44,7 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
       <div key="infos" className={'antagonistInfos offline' + (isCrazy ? ' crazy' : '')}>
         <div className="antagonistUser">
           {content}
-          {timeData ? formatTime(timeData.clockType, timeData.time/1000) : ''}
+          {clock ? renderClock(clock, antagonistColor) : ''}
         </div>
         { !isCrazy ? <div className="ratingAndMaterial">
           {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
@@ -220,4 +220,18 @@ function autoScroll(movelist: HTMLElement) {
   if (!movelist) return
   const plyEl = (movelist.querySelector('.current') || movelist.querySelector('tr:first-child')) as HTMLElement
   if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2
+}
+
+function renderClock(clock: IChessClock, color: Color) {
+  const runningColor = clock.activeSide()
+  const time = clock.getTime(color)
+  const isRunning = runningColor === color
+  const className = helper.classSet({
+    clock: true,
+    outoftime: !time,
+    running: isRunning,
+  })
+  return h('div', {
+    className
+  }, formatClockTime(time, isRunning))
 }

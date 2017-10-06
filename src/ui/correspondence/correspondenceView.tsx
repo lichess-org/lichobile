@@ -62,7 +62,7 @@ export function renderBody(ctrl: CorrespondenceCtrl) {
 }
 
 export function renderFooter() {
-  return h('div.actions_bar', h('button.action_bar_button', {
+  return h('div.actions_bar', h('button.action_create_button', {
     oncreate: helper.ontap(newGameForm.openCorrespondence)
   }, [h('span.fa.fa-plus-circle'), i18n('createAGame')]))
 }

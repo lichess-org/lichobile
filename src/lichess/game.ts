@@ -162,7 +162,7 @@ export function title(data: GameData | AnalyseData): string {
   const name = perf || (variant ? (variant.tinyName || variant.shortName || variant.name) : '?')
   const t = time(data)
   return data.game.source === 'import' ?
-    `Import • ${name}` :
+    'Import • Standard' :
     `${t} • ${name} • ${mode}`
 }
 

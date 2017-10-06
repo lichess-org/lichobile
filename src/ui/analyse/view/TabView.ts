@@ -18,13 +18,16 @@ interface Attrs {
 }
 
 interface State {
+  nbTabs: number
   mc: HammerManager
 }
 
 export default {
-  oncreate({ attrs, dom }) {
-    const nbTabs = attrs.content.length
+  oninit({ attrs }) {
+    this.nbTabs = attrs.content.length
+  },
 
+  oncreate({ attrs, dom }) {
     this.mc = new Hammer.Manager(dom, {
       inputClass: Hammer.TouchInput
     })
@@ -41,7 +44,7 @@ export default {
           const ds = tab.dataset as DOMStringMap
           const index = Number(ds.index)
           if (index !== undefined) {
-            if (e.direction === Hammer.DIRECTION_LEFT && index < nbTabs - 1) {
+            if (e.direction === Hammer.DIRECTION_LEFT && index < this.nbTabs - 1) {
               attrs.onTabChange(index + 1)
             }
             else if (e.direction === Hammer.DIRECTION_RIGHT && index > 0) {
@@ -51,6 +54,10 @@ export default {
         }
       }
     })
+  },
+
+  onupdate({ attrs }) {
+    this.nbTabs = attrs.content.length
   },
 
   onremove() {

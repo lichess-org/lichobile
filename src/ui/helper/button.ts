@@ -29,7 +29,8 @@ export default function ButtonHandler(
     boundaries: Boundaries,
     active: boolean,
     holdTimeoutID: number,
-    repeatTimeoutId: number
+    repeatTimeoutId: number,
+    activeTimeoutId: number
 
   if (typeof tapHandler !== 'function')
     throw new Error('ButtonHandler 2nd argument must be a function!')
@@ -62,9 +63,9 @@ export default function ButtonHandler(
       maxY: boundingRect.bottom
     }
     active = true
-    setTimeout(() => {
-      if (active && activeElement) activeElement.classList.add(ACTIVE_CLASS)
-    }, 30)
+    clearTimeout(activeTimeoutId)
+    // for ios: need to set it bc/ :active doesn't reset when moving away
+    activeElement.classList.add(ACTIVE_CLASS)
     holdTimeoutID = setTimeout(() => onHold(e), HOLD_DURATION)
     if (repeatHandler) repeatTimeoutId = setTimeout(() => {
       batchRequestAnimationFrame(onRepeat)
@@ -91,9 +92,9 @@ export default function ButtonHandler(
     removeFromBatchAnimationFrame(onRepeat)
     if (active && activeElement) {
       clearTimeout(holdTimeoutID)
+      activeTimeoutId = setTimeout(() => activeElement && activeElement.classList.remove(ACTIVE_CLASS), 80)
       tapHandler(e)
       active = false
-      activeElement.classList.remove(ACTIVE_CLASS)
     }
   }
 
@@ -102,7 +103,9 @@ export default function ButtonHandler(
     clearTimeout(repeatTimeoutId)
     removeFromBatchAnimationFrame(onRepeat)
     active = false
-    if (activeElement) activeElement.classList.remove(ACTIVE_CLASS)
+    if (activeElement) {
+      activeElement.classList.remove(ACTIVE_CLASS)
+    }
   }
 
   function onContextMenu(e: TouchEvent) {
@@ -117,7 +120,9 @@ export default function ButtonHandler(
     if (holdHandler) {
       holdHandler(e)
       active = false
-      if (activeElement) activeElement.classList.remove(ACTIVE_CLASS)
+      if (activeElement) {
+        activeElement.classList.remove(ACTIVE_CLASS)
+      }
     }
   }
 
@@ -139,8 +144,10 @@ export default function ButtonHandler(
     )
   }
 
-  el.addEventListener('touchstart', onTouchStart, false)
-  el.addEventListener('touchmove', onTouchMove, false)
+  const passiveConf: any = { passive: true }
+
+  el.addEventListener('touchstart', onTouchStart, passiveConf)
+  el.addEventListener('touchmove', onTouchMove, passiveConf)
   el.addEventListener('touchend', onTouchEnd, false)
   el.addEventListener('touchcancel', onTouchCancel, false)
   el.addEventListener('contextmenu', onContextMenu, false)

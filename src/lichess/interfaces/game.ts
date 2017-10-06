@@ -63,6 +63,7 @@ export interface Game {
   rematch?: string
   importedBy?: string
   // only for analyse
+  moveCentis?: number[]
   division?: {
     middle?: number | null
     end?: number | null
@@ -79,7 +80,6 @@ export interface OnlineGame extends Game {
 }
 
 export interface Player {
-  id: string
   color: Color
   rating?: number
   user?: User
@@ -97,6 +97,7 @@ export interface Player {
   version?: number
   checks?: number
   ratingDiff?: number
+  blurs?: { nb: number, percent: number }
 }
 
 export interface OnlinePlayer extends Player {
@@ -105,9 +106,9 @@ export interface OnlinePlayer extends Player {
 
 interface Tournament {
   id: string
-  berserkable: boolean
-  secondsToFinish: number
-  nbSecondsForFirstMove: number
+  berserkable?: boolean
+  secondsToFinish?: number
+  nbSecondsForFirstMove?: number
   name: string
   ranks?: {
     white: string

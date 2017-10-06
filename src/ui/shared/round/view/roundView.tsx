@@ -3,7 +3,6 @@ import * as range from 'lodash/range'
 import redraw from '../../../../utils/redraw'
 import socket from '../../../../socket'
 import session from '../../../../session'
-import variantApi from '../../../../lichess/variant'
 import * as playerApi from '../../../../lichess/player'
 import * as gameApi from '../../../../lichess/game'
 import * as perfApi from '../../../../lichess/perfs'
@@ -62,30 +61,36 @@ export function renderMaterial(material: Material) {
 }
 
 function renderTitle(ctrl: OnlineRound) {
+  const data = ctrl.data
   if (ctrl.vm.offlineWatcher || socket.isConnected()) {
+    const isCorres = !data.player.spectator && data.game.speed === 'correspondence'
     if (ctrl.data.tv) {
-      return h('div.main_header_title.withSub', [
+      return h('div.main_header_title.withSub', {
+        key: 'tv'
+      }, [
         h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), 'Lichess TV']),
         h('h2.header-subTitle', tvChannelSelector(ctrl))
       ])
     }
     else if (ctrl.data.userTV) {
-      return h('div.main_header_title.withSub', [
+      return h('div.main_header_title.withSub', {
+        key: 'user-tv'
+      }, [
         h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), ctrl.data.userTV]),
         h('h2.header-subTitle', [h(`span.withIcon[data-icon=${utils.gameIcon(ctrl.data.game.perf)}]`), gameApi.title(ctrl.data)])
       ])
     }
     else {
       return h(GameTitle, {
-        key: 'playingTitle',
+        key: 'playing-title',
         data: ctrl.data,
         kidMode: session.isKidMode(),
-        subTitle: ctrl.data.tournament ? 'tournament' : 'date'
+        subTitle: ctrl.data.tournament ? 'tournament' : isCorres ? 'corres' : 'date'
       })
     }
   } else {
     return (
-      <div key="reconnectingTitle" className="main_header_title reconnecting">
+      <div key="reconnecting-title" className="main_header_title reconnecting">
         {loader}
       </div>
     )
@@ -117,14 +122,15 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait)
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait)
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game')
+  const tournament = ctrl.data.tournament
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessground: ctrl.chessground,
     bounds,
     isPortrait,
-    alert: !!ctrl.data.tournament && !ctrl.data.player.spectator && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
-      i18n('youHaveNbSecondsToMakeYourFirstMove', ctrl.data.tournament.nbSecondsForFirstMove) : undefined
+    alert: !!tournament && tournament.nbSecondsForFirstMove && !ctrl.data.player.spectator && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
+      i18n('youHaveNbSecondsToMakeYourFirstMove', tournament.nbSecondsForFirstMove) : undefined
   })
 
   const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
@@ -308,6 +314,7 @@ function tvChannelSelector(ctrl: OnlineRound) {
 function renderGameRunningActions(ctrl: OnlineRound) {
   if (ctrl.data.player.spectator) {
     let controls = [
+      gameButton.bookmark(ctrl),
       gameButton.shareLink(ctrl),
       ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
       ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null
@@ -359,6 +366,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
     if (ctrl.data.player.spectator) {
       buttons = [
         gameButton.returnToTournament(ctrl),
+        gameButton.bookmark(ctrl),
         gameButton.shareLink(ctrl),
         gameButton.sharePGN(ctrl),
         gameButton.analysisBoard(ctrl)
@@ -368,6 +376,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
       buttons = [
         gameButton.returnToTournament(ctrl),
         gameButton.withdrawFromTournament(ctrl, tournamentId),
+        gameButton.bookmark(ctrl),
         gameButton.shareLink(ctrl),
         gameButton.sharePGN(ctrl),
         gameButton.analysisBoard(ctrl)
@@ -377,6 +386,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
   else {
     if (ctrl.data.player.spectator) {
       buttons = [
+        gameButton.bookmark(ctrl),
         gameButton.shareLink(ctrl),
         ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
         ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
@@ -386,6 +396,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
     }
     else {
       buttons = [
+        gameButton.bookmark(ctrl),
         gameButton.shareLink(ctrl),
         gameButton.sharePGN(ctrl),
         gameButton.newOpponent(ctrl),
@@ -398,49 +409,39 @@ function renderGameEndedActions(ctrl: OnlineRound) {
   }
   return (
     <div className="game_controls">
-      <div className="result">{resultDom}</div>
       <div className="control buttons">{buttons}</div>
     </div>
   )
 }
 
-function gameInfos(ctrl: OnlineRound) {
-  const data = ctrl.data
-  const time = gameApi.time(data)
-  const mode = data.game.rated ? i18n('rated') : i18n('casual')
-  const icon = utils.gameIcon(data.game.perf)
-  const withLink = !['standard', 'fromPosition'].includes(data.game.variant.key)
-  const perf = h('span.perf', {
-    className: withLink ? 'withLink' : '',
-    oncreate: helper.ontap(
-      () => {
-        if (withLink) {
-          const link = variantApi(data.game.variant.key).link
-          if (link) window.open(link, '_blank')
-        }
-      }
-    )
-  }, perfApi.perfTitle(data.game.perf))
-  const infos = [time + ' • ', perf, h('br'), mode]
+function renderPopupTitle(ctrl: OnlineRound) {
   return [
-    h('div.icon-game', {
-      'data-icon': icon ? icon : ''
+    h('span.withIcon', {
+      'data-icon': utils.gameIcon(ctrl.data.game.perf)
     }),
-    h('div.game-title.no_select', infos),
-    session.isConnected() ? h('button.star', {
-      oncreate: helper.ontap(
-        ctrl.toggleBookmark,
-        () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'center')
-      ),
-      'data-icon': data.bookmarked ? 't' : 's'
-    }) : null
+    gameApi.title(ctrl.data)
   ]
 }
 
+function renderStatus(ctrl: OnlineRound) {
+  const result = gameApi.result(ctrl.data)
+  const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner)
+  const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
+    (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
+  return gameStatusApi.aborted(ctrl.data) ? [] : [
+    h('strong', result), h('br')
+  ].concat([h('em.resultStatus', status)])
+}
+
 function renderGamePopup(ctrl: OnlineRound) {
+  const header = ctrl.data.tv ?
+    () => renderPopupTitle(ctrl) :
+    !gameApi.playable(ctrl.data) ?
+      () => renderStatus(ctrl) : undefined
+
   return popupWidget(
     'player_controls',
-    () => gameInfos(ctrl),
+    header,
     gameApi.playable(ctrl.data) ?
       () => renderGameRunningActions(ctrl) : () => renderGameEndedActions(ctrl),
     ctrl.vm.showingActions,

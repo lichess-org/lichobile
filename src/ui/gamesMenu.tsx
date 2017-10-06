@@ -1,7 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import * as IScroll from 'iscroll'
 import * as utils from '../utils'
-import { syncWithNowPlayingGames, getOfflineGames } from '../utils/offlineGames'
+import { getOfflineGames } from '../utils/offlineGames'
 import { playerName as liPlayerName } from '../lichess/player'
 import { OnlineGameData } from '../lichess/interfaces/game'
 import { NowPlayingGame } from '../lichess/interfaces'
@@ -124,12 +124,6 @@ function open() {
   setTimeout(() => {
     if (scroller) scroller.goToPage(1, 0)
   }, 400)
-  session.refresh()
-  .then(v => {
-    if (v) return session.nowPlaying()
-    else return undefined
-  })
-  .then(syncWithNowPlayingGames)
 }
 
 function close(fromBB?: string) {

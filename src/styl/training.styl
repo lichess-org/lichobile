@@ -1,33 +1,66 @@
-.trainingSection
-  height "calc((100% - 100vw - %s) / 2)" % footerHeight
-  padding 0 10px
+.training-tableWrapper
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  min-width: 0;
+
+.training-table
+  height initial
+  flex 1 1 auto
   display flex
-  justify-content space-between
+  flex-flow column nowrap
+  font-size 0.9em
+
+.training-explanation
+  padding 5px
+  flex 1 1 auto
+  display flex
+  flex-flow column nowrap
+  justify-content center
   align-items center
-  font-size 0.9rem
-  overflow hidden
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4)
-    height "calc((100% - 98vw - %s) / 2)" % footerHeight
-  @media only screen and (orientation: landscape)
-    padding 0
-    flex 1 0 auto
-    height initial
-    margin-bottom 10px
-  > .puzzle
-    padding 5px 0
-    &:before
-      font-size 1.2em
-
-.table
-  > .trainingTable
-    padding 0 10px
-    flex 1 1 auto
+  > .player
     display flex
-    flex-flow column nowrap
-    justify-content space-between
+    justify-content center
+    align-items center
+    > .piece-no-square
+      width: 40px
+      height: 40px
+  > .fatButton
+    opacity 0.7
+    width initial
+    margin 5px auto
+    font-size 0.8em
+    padding 0.5em
 
-.puzzleComment
-  text-align center
+.training-control
+  align-self stretch
+  width 50%
+  color: #fff;
+  display flex
+  justify-content center
+  align-items center
+  padding 0 1em
+  text-transform uppercase
+  > .fa
+    font-size 30px
+  &.continue
+    background: rgba(56,147,232,0.8);
+
+.training-instruction
+  display flex
+  flex-flow column nowrap
+  > strong
+    font-size 1.1em
+
+.training-icon
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  font-size: 50px;
+  font-size: 40px;
+  line-height: 40px;
+  text-align: center;
   &.fail, &.loss
     color red
   &.great, &.win
@@ -36,6 +69,15 @@
 .puzzleRatingDiff
   margin-left 10px
   font-size 1.5em
+
+.training-half
+  width 100%
+  flex 1 1 50%
+  display flex
+  justify-content center
+  align-items center
+  &:first-child
+    padding 5px 0
 
 .trainingPlayer
   .player
@@ -81,7 +123,25 @@
 
 #training-graph
   .path
-    stroke blue
     fill rgba(blue, 0.5)
+  .line
+    stroke blue
   .legend
     fill blue
+
+
+.view-container.light
+  .training-control
+    &.retry
+      color textLightBg
+
+
+.view-container.transp
+  .training-control
+    &.continue
+      background-color transpWhite03
+
+  .training-explanation
+    > .fatButton
+      opacity 0.6
+      box-shadow none

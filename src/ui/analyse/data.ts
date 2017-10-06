@@ -36,12 +36,10 @@ export function makeDefaultData(variantKey: VariantKey, fen?: string): AnalyseDa
     takebackable: false,
     orientation: 'white',
     opponent: {
-      id: oppositeColor(player),
       color: oppositeColor(player)
     },
     player: {
-      color: player,
-      id: player
+      color: player
     },
     pref: {
       animationDuration: 300,

@@ -20,6 +20,7 @@ import continuePopup, { Controller as ContinuePopupController } from '../shared/
 import { NotesCtrl } from '../shared/round/notes'
 import * as util from './util'
 import CevalCtrl from './ceval/CevalCtrl'
+import RetroCtrl, { IRetroCtrl } from './retrospect/RetroCtrl'
 import { ICevalCtrl, Work as CevalWork } from './ceval/interfaces'
 import crazyValid from './crazy/crazyValid'
 import ExplorerCtrl from './explorer/ExplorerCtrl'
@@ -42,6 +43,7 @@ export default class AnalyseCtrl {
   notes: NotesCtrl | null
   chessground: Chessground
   ceval: ICevalCtrl
+  retro: IRetroCtrl | null
   explorer: IExplorerCtrl
   tree: TreeWrapper
 
@@ -66,15 +68,12 @@ export default class AnalyseCtrl {
   cgConfig?: cg.SetConfig
   shouldGoBack: boolean
   analysisProgress: boolean = false
+  retroGlowing: boolean = false
   formattedDate: string
 
   private _currentTabIndex: number = 0
 
   private debouncedExplorerSetStep: () => void
-
-  public static decomposeUci(uci: string): [Key, Key, SanChar] {
-    return [<Key>uci.slice(0, 2), <Key>uci.slice(2, 4), <SanChar>uci.slice(4, 5)]
-  }
 
   constructor(
     data: AnalyseData,
@@ -107,6 +106,8 @@ export default class AnalyseCtrl {
     // this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null
     this.notes = null
 
+    this.retro = null
+
     this.ceval = CevalCtrl(
       this.data.game.variant.key,
       this.allowCeval(),
@@ -121,10 +122,7 @@ export default class AnalyseCtrl {
     this.explorer = ExplorerCtrl(this)
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50)
 
-    const initPly = Number(ply) ||
-      (location.hash && parseInt(location.hash.replace(/#/, ''), 10)) ||
-      (this.source === 'online' && gameApi.isPlayerPlaying(this.data) ?
-        this.tree.lastPly() : this.tree.firstPly())
+    const initPly = ply || this.tree.lastPly()
 
     this.gamePath = (this.synthetic || this.ongoing) ? undefined :
       treePath.fromNodeList(treeOps.mainlineNodeList(this.tree.root))
@@ -166,6 +164,10 @@ export default class AnalyseCtrl {
     return this.data.game.player
   }
 
+  bottomColor(): Color {
+    return this.settings.s.flip ? oppositeColor(this.data.orientation) : this.data.orientation
+  }
+
   connectGameSocket = () => {
     if (hasNetwork() &&
       this.data.url !== undefined &&
@@ -184,7 +186,7 @@ export default class AnalyseCtrl {
     let val = tabs.defaults
 
     if (this.synthetic) val = val.filter(t => t.id !== 'infos')
-    if (this.ceval.enabled()) val = val.concat([tabs.ceval])
+    if (!this.retro && this.ceval.enabled()) val = val.concat([tabs.ceval])
     if (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data)) {
       val = val.concat([tabs.charts])
     }
@@ -203,18 +205,16 @@ export default class AnalyseCtrl {
   }
 
   onTabChange = (index: number) => {
-    const loc = window.location.search.replace(/\?tab\=\w+$/, '')
-    try {
-      window.history.replaceState(window.history.state, '', loc + '?tab=' + index)
-    } catch (e) {
-      console.error(e)
-    }
     this._currentTabIndex = index
     const cur = this.currentTab(this.availableTabs())
+    this.updateHref()
     if (cur.id === 'moves') this.debouncedScroll()
-    this.explorer.setStep()
+    else if (cur.id === 'explorer') this.explorer.setStep()
     redraw()
   }
+
+  // call this when removing a tab, to avoid a lazy tab loading indefinitely
+  resetTabs = () => this.onTabChange(this.currentTabIndex(this.availableTabs()))
 
   setPath = (path: Tree.Path): void => {
     this.path = path
@@ -247,18 +247,51 @@ export default class AnalyseCtrl {
   initCeval = () => {
     if (this.ceval.enabled()) {
       if (this.ceval.isInit()) {
-        this.startCeval()
+        this.debouncedStartCeval()
       } else {
-        this.ceval.init().then(this.startCeval)
+        this.ceval.init().then(this.debouncedStartCeval)
       }
+    }
+  }
+
+  startCeval = () => {
+    if (this.ceval.enabled() && this.canUseCeval()) {
+      this.ceval.start(this.path, this.nodeList, !!this.retro)
+    }
+  }
+
+  stopCevalImmediately = () => {
+    this.ceval.stop()
+    this.debouncedStartCeval.cancel()
+  }
+
+  toggleRetro = (fromBB?: string): void => {
+    if (this.retro) {
+      if (fromBB !== 'backbutton') router.backbutton.stack.pop()
+      this.retro = null
+      // retro toggle ceval only if not enabled
+      // we use stored settings to see if it was previously enabled or not
+      if (settings.analyse.enableCeval()) {
+        this.startCeval()
+      }
+      // ceval not enabled if no moves were to review
+      else if (this.ceval.enabled()) {
+        this.ceval.toggle()
+      }
+    }
+    else {
+      this.stopCevalImmediately()
+      this.retro = RetroCtrl(this)
+      router.backbutton.stack.push(this.toggleRetro)
+      this.retro.jumpToNext()
     }
   }
 
   debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200)
 
   jump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
+    const pathChanged = path !== this.path
     this.setPath(path)
-    // this.toggleVariationMenu()
     this.showGround()
     this.fetchOpening()
     if (this.node && this.node.san && direction === 'forward') {
@@ -268,8 +301,13 @@ export default class AnalyseCtrl {
     this.ceval.stop()
     this.debouncedExplorerSetStep()
     this.updateHref()
-    this.startCeval()
     promotion.cancel(this.chessground, this.cgConfig)
+    if (pathChanged) {
+      if (this.retro) this.retro.onJump()
+      else {
+        this.debouncedStartCeval()
+      }
+    }
   }
 
   userJump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
@@ -317,7 +355,7 @@ export default class AnalyseCtrl {
   }
 
   explorerMove = (uci: string) => {
-    const move = AnalyseCtrl.decomposeUci(uci)
+    const move = chessFormat.decomposeUci(uci)
     if (uci[1] === '@') {
       this.chessground.apiNewPiece({
         color: this.chessground.state.movable.color as Color,
@@ -335,12 +373,13 @@ export default class AnalyseCtrl {
   mergeAnalysisData(data: AnalyseDataWithTree): void {
     this.tree.merge(data.tree)
     this.data.analysis = data.analysis
+    if (this.retro) this.retro.onMergeAnalysisData()
     redraw()
   }
 
   gameOver() {
     if (!this.node) return false
-    // step.end boolean is fetched async for online games (along with the dests)
+    // node.end boolean is fetched async for online games (along with the dests)
     if (this.node.end === undefined) {
       if (this.node.check) {
         const san = this.node.san
@@ -360,8 +399,20 @@ export default class AnalyseCtrl {
     return treeOps.withMainlineChild(this.node, (n: Tree.Node) => n.eval ? n.eval.best : undefined)
   }
 
+  mainlinePathToPly(ply: Ply): Tree.Path {
+    return treeOps.takePathWhile(this.mainline, n => n.ply <= ply)
+  }
+
   hasAnyComputerAnalysis = () => {
     return this.data.analysis || this.ceval.enabled()
+  }
+
+  hasFullComputerAnalysis = (): boolean => {
+    return Object.keys(this.mainline[0].eval || {}).length > 0
+  }
+
+  unload = () => {
+    if (this.ceval) this.ceval.destroy()
   }
 
   // ---
@@ -374,17 +425,12 @@ export default class AnalyseCtrl {
   }
 
   private updateHref = debounce(() => {
-    const step = this.node
-    if (step) {
-      try {
-        window.history.replaceState(window.history.state, '', '#' + step.ply)
-      } catch (e) { console.error(e) }
-    }
-  }, 750)
-
-  private mainlinePathToPly(ply: Ply): Tree.Path {
-    return treeOps.takePathWhile(this.mainline, n => n.ply <= ply)
-  }
+    router.setStateParams({
+      tab: String(this._currentTabIndex),
+      ply: String(this.node.ply),
+      curFen: this.node.fen
+    })
+  }, 200)
 
   private canGoForward() {
     return this.node.children.length > 0
@@ -485,26 +531,35 @@ export default class AnalyseCtrl {
       .indexOf(this.data.game.variant.key) !== -1
   }
 
-  private onCevalMsg = (ceval: Tree.ClientEval, work: CevalWork) => {
-    this.tree.updateAt(work.path, (node: Tree.Node) => {
-      if (node.ceval && node.ceval.depth >= ceval.depth) return
+  private onCevalMsg = (work: CevalWork, ceval?: Tree.ClientEval) => {
+    if (ceval) {
+      this.tree.updateAt(work.path, (node: Tree.Node) => {
+        if (node.ceval && node.ceval.depth >= ceval.depth) return
 
-      if (node.ceval === undefined)
-        node.ceval = <Tree.ClientEval>Object.assign({}, ceval)
-      else
-        node.ceval = <Tree.ClientEval>Object.assign(node.ceval, ceval)
+        if (node.ceval === undefined) {
+          node.ceval = <Tree.ClientEval>Object.assign({}, ceval)
+        }
+        else {
+          node.ceval = <Tree.ClientEval>Object.assign(node.ceval, ceval)
+        }
 
-      if (work.path === this.path) {
-        redraw()
-      }
-    })
+        if (node.ceval.pvs.length > 0) {
+          node.ceval.best = node.ceval.pvs[0].moves[0]
+        }
+
+        if (work.path === this.path) {
+          if (this.retro) this.retro.onCeval()
+          redraw()
+        }
+      })
+    }
+    // no ceval means stockfish has finished, just redraw
+    else {
+      if (this.currentTab(this.availableTabs()).id === 'ceval') redraw()
+    }
   }
 
-  private startCeval = debounce(() => {
-    if (this.ceval.enabled() && this.canUseCeval()) {
-      this.ceval.start(this.path, this.nodeList)
-    }
-  }, 800)
+  private debouncedStartCeval = debounce(this.startCeval, 800)
 
   private showGround() {
     const node = this.node
@@ -552,7 +607,7 @@ export default class AnalyseCtrl {
         if (path === this.path) {
           this.showGround()
           redraw()
-          if (this.gameOver()) this.ceval.stop()
+          if (this.gameOver()) this.stopCevalImmediately()
         }
       })
       .catch(err => console.error('get dests error', err))

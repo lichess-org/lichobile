@@ -14,12 +14,14 @@ import TabNavigation from '../../shared/TabNavigation'
 import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
 import renderCeval, { EvalBox } from '../ceval/cevalView'
-import renderExplorer from '../explorer/explorerView'
+import renderExplorer, { getTitle as getExplorerTitle } from '../explorer/explorerView'
 import renderCrazy from '../crazy/crazyView'
 import { view as renderContextMenu } from '../contextMenu'
 import TabView from './TabView'
 import Replay from './Replay'
-import renderComputerAnalysis from './computerAnalysisView'
+import Clocks from './clocks'
+import retroView from '../retrospect/retroView'
+import renderGameAnalysis from './gameAnalysis'
 import renderBoard from './boardView'
 import renderGameInfos from './gameInfosView'
 import renderActionsBar from './actionsView'
@@ -62,7 +64,7 @@ export function renderVariantSelector(ctrl: AnalyseCtrl) {
     availVariants = availVariants.concat([['From position', 'fromPosition']])
   }
   return (
-    h('div.select_input.main_header-selector', [
+    h('div.select_input.main_header-selector.header-subTitle', [
       h('label', {
         'for': 'variant_selector'
       }, h(`i[data-icon=${icon}]`)),
@@ -83,11 +85,6 @@ export function renderVariantSelector(ctrl: AnalyseCtrl) {
   )
 }
 
-export function getChecksCount(ctrl: AnalyseCtrl, color: Color) {
-  const node = ctrl.node
-  return node && node.checkCount && node.checkCount[utils.oppositeColor(color)]
-}
-
 function renderOpening(ctrl: AnalyseCtrl) {
   const opening = ctrl.tree.getOpening(ctrl.nodeList) || ctrl.data.game.opening
   if (opening) return h('div', {
@@ -100,15 +97,12 @@ function renderOpening(ctrl: AnalyseCtrl) {
 
 function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: Tab[]) {
 
-  const curTitle = i18n(ctrl.currentTab(availTabs).title)
   const curTab = ctrl.currentTab(availTabs)
 
   return h('div.analyse-header', [
-    ctrl.ceval.enabled() && curTab.id !== 'ceval' ? h(EvalBox, { ctrl }) : null,
+    curTab.id !== 'ceval' ? h(EvalBox, { ctrl }) : null,
     h('div.analyse-tabs', [
-      h('div.tab-title', [
-        curTab.id === 'moves' ? renderOpening(ctrl) || curTitle : curTitle
-      ]),
+      h('div.tab-title', renderTabTitle(ctrl, curTab)),
       h(TabNavigation, {
         buttons: availTabs,
         selectedIndex: ctrl.currentTabIndex(availTabs),
@@ -118,15 +112,57 @@ function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: Tab[]) {
   ])
 }
 
+function renderTabTitle(ctrl: AnalyseCtrl, curTab: Tab) {
+  const curTitle = i18n(curTab.title)
+  let children: Mithril.Children
+  let key: string
+  if (curTab.id === 'moves') {
+    const op = renderOpening(ctrl)
+    children = [op || curTitle]
+    key = op ? 'opening' : curTab.id
+  }
+  else if (curTab.id === 'ceval') {
+    children = [
+      h('span', curTitle),
+      ctrl.ceval.isSearching() ? h('div.ceval-spinner', 'analyzing ', h('span.fa.fa-spinner.fa-pulse')) : null
+    ]
+    key = ctrl.ceval.isSearching() ? 'searching-ceval' : curTab.id
+  }
+  else if (curTab.id === 'explorer') {
+    children = [getExplorerTitle(ctrl)]
+    key = curTab.id
+  }
+  else {
+    children = [curTitle]
+    key = curTab.id
+  }
+
+  return h.fragment({ key }, children)
+}
+
+function renderCheckCount(whitePov: boolean, checkCount: { white: number, black: number }) {
+  const w = h('span.color-icon.white', '+' + checkCount.black)
+  const b = h('span.color-icon.black', '+' + checkCount.white)
+  return h('div.analyse-checkCount', whitePov ? [w, b] : [b, w])
+}
+
 function renderReplay(ctrl: AnalyseCtrl) {
-  return h(Replay, { ctrl })
+  const checkCount = ctrl.node.checkCount
+  const showFb = ctrl.node.clock || checkCount
+  return h('div.analyse-replayWrapper', [
+    showFb ? h('div.analyse-fixedBar', [
+      h(Clocks, { ctrl }),
+      checkCount ? renderCheckCount(ctrl.bottomColor() === 'white', checkCount) : null
+    ]) : null,
+    h(Replay, { ctrl })
+  ])
 }
 
 const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.BaseNode } = {
   infos: renderGameInfos,
   moves: renderReplay,
   explorer: renderExplorer,
-  computer: renderComputerAnalysis,
+  analysis: renderGameAnalysis,
   ceval: renderCeval
 }
 
@@ -146,6 +182,7 @@ function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[], isPortrait: boo
       content: tabsContent,
       onTabChange: ctrl.onTabChange,
       isPortrait
-    })
+    }),
+    ctrl.retro ? retroView(ctrl) : null
   ])
 }

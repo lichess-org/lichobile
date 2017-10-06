@@ -1,16 +1,17 @@
-import * as helper from '../helper'
 import socket from '../../socket'
+import i18n from '../../i18n'
 import session from '../../session'
+import { safeStringToNum } from '../../utils'
+import * as helper from '../helper'
 import { header } from '../shared/common'
 import layout from '../layout'
-import i18n from '../../i18n'
+
 import newTournamentForm from './newTournamentForm'
 import TournamentsListCtrl from './TournamentsListCtrl'
-
 import { renderTournamentsList, renderFooter } from './tournamentsListView'
 
 interface Attrs {
-  tab: number
+  tab?: string
 }
 
 interface State {
@@ -23,7 +24,7 @@ export default {
   oninit({ attrs }) {
     socket.createDefault()
 
-    this.ctrl = new TournamentsListCtrl(attrs.tab)
+    this.ctrl = new TournamentsListCtrl(safeStringToNum(attrs.tab))
   },
 
   view() {

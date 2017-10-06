@@ -1,12 +1,13 @@
 import settings from '../../../settings'
-import StockfishEngine from './StockfishEngine'
 import { Tree } from '../../shared/tree'
+import { getNbCores } from '../../../utils/stockfish'
+import StockfishEngine from './StockfishEngine'
 import { Opts, Work, ICevalCtrl } from './interfaces'
 
 export default function CevalCtrl(
   variant: VariantKey,
   allowed: boolean,
-  emit: (res: Tree.ClientEval, work: Work) => void,
+  emit: (work: Work, res?: Tree.ClientEval) => void,
   initOpts: Opts
 ): ICevalCtrl {
 
@@ -21,7 +22,7 @@ export default function CevalCtrl(
     infinite: initOpts.infinite
   }
 
-  const engine = StockfishEngine({ minDepth })
+  const engine = StockfishEngine(variant)
 
   let started = false
   let isEnabled = settings.analyse.enableCeval()
@@ -30,11 +31,11 @@ export default function CevalCtrl(
     return allowed && isEnabled
   }
 
-  function onEmit(res: Tree.ClientEval, work: Work) {
-    emit(res, work)
+  function onEmit(work: Work, res?: Tree.ClientEval) {
+    emit(work, res)
   }
 
-  function start(path: Tree.Path, nodes: Tree.Node[]) {
+  function start(path: Tree.Path, nodes: Tree.Node[], forceRetroOpts: boolean) {
     if (!enabled()) {
       return
     }
@@ -46,14 +47,14 @@ export default function CevalCtrl(
       initialFen: nodes[0].fen,
       currentFen: step.fen,
       moves: nodes.slice(1).map((s) => fixCastle(s.uci!, s.san!)),
-      maxDepth: effectiveMaxDepth(),
-      cores: opts.cores,
+      maxDepth: forceRetroOpts ? 18 : effectiveMaxDepth(),
+      cores: forceRetroOpts ? getNbCores() : opts.cores,
       path,
       ply: step.ply,
-      multiPv: opts.multiPv,
+      multiPv: forceRetroOpts ? 1 : opts.multiPv,
       threatMode: false,
-      emit(res: Tree.ClientEval) {
-        if (enabled()) onEmit(res, work)
+      emit(res?: Tree.ClientEval) {
+        if (enabled()) onEmit(work, res)
       }
     }
 
@@ -63,12 +64,6 @@ export default function CevalCtrl(
 
   function effectiveMaxDepth() {
     return opts.infinite ? 99 : maxDepth
-  }
-
-  function stop() {
-    if (!enabled() || !started) return
-    engine.stop()
-    started = false
   }
 
   function destroy() {
@@ -100,22 +95,30 @@ export default function CevalCtrl(
 
   return {
     init() {
-      return engine.init(variant).then(() => {
+      return engine.init().then(() => {
         initialized = true
       })
     },
     isInit() {
       return initialized
     },
+    isSearching() {
+      return engine.isSearching()
+    },
     maxDepth,
+    minDepth,
     variant,
     start,
-    stop,
+    stop() {
+      if (!enabled() || !started) return
+      engine.stop()
+      started = false
+    },
     destroy,
     allowed,
     enabled,
     toggle() {
-      isEnabled = settings.analyse.enableCeval()
+      isEnabled = !isEnabled
     },
     setCores(c: number) {
       opts.cores = c

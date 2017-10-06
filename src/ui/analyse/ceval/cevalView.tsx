@@ -1,5 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import * as range from 'lodash/range'
+import i18n from '../../../i18n'
+import { isClientEval } from '../../shared/tree/interfaces'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 import { renderEval } from '../util'
@@ -22,20 +24,32 @@ function renderCevalInfos(ctrl: AnalyseCtrl) {
 
   if (!ceval) return null
 
-  return h('div.ceval-infos', [
+  return h('div.analyse-fixedBar.ceval-infos', [
     h('div.depth', [h('strong', 'Depth: '), ceval.depth + (isInfinite ? '' : `/${maxDepth}`)]),
     h('div.knps', [h('strong', 'kn/s: '), Math.round(ceval.knps)]),
     h('div.nodes', [h('strong', 'nodes: '), Math.round(ceval.nodes / 1000) + 'k']),
-    h('div.time', [h('strong', 'time: '), Math.round(ceval.millis / 1000) + 's'])
+    h('div.time', [h('strong', 'time: '), formatTime(ceval.millis)])
   ])
+}
+
+function formatTime(millis: number) {
+  const s = Math.round(millis / 1000)
+  if (s < 60) {
+    return s + 's'
+  }
+  else {
+    const min = Math.round(s / 60)
+    const rs = s % 60
+    return `${min}min ${rs}s`
+  }
 }
 
 function renderCevalPvs(ctrl: AnalyseCtrl) {
   const multiPv = ctrl.ceval.opts.multiPv
   const node = ctrl.node
-  if (node.ceval) {
+  if (node.ceval && !ctrl.gameOver()) {
     const pvs = node.ceval.pvs
-    return h('div.ceval-pv_box', {
+    return h('div.ceval-pv_box.native_scroller', {
       key: 'ceval-pvs',
       'data-fen': node.fen
     }, range(multiPv).map((i) => {
@@ -45,10 +59,15 @@ function renderCevalPvs(ctrl: AnalyseCtrl) {
         'data-uci': pvs[i].moves[0],
         className: i % 2 ? 'even' : 'odd'
       }, [
-        multiPv > 1 ? h('strong.ceval-pv_eval', pvs[i].mate !== undefined ? ('#' + pvs[i].mate) : renderEval(pvs[i].cp!)) : null,
+        h('strong.ceval-pv_eval', pvs[i].mate !== undefined ? ('#' + pvs[i].mate) : renderEval(pvs[i].cp!)),
         h('div.ceval-pv-line', san)
       ])
     }))
+  }
+  else if (ctrl.gameOver()) {
+    return h('div.ceval-pv_box.native_scroller.loading.gameOver', {
+      key: 'ceval-gameover'
+    }, [h('i.withIcon[data-icon=]'), i18n('gameOver')])
   }
   else {
     return h('div.ceval-pv_box.native_scroller.loading', {
@@ -64,28 +83,24 @@ export const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
   view({ attrs }) {
     const { ctrl } = attrs
     const node = ctrl.node
-    if (!node) return null
-
     const { ceval } = node
     const fav = node.eval || ceval
-    let pearl: Mithril.Children, percent: number
 
-    if (fav && fav.cp !== undefined) {
+    if (!ctrl.ceval.enabled() && !fav) return null
+
+    let pearl: Mithril.Children
+
+    if (fav && (!isClientEval(fav) || fav.depth >= ctrl.ceval.minDepth) && fav.cp !== undefined) {
       pearl = renderEval(fav.cp)
-      percent = ceval ?
-        Math.min(100, Math.round(100 * ceval.depth / ceval.maxDepth)) : 0
     }
     else if (fav && fav.mate !== undefined) {
       pearl = '#' + fav.mate
-      percent = 100
     }
     else if (ctrl.gameOver()) {
       pearl = '-'
-      percent = 0
     }
     else  {
       pearl = ctrl.replaying ? '' : spinnerPearl()
-      percent = 0
     }
 
     return (

@@ -46,7 +46,9 @@ export default function renderTree(ctrl: AnalyseCtrl): Mithril.Children {
     showEval: true
   }
   const commentTags = renderInlineCommentsOf(ctx, root, true)
-  return h('div.analyse-moveList', [
+  return h('div.analyse-moveList', {
+    className: cordova.platformId === 'ios' ? 'ios' : ''
+  }, [
     commentTags,
     renderChildrenOf(ctx, root, {
       parentPath: '',

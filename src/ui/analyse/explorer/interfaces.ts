@@ -6,6 +6,7 @@ export interface IExplorerCtrl {
   config: any
   withGames: boolean
   current: Mithril.Stream<ExplorerData>
+  fetchMasterOpening: (fen: string) => Promise<ExplorerData>
 }
 
 export interface Move {

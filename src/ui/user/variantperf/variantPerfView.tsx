@@ -39,7 +39,14 @@ export function renderBody(ctrl: State) {
     <div class="variantPerfBody native_scroller page">
       {graphData && graphData.length >= 3 ?
         <div>
-          <svg width={vw - 20} height="230" id="variantPerf-graph" className="variantPerf-graph" oncreate={() => delayDrawChart(graphData)} key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'} />
+          <svg
+            width={vw - 20}
+            height="230"
+            id="variantPerf-graph"
+            className="variantPerf-graph"
+            oncreate={({ dom }: Mithril.DOMNode) => delayDrawChart(graphData, dom as SVGElement)}
+            key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'}
+          />
         </div> : null
       }
       <table class="variantPerf">
@@ -189,66 +196,68 @@ function toTitleCase(str: string) {
   )
 }
 
-function delayDrawChart(graphData: GraphData) {
-  setTimeout(() => drawChart(graphData), 500)
+function delayDrawChart(graphData: GraphData, el: SVGElement) {
+  setTimeout(() => drawChart(graphData, el), 500)
 }
 
-function drawChart(graphData: GraphData) {
-  const graph = select('#variantPerf-graph')
-  const margin = {top: 0, right: 20, bottom: 40, left: 30}
-  const width = +graph.attr('width') - margin.left - margin.right
-  const height = +graph.attr('height') - margin.top - margin.bottom
-  const g = graph.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+function drawChart(graphData: GraphData, el: SVGElement) {
+  if (el) {
+    const graph = select(el)
+    const margin = {top: 0, right: 20, bottom: 40, left: 30}
+    const width = +graph.attr('width') - margin.left - margin.right
+    const height = +graph.attr('height') - margin.top - margin.bottom
+    const g = graph.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
-  const scaleX = scaleTime()
-  .domain([graphData[0].date, graphData[graphData.length - 1].date])
-  .rangeRound([0, width])
+    const scaleX = scaleTime()
+    .domain([graphData[0].date, graphData[graphData.length - 1].date])
+    .rangeRound([0, width])
 
-  const values = graphData.map(p => p.rating)
-  const scaleY = scaleLinear()
-  .domain([Math.min.apply(null, values) - 50, Math.max.apply(null, values) + 50])
-  .rangeRound([height, 0])
+    const values = graphData.map(p => p.rating)
+    const scaleY = scaleLinear()
+    .domain([Math.min.apply(null, values) - 50, Math.max.apply(null, values) + 50])
+    .rangeRound([height, 0])
 
-  const l = line<DateRating>()
-  .x(d => scaleX(d.date))
-  .y(d => scaleY(d.rating))
+    const l = line<DateRating>()
+    .x(d => scaleX(d.date))
+    .y(d => scaleY(d.rating))
 
-  const yAxis = axisLeft(scaleY)
-  .tickFormat(d => String(d))
+    const yAxis = axisLeft(scaleY)
+    .tickFormat(d => String(d))
 
-  const xAxis = axisBottom(scaleX)
-  .tickFormat(multiFormat)
+    const xAxis = axisBottom(scaleX)
+    .tickFormat(multiFormat)
 
-  g.append('g')
-  .attr('transform', 'translate(0,' + height + ')')
-  .call(xAxis)
-  .selectAll('text')
-  .attr('y', 0)
-  .attr('x', 9)
-  .attr('dy', '.35em')
-  .attr('transform', 'rotate(60)')
-  .style('text-anchor', 'start')
-  .select('.domain')
-  .remove()
+    g.append('g')
+    .attr('transform', 'translate(0,' + height + ')')
+    .call(xAxis)
+    .selectAll('text')
+    .attr('y', 0)
+    .attr('x', 9)
+    .attr('dy', '.35em')
+    .attr('transform', 'rotate(60)')
+    .style('text-anchor', 'start')
+    .select('.domain')
+    .remove()
 
-  g.append('g')
-  .call(yAxis)
-  .append('text')
-  .attr('class', 'legend')
-  .attr('transform', 'rotate(-90)')
-  .attr('y', 6)
-  .attr('dy', '0.71em')
-  .attr('text-anchor', 'end')
-  .text(i18n('rating'))
+    g.append('g')
+    .call(yAxis)
+    .append('text')
+    .attr('class', 'legend')
+    .attr('transform', 'rotate(-90)')
+    .attr('y', 6)
+    .attr('dy', '0.71em')
+    .attr('text-anchor', 'end')
+    .text(i18n('rating'))
 
-  g.append('path')
-  .attr('class', 'path')
-  .attr('fill', 'none')
-  .attr('stroke', 'blue')
-  .attr('stroke-linejoin', 'round')
-  .attr('stroke-linecap', 'round')
-  .attr('stroke-width', 1.5)
-  .attr('d', l(graphData) as string)
+    g.append('path')
+    .attr('class', 'path')
+    .attr('fill', 'none')
+    .attr('stroke', 'blue')
+    .attr('stroke-linejoin', 'round')
+    .attr('stroke-linecap', 'round')
+    .attr('stroke-width', 1.5)
+    .attr('d', l(graphData) as string)
+  }
 }
 
 function normalizeGraphData(i: GraphPoint): DateRating {

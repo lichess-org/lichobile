@@ -43,7 +43,7 @@ export function renderContent(ctrl: AiRound) {
       renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
       board,
       renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait),
-      renderGameActionsBar(ctrl, 'ai')
+      renderGameActionsBar(ctrl)
     ])
   } else {
     return h.fragment({ key: orientationKey }, [
@@ -54,7 +54,7 @@ export function renderContent(ctrl: AiRound) {
           {replayTable}
           {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait)}
         </section>
-        {renderGameActionsBar(ctrl, 'ai')}
+        {renderGameActionsBar(ctrl)}
       </section>
     ])
   }

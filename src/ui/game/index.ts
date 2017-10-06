@@ -1,4 +1,3 @@
-import session from '../../session'
 import router from '../../router'
 import { hasNetwork, handleXhrError, gamePosCache } from '../../utils'
 import { getOfflineGameData, saveOfflineGameData, removeOfflineGameData } from '../../utils/offlineGames'
@@ -64,7 +63,6 @@ const GameScreen: Mithril.Component<Attrs, State> = {
           }
 
           if (gameData.game.speed === 'correspondence') {
-            session.refresh()
             if (!gameApi.playable(gameData)) {
               removeOfflineGameData(vnode.attrs.id)
             } else {

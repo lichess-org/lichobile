@@ -27,6 +27,8 @@ export default function ctrl(vnode) {
     loading: false
   }
 
+  this.pieceTheme = settings.general.theme.piece()
+
   const showLoading = function() {
     this.vm.loading = true
     redraw()
@@ -299,12 +301,8 @@ export default function ctrl(vnode) {
   }.bind(this)
 
   this.retry = function() {
-    showLoading()
-    xhr.loadPuzzle(this.data.puzzle.id)
-      .then(this.reload)
-      .then(onXhrSuccess)
-      .catch(onXhrError)
-  }.bind(this)
+    router.set(router.get())
+  }
 
   this.share = function() {
     window.plugins.socialsharing.share(null, null, null, `http://lichess.org/training/${this.data.puzzle.id}`)
@@ -312,7 +310,7 @@ export default function ctrl(vnode) {
 
   this.goToAnalysis = function() {
     const fen = this.data.replay.history[0].fen
-    router.set(`/analyse/variant/standard/fen/${encodeURIComponent(fen)}?color=${this.data.puzzle.color}`)
+    router.set(`/analyse/variant/standard/fen/${encodeURIComponent(fen)}?color=${this.data.puzzle.color}&goBack=1`)
   }.bind(this)
 
   if (vnode.attrs.id) {

@@ -45,8 +45,10 @@ export function showEmpty(ctrl: AnalyseCtrl) {
   return (
     <div key="explorer-empty" className="explorer-data empty">
       <div className="message">
-        <i data-icon="" />
-        <h3>No game found</h3>
+        <h3>
+          <i className="withIcon" data-icon="" />
+          No game found
+        </h3>
         <p>{
           ctrl.explorer.config.fullHouse() ?
           'Already searching through all available games.' :

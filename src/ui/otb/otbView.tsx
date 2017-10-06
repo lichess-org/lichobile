@@ -1,5 +1,4 @@
 import * as h from 'mithril/hyperscript'
-import router from '../../router'
 import * as utils from '../../utils'
 import i18n from '../../i18n'
 import Board from '../shared/Board'
@@ -56,7 +55,7 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
   const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
 
   const clock = ctrl.clock
-  
+
   let timeData: TimeData = {
     white: null,
     black: null
@@ -103,26 +102,26 @@ function renderGameActionsBar(ctrl: OtbRound) {
       <button className="action_bar_button" data-icon="U"
         oncreate={helper.ontap(
           ctrl.newGameMenu.open,
-          () => window.plugins.toast.show(i18n('createAGame'), 'short', 'black')
+          () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
         )}
       />
       <button data-icon="A" className="action_bar_button"
         oncreate={helper.ontap(
-          () => router.set(`/analyse/offline/otb/${ctrl.data.player.color}`),
-          () => window.plugins.toast.show(i18n('analysis'), 'short', 'black')
+          ctrl.goToAnalysis,
+          () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')
         )}
       />
       <button className="fa fa-share-alt action_bar_button"
         oncreate={helper.ontap(
           ctrl.sharePGN,
-          () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'black')
+          () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom')
         )}
       />
       {utils.hasNetwork() ?
         <button className="fa fa-cloud-upload action_bar_button"
           oncreate={helper.ontap(
             ctrl.importGamePopup.open,
-            () => window.plugins.toast.show(i18n('Import game to lichess'), 'short', 'black')
+            () => window.plugins.toast.show(i18n('Import game to lichess'), 'short', 'bottom')
           )}
         /> : null
       }

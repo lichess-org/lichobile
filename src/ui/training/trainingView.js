@@ -2,7 +2,8 @@ import layout from '../layout'
 import router from '../../router'
 import { emptyFen } from '../../utils/fen'
 import i18n from '../../i18n'
-import { header, connectingHeader, viewOnlyBoardContent } from '../shared/common'
+import { header as renderHeader, connectingHeader } from '../shared/common'
+import ViewOnlyBoard from '../shared/ViewOnlyBoard'
 import Board from '../shared/Board'
 import { view as renderPromotion } from '../shared/offlineRound/promotion'
 import * as helper from '../helper'
@@ -12,10 +13,28 @@ import * as h from 'mithril/hyperscript'
 export default function view(vnode) {
   const ctrl = vnode.state
 
+  let header
+
+  if (!ctrl.data || ctrl.vm.loading) {
+    header = connectingHeader
+  }
+  else {
+    const viewGame = ctrl.data.puzzle.gameId ? helper.ontap(
+      () => router.set(`/game/${ctrl.data.puzzle.gameId}/${ctrl.data.puzzle.color}`)
+    ) : () => {}
+    header = () => renderHeader(h('div.main_header_title.withSub', {
+      oncreate: viewGame
+    }, [
+      h('h1', i18n('puzzleId', ctrl.data.puzzle.id)),
+      h('h2.header-subTitle', [
+        i18n('rating'), ' ' + (ctrl.data.mode === 'view' ? ctrl.data.puzzle.rating : '?'),
+        ' • ', i18n('playedXTimes', ctrl.data.puzzle.attempts)
+      ])
+    ]))
+  }
+
   return layout.board(
-    !ctrl.data || ctrl.vm.loading ?
-      connectingHeader :
-      header.bind(undefined, i18n('training')),
+    header,
     renderContent.bind(undefined, ctrl),
     () => [
       renderPromotion(ctrl),
@@ -26,11 +45,15 @@ export default function view(vnode) {
 }
 
 function renderContent(ctrl) {
-  if (!ctrl.data) return viewOnlyBoardContent(emptyFen, 'white')
-
   const isPortrait = helper.isPortrait()
-  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game')
+  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'training')
   const key = isPortrait ? 'o-portrait' : 'o-landscape'
+
+  if (!ctrl.data) return h.fragment({ key }, [
+    h('section.board_wrapper', [
+      h(ViewOnlyBoard, { fen: emptyFen, orientation: 'white', bounds })
+    ])
+  ])
 
   const board = h(Board, {
     data: ctrl.data,
@@ -38,150 +61,105 @@ function renderContent(ctrl) {
     chessground: ctrl.chessground
   })
 
-  if (isPortrait) {
-    return h.fragment({ key }, [
-      ctrl.data.mode === 'view' ? renderProblemDetails(ctrl) : renderExplanation(ctrl),
-      board,
-      ctrl.data.mode === 'view' ? renderViewTable(ctrl) : renderPlayerTable(ctrl),
+  return h.fragment({ key }, [
+    board,
+    h('div.training-tableWrapper', [
+      h('div.training-table.native_scroller',
+        ctrl.data.mode === 'view' ? renderResult(ctrl) : renderExplanation(ctrl),
+      ),
       renderActionsBar(ctrl)
     ])
-  } else {
-    return h.fragment({ key }, [
-      board,
-      <section className="table">
-        <section className="trainingTable">
-          {ctrl.data.mode === 'view' ? renderProblemDetails(ctrl) : renderExplanation(ctrl)}
-          {ctrl.data.mode === 'view' ? renderViewTable(ctrl) : renderPlayerTable(ctrl)}
-        </section>
-        {renderActionsBar(ctrl)}
-      </section>
-    ])
-  }
+  ])
 }
 
 function renderExplanation(ctrl) {
-  return (
-    <section className="trainingSection">
-      <p className="findit">
-        {i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')}
-      </p>
-    </section>
-  )
-}
-
-function renderProblemDetails(ctrl) {
-
-  const viewGame = ctrl.data.puzzle.gameId ? helper.ontap(
-    () => router.set(`/game/${ctrl.data.puzzle.gameId}/${ctrl.data.puzzle.color}`),
-    () => window.plugins.toast.show(i18n('fromGameLink', ctrl.data.puzzle.gameId), 'short', 'bottom')
-  ) : () => {}
-  return (
-    <section className="trainingSection">
-      <h3 className="puzzle withIcon button" data-icon="-" oncreate={viewGame}>
-        {i18n('puzzleId', ctrl.data.puzzle.id)}
-      </h3>
-      <div>
-        <p>{i18n('ratingX', ctrl.data.puzzle.rating)}</p>
-        <p>{i18n('playedXTimes', ctrl.data.puzzle.attempts)}</p>
-      </div>
-    </section>
-  )
-}
-
-function renderPlayerTable(ctrl) {
-  return (
-    <section className="trainingSection">
-      <div className="yourTurn">
-        {i18n(ctrl.chessground.state.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')}
-      </div>
-      {renderCommentary(ctrl)}
-      {renderResult(ctrl)}
-    </section>
-  )
-}
-
-function renderViewTable(ctrl) {
-  return (
-    <section className="trainingSection">
-      <div />
-      {renderResult(ctrl)}
-    </section>
-  )
+  const hasComment = ctrl.data.comment !== undefined
+  return h('div.training-explanation', hasComment ? renderCommentary(ctrl) : [
+    h('div.player', [
+      h('div.piece-no-square', {
+        className: ctrl.pieceTheme
+      }, h('piece.king.' + ctrl.data.puzzle.color)),
+      h('div.training-instruction', [
+        h('strong',i18n(ctrl.chessground.state.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')),
+        h('p',i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')),
+      ]),
+    ]),
+    ctrl.data.mode === 'view' ?
+      null :
+      h('button.fatButton', { oncreate: helper.ontap(ctrl.giveUp) }, i18n('resign'))
+  ])
 }
 
 function renderActionsBar(ctrl) {
-  const vdom = [
+  const history = ctrl.data.replay && ctrl.data.replay.history
+  const step = ctrl.data.replay && ctrl.data.replay.step
+  return h('section#training_actions.actions_bar', [
     h('button.action_bar_button.training_action.fa.fa-ellipsis-h', {
       key: 'puzzleMenu',
       oncreate: helper.ontap(ctrl.menu.open)
-    })
-  ]
-  return h('section#training_actions.actions_bar', vdom.concat(
-    ctrl.data.mode === 'view' ?
-      renderViewControls(ctrl) :
-      h('button.action_bar_button.training_action[data-icon=b]', {
-        key: 'giveUpPuzzle',
-        oncreate: helper.ontap(ctrl.giveUp, () => window.plugins.toast.show(i18n('giveUp'), 'short', 'bottom'))
-      })
-  ).filter(el => el !== null))
-}
-
-function renderViewControls(ctrl) {
-  const history = ctrl.data.replay.history
-  const step = ctrl.data.replay.step
-  return [
-    h('button.action_bar_button.training_action[data-icon=G]', {
-      key: 'continueTraining',
-      oncreate: helper.ontap(ctrl.newPuzzle.bind(ctrl, true), () => window.plugins.toast.show(i18n('continueTraining'), 'short', 'bottom'))
-    }),
-    h('button.action_bar_button.training_action[data-icon=P]', {
-      key: 'retryPuzzle',
-      oncreate: helper.ontap(ctrl.retry, () => window.plugins.toast.show(i18n('retryThisPuzzle'), 'short', 'bottom'))
-    }),
-    h('button.action_bar_button.training_action[data-icon=A]', {
-      key: 'analysePuzzle',
-      oncreate: helper.ontap(ctrl.goToAnalysis, () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom'))
     }),
     h('button.action_bar_button.training_action.fa.fa-share-alt', {
       key: 'sharePuzzle',
       oncreate: helper.ontap(ctrl.share, () => window.plugins.toast.show('Share this puzzle', 'short', 'bottom'))
     }),
+    h('button.action_bar_button.training_action[data-icon=A]', {
+      key: 'analysePuzzle',
+      oncreate: helper.ontap(ctrl.goToAnalysis, () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')),
+      disabled: ctrl.data.mode !== 'view'
+    }),
     h('button.action_bar_button.training_action.fa.fa-backward', {
       oncreate: helper.ontap(ctrl.jumpPrev, null, ctrl.jumpPrev),
       key: 'historyPrev',
-      className: helper.classSet({
-        disabled: !(step !== step - 1 && step - 1 >= 0 && step - 1 < history.length)
-      })
+      disabled: !history || !(step !== step - 1 && step - 1 >= 0 && step - 1 < history.length)
     }),
     h('button.action_bar_button.training_action.fa.fa-forward', {
       oncreate: helper.ontap(ctrl.jumpNext, null, ctrl.jumpNext),
       key: 'historyNext',
-      className: helper.classSet({
-        disabled: !(step !== step + 1 && step + 1 >= 0 && step + 1 < history.length)
-      })
+      disabled: !history || !(step !== step + 1 && step + 1 >= 0 && step + 1 < history.length)
     })
+  ])
+}
+
+function renderViewControls(ctrl) {
+  return [
+    h('div.li-button.training-control.retry', {
+      oncreate: helper.ontap(ctrl.retry)
+    }, [h('span.fa.fa-refresh'), i18n('retryThisPuzzle')]),
+    h('div.li-button.training-control.continue', {
+      oncreate: helper.ontap(ctrl.newPuzzle.bind(ctrl, true))
+    }, [h('span.fa.fa-play'), i18n('continueTraining')])
   ]
 }
 
 function renderCommentary(ctrl) {
   switch (ctrl.data.comment) {
     case 'retry':
-      return h('div.puzzleComment.retry', [
-        h('h3.puzzleState', h('strong', i18n('goodMove'))),
-        h('span', i18n('butYouCanDoBetter'))
-      ])
+      return [
+        h('div.training-icon', '!'),
+        h('div.training-instruction', [
+          h('strong', i18n('goodMove')),
+          h('span', i18n('butYouCanDoBetter'))
+        ])
+      ]
     case 'great':
-      return h('div.puzzleComment.great', [
-        h('h3.puzzleState.withIcon[data-icon=E]', h('strong', i18n('bestMove'))),
-        h('span', i18n('keepGoing'))
-      ])
+      return [
+        h('div.training-icon.win', '✓'),
+        h('div.training-instruction', [
+          h('strong', i18n('bestMove')),
+          h('span', i18n('keepGoing'))
+        ])
+      ]
     case 'fail':
-      return h('div.puzzleComment.fail', [
-        h('h3.puzzleState.withIcon[data-icon=k]', h('strong', i18n('puzzleFailed'))),
-        ctrl.data.mode === 'try' ? h('span', i18n('butYouCanKeepTrying')) : null
-      ])
-    default:
-      return ctrl.data.comment
+      return [
+        h('div.training-half', [
+          h('div.training-icon.loss', '✗'),
+          h('div.training-instruction', [
+            h('strong', i18n('puzzleFailed')),
+            ctrl.data.mode === 'try' ? h('span', i18n('butYouCanKeepTrying')) : null
+          ])
+        ]),
+        h('div.training-half')
+      ]
   }
 }
 
@@ -190,21 +168,23 @@ function renderRatingDiff(diff) {
 }
 
 function renderWin(ctrl, attempt) {
-  return h('div.puzzleComment.win', [
-    h('h3.puzzleState.withIcon[data-icon=E]', [
-      h('strong', i18n('victory')),
-      attempt ? renderRatingDiff(attempt.userRatingDiff) : null
-    ])
-  ])
+  return [
+    h('div.training-half', [
+      h('div.training-icon.win', '✓'),
+      h('strong', [i18n('victory'), attempt ? renderRatingDiff(attempt.userRatingDiff) : null])
+    ]),
+    h('div.training-half', renderViewControls(ctrl))
+  ]
 }
 
 function renderLoss(ctrl, attempt) {
-  return h('div.puzzleComment.loss',
-    h('h3.puzzleState.withIcon[data-icon=k]', [
-      h('strong', i18n('puzzleFailed')),
-      attempt ? renderRatingDiff(attempt.userRatingDiff) : null
-    ])
-  )
+  return [
+    h('div.training-half', [
+      h('div.training-icon.loss', '✗'),
+      h('strong', [i18n('puzzleFailed'), attempt ? renderRatingDiff(attempt.userRatingDiff) : null])
+    ]),
+    h('div.training-half', renderViewControls(ctrl))
+  ]
 }
 
 function renderResult(ctrl) {

@@ -18,6 +18,7 @@ import settings from './settings'
 import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
 import * as helper from './ui/helper'
+import lobby from './ui/lobby'
 import router from './router'
 import socket from './socket'
 import push from './push'
@@ -50,6 +51,15 @@ function main() {
   if (hasNetwork()) {
     onOnline()
   }
+
+  window.cordova.plugins.notification.local.on('click', (notification: LocalNotification) => {
+    try {
+      const data = JSON.parse(notification.data)
+      if (data && data.notifType === 'route') {
+        router.set(data.route)
+      }
+    } catch (_) {}
+  })
 
   document.addEventListener('online', onOnline, false)
   document.addEventListener('offline', onOffline, false)
@@ -132,6 +142,7 @@ function onResume() {
 
 function onPause() {
   setBackground()
+  lobby.cancelSeeking()
   socket.disconnect()
 }
 

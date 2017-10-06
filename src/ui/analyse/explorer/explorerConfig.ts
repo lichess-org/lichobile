@@ -150,7 +150,7 @@ export default {
         ])
       ]),
       h('section.save',
-        h('button.button.text[data-icon=E]', {
+        h('button.text[data-icon=E]', {
           oncreate: helper.ontapY(ctrl.toggleOpen)
         }, 'All set!')
       )

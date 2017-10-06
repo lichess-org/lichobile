@@ -8,7 +8,8 @@ export default function renderActionsBar(ctrl: AnalyseCtrl) {
 
   return (
     <section className="actions_bar analyse_actions_bar">
-      <button className="action_bar_button fa fa-ellipsis-h" key="analyseMenu"
+      <button key="analyseMenu"
+        className={'action_bar_button fa ' + (ctrl.retroGlowing ? 'fa-play glow' : 'fa-ellipsis-h')}
         oncreate={helper.ontap(ctrl.menu.open)}
       />
       {ctrl.ceval.allowed ?
@@ -32,6 +33,7 @@ export default function renderActionsBar(ctrl: AnalyseCtrl) {
         oncreate={helper.ontap(ctrl.stoprewind, undefined, ctrl.rewind)}
       />
       <button key="forward" className="action_bar_button fa fa-forward"
+        disabled={!!ctrl.retro}
         oncreate={helper.ontap(ctrl.stopff, undefined, ctrl.fastforward)}
       />
     </section>

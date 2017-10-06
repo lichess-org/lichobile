@@ -282,21 +282,14 @@
     text-transform uppercase
   .perf
     padding 7px 0
-    &.withLink
-      text-decoration underline
     &.active
       background-color darken(#fff, 5%)
 
 .player_controls
   &.overlay_popup > header
-    line-height 1
+    line-height initial
     padding 10px
     white-space normal
-    display flex
-    justify-content center
-    align-items center
-    > .star
-      background-color transparent
   button
     &.draw-yes:before
       display inline-block
@@ -326,7 +319,7 @@
     margin 5px 0
 
 .negotiationIcons
-  background-color bgpopup
+  background-color #eee
   height 70px
   display flex
   padding 0 10px

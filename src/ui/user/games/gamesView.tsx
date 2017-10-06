@@ -32,11 +32,16 @@ export function renderBody(ctrl: IUserGamesCtrl) {
   )
 }
 
+function getButton(e: Event): HTMLElement | undefined {
+  const target = (e.target as HTMLElement)
+  return target.tagName === 'BUTTON' ? target : undefined
+}
+
 interface GameDataSet extends DOMStringMap {
   id: string
 }
 function onTap(ctrl: IUserGamesCtrl, e: Event) {
-  const starButton = helper.getButton(e)
+  const starButton = getButton(e)
   const el = helper.getLI(e)
   const id = el && (el.dataset as GameDataSet).id
   if (starButton) {
@@ -52,7 +57,7 @@ function onTap(ctrl: IUserGamesCtrl, e: Event) {
         if (mePlaying || (g.source !== 'import' && g.status.id < gameStatus.ids.aborted))
           router.set(`/game/${id}/${userColor}`)
         else
-          router.set(`/analyse/online/${id}/${userColor}`)
+          router.set(`/analyse/online/${id}/${userColor}?curFen=${g.fen}`)
       }
     }
   }

@@ -1,4 +1,5 @@
 import i18n from '../../i18n'
+import { safeStringToNum } from '../../utils'
 import * as helper from '../helper'
 import layout from '../layout'
 import { header as headerWidget } from '../shared/common'
@@ -6,7 +7,7 @@ import { renderBody, renderFooter } from './correspondenceView'
 import CorrespondenceCtrl from './CorrespondenceCtrl'
 
 interface Attrs {
-  tab: number
+  tab?: string
 }
 
 interface State {
@@ -15,7 +16,7 @@ interface State {
 
 export default {
   oninit({ attrs }) {
-    this.ctrl = new CorrespondenceCtrl(attrs.tab)
+    this.ctrl = new CorrespondenceCtrl(safeStringToNum(attrs.tab))
   },
 
   oncreate: helper.viewFadeIn,

@@ -294,3 +294,4 @@ export function miniUser(user: User | undefined, mini: any, isOpen: boolean, clo
 
   return null
 }
+

@@ -386,9 +386,9 @@ export function renderRatingDiff(player: Player | UserGamePlayer): Mithril.Child
   return null
 }
 
-export function getButton(e: Event): HTMLElement | undefined {
+export function getButton(e: Event): HTMLElement {
   const target = (e.target as HTMLElement)
-  return target.tagName === 'BUTTON' ? target : undefined
+  return target.tagName === 'BUTTON' ? target : findParentBySelector(target, 'button')
 }
 
 export function getLI(e: Event) {

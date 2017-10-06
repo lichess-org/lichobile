@@ -1,10 +1,11 @@
+bglightOdd = darken(themeBgLight, 5%)
+
 .view-container.light
   main
     color textLightBg
 
   #page
     background themeBgLight
-    color textMediumGray
 
   #games_menu
     background rgba(0,0,0,0.6)
@@ -12,19 +13,15 @@
   .fatButton
     background: linear-gradient(to bottom,rgba(245,245,245,1) 0%,rgba(240,240,240,1) 100%);
     text-shadow: 0 1px 0 #FFF;
-    color: #848484;
+    color: textMediumGray
     border-color #e2e2e2
-    &.active, &:active
+    &.active
       background linear-gradient(to bottom,rgba(248,248,248,1) 0%,rgba(243,243,243,1) 100%);
 
   .mini_board
     .vsbloc
       background: linear-gradient(to bottom,rgba(245,245,245,1) 0%,rgba(240,240,240,1) 100%);
       border-color #e2e2e2
-
-  .button
-    &.active
-      background activeBgLight
 
   .overlay
     background-color rgba(0,0,0,0.6)
@@ -39,18 +36,18 @@
     &.challenge
       background gold
       &.sending
-        background lighten(textMediumGray, 25%)
+        background lighten(textLightBg, 25%)
         .actions
-          background lighten(textMediumGray, 10%)
+          background lighten(textLightBg, 10%)
       h2
         color #fff
 
   .list_item
     border-bottom-color #ddd
     &.odd
-      background-color darken(bglight, 5%)
+      background-color bglightOdd
     &.active
-      background-color darken(bglight, 5%)
+      background-color themeBgLightActive
 
   .ranking
     border-bottom-color borderLightGray
@@ -60,7 +57,7 @@
 
   .antagonistInfos
     .rating
-      color textMediumGray
+      color textLightBg
     &.active
       background-color activeBgLight
 
@@ -96,11 +93,11 @@
       background blue
       color #fff
     &.active
-      background darken(themeBgLight, 8%)
+      background-color themeBgLightActive
 
   .gameMovesList
     background darken(themeBgLight, 4%)
-    color textMediumGray
+    color textLightBg
 
   .radio_list
     input.radio:checked + label
@@ -108,7 +105,7 @@
 
   .profilePerf
     &.active
-      background darken(bglight, 5%)
+      background themeBgLightActive
     > .rating
       color textDarkGray
       > .nb
@@ -120,21 +117,18 @@
     margin-top -1px
 
   .userGame
-    background-color bglight
-    color textMediumGray
+    background-color themeBgLight
+    color textLightBg
     &.odd
-      background-color darken(bglight, 5%)
-
-  .trainingSection
-    color textMediumGray
+      background-color bglightOdd
 
   .rankingPlayer
     &.active
-      background darken(bglight, 5%)
+      background themeBgLightActive
 
   .followingPlayerAction
     &.active
-      background darken(bglight, 5%)
+      background themeBgLightActive
 
   .tabIndicator
     height 3px
@@ -147,19 +141,17 @@
 
   .moreButton
     > button
-      background darken(bglight, 5%)
-      &.active
-        background darken(bglight, 2%)
+      background themeBgLightActive
 
   #tournamentPlayerInfoModal
     > header
       background-color #fff
-      color textMediumGray
+      color textLightBg
       border-bottom 1px solid borderLightGray
       > .playerModalHeader
-        color textMediumGray
+        color textLightBg
     > .modal_content
-      color textMediumGray
+      color textLightBg
       background-color themeBgLight
 
   .color-icon
@@ -172,4 +164,4 @@
 
   .theme-progressBarContainer
     border-color textLightGray
-    color textMediumGray
+    color textLightBg

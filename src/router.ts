@@ -4,6 +4,7 @@ import * as Vnode from 'mithril/render/vnode'
 import signals from './signals'
 import * as isFunction from 'lodash/isFunction'
 import session from './session'
+import { serializeQueryParameters } from './utils'
 import redraw from './utils/redraw'
 
 interface Backbutton {
@@ -72,6 +73,11 @@ function replaceState(path: string) {
   } catch (e) { console.error(e) }
 }
 
+function setStateParams(params: StringMap) {
+  const path = get().replace(/\?.+$/, '')
+  replaceState(path + `?${serializeQueryParameters(params)}`)
+}
+
 const backbutton = (() => {
   interface X {
     (): void
@@ -137,8 +143,15 @@ function backHistory(): void {
 
 export default {
   get,
-  set,
+  // sync call to router.set must be avoided in any `oninit` mithril component
+  // otherwise it makes mithril create another root component on top of the
+  // existing one
+  // making router.set async makes it safe everywhere
+  set(path: string, replace = false) {
+    setTimeout(() => set(path, replace), 0)
+  },
   replaceState,
+  setStateParams,
   backHistory,
   getViewSlideDirection(): string {
     return viewSlideDirection

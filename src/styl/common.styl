@@ -8,19 +8,33 @@ html
     font-size 120%
 
 body
-  background-color bgdark
+  background-color #000
   overflow hidden
 
 // workaround for ios: the direct parent of an input must have user-select: text
 .allow_select
   user-select text
 
-button
+.withLink
+  text-decoration underline
+  &:after
+    content: "\f08e"
+    margin-left 5px
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+
+button, .li-button
   border none
   outline none
   -webkit-tap-highlight-color rgba(0,0,0,0)
   user-select none
   background-color transparent
+  transition opacity 50ms
+  &.active
+    opacity 0.8
   &.disabled
     opacity 1
     &::before
@@ -55,7 +69,7 @@ textarea
 span.fa
   margin-right 5px
 
-.disabled
+.disabled, &:disabled
   opacity 0.5
 
 .hide
@@ -88,10 +102,6 @@ span.fa
   position relative
   top 50%
   transform translateY(-50%)
-
-.button
-  &.active
-    background lighten(bgdark, 5%)
 
 /* lists */
 .items_list_block
@@ -188,7 +198,7 @@ span.fa
   color #8a8a8a
   font-weight bold
   border-radius 2px
-  &.active, &:active
+  &.active
     background linear-gradient(to bottom,rgba(44,44,44,1),rgba(40,40,40,1) 100%);
 
 .globalSpinner
@@ -285,9 +295,6 @@ span.fa
     text-align center
     padding 10px 0
     background lighten(bgdark, 5%)
-    &.active
-      background lighten(bgdark, 10%)
-
 
 .actions_bar
   display flex
@@ -311,10 +318,8 @@ span.fa
     padding-right: 15px;
   &:last-child
     border-right none
-  &.disabled
-    &:before
-      opacity 1
-    color rgba(buttonGray, 0.4)
+  &.disabled, &:disabled
+    opacity 0.5
   &.active
     background darkBlue
     color #ccc
@@ -330,6 +335,10 @@ span.fa
   @media only screen and (max-height 400px) and (orientation landscape)
     &:before
       font-size 16px
+
+.action_create_button
+  flex 1 1 25%
+  text-align right
 
 signal
   display: inline-block;
@@ -359,3 +368,17 @@ signal > i.off
 
 .countdown-timer
   font-family Cousine
+
+.piece-no-square
+  width: 64px;
+  height: 64px;
+  position relative
+  margin-right: 10px;
+  > piece
+    width 100%
+    height 100%
+
+.window-button
+  font-size 1.1em
+  .fa
+    margin-right 0

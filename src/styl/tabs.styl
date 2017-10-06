@@ -18,7 +18,8 @@
   font-size 14px
   overflow hidden
   height calc(100% - 2px)
-  &.active,&:active
+  color darken(headerBgDarkColor, 10%)
+  &.active
     background-color lighten(bgdark, 10%)
   &.selected
     color gold
@@ -30,7 +31,6 @@
   height 2px
   background-color gold
   transition transform ease-out 200ms
-  z-index 3
 
 
 // tab content

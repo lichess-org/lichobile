@@ -1,17 +1,18 @@
 explorerHeaderBg = lighten(headerBgDark, 2%)
 
 .explorerTable
-  height 100%
-  width 100%
+  display flex
+  flex-flow column nowrap
   position relative
   overflow-x: hidden;
   white-space: nowrap;
-  display flex
-  flex-flow column nowrap
   > div
     width 100%
   .empty
-    text-align: center;
+    flex 1 1 auto
+    display flex
+    justify-content center
+    align-items center
   .spinner_overlay
     position: absolute;
     top: 0;
@@ -110,14 +111,13 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
     text-align: center;
     font-size 0.9em
     font-style: italic;
-    i
-      font-size: 22px;
-      display: inline-block;
-      margin: 10px 0 0;
-      opacity: 0.7;
-    h3
+    > h3
+      > i
+        display inline
+        font-size: 1.2em
+        opacity: 0.7
       font-weight: bold;
-    p
+    > p
       white-space: normal;
       padding: 0 10px;
   &.loading
@@ -236,10 +236,13 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
       background-color inherit
     tr
       &:nth-child(even)
-        background-color transpWhite015
+        background-color transpWhite01
     .black
       background-color lighten(#000, 10%)
 
-  .explorerTable th, .explorerTable .title, .explorer-fixedTitle
+  .explorerTable th, .explorerTable .title
     background-color transpBlack06
     color #ccc
+
+  .explorer-fixedTitle
+    background-color transpBlack02

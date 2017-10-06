@@ -11,7 +11,7 @@ import CountdownTimer from './CountdownTimer'
 
 interface Attrs {
   data: GameData | AnalyseData,
-  subTitle?: 'players' | 'date' | 'tournament'
+  subTitle?: 'players' | 'date' | 'tournament' | 'corres'
   kidMode?: boolean
 }
 
@@ -19,9 +19,8 @@ export default {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
     // careful with that, mutability doesn't help, but it should be easy to know
     // what changes here
-    return attrs.subTitle !== oldattrs.subTitle ||
-      attrs.kidMode !== oldattrs.kidMode ||
-      attrs.data.game.player !== oldattrs.data.game.player
+    return attrs.subTitle === 'corres' || attrs.subTitle !== oldattrs.subTitle ||
+      attrs.kidMode !== oldattrs.kidMode
   },
 
   view({ attrs }) {
@@ -39,20 +38,20 @@ export default {
       ]
     }
     else if (subTitle === 'date') {
-      if (isGameData(data) && !data.player.spectator && data.game.speed === 'correspondence') {
-        if (gameStatusApi.finished(data)) {
-          subEls = i18n('gameOver')
-        } else if (gameApi.isPlayerTurn(data)) {
-          subEls = i18n('yourTurn')
-        } else {
-          subEls = i18n('waitingForOpponent')
-        }
-      }
-      else if (gameApi.playable(data)) {
+      if (gameApi.playable(data)) {
         subEls = i18n('playingRightNow')
       }
       else if (data.game.createdAt) {
         subEls = window.moment(data.game.createdAt).calendar()
+      }
+    }
+    else if (subTitle === 'corres' && isGameData(data)) {
+      if (gameStatusApi.finished(data)) {
+        subEls = i18n('gameOver')
+      } else if (gameApi.isPlayerTurn(data)) {
+        subEls = i18n('yourTurn')
+      } else {
+        subEls = i18n('waitingForOpponent')
       }
     }
     else if (subTitle === 'tournament' && isGameData(data) && data.tournament) {

@@ -1,6 +1,6 @@
 import { select } from 'd3-selection'
 import { scaleLinear } from 'd3-scale'
-import { area } from 'd3-shape'
+import { area as d3Area } from 'd3-shape'
 import { axisLeft } from 'd3-axis'
 import i18n from '../../i18n'
 import loginModal from '../loginModal'
@@ -93,13 +93,19 @@ function drawChart(ctrl) {
   .domain([Math.min.apply(null, yvalues) - 10, Math.max.apply(null, yvalues) + 10])
   .rangeRound([height, 0])
 
-  const l = area()
+  const area = d3Area()
   .x(d => scaleX(d[0]))
   .y0(height)
   .y1(d => scaleY(d[1]))
 
+  const line = d3Area()
+  .x(d => scaleX(d[0]))
+  .y(d => scaleY(d[1]))
+
   const yAxis = axisLeft(scaleY)
   .tickFormat(d => String(d))
+
+  g.datum(data)
 
   g.append('g')
   .call(yAxis)
@@ -118,7 +124,11 @@ function drawChart(ctrl) {
   .attr('stroke-linejoin', 'round')
   .attr('stroke-linecap', 'round')
   .attr('stroke-width', 0)
-  .attr('d', l(data))
+  .attr('d', area)
+
+  g.append('path')
+  .attr('class', 'line')
+  .attr('d', line)
 }
 
 function renderTrainingMenu(ctrl) {

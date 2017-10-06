@@ -144,6 +144,11 @@ export default class OnlineRound implements OnlineRoundInterface {
     redraw()
   }
 
+  public goToAnalysis = () => {
+    const d = this.data
+    router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}?ply=${this.vm.ply}&curFen=${d.game.fen}`)
+  }
+
   public openUserPopup = (position: string, userId: string) => {
     if (!this.vm.miniUser[position].data) {
       miniUserXhr(userId).then(data => {
@@ -512,7 +517,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       if (d.game.turns > 1) {
         sound.dong()
         vibrate.quick()
-        session.refresh()
+        session.backgroundRefresh()
       }
 
       this.showActions()

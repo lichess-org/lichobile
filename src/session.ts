@@ -65,7 +65,7 @@ function getUserId() {
   return session && session.id
 }
 
-function nowPlaying() {
+function nowPlaying(): NowPlayingGame[] {
   let np = session && session.nowPlaying || []
   return np.filter(e => {
     return settings.game.supportedVariants.indexOf(e.variant.key) !== -1
@@ -209,17 +209,16 @@ function rememberLogin(): Promise<Session> {
   })
 }
 
-function refresh(): Promise<Session | undefined> {
+function refresh(): void {
   if (hasNetwork() && isConnected()) {
-    return fetchJSON<Session>('/account/info')
+    fetchJSON<Session>('/account/info')
     .then((data: Session) => {
       session = data
       // if server tells me, reload challenges
       if (session.nbChallenges !== challengesApi.incoming().length) {
-        challengesApi.refresh().then(() => redraw())
+        challengesApi.refresh().then(redraw)
       }
       redraw()
-      return session
     })
     .catch(err => {
       if (session && err.response && err.response.status === 401) {
@@ -229,8 +228,19 @@ function refresh(): Promise<Session | undefined> {
       }
       throw err
     })
-  } else {
-    return Promise.resolve(undefined)
+  }
+}
+
+function backgroundRefresh(): void {
+  if (hasNetwork() && isConnected()) {
+    fetchJSON<Session>('/account/info')
+    .then((data: Session) => {
+      session = data
+      // if server tells me, reload challenges
+      if (session.nbChallenges !== challengesApi.incoming().length) {
+        challengesApi.refresh().then(redraw)
+      }
+    })
   }
 }
 
@@ -243,6 +253,7 @@ export default {
   login: throttle(login, 1000),
   rememberLogin: throttle(rememberLogin, 1000),
   refresh: throttle(refresh, 1000),
+  backgroundRefresh: throttle(backgroundRefresh, 1000),
   savePreferences: throttle(savePreferences, 1000),
   get: getSession,
   getUserId,

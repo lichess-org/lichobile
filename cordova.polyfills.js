@@ -151,6 +151,20 @@
     subscribe: noop
   };
 
+  // local notifications
+  window.cordova.plugins.notification = {
+    local: {
+      schedule: function(opts) {
+        console.log('Local notification triggered with opts:', opts)
+      },
+      cancelAll: function() {
+        console.log('Local notifications canceled')
+      },
+      on: noop
+    }
+  }
+
+
 }());
 
 if (!window.Stockfish) {

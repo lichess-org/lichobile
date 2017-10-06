@@ -81,7 +81,7 @@ export default {
         outcome = game.score
       }
       return (
-        <tr className="list_item" key={game.id} oncreate={helper.ontap(() => router.set('/game/' + game.id + '/' + game.color))}>
+        <tr className="list_item bglight" key={game.id} oncreate={helper.ontap(() => router.set('/game/' + game.id + '/' + game.color))}>
           <td className="oppRank"> {gameArray.length - index} </td>
           <td className="oppName"> {game.op.name} </td>
           <td className="oppRating"> {game.op.rating} </td>
@@ -92,7 +92,7 @@ export default {
     }
 
     return (
-      <div className="modal dark" id="tournamentPlayerInfoModal" oncreate={helper.slidesInLeft}>
+      <div className="modal" id="tournamentPlayerInfoModal" oncreate={helper.slidesInLeft}>
         <header>
           <button className="modal_close"
             oncreate={helper.ontap(helper.slidesOutRight(ctrl.close, 'tournamentPlayerInfoModal'))}

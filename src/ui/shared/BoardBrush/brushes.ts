@@ -27,5 +27,12 @@ export const brushes: { [key: string]: Brush } = {
     opacity: 0.4,
     lineWidth: 15,
     circleMargin: 0
+  },
+  paleRed: {
+    key: 'pr',
+    color: 'rgb(136, 32, 32)',
+    opacity: 0.4,
+    lineWidth: 8,
+    circleMargin: 0
   }
 }

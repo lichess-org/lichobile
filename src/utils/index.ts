@@ -106,7 +106,7 @@ export function handleXhrError(error: Error | FetchError): void {
   }
 }
 
-export function serializeQueryParameters(obj: {[i: string]: string }): string {
+export function serializeQueryParameters(obj: StringMap): string {
   let str = ''
   const keys = Object.keys(obj)
   keys.forEach(key => {

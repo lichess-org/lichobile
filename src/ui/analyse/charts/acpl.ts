@@ -5,7 +5,6 @@ import { area as d3Area } from 'd3-shape'
 import { AnalyseData } from '../../../lichess/interfaces/analyse'
 
 interface Point {
-  name?: string
   acpl: number
 }
 
@@ -35,16 +34,18 @@ export default function drawAcplChart(element: SVGElement, aData: AnalyseData, c
     .text(name)
   }
 
-  function setCurrentPly(ply: number) {
-    const xply = ply - 1
-    const p = graphData[xply]
+  function setCurrentPly(ply: number | null) {
     g.selectAll('.dot').remove()
-    if (p) {
-      g.append('circle')
-      .attr('class', 'dot')
-      .attr('cx', x(xply))
-      .attr('cy', y(p.acpl))
-      .attr('r', 3)
+    if (ply !== null) {
+      const xply = ply - 1
+      const p = graphData[xply]
+      if (p) {
+        g.append('circle')
+        .attr('class', 'dot')
+        .attr('cx', x(xply))
+        .attr('cy', y(p.acpl))
+        .attr('r', 3)
+      }
     }
   }
 
@@ -130,10 +131,7 @@ function makeSerieData(d: AnalyseData): Point[] {
       acpl: 0
     }
 
-    const turn = Math.floor((ply - 1) / 2) + 1
-    const dots = color === 1 ? '.' : '...'
     const point = {
-      name: turn + dots + ' ' + node.san,
       acpl: 2 / (1 + Math.exp(-0.004 * cp)) - 1
     }
     return point

@@ -56,4 +56,4 @@ export interface IChessStageClockState extends IChessBasicClockState {
   increment: number
 }
 
-export type ClockState = IChessBasicClockState | IChessHandicapIncClockState | IChessDelayClockState | IChessStageClockState;
+export type ClockState = IChessBasicClockState | IChessHandicapIncClockState | IChessDelayClockState | IChessStageClockState; 

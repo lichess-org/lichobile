@@ -230,6 +230,7 @@ function renderClock(clock: IChessClock, color: Color) {
     clock: true,
     outoftime: !time,
     running: isRunning,
+    offlineClock: true
   })
   return h('div', {
     className

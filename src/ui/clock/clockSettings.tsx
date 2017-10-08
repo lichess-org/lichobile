@@ -97,9 +97,6 @@ export default {
 }
 
 const clockSettingsView = {
-  none(_: IClockSettingsCtrl) {
-    return ('')
-  },
   simple(_: IClockSettingsCtrl) {
     return (
       <div key="simpleSettings" className="clockSettingParameters">

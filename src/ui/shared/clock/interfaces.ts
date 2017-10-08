@@ -1,6 +1,4 @@
 
-export type Side = 'white' | 'black'
-
 export type ClockType = 'simple' | 'increment' | 'handicapInc' | 'delay' | 'bronstein' | 'hourglass' | 'stage'
 
 export interface IBasicClock {
@@ -10,10 +8,10 @@ export interface IBasicClock {
   whiteTime(): number
   blackTime(): number
   getTime(color: Color): number
-  activeSide(): Side | undefined
-  flagged(): Side | undefined
+  activeSide(): Color | undefined
+  flagged(): Color | undefined
   isRunning(): boolean
-  clockHit(side: Side): void
+  clockHit(side: Color): void
   startStop(): void
   clear(): void
 }
@@ -31,8 +29,8 @@ export interface IChessBasicClockState {
   clockType: ClockType
   whiteTime: number
   blackTime: number
-  activeSide: Side | undefined
-  flagged: Side | undefined
+  activeSide: Color | undefined
+  flagged: Color | undefined
   isRunning: boolean
 }
 
@@ -56,4 +54,4 @@ export interface IChessStageClockState extends IChessBasicClockState {
   increment: number
 }
 
-export type ClockState = IChessBasicClockState | IChessHandicapIncClockState | IChessDelayClockState | IChessStageClockState | null; 
+export type ClockState = IChessBasicClockState | IChessHandicapIncClockState | IChessDelayClockState | IChessStageClockState | null;

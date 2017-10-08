@@ -168,18 +168,18 @@ export default {
     whitePlayer: localstorageprop('settings.otb.whitePlayer', 'White'),
     blackPlayer: localstorageprop('settings.otb.blackPlayer', 'Black'),
 
-    availableClocks: [
-      ['No Clock', 'none'],
-      ['Sudden Death', 'simple'],
-      ['Increment', 'increment'],
-      ['Increment with Handicap', 'handicapInc'],
-      ['Simple Delay', 'delay'],
-      ['Bronstein Delay', 'bronstein'],
-      ['Hourglass', 'hourglass'],
-      ['Stage', 'stage']
-    ],
-
     clock: {
+      availableClocks: [
+        ['No Clock', 'none'],
+        ['Sudden Death', 'simple'],
+        ['Increment', 'increment'],
+        ['Increment with Handicap', 'handicapInc'],
+        ['Simple Delay', 'delay'],
+        ['Bronstein Delay', 'bronstein'],
+        ['Hourglass', 'hourglass'],
+        ['Stage', 'stage']
+      ],
+
       clockType: localstorageprop('settings.otb.clock.clockType', 'none'),
 
       simple: {

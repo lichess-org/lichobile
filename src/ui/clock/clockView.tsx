@@ -3,7 +3,6 @@ import clockSettings from './clockSettings'
 import { formatTime, isStageClock } from '../shared/clock/utils'
 
 import { IChessClockCtrl } from './ChessClockCtrl'
-import { Side } from '../shared/clock/interfaces'
 
 export function renderClockSettingsOverlay(ctrl: IChessClockCtrl) {
   return [
@@ -88,7 +87,7 @@ function renderMoves(moves: number | null) {
   return null
 }
 
-function onClockTouch(ctrl: IChessClockCtrl, side: Side) {
+function onClockTouch(ctrl: IChessClockCtrl, side: Color) {
   if (((ctrl.clockObj().activeSide() !== 'white') && (side === 'black')) || ((ctrl.clockObj().activeSide() !== 'black') && (side === 'white'))) {
     ctrl.clockTap(side)
   }

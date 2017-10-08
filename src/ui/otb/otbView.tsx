@@ -94,6 +94,14 @@ function renderGameActionsBar(ctrl: OtbRound) {
           () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom')
         )}
       />
+      {ctrl.clock ?
+        <button className={"fa action_bar_button " + (ctrl.clock.isRunning() ? "fa-pause" : "fa-play")}
+          oncreate={helper.ontap(
+            ctrl.clock.startStop,
+            () => window.plugins.toast.show(i18n('Import game to lichess'), 'short', 'bottom')
+          )}
+        /> : null
+      }
       {utils.hasNetwork() ?
         <button className="fa fa-cloud-upload action_bar_button"
           oncreate={helper.ontap(

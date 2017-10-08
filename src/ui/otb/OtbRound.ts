@@ -147,7 +147,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
         pref: {
           centerPiece: true
         },
-        clock: this.clock.getState()
+        clock: this.clock ? this.clock.getState() : null
       }), [data.setup], 0)
     })
     .then(() => {
@@ -233,7 +233,8 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
 
   public onReplayAdded = (sit: chess.GameSituation) => {
     const lastMovePlayer = sit.player === 'white' ? 'black' : 'white'
-    this.clock.clockHit(lastMovePlayer)
+    if (this.clock)
+      this.clock.clockHit(lastMovePlayer)
     this.data.game.fen = sit.fen
     this.apply(sit)
     setResult(this, sit.status)
@@ -251,7 +252,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   }
 
   public onGameEnd = () => {
-    if(this.clock.isRunning())
+    if(this.clock && this.clock.isRunning())
       this.clock.startStop()
     this.chessground.stop()
     setTimeout(() => {

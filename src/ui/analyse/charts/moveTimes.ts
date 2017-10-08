@@ -15,10 +15,13 @@ interface Series {
   black: Point[]
 }
 
-export default function drawMoveTimesChart(element: SVGElement, aData: AnalyseData, curPly: number) {
+export default function drawMoveTimesChart(
+  element: SVGElement,
+  aData: AnalyseData,
+  moveCentis: number[],
+  curPly: number
+) {
   const division = aData.game.division
-  const moveCentis = aData.game.moveCentis
-  if (!moveCentis) return
 
   const svg = select(element)
   const margin = {top: 10, right: 10, bottom: 10, left: 25}

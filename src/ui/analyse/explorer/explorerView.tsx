@@ -53,7 +53,7 @@ export function getTitle(ctrl: AnalyseCtrl): Mithril.Children {
 function onTablebaseTap(ctrl: AnalyseCtrl, e: Event) {
   const el = getTR(e)
   const uci = el && el.dataset['uci']
-  if (uci) ctrl.explorerMove(uci)
+  if (uci) ctrl.uciMove(uci)
 }
 
 function showTablebase(ctrl: AnalyseCtrl, title: string, moves: Array<Move>, fen: string) {

@@ -83,7 +83,7 @@ function resultBar(move: Move) {
 function onTableTap(ctrl: AnalyseCtrl, e: Event) {
   const el = getTR(e)
   const uci = el && el.dataset['uci']
-  if (uci) ctrl.explorerMove(uci)
+  if (uci) ctrl.uciMove(uci)
 }
 
 function showResult(w: Color) {

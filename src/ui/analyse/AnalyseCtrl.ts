@@ -354,7 +354,7 @@ export default class AnalyseCtrl {
     this.debouncedScroll()
   }
 
-  explorerMove = (uci: string) => {
+  uciMove = (uci: string) => {
     const move = chessFormat.decomposeUci(uci)
     if (uci[1] === '@') {
       this.chessground.apiNewPiece({

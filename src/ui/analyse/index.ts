@@ -29,7 +29,6 @@ export interface Attrs {
   tab?: string
   // fen used for placeholder board while loading
   curFen?: string
-  goBack?: string
 }
 
 export interface State {
@@ -43,11 +42,10 @@ export default {
     const orientation: Color = vnode.attrs.color || 'white'
     const fenArg = vnode.attrs.fen
     const variant = vnode.attrs.variant
-    const goBack = vnode.attrs.goBack
     const ply = safeStringToNum(vnode.attrs.ply)
     const tab = safeStringToNum(vnode.attrs.tab)
 
-    const shouldGoBack = gameId !== undefined || goBack !== undefined
+    const shouldGoBack = gameId !== undefined
 
     if (source === 'online' && gameId) {
       const now = performance.now()

@@ -17,10 +17,11 @@ import drawMoveTimesChart from '../charts/moveTimes'
 export default function renderGameAnalysis(ctrl: AnalyseCtrl): Mithril.BaseNode {
   const isPortrait = helper.isPortrait()
   const vd = helper.viewportDim()
+  const d = ctrl.data
 
   return h('div.analyse-gameAnalysis.native_scroller',
-    ctrl.data.analysis ? renderAnalysis(ctrl, vd, isPortrait) : renderAnalysisRequest(ctrl),
-    renderMoveTimes(ctrl, vd, isPortrait)
+    d.analysis ? renderAnalysis(ctrl, vd, isPortrait) : renderAnalysisRequest(ctrl),
+    d.game.moveCentis ? renderMoveTimes(ctrl, d.game.moveCentis, vd, isPortrait) : null
   )
 }
 
@@ -105,7 +106,7 @@ function renderAnalysisRequest(ctrl: AnalyseCtrl) {
   ])
 }
 
-function renderMoveTimes(ctrl: AnalyseCtrl, vd: helper.ViewportDim, isPortrait: boolean) {
+function renderMoveTimes(ctrl: AnalyseCtrl, moveCentis: number[], vd: helper.ViewportDim, isPortrait: boolean) {
   return h('div.analyse-moveTimes', {
     key: 'move-times'
   }, [
@@ -116,7 +117,7 @@ function renderMoveTimes(ctrl: AnalyseCtrl, vd: helper.ViewportDim, isPortrait: 
       height: 150,
       oncreate({ dom }: Mithril.DOMNode) {
         setTimeout(() => {
-          this.updateCurPly = drawMoveTimesChart(dom as SVGElement, ctrl.data, ctrl.node.ply)
+          this.updateCurPly = drawMoveTimesChart(dom as SVGElement, ctrl.data, moveCentis, ctrl.node.ply)
         }, 300)
       },
       onupdate() {

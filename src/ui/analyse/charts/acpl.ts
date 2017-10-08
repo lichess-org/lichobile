@@ -2,6 +2,7 @@ import { select } from 'd3-selection'
 import { scaleLinear } from 'd3-scale'
 import { area as d3Area } from 'd3-shape'
 
+import { Tree } from '../../shared/tree/interfaces'
 import { AnalyseData } from '../../../lichess/interfaces/analyse'
 
 interface Point {
@@ -114,7 +115,7 @@ export default function drawAcplChart(element: SVGElement, aData: AnalyseData, c
 }
 
 function makeSerieData(d: AnalyseData): Point[] {
-  return d.treeParts.slice(1).map((node) => {
+  return d.treeParts.slice(1).reduce((acc: Point[], node: Partial<Tree.Node>) => {
     const ply = node.ply!
     const color = ply & 1
 
@@ -122,18 +123,19 @@ function makeSerieData(d: AnalyseData): Point[] {
 
     if (node.eval && node.eval.mate) {
       cp = node.eval.mate > 0 ? Infinity : -Infinity
-    } else if (node.san && node.san.indexOf('#') > 0) {
+    }
+    else if (node.san && node.san.indexOf('#') > 0) {
       cp = color === 1 ? Infinity : -Infinity
       if (d.game.variant.key === 'antichess') cp = -cp
-    } else if (node.eval && node.eval.cp !== undefined) {
-      cp = node.eval.cp
-    } else return {
-      acpl: 0
     }
+    else if (node.eval && node.eval.cp !== undefined) {
+      cp = node.eval.cp
+    }
+    else return acc
 
     const point = {
       acpl: 2 / (1 + Math.exp(-0.004 * cp)) - 1
     }
-    return point
-  })
+    return acc.concat([point])
+  }, [])
 }

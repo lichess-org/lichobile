@@ -309,8 +309,8 @@ export default function ctrl(vnode) {
   }.bind(this)
 
   this.goToAnalysis = function() {
-    const fen = this.data.replay.history[0].fen
-    router.set(`/analyse/variant/standard/fen/${encodeURIComponent(fen)}?color=${this.data.puzzle.color}&goBack=1`)
+    const puzzle = this.data.puzzle
+    router.set(`/analyse/online/${puzzle.gameId}/${puzzle.color}?ply=${puzzle.initialPly}&curFen=${puzzle.fen}`)
   }.bind(this)
 
   if (vnode.attrs.id) {

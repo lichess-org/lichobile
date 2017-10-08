@@ -1,6 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import * as range from 'lodash/range'
 import i18n from '../../../i18n'
+import * as helper from '../../helper'
 import { isClientEval } from '../../shared/tree/interfaces'
 
 import AnalyseCtrl from '../AnalyseCtrl'
@@ -44,18 +45,23 @@ function formatTime(millis: number) {
   }
 }
 
+function onLineTap(ctrl: AnalyseCtrl, e: Event) {
+  const el = helper.getLI(e)
+  const uci = el && el.dataset['uci']
+  if (uci) ctrl.uciMove(uci)
+}
+
 function renderCevalPvs(ctrl: AnalyseCtrl) {
   const multiPv = ctrl.ceval.opts.multiPv
   const node = ctrl.node
   if (node.ceval && !ctrl.gameOver()) {
     const pvs = node.ceval.pvs
-    return h('div.ceval-pv_box.native_scroller', {
-      key: 'ceval-pvs',
-      'data-fen': node.fen
+    return h('ul.ceval-pv_box.native_scroller', {
+      oncreate: helper.ontapXY(e => onLineTap(ctrl, e), undefined, helper.getLI)
     }, range(multiPv).map((i) => {
-      if (!pvs[i]) return h('div.pv')
+      if (!pvs[i]) return h('li.pv')
       const san = pv2san(ctrl.ceval.variant, node.fen, false, pvs[i].moves, pvs[i].mate)
-      return h('div.ceval-pv', {
+      return h('li.ceval-pv', {
         'data-uci': pvs[i].moves[0],
         className: i % 2 ? 'even' : 'odd'
       }, [

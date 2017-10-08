@@ -19,12 +19,7 @@ export default function view(vnode) {
     header = connectingHeader
   }
   else {
-    const viewGame = ctrl.data.puzzle.gameId ? helper.ontap(
-      () => router.set(`/game/${ctrl.data.puzzle.gameId}/${ctrl.data.puzzle.color}`)
-    ) : () => {}
-    header = () => renderHeader(h('div.main_header_title.withSub', {
-      oncreate: viewGame
-    }, [
+    header = () => renderHeader(h('div.main_header_title.withSub', [
       h('h1', i18n('puzzleId', ctrl.data.puzzle.id)),
       h('h2.header-subTitle', [
         i18n('rating'), ' ' + (ctrl.data.mode === 'view' ? ctrl.data.puzzle.rating : '?'),

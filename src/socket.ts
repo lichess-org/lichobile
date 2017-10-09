@@ -69,6 +69,8 @@ interface FollowingOnlinePayload extends LichessMessage<Array<string>> {
   patrons: Array<string>
 }
 
+export const SEEKING_SOCKET_NAME = 'seekLobby'
+
 // connectedWS means connection is established and server ping/pong
 // is working normally
 let connectedWS = false
@@ -247,6 +249,7 @@ function createChallenge(
 }
 
 function createLobby(
+  name: string,
   onOpen: () => void,
   handlers: MessageHandlers
 ) {
@@ -259,7 +262,7 @@ function createLobby(
   }
   const opts = {
     options: {
-      name: 'lobby',
+      name,
       debug: window.lichess.mode === 'dev',
       pingDelay: 2000,
       sendOnOpen: [{t: 'following_onlines'}],
@@ -376,11 +379,13 @@ export default {
     tellWorker(worker, 'connect')
   },
   restorePrevious() {
+    // used only after canceling a seek with lobby popup
     // if by chance we don't have a previous connection, just close
     if (rememberedSetups.length === 2) {
       const connSetup = rememberedSetups.shift()
       rememberedSetups = []
-      if (connSetup) {
+      // safeguard to just be sure to not reopen a seeking lobby socket connection
+      if (connSetup && connSetup.setup.opts.options.name !== SEEKING_SOCKET_NAME) {
         setupConnection(connSetup.setup, connSetup.handlers)
       }
     } else {

@@ -25,7 +25,7 @@ const HomeScreen: Mithril.Component<{}, HomeState> = {
 
     function init() {
       if (isForeground()) {
-        socket.createLobby(noop, {
+        socket.createLobby('homeLobby', noop, {
           n: (_: never, d: PongMessage) => {
             nbConnectedPlayers(d.d)
             nbGamesInPlay(d.r)

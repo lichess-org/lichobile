@@ -387,6 +387,8 @@ export default {
       // safeguard to just be sure to not reopen a seeking lobby socket connection
       if (connSetup && connSetup.setup.opts.options.name !== SEEKING_SOCKET_NAME) {
         setupConnection(connSetup.setup, connSetup.handlers)
+      } else {
+        tellWorker(worker, 'destroy')
       }
     } else {
       tellWorker(worker, 'destroy')

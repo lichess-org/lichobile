@@ -63,35 +63,31 @@ export default function StageClock(stages: Stage[], increment: number, onFlag: (
     const bm = state.blackMoves
 
     if (side === 'white') {
-      if (state.activeSide === 'white') {
-        if (tm !== null)
-          state.whiteMoves = tm - 1
-        state.whiteTime = state.whiteTime + state.increment
-        if (state.whiteMoves === 0) {
-          state.whiteStage = state.whiteStage + 1
-          state.whiteTime = state.whiteTime + Number(state.stages[state.whiteStage].time) * MINUTE_MILLIS
-          if (state.whiteStage === (state.stages.length - 1))
-            state.whiteMoves = null
-          else
-            state.whiteMoves = state.stages[state.whiteStage].moves
-        }
+      if (tm !== null)
+        state.whiteMoves = tm - 1
+      state.whiteTime = state.whiteTime + state.increment
+      if (state.whiteMoves === 0) {
+        state.whiteStage = state.whiteStage + 1
+        state.whiteTime = state.whiteTime + Number(state.stages[state.whiteStage].time) * MINUTE_MILLIS
+        if (state.whiteStage === (state.stages.length - 1))
+          state.whiteMoves = null
+        else
+          state.whiteMoves = state.stages[state.whiteStage].moves
       }
       blackTimestamp = performance.now()
       state.activeSide = 'black'
     }
     else {
-      if (state.activeSide === 'black') {
-        if (bm !== null)
-          state.blackMoves = bm - 1
-        state.blackTime = state.blackTime + state.increment
-        if (state.blackMoves === 0) {
-          state.blackStage = state.blackStage + 1
-          state.blackTime = state.blackTime + Number(state.stages[state.blackStage].time) * MINUTE_MILLIS
-          if (state.blackStage === (state.stages.length - 1))
-            state.blackMoves = null
-          else
-            state.blackMoves = state.stages[state.blackStage].moves
-        }
+      if (bm !== null)
+        state.blackMoves = bm - 1
+      state.blackTime = state.blackTime + state.increment
+      if (state.blackMoves === 0) {
+        state.blackStage = state.blackStage + 1
+        state.blackTime = state.blackTime + Number(state.stages[state.blackStage].time) * MINUTE_MILLIS
+        if (state.blackStage === (state.stages.length - 1))
+          state.blackMoves = null
+        else
+          state.blackMoves = state.stages[state.blackStage].moves
       }
       whiteTimestamp = performance.now()
       state.activeSide = 'white'

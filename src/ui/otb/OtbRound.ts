@@ -133,7 +133,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     }
 
     const clockType = settings.otb.clock.clockType() as ClockType
-    this.clock = clockSet[clockType](this.onFlag)
+    const clock = clockSet[clockType](this.onFlag)
 
     chess.init(payload)
     .then((data: chess.InitResponse) => {
@@ -147,7 +147,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
         pref: {
           centerPiece: true
         },
-        clock: this.clock ? this.clock.getState() : null
+        clock: clock ? clock.getState() : null
       }), [data.setup], 0)
     })
     .then(() => {

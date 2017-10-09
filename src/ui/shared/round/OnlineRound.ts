@@ -521,7 +521,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       }
 
       this.showActions()
-      setTimeout(redraw, 500)
+      setTimeout(redraw, 1000)
     }
   }
 

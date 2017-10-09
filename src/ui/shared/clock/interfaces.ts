@@ -21,6 +21,7 @@ export interface Stage { time: number, moves: number | null }
 export interface IStageClock extends IBasicClock {
   whiteMoves(): number | null
   blackMoves(): number | null
+  getMoves(color: Color): number | null
 }
 
 export type IChessClock = IBasicClock | IStageClock

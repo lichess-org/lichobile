@@ -160,6 +160,10 @@ export default function StageClock(stages: Stage[], increment: number, onFlag: (
     return color === 'white' ? whiteTime() : blackTime()
   }
 
+  function getMoves(color: Color): number | null {
+    return color === 'white' ? whiteMoves() : blackMoves()
+  }
+
   const clockType: ClockType = 'stage'
 
   return {
@@ -176,6 +180,7 @@ export default function StageClock(stages: Stage[], increment: number, onFlag: (
     whiteMoves,
     blackMoves,
     getTime,
+    getMoves,
     clear() {
       clearInterval(clockInterval)
     }

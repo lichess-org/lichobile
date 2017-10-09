@@ -10,7 +10,7 @@ import CrazyPocket from '../../shared/round/crazy/CrazyPocket'
 import { OfflineRoundInterface, Position, Material } from '../round'
 import settings from '../../../settings'
 import Replay from './Replay'
-import { IChessClock } from '../clock/interfaces'
+import { IChessClock, IStageClock } from '../clock/interfaces'
 import { formatClockTime } from '../round/clock/clockView'
 
 let pieceNotation: boolean
@@ -226,13 +226,23 @@ function renderClock(clock: IChessClock, color: Color) {
   const runningColor = clock.activeSide()
   const time = clock.getTime(color)
   const isRunning = runningColor === color
-  const className = helper.classSet({
+  let className = helper.classSet({
     clock: true,
     outoftime: !time,
     running: isRunning,
     offlineClock: true
   })
-  return h('div', {
+  const clockTime = h('div', {
     className
   }, formatClockTime(time, isRunning))
+
+  const moves = clock.clockType == 'stage' ? (clock as IStageClock).getMoves(color) : null
+  className = helper.classSet({
+    clockMoves: true
+  })
+  const clockMoves = h('div', {
+    className
+  }, "Moves: " + moves)
+  const clockInfo = h('div', {}, [clockTime, moves ? clockMoves : null])
+  return clockInfo
 }

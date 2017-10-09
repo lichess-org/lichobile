@@ -56,6 +56,12 @@ export default {
     }
   },
 
+  appCancelSeeking() {
+    if (isOpenAndSeeking) {
+      leavePoolOrCancelHook()
+    }
+  },
+
   onNewOpponent() {
     if (currentSetup) doStartSeeking(currentSetup)
     // if no setup get it from localstorage
@@ -99,7 +105,7 @@ export default {
           ),
         ] : h('div', [i18n('reconnecting'), loader])),
         h('button[data-icon=L]', {
-          oncreate: helper.ontap(() => cancelSeeking())
+          oncreate: helper.ontap(() => userCancelSeeking())
         }, i18n('cancel'))
       ])
     }
@@ -143,7 +149,7 @@ function renderPoolSetup(member: PoolMember) {
 }
 
 function doStartSeeking(conf: PoolMember | HumanSeekSetup) {
-  router.backbutton.stack.push(cancelSeeking)
+  router.backbutton.stack.push(userCancelSeeking)
 
   isOpenAndSeeking = true
   window.plugins.insomnia.keepAwake()
@@ -174,18 +180,9 @@ function stopAndClose(fromBB?: string) {
   isOpenAndSeeking = false
 }
 
-function cancelSeeking(fromBB?: string) {
+function userCancelSeeking(fromBB?: string) {
   stopAndClose(fromBB)
-
-  if (currentSetup === null) return
-
-  if (isPoolMember(currentSetup)) {
-    leavePool(currentSetup)
-  }
-  else if (hookId) {
-    cancelHook()
-  }
-
+  leavePoolOrCancelHook()
   socket.restorePrevious()
   window.plugins.insomnia.allowSleepAgain()
 }
@@ -224,6 +221,16 @@ function enterPool(member: PoolMember) {
       }, 10 * 1000)
     }
   }, socketHandlers)
+}
+
+function leavePoolOrCancelHook() {
+  if (currentSetup === null) return
+  if (isPoolMember(currentSetup)) {
+    leavePool(currentSetup)
+  }
+  else if (hookId) {
+    cancelHook()
+  }
 }
 
 function leavePool(member: PoolMember) {

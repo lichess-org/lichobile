@@ -378,9 +378,9 @@ export default {
   connect() {
     tellWorker(worker, 'connect')
   },
+  // used only when user cancels a seek from lobby popup
+  // if by chance we don't have a previous connection, just close
   restorePrevious() {
-    // used only after canceling a seek with lobby popup
-    // if by chance we don't have a previous connection, just close
     if (rememberedSetups.length === 2) {
       const connSetup = rememberedSetups.shift()
       rememberedSetups = []

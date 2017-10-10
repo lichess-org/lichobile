@@ -1,4 +1,3 @@
-import * as merge from 'lodash/merge'
 import * as cg from './interfaces'
 import { State, makeDefaults } from './state'
 import * as board from './board'
@@ -65,4 +64,15 @@ export function setNewBoardState(d: State, config: cg.SetConfig): void {
   if (d.selected) {
     board.setSelected(d, d.selected)
   }
+}
+
+function merge(base: any, extend: any) {
+  for (let key in extend) {
+    if (isObject(base[key]) && isObject(extend[key])) merge(base[key], extend[key])
+    else base[key] = extend[key]
+  }
+}
+
+function isObject(o: any): boolean {
+  return o && typeof o === 'object'
 }

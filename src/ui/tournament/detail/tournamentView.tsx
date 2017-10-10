@@ -100,7 +100,7 @@ function tournamentHeader(data: Tournament) {
         <div className={conditionsClass} data-icon="7">
           { data.verdicts.list.map(o => {
             return (
-              <p className={'condition' + (o.accepted ? 'accepted' : 'rejected')}>
+              <p className={'condition ' + (o.verdict === 'ok' ? 'accepted' : 'rejected')}>
                 { o.condition }
               </p>
             )

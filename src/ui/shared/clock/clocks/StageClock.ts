@@ -6,7 +6,7 @@ import { ClockType, IStageClock, Stage, IChessStageClockState } from '../interfa
 const CLOCK_TICK_STEP = 100
 const MINUTE_MILLIS = 60 * 1000
 
-export default function StageClock(stages: Stage[], increment: number, onFlag: (color: Color) => void): IStageClock {
+export default function StageClock(stages: Stage[], increment: number, onFlag: (color: Color) => void, soundOn: boolean): IStageClock {
   let state: IChessStageClockState = {
     clockType: 'stage',
     whiteTime: Number(stages[0].time) * MINUTE_MILLIS,
@@ -35,7 +35,7 @@ export default function StageClock(stages: Stage[], increment: number, onFlag: (
       if (state.whiteTime <= 0) {
         state.flagged = 'white'
         onFlag(state.flagged)
-        sound.dong()
+        if (soundOn) sound.dong()
         clearInterval(clockInterval)
       }
     }
@@ -46,7 +46,7 @@ export default function StageClock(stages: Stage[], increment: number, onFlag: (
       if (state.blackTime <= 0) {
         state.flagged = 'black'
         onFlag(state.flagged)
-        sound.dong()
+        if (soundOn) sound.dong()
         clearInterval(clockInterval)
       }
     }
@@ -57,7 +57,7 @@ export default function StageClock(stages: Stage[], increment: number, onFlag: (
     if (flagged()) {
       return
     }
-    sound.clock()
+    if (soundOn) sound.clock()
 
     const tm = state.whiteMoves
     const bm = state.blackMoves

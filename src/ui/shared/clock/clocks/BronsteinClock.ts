@@ -5,7 +5,7 @@ import { ClockType, IBasicClock, IChessDelayClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
-export default function BronsteinClock(time: number, increment: number, onFlag: (color: Color) => void): IBasicClock {
+export default function BronsteinClock(time: number, increment: number, onFlag: (color: Color) => void, soundOn: boolean): IBasicClock {
   let state: IChessDelayClockState = {
     clockType: 'bronstein',
     whiteTime: (time !== 0) ? time : increment,
@@ -32,7 +32,7 @@ export default function BronsteinClock(time: number, increment: number, onFlag: 
       if (state.whiteTime <= 0) {
         state.flagged = 'white'
         onFlag(state.flagged)
-        sound.dong()
+        if (soundOn) sound.dong()
         clearInterval(clockInterval)
       }
     }
@@ -44,7 +44,7 @@ export default function BronsteinClock(time: number, increment: number, onFlag: 
       if (state.blackTime <= 0) {
         state.flagged = 'black'
         onFlag(state.flagged)
-        sound.dong()
+        if (soundOn) sound.dong()
         clearInterval(clockInterval)
       }
     }
@@ -55,7 +55,7 @@ export default function BronsteinClock(time: number, increment: number, onFlag: 
     if (state.flagged) {
       return
     }
-    sound.clock()
+    if (soundOn) sound.clock()
 
     if (side === 'white') {
       if (state.activeSide === 'white') {

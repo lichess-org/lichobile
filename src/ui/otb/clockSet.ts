@@ -14,7 +14,7 @@ function SimpleClock(time: number, onFlag: (color: Color) => void) {
 }
 
 function IncrementClock(time: number, increment: number, onFlag: (color: Color) => void) {
-  return HandicapIncClock(time, increment, time, increment, onFlag)
+  return HandicapIncClock(time, increment, time, increment, onFlag, false)
 }
 
 export default {
@@ -36,24 +36,28 @@ export default {
     Number(settings.otb.clock.handicapInc.topIncrement()) * MILLIS,
     Number(settings.otb.clock.handicapInc.bottomTime()) * MINUTE_MILLIS,
     Number(settings.otb.clock.handicapInc.bottomIncrement()) * MILLIS,
-    onFlag
+    onFlag,
+    false
   ),
 
   delay: (onFlag: (color: Color) => void) => DelayClock(
     Number(settings.otb.clock.delay.time()) * MINUTE_MILLIS,
     Number(settings.otb.clock.delay.increment()) * MILLIS,
-    onFlag
+    onFlag,
+    false
   ),
 
   bronstein: (onFlag: (color: Color) => void) => BronsteinClock(
     Number(settings.otb.clock.bronstein.time()) * MINUTE_MILLIS,
     Number(settings.otb.clock.bronstein.increment()) * MILLIS,
-    onFlag
+    onFlag,
+    false
   ),
 
   hourglass: (onFlag: (color: Color) => void) => HourglassClock(
     Number(settings.otb.clock.hourglass.time()) * MINUTE_MILLIS,
-    onFlag
+    onFlag,
+    false
   ),
 
   stage: (onFlag: (color: Color) => void) => StageClock(
@@ -64,6 +68,7 @@ export default {
       }
     }),
     Number(settings.otb.clock.stage.increment()) * MILLIS,
-    onFlag
+    onFlag,
+    false
   )
 }

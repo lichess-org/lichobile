@@ -5,7 +5,7 @@ import { ClockType, IBasicClock, IChessDelayClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
-export default function DelayClock(time: number, increment: number, onFlag: (color: Color) => void): IBasicClock {
+export default function DelayClock(time: number, increment: number, onFlag: (color: Color) => void, soundOn: boolean): IBasicClock {
   let state: IChessDelayClockState = {
     clockType: 'delay',
     whiteTime: (time !== 0) ? time : increment,
@@ -34,7 +34,7 @@ export default function DelayClock(time: number, increment: number, onFlag: (col
         if (state.whiteTime <= 0) {
           state.flagged = 'white'
           onFlag(state.flagged)
-          sound.dong()
+          if (soundOn) sound.dong()
           clearInterval(clockInterval)
         }
       }
@@ -49,7 +49,7 @@ export default function DelayClock(time: number, increment: number, onFlag: (col
         if (blackTime() <= 0) {
           state.flagged = 'black'
           onFlag(state.flagged)
-          sound.dong()
+          if (soundOn) sound.dong()
           clearInterval(clockInterval)
         }
       }
@@ -61,7 +61,7 @@ export default function DelayClock(time: number, increment: number, onFlag: (col
     if (flagged()) {
       return
     }
-    sound.clock()
+    if (soundOn) sound.clock()
 
     if (side === 'white') {
       if (state.activeSide === 'white') {

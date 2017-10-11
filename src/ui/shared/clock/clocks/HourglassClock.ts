@@ -5,11 +5,11 @@ import { ClockType, IBasicClock, IChessBasicClockState } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
-export default function HourglassClock(time: number, onFlag: (color: Color) => void): IBasicClock {
+export default function HourglassClock(time: number, onFlag: (color: Color) => void, soundOn: boolean): IBasicClock {
   let state: IChessBasicClockState = {
     clockType: 'hourglass',
     whiteTime: time / 2,
-    blackTime: time / 2,
+    blackTime: time /   2,
     activeSide: undefined,
     flagged: undefined,
     isRunning: false
@@ -29,7 +29,7 @@ export default function HourglassClock(time: number, onFlag: (color: Color) => v
       if (whiteTime() <= 0) {
         state.flagged = 'white'
         onFlag(state.flagged)
-        sound.dong()
+        if (soundOn) sound.dong()
         clearInterval(clockInterval)
       }
     }
@@ -41,7 +41,7 @@ export default function HourglassClock(time: number, onFlag: (color: Color) => v
       if (blackTime() <= 0) {
         state.flagged = 'black'
         onFlag(state.flagged)
-        sound.dong()
+        if (soundOn) sound.dong()
         clearInterval(clockInterval)
       }
     }
@@ -52,7 +52,7 @@ export default function HourglassClock(time: number, onFlag: (color: Color) => v
     if (flagged()) {
       return
     }
-    sound.clock()
+    if (soundOn) sound.clock()
 
     if (side === 'white') {
       blackTimestamp = performance.now()

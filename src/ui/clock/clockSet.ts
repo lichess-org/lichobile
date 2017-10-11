@@ -13,7 +13,7 @@ function SimpleClock(time: number, onFlag: () => void) {
 }
 
 function IncrementClock(time: number, increment: number, onFlag: () => void) {
-  return HandicapIncClock(time, increment, time, increment, onFlag)
+  return HandicapIncClock(time, increment, time, increment, onFlag, true)
 }
 
 export default {
@@ -35,24 +35,28 @@ export default {
     Number(settings.clock.handicapInc.topIncrement()) * MILLIS,
     Number(settings.clock.handicapInc.bottomTime()) * MINUTE_MILLIS,
     Number(settings.clock.handicapInc.bottomIncrement()) * MILLIS,
-    () => {}
+    () => {},
+    true
   ),
 
   delay: () => DelayClock(
     Number(settings.clock.delay.time()) * MINUTE_MILLIS,
     Number(settings.clock.delay.increment()) * MILLIS,
-    () => {}
+    () => { },
+    true
   ),
 
   bronstein: () => BronsteinClock(
     Number(settings.clock.bronstein.time()) * MINUTE_MILLIS,
     Number(settings.clock.bronstein.increment()) * MILLIS,
-    () => {}
+    () => { },
+    true
   ),
 
   hourglass: () => HourglassClock(
     Number(settings.clock.hourglass.time()) * MINUTE_MILLIS,
-    () => {}
+    () => { },
+    true
   ),
 
   stage: () => StageClock(
@@ -63,6 +67,7 @@ export default {
       }
     }),
     Number(settings.clock.stage.increment()) * MILLIS,
-    () => {}
+    () => { },
+    true
   )
 }

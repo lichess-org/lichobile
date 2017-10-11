@@ -42,7 +42,7 @@ function renderAlways(ctrl: OtbRound) {
             value: 'flipBoard',
             selected: settings.otb.flipMode() === 'flipBoard'
           }, i18n('Flip board after move')),
-          h('option[value=none]',{
+          h('option[value=none]', {
             value: 'none',
             selected: settings.otb.flipMode() === 'none'
           }, i18n('None'))

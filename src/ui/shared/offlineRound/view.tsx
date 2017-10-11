@@ -236,13 +236,13 @@ function renderClock(clock: IChessClock, color: Color) {
     className
   }, formatClockTime(time, isRunning))
 
-  const moves = clock.clockType == 'stage' ? (clock as IStageClock).getMoves(color) : null
+  const moves = clock.clockType === 'stage' ? (clock as IStageClock).getMoves(color) : null
   className = helper.classSet({
     clockMoves: true
   })
   const clockMoves = h('div', {
     className
-  }, "Moves: " + moves)
+  }, 'Moves: ' + moves)
   const clockInfo = h('div', {}, [clockTime, moves ? clockMoves : null])
   return clockInfo
 }

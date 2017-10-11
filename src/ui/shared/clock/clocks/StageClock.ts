@@ -144,7 +144,7 @@ export default function StageClock(stages: Stage[], increment: number, onFlag: (
     return state.blackMoves
   }
 
-  function whiteTime() : number{
+  function whiteTime(): number {
     return state.whiteTime
   }
 

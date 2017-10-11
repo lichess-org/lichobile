@@ -8,8 +8,8 @@ const CLOCK_TICK_STEP = 100
 export default function HourglassClock(time: number, onFlag: (color: Color) => void): IBasicClock {
   let state: IChessBasicClockState = {
     clockType: 'hourglass',
-    whiteTime: time/2,
-    blackTime: time/2,
+    whiteTime: time / 2,
+    blackTime: time / 2,
     activeSide: undefined,
     flagged: undefined,
     isRunning: false
@@ -87,15 +87,15 @@ export default function HourglassClock(time: number, onFlag: (color: Color) => v
   }
 
   function activeSide(): Color | undefined {
-     return state.activeSide;
+     return state.activeSide
   }
 
   function flagged(): Color | undefined {
-     return state.flagged;
+     return state.flagged
   }
 
   function isRunning(): boolean {
-    return state.isRunning;
+    return state.isRunning
   }
 
   function getState(): IChessBasicClockState {

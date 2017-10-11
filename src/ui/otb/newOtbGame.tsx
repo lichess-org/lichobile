@@ -144,7 +144,7 @@ export default {
 }
 
 const clockSettingsView = {
-  none(_ : NewOtbGameCtrl) {
+  none(_: NewOtbGameCtrl) {
     return('')
   },
   simple(_: NewOtbGameCtrl) {

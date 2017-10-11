@@ -90,15 +90,15 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
   }
 
   function activeSide(): Color | undefined {
-     return state.activeSide;
+     return state.activeSide
   }
 
   function flagged(): Color | undefined {
-     return state.flagged;
+     return state.flagged
   }
 
   function isRunning(): boolean {
-    return state.isRunning;
+    return state.isRunning
   }
 
   function getState(): IChessHandicapIncClockState {

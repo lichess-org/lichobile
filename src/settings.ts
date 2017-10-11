@@ -161,7 +161,7 @@ export default {
   },
 
   otb: {
-    flipPieces: localstorageprop('settings.otb.flipPieces', false),
+    flipMode: localstorageprop('settings.otb.flipMode', 'none'),
     useSymmetric: localstorageprop('settings.otb.useSymmetric', false),
     variant: localstorageprop<VariantKey>('settings.otb.variant', 'standard'),
     availableVariants: offlineAvailableVariants,

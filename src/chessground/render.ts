@@ -1,8 +1,13 @@
 import * as cg from './interfaces'
 import { State } from './state'
 import * as util from './util'
+import * as board from './board'
 
 export function renderBoard(d: State, dom: cg.DOM) {
+  if (d.otb && d.otbFlipMode === 'flipBoard' && d.turnColor !== d.orientation) {
+    board.toggleOrientation(d)
+  }
+
   const boardElement = dom.board
   const asWhite = d.orientation === 'white'
   const orientationChange = d.prev.orientation && d.prev.orientation !== d.orientation
@@ -26,12 +31,13 @@ export function renderBoard(d: State, dom: cg.DOM) {
   let otbTurnFlipChange, otbModeChange, otbChange = false
   if (d.otb) {
     otbTurnFlipChange = d.prev.turnColor && d.prev.turnColor !== d.turnColor
-    otbModeChange = d.prev.otbMode && d.prev.otbMode !== d.otbMode
-    d.prev.otbMode = d.otbMode
+    otbModeChange = d.prev.otbFlipMode &&
+                    (d.prev.otbFlipMode !== d.otbFlipMode) &&
+                    (d.otbFlipMode === 'flipPieces' || d.prev.otbFlipMode === 'flipPieces')
+    d.prev.otbFlipMode = d.otbFlipMode
     d.prev.turnColor = d.turnColor
     otbChange = !!(otbTurnFlipChange || otbModeChange)
   }
-
   // walk over all board dom elements, apply animations and flag moved pieces
   let el = dom.board.firstChild as cg.KeyedNode
   while (el) {
@@ -47,7 +53,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
         el.classList.remove('dragging')
         el.classList.remove('magnified')
         translate = util.posToTranslate(util.key2pos(k), asWhite, bounds)
-        el.style.transform = util.transform(d, el.cgColor, util.translate(translate))
+        el.style.transform = util.transform(d, util.translate(translate))
         el.cgDragging = false
       }
       // remove captured class if it still remains
@@ -63,10 +69,10 @@ export function renderBoard(d: State, dom: cg.DOM) {
           translate = util.posToTranslate(util.key2pos(k), asWhite, bounds)
           translate[0] += anim[1][0]
           translate[1] += anim[1][1]
-          el.style.transform = util.transform(d, el.cgColor, util.translate(translate))
+          el.style.transform = util.transform(d, util.translate(translate))
         } else if (el.cgAnimating) {
           translate = util.posToTranslate(util.key2pos(k), asWhite, bounds)
-          el.style.transform = util.transform(d, el.cgColor, util.translate(translate))
+          el.style.transform = util.transform(d, util.translate(translate))
           el.cgAnimating = false
         }
         // same piece: flag as same
@@ -122,7 +128,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
           translate[0] += anim[1][0]
           translate[1] += anim[1][1]
         }
-        mvd.style.transform = util.transform(d, mvd.cgColor, util.translate(translate))
+        mvd.style.transform = util.transform(d, util.translate(translate))
       }
       // no piece in moved obj: insert the new piece
       else {
@@ -137,7 +143,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
           translate[0] += anim[1][0]
           translate[1] += anim[1][1]
         }
-        pe.style.transform = util.transform(d, p.color, util.translate(translate))
+        pe.style.transform = util.transform(d, util.translate(translate))
         boardElement.appendChild(pe)
       }
     }

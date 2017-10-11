@@ -7,6 +7,7 @@ import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineR
 import ground from '../shared/offlineRound/ground'
 import popupWidget from '../shared/popup'
 import router from '../../router'
+import * as cg from '../../chessground/interfaces'
 
 import OtbRound from './OtbRound'
 
@@ -19,10 +20,35 @@ export interface OtbActionsCtrl {
 
 function renderAlways(ctrl: OtbRound) {
   return [
-    h('div.action', formWidgets.renderCheckbox(
-      i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces,
-        (v) => ground.changeOTBMode(ctrl.chessground, v)
-    )),
+    h('div.action', [
+      h('div.select_input', [
+        h('label', {
+          'for': 'select_otb_flip_mode'
+        }, 'Flip Mode'),
+        h('select', {
+          id: 'select_otb_flip_mode',
+          value: settings.otb.flipMode(),
+          onchange(e: Event) {
+            let mode = (e.target as HTMLInputElement).value as cg.OtbFlipMode
+            settings.otb.flipMode(mode)
+            ground.setOtbFlipMode(ctrl.chessground, mode)
+          }
+       }, [
+          h('option[value=flipPieces]', {
+            value: 'flipPieces',
+            selected: settings.otb.flipMode() === 'flipPieces'
+          }, i18n('Flip pieces after move')),
+          h('option[value=flipBoard]', {
+            value: 'flipBoard',
+            selected: settings.otb.flipMode() === 'flipBoard'
+          }, i18n('Flip board after move')),
+          h('option[value=none]',{
+            value: 'none',
+            selected: settings.otb.flipMode() === 'none'
+          }, i18n('None'))
+        ])
+      ])
+    ]),
     h('div.action', formWidgets.renderCheckbox(
       i18n('Use Symmetric pieces'), 'useSymmetric', settings.otb.useSymmetric, redraw
     ))

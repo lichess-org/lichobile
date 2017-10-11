@@ -125,9 +125,9 @@ export default class Chessground {
     anim(board.toggleOrientation, this)
   }
 
-  setOtbMode(mode: 'flip' | 'facing'): void {
+  setOtbFlipMode(mode: cg.OtbFlipMode): void {
     anim(state => {
-      state.otbMode = mode
+      state.otbFlipMode = mode
     }, this)
   }
 

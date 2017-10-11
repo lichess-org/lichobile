@@ -20,7 +20,7 @@ function makeConfig(data: OfflineGameData, sit: GameSituation): cg.InitConfig {
     check: sit.check,
     otb: data.game.id === 'offline_otb',
     coordinates: settings.game.coords(),
-    otbMode: settings.otb.flipPieces() ? 'flip' : 'facing',
+    otbFlipMode: settings.otb.flipMode() as cg.OtbFlipMode,
     symmetricCoordinates: data.game.id === 'offline_otb',
     autoCastle: data.game.variant.key === 'standard',
     highlight: {
@@ -72,8 +72,8 @@ function reload(ground: Chessground, data: OfflineGameData, sit: GameSituation) 
   ground.reconfigure(makeConfig(data, sit))
 }
 
-function changeOTBMode(ground: Chessground, flip: boolean) {
-  ground.setOtbMode(flip ? 'flip' : 'facing')
+function setOtbFlipMode(ground: Chessground, mode: cg.OtbFlipMode) {
+  ground.setOtbFlipMode(mode)
 }
 
 function promote(ground: Chessground, key: Key, role: Role) {
@@ -97,5 +97,5 @@ export default {
   reload,
   promote,
   end,
-  changeOTBMode
+  setOtbFlipMode
 }

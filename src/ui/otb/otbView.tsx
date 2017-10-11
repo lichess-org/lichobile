@@ -21,7 +21,7 @@ export function overlay(ctrl: OtbRound) {
 }
 
 export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
-  const flip = settings.otb.flipPieces()
+  const flip = settings.otb.flipMode() === 'flipPieces'
   const wrapperClasses = helper.classSet({
     'otb': true,
     'mode_flip': flip,

@@ -252,7 +252,7 @@ function processDrag(ctrl: Chessground) {
         const translate = util.posToTranslate(cur.origPos, asWhite, bounds)
         translate[0] += cur.pos[0] + cur.dec[0]
         translate[1] += cur.pos[1] + cur.dec[1]
-        pieceEl.style.transform = util.transform(state, cur.piece.color, util.translate3d(translate))
+        pieceEl.style.transform = util.transform(state, util.translate3d(translate))
 
         // move square target
         const shadow = dom.elements.shadow

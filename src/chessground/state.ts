@@ -15,7 +15,7 @@ export interface State {
   viewOnly: boolean // don't bind events: the user will never be able to move pieces around
   exploding: cg.Exploding | null
   otb: boolean // is this an otb game?
-  otbMode: cg.OtbMode
+  otbFlipMode: cg.OtbFlipMode
   highlight: {
     lastMove: boolean // add last-move class to squares
     check: boolean // add check class to squares
@@ -93,7 +93,7 @@ export function makeDefaults(): State {
     coordinates: true,
     symmetricCoordinates: false,
     otb: false,
-    otbMode: 'facing' as cg.OtbMode,
+    otbFlipMode: 'none' as cg.OtbFlipMode,
     autoCastle: false,
     viewOnly: false,
     exploding: null,
@@ -144,7 +144,7 @@ export function makeDefaults(): State {
       orientation: null,
       bounds: null,
       turnColor: null,
-      otbMode: null
+      otbFlipMode: null
     }
   }
 }

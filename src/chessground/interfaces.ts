@@ -22,7 +22,7 @@ export interface InitConfig {
   viewOnly?: boolean
   initBounds?: ClientRect
   otb?: boolean
-  otbMode?: OtbMode
+  otbFlipMode?: OtbFlipMode
   highlight?: {
     lastMove?: boolean
     check?: boolean
@@ -118,7 +118,7 @@ export interface Drop {
   key: Key
 }
 
-export type OtbMode = 'facing' | 'flip'
+export type OtbFlipMode = 'flipPieces' | 'flipBoard' | 'none'
 
 export interface KeyedNode extends HTMLElement {
   cgKey: Key
@@ -136,5 +136,5 @@ export interface PrevData {
   orientation: Color | null
   bounds: ClientRect | null
   turnColor: Color | null
-  otbMode: OtbMode | null
+  otbFlipMode: OtbFlipMode | null
 }

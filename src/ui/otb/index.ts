@@ -33,13 +33,15 @@ const OtbScreen: Mithril.Component<Attrs, State> = {
     this.round = new OtbRound(saved, setupFen, setupVariant)
 
     window.plugins.insomnia.keepAwake()
+    document.addEventListener('pause', () => saveClock(this.round), false)
+    window.addEventListener('unload', () => saveClock(this.round))
   },
   oncreate: helper.viewFadeIn,
   onremove() {
     window.plugins.insomnia.allowSleepAgain()
-    if (this.round.clock && this.round.clock.isRunning())
-      this.round.clock.startStop()
-    this.round.save()
+    document.removeEventListener('pause', () => saveClock(this.round), false)
+    window.removeEventListener('unload', () => saveClock(this.round))
+    saveClock(this.round)
   },
   view() {
     let content: () => Mithril.Children, header: () => Mithril.Children
@@ -62,6 +64,12 @@ const OtbScreen: Mithril.Component<Attrs, State> = {
       this.round.data && this.round.data.player.color || 'white'
     )
   }
+}
+
+function saveClock (round: OtbRound) {
+  if (round.clock && round.clock.isRunning())
+    round.clock.startStop()
+  round.save()
 }
 
 export default OtbScreen

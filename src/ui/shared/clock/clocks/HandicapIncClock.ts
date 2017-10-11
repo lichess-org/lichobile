@@ -69,15 +69,11 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
     }
     clearInterval(clockInterval)
     clockInterval = setInterval(tick, CLOCK_TICK_STEP)
-    console.log(clockInterval)
     state.isRunning = true
     redraw()
   }
 
   function startStop () {
-    console.log(state)
-    console.log(isRunning())
-    console.log(clockInterval)
     if (isRunning()) {
       clearInterval(clockInterval)
       state.isRunning = false

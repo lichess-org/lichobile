@@ -98,7 +98,7 @@ function renderGameActionsBar(ctrl: OtbRound) {
         ((!ctrl.clock.flagged() && ctrl.clock.activeSide()) ?
           <button className={"fa action_bar_button " + (ctrl.clock.isRunning() ? "fa-pause" : "fa-play")}
             oncreate={helper.ontap(
-              () => { console.log('click!'); ctrl.clock.startStop() },
+              ctrl.clock.startStop,
               () => window.plugins.toast.show(i18n('Start/stop clock'), 'short', 'bottom')
             )}
           />

@@ -118,7 +118,8 @@ export default {
     pieceDestinations: localstorageprop('settings.pieceDestinations', true),
     coords: localstorageprop('settings.coords', true),
     magnified: localstorageprop('settings.pieceMagnified', true),
-    pieceNotation: localstorageprop('settings.pieceNotation', true)
+    pieceNotation: localstorageprop('settings.pieceNotation', true),
+    zenMode: localstorageprop('settings.zenMode', false)
   },
 
   analyse: {

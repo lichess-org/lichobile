@@ -84,9 +84,6 @@ export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedi
         })
       }
     },
-    clock(o: { white: number, black: number }) {
-      if (ctrl.clock) ctrl.clock.update(o.white, o.black)
-    },
     endData(o: ApiEnd) {
       ctrl.endWithData(o)
       redraw()

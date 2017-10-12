@@ -127,12 +127,13 @@ export interface CorrespondenceClockData {
 }
 
 export interface ClockData {
-  black: number
-  white: number
-  emerg: number
   running: boolean
-  initial: number
-  increment: number
+  initial: Seconds
+  increment: Seconds
+  white: Seconds
+  black: Seconds
+  emerg: Seconds
+  moretime: Seconds
 }
 
 export interface ApiEnd {

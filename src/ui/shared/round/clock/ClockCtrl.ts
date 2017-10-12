@@ -1,119 +1,130 @@
-import { ClockData } from '../../../../lichess/interfaces/game'
-import { formatClockTime } from './clockView'
-import redraw from '../../../../utils/redraw'
+import { GameData } from '../../../../lichess/interfaces/game'
+import * as gameApi from '../../../../lichess/game'
 import sound from '../../../../sound'
+import { formatClockTime } from './clockView'
 
-type Centis = number
+export type Seconds = number
+export type Centis = number
+export type Millis = number
 
-interface LastUpdate {
-  white: number
-  black: number
-  at: number
+interface ClockOpts {
+  onFlag(): void
+  soundColor?: Color
 }
 
-interface ClockEls {
-  white: HTMLElement | null
-  black: HTMLElement | null
+interface Times {
+  white: Millis
+  black: Millis
+  activeColor?: Color
+  lastUpdate: Millis
 }
 
-interface ClockBools {
-  white: boolean
-  black: boolean
+interface EmergSound {
+  play(): void
+  next?: number
+  delay: Millis,
+  playable: {
+    white: boolean
+    black: boolean
+  }
 }
 
 export default class ClockCtrl {
-  public data: ClockData
-  public els: ClockEls
-  public emerg: ClockBools
-  public outOfTime: () => void
 
-  private soundColor?: Color
-  private emergSound: { last: number, delay: number, playable: ClockBools }
-  private lastUpdate: LastUpdate
-
-  constructor(data: ClockData, outOfTime: () => void, soundColor?: Color) {
-
-    this.lastUpdate = {
-      white: data.white,
-      black: data.black,
-      at: Date.now()
+  emergSound: EmergSound = {
+    play: sound.lowtime,
+    delay: 20000,
+    playable: {
+      white: true,
+      black: true
     }
+  }
 
-    this.els = {
-      black: null,
-      white: null
+  times: Times
+
+  timePercentDivisor: number
+  emergMs: Millis
+
+  elements = {
+    white: null,
+    black: null
+  } as ColorMap<HTMLElement | null>
+
+  constructor(d: GameData, public opts: ClockOpts) {
+    const cdata = d.clock!
+
+    this.timePercentDivisor = .1 / (Math.max(cdata.initial, 2) + 5 * cdata.increment)
+
+    this.emergMs = 1000 * Math.min(60, Math.max(10, cdata.initial * .125))
+
+    this.setClock(d, cdata.white, cdata.black)
+  }
+
+  timePercent = (millis: number): number =>
+    Math.max(0, Math.min(100, millis * this.timePercentDivisor))
+
+  setClock = (d: GameData, white: Seconds, black: Seconds, delay: Centis = 0) => {
+    const isClockRunning = gameApi.playable(d) &&
+           ((d.game.turns - d.game.startedAtTurn) > 1 || d.clock!.running)
+
+    this.times = {
+      white: white * 1000,
+      black: black * 1000,
+      activeColor: isClockRunning ? d.game.player : undefined,
+      lastUpdate: performance.now() + delay * 10
     }
+  }
 
-    this.emerg = {
-      black: false,
-      white: false
+  addTime = (color: Color, time: Centis): void => {
+    this.times[color] += time * 10
+  }
+
+  stopClock = (): void => {
+    const color = this.times.activeColor
+    if (color) {
+      const curElapse = this.elapsed()
+      this.times[color] = Math.max(0, this.times[color] - curElapse)
+      this.times.activeColor = undefined
     }
+  }
 
-    this.emergSound = {
-      last: 0,
-      delay: 5000,
-      playable: {
-        white: true,
-        black: true
+  tick = (): void => {
+    const color = this.times.activeColor
+    if (!color) return
+
+    const now = performance.now()
+    const millis = this.times[color] - this.elapsed(now)
+
+    if (millis <= 0) this.opts.onFlag()
+    else this.updateElement(color, millis)
+
+    if (this.opts.soundColor === color) {
+      if (this.emergSound.playable[color]) {
+        if (millis < this.emergMs && !(now < this.emergSound.next!)) {
+          this.emergSound.play()
+          this.emergSound.next = now + this.emergSound.delay
+          this.emergSound.playable[color] = false
+        }
+      } else if (millis > 1.5 * this.emergMs) {
+        this.emergSound.playable[color] = true
       }
     }
-
-    this.outOfTime = outOfTime
-    this.soundColor = soundColor
-    this.data = data
   }
 
-  public addTime = (color: Color, time: Centis): void => {
-    this.data[color] += time / 100
-    this.setLastUpdate(this.data)
-  }
-
-  public update(white: number, black: number, delay: number = 0) {
-    this.data.white = white
-    this.data.black = black
-    this.setLastUpdate(this.data, delay)
-    if (this.els.white) this.els.white.textContent = formatClockTime(this.data.white * 1000)
-    if (this.els.black) this.els.black.textContent = formatClockTime(this.data.black * 1000)
-  }
-
-  public tick(color: Color) {
-    const diffMs = Math.max(0, Date.now() - this.lastUpdate.at)
-    this.data[color] = Math.max(0, this.lastUpdate[color] - diffMs / 1000)
-    const time = this.data[color] * 1000
-    const el = this.els[color]
-
-    if (el) el.textContent = formatClockTime(time, true)
-
-    if (this.data[color] < this.data.emerg && !this.emerg[color]) {
-      this.emerg[color] = true
-      redraw()
-    } else if (this.data[color] >= this.data.emerg && this.emerg[color]) {
-      this.emerg[color] = false
-      redraw()
+  updateElement(color: Color, millis: Millis) {
+    const el = this.elements[color]
+    if (el) {
+      el.textContent = formatClockTime(millis, this.times.activeColor === color)
+      if (millis < this.emergMs) el.classList.add('emerg')
+      else el.classList.remove('emerg')
     }
-
-    if (this.soundColor === color &&
-      this.data[this.soundColor] < this.data.emerg &&
-      this.emergSound.playable[this.soundColor]
-    ) {
-      if (!this.emergSound.last ||
-        (this.data.increment && Date.now() - this.emergSound.delay > this.emergSound.last)
-      ) {
-        sound.lowtime()
-        this.emergSound.last = Date.now()
-        this.emergSound.playable[this.soundColor] = false
-      }
-    } else if (this.soundColor === color && this.data[this.soundColor] > 2 * this.data.emerg && !this.emergSound.playable[this.soundColor]) {
-      this.emergSound.playable[this.soundColor] = true
-    }
-
-    if (this.data[color] === 0) this.outOfTime()
   }
 
-  private setLastUpdate(data: ClockData, delay: number = 0) {
-    this.lastUpdate.white = data.white
-    this.lastUpdate.black = data.black
-    this.lastUpdate.at = Date.now() + 10 * delay
-  }
+  elapsed = (now = performance.now()) => Math.max(0, now - this.times.lastUpdate)
 
+  millisOf = (color: Color): Millis => (this.times.activeColor === color ?
+     Math.max(0, this.times[color] - this.elapsed()) : this.times[color]
+  )
+
+  isRunning = () => this.times.activeColor !== undefined
 }

@@ -119,16 +119,20 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.onNewPiece
     )
 
-    this.clock = this.data.clock ? new ClockCtrl(
-      this.data.clock,
-      this.outoftime,
-      this.data.player.spectator ? undefined : this.data.player.color
-    ) : null
+    this.clock = this.data.clock ? new ClockCtrl(this.data, {
+      onFlag: this.outoftime
+    }) : null
+
+    if (this.clock) {
+      const tickNow = () => {
+        this.clock && this.clock.tick()
+        if (gameApi.playable(this.data)) setTimeout(tickNow, 100)
+      }
+      setTimeout(tickNow, 100)
+    }
 
     this.makeCorrespondenceClock()
-
-    if (this.clock) this.clockIntervId = setInterval(this.clockTick, 100)
-    else if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick, 6000)
+    if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick, 6000)
 
     socket.createGame(
       this.data.url.socket,
@@ -435,7 +439,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       const c = o.clock
       if (this.clock) {
         const delay = (playing && activeColor) ? 0 : (c.lag || 1)
-        this.clock.update(c.white, c.black, delay)
+        this.clock.setClock(d, c.white, c.black, delay)
       } else if (this.correspondenceClock) {
         this.correspondenceClock.update(c.white, c.black)
       }
@@ -481,7 +485,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.data = rCfg
 
     this.makeCorrespondenceClock()
-    if (this.clock && this.data.clock) this.clock.update(this.data.clock.white, this.data.clock.black)
+    if (this.clock && this.data.clock) this.clock.setClock(this.data, this.data.clock.white, this.data.clock.black)
     this.lastMoveMillis = undefined
     if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip)
     redraw()
@@ -507,7 +511,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       d.player.ratingDiff = o.ratingDiff[d.player.color]
       d.opponent.ratingDiff = o.ratingDiff[d.opponent.color]
     }
-    if (this.clock && o.clock) this.clock.update(o.clock.wc * .01, o.clock.bc * .01)
+    if (this.clock && o.clock) this.clock.setClock(d, o.clock.wc * .01, o.clock.bc * .01)
 
     window.plugins.insomnia.allowSleepAgain()
     if (this.data.game.speed === 'correspondence') {
@@ -546,10 +550,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     document.removeEventListener('resume', this.onResume)
     if (this.chat) this.chat.unload()
     if (this.notes) this.notes.unload()
-  }
-
-  private clockTick = () => {
-    if (this.clock && this.isClockRunning()) this.clock.tick(this.data.game.player)
   }
 
   private makeCorrespondenceClock() {

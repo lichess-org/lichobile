@@ -45,7 +45,7 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
       <div key="infos" className={'antagonistInfos offline' + (isCrazy ? ' crazy' : '')}>
         <div className="antagonistUser">
           {content}
-          {clock ? renderClock(clock, antagonistColor) : ''}
+          {isCrazy && clock ? renderClock(clock, antagonistColor) : ''}
         </div>
         { !isCrazy ? <div className="ratingAndMaterial">
           {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
@@ -55,13 +55,16 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
         </div> : null
         }
       </div>
-      {sit.crazyhouse ? h(CrazyPocket, {
-        ctrl,
-        crazyData: sit.crazyhouse,
-        color: antagonistColor,
-        position,
-        customPieceTheme
-      }) : null}
+      {sit.crazyhouse ?
+        h(CrazyPocket, {
+          ctrl,
+          crazyData: sit.crazyhouse,
+          color: antagonistColor,
+          position,
+          customPieceTheme
+        })
+        :
+        clock ? renderClock(clock, antagonistColor) : null}
     </section>
   )
 }

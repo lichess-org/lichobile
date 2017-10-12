@@ -33,14 +33,15 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
 
   const className = [
     'playTable',
+    'offline',
     position,
     isCrazy ? 'crazy' : '',
     otbFlip !== undefined ? otbFlip ? 'mode_flip' : 'mode_facing' : '',
-    ctrl.chessground.state.turnColor === 'white' ? 'turn_white' : 'turn_black'
+    ctrl.chessground.state.turnColor === ctrl.data.player.color ? 'player_turn' : 'opponent_turn'
   ].join(' ')
 
   return (
-    <section className={className} key={key}>
+    <section id={position + '_info'} className={className} key={key}>
       <div key="infos" className={'antagonistInfos offline' + (isCrazy ? ' crazy' : '')}>
         <div className="antagonistUser">
           {content}

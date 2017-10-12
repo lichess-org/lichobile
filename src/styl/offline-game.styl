@@ -64,9 +64,25 @@
   font-size 1.2em
   text-align center
   max-width 70px
-  
+
 .offlineClock.outoftime
     background-color #a00000
 
 .clockMoves
   font-size 0.9em
+
+#player_info
+  >.pocket
+    >piece
+      transform rotate(0deg)
+
+#opponent_info
+  >.pocket
+    >piece
+      transform rotate(0deg)
+
+.playTable.offline.mode_facing.opponent
+  transform rotate(180deg)
+
+.playTable.offline.mode_flip.opponent_turn
+  transform rotate(180deg)

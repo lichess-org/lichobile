@@ -120,6 +120,7 @@ function wrapperOnUpdate({ dom }: Mithril.DOMNode) {
 
 function open() {
   router.backbutton.stack.push(close)
+  session.refresh()
   isOpen = true
   setTimeout(() => {
     if (scroller) scroller.goToPage(1, 0)

@@ -67,9 +67,9 @@ function getUserId() {
 
 function nowPlaying(): NowPlayingGame[] {
   let np = session && session.nowPlaying || []
-  return np.filter(e => {
-    return settings.game.supportedVariants.indexOf(e.variant.key) !== -1
-  })
+  return np.filter(e =>
+    settings.game.supportedVariants.indexOf(e.variant.key) !== -1
+  )
 }
 
 function isKidMode(): boolean {
@@ -81,9 +81,7 @@ function isShadowban(): boolean {
 }
 
 function myTurnGames() {
-  return nowPlaying().filter(e => {
-    return e.isMyTurn
-  })
+  return nowPlaying().filter(e => e.isMyTurn)
 }
 
 function toggleKidMode() {

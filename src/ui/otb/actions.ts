@@ -20,7 +20,7 @@ export interface OtbActionsCtrl {
 function renderAlways(ctrl: OtbRound) {
   return [
     h('div.action', formWidgets.renderCheckbox(
-      i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces,
+      i18n('Flip pieces and clocks after move'), 'flipPieces', settings.otb.flipPieces,
         (v) => ground.changeOTBMode(ctrl.chessground, v)
     )),
     h('div.action', formWidgets.renderCheckbox(

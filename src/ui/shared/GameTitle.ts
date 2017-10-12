@@ -41,6 +41,9 @@ export default {
       if (gameApi.playable(data)) {
         subEls = i18n('playingRightNow')
       }
+      else if (gameStatusApi.aborted(data)) {
+        subEls = i18n('gameAborted')
+      }
       else if (data.game.createdAt) {
         subEls = window.moment(data.game.createdAt).calendar()
       }

@@ -142,7 +142,7 @@ function onResume() {
 
 function onPause() {
   setBackground()
-  lobby.cancelSeeking()
+  lobby.appCancelSeeking()
   socket.disconnect()
 }
 

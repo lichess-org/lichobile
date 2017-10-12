@@ -19,7 +19,7 @@ export default class CorrespondenceCtrl {
     this.pool = []
     this.sendingChallenges = []
 
-    socket.createLobby(this.reload, {
+    socket.createLobby('corresLobby', this.reload, {
       redirect: socket.redirectToGame,
       reload_seeks: () => this.reload(),
       resync: () => xhr.lobby().then(d => {

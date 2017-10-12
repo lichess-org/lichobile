@@ -1,6 +1,22 @@
 (function() {
   function noop() {}
 
+  // dispatch cordova events for testing purpose
+  window.setOffline = function() {
+    window.navigator.connection.type = window.Connection.NONE;
+    document.dispatchEvent(new window.Event('offline'));
+  };
+  window.setOnline = function() {
+    window.navigator.connection.type = window.Connection.WIFI;
+    document.dispatchEvent(new window.Event('online'));
+  };
+  window.setBackground = function() {
+    document.dispatchEvent(new window.Event('pause'));
+  };
+  window.setForeground = function() {
+    document.dispatchEvent(new window.Event('resume'));
+  };
+
   window.cordova = {};
   window.cordova.plugins = {};
   window.plugins = {};
@@ -114,14 +130,6 @@
   };
   window.navigator.connection = {
     type: window.Connection.WIFI
-  };
-  window.setOffline = function() {
-    window.navigator.connection.type = window.Connection.NONE;
-    document.dispatchEvent(new window.Event('offline'));
-  };
-  window.setOnline = function() {
-    window.navigator.connection.type = window.Connection.WIFI;
-    document.dispatchEvent(new window.Event('online'));
   };
 
   // notification

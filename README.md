@@ -14,8 +14,8 @@ Multi-variant chess library is brought by [a JavaScript version of scalachess](h
 
 ## Requirements
 
-* [node](http://nodejs.org) v6.x
-* [cordova](https://cordova.apache.org/) v6.x
+* [node](http://nodejs.org) latest LTS version
+* [cordova](https://cordova.apache.org/) v7.x
 
 **Android:**
 
@@ -29,7 +29,7 @@ Multi-variant chess library is brought by [a JavaScript version of scalachess](h
 
 **iOS:**
 
-* OS X and [Xcode](https://developer.apple.com/xcode/download/) version 8.x
+* OS X and [Xcode](https://developer.apple.com/xcode/download/)
 
 ## Build the web application
 
@@ -80,13 +80,3 @@ Through XCode, in the build settings menu:
 ## Advanced setup
 
 See the wiki.
-
-## Contributing
-
-Mithril views should be written with the hyperscript function (imported as h),
-and not JSX. Current JSX views are here for legacy reasons.
-
-We use tslint to enforce some coding conventions. Before sending a pull request,
-please run the linter and ensure there is no error:
-
-    $ npm run lint

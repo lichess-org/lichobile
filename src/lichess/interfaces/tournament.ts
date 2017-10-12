@@ -135,7 +135,7 @@ interface Verdicts {
 
 interface Verdict {
   condition: string
-  accepted: string
+  verdict: string
 }
 
 export interface PlayerInfo {

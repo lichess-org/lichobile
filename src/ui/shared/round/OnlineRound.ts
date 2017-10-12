@@ -521,7 +521,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       }
 
       this.showActions()
-      setTimeout(redraw, 500)
+      setTimeout(redraw, 1000)
     }
   }
 
@@ -636,7 +636,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     // a reload by xhr triggered by same resume event
     // thus we disconnect socket and reconnect it after reloading data in order to
     // have last version
-    socket.disconnect()
     xhr.reload(this)
     .then(data => {
       socket.setVersion(data.player.version)

@@ -9,7 +9,7 @@ export type Millis = number
 
 interface ClockOpts {
   onFlag(): void
-  soundColor?: Color
+  soundColor: Color | null
 }
 
 interface Times {
@@ -42,7 +42,6 @@ export default class ClockCtrl {
 
   times: Times
 
-  timePercentDivisor: number
   emergMs: Millis
 
   elements = {
@@ -53,15 +52,10 @@ export default class ClockCtrl {
   constructor(d: GameData, public opts: ClockOpts) {
     const cdata = d.clock!
 
-    this.timePercentDivisor = .1 / (Math.max(cdata.initial, 2) + 5 * cdata.increment)
-
     this.emergMs = 1000 * Math.min(60, Math.max(10, cdata.initial * .125))
 
     this.setClock(d, cdata.white, cdata.black)
   }
-
-  timePercent = (millis: number): number =>
-    Math.max(0, Math.min(100, millis * this.timePercentDivisor))
 
   setClock = (d: GameData, white: Seconds, black: Seconds, delay: Centis = 0) => {
     const isClockRunning = gameApi.playable(d) &&

@@ -46,6 +46,7 @@ export function view(ctrl: CorresClockCtrl, color: Color, runningColor: Color) {
   }
   function cOnUpdate(vnode: Mithril.DOMNode) {
     const el = vnode.dom as HTMLElement
+    el.textContent = formatClockTime(time * 1000)
     ctrl.els[color] = el
   }
   return h('div', {

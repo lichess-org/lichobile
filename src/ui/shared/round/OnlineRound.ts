@@ -120,7 +120,8 @@ export default class OnlineRound implements OnlineRoundInterface {
     )
 
     this.clock = this.data.clock ? new ClockCtrl(this.data, {
-      onFlag: this.outoftime
+      onFlag: this.outoftime,
+      soundColor: this.data.player.spectator ? null : this.data.player.color
     }) : null
 
     if (this.clock) {

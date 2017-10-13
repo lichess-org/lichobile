@@ -213,6 +213,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   private onFlag = (color: Color) => {
     const winner = color === 'white' ? 'black' : 'white'
     setResult(this, {id: 35, name: 'outoftime'}, winner)
+    sound.dong()
     this.onGameEnd()
     this.save()
   }

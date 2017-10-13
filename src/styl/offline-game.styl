@@ -60,16 +60,31 @@
         > .fa
           margin 0
 
-.offlineClock
-  font-size 1.2em
-  text-align center
-  max-width 70px
+.clockMoves
+  transform translateZ(0)
+  max-width 120px
+  font-family Cousine
+  text-align right
+  font-size 15px
+  padding 4px 5px 2px
+  line-height 1
+  color #8c8c8c
+  background-color #262626
 
-.offlineClock.outoftime
+.clock.outoftime
     background-color #a00000
 
-.clockMoves
-  font-size 0.9em
+.antagonistInfos.crazy
+  >.antagonistUser
+    >.clockInfo
+      >.clock
+        max-width 68px
+        font-size 20px
+        padding 2px 2px 2px
+      >.clockMoves
+        max-width 68px
+        font-size 12px
+        padding 2px 2px 2px
 
 #player_info
   >.pocket

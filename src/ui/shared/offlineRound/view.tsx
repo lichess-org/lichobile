@@ -247,6 +247,6 @@ function renderClock(clock: IChessClock, color: Color) {
   const clockMoves = h('div', {
     className
   }, 'Moves: ' + moves)
-  const clockInfo = h('div', {}, [clockTime, moves ? clockMoves : null])
+  const clockInfo = h('div', {className: 'clockInfo'}, [clockTime, moves ? clockMoves : null])
   return clockInfo
 }

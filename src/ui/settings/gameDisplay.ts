@@ -22,7 +22,7 @@ function renderBody() {
         settings.game.pieceNotation)),
       h('li.list_item', [
         formWidgets.renderCheckbox('Zen Mode', 'zenMode', settings.game.zenMode),
-        h('small', 'Opponent and rating are hidden during game')
+        h('small', 'Players name and rating are hidden during game')
       ])
    ])
   ]

@@ -4,7 +4,7 @@ npm-debug.log
 /*.mobileprovision
 /*.keystore
 /build.json
-/deploy-stage.sh
+/scripts/deploy-stage.sh
 
 /platforms
 /plugins

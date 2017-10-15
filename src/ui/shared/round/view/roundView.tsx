@@ -16,6 +16,7 @@ import layout from '../../../layout'
 import * as helper from '../../../helper'
 import { backButton, menuButton, loader, headerBtns, miniUser } from '../../../shared/common'
 import GameTitle from '../../../shared/GameTitle'
+import CountdownTimer from '../../../shared/CountdownTimer'
 import Board from '../../../shared/Board'
 import popupWidget from '../../../shared/popup'
 import Clock from '../clock/clockView'
@@ -62,6 +63,7 @@ export function renderMaterial(material: Material) {
 
 function renderTitle(ctrl: OnlineRound) {
   const data = ctrl.data
+  const tournament = ctrl.data.tournament
   if (ctrl.vm.offlineWatcher || socket.isConnected()) {
     const isCorres = !data.player.spectator && data.game.speed === 'correspondence'
     if (ctrl.data.tv) {
@@ -77,7 +79,14 @@ function renderTitle(ctrl: OnlineRound) {
         key: 'user-tv'
       }, [
         h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), ctrl.data.userTV]),
-        h('h2.header-subTitle', [h(`span.withIcon[data-icon=${utils.gameIcon(ctrl.data.game.perf)}]`), gameApi.title(ctrl.data)])
+        h('h2.header-subTitle', tournament ? [
+          h('span.fa.fa-trophy'),
+          h(CountdownTimer, { seconds: tournament.secondsToFinish || 0 }),
+          h('span', ' • ' + tournament.name)
+        ] : [
+          h(`span.withIcon[data-icon=${utils.gameIcon(ctrl.data.game.perf)}]`),
+          gameApi.title(ctrl.data)
+        ])
       ])
     }
     else {
@@ -85,7 +94,7 @@ function renderTitle(ctrl: OnlineRound) {
         key: 'playing-title',
         data: ctrl.data,
         kidMode: session.isKidMode(),
-        subTitle: ctrl.data.tournament ? 'tournament' : isCorres ? 'corres' : 'date'
+        subTitle: tournament ? 'tournament' : isCorres ? 'corres' : 'date'
       })
     }
   } else {

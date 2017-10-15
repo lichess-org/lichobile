@@ -44,7 +44,7 @@ function renderContent(ctrl) {
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'training')
   const key = isPortrait ? 'o-portrait' : 'o-landscape'
 
-  if (!ctrl.data) return h.fragment({ key }, [
+  if (!ctrl.data) return h.fragment({ key: key + '-no-data' }, [
     h('section.board_wrapper', [
       h(ViewOnlyBoard, { fen: emptyFen, orientation: 'white', bounds })
     ])

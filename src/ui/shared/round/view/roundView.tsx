@@ -128,7 +128,6 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
     variant: ctrl.data.game.variant.key,
     chessground: ctrl.chessground,
     bounds,
-    isPortrait,
     alert: !!tournament && tournament.nbSecondsForFirstMove && !ctrl.data.player.spectator && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
       i18n('youHaveNbSecondsToMakeYourFirstMove', tournament.nbSecondsForFirstMove) : undefined
   })

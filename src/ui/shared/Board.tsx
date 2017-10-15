@@ -7,7 +7,6 @@ export interface Attrs {
   variant: VariantKey
   chessground: Chessground
   bounds: ClientRect
-  isPortrait: boolean
   wrapperClasses?: string
   customPieceTheme?: string
   shapes?: Shape[]

@@ -40,7 +40,6 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
     variant: ctrl.data.game.variant.key,
     chessground: ctrl.chessground,
     bounds,
-    isPortrait,
     wrapperClasses,
     customPieceTheme: pieceTheme
   })

@@ -281,8 +281,7 @@ export default function ctrl(vnode) {
     if (feedback) showLoading()
     xhr.newPuzzle()
     .then(cfg => {
-      if (feedback) pushState(cfg)
-      else replaceStateForNewPuzzle(cfg)
+      router.replaceState(`/training/${cfg.puzzle.id}`)
       this.init(cfg)
       setTimeout(this.playInitialMove, 1000)
     })
@@ -300,9 +299,7 @@ export default function ctrl(vnode) {
       .catch(onXhrError)
   }.bind(this)
 
-  this.retry = function() {
-    router.set(router.get())
-  }
+  this.retry = router.reload
 
   this.share = function() {
     window.plugins.socialsharing.share(null, null, null, `http://lichess.org/training/${this.data.puzzle.id}`)
@@ -322,22 +319,4 @@ export default function ctrl(vnode) {
   signals.afterLogin.add(this.retry)
 
   window.plugins.insomnia.keepAwake()
-
-}
-
-function pushState(cfg) {
-  try {
-    window.history.pushState(null, null, '?=/training/' + cfg.puzzle.id)
-  } catch (e) { console.error(e); }
-  return cfg
-}
-
-function replaceStateForNewPuzzle(cfg) {
-  // ugly hack to bypass mithril's postRedraw hook
-  setTimeout(function() {
-    try {
-      window.history.replaceState(window.history.state, null, '?=/training/' + cfg.puzzle.id)
-    } catch (e) { console.error(e); }
-  }, 100)
-  return cfg
 }

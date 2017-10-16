@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "target": "es2015",
-    "module": "commonjs",
+    "target": "es6",
     "suppressImplicitAnyIndexErrors": false,
     "strict": true,
     "noUnusedParameters": true,

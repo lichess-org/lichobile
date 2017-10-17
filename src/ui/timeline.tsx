@@ -104,7 +104,7 @@ export function renderGameEnd(entry: TimelineEntry) {
   return (
     <li className="list_item timelineEntry" key={key} data-icon={icon}
       oncreate={helper.ontapY(() => {
-        router.set('/game/' + entry.data.playerId)
+        router.set('/game/' + entry.data.playerId + '?goingBack=1')
       })}
     >
       <strong>{result}</strong> vs. {entry.data.opponent}

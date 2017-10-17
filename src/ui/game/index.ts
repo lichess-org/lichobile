@@ -16,11 +16,12 @@ import { emptyFen } from '../../utils/fen'
 import roundView from '../shared/round/view/roundView'
 import gamesMenu from '../gamesMenu'
 import layout from '../layout'
-import { connectingHeader, viewOnlyBoardContent } from '../shared/common'
+import { connectingHeader, viewOnlyBoardContent, loadingBackbutton } from '../shared/common'
 
 interface Attrs {
   id: string
   color: Color
+  goingBack?: string
 }
 
 interface State {
@@ -129,7 +130,10 @@ const GameScreen: Mithril.Component<Attrs, State> = {
         board = () => viewOnlyBoardContent(emptyFen, 'white')
     }
 
-    return layout.board(connectingHeader, board)
+    return layout.board(
+      attrs.goingBack ? loadingBackbutton : connectingHeader,
+      board
+    )
   }
 }
 

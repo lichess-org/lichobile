@@ -81,7 +81,7 @@ export default {
         outcome = game.score
       }
       return (
-        <tr className="list_item bglight" key={game.id} oncreate={helper.ontap(() => router.set('/game/' + game.id + '/' + game.color))}>
+        <tr className="list_item bglight" key={game.id} oncreate={helper.ontap(() => router.set('/game/' + game.id + '/' + game.color + '?goingBack=1'))}>
           <td className="oppRank"> {gameArray.length - index} </td>
           <td className="oppName"> {game.op.name} </td>
           <td className="oppRating"> {game.op.rating} </td>

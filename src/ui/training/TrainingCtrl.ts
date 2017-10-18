@@ -83,6 +83,8 @@ export default class TrainingCtrl {
     redraw()
   }
 
+  public player = (): Color => this.data.puzzle.color
+
   public revert = (id: number) => {
     if (id !== this.data.puzzle.id) return
     this.chessground.set({

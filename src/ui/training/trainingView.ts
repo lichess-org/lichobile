@@ -1,14 +1,17 @@
 import * as h from 'mithril/hyperscript'
-import router from '../../router'
 import i18n from '../../i18n'
+import { PuzzleAttempt } from '../../lichess/interfaces/training'
 import Board from '../shared/Board'
 import { view as renderPromotion } from '../shared/offlineRound/promotion'
-import { header as renderHeader } from '../shared/common'
+import { header } from '../shared/common'
 import * as helper from '../helper'
-import menu from './menu'
 
-export function renderHeader(ctrl) {
-  return renderHeader(h('div.main_header_title.withSub', [
+import menu from './menu'
+import TrainingCtrl from './TrainingCtrl'
+
+
+export function renderHeader(ctrl: TrainingCtrl) {
+  return header(h('div.main_header_title.withSub', [
     h('h1', i18n('puzzleId', ctrl.data.puzzle.id)),
     h('h2.header-subTitle', [
       i18n('rating'), ' ' + (ctrl.data.mode === 'view' ? ctrl.data.puzzle.rating : '?'),
@@ -17,9 +20,9 @@ export function renderHeader(ctrl) {
   ]))
 }
 
-export function renderContent(ctrl, key, bounds) {
+export function renderContent(ctrl: TrainingCtrl, key: string, bounds: ClientRect) {
   const board = h(Board, {
-    data: ctrl.data,
+    variant: ctrl.data.game.variant.key,
     bounds,
     chessground: ctrl.chessground
   })
@@ -35,14 +38,14 @@ export function renderContent(ctrl, key, bounds) {
   ])
 }
 
-export function overlay(ctrl) {
+export function overlay(ctrl: TrainingCtrl) {
   return [
     renderPromotion(ctrl),
     menu.view(ctrl.menu)
   ]
 }
 
-function renderExplanation(ctrl) {
+function renderExplanation(ctrl: TrainingCtrl) {
   const hasComment = ctrl.data.comment !== undefined
   return h('div.training-explanation', hasComment ? renderCommentary(ctrl) : [
     h('div.player', [
@@ -50,15 +53,15 @@ function renderExplanation(ctrl) {
         className: ctrl.pieceTheme
       }, h('piece.king.' + ctrl.data.puzzle.color)),
       h('div.training-instruction', [
-        h('strong',i18n(ctrl.chessground.state.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')),
-        h('p',i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')),
+        h('strong', i18n(ctrl.chessground.state.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')),
+        h('p', i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')),
       ]),
     ]),
     h('button.fatButton', { oncreate: helper.ontap(ctrl.giveUp) }, i18n('resign'))
   ])
 }
 
-function renderActionsBar(ctrl) {
+function renderActionsBar(ctrl: TrainingCtrl) {
   const history = ctrl.data.replay && ctrl.data.replay.history
   const step = ctrl.data.replay && ctrl.data.replay.step
   return h('section#training_actions.actions_bar', [
@@ -76,19 +79,19 @@ function renderActionsBar(ctrl) {
       disabled: ctrl.data.mode !== 'view'
     }),
     h('button.action_bar_button.training_action.fa.fa-backward', {
-      oncreate: helper.ontap(ctrl.jumpPrev, null, ctrl.jumpPrev),
+      oncreate: helper.ontap(ctrl.jumpPrev, undefined, ctrl.jumpPrev),
       key: 'historyPrev',
       disabled: !history || !(step !== step - 1 && step - 1 >= 0 && step - 1 < history.length)
     }),
     h('button.action_bar_button.training_action.fa.fa-forward', {
-      oncreate: helper.ontap(ctrl.jumpNext, null, ctrl.jumpNext),
+      oncreate: helper.ontap(ctrl.jumpNext, undefined, ctrl.jumpNext),
       key: 'historyNext',
       disabled: !history || !(step !== step + 1 && step + 1 >= 0 && step + 1 < history.length)
     })
   ])
 }
 
-function renderViewControls(ctrl) {
+function renderViewControls(ctrl: TrainingCtrl) {
   return [
     h('div.li-button.training-control.retry', {
       oncreate: helper.ontap(ctrl.retry)
@@ -99,7 +102,7 @@ function renderViewControls(ctrl) {
   ]
 }
 
-function renderCommentary(ctrl) {
+function renderCommentary(ctrl: TrainingCtrl) {
   switch (ctrl.data.comment) {
     case 'retry':
       return [
@@ -133,11 +136,11 @@ function renderCommentary(ctrl) {
   }
 }
 
-function renderRatingDiff(diff) {
+function renderRatingDiff(diff: number) {
   return h('strong.puzzleRatingDiff', diff > 0 ? '+' + diff : diff)
 }
 
-function renderWin(ctrl, attempt) {
+function renderWin(ctrl: TrainingCtrl, attempt: PuzzleAttempt) {
   return [
     h('div.training-half', [
       h('div.training-icon.win', '✓'),
@@ -147,7 +150,7 @@ function renderWin(ctrl, attempt) {
   ]
 }
 
-function renderLoss(ctrl, attempt) {
+function renderLoss(ctrl: TrainingCtrl, attempt: PuzzleAttempt) {
   return [
     h('div.training-half', [
       h('div.training-icon.loss', '✗'),
@@ -157,20 +160,10 @@ function renderLoss(ctrl, attempt) {
   ]
 }
 
-function renderResult(ctrl) {
-  switch (ctrl.data.win) {
-    case true:
-      return renderWin(ctrl, null)
-    case false:
-      return renderLoss(ctrl, null)
-    default:
-      switch (ctrl.data.attempt && ctrl.data.attempt.win) {
-        case true:
-          return renderWin(ctrl, ctrl.data.attempt)
-        case false:
-          return renderLoss(ctrl, ctrl.data.attempt)
-      }
+function renderResult(ctrl: TrainingCtrl) {
+  if (ctrl.data.attempt) {
+    if (ctrl.data.attempt.win) return renderWin(ctrl, ctrl.data.attempt)
+    else return renderLoss(ctrl, ctrl.data.attempt)
   }
   return null
 }
-

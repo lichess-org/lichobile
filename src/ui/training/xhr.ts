@@ -1,7 +1,7 @@
 import { fetchJSON } from '../../http'
 import { PuzzleData } from '../../lichess/interfaces/training'
 
-export function attempt(id: number, win: boolean): Promise<any> {
+export function attempt(id: number, win: boolean): Promise<PuzzleData> {
   return fetchJSON(`/training/${id}/attempt`, {
     method: 'POST',
     body: JSON.stringify({
@@ -23,6 +23,6 @@ export function loadPuzzle(id: number): Promise<PuzzleData> {
   return fetchJSON(`/training/${id}/load`)
 }
 
-export function newPuzzle(): Promise<any> {
+export function newPuzzle(): Promise<PuzzleData> {
   return fetchJSON('/training/new')
 }

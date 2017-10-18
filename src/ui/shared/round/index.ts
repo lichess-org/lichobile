@@ -3,6 +3,7 @@ import Replay from '../offlineRound/Replay'
 import { OnlineGameData, OfflineGameData, GameData, GameStatus } from '../../../lichess/interfaces/game'
 import { AnalyseData } from '../../../lichess/interfaces/analyse'
 import { GameSituation } from '../../../chess'
+import { Data as TrainingData } from '../../training/interfaces'
 
 export type Position = 'player' | 'opponent'
 export type Material = { [role: string]: number }
@@ -14,7 +15,7 @@ export interface BoardInterface {
 
 export interface PromotingInterface {
   chessground: Chessground
-  data: GameData | AnalyseData
+  data: GameData | AnalyseData | TrainingData
   player: () => Color
 }
 

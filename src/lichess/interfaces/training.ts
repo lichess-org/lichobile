@@ -1,6 +1,13 @@
 export interface PuzzleData {
   puzzle: Puzzle
-  mode: 'view' | 'play'
+  mode: 'view' | 'play' | 'try'
+  progress?: any
+  attempt?: PuzzleAttempt
+}
+
+export interface PuzzleAttempt {
+  win: boolean
+  userRatingDiff: number
 }
 
 export interface Puzzle {

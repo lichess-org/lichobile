@@ -15,6 +15,8 @@ export default function HourglassClock(time: number, onFlag: (color: Color) => v
     isRunning: false
   }
 
+  const id = Math.random()
+
   let clockInterval: number
   let whiteTimestamp: number
   let blackTimestamp: number
@@ -132,6 +134,7 @@ export default function HourglassClock(time: number, onFlag: (color: Color) => v
     whiteTime,
     blackTime,
     getTime,
+    id,
     clear() {
       clearInterval(clockInterval)
     }

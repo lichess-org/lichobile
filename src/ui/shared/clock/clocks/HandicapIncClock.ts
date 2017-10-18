@@ -17,6 +17,8 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
     isRunning: false
   }
 
+  const id = Math.random()
+
   let clockInterval: number
   let whiteTimestamp: number
   let blackTimestamp: number
@@ -135,6 +137,7 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
     whiteTime,
     blackTime,
     getTime,
+    id,
     clear() {
       clearInterval(clockInterval)
     }

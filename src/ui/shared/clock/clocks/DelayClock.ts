@@ -18,6 +18,8 @@ export default function DelayClock(time: number, increment: number, onFlag: (col
     isRunning: false
   }
 
+  const id = Math.random()
+
   let clockInterval: number
   let whiteTimestamp: number
   let blackTimestamp: number
@@ -144,6 +146,7 @@ export default function DelayClock(time: number, increment: number, onFlag: (col
     whiteTime,
     blackTime,
     getTime,
+    id,
     clear() {
       clearInterval(clockInterval)
     }

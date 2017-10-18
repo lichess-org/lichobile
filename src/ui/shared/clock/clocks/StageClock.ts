@@ -22,6 +22,8 @@ export default function StageClock(stages: Stage[], increment: number, onFlag: (
     isRunning: false
   }
 
+  const id = Math.random()
+
   let clockInterval: number
   let whiteTimestamp: number
   let blackTimestamp: number
@@ -177,6 +179,7 @@ export default function StageClock(stages: Stage[], increment: number, onFlag: (
     blackMoves,
     getTime,
     getMoves,
+    id,
     clear() {
       clearInterval(clockInterval)
     }

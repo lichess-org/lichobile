@@ -14,6 +14,7 @@ export interface IBasicClock {
   clockHit(side: Color): void
   startStop(): void
   clear(): void
+  id: number
 }
 
 export interface Stage { time: number, moves: number | null }

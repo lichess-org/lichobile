@@ -1,55 +1,23 @@
-import layout from '../layout'
+import * as h from 'mithril/hyperscript'
 import router from '../../router'
-import { emptyFen } from '../../utils/fen'
 import i18n from '../../i18n'
-import { header as renderHeader, connectingHeader } from '../shared/common'
-import ViewOnlyBoard from '../shared/ViewOnlyBoard'
 import Board from '../shared/Board'
 import { view as renderPromotion } from '../shared/offlineRound/promotion'
+import { header as renderHeader } from '../shared/common'
 import * as helper from '../helper'
 import menu from './menu'
-import * as h from 'mithril/hyperscript'
 
-export default function view() {
-  const ctrl = this.ctrl
-
-  let header
-
-  if (!ctrl.data || ctrl.vm.loading) {
-    header = connectingHeader
-  }
-  else {
-    header = () => renderHeader(h('div.main_header_title.withSub', [
-      h('h1', i18n('puzzleId', ctrl.data.puzzle.id)),
-      h('h2.header-subTitle', [
-        i18n('rating'), ' ' + (ctrl.data.mode === 'view' ? ctrl.data.puzzle.rating : '?'),
-        ' • ', i18n('playedXTimes', ctrl.data.puzzle.attempts)
-      ])
-    ]))
-  }
-
-  return layout.board(
-    header,
-    renderContent.bind(undefined, ctrl),
-    () => [
-      renderPromotion(ctrl),
-      menu.view(ctrl.menu)
-    ]
-  )
-
+export function renderHeader(ctrl) {
+  return renderHeader(h('div.main_header_title.withSub', [
+    h('h1', i18n('puzzleId', ctrl.data.puzzle.id)),
+    h('h2.header-subTitle', [
+      i18n('rating'), ' ' + (ctrl.data.mode === 'view' ? ctrl.data.puzzle.rating : '?'),
+      ' • ', i18n('playedXTimes', ctrl.data.puzzle.attempts)
+    ])
+  ]))
 }
 
-function renderContent(ctrl) {
-  const isPortrait = helper.isPortrait()
-  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'training')
-  const key = isPortrait ? 'o-portrait' : 'o-landscape'
-
-  if (!ctrl.data) return h.fragment({ key: key + '-no-data' }, [
-    h('section.board_wrapper', [
-      h(ViewOnlyBoard, { fen: emptyFen, orientation: 'white', bounds })
-    ])
-  ])
-
+export function renderContent(ctrl, key, bounds) {
   const board = h(Board, {
     data: ctrl.data,
     bounds,
@@ -65,6 +33,13 @@ function renderContent(ctrl) {
       renderActionsBar(ctrl)
     ])
   ])
+}
+
+export function overlay(ctrl) {
+  return [
+    renderPromotion(ctrl),
+    menu.view(ctrl.menu)
+  ]
 }
 
 function renderExplanation(ctrl) {

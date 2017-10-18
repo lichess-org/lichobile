@@ -1,6 +1,7 @@
 import { fetchJSON } from '../../http'
+import { PuzzleData } from '../../lichess/interfaces/training'
 
-export function attempt(id: string, win: boolean): Promise<any> {
+export function attempt(id: number, win: boolean): Promise<any> {
   return fetchJSON(`/training/${id}/attempt`, {
     method: 'POST',
     body: JSON.stringify({
@@ -9,7 +10,7 @@ export function attempt(id: string, win: boolean): Promise<any> {
   })
 }
 
-export function vote(id: string, v: number): Promise<any> {
+export function vote(id: number, v: number): Promise<any> {
   return fetchJSON(`/training/${id}/vote`, {
     method: 'POST',
     body: JSON.stringify({
@@ -18,7 +19,7 @@ export function vote(id: string, v: number): Promise<any> {
   })
 }
 
-export function loadPuzzle(id: string): Promise<any> {
+export function loadPuzzle(id: number): Promise<PuzzleData> {
   return fetchJSON(`/training/${id}/load`)
 }
 

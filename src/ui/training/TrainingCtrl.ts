@@ -5,27 +5,31 @@ import redraw from '../../utils/redraw'
 import signals from '../../signals'
 import { handleXhrError } from '../../utils'
 import { batchRequestAnimationFrame } from '../../utils/batchRAF'
+import sound from '../../sound'
+import socket from '../../socket'
+import settings from '../../settings'
+import { PuzzleData } from '../../lichess/interfaces/training'
+
 import makeData from './data'
 import chess from './chess'
-import puzzle from './puzzle'
-import sound from '../../sound'
-import settings from '../../settings'
 import menu from './menu'
+import puzzle from './puzzle'
 import * as xhr from './xhr'
-import socket from '../../socket'
+import { Data } from './interfaces'
 
 export default class TrainingCtrl {
-  data: any
+  data: Data
   menu: any
   vm: { loading: boolean }
   pieceTheme: string
   chessground: Chessground
 
-  constructor(id: string) {
+  constructor(cfg: PuzzleData) {
     socket.createDefault()
 
-    this.data = null
     this.menu = menu.controller(this)
+    this.init(cfg)
+    setTimeout(this.playInitialMove, 1000)
 
     this.vm = {
       loading: false
@@ -33,18 +37,53 @@ export default class TrainingCtrl {
 
     this.pieceTheme = settings.general.theme.piece()
 
-    if (id) {
-      this.loadPuzzle(id)
-    } else {
-      this.newPuzzle(false)
-    }
-
     signals.afterLogin.add(this.retry)
 
     window.plugins.insomnia.keepAwake()
   }
 
-  public revert = (id: string) => {
+  public init = (cfg: PuzzleData) => {
+    this.data = makeData(cfg)
+    const chessgroundConf = {
+      batchRAF: batchRequestAnimationFrame,
+      fen: this.data.puzzle.fen,
+      orientation: this.data.puzzle.color,
+      coordinates: settings.game.coords(),
+      turnColor: this.data.puzzle.opponentColor,
+      highlight: {
+        lastMove: settings.game.highlights(),
+        check: settings.game.highlights(),
+        dragOver: false
+      },
+      movable: {
+        free: false,
+        color: this.data.mode !== 'view' ? this.data.puzzle.color : null,
+        showDests: settings.game.pieceDestinations(),
+        events: {
+          after: this.userMove
+        }
+      },
+      events: {
+        move: this.onMove
+      },
+      animation: {
+        enabled: true,
+        duration: 300
+      },
+      premovable: {
+        enabled: false
+      },
+      draggable: {
+        distance: 3,
+        magnified: settings.game.magnified()
+      }
+    }
+    if (this.chessground) this.chessground.reconfigure(chessgroundConf)
+    else this.chessground = new Chessground(chessgroundConf)
+    redraw()
+  }
+
+  public revert = (id: number) => {
     if (id !== this.data.puzzle.id) return
     this.chessground.set({
       fen: this.data.chess.fen(),
@@ -99,7 +138,7 @@ export default class TrainingCtrl {
     redraw()
   }
 
-  public playOpponentNextMove = (id: string) => {
+  public playOpponentNextMove = (id: number) => {
     if (id !== this.data.puzzle.id) return
     const move = puzzle.getOpponentNextMove(this.data)
     this.playOpponentMove(puzzle.str2move(move) as KeyPair)
@@ -153,47 +192,6 @@ export default class TrainingCtrl {
     setTimeout(this.playInitialMove, 1000)
   }
 
-  public init = (cfg: any) => {
-    this.data = makeData(cfg)
-    const chessgroundConf = {
-      batchRAF: batchRequestAnimationFrame,
-      fen: this.data.puzzle.fen,
-      orientation: this.data.puzzle.color,
-      coordinates: settings.game.coords(),
-      turnColor: this.data.puzzle.opponentColor,
-      highlight: {
-        lastMove: settings.game.highlights(),
-        check: settings.game.highlights(),
-        dragOver: false
-      },
-      movable: {
-        free: false,
-        color: this.data.mode !== 'view' ? this.data.puzzle.color : null,
-        showDests: settings.game.pieceDestinations(),
-        events: {
-          after: this.userMove
-        }
-      },
-      events: {
-        move: this.onMove
-      },
-      animation: {
-        enabled: true,
-        duration: 300
-      },
-      premovable: {
-        enabled: false
-      },
-      draggable: {
-        distance: 3,
-        magnified: settings.game.magnified()
-      }
-    }
-    if (this.chessground) this.chessground.reconfigure(chessgroundConf)
-    else this.chessground = new Chessground(chessgroundConf)
-    redraw()
-  }
-
   public newPuzzle = (feedback: boolean) => {
     if (feedback) this.showLoading()
     xhr.newPuzzle()
@@ -206,14 +204,14 @@ export default class TrainingCtrl {
     .catch(this.onXhrError)
   }
 
-  public loadPuzzle = (id: string) => {
+  public loadPuzzle = (id: number) => {
     xhr.loadPuzzle(id)
-      .then(cfg => {
-        this.init(cfg)
-        setTimeout(this.playInitialMove, 1000)
-      })
-      .then(this.onXhrSuccess)
-      .catch(this.onXhrError)
+    .then(cfg => {
+      this.init(cfg)
+      setTimeout(this.playInitialMove, 1000)
+    })
+    .then(this.onXhrSuccess)
+    .catch(this.onXhrError)
   }
 
   public retry = router.reload
@@ -294,7 +292,7 @@ export default class TrainingCtrl {
     const promotion = lastMove ? lastMove[4] : undefined
     switch (newLines) {
       case 'retry':
-        setTimeout(this.revert.bind(this, this.data.puzzle.id), 500)
+        setTimeout(() => this.revert(this.data.puzzle.id), 500)
         this.data.comment = 'retry'
         break
       case 'fail':
@@ -314,7 +312,7 @@ export default class TrainingCtrl {
           this.chessground.stop()
           this.attempt(true)
         } else {
-          setTimeout(this.playOpponentNextMove.bind(this, this.data.puzzle.id), 1000)
+          setTimeout(() => this.playOpponentNextMove(this.data.puzzle.id), 1000)
         }
         break
     }
@@ -325,5 +323,4 @@ export default class TrainingCtrl {
     if (captured) sound.capture()
     else sound.move()
   }
-
 }

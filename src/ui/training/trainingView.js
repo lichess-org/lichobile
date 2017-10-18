@@ -79,9 +79,7 @@ function renderExplanation(ctrl) {
         h('p',i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')),
       ]),
     ]),
-    ctrl.data.mode === 'view' ?
-      null :
-      h('button.fatButton', { oncreate: helper.ontap(ctrl.giveUp) }, i18n('resign'))
+    h('button.fatButton', { oncreate: helper.ontap(ctrl.giveUp) }, i18n('resign'))
   ])
 }
 
@@ -134,7 +132,8 @@ function renderCommentary(ctrl) {
         h('div.training-instruction', [
           h('strong', i18n('goodMove')),
           h('span', i18n('butYouCanDoBetter'))
-        ])
+        ]),
+        h('button.fatButton', { oncreate: helper.ontap(ctrl.giveUp) }, i18n('resign'))
       ]
     case 'great':
       return [
@@ -142,7 +141,8 @@ function renderCommentary(ctrl) {
         h('div.training-instruction', [
           h('strong', i18n('bestMove')),
           h('span', i18n('keepGoing'))
-        ])
+        ]),
+        h('button.fatButton', { oncreate: helper.ontap(ctrl.giveUp) }, i18n('resign'))
       ]
     case 'fail':
       return [

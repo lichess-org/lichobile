@@ -80,7 +80,7 @@ export interface SetConfig {
   lastMove?: KeyPair | null
   check?: Color | boolean
   turnColor?: Color
-  movableColor?: Color | null
+  movableColor?: Color | 'both' | null
   dests?: DestsMap | null
 }
 

@@ -1,6 +1,6 @@
 import { fetchJSON } from '../../http'
 
-export function attempt(id, win) {
+export function attempt(id: string, win: boolean): Promise<any> {
   return fetchJSON(`/training/${id}/attempt`, {
     method: 'POST',
     body: JSON.stringify({
@@ -9,7 +9,7 @@ export function attempt(id, win) {
   })
 }
 
-export function vote(id, v) {
+export function vote(id: string, v: number): Promise<any> {
   return fetchJSON(`/training/${id}/vote`, {
     method: 'POST',
     body: JSON.stringify({
@@ -18,14 +18,10 @@ export function vote(id, v) {
   })
 }
 
-export function loadPuzzle(id) {
+export function loadPuzzle(id: string): Promise<any> {
   return fetchJSON(`/training/${id}/load`)
 }
 
-export function newPuzzle() {
+export function newPuzzle(): Promise<any> {
   return fetchJSON('/training/new')
-}
-
-export function history() {
-  return fetchJSON('/training/history')
 }

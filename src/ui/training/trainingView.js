@@ -10,8 +10,8 @@ import * as helper from '../helper'
 import menu from './menu'
 import * as h from 'mithril/hyperscript'
 
-export default function view(vnode) {
-  const ctrl = vnode.state
+export default function view() {
+  const ctrl = this.ctrl
 
   let header
 

@@ -13,6 +13,8 @@ import TrainingCtrl from './TrainingCtrl'
 
 interface Attrs {
   id?: string
+  initFen?: string
+  initColor?: Color
 }
 
 interface State {
@@ -24,7 +26,6 @@ export default {
     if (attrs.id) {
       xhr.loadPuzzle(Number(attrs.id))
       .then(cfg => {
-        // console.log(cfg)
         this.ctrl = new TrainingCtrl(cfg)
       })
       .catch(handleXhrError)
@@ -46,7 +47,7 @@ export default {
     window.plugins.insomnia.allowSleepAgain()
   },
 
-  view() {
+  view({ attrs }) {
     const isPortrait = helper.isPortrait()
     const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'training')
     const key = isPortrait ? 'o-portrait' : 'o-landscape'
@@ -63,7 +64,11 @@ export default {
         connectingHeader,
         () => h.fragment({ key: key + '-no-data' }, [
           h('section.board_wrapper', [
-            h(ViewOnlyBoard, { fen: emptyFen, orientation: 'white', bounds })
+            h(ViewOnlyBoard, {
+              fen: attrs.initFen || emptyFen,
+              orientation: attrs.initColor || 'white',
+              bounds
+            })
           ])
         ])
       )

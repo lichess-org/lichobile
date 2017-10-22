@@ -1,3 +1,4 @@
+import router from '../../router'
 import { fetchJSON } from '../../http'
 import { PuzzleData } from '../../lichess/interfaces/training'
 
@@ -24,5 +25,9 @@ export function loadPuzzle(id: number): Promise<PuzzleData> {
 }
 
 export function newPuzzle(): Promise<PuzzleData> {
-  return fetchJSON('/training/new')
+  return fetchJSON<PuzzleData>('/training/new')
+  .then(cfg => {
+    router.replaceState(`/training/${cfg.puzzle.id}`)
+    return cfg
+  })
 }

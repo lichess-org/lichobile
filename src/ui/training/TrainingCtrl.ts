@@ -4,12 +4,12 @@ import router from '../../router'
 import redraw from '../../utils/redraw'
 import signals from '../../signals'
 import { handleXhrError } from '../../utils'
-import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import sound from '../../sound'
 import socket from '../../socket'
 import settings from '../../settings'
 import { PuzzleData } from '../../lichess/interfaces/training'
 
+import makeGround from './ground'
 import makeData from './data'
 import chess from './chess'
 import menu from './menu'
@@ -44,40 +44,7 @@ export default class TrainingCtrl {
 
   public init = (cfg: PuzzleData) => {
     this.data = makeData(cfg)
-    const chessgroundConf = {
-      batchRAF: batchRequestAnimationFrame,
-      fen: this.data.puzzle.fen,
-      orientation: this.data.puzzle.color,
-      coordinates: settings.game.coords(),
-      turnColor: this.data.puzzle.opponentColor,
-      highlight: {
-        lastMove: settings.game.highlights(),
-        check: settings.game.highlights(),
-        dragOver: false
-      },
-      movable: {
-        free: false,
-        color: this.data.mode !== 'view' ? this.data.puzzle.color : null,
-        showDests: settings.game.pieceDestinations(),
-        events: {
-          after: this.userMove
-        }
-      },
-      events: {
-        move: this.onMove
-      },
-      animation: {
-        enabled: true,
-        duration: 300
-      },
-      premovable: {
-        enabled: false
-      },
-      draggable: {
-        distance: 3,
-        magnified: settings.game.magnified()
-      }
-    }
+    const chessgroundConf = makeGround(this, this.userMove, this.onMove)
     if (this.chessground) this.chessground.reconfigure(chessgroundConf)
     else this.chessground = new Chessground(chessgroundConf)
     redraw()
@@ -96,64 +63,6 @@ export default class TrainingCtrl {
     })
     redraw()
     if (this.data.chess.in_check()) this.chessground.setCheck(true)
-  }
-
-  public userFinalizeMove = (move: string[], newProgress: any) => {
-    chess.move(this.data.chess, move)
-    this.data.comment = 'great'
-    this.data.progress = newProgress
-    this.data.playHistory.push({
-      move,
-      fen: this.data.chess.fen(),
-      dests: this.data.chess.dests(),
-      check: this.data.chess.in_check(),
-      turnColor: this.data.chess.turn() === 'w' ? 'white' : 'black'
-    })
-    this.chessground.set({
-      fen: this.data.chess.fen(),
-      lastMove: [move[0], move[1]] as KeyPair,
-      turnColor: this.data.puzzle.opponentColor,
-      check: false
-    })
-    if (this.data.chess.in_check()) this.chessground.setCheck(true)
-  }
-
-  public playOpponentMove = (move: KeyPair) => {
-    this.onMove(move[0], move[1], this.chessground.state.pieces[move[1]])
-    chess.move(this.data.chess, move)
-    this.data.playHistory.push({
-      move,
-      fen: this.data.chess.fen(),
-      dests: this.data.chess.dests(),
-      check: this.data.chess.in_check(),
-      turnColor: this.data.chess.turn() === 'w' ? 'white' : 'black'
-    })
-    this.chessground.set({
-      fen: this.data.chess.fen(),
-      lastMove: move,
-      dests: this.data.chess.dests(),
-      turnColor: this.data.puzzle.color,
-      check: false
-    })
-    if (this.data.chess.in_check()) this.chessground.setCheck(true)
-    setTimeout(this.chessground.playPremove, this.chessground.state.animation.duration)
-    redraw()
-  }
-
-  public playOpponentNextMove = (id: number) => {
-    if (id !== this.data.puzzle.id) return
-    const move = puzzle.getOpponentNextMove(this.data)
-    this.playOpponentMove(puzzle.str2move(move) as KeyPair)
-    this.data.progress.push(move)
-    if (puzzle.getCurrentLines(this.data) === 'win') {
-      setTimeout(() => this.attempt(true), 300)
-    }
-  }
-
-  public playInitialMove = () => {
-    if (this.data.mode !== 'view') {
-      this.playOpponentMove(this.data.puzzle.initialMove)
-    }
   }
 
   public giveUp = () => {
@@ -198,7 +107,6 @@ export default class TrainingCtrl {
     if (feedback) this.showLoading()
     xhr.newPuzzle()
     .then(cfg => {
-      router.replaceState(`/training/${cfg.puzzle.id}`)
       this.init(cfg)
       setTimeout(this.playInitialMove, 1000)
     })
@@ -228,6 +136,64 @@ export default class TrainingCtrl {
   }
 
   // --
+
+  private userFinalizeMove = (move: string[], newProgress: any) => {
+    chess.move(this.data.chess, move)
+    this.data.comment = 'great'
+    this.data.progress = newProgress
+    this.data.playHistory.push({
+      move,
+      fen: this.data.chess.fen(),
+      dests: this.data.chess.dests(),
+      check: this.data.chess.in_check(),
+      turnColor: this.data.chess.turn() === 'w' ? 'white' : 'black'
+    })
+    this.chessground.set({
+      fen: this.data.chess.fen(),
+      lastMove: [move[0], move[1]] as KeyPair,
+      turnColor: this.data.puzzle.opponentColor,
+      check: false
+    })
+    if (this.data.chess.in_check()) this.chessground.setCheck(true)
+  }
+
+  private playOpponentMove = (move: KeyPair) => {
+    this.onMove(move[0], move[1], this.chessground.state.pieces[move[1]])
+    chess.move(this.data.chess, move)
+    this.data.playHistory.push({
+      move,
+      fen: this.data.chess.fen(),
+      dests: this.data.chess.dests(),
+      check: this.data.chess.in_check(),
+      turnColor: this.data.chess.turn() === 'w' ? 'white' : 'black'
+    })
+    this.chessground.set({
+      fen: this.data.chess.fen(),
+      lastMove: move,
+      dests: this.data.chess.dests(),
+      turnColor: this.data.puzzle.color,
+      check: false
+    })
+    if (this.data.chess.in_check()) this.chessground.setCheck(true)
+    setTimeout(this.chessground.playPremove, this.chessground.state.animation.duration)
+    redraw()
+  }
+
+  private playOpponentNextMove = (id: number) => {
+    if (id !== this.data.puzzle.id) return
+    const move = puzzle.getOpponentNextMove(this.data)
+    this.playOpponentMove(puzzle.str2move(move) as KeyPair)
+    this.data.progress.push(move)
+    if (puzzle.getCurrentLines(this.data) === 'win') {
+      setTimeout(() => this.attempt(true), 300)
+    }
+  }
+
+  private playInitialMove = () => {
+    if (this.data.mode !== 'view') {
+      this.playOpponentMove(this.data.puzzle.initialMove)
+    }
+  }
 
   private showLoading = () => {
     this.vm.loading = true
@@ -321,7 +287,7 @@ export default class TrainingCtrl {
     redraw()
   }
 
-  private onMove = (_: Key, __: Key, captured: Piece) => {
+  private onMove = (_: Key, __: Key, captured?: Piece) => {
     if (captured) sound.capture()
     else sound.move()
   }

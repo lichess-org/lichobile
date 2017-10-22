@@ -3,7 +3,7 @@ import i18n from '../../i18n'
 import { PuzzleAttempt } from '../../lichess/interfaces/training'
 import Board from '../shared/Board'
 import { view as renderPromotion } from '../shared/offlineRound/promotion'
-import { header } from '../shared/common'
+import { header, connectingHeader } from '../shared/common'
 import * as helper from '../helper'
 
 import menu from './menu'
@@ -11,7 +11,8 @@ import TrainingCtrl from './TrainingCtrl'
 
 
 export function renderHeader(ctrl: TrainingCtrl) {
-  return header(h('div.main_header_title.withSub', [
+  return ctrl.vm.loading ?
+  connectingHeader() : header(h('div.main_header_title.withSub', [
     h('h1', i18n('puzzleId', ctrl.data.puzzle.id)),
     h('h2.header-subTitle', [
       i18n('rating'), ' ' + (ctrl.data.mode === 'view' ? ctrl.data.puzzle.rating : '?'),

@@ -129,6 +129,29 @@
   .legend
     fill blue
 
+.puzzle-recents
+  display flex
+  flex-flow row wrap
+  align-items center
+  justify-content flex-start
+  margin 10px
+  > button
+    padding 0
+    min-height initial
+    margin 0 3px 3px 0
+    width 30px
+    height 30px
+    color #fff
+    text-align center
+    line-height 30px
+    font-size 0.8em
+    &:last-child
+      border-radius 0
+    &.up
+      background green
+    &.down
+      background red
+
 
 .view-container.light
   .training-control

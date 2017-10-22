@@ -1,6 +1,7 @@
 export interface PuzzleData {
   puzzle: Puzzle
   mode: 'view' | 'play' | 'try'
+  user?: UserData
   progress?: any
   attempt?: PuzzleAttempt
 }
@@ -22,6 +23,12 @@ export interface Puzzle {
   lines: Lines
   enabled: boolean
   vote: number
+}
+
+export interface UserData {
+  history: number[]
+  recent: Array<[number, number, number]>
+  rating: number
 }
 
 export type Lines = { [uci: string]: Lines | string }

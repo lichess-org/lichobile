@@ -75,7 +75,14 @@ function renderSigninBox() {
 
 function renderUserInfos(user: PuzzleUserData) {
   const { vw } = helper.viewportDim()
-  const width = vw * 0.85
+  let width: number
+  // see overlay-popup.styl for popup width
+  if (vw >= 900) width = vw * 0.4
+  else if (vw >= 800) width = vw * 0.45
+  else if (vw >= 700) width = vw * 0.5
+  else if (vw >= 600) width = vw * 0.55
+  else if (vw >= 500) width = vw * 0.6
+  else width = vw * 0.85
   const height = 200
   return [
     h('p.trainingRatingHeader', h.trust(i18n('yourPuzzleRatingX', `<strong>${user.rating}</strong>`))),

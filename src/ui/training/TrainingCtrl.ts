@@ -12,14 +12,14 @@ import { PuzzleData } from '../../lichess/interfaces/training'
 import makeGround from './ground'
 import makeData from './data'
 import chess from './chess'
-import menu from './menu'
+import menu, { IMenuCtrl } from './menu'
 import puzzle from './puzzle'
 import * as xhr from './xhr'
 import { Data } from './interfaces'
 
 export default class TrainingCtrl {
   data: Data
-  menu: any
+  menu: IMenuCtrl
   vm: { loading: boolean }
   pieceTheme: string
   chessground: Chessground
@@ -96,7 +96,7 @@ export default class TrainingCtrl {
     this.jump(this.data.replay.history.length - 1)
   }
 
-  public reload = (cfg: any) => {
+  public reload = (cfg: PuzzleData) => {
     this.data = makeData(cfg)
     this.chessground.stop()
     puzzle.reload(this.chessground, this.data)

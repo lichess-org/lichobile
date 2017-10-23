@@ -29,11 +29,11 @@ export function defineRoutes(mountPoint: HTMLElement, routes: {[index: string]: 
     router.add(route, function onRouteMatch({ params }) {
 
       const RouteComponent = {view() {
-        return Vnode(component, undefined, params, undefined, undefined, undefined)
+        return Vnode(component, undefined, params)
       }}
 
       function redraw() {
-        RenderService.render(mountPoint, Vnode(RouteComponent, undefined, undefined, undefined, undefined, undefined))
+        RenderService.render(mountPoint, Vnode(RouteComponent))
       }
 
       signals.redraw.removeAll()

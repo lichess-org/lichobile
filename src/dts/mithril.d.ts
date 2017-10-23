@@ -66,7 +66,7 @@ declare namespace Mithril {
   }
 
   interface VnodeFactory {
-    <A, S>(tag: string | Component<A, S>, key: string | number | undefined, attrs: A | undefined, children: Children | undefined, text: string | undefined, dom: Element | undefined): DOMNode
+    <A, S>(tag: string | Component<A, S>, key?: string, attrs?: A, children?: Children, text?: string, dom?: Element): DOMNode
   }
 
   interface Component<A, S> extends Lifecycle<A, S> {

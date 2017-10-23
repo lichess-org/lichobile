@@ -31,7 +31,8 @@ export default {
       const remaining = diff > 0 ? diff : 0
       if (this.el) {
         const t = formatTimeInSecs(remaining)
-        this.el.innerHTML = attrs.textWrap ? attrs.textWrap(t) : t
+        if (attrs.textWrap) this.el.innerHTML = attrs.textWrap(t)
+        else this.el.textContent = t
       }
       if (attrs.emergTime !== undefined && !this.rang && remaining < attrs.emergTime) {
         if (this.el) this.el.classList.add('emerg')
@@ -51,7 +52,8 @@ export default {
     this.el = dom as HTMLElement
     this.seconds = attrs.seconds
     const t = formatTimeInSecs(this.seconds)
-    dom.innerHTML = attrs.textWrap ? attrs.textWrap(t) : t
+    if (attrs.textWrap) dom.innerHTML = attrs.textWrap(t)
+    else dom.textContent = t
     this.clockTime = performance.now()
     this.clockTimeoutId = setTimeout(this.tick, 1000)
   },

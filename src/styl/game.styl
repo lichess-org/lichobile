@@ -11,6 +11,7 @@
     font-size 0.8em
 
 .playTable
+  position relative
   height "calc((100% - 100vw - %s) / 2)" % footerHeight
   padding 0 10px
   display flex
@@ -32,6 +33,31 @@
         order 2
       > .pocket
         order 1
+
+.round-expiration
+  position: absolute;
+  left: 0
+  width: 100%
+  text-align: center
+  font-size 0.9em
+  color: #fff
+  z-index: 50
+  &.player
+    top: 0
+  &.opponent
+    bottom 0
+  > .countdown-timer
+    padding: 5px
+    font-weight normal
+    font-family inherit
+    display block
+    height 100%
+    width 100%
+    background: rgba(#b3b3b3, 0.8)
+    > strong
+      font-family Cousine
+    &.emerg
+      background: rgba(#dc322f, 0.8)
 
 .replay
   flex 0 0 auto
@@ -495,6 +521,9 @@
       &.running
         color #fff
   .gameMovesList
+    background transpBlack04
+
+  .round-expiration
     background transpBlack04
 
 .action_bar_button

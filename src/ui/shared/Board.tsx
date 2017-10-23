@@ -10,7 +10,7 @@ export interface Attrs {
   wrapperClasses?: string
   customPieceTheme?: string
   shapes?: Shape[]
-  alert?: string
+  alert?: Mithril.Children
 }
 
 interface State {

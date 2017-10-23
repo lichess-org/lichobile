@@ -1,14 +1,18 @@
 import * as h from 'mithril/hyperscript'
 import { formatTimeInSecs } from '../../utils'
+import sound from '../../sound'
 
 interface Attrs {
   seconds: number
+  emergTime?: number
+  textWrap?: (t: string) => string
 }
 
 interface State {
   clockTime: number
   seconds: number
   el?: HTMLElement
+  rang: boolean
   clockOnCreate(vnode: Mithril.DOMNode): void
   clockOnUpdate(vnode: Mithril.DOMNode): void
   tick(): void
@@ -17,14 +21,22 @@ interface State {
 
 export default {
   oninit({ attrs }) {
+    this.rang = false
     this.seconds = attrs.seconds
     this.tick = () => {
       const now = performance.now()
       const elapsed = Math.round((now - this.clockTime) / 1000)
       this.clockTime = now
-      const remaining = this.seconds - elapsed
+      const diff = this.seconds - elapsed
+      const remaining = diff > 0 ? diff : 0
       if (this.el) {
-        this.el.textContent = formatTimeInSecs(remaining > 0 ? remaining : 0)
+        const t = formatTimeInSecs(remaining)
+        this.el.innerHTML = attrs.textWrap ? attrs.textWrap(t) : t
+      }
+      if (attrs.emergTime !== undefined && !this.rang && remaining < attrs.emergTime) {
+        if (this.el) this.el.classList.add('emerg')
+        sound.lowtime()
+        this.rang = true
       }
       if (remaining <= 0) {
         clearTimeout(this.clockTimeoutId)
@@ -38,7 +50,8 @@ export default {
   oncreate({ attrs, dom }) {
     this.el = dom as HTMLElement
     this.seconds = attrs.seconds
-    dom.textContent = formatTimeInSecs(this.seconds)
+    const t = formatTimeInSecs(this.seconds)
+    dom.innerHTML = attrs.textWrap ? attrs.textWrap(t) : t
     this.clockTime = performance.now()
     this.clockTimeoutId = setTimeout(this.tick, 1000)
   },
@@ -52,6 +65,6 @@ export default {
   },
 
   view() {
-    return h('strong.countdown-timer', formatTimeInSecs(this.seconds))
+    return h('div.countdown-timer')
   }
 } as Mithril.Component<Attrs, State>

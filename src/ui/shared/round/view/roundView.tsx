@@ -131,14 +131,11 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait)
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait)
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game')
-  const tournament = ctrl.data.tournament
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessground: ctrl.chessground,
-    bounds,
-    alert: !!tournament && tournament.nbSecondsForFirstMove && !ctrl.data.player.spectator && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
-      i18n('youHaveNbSecondsToMakeYourFirstMove', tournament.nbSecondsForFirstMove) : undefined
+    bounds
   })
 
   const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
@@ -163,6 +160,21 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
       </section>
     ])
   }
+}
+
+function renderExpiration(ctrl: OnlineRound, position: Position, myTurn: boolean) {
+  const d = ctrl.data.expiration
+  if (!d) return null
+  const timeLeft = Math.max(0, d.movedAt - Date.now() + d.millisToMove)
+
+  return h('div.round-expiration', {
+    className: position
+  }, h(CountdownTimer, {
+      seconds: Math.round(timeLeft / 1000),
+      emergTime: myTurn ? 8 : undefined,
+      textWrap: (t: string) => `<strong>${t}</strong> seconds to play the first move`
+    })
+  )
 }
 
 function getChecksCount(ctrl: OnlineRound, color: Color) {
@@ -270,6 +282,8 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : undefined
   const step = ctrl.plyStep(ctrl.vm.ply)
   const isCrazy = !!step.crazy
+  const playable = gameApi.playable(ctrl.data)
+  const myTurn = gameApi.isPlayerTurn(ctrl.data)
 
   return (
     <section className={'playTable' + (isCrazy ? ' crazy' : '')}>
@@ -288,6 +302,9 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
           ) : null
+      }
+      { playable && (myTurn && position === 'player' || !myTurn && position === 'opponent') ?
+        renderExpiration(ctrl, position, myTurn) : null
       }
     </section>
   )

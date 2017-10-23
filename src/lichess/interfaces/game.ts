@@ -28,6 +28,7 @@ export interface OnlineGameData extends GameData {
     round: string
     socket: string
   }
+  expiration?: Expiration
 }
 export function isOnlineGameData(d: GameData): d is OnlineGameData {
   return (<OnlineGameData>d).url !== undefined
@@ -37,6 +38,12 @@ export interface OfflineGameData extends GameData {
 }
 
 export type GameSource = 'lobby' | 'pool' | 'friend' | 'ai' | 'api' | 'tournament' | 'position' | 'import' | 'offline'
+
+export interface Expiration {
+  idleMillis: number
+  movedAt: number
+  millisToMove: number
+}
 
 export interface Game {
   id: string

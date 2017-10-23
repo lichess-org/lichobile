@@ -73,7 +73,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     onUserTVRedirect?: () => void
   ) {
     this.id = id
-    this.data = cfg
+    this.setData(cfg)
     this.onTVChannelChange = onTVChannelChange
     this.onFeatured = onFeatured
     this.data.userTV = userTv
@@ -457,6 +457,11 @@ export default class OnlineRound implements OnlineRoundInterface {
     })
     gameApi.setOnGame(d, playedColor, true)
 
+    if (this.data.expiration) {
+      if (this.data.steps.length > 2) this.data.expiration = undefined
+      else this.data.expiration.movedAt = Date.now()
+    }
+
     if (!this.replaying() && playedColor !== d.player.color &&
       (this.chessground.state.premovable.current || this.chessground.state.predroppable.current)) {
       // atrocious hack to prevent race condition
@@ -483,7 +488,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (this.data.tv) rCfg.tv = this.data.tv
     if (this.data.userTV) rCfg.userTV = this.data.userTV
 
-    this.data = rCfg
+    this.setData(rCfg)
 
     this.makeCorrespondenceClock()
     if (this.clock && this.data.clock) this.clock.setClock(this.data, this.data.clock.white, this.data.clock.black)
@@ -642,5 +647,12 @@ export default class OnlineRound implements OnlineRoundInterface {
       socket.setVersion(data.player.version)
       this.onReload(data)
     })
+  }
+
+  private setData(cfg: OnlineGameData) {
+    if (cfg.expiration) {
+      cfg.expiration.movedAt = Date.now() - cfg.expiration.idleMillis
+    }
+    this.data = cfg
   }
 }

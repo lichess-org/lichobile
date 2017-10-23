@@ -4,22 +4,27 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 // Typescript 2
+//
+// modified here
 
 declare namespace Mithril {
-
-  interface Lifecycle<A, S> {
-    oninit?: (this: S, vnode: Vnode<A, S>) => void
-    oncreate?: (this: S, vnode: VnodeDOM<A, S>) => void
-    onbeforeremove?: (this: S, vnode: VnodeDOM<A, S>) => Promise<any> | void
-    onremove?: (this: S, vnode: VnodeDOM<A, S>) => void
-    onbeforeupdate?: (this: S, vnode: Vnode<A, S>, old: Vnode<A, S>) => boolean
-    onupdate?: (this: S, vnode: VnodeDOM<A, S>) => void
+  interface Lifecycle<Attrs, State> {
+    oninit?(this: State, vnode: Vnode<Attrs, State>): any
+    oncreate?(this: State, vnode: VnodeDOM<Attrs, State>): any
+    onbeforeremove?(this: State, vnode: VnodeDOM<Attrs, State>): Promise<any> | void
+    onremove?(this: State, vnode: VnodeDOM<Attrs, State>): any
+    onbeforeupdate?(this: State, vnode: Vnode<Attrs, State>, old: VnodeDOM<Attrs, State>): boolean | void
+    onupdate?(this: State, vnode: VnodeDOM<Attrs, State>): any
+    /** WORKAROUND: TypeScript 2.4 does not allow extending an interface with all-optional properties. */
+    [_: number]: any
   }
 
   interface Hyperscript {
     (selector: string, ...children: any[]): Vnode<any, any>
-    <A, S>(component: Component<A, S>, a?: (A & Lifecycle<A, S>) | Children, ...children: Children[]): Vnode<A, S>
-    fragment(attrs: any, children: any[]): Vnode<any, any>
+    (selector: string, ...children: Children[]): Vnode<any, any>
+    <A, State>(component: ComponentTypes<A, State>, ...args: Children[]): Vnode<A, State>
+    <A, State>(component: ComponentTypes<A, State>, attributes: A & Lifecycle<A, State> & { key?: string | number }, ...args: Children[]): Vnode<A, State>
+    fragment(attrs: Lifecycle<any, any> & { [key: string]: any }, children: ChildArrayOrPrimitive): Vnode<any, any>
     trust(html: string): Vnode<any, any>
   }
 
@@ -48,6 +53,7 @@ declare namespace Mithril {
   type Child = string | number | boolean | Vnode<any, any> | null
   interface ChildArray extends Array<Children> {}
   type Children = Child | ChildArray
+  type ChildArrayOrPrimitive = ChildArray | string | number | boolean
 
   interface Vnode<A, S> {
     tag: string | Component<A, S>
@@ -69,8 +75,34 @@ declare namespace Mithril {
     <A, S>(tag: string | Component<A, S>, key?: string, attrs?: A, children?: Children, text?: string, dom?: Element): DOMNode
   }
 
-  interface Component<A, S> extends Lifecycle<A, S> {
-    view: (this: S, vnode: Vnode<A, S>) => Children | void
+  interface CVnode<A> extends Vnode<A, ClassComponent<A>> { }
+
+  interface CVnodeDOM<A> extends VnodeDOM<A, ClassComponent<A>> { }
+
+  interface Component<A, S extends Lifecycle<A, S>> extends Lifecycle<A, S> {
+    view(this: S, vnode: Vnode<A, S>): Children | void
+  }
+
+  interface ClassComponent<A> extends Lifecycle<A, ClassComponent<A>> {
+    oninit?(vnode: Vnode<A, this>): any
+    oncreate?(vnode: VnodeDOM<A, this>): any
+    onbeforeremove?(vnode: VnodeDOM<A, this>): Promise<any> | void
+    onremove?(vnode: VnodeDOM<A, this>): any
+    onbeforeupdate?(vnode: Vnode<A, this>, old: VnodeDOM<A, this>): boolean | void
+    onupdate?(vnode: VnodeDOM<A, this>): any
+    view(vnode: Vnode<A, this>): Children | null | void
+  }
+
+  type FactoryComponent<A> = (vnode: Vnode<A, {}>) => Component<A, {}>
+
+  type Comp<Attrs, State extends Lifecycle<Attrs, State>> = Component<Attrs, State> & State
+
+  type ComponentTypes<A, S> = Component<A, S> | { new (vnode: CVnode<A>): ClassComponent<A> } | FactoryComponent<A>
+
+  interface Attributes extends Lifecycle<any, any> {
+    className?: string
+    key?: string | number
+    [property: string]: any
   }
 
   type Unary<T, U> = (input: T) => U

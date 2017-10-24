@@ -172,7 +172,8 @@ function renderExpiration(ctrl: OnlineRound, position: Position, myTurn: boolean
   }, h(CountdownTimer, {
       seconds: Math.round(timeLeft / 1000),
       emergTime: myTurn ? 8 : undefined,
-      textWrap: (t: string) => `<strong>${t}</strong> seconds to play the first move`
+      textWrap: (t: string) => `<strong>${t}</strong> seconds to play the first move`,
+      showOnlySecs: true
     })
   )
 }

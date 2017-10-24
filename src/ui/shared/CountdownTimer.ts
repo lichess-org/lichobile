@@ -6,6 +6,7 @@ interface Attrs {
   seconds: number
   emergTime?: number
   textWrap?: (t: string) => string
+  showOnlySecs?: boolean
 }
 
 interface State {
@@ -15,6 +16,7 @@ interface State {
   rang: boolean
   clockOnCreate(vnode: Mithril.DOMNode): void
   clockOnUpdate(vnode: Mithril.DOMNode): void
+  render(sec: Seconds): void
   tick(): void
   clockTimeoutId: number
 }
@@ -23,17 +25,20 @@ export default {
   oninit({ attrs }) {
     this.rang = false
     this.seconds = attrs.seconds
+    this.render = (sec: Seconds) => {
+      if (this.el) {
+        const t = formatTimeInSecs(sec, attrs.showOnlySecs ? 'secs_only' : undefined)
+        if (attrs.textWrap) this.el.innerHTML = attrs.textWrap(t)
+        else this.el.textContent = t
+      }
+    }
     this.tick = () => {
       const now = performance.now()
       const elapsed = Math.round((now - this.clockTime) / 1000)
       this.clockTime = now
       const diff = this.seconds - elapsed
       const remaining = diff > 0 ? diff : 0
-      if (this.el) {
-        const t = formatTimeInSecs(remaining)
-        if (attrs.textWrap) this.el.innerHTML = attrs.textWrap(t)
-        else this.el.textContent = t
-      }
+      this.render(remaining)
       if (attrs.emergTime !== undefined && !this.rang && remaining < attrs.emergTime) {
         if (this.el) this.el.classList.add('emerg')
         sound.lowtime()
@@ -51,9 +56,7 @@ export default {
   oncreate({ attrs, dom }) {
     this.el = dom as HTMLElement
     this.seconds = attrs.seconds
-    const t = formatTimeInSecs(this.seconds)
-    if (attrs.textWrap) dom.innerHTML = attrs.textWrap(t)
-    else dom.textContent = t
+    this.render(this.seconds)
     this.clockTime = performance.now()
     this.clockTimeoutId = setTimeout(this.tick, 1000)
   },

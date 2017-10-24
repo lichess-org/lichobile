@@ -145,7 +145,7 @@ function renderRatingDiff(diff: number) {
   return h('strong.puzzleRatingDiff', diff > 0 ? '+' + diff : diff)
 }
 
-function renderWin(ctrl: TrainingCtrl, attempt: PuzzleAttempt) {
+function renderWin(ctrl: TrainingCtrl, attempt?: PuzzleAttempt) {
   return [
     h('div.training-half', [
       h('div.training-icon.win', '✓'),
@@ -155,7 +155,7 @@ function renderWin(ctrl: TrainingCtrl, attempt: PuzzleAttempt) {
   ]
 }
 
-function renderLoss(ctrl: TrainingCtrl, attempt: PuzzleAttempt) {
+function renderLoss(ctrl: TrainingCtrl, attempt?: PuzzleAttempt) {
   return [
     h('div.training-half', [
       h('div.training-icon.loss', '✗'),
@@ -169,6 +169,10 @@ function renderResult(ctrl: TrainingCtrl) {
   if (ctrl.data.attempt) {
     if (ctrl.data.attempt.win) return renderWin(ctrl, ctrl.data.attempt)
     else return renderLoss(ctrl, ctrl.data.attempt)
+  }
+  if (ctrl.data.win !== undefined) {
+    if (ctrl.data.win) return renderWin(ctrl)
+    else return renderLoss(ctrl)
   }
   return null
 }

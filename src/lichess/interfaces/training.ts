@@ -4,6 +4,7 @@ export interface PuzzleData {
   user?: UserData
   progress?: any
   attempt?: PuzzleAttempt
+  win?: boolean
 }
 
 export interface PuzzleAttempt {

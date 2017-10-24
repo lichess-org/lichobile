@@ -52,7 +52,8 @@ export function makeDefaultData(variantKey: VariantKey, fen?: string): AnalyseDa
         ply,
         crazyhouse: variant.key === 'crazyhouse' ? {
           pockets: [emptyPocket, emptyPocket]
-        } : undefined
+        } : undefined,
+        pgnMoves: []
       }
     ],
     userAnalysis: true

@@ -457,7 +457,8 @@ export default class AnalyseCtrl {
       dest,
       variant: this.data.game.variant.key,
       fen: this.node.fen,
-      path: this.path
+      path: this.path,
+      pgnMoves: this.node.pgnMoves
     }
     if (prom) move.promotion = prom
     chess.move(move)
@@ -492,7 +493,6 @@ export default class AnalyseCtrl {
   }
 
   private addNode = ({ situation, path }: chess.MoveResponse) => {
-    const curNode = this.node
     const node = {
       id: situation.nodeId,
       ply: situation.ply,
@@ -507,7 +507,7 @@ export default class AnalyseCtrl {
       checkCount: situation.checkCount,
       san: situation.pgnMoves[0],
       crazyhouse: situation.crazyhouse,
-      pgnMoves: curNode && curNode.pgnMoves ? curNode.pgnMoves.concat(situation.pgnMoves) : undefined
+      pgnMoves: situation.pgnMoves
     }
     if (path === undefined) {
       console.error('Cannot addNode, missing path', node)

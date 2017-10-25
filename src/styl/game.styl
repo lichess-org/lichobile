@@ -393,22 +393,20 @@
     @media only screen and (orientation: landscape)
       top calc((100vh - 70px) / 2)
       left initial
-      right 1rem
-      width 'calc(100vw - 100vh + %s - 5vw)' % headerHeight
+      right 1vw
+      width 'calc(100vw - 100vh + %s - 2vw)' % headerHeight
     @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
-      left initial
-      right 1rem
-      width 'calc(100vw - 100vh + %s + 12vh - 5vw)' % headerHeight
+      width 'calc(100vw - 100vh + %s + 12vh - 2vw)' % headerHeight
     // tablets
-    @media only screen and (min-width 500px)
+    @media only screen and (orientation portrait) and (min-width 500px)
       left 20%
-    @media only screen and (min-width 600px)
+    @media only screen and (orientation portrait) and (min-width 600px)
       left 22.5%
-    @media only screen and (min-width 700px)
+    @media only screen and (orientation portrait) and (min-width 700px)
       left 25%
-    @media only screen and (min-width 800px)
+    @media only screen and (orientation portrait) and (min-width 800px)
       left 27.5%
-    @media only screen and (min-width 900px)
+    @media only screen and (orientation portrait) and (min-width 900px)
       left 30%
     border-radius 5px
     button

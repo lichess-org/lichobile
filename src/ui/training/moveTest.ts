@@ -23,13 +23,11 @@ export default function moveTest(
   if (mode === 'view') return null
   if (!treePath.contains(path, initialPath)) return null
 
-  const playedByColor = node.ply % 2 === 1 ? 'white' : 'black'
-  if (playedByColor !== puzzle.color) return null
-
   // puzzle moves so far
   const progress: Uci[] = nodeList
   .slice(treePath.size(initialPath) + 1)
-  .map(node => node.uci)
+  // at this point we know node has uci (every node except first has uci)
+  .map(node => node.uci!)
 
   // search in puzzle lines with current progress
   const curLine = progress.reduce((acc: Line, uci: Uci) => {

@@ -41,17 +41,18 @@ export default class TrainingCtrl {
   constructor(cfg: PuzzleData) {
     socket.createDefault()
 
-    this.menu = menu.controller(this)
-    this.init(cfg)
-
     this.vm = {
       mode: 'play',
       lastFeedback: 'init',
+      initializing: false,
       loading: false,
       // TODO delay
       canViewSolution: true,
       resultSent: false
     }
+
+    this.menu = menu.controller(this)
+    this.init(cfg)
 
     this.pieceTheme = settings.general.theme.piece()
 
@@ -61,6 +62,7 @@ export default class TrainingCtrl {
   }
 
   public init = (cfg: PuzzleData) => {
+    this.vm.initializing = true
     this.data = makeData(cfg)
     this.tree = makeTree(treeOps.reconstruct(this.data.game.treeParts))
     this.initialPath = treePath.fromNodeList(treeOps.mainlineNodeList(this.tree.root))
@@ -72,6 +74,7 @@ export default class TrainingCtrl {
     // play initial move
     setTimeout(() => {
       this.jump(this.initialPath)
+      this.vm.initializing = false
       redraw()
     }, 1000)
 
@@ -107,28 +110,47 @@ export default class TrainingCtrl {
     this.mainline = treeOps.mainlineNodeList(this.tree.root)
   }
 
-  public jump = (path: Tree.Path) => {
+  public jump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
     const pathChanged = path !== this.path
     this.setPath(path)
     this.updateGround()
-    if (pathChanged) {
-      if (!this.node.uci) sound.move() // initial position
-      else {
-        if (this.node.san!.indexOf('x') !== -1) sound.capture()
-        else sound.move()
-      }
+    if (pathChanged && direction === 'forward') {
+      if (this.node.san && this.node.san.indexOf('x') !== -1) sound.throttledCapture()
+      else sound.throttledMove()
     }
     promotion.cancel(this.chessground)
   }
 
-  public userJump = (path: Tree.Path) => {
-    this.jump(path)
+  public userJump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
+    this.jump(path, direction)
   }
 
-  public jumpPrev = () => {
+  public canGoForward = () => {
+    return this.node.children.length > 0
   }
 
-  public jumpNext = () => {
+  public fastforward = () => {
+    if (this.node.children.length === 0) return false
+
+    const child = this.node.children[0]
+    this.userJump(this.path + child.id, 'forward')
+    return true
+  }
+
+  public canGoBackward = () => {
+    if (this.path === '') return false
+    const p = treePath.init(this.path)
+    if (p.length < this.initialPath.length) return false
+    return true
+  }
+
+  public rewind = () => {
+    if (this.canGoBackward()) {
+      this.userJump(treePath.init(this.path), 'backward')
+      return true
+    }
+
+    return false
   }
 
   public reload = (cfg: PuzzleData) => {
@@ -176,10 +198,10 @@ export default class TrainingCtrl {
       fen: node.fen,
       turnColor: color,
       orientation: this.data.puzzle.color,
-      movableColor: this.gameOver() ? null : color,
+      movableColor: this.gameOver() || color !== this.data.puzzle.color ? null : color,
       dests: dests || null,
       check: !!node.check,
-      lastMove: chessFormat.uciToMove(node.uci)
+      lastMove: node.uci ? chessFormat.uciToMove(node.uci) : null
     }
 
     if (!this.chessground) {
@@ -276,11 +298,14 @@ export default class TrainingCtrl {
       this.reorderChildren(newPath)
       redraw()
 
-      const progress = moveTest(
-        this.vm.mode, this.node, this.path, this.initialPath, this.nodeList,
-        this.data.puzzle
-      )
-      if (progress) this.applyProgress(progress)
+      const playedByColor = this.node.ply % 2 === 1 ? 'white' : 'black'
+      if (playedByColor === this.data.puzzle.color) {
+        const progress = moveTest(
+          this.vm.mode, this.node, this.path, this.initialPath, this.nodeList,
+          this.data.puzzle
+        )
+        if (progress) this.applyProgress(progress)
+      }
     })
     .catch(err => console.error('send move error', move, err))
   }

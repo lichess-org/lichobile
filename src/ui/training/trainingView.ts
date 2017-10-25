@@ -60,16 +60,16 @@ function renderActionsBar(ctrl: TrainingCtrl) {
       oncreate: helper.ontap(ctrl.goToAnalysis, () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')),
       disabled: ctrl.data.mode !== 'view'
     }),
-    // h('button.action_bar_button.training_action.fa.fa-backward', {
-    //   oncreate: helper.ontap(ctrl.jumpPrev, undefined, ctrl.jumpPrev),
-    //   key: 'historyPrev',
-    //   disabled: !history || !(step !== step - 1 && step - 1 >= 0 && step - 1 < history.length)
-    // }),
-    // h('button.action_bar_button.training_action.fa.fa-forward', {
-    //   oncreate: helper.ontap(ctrl.jumpNext, undefined, ctrl.jumpNext),
-    //   key: 'historyNext',
-    //   disabled: !history || !(step !== step + 1 && step + 1 >= 0 && step + 1 < history.length)
-    // })
+    h('button.action_bar_button.training_action.fa.fa-backward', {
+      oncreate: helper.ontap(ctrl.rewind, undefined, ctrl.rewind),
+      key: 'historyPrev',
+      disabled: ctrl.vm.initializing || !ctrl.canGoBackward()
+    }),
+    h('button.action_bar_button.training_action.fa.fa-forward', {
+      oncreate: helper.ontap(ctrl.fastforward, undefined, ctrl.fastforward),
+      key: 'historyNext',
+      disabled: ctrl.vm.initializing || !ctrl.canGoForward()
+    })
   ])
 }
 

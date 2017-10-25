@@ -45,6 +45,7 @@ export default class TrainingCtrl {
       mode: 'play',
       lastFeedback: 'init',
       initializing: false,
+      moveValidationPending: false,
       loading: false,
       // TODO delay
       canViewSolution: true,
@@ -73,7 +74,7 @@ export default class TrainingCtrl {
 
     // play initial move
     setTimeout(() => {
-      this.jump(this.initialPath)
+      this.jump(this.initialPath, true)
       this.vm.initializing = false
       redraw()
     }, 1000)
@@ -88,16 +89,17 @@ export default class TrainingCtrl {
     this.sendResult(false)
     this.vm.mode = 'view'
     this.mergeSolution(this.data.puzzle.branch, this.data.puzzle.color)
-    this.reorderChildren(this.initialPath, true)
 
     // try and play the solution next move
     const next = this.node.children[0]
-    if (next && next.puzzle === 'good') this.userJump(this.path + next.id)
+    if (next && next.puzzle === 'good') this.userJump(this.path + next.id, true)
     else {
       const firstGoodPath = treeOps.takePathWhile(this.mainline, function(node) {
         return node.puzzle !== 'good'
       })
-      if (firstGoodPath) this.userJump(firstGoodPath + this.tree.nodeAtPath(firstGoodPath).children[0].id)
+      if (firstGoodPath) {
+        this.userJump(firstGoodPath + this.tree.nodeAtPath(firstGoodPath).children[0].id, true)
+      }
     }
 
     redraw()
@@ -110,34 +112,35 @@ export default class TrainingCtrl {
     this.mainline = treeOps.mainlineNodeList(this.tree.root)
   }
 
-  public jump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
+  public jump = (path: Tree.Path, withSound = false) => {
     const pathChanged = path !== this.path
     this.setPath(path)
     this.updateGround()
-    if (pathChanged && direction === 'forward') {
+    if (pathChanged && withSound) {
       if (this.node.san && this.node.san.indexOf('x') !== -1) sound.throttledCapture()
       else sound.throttledMove()
     }
     promotion.cancel(this.chessground)
   }
 
-  public userJump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
-    this.jump(path, direction)
+  public userJump = (path: Tree.Path, withSound: boolean) => {
+    this.jump(path, withSound)
   }
 
   public canGoForward = () => {
-    return this.node.children.length > 0
+    return !this.vm.initializing && this.node.children.length > 0
   }
 
   public fastforward = () => {
     if (this.node.children.length === 0) return false
 
     const child = this.node.children[0]
-    this.userJump(this.path + child.id, 'forward')
+    this.userJump(this.path + child.id, true)
     return true
   }
 
   public canGoBackward = () => {
+    if (this.vm.moveValidationPending) return false
     if (this.path === '') return false
     const p = treePath.init(this.path)
     if (p.length < this.initialPath.length) return false
@@ -146,7 +149,7 @@ export default class TrainingCtrl {
 
   public rewind = () => {
     if (this.canGoBackward()) {
-      this.userJump(treePath.init(this.path), 'backward')
+      this.userJump(treePath.init(this.path), false)
       return true
     }
 
@@ -266,10 +269,10 @@ export default class TrainingCtrl {
       pgnMoves: this.node.pgnMoves
     }
     if (prom) move.promotion = prom
-    this.sendMoveRequest(move)
+    this.sendMoveRequest(move, true)
   }
 
-  private sendMoveRequest = (move: chess.MoveRequest) => {
+  private sendMoveRequest = (move: chess.MoveRequest, userMove = false) => {
     chess.move(move)
     .then(({ situation, path}) => {
       const node = {
@@ -294,8 +297,8 @@ export default class TrainingCtrl {
         console.error('Cannot addNode', node, path)
         return
       }
-      this.jump(newPath)
-      this.reorderChildren(newPath)
+      if (userMove) this.vm.moveValidationPending = true
+      this.jump(newPath, !userMove)
       redraw()
 
       const playedByColor = this.node.ply % 2 === 1 ? 'white' : 'black'
@@ -313,12 +316,16 @@ export default class TrainingCtrl {
   private userMove = (orig: Key, dest: Key, captured?: Piece) => {
     if (captured) sound.capture()
     else sound.move()
-    if (!promotion.start(this.chessground, orig, dest, this.sendMove)) this.sendMove(orig, dest)
+    if (!promotion.start(this.chessground, orig, dest, this.sendMove)) {
+      this.sendMove(orig, dest)
+    }
   }
 
-  private revertUserMove = () => {
+  private revertUserMove = (path: Tree.Path) => {
     setTimeout(() => {
-      this.userJump(treePath.init(this.path))
+      this.vm.moveValidationPending = false
+      this.userJump(treePath.init(path), false)
+      this.tree.deleteNodeAt(path)
       redraw()
     }, 500)
   }
@@ -326,7 +333,7 @@ export default class TrainingCtrl {
   private applyProgress = (progress: Feedback | chess.MoveRequest) => {
     if (progress === 'fail') {
       this.vm.lastFeedback = 'fail'
-      this.revertUserMove()
+      this.revertUserMove(this.path)
       if (this.vm.mode === 'play') {
         this.vm.canViewSolution = true
         this.vm.mode = 'try'
@@ -334,33 +341,22 @@ export default class TrainingCtrl {
       }
     } else if (progress === 'retry') {
       this.vm.lastFeedback = 'retry'
-      this.revertUserMove()
+      this.revertUserMove(this.path)
     } else if (progress === 'win') {
+      this.vm.moveValidationPending = false
       if (this.vm.mode !== 'view') {
         if (this.vm.mode === 'play') this.sendResult(true)
         this.vm.lastFeedback = 'win'
         this.vm.mode = 'view'
       }
     } else if (isMoveRequest(progress)) {
+      this.vm.moveValidationPending = false
       this.vm.lastFeedback = 'good'
       setTimeout(() => {
         // play opponent move
         this.sendMoveRequest(progress)
       }, 500)
     }
-  }
-
-  private reorderChildren(path: Tree.Path, recursive?: boolean) {
-    const node = this.tree.nodeAtPath(path)
-    node.children.sort((c1: Tree.Node, _: Tree.Node) => {
-      if (c1.puzzle === 'fail') return 1
-      if (c1.puzzle === 'retry') return 1
-      if (c1.puzzle === 'good') return -1
-      return 0
-    })
-    if (recursive) node.children.forEach((child: Tree.Node) => {
-      this.reorderChildren(path + child.id, true)
-    })
   }
 
   private mergeSolution(solution: Tree.Node, color: Color) {

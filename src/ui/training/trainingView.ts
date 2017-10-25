@@ -31,7 +31,7 @@ export function renderContent(ctrl: TrainingCtrl, key: string, bounds: ClientRec
     board,
     h('div.training-tableWrapper', [
       h('div.training-table.native_scroller',
-        ctrl.data.mode === 'view' ? renderResult(ctrl) : renderFeedback(ctrl)
+        ctrl.vm.mode === 'view' ? renderResult(ctrl) : renderFeedback(ctrl)
       ),
       renderActionsBar(ctrl)
     ])
@@ -63,12 +63,12 @@ function renderActionsBar(ctrl: TrainingCtrl) {
     h('button.action_bar_button.training_action.fa.fa-backward', {
       oncreate: helper.ontap(ctrl.rewind, undefined, ctrl.rewind),
       key: 'historyPrev',
-      disabled: ctrl.vm.initializing || !ctrl.canGoBackward()
+      disabled: !ctrl.canGoBackward()
     }),
     h('button.action_bar_button.training_action.fa.fa-forward', {
       oncreate: helper.ontap(ctrl.fastforward, undefined, ctrl.fastforward),
       key: 'historyNext',
-      disabled: ctrl.vm.initializing || !ctrl.canGoForward()
+      disabled: !ctrl.canGoForward()
     })
   ])
 }
@@ -124,14 +124,14 @@ function renderFeedback(ctrl: TrainingCtrl) {
       ])
     case 'fail':
       return h('div.training-explanation', [
-        h('div.training-half', [
+        h('div.player', [
           h('div.training-icon.loss', '✗'),
           h('div.training-instruction', [
             h('strong', i18n('puzzleFailed')),
-            ctrl.data.mode === 'try' ? h('span', i18n('butYouCanKeepTrying')) : null
+            h('span', i18n('butYouCanKeepTrying'))
           ])
         ]),
-        h('div.training-half')
+        h('button.fatButton', { oncreate: helper.ontap(ctrl.viewSolution) }, i18n('viewTheSolution'))
       ])
   }
 

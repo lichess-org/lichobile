@@ -17,6 +17,7 @@ export type Feedback = 'init' | 'fail' | 'retry' | 'win' | 'good'
 export interface VM {
   loading: boolean
   initializing: boolean
+  moveValidationPending: boolean
   mode: Mode
   lastFeedback: Feedback
   canViewSolution: boolean

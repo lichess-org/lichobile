@@ -2,7 +2,7 @@ import * as merge from 'lodash/merge'
 import spinner from './spinner'
 import { buildQueryString } from './utils/querystring'
 
-export const apiVersion = 2
+export const apiVersion = 3
 
 const baseUrl = window.lichess.apiEndPoint
 

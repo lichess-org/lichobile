@@ -6,14 +6,13 @@ import TrainingCtrl from './TrainingCtrl'
 
 export default function makeConfig(
   ctrl: TrainingCtrl,
-  userMove: (orig: Key, dest: Key) => void,
-  onMove: (orig: Key, dest: Key, capture?: Piece) => void): cg.InitConfig {
+  userMove: (orig: Key, dest: Key) => void): cg.InitConfig {
   return {
     batchRAF: batchRequestAnimationFrame,
     fen: ctrl.data.puzzle.fen,
     orientation: ctrl.data.puzzle.color,
     coordinates: settings.game.coords(),
-    turnColor: ctrl.data.puzzle.opponentColor,
+    turnColor: ctrl.node.ply % 2 === 0 ? 'white' : 'black',
     highlight: {
       lastMove: settings.game.highlights(),
       check: settings.game.highlights()
@@ -21,13 +20,10 @@ export default function makeConfig(
     movable: {
       free: false,
       color: ctrl.data.mode !== 'view' ? ctrl.data.puzzle.color : null,
-      showDests: settings.game.pieceDestinations(),
-      events: {
-        after: userMove
-      }
+      showDests: settings.game.pieceDestinations()
     },
     events: {
-      move: onMove
+      move: userMove
     },
     animation: {
       enabled: true,

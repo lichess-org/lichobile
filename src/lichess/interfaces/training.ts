@@ -1,15 +1,40 @@
+import { Tree } from '../../ui/shared/tree'
+
 export interface PuzzleData {
   puzzle: Puzzle
   mode: 'view' | 'play' | 'try'
+  game: Game
   user?: UserData
   progress?: any
-  attempt?: PuzzleAttempt
-  win?: boolean
 }
 
-export interface PuzzleAttempt {
+export interface Round {
   win: boolean
   userRatingDiff: number
+}
+
+export interface RoundData {
+  round: Round
+  user?: UserData
+  voted: number | null
+}
+
+export interface Game {
+  id: string
+  clock: string
+  perf: {
+    icon: string
+    name: string
+  }
+  players: [Player, Player]
+  rated: boolean
+  treeParts: Array<Partial<Tree.Node>>
+}
+
+export interface Player {
+  color: Color
+  name: string
+  userId: string
 }
 
 export interface Puzzle {
@@ -24,12 +49,15 @@ export interface Puzzle {
   lines: Lines
   enabled: boolean
   vote: number
+  branch: Tree.Node
 }
 
 export interface UserData {
-  history: number[]
+  // [id, diff, rating]
   recent: Array<[number, number, number]>
   rating: number
 }
 
-export type Lines = { [uci: string]: Lines | string }
+export type LineFeedback = 'win' | 'retry'
+export type Line = Lines | LineFeedback
+export type Lines = { [uci: string]: Line }

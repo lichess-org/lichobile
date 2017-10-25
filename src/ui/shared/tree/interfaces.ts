@@ -38,7 +38,7 @@ export namespace Tree {
     fen: Fen
     children: Node[]
     drops?: string | string[] | undefined | null
-    uci?: Uci
+    uci: Uci
     san?: San
     comments?: Comment[]
     // TODO maybe don't keep both formats for dests & drops

@@ -1,6 +1,5 @@
 import * as h from 'mithril/hyperscript'
 import i18n from '../../i18n'
-import { PuzzleAttempt } from '../../lichess/interfaces/training'
 import Board from '../shared/Board'
 import { view as renderPromotion } from '../shared/offlineRound/promotion'
 import { header, connectingHeader } from '../shared/common'
@@ -32,7 +31,7 @@ export function renderContent(ctrl: TrainingCtrl, key: string, bounds: ClientRec
     board,
     h('div.training-tableWrapper', [
       h('div.training-table.native_scroller',
-        ctrl.data.mode === 'view' ? renderResult(ctrl) : renderExplanation(ctrl),
+        ctrl.data.mode === 'view' ? renderResult(ctrl) : renderFeedback(ctrl)
       ),
       renderActionsBar(ctrl)
     ])
@@ -46,25 +45,7 @@ export function overlay(ctrl: TrainingCtrl) {
   ]
 }
 
-function renderExplanation(ctrl: TrainingCtrl) {
-  const hasComment = ctrl.data.comment !== undefined
-  return h('div.training-explanation', hasComment ? renderCommentary(ctrl) : [
-    h('div.player', [
-      h('div.piece-no-square', {
-        className: ctrl.pieceTheme
-      }, h('piece.king.' + ctrl.data.puzzle.color)),
-      h('div.training-instruction', [
-        h('strong', i18n(ctrl.chessground.state.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')),
-        h('p', i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')),
-      ]),
-    ]),
-    h('button.fatButton', { oncreate: helper.ontap(ctrl.giveUp) }, i18n('resign'))
-  ])
-}
-
 function renderActionsBar(ctrl: TrainingCtrl) {
-  const history = ctrl.data.replay && ctrl.data.replay.history
-  const step = ctrl.data.replay && ctrl.data.replay.step
   return h('section#training_actions.actions_bar', [
     h('button.action_bar_button.training_action.fa.fa-ellipsis-h', {
       key: 'puzzleMenu',
@@ -79,16 +60,16 @@ function renderActionsBar(ctrl: TrainingCtrl) {
       oncreate: helper.ontap(ctrl.goToAnalysis, () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')),
       disabled: ctrl.data.mode !== 'view'
     }),
-    h('button.action_bar_button.training_action.fa.fa-backward', {
-      oncreate: helper.ontap(ctrl.jumpPrev, undefined, ctrl.jumpPrev),
-      key: 'historyPrev',
-      disabled: !history || !(step !== step - 1 && step - 1 >= 0 && step - 1 < history.length)
-    }),
-    h('button.action_bar_button.training_action.fa.fa-forward', {
-      oncreate: helper.ontap(ctrl.jumpNext, undefined, ctrl.jumpNext),
-      key: 'historyNext',
-      disabled: !history || !(step !== step + 1 && step + 1 >= 0 && step + 1 < history.length)
-    })
+    // h('button.action_bar_button.training_action.fa.fa-backward', {
+    //   oncreate: helper.ontap(ctrl.jumpPrev, undefined, ctrl.jumpPrev),
+    //   key: 'historyPrev',
+    //   disabled: !history || !(step !== step - 1 && step - 1 >= 0 && step - 1 < history.length)
+    // }),
+    // h('button.action_bar_button.training_action.fa.fa-forward', {
+    //   oncreate: helper.ontap(ctrl.jumpNext, undefined, ctrl.jumpNext),
+    //   key: 'historyNext',
+    //   disabled: !history || !(step !== step + 1 && step + 1 >= 0 && step + 1 < history.length)
+    // })
   ])
 }
 
@@ -103,10 +84,24 @@ function renderViewControls(ctrl: TrainingCtrl) {
   ]
 }
 
-function renderCommentary(ctrl: TrainingCtrl) {
-  switch (ctrl.data.comment) {
+function renderFeedback(ctrl: TrainingCtrl) {
+
+  switch (ctrl.vm.lastFeedback) {
+    case 'init':
+      return h('div.training-explanation', [
+        h('div.player', [
+          h('div.piece-no-square', {
+            className: ctrl.pieceTheme
+          }, h('piece.king.' + ctrl.data.puzzle.color)),
+          h('div.training-instruction', [
+            h('strong', i18n(ctrl.chessground.state.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')),
+            h('p', i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')),
+          ])
+        ]),
+        h('button.fatButton', { oncreate: helper.ontap(ctrl.viewSolution) }, i18n('viewTheSolution'))
+      ])
     case 'retry':
-      return [
+      return h('div.training-explanation', [
         h('div.player', [
           h('div.training-icon', '!'),
           h('div.training-instruction', [
@@ -114,10 +109,10 @@ function renderCommentary(ctrl: TrainingCtrl) {
             h('span', i18n('butYouCanDoBetter'))
           ]),
         ]),
-        h('button.fatButton', { oncreate: helper.ontap(ctrl.giveUp) }, i18n('resign'))
-      ]
-    case 'great':
-      return [
+        h('button.fatButton', { oncreate: helper.ontap(ctrl.viewSolution) }, i18n('viewTheSolution'))
+      ])
+    case 'good':
+      return h('div.training-explanation', [
         h('div.player', [
           h('div.training-icon.win', '✓'),
           h('div.training-instruction', [
@@ -125,10 +120,10 @@ function renderCommentary(ctrl: TrainingCtrl) {
             h('span', i18n('keepGoing'))
           ]),
         ]),
-        h('button.fatButton', { oncreate: helper.ontap(ctrl.giveUp) }, i18n('resign'))
-      ]
+        h('button.fatButton', { oncreate: helper.ontap(ctrl.viewSolution) }, i18n('viewTheSolution'))
+      ])
     case 'fail':
-      return [
+      return h('div.training-explanation', [
         h('div.training-half', [
           h('div.training-icon.loss', '✗'),
           h('div.training-instruction', [
@@ -137,42 +132,36 @@ function renderCommentary(ctrl: TrainingCtrl) {
           ])
         ]),
         h('div.training-half')
-      ]
+      ])
   }
+
 }
 
-function renderRatingDiff(diff: number) {
-  return h('strong.puzzleRatingDiff', diff > 0 ? '+' + diff : diff)
-}
+// function renderRatingDiff(diff: number) {
+//   return h('strong.puzzleRatingDiff', diff > 0 ? '+' + diff : diff)
+// }
 
-function renderWin(ctrl: TrainingCtrl, attempt?: PuzzleAttempt) {
+function renderWin(ctrl: TrainingCtrl) {
   return [
     h('div.training-half', [
       h('div.training-icon.win', '✓'),
-      h('strong', [i18n('victory'), attempt ? renderRatingDiff(attempt.userRatingDiff) : null])
+      h('strong', [i18n('victory')])
     ]),
     h('div.training-half', renderViewControls(ctrl))
   ]
 }
 
-function renderLoss(ctrl: TrainingCtrl, attempt?: PuzzleAttempt) {
+function renderLoss(ctrl: TrainingCtrl) {
   return [
     h('div.training-half', [
       h('div.training-icon.loss', '✗'),
-      h('strong', [i18n('puzzleFailed'), attempt ? renderRatingDiff(attempt.userRatingDiff) : null])
+      h('strong', [i18n('puzzleFailed')])
     ]),
     h('div.training-half', renderViewControls(ctrl))
   ]
 }
 
 function renderResult(ctrl: TrainingCtrl) {
-  if (ctrl.data.attempt) {
-    if (ctrl.data.attempt.win) return renderWin(ctrl, ctrl.data.attempt)
-    else return renderLoss(ctrl, ctrl.data.attempt)
-  }
-  if (ctrl.data.win !== undefined) {
-    if (ctrl.data.win) return renderWin(ctrl)
-    else return renderLoss(ctrl)
-  }
-  return null
+  if (ctrl.vm.lastFeedback === 'win') return renderWin(ctrl)
+  else return renderLoss(ctrl)
 }

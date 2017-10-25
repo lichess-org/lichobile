@@ -1,38 +1,56 @@
-import * as last from 'lodash/last'
+import * as debounce from 'lodash/debounce'
 import Chessground from '../../chessground/Chessground'
+import { build as makeTree, ops as treeOps, path as treePath, TreeWrapper, Tree } from '../shared/tree'
 import router from '../../router'
 import redraw from '../../utils/redraw'
 import signals from '../../signals'
+import * as chess from '../../chess'
 import { handleXhrError } from '../../utils'
+import * as chessFormat from '../../utils/chessFormat'
 import sound from '../../sound'
 import socket from '../../socket'
 import settings from '../../settings'
 import { PuzzleData } from '../../lichess/interfaces/training'
+import promotion from '../shared/offlineRound/promotion'
 
-import makeGround from './ground'
+import moveTest from './moveTest'
 import makeData from './data'
-import chess from './chess'
+import makeGround from './ground'
 import menu, { IMenuCtrl } from './menu'
-import puzzle from './puzzle'
 import * as xhr from './xhr'
-import { Data } from './interfaces'
+import { VM, Data, Feedback } from './interfaces'
 
 export default class TrainingCtrl {
   data: Data
+  tree: TreeWrapper
   menu: IMenuCtrl
-  vm: { loading: boolean }
-  pieceTheme: string
   chessground: Chessground
+
+  // current tree state, cursor, and denormalized node lists
+  path: Tree.Path
+  node: Tree.Node
+  nodeList: Tree.Node[]
+  mainline: Tree.Node[]
+  initialPath: Tree.Path
+  initialNode: Tree.Node
+
+  vm: VM
+
+  pieceTheme: string
 
   constructor(cfg: PuzzleData) {
     socket.createDefault()
 
     this.menu = menu.controller(this)
     this.init(cfg)
-    setTimeout(this.playInitialMove, 1000)
 
     this.vm = {
-      loading: false
+      mode: 'play',
+      lastFeedback: 'init',
+      loading: false,
+      // TODO delay
+      canViewSolution: true,
+      resultSent: false
     }
 
     this.pieceTheme = settings.general.theme.piece()
@@ -44,63 +62,78 @@ export default class TrainingCtrl {
 
   public init = (cfg: PuzzleData) => {
     this.data = makeData(cfg)
-    const chessgroundConf = makeGround(this, this.userMove, this.onMove)
-    if (this.chessground) this.chessground.reconfigure(chessgroundConf)
-    else this.chessground = new Chessground(chessgroundConf)
+    this.tree = makeTree(treeOps.reconstruct(this.data.game.treeParts))
+    this.initialPath = treePath.fromNodeList(treeOps.mainlineNodeList(this.tree.root))
+    this.initialNode = this.tree.nodeAtPath(this.initialPath)
+    this.setPath(treePath.init(this.initialPath))
+
+    this.updateGround()
+
+    // play initial move
+    setTimeout(() => {
+      this.jump(this.initialPath)
+      redraw()
+    }, 1000)
+
     redraw()
   }
 
   public player = (): Color => this.data.puzzle.color
 
-  public revert = (id: number) => {
-    if (id !== this.data.puzzle.id) return
-    this.chessground.set({
-      fen: this.data.chess.fen(),
-      lastMove: chess.lastMove(this.data.chess) as KeyPair,
-      turnColor: this.data.puzzle.color,
-      check: false,
-      dests: this.data.chess.dests()
-    })
-    redraw()
-    if (this.data.chess.in_check()) this.chessground.setCheck(true)
-  }
+  public viewSolution = () => {
+    if (!this.vm.canViewSolution) return
+    this.sendResult(false)
+    this.vm.mode = 'view'
+    this.mergeSolution(this.data.puzzle.branch, this.data.puzzle.color)
+    this.reorderChildren(this.initialPath, true)
 
-  public giveUp = () => {
-    this.attempt(false, true)
-  }
-
-  public jump = (to: number) => {
-    const history = this.data.replay.history
-    const step = this.data.replay.step
-    const state = this.data.replay.history[to]
-    if (!(step !== to && to >= 0 && to < history.length)) return false
-    puzzle.jump(this.chessground, this.data, to)
-    if (step + 1 === to) {
-      if (state.capture) sound.capture()
-      else sound.move()
+    // try and play the solution next move
+    const next = this.node.children[0]
+    if (next && next.puzzle === 'good') this.userJump(this.path + next.id)
+    else {
+      const firstGoodPath = treeOps.takePathWhile(this.mainline, function(node) {
+        return node.puzzle !== 'good'
+      })
+      if (firstGoodPath) this.userJump(firstGoodPath + this.tree.nodeAtPath(firstGoodPath).children[0].id)
     }
-    return true
+
+    redraw()
   }
 
-  public jumpFirst = () => this.jump(0)
+  public setPath = (path: Tree.Path): void => {
+    this.path = path
+    this.nodeList = this.tree.getNodeList(path)
+    this.node = treeOps.last(this.nodeList) as Tree.Node
+    this.mainline = treeOps.mainlineNodeList(this.tree.root)
+  }
+
+  public jump = (path: Tree.Path) => {
+    const pathChanged = path !== this.path
+    this.setPath(path)
+    this.updateGround()
+    if (pathChanged) {
+      if (!this.node.uci) sound.move() // initial position
+      else {
+        if (this.node.san!.indexOf('x') !== -1) sound.capture()
+        else sound.move()
+      }
+    }
+    promotion.cancel(this.chessground)
+  }
+
+  public userJump = (path: Tree.Path) => {
+    this.jump(path)
+  }
 
   public jumpPrev = () => {
-    return this.jump(this.data.replay.step - 1)
   }
 
   public jumpNext = () => {
-    return this.jump(this.data.replay.step + 1)
-  }
-
-  public jumpLast = () => {
-    this.jump(this.data.replay.history.length - 1)
   }
 
   public reload = (cfg: PuzzleData) => {
     this.data = makeData(cfg)
     this.chessground.stop()
-    puzzle.reload(this.chessground, this.data)
-    setTimeout(this.playInitialMove, 1000)
   }
 
   public newPuzzle = (feedback: boolean) => {
@@ -108,7 +141,6 @@ export default class TrainingCtrl {
     xhr.newPuzzle()
     .then(cfg => {
       this.init(cfg)
-      setTimeout(this.playInitialMove, 1000)
     })
     .then(this.onXhrSuccess)
     .catch(this.onXhrError)
@@ -118,7 +150,6 @@ export default class TrainingCtrl {
     xhr.loadPuzzle(id)
     .then(cfg => {
       this.init(cfg)
-      setTimeout(this.playInitialMove, 1000)
     })
     .then(this.onXhrSuccess)
     .catch(this.onXhrError)
@@ -137,67 +168,197 @@ export default class TrainingCtrl {
 
   // --
 
-  private userFinalizeMove = (move: string[], newProgress: any) => {
-    chess.move(this.data.chess, move)
-    this.data.comment = 'great'
-    this.data.progress = newProgress
-    this.data.playHistory.push({
-      move,
-      fen: this.data.chess.fen(),
-      dests: this.data.chess.dests(),
-      check: this.data.chess.in_check(),
-      turnColor: this.data.chess.turn() === 'w' ? 'white' : 'black'
-    })
-    this.chessground.set({
-      fen: this.data.chess.fen(),
-      lastMove: [move[0], move[1]] as KeyPair,
-      turnColor: this.data.puzzle.opponentColor,
-      check: false
-    })
-    if (this.data.chess.in_check()) this.chessground.setCheck(true)
-  }
-
-  private playOpponentMove = (move: KeyPair) => {
-    this.onMove(move[0], move[1], this.chessground.state.pieces[move[1]])
-    chess.move(this.data.chess, move)
-    this.data.playHistory.push({
-      move,
-      fen: this.data.chess.fen(),
-      dests: this.data.chess.dests(),
-      check: this.data.chess.in_check(),
-      turnColor: this.data.chess.turn() === 'w' ? 'white' : 'black'
-    })
-    this.chessground.set({
-      fen: this.data.chess.fen(),
-      lastMove: move,
-      dests: this.data.chess.dests(),
-      turnColor: this.data.puzzle.color,
-      check: false
-    })
-    if (this.data.chess.in_check()) this.chessground.setCheck(true)
-    setTimeout(this.chessground.playPremove, this.chessground.state.animation.duration)
-    redraw()
-  }
-
-  private playOpponentNextMove = (id: number) => {
-    if (id !== this.data.puzzle.id) return
-    const move = puzzle.getOpponentNextMove(this.data)
-    this.playOpponentMove(puzzle.str2move(move) as KeyPair)
-    this.data.progress.push(move)
-    if (puzzle.getCurrentLines(this.data) === 'win') {
-      setTimeout(() => this.attempt(true), 300)
+  private updateGround() {
+    const node = this.node
+    const color: Color = node.ply % 2 === 0 ? 'white' : 'black'
+    const dests = chessFormat.readDests(node.dests)
+    const config = {
+      fen: node.fen,
+      turnColor: color,
+      orientation: this.data.puzzle.color,
+      movableColor: this.gameOver() ? null : color,
+      dests: dests || null,
+      check: !!node.check,
+      lastMove: chessFormat.uciToMove(node.uci)
     }
+
+    if (!this.chessground) {
+      this.chessground = new Chessground(makeGround(this, this.userMove))
+    } else {
+      this.chessground.set(config)
+    }
+
+    if (!dests) this.getNodeSituation()
   }
 
-  private playInitialMove = () => {
-    if (this.data.mode !== 'view') {
-      this.playOpponentMove(this.data.puzzle.initialMove)
+  private getNodeSituation = debounce(() => {
+    if (this.node && !this.node.dests) {
+      chess.situation({
+        variant: this.data.game.variant.key,
+        fen: this.node.fen,
+        path: this.path
+      })
+      .then(({ situation, path }) => {
+        this.tree.updateAt(path, (node: Tree.Node) => {
+          node.dests = situation.dests
+          node.end = situation.end
+          node.player = situation.player
+        })
+        if (path === this.path) {
+          this.updateGround()
+          redraw()
+        }
+      })
+      .catch(err => console.error('get dests error', err))
     }
+  }, 50)
+
+  private gameOver(): boolean {
+    if (!this.node) return false
+    // node.end boolean is fetched async for online games (along with the dests)
+    if (this.node.end === undefined) {
+      if (this.node.check) {
+        const san = this.node.san
+        const checkmate = !!(san && san[san.length - 1] === '#')
+        return checkmate
+      }
+    } else {
+      return this.node.end
+    }
+
+    return false
   }
 
   private showLoading = () => {
     this.vm.loading = true
     redraw()
+  }
+
+  private sendMove = (orig: Key, dest: Key, prom?: Role) => {
+    const move: chess.MoveRequest = {
+      orig,
+      dest,
+      variant: this.data.game.variant.key,
+      fen: this.node.fen,
+      path: this.path,
+      pgnMoves: this.node.pgnMoves
+    }
+    if (prom) move.promotion = prom
+    this.sendMoveRequest(move)
+  }
+
+  private sendMoveRequest = (move: chess.MoveRequest) => {
+    chess.move(move)
+    .then(({ situation, path}) => {
+      const node = {
+        id: situation.nodeId,
+        ply: situation.ply,
+        fen: situation.fen,
+        uci: situation.uciMoves[0],
+        children: [],
+        dests: situation.dests,
+        check: situation.check,
+        end: situation.end,
+        player: situation.player,
+        san: situation.pgnMoves[0],
+        pgnMoves: situation.pgnMoves
+      }
+      if (path === undefined) {
+        console.error('Cannot addNode, missing path', node)
+        return
+      }
+      const newPath = this.tree.addNode(node, path)
+      if (!newPath) {
+        console.error('Cannot addNode', node, path)
+        return
+      }
+      this.jump(newPath)
+      this.reorderChildren(newPath)
+      redraw()
+
+      const progress = moveTest(
+        this.vm.mode, this.node, this.path, this.initialPath, this.nodeList,
+        this.data.puzzle
+      )
+      if (progress) this.applyProgress(progress)
+    })
+    .catch(err => console.error('send move error', move, err))
+  }
+
+  private userMove = (orig: Key, dest: Key, captured?: Piece) => {
+    if (captured) sound.capture()
+    else sound.move()
+    if (!promotion.start(this.chessground, orig, dest, this.sendMove)) this.sendMove(orig, dest)
+  }
+
+  private revertUserMove = () => {
+    setTimeout(() => {
+      this.userJump(treePath.init(this.path))
+      redraw()
+    }, 500)
+  }
+
+  private applyProgress = (progress: Feedback | chess.MoveRequest) => {
+    if (progress === 'fail') {
+      this.vm.lastFeedback = 'fail'
+      this.revertUserMove()
+      if (this.vm.mode === 'play') {
+        this.vm.canViewSolution = true
+        this.vm.mode = 'try'
+        this.sendResult(false)
+      }
+    } else if (progress === 'retry') {
+      this.vm.lastFeedback = 'retry'
+      this.revertUserMove()
+    } else if (progress === 'win') {
+      if (this.vm.mode !== 'view') {
+        if (this.vm.mode === 'play') this.sendResult(true)
+        this.vm.lastFeedback = 'win'
+        this.vm.mode = 'view'
+      }
+    } else if (isMoveRequest(progress)) {
+      this.vm.lastFeedback = 'good'
+      setTimeout(() => {
+        // play opponent move
+        this.sendMoveRequest(progress)
+      }, 500)
+    }
+  }
+
+  private reorderChildren(path: Tree.Path, recursive?: boolean) {
+    const node = this.tree.nodeAtPath(path)
+    node.children.sort((c1: Tree.Node, _: Tree.Node) => {
+      if (c1.puzzle === 'fail') return 1
+      if (c1.puzzle === 'retry') return 1
+      if (c1.puzzle === 'good') return -1
+      return 0
+    })
+    if (recursive) node.children.forEach((child: Tree.Node) => {
+      this.reorderChildren(path + child.id, true)
+    })
+  }
+
+  private mergeSolution(solution: Tree.Node, color: Color) {
+
+    treeOps.updateAll(solution, (node) => {
+      if ((color === 'white') === (node.ply % 2 === 1)) node.puzzle = 'good'
+    })
+
+    const solutionNode = treeOps.childById(this.initialNode, solution.id)
+
+    if (solutionNode) treeOps.merge(solutionNode, solution)
+    else this.initialNode.children.push(solution)
+  }
+
+  private sendResult = (win: boolean) => {
+    if (this.vm.resultSent) return
+    this.vm.resultSent = true
+    xhr.round(this.data.puzzle.id, win)
+    .then((res) => {
+      this.data.user = res.user
+      this.data.round = res.round
+      redraw()
+    })
   }
 
   private onXhrSuccess = ()  => {
@@ -210,85 +371,8 @@ export default class TrainingCtrl {
     redraw()
     handleXhrError(res)
   }
+}
 
-  private revertLastMove = () => {
-    if (this.data.progress.length === 0) {
-      return
-    }
-    const lastTurnColor = this.data.playHistory[this.data.playHistory.length - 1].turnColor
-    const nbPliesToRevert = lastTurnColor === this.data.player.color ? 2 : 1
-    this.data.progress = this.data.progress.slice(0, this.data.progress.length - nbPliesToRevert)
-    this.data.playHistory = this.data.playHistory.slice(0, this.data.playHistory.length - nbPliesToRevert)
-    const sitToRevertTo = this.data.playHistory[this.data.playHistory.length - 1]
-    setTimeout(() => {
-      this.chessground.set({
-        fen: sitToRevertTo.fen,
-        lastMove: sitToRevertTo.move,
-        turnColor: sitToRevertTo.turnColor,
-        check: sitToRevertTo.check,
-        movableColor: 'both',
-        dests: sitToRevertTo.dests
-      })
-      redraw()
-    }, 1000)
-  }
-
-  private attempt = (winFlag: boolean, giveUpFlag: boolean = false) => {
-    this.showLoading()
-    xhr.attempt(this.data.puzzle.id, winFlag)
-    .then(cfg => {
-      cfg.progress = this.data.progress
-      this.reload(cfg)
-      this.onXhrSuccess()
-    })
-    .catch(() => {
-      if (!giveUpFlag) {
-        this.revertLastMove()
-      }
-      const msg = 'Your move has failed to reach lichess server. Please retry to move when the network is back.'
-      window.plugins.toast.show(msg, 'long', 'center')
-      this.vm.loading = false
-      redraw()
-    })
-  }
-
-  private userMove = (orig: Key, dest: Key) => {
-    const res: any = puzzle.tryMove(this.data, [orig, dest])
-    const newProgress = res[0]
-    const newLines = res[1]
-    const lastMove: any = last(newProgress)
-    const promotion = lastMove ? lastMove[4] : undefined
-    switch (newLines) {
-      case 'retry':
-        setTimeout(() => this.revert(this.data.puzzle.id), 500)
-        this.data.comment = 'retry'
-        break
-      case 'fail':
-        setTimeout(() => {
-          if (this.data.mode === 'play') {
-            this.chessground.stop()
-            this.attempt(false)
-          } else {
-            this.revert(this.data.puzzle.id)
-          }
-        }, 500)
-        this.data.comment = 'fail'
-        break
-      default:
-        this.userFinalizeMove([orig, dest, promotion], newProgress)
-        if (newLines === 'win') {
-          this.chessground.stop()
-          this.attempt(true)
-        } else {
-          setTimeout(() => this.playOpponentNextMove(this.data.puzzle.id), 1000)
-        }
-        break
-    }
-    redraw()
-  }
-
-  private onMove = (_: Key, __: Key, captured?: Piece) => {
-    if (captured) sound.capture()
-    else sound.move()
-  }
+function isMoveRequest(v: Feedback | chess.MoveRequest): v is chess.MoveRequest {
+  return (v as chess.MoveRequest).variant !== undefined
 }

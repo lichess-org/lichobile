@@ -1,28 +1,7 @@
-import * as isObject from 'lodash/isObject'
 import { fixCrazySan } from '../../utils/chessFormat'
 import { Tree } from '../shared/tree'
 import { AnalyseData } from '../../lichess/interfaces/analyse'
-import { piotr2key } from './piotr'
-import { SanToRole } from './interfaces'
 import { Eval, NodeEvals } from './ceval/interfaces'
-
-function isString(o: DestsMap | string): o is string {
-  return typeof o === 'string'
-}
-
-function isDestMap(o: DestsMap | string): o is DestsMap {
-  return isObject(o)
-}
-
-export function readDests(lines?: DestsMap | string): DestsMap | null {
-  if (lines === undefined) return null
-  if (isDestMap(lines)) return lines
-  const dests: DestsMap = {}
-  if (lines && isString(lines)) lines.split(' ').forEach(line => {
-    dests[piotr2key[line[0]]] = line.split('').slice(1).map(c => piotr2key[c])
-  })
-  return dests
-}
 
 export function readDrops(line?: string | null): string[] | null {
   if (typeof line === 'undefined' || line === null) return null
@@ -75,14 +54,6 @@ export function autoScroll(movelist: HTMLElement | null) {
       movelist.scrollTop = 0
     }
   })
-}
-
-export const sanToRole: SanToRole = {
-  P: 'pawn',
-  N: 'knight',
-  B: 'bishop',
-  R: 'rook',
-  Q: 'queen'
 }
 
 export function plyToTurn(ply: number): number {

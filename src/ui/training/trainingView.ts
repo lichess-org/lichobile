@@ -98,7 +98,7 @@ function renderFeedback(ctrl: TrainingCtrl) {
             h('p', i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')),
           ])
         ]),
-        h('button.fatButton', { oncreate: helper.ontap(ctrl.viewSolution) }, i18n('viewTheSolution'))
+        renderViewSolution(ctrl)
       ])
     case 'retry':
       return h('div.training-explanation', [
@@ -109,7 +109,7 @@ function renderFeedback(ctrl: TrainingCtrl) {
             h('span', i18n('butYouCanDoBetter'))
           ]),
         ]),
-        h('button.fatButton', { oncreate: helper.ontap(ctrl.viewSolution) }, i18n('viewTheSolution'))
+        renderViewSolution(ctrl)
       ])
     case 'good':
       return h('div.training-explanation', [
@@ -120,7 +120,7 @@ function renderFeedback(ctrl: TrainingCtrl) {
             h('span', i18n('keepGoing'))
           ]),
         ]),
-        h('button.fatButton', { oncreate: helper.ontap(ctrl.viewSolution) }, i18n('viewTheSolution'))
+        renderViewSolution(ctrl)
       ])
     case 'fail':
       return h('div.training-explanation', [
@@ -131,10 +131,19 @@ function renderFeedback(ctrl: TrainingCtrl) {
             h('span', i18n('butYouCanKeepTrying'))
           ])
         ]),
-        h('button.fatButton', { oncreate: helper.ontap(ctrl.viewSolution) }, i18n('viewTheSolution'))
+        renderViewSolution(ctrl)
       ])
   }
 
+}
+
+function renderViewSolution(ctrl: TrainingCtrl) {
+  return ctrl.vm.canViewSolution ? h('button.fatButton', {
+    oncreate: (vnode: Mithril.DOMNode) => {
+      helper.elFadeIn(vnode.dom as HTMLElement, 1500, '0', '0.8')
+      helper.ontap(ctrl.viewSolution)(vnode)
+    }
+  }, i18n('viewTheSolution')) : h('div.buttonPlaceholder', '')
 }
 
 // function renderRatingDiff(diff: number) {

@@ -44,11 +44,10 @@ export default class TrainingCtrl {
     this.vm = {
       mode: 'play',
       lastFeedback: 'init',
-      initializing: false,
+      initializing: true,
       moveValidationPending: false,
       loading: false,
-      // TODO delay
-      canViewSolution: true,
+      canViewSolution: false,
       resultSent: false
     }
 
@@ -63,7 +62,16 @@ export default class TrainingCtrl {
   }
 
   public init = (cfg: PuzzleData) => {
-    this.vm.initializing = true
+    this.vm = {
+      mode: 'play',
+      lastFeedback: 'init',
+      initializing: true,
+      moveValidationPending: false,
+      loading: false,
+      canViewSolution: false,
+      resultSent: false
+    }
+
     this.data = makeData(cfg)
     this.tree = makeTree(treeOps.reconstruct(this.data.game.treeParts))
     this.initialPath = treePath.fromNodeList(treeOps.mainlineNodeList(this.tree.root))
@@ -78,6 +86,11 @@ export default class TrainingCtrl {
       this.vm.initializing = false
       redraw()
     }, 1000)
+
+    setTimeout(() => {
+      this.vm.canViewSolution = true
+      redraw()
+    }, 5000)
 
     redraw()
   }

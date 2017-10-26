@@ -14,7 +14,7 @@ export function renderHeader(ctrl: TrainingCtrl) {
   connectingHeader() : header(h('div.main_header_title.withSub', [
     h('h1', i18n('puzzleId', ctrl.data.puzzle.id)),
     h('h2.header-subTitle', [
-      i18n('rating'), ' ' + (ctrl.data.mode === 'view' ? ctrl.data.puzzle.rating : '?'),
+      i18n('rating'), ' ' + (ctrl.vm.mode === 'view' ? ctrl.data.puzzle.rating : '?'),
       ' • ', i18n('playedXTimes', ctrl.data.puzzle.attempts)
     ])
   ]))
@@ -58,7 +58,7 @@ function renderActionsBar(ctrl: TrainingCtrl) {
     h('button.action_bar_button.training_action[data-icon=A]', {
       key: 'analysePuzzle',
       oncreate: helper.ontap(ctrl.goToAnalysis, () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')),
-      disabled: ctrl.data.mode !== 'view'
+      disabled: ctrl.vm.mode !== 'view'
     }),
     h('button.action_bar_button.training_action.fa.fa-backward', {
       oncreate: helper.ontap(ctrl.rewind, undefined, ctrl.rewind),

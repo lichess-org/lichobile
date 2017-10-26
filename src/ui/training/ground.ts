@@ -19,7 +19,7 @@ export default function makeConfig(
     },
     movable: {
       free: false,
-      color: ctrl.data.mode !== 'view' ? ctrl.data.puzzle.color : null,
+      color: ctrl.data.puzzle.color,
       showDests: settings.game.pieceDestinations()
     },
     events: {

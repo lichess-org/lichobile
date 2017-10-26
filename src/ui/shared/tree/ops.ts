@@ -1,4 +1,5 @@
 import { Tree } from './interfaces'
+import { Pockets } from '../../../lichess/interfaces/game'
 
 function mainlineChild(node: Tree.Node): Tree.Node | undefined {
   return node.children[0]
@@ -71,21 +72,29 @@ export function countChildrenAndComments(node: Tree.Node) {
   return count
 }
 
-export function reconstruct(parts: any): Tree.Node {
-  const root = parts[0]
-  // adapt to offline format which use crazyhouse field name
-  if (root.crazy !== undefined) {
-    root.crazyhouse = root.crazy
-    root.crazy = undefined
+interface Crazy {
+  crazy?: {
+    pockets: Pockets
   }
-  root.id = ''
-  let node: Tree.Node = root as Tree.Node
+}
+
+export function reconstruct(parts: Array<Partial<Tree.Node & Crazy>>): Tree.Node {
+  const proot = parts[0]
+  // adapt to offline format which use crazyhouse field name
+  if (proot.crazy !== undefined) {
+    proot.crazyhouse = proot.crazy
+    proot.crazy = undefined
+  }
+  proot.id = ''
+  const root = proot as Tree.Node
+  let node: Tree.Node = root
   for (let i = 1, nb = parts.length; i < nb; i++) {
-    const n = parts[i]
-    if (n.crazy !== undefined) {
-      n.crazyhouse = n.crazy
-      n.crazy = undefined
+    const np = parts[i]
+    if (np.crazy !== undefined) {
+      np.crazyhouse = np.crazy
+      np.crazy = undefined
     }
+    const n = np as Tree.Node
     if (node.children) node.children.unshift(n)
     else node.children = [n]
     node = n

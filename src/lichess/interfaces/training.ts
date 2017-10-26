@@ -2,10 +2,8 @@ import { Tree } from '../../ui/shared/tree'
 
 export interface PuzzleData {
   puzzle: Puzzle
-  mode: 'view' | 'play' | 'try'
   game: Game
   user?: UserData
-  progress?: any
 }
 
 export interface Round {
@@ -28,7 +26,7 @@ export interface Game {
   }
   players: [Player, Player]
   rated: boolean
-  treeParts: Array<Partial<Tree.Node>>
+  treeParts: Tree.Node
 }
 
 export interface Player {

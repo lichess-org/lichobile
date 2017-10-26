@@ -76,7 +76,7 @@ export default class TrainingCtrl implements PromotingInterface {
     this.initialPath = treePath.fromNodeList(treeOps.mainlineNodeList(this.tree.root))
     this.initialNode = this.tree.nodeAtPath(this.initialPath)
     this.setPath(treePath.init(this.initialPath))
-    this.updateGround()
+    this.updateBoard()
 
     // play opponent first move with delay
     setTimeout(() => {
@@ -125,7 +125,7 @@ export default class TrainingCtrl implements PromotingInterface {
   public jump = (path: Tree.Path, withSound = false) => {
     const pathChanged = path !== this.path
     this.setPath(path)
-    this.updateGround()
+    this.updateBoard()
     if (pathChanged && withSound) {
       if (this.node.san && this.node.san.indexOf('x') !== -1) sound.throttledCapture()
       else sound.throttledMove()
@@ -201,7 +201,7 @@ export default class TrainingCtrl implements PromotingInterface {
 
   // --
 
-  private updateGround() {
+  private updateBoard() {
     const node = this.node
     const color: Color = node.ply % 2 === 0 ? 'white' : 'black'
     const dests = chessFormat.readDests(node.dests)
@@ -209,7 +209,7 @@ export default class TrainingCtrl implements PromotingInterface {
       fen: node.fen,
       turnColor: color,
       orientation: this.data.puzzle.color,
-      movableColor: this.gameOver() || color !== this.data.puzzle.color ? null : color,
+      movableColor: this.gameOver() ? null : this.data.puzzle.color,
       dests: dests || null,
       check: !!node.check,
       lastMove: node.uci ? chessFormat.uciToMove(node.uci) : null
@@ -238,7 +238,7 @@ export default class TrainingCtrl implements PromotingInterface {
           node.player = situation.player
         })
         if (path === this.path) {
-          this.updateGround()
+          this.updateBoard()
           redraw()
         }
       })
@@ -248,18 +248,8 @@ export default class TrainingCtrl implements PromotingInterface {
 
   private gameOver(): boolean {
     if (!this.node) return false
-    // node.end boolean is fetched async for online games (along with the dests)
-    if (this.node.end === undefined) {
-      if (this.node.check) {
-        const san = this.node.san
-        const checkmate = !!(san && san[san.length - 1] === '#')
-        return checkmate
-      }
-    } else {
-      return this.node.end
-    }
-
-    return false
+    if (this.vm.mode === 'view') return true
+    return !!this.node.end
   }
 
   private showLoading = () => {

@@ -103,13 +103,9 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     }
 
     if (data.offlineClock) {
-      const clockType = data.offlineClock.clockType as ClockType
+      const clockType = data.offlineClock.clockType
       this.clock = clockSet[clockType](this.onFlag)
       this.clock.setState(data.offlineClock)
-    }
-    else {
-      const clockType = settings.otb.clock.clockType() as ClockType
-      this.clock = clockSet[clockType](this.onFlag)
     }
 
     if (this.clock)

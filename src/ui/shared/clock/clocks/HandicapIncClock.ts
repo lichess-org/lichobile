@@ -2,8 +2,7 @@ import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
 
 import { ClockType, IBasicClock, IChessHandicapIncClockState } from '../interfaces'
-
-const CLOCK_TICK_STEP = 100
+import { CLOCK_TICK_STEP } from '../utils'
 
 export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement: number, blackTimeParam: number, blackIncrement: number, onFlag: (color: Color) => void, soundOn: boolean): IBasicClock {
   let state: IChessHandicapIncClockState = {

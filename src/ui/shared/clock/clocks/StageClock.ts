@@ -2,9 +2,7 @@ import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'
 
 import { ClockType, IStageClock, Stage, IChessStageClockState } from '../interfaces'
-
-const CLOCK_TICK_STEP = 100
-const MINUTE_MILLIS = 60 * 1000
+import { CLOCK_TICK_STEP, MINUTE_MILLIS} from '../utils'
 
 export default function StageClock(stages: Stage[], increment: number, onFlag: (color: Color) => void, soundOn: boolean): IStageClock {
   let state: IChessStageClockState = {

@@ -5,9 +5,7 @@ import BronsteinClock from '../shared/clock/clocks/BronsteinClock'
 import HourglassClock from '../shared/clock/clocks/HourglassClock'
 import StageClock from '../shared/clock/clocks/StageClock'
 import { noop } from '../../utils'
-
-const MILLIS = 1000
-const MINUTE_MILLIS = 60 * 1000
+import { MILLIS, MINUTE_MILLIS } from '../shared/clock/utils'
 
 function SimpleClock(time: number, onFlag: () => void) {
   return IncrementClock(time, 0, onFlag)

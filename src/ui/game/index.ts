@@ -16,11 +16,12 @@ import { emptyFen } from '../../utils/fen'
 import roundView from '../shared/round/view/roundView'
 import gamesMenu from '../gamesMenu'
 import layout from '../layout'
-import { connectingHeader, viewOnlyBoardContent } from '../shared/common'
+import { connectingHeader, viewOnlyBoardContent, loadingBackbutton } from '../shared/common'
 
 interface Attrs {
   id: string
   color: Color
+  goingBack?: string
 }
 
 interface State {
@@ -32,6 +33,7 @@ const GameScreen: Mithril.Component<Attrs, State> = {
     let gameData: OnlineGameData
 
     if (hasNetwork()) {
+      const now = performance.now()
       gameXhr(vnode.attrs.id, vnode.attrs.color)
       .then(data => {
         gameData = data
@@ -55,7 +57,12 @@ const GameScreen: Mithril.Component<Attrs, State> = {
             }
           }
 
-          this.round = new OnlineRound(vnode.attrs.id, data)
+          const elapsed = performance.now() - now
+
+          setTimeout(() => {
+            this.round = new OnlineRound(vnode.attrs.id, data)
+          }, Math.max(400 - elapsed, 0))
+
           gamesMenu.resetLastJoined()
 
           if (data.player.user === undefined) {
@@ -69,7 +76,6 @@ const GameScreen: Mithril.Component<Attrs, State> = {
               saveOfflineGameData(vnode.attrs.id, gameData)
             }
           }
-
         }
       })
       .catch(error => {
@@ -124,7 +130,10 @@ const GameScreen: Mithril.Component<Attrs, State> = {
         board = () => viewOnlyBoardContent(emptyFen, 'white')
     }
 
-    return layout.board(connectingHeader, board)
+    return layout.board(
+      attrs.goingBack ? loadingBackbutton : connectingHeader,
+      board
+    )
   }
 }
 

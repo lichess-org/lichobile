@@ -20,8 +20,7 @@ export default function view(ctrl: Editor) {
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessground: ctrl.chessground,
-    bounds,
-    isPortrait: helper.isPortrait()
+    bounds
   })
 
   function content() {

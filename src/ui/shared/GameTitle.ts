@@ -27,7 +27,7 @@ export default {
     const { data, subTitle, kidMode } = attrs
     const icon = data.game.source === 'import' ? '/' :
     utils.gameIcon(data.game.perf || data.game.variant.key)
-    const text = gameApi.title(data)
+    const title = gameApi.title(data)
 
     let subEls: Mithril.Children = null
     if (subTitle === 'players') {
@@ -58,15 +58,24 @@ export default {
       }
     }
     else if (subTitle === 'tournament' && isGameData(data) && data.tournament) {
-      subEls = [
-        h('span.fa.fa-trophy'),
-        data.tournament.secondsToFinish ?
-          h(CountdownTimer, { seconds: data.tournament.secondsToFinish }) :
+      const ttime = data.tournament.secondsToFinish
+      if (ttime) {
+        subEls = [
+          h('span.fa.fa-trophy'),
+          h(CountdownTimer, { seconds: ttime }),
+          h('span', ' • ' + data.tournament.name)
+        ]
+      }
+      else {
+        subEls = [
+          h('span.fa.fa-trophy'),
           h('span', [
             data.tournament.name,
-            data.game.createdAt ? (' (' + window.moment(data.game.createdAt).calendar() + ')') : null
+            data.game.createdAt ?
+              (' (' + window.moment(data.game.createdAt).calendar() + ')') : null
           ])
-      ]
+        ]
+      }
     }
 
     return h('div.main_header_title', {
@@ -75,7 +84,7 @@ export default {
       h('h1.header-gameTitle', [
         kidMode ? h('span.kiddo', '😊') : null,
         h('span.withIcon', { 'data-icon': icon }),
-        h('span', text)
+        h('span', title)
       ]),
       subEls ? h('h2.header-subTitle', subEls) : null
     ])

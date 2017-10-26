@@ -1,9 +1,9 @@
+import * as h from 'mithril/hyperscript'
 import * as Zanimo from 'zanimo'
+import * as utils from '../../utils'
 import redraw from '../../utils/redraw'
 import router from '../../router'
-import * as utils from '../../utils'
 import ButtonHandler from './button'
-import * as h from 'mithril/hyperscript'
 import { UserGamePlayer } from '../../lichess/interfaces/user'
 import { Player } from '../../lichess/interfaces/game'
 
@@ -379,9 +379,9 @@ export function onKeyboardHide(): void {
 
 export function renderRatingDiff(player: Player | UserGamePlayer): Mithril.Children {
   if (player.ratingDiff === undefined) return null
-  if (player.ratingDiff === 0) return <span className="rp null"> +0</span>
-  if (player.ratingDiff > 0) return <span className="rp up"> +{player.ratingDiff}</span>
-  if (player.ratingDiff < 0) return <span className="rp down"> {player.ratingDiff}</span>
+  if (player.ratingDiff === 0) return h('span.rp.null', ' +0')
+  if (player.ratingDiff > 0) return h('span.rp.up', ' +' + player.ratingDiff)
+  if (player.ratingDiff < 0) return h('span.rp.down', ' ' + player.ratingDiff)
 
   return null
 }

@@ -10,7 +10,6 @@ import AnalyseCtrl from '../AnalyseCtrl'
 
 export default function renderBoard(
   ctrl: AnalyseCtrl,
-  isPortrait: boolean,
   bounds: ClientRect,
   availTabs: Tab[]
 ) {
@@ -47,7 +46,6 @@ export default function renderBoard(
     variant: ctrl.data.game.variant.key,
     chessground: ctrl.chessground,
     bounds,
-    isPortrait,
     shapes,
     wrapperClasses: ctrl.settings.s.smallBoard ? 'halfsize' : ''
   })

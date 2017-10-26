@@ -507,7 +507,7 @@ export default class AnalyseCtrl {
       checkCount: situation.checkCount,
       san: situation.pgnMoves[0],
       crazyhouse: situation.crazyhouse,
-      pgnMoves: curNode && curNode.pgnMoves ? curNode.pgnMoves.concat(situation.pgnMoves) : undefined
+      pgnMoves: curNode && curNode.pgnMoves ? curNode.pgnMoves.concat(situation.pgnMoves) : situation.pgnMoves
     }
     if (path === undefined) {
       console.error('Cannot addNode, missing path', node)

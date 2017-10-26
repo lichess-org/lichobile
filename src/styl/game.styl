@@ -11,6 +11,7 @@
     font-size 0.8em
 
 .playTable
+  position relative
   height "calc((100% - 100vw - %s) / 2)" % footerHeight
   padding 0 10px
   display flex
@@ -32,6 +33,31 @@
         order 2
       > .pocket
         order 1
+
+.round-expiration
+  position: absolute;
+  left: 0
+  width: 100%
+  text-align: center
+  font-size 0.9em
+  color: #fff
+  z-index: 50
+  &.player
+    top: 0
+  &.opponent
+    bottom 0
+  > .countdown-timer
+    padding: 5px
+    font-weight normal
+    font-family inherit
+    display block
+    height 100%
+    width 100%
+    background: rgba(#b3b3b3, 0.8)
+    > strong
+      font-family Cousine
+    &.emerg
+      background: rgba(#dc322f, 0.8)
 
 .replay
   flex 0 0 auto
@@ -104,6 +130,11 @@
     display flex
     height 18px
     margin-top 2px
+  &.zen
+    > .antagonistUser
+      visibility hidden
+    > .ratingAndMaterial
+      visibility hidden
   &.active
     background-color lighten(bgdark, 8%)
   &.offline
@@ -183,22 +214,18 @@
     opacity 0.15
   > tens
     font-size 0.8em
-  &.berserk
-    color #e35d5b
   &.running
     background-color #505a60
     color #fff
+  &.berserk
+    color #e35d5b
   &.emerg
     background-color #a00000
     color #d0d0d0
     &.running
       color #fff
   &.correspondence
-    font-family 'Noto Sans'
-    font-size 18px
-    background-color inherit
-    &.running
-      color lighten(gold, 15%)
+    font-size 20px
     &.offline
       color #8c8c8c
   @media only screen and (min-width: 600px)
@@ -356,7 +383,7 @@
     font-size 0.9em
 
 .submitMovePopup
-  background-color rgba(0,0,0,0.4)
+  background-color rgba(0,0,0,0.1)
   > .overlay_popup
     position absolute
     left 7.5%
@@ -364,22 +391,20 @@
     @media only screen and (orientation: landscape)
       top calc((100vh - 70px) / 2)
       left initial
-      right 1rem
-      width 'calc(100vw - 100vh + %s - 5vw)' % headerHeight
+      right 1vw
+      width 'calc(100vw - 100vh + %s - 2vw)' % headerHeight
     @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
-      left initial
-      right 1rem
-      width 'calc(100vw - 100vh + %s + 12vh - 5vw)' % headerHeight
+      width 'calc(100vw - 100vh + %s + 12vh - 2vw)' % headerHeight
     // tablets
-    @media only screen and (min-width 500px)
+    @media only screen and (orientation portrait) and (min-width 500px)
       left 20%
-    @media only screen and (min-width 600px)
+    @media only screen and (orientation portrait) and (min-width 600px)
       left 22.5%
-    @media only screen and (min-width 700px)
+    @media only screen and (orientation portrait) and (min-width 700px)
       left 25%
-    @media only screen and (min-width 800px)
+    @media only screen and (orientation portrait) and (min-width 800px)
       left 27.5%
-    @media only screen and (min-width 900px)
+    @media only screen and (orientation portrait) and (min-width 900px)
       left 30%
     border-radius 5px
     button
@@ -475,12 +500,6 @@
     background transpWhite05
   .clock
     color rgba(#8c8c8c, 0.6)
-    &.correspondence
-      background transparent
-      text-shadow 0 1px 1px rgba(0,0,0,0.5)
-      color rgba(#ccc, 0.8)
-      &.running
-        color #fff
     &.running
       color #fff
     &.emerg

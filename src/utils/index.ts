@@ -189,15 +189,22 @@ export function pad(num: number, size: number): string {
     return s
 }
 
-export function formatTimeInSecs(seconds: number): string {
+export function formatTimeInSecs(
+  seconds: number,
+  format: 'hour_min_secs' | 'secs_only' = 'hour_min_secs'
+): string {
   let timeStr = ''
   const hours = Math.floor(seconds / 60 / 60)
   const mins = Math.floor(seconds / 60) - (hours * 60)
   const secs = seconds % 60
-  if (hours > 0) {
-    timeStr = hours + ':' + pad(mins, 2) + ':' + pad(secs, 2)
+  if (format === 'hour_min_secs') {
+    if (hours > 0) {
+      timeStr = hours + ':' + pad(mins, 2) + ':' + pad(secs, 2)
+    } else {
+      timeStr = mins + ':' + pad(secs, 2)
+    }
   } else {
-    timeStr = mins + ':' + pad(secs, 2)
+    timeStr = pad(secs, 2)
   }
 
   return timeStr

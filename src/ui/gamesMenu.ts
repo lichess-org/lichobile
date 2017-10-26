@@ -54,29 +54,24 @@ export default {
     const wrapperStyle = helper.isWideScreen() ? {} : { top: ((vh - cDim.h) / 2) + 'px' }
     const wrapperClass = helper.isWideScreen() ? 'overlay_popup' : ''
 
-    return (
-      <div id="games_menu" className="overlay_popup_wrapper"
-        onbeforeremove={menuOnBeforeRemove}
-      >
-        <div className="wrapper_overlay_close"
-          oncreate={menuOnOverlayTap}
-        />
-        <div id="wrapper_games" className={wrapperClass} style={wrapperStyle}
-          oncreate={wrapperOnCreate} onupdate={wrapperOnUpdate} onremove={wrapperOnRemove}>
-          {helper.isWideScreen() ? (
-            <header>
-            {i18n('nbGamesInPlay', session.nowPlaying().length)}
-            </header>
-          ) : null
-          }
-          {helper.isWideScreen() ?
-            <div className="popup_content">
-              {renderAllGames()}
-            </div> : renderAllGames(cDim)
-          }
-        </div>
-      </div>
-    )
+    return h('div#games_menu.overlay_popup_wrapper', {
+      onbeforeremove: menuOnBeforeRemove
+    }, [
+      h('div.wrapper_overlay_close', { oncreate: menuOnOverlayTap }),
+      h('div#wrapper_games', {
+        className: wrapperClass,
+        style: wrapperStyle,
+        oncreate: wrapperOnCreate,
+        onupdate: wrapperOnUpdate,
+        onremove: wrapperOnRemove
+      }, [
+        helper.isWideScreen() ? h('header',
+          i18n('nbGamesInPlay', session.nowPlaying().length)
+        ) : null,
+        helper.isWideScreen() ? h('div.popup_content', renderAllGames()) :
+          renderAllGames(cDim)
+      ])
+    ])
   }
 }
 
@@ -120,6 +115,7 @@ function wrapperOnUpdate({ dom }: Mithril.DOMNode) {
 
 function open() {
   router.backbutton.stack.push(close)
+  session.refresh()
   isOpen = true
   setTimeout(() => {
     if (scroller) scroller.goToPage(1, 0)
@@ -183,10 +179,8 @@ function cardDims(): CardDim {
 function renderViewOnlyBoard(fen: string, orientation: Color, cDim?: CardDim, lastMove?: string, variant?: VariantKey) {
   const style = cDim ? { height: cDim.innerW + 'px' } : {}
   const bounds = cDim ? { width: cDim.innerW, height: cDim.innerW } : undefined
-  return (
-    <div className="boardWrapper" style={style}>
-      {h(ViewOnlyBoard, { bounds, fen, lastMove, orientation, variant })}
-    </div>
+  return h('div.boardWrapper', { style },
+    h(ViewOnlyBoard, { bounds, fen, lastMove, orientation, variant })
   )
 }
 
@@ -238,23 +232,24 @@ function renderGame(g: NowPlayingGame, cDim: CardDim | undefined, cardStyle: Obj
     helper.ontapY(() => joinGame(g)) :
     helper.ontapX(() => joinGame(g))
 
-  return (
-    <div className={cardClass} key={'game.' + g.gameId} style={cardStyle}
-      oncreate={oncreate}
-    >
-      {renderViewOnlyBoard(g.fen, g.color, cDim, g.lastMove, g.variant.key)}
-      <div className="infos">
-        <div className="icon-game" data-icon={icon ? icon : ''} />
-        <div className="description">
-          <h2 className="title">{playerName}</h2>
-          <p>
-            <span className="variant">{g.variant.name}</span>
-            <span className={timeClass}>{timeLeft(g)}</span>
-          </p>
-        </div>
-      </div>
-    </div>
-  )
+  return h('div', {
+    className: cardClass,
+    key: 'game.' + g.gameId,
+    style: cardStyle,
+    oncreate
+  }, [
+    renderViewOnlyBoard(g.fen, g.color, cDim, g.lastMove, g.variant.key),
+    h('div.infos', [
+      h('div.icon-game', { 'data-icon': icon || '' }),
+      h('div.description', [
+        h('h2.title', playerName),
+        h('p', [
+          h('span.variant', g.variant.name),
+          h('span', { className: timeClass }, timeLeft(g))
+        ])
+      ])
+    ])
+  ])
 }
 
 function renderIncomingChallenge(c: Challenge, cDim: CardDim | undefined, cardStyle: Object) {
@@ -267,31 +262,31 @@ function renderIncomingChallenge(c: Challenge, cDim: CardDim | undefined, cardSt
   const mark = c.challenger.provisional ? '?' : ''
   const playerName = `${c.challenger.id} (${c.challenger.rating}${mark})`
 
-  return (
-    <div className="card standard challenge" style={cardStyle}>
-      {renderViewOnlyBoard(c.initialFen || standardFen, 'white', cDim, undefined, c.variant.key)}
-      <div className="infos">
-        <div className="icon-game" data-icon={c.perf.icon}></div>
-        <div className="description">
-          <h2 className="title">{i18n('playerisInvitingYou', playerName)}</h2>
-          <p className="variant">
-            <span className="variantName">{i18n('toATypeGame', c.variant.name)}</span>
-            <span className="time-indication" data-icon="p">{timeAndMode}</span>
-          </p>
-        </div>
-        <div className="actions">
-          <button oncreate={helper.ontapX(() => acceptChallenge(c.id))}>
-            {i18n('accept')}
-          </button>
-          <button oncreate={helper.ontapX(
+  return h('div.card.standard.challenge', { style: cardStyle }, [
+    renderViewOnlyBoard(c.initialFen || standardFen, 'white', cDim, undefined, c.variant.key),
+    h('div.infos', [
+      h('div.icon-game', { 'data-icon': c.perf.icon }),
+      h('div.description', [
+        h('h2.title', i18n('playerisInvitingYou', playerName)),
+        h('p.variant', [
+          h('span.variantName', i18n('toATypeGame', c.variant.name)),
+          h('span.time-indication[data-icon=p]', timeAndMode)
+        ])
+      ]),
+      h('div.actions', [
+        h('button', { oncreate: helper.ontapX(() => acceptChallenge(c.id)) },
+          i18n('accept')
+        ),
+        h('button', {
+          oncreate: helper.ontapX(
             helper.fadesOut(() => declineChallenge(c.id), '.card', 250)
-          )}>
-            {i18n('decline')}
-          </button>
-        </div>
-      </div>
-    </div>
-  )
+          )
+        },
+          i18n('decline')
+        )
+      ])
+    ])
+  ])
 }
 
 function renderAllGames(cDim?: CardDim) {
@@ -337,26 +332,25 @@ function renderAllGames(cDim?: CardDim) {
   }
 
   if (!helper.isWideScreen()) {
-    const newGameCard = (
-      <div className="card standard" key="game.new-game" style={cardStyle}
-        oncreate={helper.ontapX(() => {
-          close()
-          newGameForm.open()
-        })}
-      >
-        {renderViewOnlyBoard(standardFen, 'white', cDim)}
-        <div className="infos">
-          <div className="description">
-            <h2 className="title">{i18n('createAGame')}</h2>
-            <p>{i18n('newOpponent')}</p>
-          </div>
-        </div>
-      </div>
-    )
+    const newGameCard = h('div.card.standard', {
+      key: 'game.new-game',
+      style: cardStyle,
+      oncreate: helper.ontapX(() => {
+        close()
+        newGameForm.open()
+      })
+    }, [
+      renderViewOnlyBoard(standardFen, 'white', cDim),
+      h('div.infos', [
+        h('div.description', [
+          h('h2.title', i18n('createAGame')),
+          h('p', i18n('newOpponent'))
+        ])
+      ])
+    ])
 
     allCards.unshift(newGameCard)
   }
 
   return h('div#all_games', { style: wrapperStyle }, allCards)
 }
-

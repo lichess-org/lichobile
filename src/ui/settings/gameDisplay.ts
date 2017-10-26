@@ -19,8 +19,12 @@ function renderBody() {
       h('li.list_item', formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations',
         settings.game.pieceDestinations)),
       h('li.list_item', formWidgets.renderCheckbox('Use piece symbols in move list', 'pieceNotation',
-        settings.game.pieceNotation))
-    ])
+        settings.game.pieceNotation)),
+      h('li.list_item', [
+        formWidgets.renderCheckbox('Zen Mode', 'zenMode', settings.game.zenMode),
+        h('small', 'Players name and rating are hidden during game')
+      ])
+   ])
   ]
 }
 

@@ -2,15 +2,18 @@ import * as merge from 'lodash/merge'
 import chess from './chess'
 import puzzle from './puzzle'
 import { oppositeColor } from '../../utils'
+import { PuzzleData } from '../../lichess/interfaces/training'
 
-export default function(cfg) {
+import { Data } from './interfaces'
+
+export default function(cfg: PuzzleData): Data {
 
   const sit = chess.make(cfg.puzzle.fen)
 
   const defaults = {
     game: {
       variant: {
-        key: 'standard'
+        key: 'standard' as VariantKey
       }
     },
     player: {
@@ -29,7 +32,7 @@ export default function(cfg) {
     chess: sit
   }
 
-  cfg.puzzle.initialMove = puzzle.str2move(cfg.puzzle.initialMove)
+  cfg.puzzle.initialMove = puzzle.str2move(cfg.puzzle.initialMove) as KeyPair
 
   return merge({}, defaults, cfg)
 }

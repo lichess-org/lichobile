@@ -16,6 +16,7 @@ import layout from '../../../layout'
 import * as helper from '../../../helper'
 import { backButton, menuButton, loader, headerBtns, miniUser } from '../../../shared/common'
 import GameTitle from '../../../shared/GameTitle'
+import CountdownTimer from '../../../shared/CountdownTimer'
 import Board from '../../../shared/Board'
 import popupWidget from '../../../shared/popup'
 import Clock from '../clock/clockView'
@@ -62,6 +63,7 @@ export function renderMaterial(material: Material) {
 
 function renderTitle(ctrl: OnlineRound) {
   const data = ctrl.data
+  const tournament = ctrl.data.tournament
   if (ctrl.vm.offlineWatcher || socket.isConnected()) {
     const isCorres = !data.player.spectator && data.game.speed === 'correspondence'
     if (ctrl.data.tv) {
@@ -77,7 +79,14 @@ function renderTitle(ctrl: OnlineRound) {
         key: 'user-tv'
       }, [
         h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), ctrl.data.userTV]),
-        h('h2.header-subTitle', [h(`span.withIcon[data-icon=${utils.gameIcon(ctrl.data.game.perf)}]`), gameApi.title(ctrl.data)])
+        h('h2.header-subTitle', tournament ? [
+          h('span.fa.fa-trophy'),
+          h(CountdownTimer, { seconds: tournament.secondsToFinish || 0 }),
+          h('span', ' • ' + tournament.name)
+        ] : [
+          h(`span.withIcon[data-icon=${utils.gameIcon(ctrl.data.game.perf)}]`),
+          gameApi.title(ctrl.data)
+        ])
       ])
     }
     else {
@@ -85,7 +94,7 @@ function renderTitle(ctrl: OnlineRound) {
         key: 'playing-title',
         data: ctrl.data,
         kidMode: session.isKidMode(),
-        subTitle: ctrl.data.tournament ? 'tournament' : isCorres ? 'corres' : 'date'
+        subTitle: tournament ? 'tournament' : isCorres ? 'corres' : 'date'
       })
     }
   } else {
@@ -122,15 +131,11 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait)
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait)
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game')
-  const tournament = ctrl.data.tournament
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessground: ctrl.chessground,
-    bounds,
-    isPortrait,
-    alert: !!tournament && tournament.nbSecondsForFirstMove && !ctrl.data.player.spectator && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
-      i18n('youHaveNbSecondsToMakeYourFirstMove', tournament.nbSecondsForFirstMove) : undefined
+    bounds
   })
 
   const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
@@ -155,6 +160,22 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
       </section>
     ])
   }
+}
+
+function renderExpiration(ctrl: OnlineRound, position: Position, myTurn: boolean) {
+  const d = ctrl.data.expiration
+  if (!d) return null
+  const timeLeft = Math.max(0, d.movedAt - Date.now() + d.millisToMove)
+
+  return h('div.round-expiration', {
+    className: position
+  }, h(CountdownTimer, {
+      seconds: Math.round(timeLeft / 1000),
+      emergTime: myTurn ? 8 : undefined,
+      textWrap: (t: string) => `<strong>${t}</strong> seconds to play the first move`,
+      showOnlySecs: true
+    })
+  )
 }
 
 function getChecksCount(ctrl: OnlineRound, color: Color) {
@@ -213,8 +234,11 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
   const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
     '#' + ctrl.data.tournament.ranks[player.color] + ' ' : null
 
+  const isZen = settings.game.zenMode() && !ctrl.data.player.spectator &&
+    !(gameStatusApi.finished(ctrl.data) || gameStatusApi.aborted(ctrl.data))
+
   return (
-    <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '')} oncreate={vConf}>
+    <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '') + (isZen ? ' zen' : '')} oncreate={vConf}>
       <h2 className="antagonistUser">
         { user && user.patron ?
           <span className={'patron status ' + (player.onGame ? 'ongame' : 'offgame')} data-icon="" />
@@ -259,6 +283,8 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : undefined
   const step = ctrl.plyStep(ctrl.vm.ply)
   const isCrazy = !!step.crazy
+  const playable = gameApi.playable(ctrl.data)
+  const myTurn = gameApi.isPlayerTurn(ctrl.data)
 
   return (
     <section className={'playTable' + (isCrazy ? ' crazy' : '')}>
@@ -277,6 +303,9 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
           ) : null
+      }
+      { playable && (myTurn && position === 'player' || !myTurn && position === 'opponent') ?
+        renderExpiration(ctrl, position, myTurn) : null
       }
     </section>
   )

@@ -9,11 +9,9 @@
 .table
   flex 1 1 auto
   @media only screen and (orientation landscape)
-    width 'calc(100vw - 100vh + %s)' % headerHeight
     height 100%
   @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
     margin auto 0
-    width 'calc(100vw - 100vh + %s + 12vh)' % headerHeight
     height 'calc(100vh - %s - 12vh)' % headerHeight
 
 .game_board_wrapper, .board_wrapper

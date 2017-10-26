@@ -1,4 +1,7 @@
 declare type Timestamp = number
+declare type Seconds = number
+declare type Centis = number
+declare type Millis = number
 
 declare type StringMap = {
   [i: string]: string
@@ -7,6 +10,8 @@ declare type StringMap = {
 declare type SanChar = 'P' | 'N' | 'B' | 'R' | 'Q'
 
 declare type Color = 'white' | 'black'
+
+declare type ColorMap<T> = { [C in Color]: T }
 
 declare type VariantKey = 'standard' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse'
 

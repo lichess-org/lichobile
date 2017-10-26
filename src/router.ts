@@ -29,11 +29,11 @@ export function defineRoutes(mountPoint: HTMLElement, routes: {[index: string]: 
     router.add(route, function onRouteMatch({ params }) {
 
       const RouteComponent = {view() {
-        return Vnode(component, undefined, params, undefined, undefined, undefined)
+        return Vnode(component, undefined, params)
       }}
 
       function redraw() {
-        RenderService.render(mountPoint, Vnode(RouteComponent, undefined, undefined, undefined, undefined, undefined))
+        RenderService.render(mountPoint, Vnode(RouteComponent))
       }
 
       signals.redraw.removeAll()
@@ -111,7 +111,7 @@ const backbutton = (() => {
 
 })()
 
-function set(path: string, replace = false) {
+function doSet(path: string, replace = false) {
   // reset backbutton stack when changing route
   backbutton.stack = []
   if (replace) {
@@ -126,6 +126,14 @@ function set(path: string, replace = false) {
   }
   const matched = router.run(path)
   if (!matched) router.run('/')
+}
+
+// sync call to router.set must be avoided in any `oninit` mithril component
+// otherwise it makes mithril create another root component on top of the
+// existing one
+// making router.set async makes it safe everywhere
+function set(path: string, replace = false): void {
+  setTimeout(() => doSet(path, replace), 0)
 }
 
 function get(): string {
@@ -143,12 +151,9 @@ function backHistory(): void {
 
 export default {
   get,
-  // sync call to router.set must be avoided in any `oninit` mithril component
-  // otherwise it makes mithril create another root component on top of the
-  // existing one
-  // making router.set async makes it safe everywhere
-  set(path: string, replace = false) {
-    setTimeout(() => set(path, replace), 0)
+  set,
+  reload(): void {
+    set(get(), true)
   },
   replaceState,
   setStateParams,

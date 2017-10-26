@@ -1,17 +1,27 @@
+import * as h from 'mithril/hyperscript'
 import { select } from 'd3-selection'
 import { scaleLinear } from 'd3-scale'
 import { area as d3Area } from 'd3-shape'
 import { axisLeft } from 'd3-axis'
 import i18n from '../../i18n'
+import router from '../../router'
+import { UserData as PuzzleUserData } from '../../lichess/interfaces/training'
 import loginModal from '../loginModal'
 import popupWidget from '../shared/popup'
-import router from '../../router'
 import * as helper from '../helper'
-import * as h from 'mithril/hyperscript'
+
+import TrainingCtrl from './TrainingCtrl'
+
+export interface IMenuCtrl {
+  open: () => void
+  close: () => void
+  isOpen: () => boolean
+  root: TrainingCtrl
+}
 
 export default {
 
-  controller: function(root) {
+  controller(root: TrainingCtrl): IMenuCtrl {
     let isOpen = false
 
     function open() {
@@ -19,49 +29,39 @@ export default {
       isOpen = true
     }
 
-    function close(fromBB) {
+    function close(fromBB?: string) {
       if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
       isOpen = false
     }
 
     return {
-      open: open,
-      close: close,
-      isOpen: function() {
-        return isOpen
-      },
+      open,
+      close,
+      isOpen: () => isOpen,
       root
     }
   },
 
-  view: function(ctrl) {
+  view(ctrl: IMenuCtrl) {
     return popupWidget(
       'trainingMenu',
-      null,
-      renderTrainingMenu.bind(undefined, ctrl.root),
+      undefined,
+      () => renderTrainingMenu(ctrl.root),
       ctrl.isOpen(),
       ctrl.close
     )
   }
 }
 
-export function renderUserInfos(ctrl) {
-  const { vw } = helper.viewportDim()
-  const width = vw * 0.85
-  const height = 200
-  return [
-    h('p.trainingRatingHeader', h.trust(i18n('yourPuzzleRatingX', `<strong>${ctrl.data.user.rating}</strong>`))),
-    ctrl.data.user.history ? h('svg#training-graph', {
-      width,
-      height,
-      oncreate() {
-        drawChart(ctrl)
-      }
-    }) : null
-  ]
+function renderTrainingMenu(ctrl: TrainingCtrl) {
+  if (ctrl.data && ctrl.data.user) {
+    return renderUserInfos(ctrl.data.user)
+  } else {
+    return renderSigninBox()
+  }
 }
 
-export function renderSigninBox() {
+function renderSigninBox() {
   return h('div.trainingMenuContent', [
     h('p', i18n('toTrackYourProgress')),
     h('p',
@@ -73,12 +73,52 @@ export function renderSigninBox() {
   ])
 }
 
-function drawChart(ctrl) {
-  const history = Array.from(ctrl.data.user.history);
-  history.push(ctrl.data.user.rating);
+function renderUserInfos(user: PuzzleUserData) {
+  const { vw } = helper.viewportDim()
+  let width: number
+  // see overlay-popup.styl for popup width
+  if (vw >= 900) width = vw * 0.4
+  else if (vw >= 800) width = vw * 0.45
+  else if (vw >= 700) width = vw * 0.5
+  else if (vw >= 600) width = vw * 0.55
+  else if (vw >= 500) width = vw * 0.6
+  else width = vw * 0.85
+  const height = 200
+  return [
+    h('p.trainingRatingHeader', h.trust(i18n('yourPuzzleRatingX', `<strong>${user.rating}</strong>`))),
+    user.history ? h('svg#training-graph', {
+      width,
+      height,
+      oncreate() {
+        drawChart(user)
+      }
+    }) : null,
+    renderRecent(user)
+  ]
+}
+
+function onRecentTap(e: TouchEvent) {
+  const button = helper.getButton(e)
+  const id = button && (button.dataset as DOMStringMap).id
+  if (id) router.set(`/training/${id}`, true)
+}
+
+function renderRecent(user: PuzzleUserData) {
+  return h('div.puzzle-recents', {
+    oncreate: helper.ontapY(onRecentTap, undefined, helper.getButton)
+  }, user.recent.map(([id, diff]) => h('button', {
+      'data-id': id,
+      className: diff > 0 ? 'up' : 'down'
+    }, (diff > 0 ? '+' : '') + diff))
+  )
+}
+
+function drawChart(user: PuzzleUserData) {
+  const history = Array.from(user.history)
+  history.push(user.rating)
   const data = history.map((x, i) => [i + 1, x])
   const graph = select('#training-graph')
-  const margin = {top: 0, right: 20, bottom: 15, left: 35}
+  const margin = {top: 5, right: 20, bottom: 5, left: 35}
   const width = +graph.attr('width') - margin.left - margin.right
   const height = +graph.attr('height') - margin.top - margin.bottom
   const g = graph.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
@@ -129,12 +169,4 @@ function drawChart(ctrl) {
   g.append('path')
   .attr('class', 'line')
   .attr('d', line)
-}
-
-function renderTrainingMenu(ctrl) {
-  if (ctrl.data && ctrl.data.user) {
-    return renderUserInfos(ctrl)
-  } else {
-    return renderSigninBox()
-  }
 }

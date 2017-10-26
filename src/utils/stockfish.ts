@@ -5,7 +5,7 @@ interface XNavigator extends Navigator {
 }
 
 export function send(text: string) {
-  console.info('[stockfish <<]', text)
+  console.debug('[stockfish <<]', text)
   return Stockfish.cmd(text)
 }
 

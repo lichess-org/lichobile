@@ -4,6 +4,7 @@ import DelayClock from '../shared/clock/clocks/DelayClock'
 import BronsteinClock from '../shared/clock/clocks/BronsteinClock'
 import HourglassClock from '../shared/clock/clocks/HourglassClock'
 import StageClock from '../shared/clock/clocks/StageClock'
+import { noop } from '../../utils'
 
 const MILLIS = 1000
 const MINUTE_MILLIS = 60 * 1000
@@ -21,13 +22,13 @@ export default {
 
   simple: () => SimpleClock(
     Number(settings.clock.simple.time()) * MINUTE_MILLIS,
-    () => {}
+    noop
   ),
 
   increment: () => IncrementClock(
     Number(settings.clock.increment.time()) * MINUTE_MILLIS,
     Number(settings.clock.increment.increment()) * MILLIS,
-    () => {}
+    noop
   ),
 
   handicapInc: () => HandicapIncClock(
@@ -35,27 +36,27 @@ export default {
     Number(settings.clock.handicapInc.topIncrement()) * MILLIS,
     Number(settings.clock.handicapInc.bottomTime()) * MINUTE_MILLIS,
     Number(settings.clock.handicapInc.bottomIncrement()) * MILLIS,
-    () => {},
+    noop,
     true
   ),
 
   delay: () => DelayClock(
     Number(settings.clock.delay.time()) * MINUTE_MILLIS,
     Number(settings.clock.delay.increment()) * MILLIS,
-    () => { },
+    noop,
     true
   ),
 
   bronstein: () => BronsteinClock(
     Number(settings.clock.bronstein.time()) * MINUTE_MILLIS,
     Number(settings.clock.bronstein.increment()) * MILLIS,
-    () => { },
+    noop,
     true
   ),
 
   hourglass: () => HourglassClock(
     Number(settings.clock.hourglass.time()) * MINUTE_MILLIS,
-    () => { },
+    noop,
     true
   ),
 
@@ -67,7 +68,7 @@ export default {
       }
     }),
     Number(settings.clock.stage.increment()) * MILLIS,
-    () => { },
+    noop,
     true
   )
 }

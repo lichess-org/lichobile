@@ -145,7 +145,7 @@ export default class AnalyseCtrl {
       socket.createDefault()
     }
 
-    this.updateGround()
+    this.updateBoard()
 
     if (this.currentTab(this.availableTabs()).id === 'explorer') {
       this.debouncedExplorerSetStep()
@@ -292,7 +292,7 @@ export default class AnalyseCtrl {
   jump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
     const pathChanged = path !== this.path
     this.setPath(path)
-    this.updateGround()
+    this.updateBoard()
     this.fetchOpening()
     if (this.node && this.node.san && direction === 'forward') {
       if (this.node.san.indexOf('x') !== -1) sound.throttledCapture()
@@ -563,7 +563,7 @@ export default class AnalyseCtrl {
 
   private debouncedStartCeval = debounce(this.startCeval, 800)
 
-  private updateGround() {
+  private updateBoard() {
     const node = this.node
 
     if (this.data.game.variant.key === 'threeCheck' && !node.checkCount) {
@@ -607,7 +607,7 @@ export default class AnalyseCtrl {
           node.player = situation.player
         })
         if (path === this.path) {
-          this.updateGround()
+          this.updateBoard()
           redraw()
           if (this.gameOver()) this.stopCevalImmediately()
         }

@@ -12,6 +12,7 @@ import socket from '../../socket'
 import settings from '../../settings'
 import { PuzzleData } from '../../lichess/interfaces/training'
 import promotion from '../shared/offlineRound/promotion'
+import { PromotingInterface } from '../shared/round'
 
 import moveTest from './moveTest'
 import makeData from './data'
@@ -20,7 +21,7 @@ import menu, { IMenuCtrl } from './menu'
 import * as xhr from './xhr'
 import { VM, Data, Feedback } from './interfaces'
 
-export default class TrainingCtrl {
+export default class TrainingCtrl implements PromotingInterface {
   data: Data
   tree: TreeWrapper
   menu: IMenuCtrl
@@ -40,16 +41,6 @@ export default class TrainingCtrl {
 
   constructor(cfg: PuzzleData) {
     socket.createDefault()
-
-    this.vm = {
-      mode: 'play',
-      initializing: true,
-      lastFeedback: 'init',
-      moveValidationPending: false,
-      loading: false,
-      canViewSolution: false,
-      resultSent: false
-    }
 
     this.menu = menu.controller(this)
     this.init(cfg)

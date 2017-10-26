@@ -94,7 +94,7 @@ function renderFeedback(ctrl: TrainingCtrl) {
             className: ctrl.pieceTheme
           }, h('piece.king.' + ctrl.data.puzzle.color)),
           h('div.training-instruction', [
-            h('strong', i18n(ctrl.chessground.state.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')),
+            h('strong', i18n('yourTurn')),
             h('p', i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')),
           ])
         ]),
@@ -146,31 +146,22 @@ function renderViewSolution(ctrl: TrainingCtrl) {
   }, i18n('viewTheSolution')) : h('div.buttonPlaceholder', '')
 }
 
-// function renderRatingDiff(diff: number) {
-//   return h('strong.puzzleRatingDiff', diff > 0 ? '+' + diff : diff)
-// }
-
-function renderWin(ctrl: TrainingCtrl) {
-  return [
-    h('div.training-half', [
-      h('div.training-icon.win', '✓'),
-      h('strong', [i18n('victory')])
-    ]),
-    h('div.training-half', renderViewControls(ctrl))
-  ]
-}
-
-function renderLoss(ctrl: TrainingCtrl) {
-  return [
-    h('div.training-half', [
-      h('div.training-icon.loss', '✗'),
-      h('strong', [i18n('puzzleFailed')])
-    ]),
-    h('div.training-half', renderViewControls(ctrl))
-  ]
-}
-
 function renderResult(ctrl: TrainingCtrl) {
-  if (ctrl.vm.lastFeedback === 'win') return renderWin(ctrl)
-  else return renderLoss(ctrl)
+  if (ctrl.vm.lastFeedback === 'win') {
+    return [
+      h('div.training-half', [
+        h('div.training-icon.win', '✓'),
+        h('strong', [i18n('victory')])
+      ]),
+      h('div.training-half', renderViewControls(ctrl))
+    ]
+  }
+  else {
+    return [
+      h('div.training-half', [
+        h('strong', 'Puzzle complete!')
+      ]),
+      h('div.training-half', renderViewControls(ctrl))
+    ]
+  }
 }

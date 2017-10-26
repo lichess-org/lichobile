@@ -43,8 +43,8 @@ export default class TrainingCtrl {
 
     this.vm = {
       mode: 'play',
-      lastFeedback: 'init',
       initializing: true,
+      lastFeedback: 'init',
       moveValidationPending: false,
       loading: false,
       canViewSolution: false,
@@ -64,8 +64,8 @@ export default class TrainingCtrl {
   public init = (cfg: PuzzleData) => {
     this.vm = {
       mode: 'play',
-      lastFeedback: 'init',
       initializing: true,
+      lastFeedback: 'init',
       moveValidationPending: false,
       loading: false,
       canViewSolution: false,
@@ -73,18 +73,24 @@ export default class TrainingCtrl {
     }
 
     this.data = makeData(cfg)
-    this.tree = makeTree(treeOps.reconstruct(this.data.game.treeParts))
+    this.tree = makeTree(treeOps.reconstruct([
+      // make root node with puzzle initial state
+      {
+        fen: this.data.puzzle.fen,
+        ply: this.data.puzzle.initialPly - 1,
+        id: ''
+      },
+      this.data.game.treeParts
+    ]))
     this.initialPath = treePath.fromNodeList(treeOps.mainlineNodeList(this.tree.root))
     this.initialNode = this.tree.nodeAtPath(this.initialPath)
     this.setPath(treePath.init(this.initialPath))
-
     this.updateGround()
 
-    // play initial move
+    // play opponent first move with delay
     setTimeout(() => {
       this.jump(this.initialPath, true)
       this.vm.initializing = false
-      redraw()
     }, 1000)
 
     setTimeout(() => {
@@ -107,7 +113,7 @@ export default class TrainingCtrl {
     const next = this.node.children[0]
     if (next && next.puzzle === 'good') this.userJump(this.path + next.id, true)
     else {
-      const firstGoodPath = treeOps.takePathWhile(this.mainline, function(node) {
+      const firstGoodPath = treeOps.takePathWhile(this.mainline, node => {
         return node.puzzle !== 'good'
       })
       if (firstGoodPath) {
@@ -155,8 +161,6 @@ export default class TrainingCtrl {
   public canGoBackward = () => {
     if (this.vm.moveValidationPending) return false
     if (this.path === '') return false
-    const p = treePath.init(this.path)
-    if (p.length < this.initialPath.length) return false
     return true
   }
 

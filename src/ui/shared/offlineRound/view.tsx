@@ -24,7 +24,7 @@ function getChecksCount(ctrl: OfflineRoundInterface, color: Color) {
     return 0
 }
 
-export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.Children, material: Material, position: Position, isPortrait: boolean, otbFlip?: boolean, customPieceTheme?: string, clock?: IChessClock | null) {
+export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.Children, material: Material, position: Position, isPortrait: boolean, otbFlip?: boolean, customPieceTheme?: string, clock?: IChessClock) {
   const sit = ctrl.replay.situation()
   const isCrazy = !!sit.crazyhouse
   const key = isPortrait ? position + '-portrait' : position + '-landscape'

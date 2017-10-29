@@ -12,6 +12,7 @@ import redraw from '../../utils/redraw'
 import * as utils from '../../utils'
 import { OtbRoundInterface } from '../shared/round'
 import { ClockType } from '../shared/clock/interfaces'
+import { addStage, removeStage } from '../shared/clock/utils'
 
 export interface NewOtbGameCtrl {
   open: () => void
@@ -37,30 +38,13 @@ export default {
       isOpen(false)
     }
 
-    function addStage () {
-      let stages = settings.otb.clock.stage.stages()
-      stages[stages.length - 1].moves = stages[stages.length - 2].moves
-      stages.push({time: stages[stages.length - 1].time, moves: null})
-      settings.otb.clock.stage.stages(stages)
-      redraw()
-    }
-
-    function removeStage () {
-      let stages = settings.otb.clock.stage.stages()
-      if (stages.length <= 2)
-        return
-      stages.pop()
-      settings.otb.clock.stage.stages(stages)
-      redraw()
-    }
-
     return {
       open,
       close,
       isOpen,
       root,
-      addStage,
-      removeStage
+      addStage: () => addStage(settings.otb.clock.stage.stages),
+      removeStage: () => removeStage(settings.otb.clock.stage.stages)
     }
   },
 

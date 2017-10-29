@@ -5,7 +5,7 @@ import popupWidget from '../shared/popup'
 import * as helper from '../helper'
 import router from '../../router'
 import * as utils from '../../utils'
-
+import { addStage, removeStage } from '../shared/clock/utils'
 import { IChessClock, ClockType } from '../shared/clock/interfaces'
 
 interface IClockSettingsCtrl {
@@ -34,23 +34,6 @@ export default {
       isOpen = false
     }
 
-    function addStage () {
-      let stages = settings.clock.stage.stages()
-      stages[stages.length - 1].moves = stages[stages.length - 2].moves
-      stages.push({time: stages[stages.length - 1].time, moves: null})
-      settings.clock.stage.stages(stages)
-      redraw()
-    }
-
-    function removeStage () {
-      let stages = settings.clock.stage.stages()
-      if (stages.length <= 2)
-        return
-      stages.pop()
-      settings.clock.stage.stages(stages)
-      redraw()
-    }
-
     return {
       open,
       close,
@@ -58,8 +41,8 @@ export default {
         return isOpen
       },
       reload,
-      addStage,
-      removeStage
+      addStage: () => addStage(settings.otb.clock.stage.stages),
+      removeStage: () => removeStage(settings.otb.clock.stage.stages)
     }
   },
 

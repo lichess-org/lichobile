@@ -73,10 +73,10 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
         try {
           this.init(saved.data, saved.situations, saved.ply)
         } catch (e) {
-          this.startNewGame(currentVariant)
+          this.startNewGame(currentVariant, undefined, settings.otb.clock.clockType() as ClockType)
         }
       } else {
-        this.startNewGame(currentVariant)
+        this.startNewGame(currentVariant, undefined, settings.otb.clock.clockType() as ClockType)
       }
     }
   }
@@ -120,7 +120,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     redraw()
   }
 
-  public startNewGame(variant: VariantKey, setupFen?: string) {
+  public startNewGame(variant: VariantKey, setupFen?: string, clockType?: ClockType) {
     const payload: InitPayload = {
       variant
     }
@@ -128,8 +128,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
       payload.fen = setupFen
     }
 
-    const clockType = settings.otb.clock.clockType() as ClockType
-    const clock = clockSet[clockType](this.onFlag)
+    const clock = clockType ? clockSet[clockType](this.onFlag) : null
 
     chess.init(payload)
     .then((data: chess.InitResponse) => {

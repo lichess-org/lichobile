@@ -21,6 +21,7 @@ import { setResult } from '../shared/offlineRound'
 import atomic from '../shared/round/atomic'
 import crazyValid from '../shared/round/crazy/crazyValid'
 import { AiRoundInterface, AiVM, PromotingInterface } from '../shared/round'
+import { ClockType } from '../shared/clock/interfaces'
 import Replay from '../shared/offlineRound/Replay'
 
 import actions, { AiActionsCtrl } from './actions'
@@ -126,7 +127,8 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     redraw()
   }
 
-  public startNewGame(variant: VariantKey, setupFen?: string, setupColor?: Color) {
+  // clockType preceded by underscore until we implement AI timed games
+  public startNewGame(variant: VariantKey, setupFen?: string, _clockType?: ClockType, setupColor?: Color) {
     const payload: InitPayload = {
       variant
     }

@@ -105,7 +105,7 @@ export default {
               <div className="popupActionWrapper">
                 <button className="popupAction" data-icon="E"
                   oncreate={helper.ontap(() =>
-                    ctrl.root.startNewGame(settings.otb.variant() as VariantKey, ctrl.root.vm.setupFen))
+                    ctrl.root.startNewGame(settings.otb.variant() as VariantKey, ctrl.root.vm.setupFen, settings.otb.clock.clockType() as ClockType))
                   }>
                   {i18n('play')}
                 </button>

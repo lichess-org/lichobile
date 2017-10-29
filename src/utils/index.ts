@@ -76,12 +76,6 @@ export function handleXhrError(error: ErrorResponse): void {
   else if (data.global && data.global.constructor === Array) {
     message += ` ${i18n(data.global[0])}`
   }
-  else if (data.error && data.error.constructor === Array) {
-    message += ` ${i18n(data.error[0])}`
-  }
-  else if (typeof data.error === 'string') {
-    message += ` ${i18n(data.error)}`
-  }
   window.plugins.toast.show(message, 'short', 'center')
 }
 

@@ -145,7 +145,7 @@ export default class AnalyseCtrl {
       socket.createDefault()
     }
 
-    this.showGround()
+    this.updateBoard()
 
     if (this.currentTab(this.availableTabs()).id === 'explorer') {
       this.debouncedExplorerSetStep()
@@ -292,7 +292,7 @@ export default class AnalyseCtrl {
   jump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
     const pathChanged = path !== this.path
     this.setPath(path)
-    this.showGround()
+    this.updateBoard()
     this.fetchOpening()
     if (this.node && this.node.san && direction === 'forward') {
       if (this.node.san.indexOf('x') !== -1) sound.throttledCapture()
@@ -359,13 +359,13 @@ export default class AnalyseCtrl {
     if (uci[1] === '@') {
       this.chessground.apiNewPiece({
         color: this.chessground.state.movable.color as Color,
-        role: util.sanToRole[uci[0]]
+        role: chessFormat.sanToRole[uci[0]]
       }, move[1])
     } else if (!move[2]) {
       this.sendMove(move[0], move[1])
     }
     else {
-      this.sendMove(move[0], move[1], util.sanToRole[move[2].toUpperCase()])
+      this.sendMove(move[0], move[1], chessFormat.sanToRole[move[2].toUpperCase()])
     }
     this.explorer.loading(true)
   }
@@ -377,18 +377,20 @@ export default class AnalyseCtrl {
     redraw()
   }
 
-  gameOver() {
+  gameOver(): boolean {
     if (!this.node) return false
     // node.end boolean is fetched async for online games (along with the dests)
     if (this.node.end === undefined) {
       if (this.node.check) {
         const san = this.node.san
-        const checkmate = san && san[san.length - 1] === '#'
+        const checkmate = !!(san && san[san.length - 1] === '#')
         return checkmate
       }
     } else {
       return this.node.end
     }
+
+    return false
   }
 
   canUseCeval = () => {
@@ -561,7 +563,7 @@ export default class AnalyseCtrl {
 
   private debouncedStartCeval = debounce(this.startCeval, 800)
 
-  private showGround() {
+  private updateBoard() {
     const node = this.node
 
     if (this.data.game.variant.key === 'threeCheck' && !node.checkCount) {
@@ -569,7 +571,7 @@ export default class AnalyseCtrl {
     }
 
     const color: Color = node.ply % 2 === 0 ? 'white' : 'black'
-    const dests = util.readDests(node.dests)
+    const dests = chessFormat.readDests(node.dests)
     const config = {
       fen: node.fen,
       turnColor: color,
@@ -605,7 +607,7 @@ export default class AnalyseCtrl {
           node.player = situation.player
         })
         if (path === this.path) {
-          this.showGround()
+          this.updateBoard()
           redraw()
           if (this.gameOver()) this.stopCevalImmediately()
         }

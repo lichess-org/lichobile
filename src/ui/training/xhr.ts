@@ -1,9 +1,9 @@
 import router from '../../router'
 import { fetchJSON } from '../../http'
-import { PuzzleData } from '../../lichess/interfaces/training'
+import { PuzzleData, RoundData } from '../../lichess/interfaces/training'
 
-export function attempt(id: number, win: boolean): Promise<PuzzleData> {
-  return fetchJSON(`/training/${id}/attempt`, {
+export function round(id: number, win: boolean): Promise<RoundData> {
+  return fetchJSON(`/training/${id}/round2`, {
     method: 'POST',
     body: JSON.stringify({
       win: win ? 1 : 0

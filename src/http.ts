@@ -3,7 +3,7 @@ import spinner from './spinner'
 import config from './config'
 import { buildQueryString } from './utils/querystring'
 
-export const apiVersion = 2
+export const apiVersion = 3
 
 const baseUrl = config.apiEndPoint
 

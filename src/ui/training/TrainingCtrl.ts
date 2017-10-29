@@ -1,5 +1,6 @@
 import * as last from 'lodash/last'
 import Chessground from '../../chessground/Chessground'
+import { ErrorResponse } from '../../http'
 import router from '../../router'
 import redraw from '../../utils/redraw'
 import signals from '../../signals'
@@ -205,7 +206,7 @@ export default class TrainingCtrl {
     redraw()
   }
 
-  private onXhrError = (res: Error) => {
+  private onXhrError = (res: ErrorResponse) => {
     this.vm.loading = false
     redraw()
     handleXhrError(res)

@@ -1,6 +1,6 @@
 import router from './router'
 import redraw from './utils/redraw'
-import { apiVersion } from './http'
+import { apiVersion, ErrorResponse } from './http'
 import * as xorWith from 'lodash/xorWith'
 import * as isEqual from 'lodash/isEqual'
 import * as cloneDeep from 'lodash/cloneDeep'
@@ -154,8 +154,8 @@ function createGame(
         // websocket is trying to reconnect
         errorDetected = true
         xhr.game(gameUrl.substring(1))
-        .catch(err => {
-          if (err.response && err.response.status === 401) {
+        .catch((err: ErrorResponse) => {
+          if (err.status === 401) {
             window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center')
             router.set('/')
           }

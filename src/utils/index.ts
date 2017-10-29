@@ -1,5 +1,5 @@
 import i18n from '../i18n'
-import { FetchError } from '../http'
+import { ErrorResponse } from '../http'
 import redraw from './redraw'
 import { GameData } from '../lichess/interfaces/game'
 import { TournamentClock } from '../lichess/interfaces/tournament'
@@ -50,60 +50,39 @@ export function hasNetwork(): boolean {
   return window.navigator.connection.type !== Connection.NONE
 }
 
-export function isFetchError(error: Error | FetchError): error is FetchError {
-  return (<FetchError>error).response !== undefined
-}
+export function handleXhrError(error: ErrorResponse): void {
+  const status = error.status
+  const data = error.body
+  let message: string
 
-export function handleXhrError(error: Error | FetchError): void {
-  if (!hasNetwork()) {
-    window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center')
-  } else {
-    if (isFetchError(error)) {
-      const status = error.response.status
-      let message: string
+  if (!status || status === 0)
+    message = 'lichessIsUnreachable'
+  else if (status === 401)
+    message = 'unauthorizedError'
+  else if (status === 404)
+    message = 'resourceNotFoundError'
+  else if (status === 503)
+    message = 'lichessIsUnavailableError'
+  else if (status >= 500)
+    message = 'Server error.'
+  else
+    message = 'Error.'
 
-      if (!status || status === 0)
-        message = 'lichessIsUnreachable'
-      else if (status === 401)
-        message = 'unauthorizedError'
-      else if (status === 404)
-        message = 'resourceNotFoundError'
-      else if (status === 503)
-        message = 'lichessIsUnavailableError'
-      else if (status >= 500)
-        message = 'Server error.'
-      else
-        message = 'Error.'
+  message = i18n(message)
 
-      message = i18n(message)
-
-      let promise: Promise<any>
-      try {
-        promise = error.response.json()
-      } catch (e) {
-        promise = error.response.text()
-      }
-
-      promise.then((data: any) => {
-        if (typeof data === 'string') {
-          message += ` ${data}`
-        }
-        else if (data.global && data.global.constructor === Array) {
-          message += ` ${i18n(data.global[0])}`
-        }
-        else if (data.error && data.error.constructor === Array) {
-          message += ` ${i18n(data.error[0])}`
-        }
-        else if (typeof data.error === 'string') {
-          message += ` ${i18n(data.error)}`
-        }
-        window.plugins.toast.show(message, 'short', 'center')
-      })
-    } else {
-      // can be a type error in promise or unreachable network
-      console.error(error)
-    }
+  if (typeof data === 'string') {
+    message += ` ${data}`
   }
+  else if (data.global && data.global.constructor === Array) {
+    message += ` ${i18n(data.global[0])}`
+  }
+  else if (data.error && data.error.constructor === Array) {
+    message += ` ${i18n(data.error[0])}`
+  }
+  else if (typeof data.error === 'string') {
+    message += ` ${i18n(data.error)}`
+  }
+  window.plugins.toast.show(message, 'short', 'center')
 }
 
 export function serializeQueryParameters(obj: StringMap): string {

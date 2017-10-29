@@ -5,7 +5,7 @@ import * as mapValues from 'lodash/mapValues'
 import * as mapKeys from 'lodash/mapKeys'
 import * as throttle from 'lodash/throttle'
 import redraw from './utils/redraw'
-import { fetchJSON, fetchText } from './http'
+import { fetchJSON, fetchText, ErrorResponse } from './http'
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils'
 import i18n from './i18n'
 import settings from './settings'
@@ -159,7 +159,7 @@ function isSession(data: Session | LobbyData): data is Session {
   return (<Session>data).id !== undefined
 }
 
-function login(username: string, password: string) {
+function login(username: string, password: string): Promise<Session | LobbyData> {
   return fetchJSON('/login', {
     method: 'POST',
     body: JSON.stringify({
@@ -218,8 +218,8 @@ function refresh(): void {
       }
       redraw()
     })
-    .catch(err => {
-      if (session && err.response && err.response.status === 401) {
+    .catch((err: ErrorResponse) => {
+      if (session && err.status === 401) {
         session = undefined
         redraw()
         window.plugins.toast.show(i18n('signedOut'), 'short', 'center')

@@ -53,12 +53,6 @@ export interface Post {
   text: string
 }
 
-export interface SendErrorResponse {
-  username: Array<string>
-  subject: Array<string>
-  text: Array<string>
-}
-
 export interface ComposeResponse {
   ok: string
   id: string

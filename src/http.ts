@@ -1,27 +1,20 @@
 import * as merge from 'lodash/merge'
 import spinner from './spinner'
+import config from './config'
 import { buildQueryString } from './utils/querystring'
 
 export const apiVersion = 2
 
-const baseUrl = window.lichess.apiEndPoint
+const baseUrl = config.apiEndPoint
+
+export interface ErrorResponse {
+  status: number
+  // body is either json or text
+  body: any
+}
 
 export interface RequestOpts extends RequestInit {
   query?: Object
-}
-
-export interface FetchError extends Error {
-  response: Response
-}
-
-export function checkStatus(response: Response): Response {
-  if (response.status >= 200 && response.status < 300) {
-    return response
-  } else {
-    const error = new Error(response.statusText);
-    (error as any).response = response
-    throw error
-  }
 }
 
 function addQuerystring(url: string, querystring: string): string {
@@ -30,20 +23,24 @@ function addQuerystring(url: string, querystring: string): string {
   return res
 }
 
-export function request(url: string, opts?: RequestOpts, feedback = false): Promise<Response> {
+// custom rejection handler factory
+const makeRejectHandler =
+  (reject: (reason: any) => any, status: number) => (body: any): ErrorResponse =>
+    reject({
+      status,
+      body
+    })
+
+// lichess can return either json or text
+// for convenience, this wrapper returns a promise with the response body already
+// extracted
+function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feedback = false): Promise<T> {
 
   let timeoutId: number
 
-  function onSuccess(data: Response): Response {
+  function onComplete(): void {
     clearTimeout(timeoutId)
     if (feedback) spinner.stop()
-    return data
-  }
-
-  function onError(error: Error | Response) {
-    clearTimeout(timeoutId)
-    if (feedback) spinner.stop()
-    return Promise.reject(error)
   }
 
   const cfg: RequestInit = {
@@ -78,33 +75,62 @@ export function request(url: string, opts?: RequestOpts, feedback = false): Prom
 
   const fullUrl = url.indexOf('http') > -1 ? url : baseUrl + url
 
-  const timeoutPromise: PromiseLike<Response> = new Promise((_, reject) => {
-    timeoutId = setTimeout(() => reject('Request timeout.'), 10000)
+  const timeoutPromise = new Promise((_, reject) => {
+    timeoutId = setTimeout(() => reject('Request timeout.'), config.fetchTimeoutMs)
   })
 
-  const reqPromise: PromiseLike<Response> = fetch(fullUrl, cfg)
-
-  const promise: Promise<Response> = Promise.race([
-    reqPromise,
-    timeoutPromise
+  const respOrTimeout: Promise<Response> = Promise.race([
+    fetch(fullUrl, cfg),
+    timeoutPromise as Promise<Response>
   ])
 
   if (feedback) {
     spinner.spin()
   }
 
-  return promise
-    .then(checkStatus)
-    .then(onSuccess)
-    .catch(onError)
+  return new Promise((resolve, reject) => {
+    respOrTimeout
+      .then((r: Response) => {
+        onComplete()
+
+        if (r.ok) {
+          resolve(r[type]())
+        }
+        else {
+          const withReject = makeRejectHandler(reject, r.status)
+
+          // assume error is returned as json
+          // if parsing fails, return text
+          r.json()
+          .then(withReject)
+          .catch(() => {
+            r.text()
+            .then(withReject)
+            .catch(withReject)
+          })
+        }
+      })
+      .catch(err => {
+        onComplete()
+        // network or timeout error
+        reject({
+          status: 0,
+          body: err.message
+        })
+      })
+  })
 }
 
 export function fetchJSON<T>(url: string, opts?: RequestOpts, feedback = false): Promise<T> {
-  return request(url, opts, feedback)
-  .then(r => r.json() as Promise<T>)
+  return request<T>(url, 'json', opts, feedback)
 }
 
 export function fetchText(url: string, opts?: RequestOpts, feedback = false): Promise<string> {
-  return request(url, opts, feedback)
-  .then(r => r.text())
+  return request<string>(url, 'text', opts, feedback)
+}
+
+export function post(url: string, opts?: RequestOpts, feedback = false): Promise<string> {
+  // post request usually has a text body in response (and we don't care about it)
+  const mergedOpts = Object.assign({}, opts, { method: 'POST' })
+  return request<string>(url, 'text', mergedOpts, feedback)
 }

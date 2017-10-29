@@ -51,7 +51,6 @@
         "@types/hammerjs": "~2.0.35",
         "babelify": "7.3.0",
         "browserify": "14.4.0",
-        "chess.js": "git://github.com/veloce/chess.js#8f9b37d2",
         "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",
         "cordova-android": "~6.2.2",
         "cordova-ios": "^4.5.1",

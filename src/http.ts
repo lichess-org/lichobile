@@ -23,14 +23,6 @@ function addQuerystring(url: string, querystring: string): string {
   return res
 }
 
-// custom rejection handler factory
-const makeRejectHandler =
-  (reject: (reason: any) => any, status: number) => (body: any): ErrorResponse =>
-    reject({
-      status,
-      body
-    })
-
 // lichess can return either json or text
 // for convenience, this wrapper returns a promise with the response body already
 // extracted
@@ -97,16 +89,21 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
           resolve(r[type]())
         }
         else {
-          const withReject = makeRejectHandler(reject, r.status)
-
           // assume error is returned as json
           // if parsing fails, return text
-          r.json()
-          .then(withReject)
-          .catch(() => {
-            r.text()
-            .then(withReject)
-            .catch(withReject)
+          r.text()
+          .then((bodyText: string) => {
+            try {
+              reject({
+                status: r.status,
+                body: JSON.parse(bodyText)
+              })
+            } catch (_) {
+              reject({
+                status: r.status,
+                body: bodyText
+              })
+            }
           })
         }
       })

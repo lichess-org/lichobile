@@ -1,6 +1,7 @@
 import router from './router'
+import globalConfig from './config'
 import redraw from './utils/redraw'
-import { apiVersion, ErrorResponse } from './http'
+import { ErrorResponse } from './http'
 import * as xorWith from 'lodash/xorWith'
 import * as isEqual from 'lodash/isEqual'
 import * as cloneDeep from 'lodash/cloneDeep'
@@ -168,7 +169,7 @@ function createGame(
   const opts: SocketConfig = {
     options: {
       name: 'game',
-      debug: window.lichess.mode === 'dev',
+      debug: globalConfig.mode === 'dev',
       sendOnOpen: [{t: 'following_onlines'}],
       registeredEvents: Object.keys(socketHandlers.events)
     }
@@ -176,7 +177,7 @@ function createGame(
   if (userTv) opts.params = { userTv }
   const setup = {
     clientId: newSri(),
-    socketEndPoint: window.lichess.socketEndPoint,
+    socketEndPoint: globalConfig.socketEndPoint,
     url,
     version,
     opts
@@ -190,7 +191,7 @@ function createTournament(
   handlers: MessageHandlers,
   featuredGameId?: string
 ) {
-  let url = '/tournament/' + tournamentId + `/socket/v${apiVersion}`
+  let url = '/tournament/' + tournamentId + `/socket/v${globalConfig.apiVersion}`
   const socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers),
     onOpen: session.backgroundRefresh
@@ -198,7 +199,7 @@ function createTournament(
   const opts = {
     options: {
       name: 'tournament',
-      debug: window.lichess.mode === 'dev',
+      debug: globalConfig.mode === 'dev',
       pingDelay: 2000,
       sendOnOpen: [{t: 'following_onlines'}, {t: 'startWatching', d: featuredGameId}],
       registeredEvents: Object.keys(socketHandlers.events)
@@ -206,7 +207,7 @@ function createTournament(
   }
   const setup = {
     clientId: newSri(),
-    socketEndPoint: window.lichess.socketEndPoint,
+    socketEndPoint: globalConfig.socketEndPoint,
     url,
     version,
     opts
@@ -231,7 +232,7 @@ function createChallenge(
   const opts = {
     options: {
       name: 'challenge',
-      debug: window.lichess.mode === 'dev',
+      debug: globalConfig.mode === 'dev',
       ignoreUnknownMessages: true,
       pingDelay: 2000,
       sendOnOpen: [{t: 'following_onlines'}],
@@ -240,7 +241,7 @@ function createChallenge(
   }
   const setup = {
     clientId: newSri(),
-    socketEndPoint: window.lichess.socketEndPoint,
+    socketEndPoint: globalConfig.socketEndPoint,
     url,
     version,
     opts
@@ -263,7 +264,7 @@ function createLobby(
   const opts = {
     options: {
       name,
-      debug: window.lichess.mode === 'dev',
+      debug: globalConfig.mode === 'dev',
       pingDelay: 2000,
       sendOnOpen: [{t: 'following_onlines'}],
       registeredEvents: Object.keys(socketHandlers.events)
@@ -271,8 +272,8 @@ function createLobby(
   }
   const setup = {
     clientId: newSri(),
-    socketEndPoint: window.lichess.socketEndPoint,
-    url: `/lobby/socket/v${apiVersion}`,
+    socketEndPoint: globalConfig.socketEndPoint,
+    url: `/lobby/socket/v${globalConfig.apiVersion}`,
     opts
   }
   setupConnection(setup, socketHandlers)
@@ -287,7 +288,7 @@ function createDefault() {
     const opts = {
       options: {
         name: 'default',
-        debug: window.lichess.mode === 'dev',
+        debug: globalConfig.mode === 'dev',
         pingDelay: 3000,
         sendOnOpen: [{t: 'following_onlines'}],
         registeredEvents: Object.keys(socketHandlers.events)
@@ -295,7 +296,7 @@ function createDefault() {
     }
     const setup = {
       clientId: newSri(),
-      socketEndPoint: window.lichess.socketEndPoint,
+      socketEndPoint: globalConfig.socketEndPoint,
       url: '/socket',
       opts
     }

@@ -1,4 +1,5 @@
 import i18n from '../i18n'
+import globalConfig from '../config'
 import { ErrorResponse } from '../http'
 import redraw from './redraw'
 import { GameData } from '../lichess/interfaces/game'
@@ -214,7 +215,7 @@ export function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) =
 }
 
 export function lichessAssetSrc(path: string) {
-  return `${window.lichess.apiEndPoint}/assets/${path}`
+  return `${globalConfig.apiEndPoint}/assets/${path}`
 }
 
 // Implementation originally from Twitter's Hogan.js:

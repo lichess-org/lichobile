@@ -125,5 +125,3 @@ const untranslated: StringMap = {
   usernameInvalid: 'The username contains invalid characters',
   offline: 'Offline'
 }
-
-

@@ -1,6 +1,6 @@
 import router from '../../router'
 import settings from '../../settings'
-import { apiVersion } from '../../http'
+import globalConfig from '../../config'
 import redraw from '../../utils/redraw'
 import { serializeQueryParameters, handleXhrError } from '../../utils'
 import { fetchJSON } from '../../http'
@@ -26,7 +26,7 @@ export default function ImporterCtrl(): IImporterCtrl {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         'X-Requested-With': 'XMLHttpRequest',
-        'Accept': 'application/vnd.lichess.v' + apiVersion + '+json'
+        'Accept': 'application/vnd.lichess.v' + globalConfig.apiVersion + '+json'
       },
       body: serializeQueryParameters(data)
     }, true)

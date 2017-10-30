@@ -1,4 +1,5 @@
-import { fetchJSON, fetchText, apiVersion } from './http'
+import globalConfig from './config'
+import { fetchJSON, fetchText } from './http'
 import { currentSri, noop } from './utils'
 import settings from './settings'
 import i18n from './i18n'
@@ -163,10 +164,10 @@ export function timeline(): Promise<TimelineData> {
 export function status() {
   return fetchJSON('/api/status')
   .then((data: any) => {
-    if (data.api.current !== apiVersion) {
+    if (data.api.current !== globalConfig.apiVersion) {
       for (let i = 0, len = data.api.olds.length; i < len; i++) {
         const o = data.api.olds[i]
-        if (o.version === apiVersion) {
+        if (o.version === globalConfig.apiVersion) {
           const now = new Date(),
             unsupportedDate = new Date(o.unsupportedAt),
             deprecatedDate = new Date(o.deprecatedAt)

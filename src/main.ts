@@ -7,6 +7,7 @@ import * as moment from 'moment'
 window.moment = moment
 
 import * as debounce from 'lodash/debounce'
+import globalConfig from './config'
 import { hasNetwork } from './utils'
 import { syncWithNowPlayingGames } from './utils/offlineGames'
 import redraw from './utils/redraw'
@@ -74,8 +75,8 @@ function main() {
   window.cordova.plugins.Keyboard.disableScroll(true)
   window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false)
 
-  if (window.lichess.mode === 'release' && window.lichess.sentryDSN) {
-    Raven.config(window.lichess.sentryDSN, {
+  if (globalConfig.mode === 'release' && globalConfig.sentryDSN) {
+    Raven.config(globalConfig.sentryDSN, {
       release: window.AppVersion ? window.AppVersion.version : 'snapshot-dev'
     }).install()
   }

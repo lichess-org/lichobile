@@ -1,4 +1,18 @@
+const testConfig = {
+  apiEndPoint: 'http://test.org',
+  fetchTimeoutMs: 10,
+  apiVersion: 1
+}
+
+// must be before import
+jest.mock('../config', () => {
+  return {
+    'default': testConfig
+  }
+})
+
 import * as http from '../http'
+
 
 describe('HTTP fetch wrapper', () => {
   test('if response ok, fetchJSON returns extracted json body', async () => {
@@ -81,22 +95,65 @@ describe('HTTP fetch wrapper', () => {
     })
   })
 
-  // test('will reject on timeout', async () => {
-  //   global.fetch = jest.fn().mockImplementation(() => {
-  //     return new Promise((resolve) => {
-  //       setTimeout(() => resolve({
-  //         status: 200,
-  //         ok: true,
-  //         json() {
-  //           return Promise.resolve({ data: 'hello' })
-  //         }
-  //       }), 100)
-  //     })
-  //   })
+  test('will reject on timeout', async () => {
+    global.fetch = jest.fn().mockImplementation(() => {
+      return new Promise((resolve) => {
+        setTimeout(() => resolve({
+          status: 200,
+          ok: true,
+          json() {
+            return Promise.resolve({ data: 'hello' })
+          }
+        }), testConfig.fetchTimeoutMs + 100)
+      })
+    })
 
-  //   await expect(http.fetchJSON('/api/test')).rejects.toEqual({
-  //     status: 0,
-  //     body: 'Request timeout.'
-  //   })
-  // })
+    await expect(http.fetchJSON('/api/test')).rejects.toEqual({
+      status: 0,
+      body: 'Request timeout.'
+    })
+  })
+
+  test('request call fetch with correct url', () => {
+    global.fetch = jest.fn()
+
+    http.fetchJSON('/api/test')
+
+    expect(global.fetch.mock.calls.length).toBe(1)
+    expect(global.fetch.mock.calls[0][0]).toBe('http://test.org/api/test')
+  })
+
+  test('GET request call fetch with correct opts', () => {
+    global.fetch = jest.fn()
+
+    http.fetchJSON('/api/test')
+
+    expect(global.fetch.mock.calls.length).toBe(1)
+    expect(global.fetch.mock.calls[0][1]).toEqual({
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/vnd.lichess.v1+json'
+      }
+    })
+  })
+
+  test('POST request call fetch with correct opts', () => {
+    global.fetch = jest.fn()
+
+    http.fetchJSON('/api/test', { method: 'POST' })
+
+    expect(global.fetch.mock.calls.length).toBe(1)
+    expect(global.fetch.mock.calls[0][1]).toEqual({
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/vnd.lichess.v1+json',
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: '{}'
+    })
+  })
 })

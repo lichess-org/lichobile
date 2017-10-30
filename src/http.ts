@@ -1,11 +1,9 @@
 import * as merge from 'lodash/merge'
 import spinner from './spinner'
-import config from './config'
+import globalConfig from './config'
 import { buildQueryString } from './utils/querystring'
 
-export const apiVersion = 3
-
-const baseUrl = config.apiEndPoint
+const baseUrl = globalConfig.apiEndPoint
 
 export interface ErrorResponse {
   status: number
@@ -40,7 +38,7 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
     credentials: 'include',
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
-      'Accept': 'application/vnd.lichess.v' + apiVersion + '+json'
+      'Accept': 'application/vnd.lichess.v' + globalConfig.apiVersion + '+json'
     }
   }
 
@@ -68,7 +66,10 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
   const fullUrl = url.indexOf('http') > -1 ? url : baseUrl + url
 
   const timeoutPromise = new Promise((_, reject) => {
-    timeoutId = setTimeout(() => reject('Request timeout.'), config.fetchTimeoutMs)
+    timeoutId = setTimeout(
+      () => reject(new Error('Request timeout.')),
+      globalConfig.fetchTimeoutMs
+    )
   })
 
   const respOrTimeout: Promise<Response> = Promise.race([

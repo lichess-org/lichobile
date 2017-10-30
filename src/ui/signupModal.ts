@@ -41,7 +41,7 @@ export default {
         }, closeIcon),
         h('h2', i18n('signUp'))
       ]),
-      h('div.modal_content', {
+      h('div#signupModalContent.modal_content', {
         className: loading ? 'loading' : ''
       }, checkEmail ? renderCheckEmail() : renderForm())
     ])
@@ -88,6 +88,7 @@ function renderForm() {
           autocorrect: 'off',
           spellcheck: false,
           required: true,
+          onfocus: scrollToTop,
           oninput: debounce((e: Event) => {
             const val = (e.target as HTMLFormElement).value.trim()
             if (val && val.length > 2) {
@@ -113,6 +114,7 @@ function renderForm() {
         formError && formError.email ?
           h('div.form-error', formError.email[0]) : null,
         h('input#email[type=email]', {
+          onfocus: scrollToTop,
           className: formError && formError.email ? 'form-error' : '',
           placeholder: i18n('email'),
           autocapitalize: 'off',
@@ -125,6 +127,7 @@ function renderForm() {
         formError && formError.password ?
           h('div.form-error', formError.password[0]) : null,
         h('input#password[type=password]', {
+          onfocus: scrollToTop,
           className: formError && formError.password ? 'form-error' : '',
           placeholder: i18n('password'),
           required: true
@@ -135,6 +138,13 @@ function renderForm() {
       ])
     ])
   ]
+}
+
+function scrollToTop(e: Event) {
+  setTimeout(() => {
+    const el = e.target as HTMLElement
+    el.scrollIntoView(true)
+  }, 300)
 }
 
 function submit(form: HTMLFormElement) {

@@ -17,8 +17,6 @@ export default function BronsteinClock(time: number, increment: number, onFlag: 
     isRunning: false
   }
 
-  const id = Math.random()
-
   let clockInterval: number
   let whiteTimestamp: number
   let blackTimestamp: number
@@ -146,7 +144,6 @@ export default function BronsteinClock(time: number, increment: number, onFlag: 
     whiteTime,
     blackTime,
     getTime,
-    id,
     clear() {
       clearInterval(clockInterval)
     }

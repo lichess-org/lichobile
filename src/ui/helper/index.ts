@@ -153,11 +153,11 @@ export function slidesInUp(vnode: Mithril.DOMNode): Promise<HTMLElement> {
   .catch(console.log.bind(console))
 }
 
-export function slidesOutDown(callback: () => void, elID: string): () => Promise<HTMLElement> {
-  return function() {
+export function slidesOutDown(callback: (fromBB?: string) => void, elID: string): () => Promise<HTMLElement> {
+  return function(fromBB?: string) {
     const el = document.getElementById(elID)
     return Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
-    .then(utils.autoredraw.bind(undefined, callback))
+    .then(() => utils.autoredraw(() => callback(fromBB)))
     .catch(console.log.bind(console))
   }
 }
@@ -171,11 +171,11 @@ export function slidesInLeft(vnode: Mithril.DOMNode): Promise<HTMLElement> {
   .catch(console.log.bind(console))
 }
 
-export function slidesOutRight(callback: () => void, elID: string): () => Promise<HTMLElement> {
-  return function() {
+export function slidesOutRight(callback: (fromBB?: string) => void, elID: string): () => Promise<HTMLElement> {
+  return function(fromBB?: string) {
     const el = document.getElementById(elID)
     return Zanimo(el, 'transform', 'translateX(100%)', 250, 'ease-out')
-    .then(utils.autoredraw.bind(undefined, callback))
+    .then(() => utils.autoredraw(() => callback(fromBB)))
     .catch(console.log.bind(console))
   }
 }

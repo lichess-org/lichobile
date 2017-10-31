@@ -8,7 +8,7 @@ const worker = new Worker('vendor/scalachess.js')
 worker.postMessage({ topic: 'init', payload: { variant: 'standard'}})
 
 export interface GameSituation {
-  nodeId: string
+  id: string
   ply: number
   variant: string
   fen: string
@@ -21,6 +21,8 @@ export interface GameSituation {
   winner?: Color
   check: boolean
   checkCount?: CheckCount
+  san?: San
+  uci?: Uci
   pgnMoves: Array<string>
   uciMoves: Array<string>
   promotion?: string

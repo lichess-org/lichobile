@@ -275,16 +275,16 @@ export default class TrainingCtrl implements PromotingInterface {
     chess.move(move)
     .then(({ situation, path}) => {
       const node = {
-        id: situation.nodeId,
+        id: situation.id,
         ply: situation.ply,
         fen: situation.fen,
-        uci: situation.uciMoves[0],
+        uci: situation.uci,
         children: [],
         dests: situation.dests,
         check: situation.check,
         end: situation.end,
         player: situation.player,
-        san: situation.pgnMoves[0],
+        san: situation.san,
         pgnMoves: situation.pgnMoves
       }
       if (path === undefined) {

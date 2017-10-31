@@ -27,14 +27,16 @@ export function getAnalyseData(data: StoredOfflineGame, orientation: Color): Ana
   (aData as AnalyseData).orientation = orientation
   aData.treeParts = data.situations.map((o: GameSituation) => {
     const node = {
-      id: o.nodeId,
+      // bc layer TODO remove in version 5.4
+      id: o.id || (o as any).nodeId,
       fen: o.fen,
       ply: o.ply,
       check: o.check,
       checkCount: o.checkCount,
       // uciMoves contains at least situation last move
-      uci: o.uciMoves[o.uciMoves.length - 1],
-      san: o.pgnMoves.length ? o.pgnMoves[o.pgnMoves.length - 1] : undefined,
+      // bc layer TODO remove in version 5.4
+      uci: o.uci || o.uciMoves[o.uciMoves.length - 1],
+      san: o.san || o.pgnMoves.length ? o.pgnMoves[o.pgnMoves.length - 1] : undefined,
       dests: o.dests,
       drops: o.drops,
       crazyhouse: o.crazyhouse,

@@ -494,10 +494,9 @@ export default class AnalyseCtrl {
   private addNode = ({ situation, path }: chess.MoveResponse) => {
     const curNode = this.node
     const node = {
-      id: situation.nodeId,
+      id: situation.id,
       ply: situation.ply,
       fen: situation.fen,
-      uci: situation.uciMoves[0],
       children: [],
       dests: situation.dests,
       drops: situation.drops,
@@ -505,7 +504,8 @@ export default class AnalyseCtrl {
       end: situation.end,
       player: situation.player,
       checkCount: situation.checkCount,
-      san: situation.pgnMoves[0],
+      uci: situation.uci,
+      san: situation.san,
       crazyhouse: situation.crazyhouse,
       pgnMoves: curNode && curNode.pgnMoves ? curNode.pgnMoves.concat(situation.pgnMoves) : situation.pgnMoves
     }

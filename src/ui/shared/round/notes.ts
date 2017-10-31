@@ -7,6 +7,7 @@ import router from '../../../router'
 import * as helper from '../../helper'
 import { closeIcon } from '../../shared/icons'
 import { GameData } from '../../../lichess/interfaces/game'
+import { AnalyseData } from '../../../lichess/interfaces/analyse'
 import { readNote, syncNote } from './roundXhr'
 
 let notesHeight: number
@@ -15,9 +16,9 @@ export class NotesCtrl {
   public syncing: boolean
   public showing: boolean
   public inputValue: string
-  public data: GameData
+  public data: GameData | AnalyseData
 
-  constructor(data: GameData) {
+  constructor(data: GameData | AnalyseData) {
 
     this.syncing = true
     this.data = data

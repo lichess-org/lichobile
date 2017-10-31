@@ -102,9 +102,7 @@ export default class AnalyseCtrl {
     this.menu = menu.controller(this)
     this.continuePopup = continuePopup.controller()
 
-    // TODO
-    // this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null
-    this.notes = null
+    this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null
 
     this.retro = null
 

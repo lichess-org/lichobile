@@ -13,6 +13,9 @@ jest.mock('../config', () => {
 
 import * as http from '../http'
 
+process.on('unhandledRejection', error => {
+  // catch all unhandled rejection here to avoid node warning
+})
 
 describe('HTTP fetch wrapper', () => {
   test('if response ok, fetchJSON returns extracted json body', async () => {

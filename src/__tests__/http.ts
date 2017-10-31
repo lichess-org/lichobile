@@ -53,7 +53,7 @@ describe('HTTP fetch wrapper', () => {
         ok: false,
         json() {
           return Promise.resolve().then(() => JSON.parse(body))
-        }
+        },
         text() {
           return Promise.resolve().then(() => body)
         }
@@ -66,7 +66,7 @@ describe('HTTP fetch wrapper', () => {
         ok: false,
         json() {
           return Promise.resolve().then(() => JSON.parse(body))
-        }
+        },
         text() {
           return Promise.resolve().then(() => body)
         }
@@ -137,6 +137,20 @@ describe('HTTP fetch wrapper', () => {
         'Accept': 'application/vnd.lichess.v1+json'
       }
     })
+  })
+
+  test('GET query params are url encoded', () => {
+    global.fetch = jest.fn()
+
+    http.fetchJSON('/api/test', {
+      query: {
+        q: 'text url encoded',
+        v: 1234
+      }
+    })
+
+    expect(global.fetch.mock.calls.length).toBe(1)
+    expect(global.fetch.mock.calls[0][0]).toBe('http://test.org/api/test?q=text%20url%20encoded&v=1234')
   })
 
   test('POST request call fetch with correct opts', () => {

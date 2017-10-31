@@ -150,6 +150,18 @@ export interface Paginator<T> {
   nbPages: number
 }
 
+interface ApiVersion {
+  version: number
+  deprecatedAt: Timestamp
+  unsupportedAt: Timestamp
+}
+
+export interface ApiStatus {
+  api: {
+    current: number
+    olds: ApiVersion[]
+  }
+}
 
 export function isPoolMember(conf: PoolMember | SeekSetup): conf is PoolMember {
   return (conf as PoolMember).id !== undefined

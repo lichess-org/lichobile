@@ -4,7 +4,7 @@ import { currentSri, noop } from './utils'
 import settings from './settings'
 import i18n from './i18n'
 import session from './session'
-import { TimelineData, LobbyData, HookData, Pool, HumanSeekSetup, CorrespondenceSeek } from './lichess/interfaces'
+import { TimelineData, LobbyData, HookData, Pool, HumanSeekSetup, CorrespondenceSeek, ApiStatus } from './lichess/interfaces'
 import { ChallengesData, Challenge } from './lichess/interfaces/challenge'
 import { OnlineGameData } from './lichess/interfaces/game'
 
@@ -162,8 +162,12 @@ export function timeline(): Promise<TimelineData> {
 }
 
 export function status() {
-  return fetchJSON('/api/status')
-  .then((data: any) => {
+  return fetchJSON('/api/status', {
+    query: {
+      v: window.AppVersion ? window.AppVersion.version : null
+    }
+  })
+  .then((data: ApiStatus) => {
     if (data.api.current !== globalConfig.apiVersion) {
       for (let i = 0, len = data.api.olds.length; i < len; i++) {
         const o = data.api.olds[i]

@@ -23,6 +23,7 @@
     },
     "homepage": "https://github.com/veloce/lichobile",
     "devDependencies": {
+        "@types/jest": "^21.1.5",
         "babel-plugin-transform-react-jsx": "~6.8.0",
         "babel-plugin-transform-react-require": "~1.0.1",
         "babel-plugin-transform-remove-console": "~6.8.0",

@@ -44,6 +44,10 @@ To build and watch for changes:
 
     $ npm run watch
 
+## Run the tests
+
+    $ npm run test
+
 ## Build cordova application and run on device
 
 Be sure to check requirements above.

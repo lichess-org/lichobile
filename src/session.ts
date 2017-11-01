@@ -187,6 +187,14 @@ function logout() {
   .catch(handleXhrError)
 }
 
+function confirmEmail(token: string): Promise<Session> {
+  return fetchJSON(`/signup/confirm/${token}`, undefined, true)
+  .then((data: Session) => {
+    session = data
+    return session
+  })
+}
+
 function signup(username: string, email: string, password: string): Promise<{}> {
   return fetchJSON('/signup', {
     method: 'POST',
@@ -264,5 +272,6 @@ export default {
   nowPlaying,
   myTurnGames,
   lichessBackedProp,
-  toggleKidMode
+  toggleKidMode,
+  confirmEmail
 }

@@ -99,6 +99,7 @@
             <path event="tvChannel" url="/tv/*" />
             <path event="userVariantProfile" url="/@/*/perf/*" />
             <path event="userProfile" url="/@/*" />
+            <path event="signupConfirm" url="/signup/confirm/*" />
             <path event="other" url="*" />
         </host>
     </universal-links>
@@ -110,9 +111,6 @@
     <plugin name="cordova-plugin-crosswalk-webview" spec="~2.3.0">
         <variable name="XWALK_MODE" value="embedded" />
         <variable name="XWALK_MULTIPLEAPK" value="true" />
-    </plugin>
-    <plugin name="cordova-plugin-customurlscheme" spec="~4.1.3">
-        <variable name="URL_SCHEME" value="lichess" />
     </plugin>
     <plugin name="cordova-plugin-device" spec="~1.1.4" />
     <plugin name="cordova-plugin-dialogs" spec="~1.3.1" />

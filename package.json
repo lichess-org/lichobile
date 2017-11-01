@@ -58,7 +58,6 @@
         "cordova-plugin-app-event": "git+https://github.com/katzer/cordova-plugin-app-event.git#1.2.1",
         "cordova-plugin-appversion": "~1.0.0",
         "cordova-plugin-crosswalk-webview": "~2.3.0",
-        "cordova-plugin-customurlscheme": "~4.1.3",
         "cordova-plugin-device": "~1.1.4",
         "cordova-plugin-dialogs": "~1.3.1",
         "cordova-plugin-file-transfer": "~1.6.1",
@@ -132,9 +131,6 @@
             "cordova-plugin-crosswalk-webview": {
                 "XWALK_MODE": "embedded",
                 "XWALK_MULTIPLEAPK": "true"
-            },
-            "cordova-plugin-customurlscheme": {
-                "URL_SCHEME": "lichess"
             },
             "cordova-plugin-device": {},
             "cordova-plugin-dialogs": {},

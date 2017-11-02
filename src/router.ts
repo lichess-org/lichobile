@@ -67,15 +67,15 @@ function processQuerystring(e?: PopStateEvent) {
   if (!matched) router.run('/')
 }
 
-function replaceState(path: string) {
+function replacePath(path: string) {
   try {
     window.history.replaceState(window.history.state, '', '?=' + path)
   } catch (e) { console.error(e) }
 }
 
-function setStateParams(params: StringMap) {
+function setQueryParams(params: StringMap) {
   const path = get().replace(/\?.+$/, '')
-  replaceState(path + `?${serializeQueryParameters(params)}`)
+  replacePath(path + `?${serializeQueryParameters(params)}`)
 }
 
 const backbutton = (() => {
@@ -115,7 +115,7 @@ function doSet(path: string, replace = false) {
   // reset backbutton stack when changing route
   backbutton.stack = []
   if (replace) {
-    replaceState(path)
+    replacePath(path)
   } else {
     const stateId = uid()
     currentStateId = stateId
@@ -155,8 +155,14 @@ export default {
   reload(): void {
     set(get(), true)
   },
-  replaceState,
-  setStateParams,
+  replacePath,
+  setQueryParams,
+  assignState(state: Object) {
+    try {
+      const newState = Object.assign({}, window.history.state, state)
+      window.history.replaceState(newState, '')
+    } catch (e) { console.error(e) }
+  },
   backHistory,
   getViewSlideDirection(): string {
     return viewSlideDirection

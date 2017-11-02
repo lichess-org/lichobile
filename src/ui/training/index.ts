@@ -1,9 +1,11 @@
 import * as h from 'mithril/hyperscript'
 import signals from '../../signals'
-import { handleXhrError } from '../../utils'
+import router from '../../router'
+import redraw from '../../utils/redraw'
+import { handleXhrError, safeStringToNum } from '../../utils'
+import { emptyFen } from '../../utils/fen'
 import * as helper from '../helper'
 import layout from '../layout'
-import { emptyFen } from '../../utils/fen'
 import ViewOnlyBoard from '../shared/ViewOnlyBoard'
 import { connectingHeader } from '../shared/common'
 
@@ -18,21 +20,38 @@ interface Attrs {
 }
 
 interface State {
-  ctrl: TrainingCtrl
+  ctrl?: TrainingCtrl
+}
+
+// cache last state to retrieve it when navigating back
+const cachedState: State = {}
+
+function saveState(ctrl: TrainingCtrl) {
+  cachedState.ctrl = ctrl
+  router.assignState({ puzzleId: ctrl.data.puzzle.id })
 }
 
 export default {
   oninit({ attrs }) {
-    if (attrs.id) {
-      xhr.loadPuzzle(Number(attrs.id))
-      .then(cfg => {
-        this.ctrl = new TrainingCtrl(cfg)
-      })
-      .catch(handleXhrError)
+    const numId = safeStringToNum(attrs.id)
+    if (numId !== undefined) {
+      if (cachedState.ctrl && window.history.state.puzzleId === numId) {
+        this.ctrl = cachedState.ctrl
+        redraw()
+      }
+      else {
+        xhr.loadPuzzle(numId)
+        .then(cfg => {
+          this.ctrl = new TrainingCtrl(cfg)
+          saveState(this.ctrl)
+        })
+        .catch(handleXhrError)
+      }
     } else {
       xhr.newPuzzle()
       .then(cfg => {
         this.ctrl = new TrainingCtrl(cfg)
+        saveState(this.ctrl)
       })
       .catch(handleXhrError)
     }
@@ -54,9 +73,9 @@ export default {
 
     if (this.ctrl) {
       return layout.board(
-        () => renderHeader(this.ctrl),
-        () => renderContent(this.ctrl, key, bounds),
-        () => overlay(this.ctrl)
+        () => renderHeader(this.ctrl!),
+        () => renderContent(this.ctrl!, key, bounds),
+        () => overlay(this.ctrl!)
       )
     }
     else {

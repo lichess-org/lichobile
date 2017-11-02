@@ -148,7 +148,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     .then(() => {
       if (setupFen) {
         this.vm.setupFen = undefined
-        router.replaceState('/ai')
+        router.replacePath('/ai')
       }
     })
   }

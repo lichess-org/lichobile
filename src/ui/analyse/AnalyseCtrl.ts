@@ -425,7 +425,7 @@ export default class AnalyseCtrl {
   }
 
   private updateHref = debounce(() => {
-    router.setStateParams({
+    router.setQueryParams({
       tab: String(this._currentTabIndex),
       ply: String(this.node.ply),
       curFen: this.node.fen

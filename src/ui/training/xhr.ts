@@ -27,7 +27,7 @@ export function loadPuzzle(id: number): Promise<PuzzleData> {
 export function newPuzzle(): Promise<PuzzleData> {
   return fetchJSON<PuzzleData>('/training/new')
   .then(cfg => {
-    router.replaceState(`/training/${cfg.puzzle.id}`)
+    router.replacePath(`/training/${cfg.puzzle.id}`)
     return cfg
   })
 }

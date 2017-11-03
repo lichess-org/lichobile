@@ -161,6 +161,8 @@ export interface ApiStatus {
     current: number
     olds: ApiVersion[]
   }
+  // version is detected as buggy
+  mustUpgrade?: boolean
 }
 
 export function isPoolMember(conf: PoolMember | SeekSetup): conf is PoolMember {

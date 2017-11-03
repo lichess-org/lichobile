@@ -2,6 +2,8 @@
 
 'use strict'
 
+import 'whatwg-fetch'
+
 import * as Raven from 'raven-js'
 import * as moment from 'moment'
 window.moment = moment

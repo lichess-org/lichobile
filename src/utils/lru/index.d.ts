@@ -1,3 +1,7 @@
+// Copyright (c) 2010-2016 Rasmus Andersson https://rsms.me/
+// taken from https://github.com/rsms/js-lru
+
+
 // An entry holds the key and value, and pointers to any older and newer entries.
 interface Entry<K,V> {
   key   :K
@@ -44,40 +48,4 @@ export default class LRUMap<K,V> {
   // Get and register recent use of <key>.
   // Returns the value associated with <key> or undefined if not in cache.
   get(key :K) : V | undefined
-
-  // Check if there's a value for key in the cache without registering recent use.
-  has(key :K) : boolean
-
-  // Access value for <key> without registering recent use. Useful if you do not
-  // want to chage the state of the map, but only "peek" at it.
-  // Returns the value associated with <key> if found, or undefined if not found.
-  find(key :K) : V | undefined
-
-  // Remove entry <key> from cache and return its value.
-  // Returns the removed value, or undefined if not found.
-  delete(key :K) : V | undefined
-
-  // Removes all entries
-  clear() : void
-
-  // Returns an iterator over all keys, starting with the oldest.
-  keys() : Iterator<K>
-
-  // Returns an iterator over all values, starting with the oldest.
-  values() : Iterator<V>
-
-  // Returns an iterator over all entries, starting with the oldest.
-  entries() : Iterator<[K,V]>
-
-  // Returns an iterator over all entries, starting with the oldest.
-  [Symbol.iterator]() : Iterator<[K,V]>
-
-  // Call `fun` for each entry, starting with the oldest entry.
-  forEach(fun :(value :V, key :K, m :LRUMap<K,V>)=>void, thisArg? :any) : void
-
-  // Returns an object suitable for JSON encoding
-  toJSON() : Array<{key :K, value :V}>
-
-  // Returns a human-readable text representation
-  toString() : string
 }

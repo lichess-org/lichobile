@@ -111,7 +111,7 @@
         <variable name="XWALK_MODE" value="embedded" />
         <variable name="XWALK_MULTIPLEAPK" value="true" />
     </plugin>
-    <plugin name="cordova-plugin-customurlscheme" spec="~4.1.3">
+    <plugin name="cordova-plugin-customurlscheme" spec="^4.1.5">
         <variable name="URL_SCHEME" value="lichess" />
     </plugin>
     <plugin name="cordova-plugin-device" spec="~1.1.4" />

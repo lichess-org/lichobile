@@ -68,6 +68,7 @@ export default class Chessground {
   }
 
   detach = () => {
+    this.dom = undefined
     window.removeEventListener('resize', this.onOrientationChange)
   }
 

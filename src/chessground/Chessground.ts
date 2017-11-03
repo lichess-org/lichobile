@@ -64,11 +64,11 @@ export default class Chessground {
       }
     }
 
-    window.addEventListener('resize', this.onresize)
+    window.addEventListener('resize', this.onOrientationChange)
   }
 
   detach = () => {
-    window.removeEventListener('resize', onresize)
+    window.removeEventListener('resize', this.onOrientationChange)
   }
 
   setBounds = (bounds: ClientRect) => {
@@ -233,7 +233,7 @@ export default class Chessground {
   }
 
   // no need to debounce: resizable only by orientation change
-  private onresize = () => {
+  private onOrientationChange = () => {
     const dom = this.dom
     if (dom) {
       // yolo

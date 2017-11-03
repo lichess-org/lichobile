@@ -1,6 +1,7 @@
 import * as throttle from 'lodash/throttle'
 import * as h from 'mithril/hyperscript'
 import * as utils from '../../../utils'
+import { positionsCache } from '../../../utils/gamePosition'
 import router from '../../../router'
 import * as helper from '../../helper'
 import i18n from '../../../i18n'
@@ -51,7 +52,7 @@ function onTap(ctrl: IUserGamesCtrl, e: Event) {
       const userId = ctrl.scrollState.userId
       if (g) {
         const userColor: Color = g.players.white.userId === userId ? 'white' : 'black'
-        utils.gamePosCache.set(g.id, { fen: g.fen, orientation: userColor })
+        positionsCache.set(g.id, { fen: g.fen, orientation: userColor })
         const mePlaying = session.getUserId() === userId
         if (mePlaying) {
           router.set(`/game/${id}/${userColor}?goingBack=1`)

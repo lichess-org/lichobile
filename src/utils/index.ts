@@ -16,14 +16,6 @@ export function newSri() {
   return sri
 }
 
-// game -> last pos fen
-interface GamePosCached {
-  fen: string
-  orientation: Color
-}
-
-export const gamePosCache: Map<string, GamePosCached> = new Map()
-
 export function loadLocalJsonFile<T>(url: string): Promise<T> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()

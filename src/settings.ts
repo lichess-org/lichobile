@@ -96,6 +96,7 @@ export default {
         'shapes',
         'chessnut',
         'chess7',
+        'riohacha',
         'symmetric'
       ],
       board: localstorageprop('settings.theme.board', 'brown'),

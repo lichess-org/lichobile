@@ -9,18 +9,15 @@ import popupWidget from '../shared/popup'
 import * as helper from '../helper'
 import * as stream from 'mithril/stream'
 import redraw from '../../utils/redraw'
-import * as utils from '../../utils'
 import { OtbRoundInterface } from '../shared/round'
 import { ClockType } from '../shared/clock/interfaces'
-import { addStage, removeStage } from '../shared/clock/utils'
+import { clockSettingsView } from '../shared/clock/utils'
 
 export interface NewOtbGameCtrl {
   open: () => void
   close: (fromBB?: string) => void
   isOpen: Mithril.Stream<boolean>
   root: OtbRoundInterface
-  addStage(): void
-  removeStage(): void
 }
 
 export default {
@@ -42,9 +39,7 @@ export default {
       open,
       close,
       isOpen,
-      root,
-      addStage: () => addStage(settings.otb.clock.stage.stages),
-      removeStage: () => removeStage(settings.otb.clock.stage.stages)
+      root
     }
   },
 
@@ -100,7 +95,7 @@ export default {
                 <div className="select_input">
                   {formWidgets.renderSelect('Clock', 'clock', settings.otb.clock.availableClocks, settings.otb.clock.clockType, false, onChange)}
                 </div>
-                {clockSettingsView[settings.otb.clock.clockType() as ClockType](ctrl)}
+                {clockSettingsView(settings.otb.clock, onChange)}
               </div>
               <div className="popupActionWrapper">
                 <button className="popupAction" data-icon="E"
@@ -125,141 +120,6 @@ export default {
 
     return null
   }
-}
-
-const clockSettingsView = {
-  none(_: NewOtbGameCtrl) {
-    return('')
-  },
-  simple(_: NewOtbGameCtrl) {
-    return (
-      <div key="simpleSettings" className="clockSettingParameters">
-        <div className="select_input">
-          {formWidgets.renderSelect('Time', 'time', settings.otb.clock.availableTimes, settings.otb.clock.simple.time, false, onChange)}
-        </div>
-      </div>
-    )
-  },
-  increment(_: NewOtbGameCtrl) {
-    return (
-      <div key="incrementSettings" className="clockSettingParameters">
-        <div className="select_input">
-          {formWidgets.renderSelect('Time', 'time', settings.otb.clock.availableTimes, settings.otb.clock.increment.time, false, onChange)}
-        </div>
-        <div className="select_input">
-          {formWidgets.renderSelect('Increment', 'increment', settings.otb.clock.availableIncrements.map(utils.tupleOf), settings.otb.clock.increment.increment, false, onChange)}
-        </div>
-      </div>
-    )
-  },
-  handicapInc(_: NewOtbGameCtrl) {
-    return (
-      <div key="handicapIncSettings" className="clockSettingParameters">
-        <div className="handicapRow">
-          <div className="handicapRowTitle">Top</div>
-          <div className="select_input inline handicapRowMember">
-            {formWidgets.renderSelect('Time', 'topTime', settings.otb.clock.availableTimes, settings.otb.clock.handicapInc.topTime, false, onChange)}
-          </div>
-          <div className="select_input inline handicapRowMember">
-            {formWidgets.renderSelect('Increment', 'topIncrement', settings.otb.clock.availableIncrements.map(utils.tupleOf), settings.otb.clock.handicapInc.topIncrement, false, onChange)}
-          </div>
-        </div>
-        <div className="handicapRow">
-          <div className="handicapRowTitle">Bottom</div>
-          <div className="select_input inline handicapRowMember">
-            {formWidgets.renderSelect('Time', 'bottomTime', settings.otb.clock.availableTimes, settings.otb.clock.handicapInc.bottomTime, false, onChange)}
-          </div>
-          <div className="select_input inline handicapRowMember">
-            {formWidgets.renderSelect('Increment', 'bottomIncrement', settings.otb.clock.availableIncrements.map(utils.tupleOf), settings.otb.clock.handicapInc.bottomIncrement, false, onChange)}
-          </div>
-        </div>
-      </div>
-    )
-  },
-  delay(_: NewOtbGameCtrl) {
-    return (
-      <div key="delaySettings" className="clockSettingParameters">
-        <div className="select_input">
-          {formWidgets.renderSelect('Time', 'time', settings.otb.clock.availableTimes, settings.otb.clock.delay.time, false, onChange)}
-        </div>
-        <div className="select_input">
-          {formWidgets.renderSelect('Increment', 'increment', settings.otb.clock.availableIncrements.map(utils.tupleOf), settings.otb.clock.delay.increment, false, onChange)}
-        </div>
-      </div>
-    )
-  },
-  bronstein(_: NewOtbGameCtrl) {
-    return (
-      <div key="bronsteinSettings" className="clockSettingParameters">
-        <div className="select_input">
-          {formWidgets.renderSelect('Time', 'time', settings.otb.clock.availableTimes, settings.otb.clock.bronstein.time, false, onChange)}
-        </div>
-        <div className="select_input">
-          {formWidgets.renderSelect('Increment', 'increment', settings.otb.clock.availableIncrements.map(utils.tupleOf), settings.otb.clock.bronstein.increment, false, onChange)}
-        </div>
-      </div>
-    )
-  },
-  hourglass(_: NewOtbGameCtrl) {
-    return (
-      <div key="hourglassSettings" className="clockSettingParameters">
-        <div className="select_input">
-          {formWidgets.renderSelect('Time', 'time', settings.otb.clock.availableTimes, settings.otb.clock.hourglass.time, false, onChange)}
-        </div>
-      </div>
-    )
-  },
-  stage(ctrl: NewOtbGameCtrl) {
-    return (
-      <div key="hourglassSettings" className="clockSettingParameters">
-        { settings.otb.clock.stage.stages().map(renderStage.bind(undefined, ctrl)) }
-        <div className="select_input">
-          {formWidgets.renderSelect('Increment', 'increment', settings.otb.clock.availableIncrements.map(utils.tupleOf), settings.otb.clock.stage.increment, false, onChange)}
-        </div>
-      </div>
-    )
-  }
-}
-
-function renderStage(ctrl: NewOtbGameCtrl, _: number, index: number) {
-  const time = updateTime.bind(undefined, index)
-  const moves = updateMoves.bind(undefined, index)
-  const hidePlus = settings.otb.clock.stage.stages().length >= 5
-  const hideMinus = settings.otb.clock.stage.stages().length <= 2
-  return (
-    <div className="stageRow">
-      <div className="stageRowTitle">{index + 1}</div>
-      <div className="select_input inline stage stageRowMember">
-        {formWidgets.renderSelect('Time', 'time', settings.otb.clock.availableTimes, time, false, onChange)}
-      </div>
-      <div className={'select_input inline stage stageRowMember' + ((index === settings.otb.clock.stage.stages().length - 1 ) ? ' lastStage' : '')}>
-        {formWidgets.renderSelect('Moves', 'moves', settings.otb.clock.availableMoves.map(utils.tupleOf), moves, false, onChange)}
-      </div>
-      <div className={'stageRowMember addSubtractStage' + ((index === settings.otb.clock.stage.stages().length - 1 ) ? ' lastStage' : '')}>
-        <span  className={'fa fa-plus-square-o' + (hidePlus ? ' hiddenButton' : '')} oncreate={helper.ontap(() => ctrl.addStage())}/> <span className={'fa fa-minus-square-o' + (hideMinus ? ' hiddenButton' : '')} oncreate={helper.ontap(() => ctrl.removeStage())}/>
-      </div>
-    </div>
-  )
-}
-
-function updateTime(index: number, time: string) {
-  let stages = settings.otb.clock.stage.stages()
-
-  if (time) {
-    stages[index].time = time
-    settings.otb.clock.stage.stages(stages)
-  }
-  return stages[index].time
-}
-
-function updateMoves (index: number, moves: string) {
-  let stages = settings.otb.clock.stage.stages()
-  if (moves) {
-    stages[index].moves = moves
-    settings.otb.clock.stage.stages(stages)
-  }
-
-  return stages[index].moves
 }
 
 function onChange () {

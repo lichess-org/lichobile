@@ -1,5 +1,6 @@
 import store from './storage'
 import * as range from 'lodash/range'
+import { ClockType, ClockTypeWithNone } from './ui/shared/clock/interfaces'
 
 export interface SettingsProp<T> {
   (): T
@@ -181,7 +182,7 @@ export default {
         ['Stage', 'stage']
       ],
 
-      clockType: localstorageprop('settings.otb.clock.clockType', 'none'),
+      clockType: localstorageprop<ClockTypeWithNone>('settings.otb.clock.clockType', 'none'),
 
       simple: {
         time: localstorageprop('settings.otb.clock.simple.time', '5')
@@ -241,7 +242,7 @@ export default {
       ['Stage', 'stage']
     ],
 
-    clockType: localstorageprop('settings.clock.clockType', 'simple'),
+    clockType: localstorageprop<ClockType>('settings.clock.clockType', 'simple'),
 
     simple: {
       time: localstorageprop('settings.clock.simple.time', '5')

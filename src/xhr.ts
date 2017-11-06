@@ -1,6 +1,7 @@
 import globalConfig from './config'
 import { fetchJSON, fetchText } from './http'
 import { currentSri, noop } from './utils'
+import storage from './storage'
 import settings from './settings'
 import i18n from './i18n'
 import session from './session'
@@ -168,6 +169,7 @@ export function status() {
     }
   })
   .then((data: ApiStatus) => {
+    // check api version
     if (data.api.current !== globalConfig.apiVersion) {
       for (let i = 0, len = data.api.olds.length; i < len; i++) {
         const o = data.api.olds[i]
@@ -176,16 +178,31 @@ export function status() {
             unsupportedDate = new Date(o.unsupportedAt),
             deprecatedDate = new Date(o.deprecatedAt)
 
-          if (now > unsupportedDate)
+          const key = 'warn_old_' + o.version
+          const deprWarnCount = Number(storage.get(key)) || 0
+
+          if (now > unsupportedDate) {
             window.navigator.notification.alert(
               i18n('apiUnsupported'),
               noop
             )
-          else if (now > deprecatedDate)
-            window.navigator.notification.alert(
-              i18n('apiDeprecated', window.moment(unsupportedDate).format('LL')),
-              noop
-            )
+          }
+          else if (now > deprecatedDate) {
+            if (deprWarnCount === 0) {
+              window.navigator.notification.alert(
+                i18n('apiDeprecated', window.moment(unsupportedDate).format('LL')),
+                () => {
+                  storage.set(key, 1)
+                }
+              )
+            }
+            else if (deprWarnCount === 15) {
+              storage.remove(key)
+            }
+            else {
+              storage.set(key, deprWarnCount + 1)
+            }
+          }
           break
         }
       }

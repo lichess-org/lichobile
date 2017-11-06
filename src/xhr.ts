@@ -169,41 +169,54 @@ export function status() {
     }
   })
   .then((data: ApiStatus) => {
-    // check api version
-    if (data.api.current !== globalConfig.apiVersion) {
-      for (let i = 0, len = data.api.olds.length; i < len; i++) {
-        const o = data.api.olds[i]
-        if (o.version === globalConfig.apiVersion) {
-          const now = new Date(),
-            unsupportedDate = new Date(o.unsupportedAt),
-            deprecatedDate = new Date(o.deprecatedAt)
+    // warn if buggy app
+    // if (data.mustUpgrade) {
+      // const v = window.AppVersion ? window.AppVersion.version : 'dev'
+      // const key = 'warn_bug_' + v
+      // const warnCount = Number(storage.get(key)) || 0
+      // if (warnCount === 0) {
+      //   window.navigator.notification.alert(
+      //     'A new version is available from the app store.',
+      //     () => {
+      //       storage.set(key, 1)
+      //     }
+      //   )
+      // } else {
+      //   storage.set(key, warnCount + 1)
+      // }
+    // }
 
-          const key = 'warn_old_' + o.version
-          const deprWarnCount = Number(storage.get(key)) || 0
+    /* else */ if (data.api.current !== globalConfig.apiVersion) {
+      const versionInfo = data.api.olds.find(o => o.version === globalConfig.apiVersion)
+      if (versionInfo) {
+        const now = new Date(),
+        unsupportedDate = new Date(versionInfo.unsupportedAt),
+        deprecatedDate = new Date(versionInfo.deprecatedAt)
 
-          if (now > unsupportedDate) {
+        const key = 'warn_old_' + versionInfo.version
+        const deprWarnCount = Number(storage.get(key)) || 0
+
+        if (now > unsupportedDate) {
+          window.navigator.notification.alert(
+            i18n('apiUnsupported'),
+            noop
+          )
+        }
+        else if (now > deprecatedDate) {
+          if (deprWarnCount === 0) {
             window.navigator.notification.alert(
-              i18n('apiUnsupported'),
-              noop
+              i18n('apiDeprecated', window.moment(unsupportedDate).format('LL')),
+              () => {
+                storage.set(key, 1)
+              }
             )
           }
-          else if (now > deprecatedDate) {
-            if (deprWarnCount === 0) {
-              window.navigator.notification.alert(
-                i18n('apiDeprecated', window.moment(unsupportedDate).format('LL')),
-                () => {
-                  storage.set(key, 1)
-                }
-              )
-            }
-            else if (deprWarnCount === 15) {
-              storage.remove(key)
-            }
-            else {
-              storage.set(key, deprWarnCount + 1)
-            }
+          else if (deprWarnCount === 15) {
+            storage.remove(key)
           }
-          break
+          else {
+            storage.set(key, deprWarnCount + 1)
+          }
         }
       }
     }

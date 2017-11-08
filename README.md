@@ -83,4 +83,4 @@ Through XCode, in the build settings menu:
 
 ## Advanced setup
 
-See the wiki.
+See the [wiki](https://github.com/veloce/lichobile/wiki/Setting-a-lichess-dev-server-for-the-app).

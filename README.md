@@ -48,6 +48,10 @@ To build and watch for changes:
 
     $ npm run test
 
+## Run in a browser
+
+   chromium --user-data-dir=/tmp/lichobile-chrom --disable-web-security ~/lichobile/www/index.html
+
 ## Build cordova application and run on device
 
 Be sure to check requirements above.

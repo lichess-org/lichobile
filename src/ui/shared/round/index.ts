@@ -4,7 +4,7 @@ import { OnlineGameData, OfflineGameData, GameData, GameStatus } from '../../../
 import { AnalyseData } from '../../../lichess/interfaces/analyse'
 import { GameSituation } from '../../../chess'
 import { Data as TrainingData } from '../../training/interfaces'
-import { ClockType } from '../clock/interfaces'
+import { ClockTypeWithNone } from '../clock/interfaces'
 
 export type Position = 'player' | 'opponent'
 export type Material = { [role: string]: number }
@@ -46,7 +46,7 @@ export interface OfflineRoundInterface extends RoundInterface {
   actions: any
   newGameMenu: any
 
-  startNewGame(variant: VariantKey, setupFen?: string, clockType?: ClockType): void
+  startNewGame(variant: VariantKey, setupFen?: string, clockType?: ClockTypeWithNone): void
   save(): void
   sharePGN(): void
   onReplayAdded(sit: GameSituation): void

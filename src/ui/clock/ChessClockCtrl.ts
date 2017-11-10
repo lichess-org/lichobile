@@ -19,12 +19,12 @@ export interface IChessClockCtrl {
 
 export default function ChessClockCtrl(): IChessClockCtrl {
 
-  const clockType: Mithril.Stream<ClockType> = stream(settings.clock.clockType() as ClockType)
+  const clockType: Mithril.Stream<ClockType> = stream(settings.clock.clockType())
   const clockObj: Mithril.Stream<IChessClock> = stream(clockSet[clockType()]())
 
   function reload() {
     if (clockObj() && clockObj().isRunning() && !clockObj().flagged()) return
-    clockType(settings.clock.clockType() as ClockType)
+    clockType(settings.clock.clockType())
     clockObj(clockSet[clockType()]())
   }
 

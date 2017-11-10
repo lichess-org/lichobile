@@ -23,7 +23,7 @@ import actions from './actions'
 import newGameMenu, { NewOtbGameCtrl } from './newOtbGame'
 import importGamePopup, { Controller as ImportGameController } from './importGamePopup'
 
-import { IChessClock, ClockType } from '../shared/clock/interfaces'
+import { IChessClock, ClockTypeWithNone } from '../shared/clock/interfaces'
 import clockSet from './clockSet'
 
 interface InitPayload {
@@ -73,10 +73,10 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
         try {
           this.init(saved.data, saved.situations, saved.ply)
         } catch (e) {
-          this.startNewGame(currentVariant, undefined, settings.otb.clock.clockType() as ClockType)
+          this.startNewGame(currentVariant, undefined, settings.otb.clock.clockType())
         }
       } else {
-        this.startNewGame(currentVariant, undefined, settings.otb.clock.clockType() as ClockType)
+        this.startNewGame(currentVariant, undefined, settings.otb.clock.clockType())
       }
     }
   }
@@ -108,9 +108,6 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
       this.clock.setState(data.offlineClock)
     }
 
-    if (this.clock)
-      data.offlineClock = this.clock.getState()
-
     if (!this.chessground) {
       this.chessground = ground.make(this.data, this.replay.situation(), this.userMove, this.onUserNewPiece, this.onMove, this.onNewPiece)
     } else {
@@ -120,7 +117,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     redraw()
   }
 
-  public startNewGame(variant: VariantKey, setupFen?: string, clockType?: ClockType) {
+  public startNewGame(variant: VariantKey, setupFen?: string, clockType?: ClockTypeWithNone) {
     const payload: InitPayload = {
       variant
     }

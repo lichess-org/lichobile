@@ -21,13 +21,17 @@ export function vote(id: number, v: number): Promise<any> {
 }
 
 export function loadPuzzle(id: number): Promise<PuzzleData> {
-  return fetchJSON(`/training/${id}/load`)
+  return fetchJSON<PuzzleData>(`/training/${id}/load`)
+  .then(cfg => {
+    router.assignState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
+    return cfg
+  })
 }
 
 export function newPuzzle(): Promise<PuzzleData> {
   return fetchJSON<PuzzleData>('/training/new')
   .then(cfg => {
-    router.replacePath(`/training/${cfg.puzzle.id}`)
+    router.assignState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
     return cfg
   })
 }

@@ -67,10 +67,26 @@ function processQuerystring(e?: PopStateEvent) {
   if (!matched) router.run('/')
 }
 
-function replacePath(path: string) {
+function assignState(state?: { [k: string]: any }, path?: string) {
+  // try catch to avoid ios 9 100th pushState call DOM error
+  // see https://forums.developer.apple.com/thread/36650
+  // and https://bugs.webkit.org/show_bug.cgi?id=156115
+  // (may be only 100 calls per 30s interval in ios 10... need to test)
   try {
-    window.history.replaceState(window.history.state, '', '?=' + path)
+    const newState = state ?
+      Object.assign({}, window.history.state, state) :
+      window.history.state
+
+    if (path !== undefined) {
+      window.history.replaceState(newState, '', '?=' + path)
+    } else {
+      window.history.replaceState(newState, '')
+    }
   } catch (e) { console.error(e) }
+}
+
+function replacePath(path: string) {
+  assignState(undefined, path)
 }
 
 function setQueryParams(params: StringMap) {
@@ -157,12 +173,7 @@ export default {
   },
   replacePath,
   setQueryParams,
-  assignState(state: Object) {
-    try {
-      const newState = Object.assign({}, window.history.state, state)
-      window.history.replaceState(newState, '')
-    } catch (e) { console.error(e) }
-  },
+  assignState,
   backHistory,
   getViewSlideDirection(): string {
     return viewSlideDirection

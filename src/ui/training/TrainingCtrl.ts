@@ -175,15 +175,6 @@ export default class TrainingCtrl implements PromotingInterface {
     .catch(this.onXhrError)
   }
 
-  public loadPuzzle = (id: number) => {
-    xhr.loadPuzzle(id)
-    .then(cfg => {
-      this.init(cfg)
-    })
-    .then(this.onXhrSuccess)
-    .catch(this.onXhrError)
-  }
-
   public retry = router.reload
 
   public share = () => {

@@ -1,7 +1,6 @@
 import * as h from 'mithril/hyperscript'
 import signals from '../../signals'
 import socket from '../../socket'
-import router from '../../router'
 import redraw from '../../utils/redraw'
 import { handleXhrError, safeStringToNum } from '../../utils'
 import { emptyFen } from '../../utils/fen'
@@ -27,11 +26,6 @@ interface State {
 // cache last state to retrieve it when navigating back
 const cachedState: State = {}
 
-function saveState(ctrl: TrainingCtrl) {
-  cachedState.ctrl = ctrl
-  router.assignState({ puzzleId: ctrl.data.puzzle.id })
-}
-
 export default {
   oninit({ attrs }) {
     const numId = safeStringToNum(attrs.id)
@@ -44,7 +38,7 @@ export default {
         xhr.loadPuzzle(numId)
         .then(cfg => {
           this.ctrl = new TrainingCtrl(cfg)
-          saveState(this.ctrl)
+          cachedState.ctrl = this.ctrl
         })
         .catch(handleXhrError)
       }
@@ -52,7 +46,7 @@ export default {
       xhr.newPuzzle()
       .then(cfg => {
         this.ctrl = new TrainingCtrl(cfg)
-        saveState(this.ctrl)
+        cachedState.ctrl = this.ctrl
       })
       .catch(handleXhrError)
     }

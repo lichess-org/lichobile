@@ -9,7 +9,6 @@ import * as chess from '../../chess'
 import { handleXhrError } from '../../utils'
 import * as chessFormat from '../../utils/chessFormat'
 import sound from '../../sound'
-import socket from '../../socket'
 import settings from '../../settings'
 import { PuzzleData } from '../../lichess/interfaces/training'
 import promotion from '../shared/offlineRound/promotion'
@@ -41,16 +40,12 @@ export default class TrainingCtrl implements PromotingInterface {
   pieceTheme: string
 
   constructor(cfg: PuzzleData) {
-    socket.createDefault()
-
     this.menu = menu.controller(this)
     this.init(cfg)
 
     this.pieceTheme = settings.general.theme.piece()
 
     signals.afterLogin.add(this.retry)
-
-    window.plugins.insomnia.keepAwake()
   }
 
   public init = (cfg: PuzzleData) => {

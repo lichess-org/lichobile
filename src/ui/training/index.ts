@@ -1,5 +1,6 @@
 import * as h from 'mithril/hyperscript'
 import signals from '../../signals'
+import socket from '../../socket'
 import router from '../../router'
 import redraw from '../../utils/redraw'
 import { handleXhrError, safeStringToNum } from '../../utils'
@@ -55,6 +56,9 @@ export default {
       })
       .catch(handleXhrError)
     }
+
+    socket.createDefault()
+    window.plugins.insomnia.keepAwake()
   },
 
   oncreate: helper.viewFadeIn,

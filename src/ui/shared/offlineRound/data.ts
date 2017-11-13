@@ -3,6 +3,7 @@ import { oppositeColor } from '../../../utils'
 import i18n from '../../../i18n'
 import { standardFen } from '../../../lichess/variant'
 import { OfflineGameData } from '../../../lichess/interfaces/game'
+import { ClockState } from '../clock/interfaces'
 
 const standardVariant: Variant = {
   key: 'standard',
@@ -21,6 +22,7 @@ export interface OfflineDataConfig {
   pref?: {
     centerPiece: boolean
   }
+  clock?: ClockState
 }
 
 export default function data(cfg: OfflineDataConfig): OfflineGameData {
@@ -61,6 +63,7 @@ export default function data(cfg: OfflineDataConfig): OfflineGameData {
       destination: true,
       centerPiece: cfg.pref && cfg.pref.centerPiece || false
     },
-    steps: []
+    steps: [],
+    offlineClock: cfg.clock
   }
 }

@@ -8,8 +8,9 @@ import formWidgets from '../shared/form'
 import popupWidget from '../shared/popup'
 import * as helper from '../helper'
 import * as stream from 'mithril/stream'
-
+import redraw from '../../utils/redraw'
 import { OtbRoundInterface } from '../shared/round'
+import { clockSettingsView } from '../shared/clock/utils'
 
 export interface NewOtbGameCtrl {
   open: () => void
@@ -90,11 +91,15 @@ export default {
                     </div>
                   </div> : null
                 }
+                <div className="select_input">
+                  {formWidgets.renderSelect('Clock', 'clock', settings.otb.clock.availableClocks, settings.otb.clock.clockType, false, onChange)}
+                </div>
+                {clockSettingsView(settings.otb.clock, onChange)}
               </div>
               <div className="popupActionWrapper">
                 <button className="popupAction" data-icon="E"
                   oncreate={helper.ontap(() =>
-                    ctrl.root.startNewGame(settings.otb.variant() as VariantKey, ctrl.root.vm.setupFen))
+                    ctrl.root.startNewGame(settings.otb.variant() as VariantKey, ctrl.root.vm.setupFen, settings.otb.clock.clockType()))
                   }>
                   {i18n('play')}
                 </button>
@@ -114,4 +119,8 @@ export default {
 
     return null
   }
+}
+
+function onChange () {
+  redraw()
 }

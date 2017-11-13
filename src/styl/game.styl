@@ -145,8 +145,6 @@
     padding 0 10px
     .ratingAndMaterial
       height inherit
-    > .antagonistUser
-      font-size 0.8em
     > .clock
       display inline-block
       font-size 22px
@@ -447,15 +445,6 @@
     max-height 55px
   @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
     height 'calc((100vh - %s - 12vh) / 8 + 10px)' % headerHeight
-
-.playTable.opponent.mode_facing
-  > .pocket
-    transform rotate(180deg)
-
-#page.white .playTable.mode_flip.turn_black,
-#page.black .playTable.mode_flip.turn_white
-  > .pocket
-    transform rotate(180deg)
 
 .pocket > piece
   width calc(100vw / 8)

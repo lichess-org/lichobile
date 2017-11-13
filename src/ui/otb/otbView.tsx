@@ -46,11 +46,13 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
 
   const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
 
+  const clock = ctrl.clock
+
   if (isPortrait)
     return h.fragment({ key: orientationKey }, [
-      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme),
+      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, clock),
       board,
-      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme),
+      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, clock),
       renderGameActionsBar(ctrl)
     ])
   else
@@ -58,9 +60,9 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
       board,
       <section key="table" className="table">
         <section className="playersTable offline">
-          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme)}
+          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, clock)}
           {replayTable}
-          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme)}
+          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, clock)}
         </section>
         {renderGameActionsBar(ctrl)}
       </section>
@@ -91,6 +93,19 @@ function renderGameActionsBar(ctrl: OtbRound) {
           () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom')
         )}
       />
+      {ctrl.clock ?
+        ((!ctrl.clock.flagged() && ctrl.clock.activeSide()) ?
+          <button id="playPause" className={'fa action_bar_button ' + (ctrl.clock.isRunning() ? 'fa-pause' : 'fa-play')}
+            oncreate={helper.ontap(
+              () => ctrl.clock.startStop(),
+              () => window.plugins.toast.show(i18n('chessClock'), 'short', 'bottom')
+            )}
+          />
+          :
+          <button key="disabled-pause" className="fa action_bar_button fa-pause disabled"/>
+        )
+        : null
+      }
       {utils.hasNetwork() ?
         <button className="fa fa-cloud-upload action_bar_button"
           oncreate={helper.ontap(

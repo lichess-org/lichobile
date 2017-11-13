@@ -1,23 +1,32 @@
+import * as h from 'mithril/hyperscript'
+import * as debounce from 'lodash/debounce'
 import session from '../session'
 import redraw from '../utils/redraw'
-import * as helper from './helper'
+import { handleXhrError } from '../utils'
+import { fetchJSON, ErrorResponse } from '../http'
 import i18n from '../i18n'
 import router from '../router'
+import * as helper from './helper'
 import loginModal from './loginModal'
 import { closeIcon } from './shared/icons'
-import * as h from 'mithril/hyperscript'
+
+interface SubmitErrorResponse extends ErrorResponse {
+  body: {
+    error: SubmitError
+  }
+}
 
 interface SubmitError {
-  error: {
-    email?: string[]
-    username?: string[]
-    password?: string[]
-  }
+  email?: string[]
+  username?: string[]
+  password?: string[]
 }
 
 let isOpen = false
 let loading = false
 let checkEmail = false
+
+let formError: SubmitError | null = null
 
 export default {
   open,
@@ -32,7 +41,7 @@ export default {
         }, closeIcon),
         h('h2', i18n('signUp'))
       ]),
-      h('div.modal_content', {
+      h('div#signupModalContent.modal_content', {
         className: loading ? 'loading' : ''
       }, checkEmail ? renderCheckEmail() : renderForm())
     ])
@@ -68,28 +77,74 @@ function renderForm() {
         return submit((e.target as HTMLFormElement))
       }
     }, [
-      h('input#pseudo[type=text]', {
-        placeholder: i18n('username'),
-        autocomplete: 'off',
-        autocapitalize: 'off',
-        autocorrect: 'off',
-        spellcheck: false,
-        required: true
-      }),
-      h('input#email[type=email]', {
-        placeholder: i18n('email'),
-        autocapitalize: 'off',
-        autocorrect: 'off',
-        spellcheck: false,
-        required: true
-      }),
-      h('input#password[type=password]', {
-        placeholder: i18n('password'),
-        required: true
-      }),
-      h('button.fat', i18n('signUp'))
+      h('div.field', [
+        formError && formError.username ?
+          h('div.form-error', formError.username[0]) : null,
+        h('input#pseudo[type=text]', {
+          className: formError && formError.username ? 'form-error' : '',
+          placeholder: i18n('username'),
+          autocomplete: 'off',
+          autocapitalize: 'off',
+          autocorrect: 'off',
+          spellcheck: false,
+          required: true,
+          onfocus: scrollToTop,
+          oninput: debounce((e: Event) => {
+            const val = (e.target as HTMLFormElement).value.trim()
+            if (val && val.length > 2) {
+              testUserName(val).then(exists => {
+                if (exists) {
+                  formError = {
+                    username: ['This username is already in use, please try another one.']
+                  }
+                }
+                else {
+                  formError = null
+                }
+                redraw()
+              })
+            } else {
+              formError = null
+              redraw()
+            }
+          }, 100)
+        }),
+      ]),
+      h('div.field', [
+        formError && formError.email ?
+          h('div.form-error', formError.email[0]) : null,
+        h('input#email[type=email]', {
+          onfocus: scrollToTop,
+          className: formError && formError.email ? 'form-error' : '',
+          placeholder: i18n('email'),
+          autocapitalize: 'off',
+          autocorrect: 'off',
+          spellcheck: false,
+          required: true
+        })
+      ]),
+      h('div.field', [
+        formError && formError.password ?
+          h('div.form-error', formError.password[0]) : null,
+        h('input#password[type=password]', {
+          onfocus: scrollToTop,
+          className: formError && formError.password ? 'form-error' : '',
+          placeholder: i18n('password'),
+          required: true
+        })
+      ]),
+      h('div.submit', [
+        h('button.submitButton[data-icon=F]', i18n('signUp'))
+      ])
     ])
   ]
+}
+
+function scrollToTop(e: Event) {
+  setTimeout(() => {
+    const el = e.target as HTMLElement
+    el.scrollIntoView(true)
+  }, 300)
 }
 
 function submit(form: HTMLFormElement) {
@@ -99,6 +154,7 @@ function submit(form: HTMLFormElement) {
   if (!login || !email || !pass) return
   window.cordova.plugins.Keyboard.close()
   loading = true
+  formError = null
   redraw()
   session.signup(login, email, pass)
   .then((d: { email_confirm?: boolean }) => {
@@ -113,23 +169,25 @@ function submit(form: HTMLFormElement) {
       loginModal.close()
     }
   })
-  .catch(error => {
-    loading = false
-    if (error.response) {
-      error.response.json().then((data: SubmitError) => {
-        if (data.error.username)
-          window.plugins.toast.show('Invalid username. ' + i18n(data.error.username[0]), 'short', 'center')
-        else if (data.error.email)
-          window.plugins.toast.show(i18n(data.error.email[0]), 'short', 'center')
-        else if (data.error.password)
-          window.plugins.toast.show('Invalid password. ' + i18n(data.error.password[0]), 'short', 'center')
-      })
+  .catch((error: any) => {
+    if (isSubmitError(error)) {
+      loading = false
+      formError = error.body.error
+      redraw()
+    }
+    else {
+      handleXhrError(error)
     }
   })
 }
 
+function isSubmitError(err: any): err is SubmitErrorResponse {
+  return (err as SubmitErrorResponse).body.error !== undefined
+}
+
 function open() {
   router.backbutton.stack.push(helper.slidesOutDown(close, 'signupModal'))
+  formError = null
   isOpen = true
 }
 
@@ -138,4 +196,8 @@ function close(fromBB?: string) {
   window.cordova.plugins.Keyboard.close()
   if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
   isOpen = false
+}
+
+function testUserName(term: string): Promise<boolean> {
+  return fetchJSON('/player/autocomplete?exists=1', { query: { term }})
 }

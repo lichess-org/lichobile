@@ -2,17 +2,19 @@
 
 'use strict'
 
+import 'whatwg-fetch'
+
 import * as Raven from 'raven-js'
 import * as moment from 'moment'
 window.moment = moment
 
 import * as debounce from 'lodash/debounce'
+import globalConfig from './config'
 import { hasNetwork } from './utils'
 import { syncWithNowPlayingGames } from './utils/offlineGames'
 import redraw from './utils/redraw'
 import session from './session'
-import { loadPreferredLanguage } from './i18n'
-import settings from './settings'
+import { loadPreferredLanguage, getLang } from './i18n'
 import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
 import * as helper from './ui/helper'
@@ -75,8 +77,8 @@ function main() {
   window.cordova.plugins.Keyboard.disableScroll(true)
   window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false)
 
-  if (window.lichess.mode === 'release' && window.lichess.sentryDSN) {
-    Raven.config(window.lichess.sentryDSN, {
+  if (globalConfig.mode === 'release' && globalConfig.sentryDSN) {
+    Raven.config(globalConfig.sentryDSN, {
       release: window.AppVersion ? window.AppVersion.version : 'snapshot-dev'
     }).install()
   }
@@ -114,7 +116,7 @@ function onOnline() {
       })
       .then(session.nowPlaying)
       .then(syncWithNowPlayingGames)
-      .then(() => xhr.setServerLang(settings.general.lang()))
+      .then(() => xhr.setServerLang(getLang()))
       .catch(() => console.log('connected as anonymous'))
 
     } else {

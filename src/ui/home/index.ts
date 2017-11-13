@@ -43,7 +43,7 @@ const HomeScreen: Mithril.Component<{}, HomeState> = {
           weekTopPlayers(topPlayersData)
           redraw()
         })
-        .catch(console.error.bind(console))
+        .catch(noop)
 
         timelineXhr()
         .then(data => {
@@ -54,7 +54,7 @@ const HomeScreen: Mithril.Component<{}, HomeState> = {
           )
           redraw()
         })
-        .catch(console.error.bind(console))
+        .catch(noop)
       }
     }
 

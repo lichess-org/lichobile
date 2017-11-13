@@ -1,9 +1,11 @@
 import * as h from 'mithril/hyperscript'
 import signals from '../../signals'
-import { handleXhrError } from '../../utils'
+import socket from '../../socket'
+import redraw from '../../utils/redraw'
+import { handleXhrError, safeStringToNum } from '../../utils'
+import { emptyFen } from '../../utils/fen'
 import * as helper from '../helper'
 import layout from '../layout'
-import { emptyFen } from '../../utils/fen'
 import ViewOnlyBoard from '../shared/ViewOnlyBoard'
 import { connectingHeader } from '../shared/common'
 
@@ -18,24 +20,39 @@ interface Attrs {
 }
 
 interface State {
-  ctrl: TrainingCtrl
+  ctrl?: TrainingCtrl
 }
+
+// cache last state to retrieve it when navigating back
+const cachedState: State = {}
 
 export default {
   oninit({ attrs }) {
-    if (attrs.id) {
-      xhr.loadPuzzle(Number(attrs.id))
-      .then(cfg => {
-        this.ctrl = new TrainingCtrl(cfg)
-      })
-      .catch(handleXhrError)
+    const numId = safeStringToNum(attrs.id)
+    if (numId !== undefined) {
+      if (cachedState.ctrl && window.history.state.puzzleId === numId) {
+        this.ctrl = cachedState.ctrl
+        redraw()
+      }
+      else {
+        xhr.loadPuzzle(numId)
+        .then(cfg => {
+          this.ctrl = new TrainingCtrl(cfg)
+          cachedState.ctrl = this.ctrl
+        })
+        .catch(handleXhrError)
+      }
     } else {
       xhr.newPuzzle()
       .then(cfg => {
         this.ctrl = new TrainingCtrl(cfg)
+        cachedState.ctrl = this.ctrl
       })
       .catch(handleXhrError)
     }
+
+    socket.createDefault()
+    window.plugins.insomnia.keepAwake()
   },
 
   oncreate: helper.viewFadeIn,
@@ -54,9 +71,9 @@ export default {
 
     if (this.ctrl) {
       return layout.board(
-        () => renderHeader(this.ctrl),
-        () => renderContent(this.ctrl, key, bounds),
-        () => overlay(this.ctrl)
+        () => renderHeader(this.ctrl!),
+        () => renderContent(this.ctrl!, key, bounds),
+        () => overlay(this.ctrl!)
       )
     }
     else {

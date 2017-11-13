@@ -1,18 +1,20 @@
+import * as h from 'mithril/hyperscript'
 import session from '../session'
+import { ErrorResponse } from '../http'
 import redraw from '../utils/redraw'
 import socket from '../socket'
 import signals from '../signals'
 import push from '../push'
 import challengesApi from '../lichess/challenges'
-import * as utils from '../utils'
+import { handleXhrError } from '../utils'
 import * as helper from './helper'
 import i18n from '../i18n'
-import signupModal from './signupModal'
 import router from '../router'
-import * as h from 'mithril/hyperscript'
 import { closeIcon } from './shared/icons'
+import signupModal from './signupModal'
 
 let isOpen = false
+let formError: string | null = null
 
 export default {
   open,
@@ -34,19 +36,28 @@ export default {
             submit((e.target as HTMLFormElement))
           }
         }, [
-          h('input#pseudo[type=text]', {
-            placeholder: i18n('username'),
-            autocomplete: 'off',
-            autocapitalize: 'off',
-            autocorrect: 'off',
-            spellcheck: false,
-            required: true
-          }),
-          h('input#password[type=password]', {
-            placeholder: i18n('password'),
-            required: true
-          }),
-          h('button.fat', i18n('signIn'))
+          formError ?  h('div.form-error', formError) : null,
+          h('div.field', [
+            h('input#pseudo[type=text]', {
+              className: formError ? 'form-error' : '',
+              placeholder: i18n('username'),
+              autocomplete: 'off',
+              autocapitalize: 'off',
+              autocorrect: 'off',
+              spellcheck: false,
+              required: true
+            }),
+          ]),
+          h('div.field', [
+            h('input#password[type=password]', {
+              className: formError ? 'form-error' : '',
+              placeholder: i18n('password'),
+              required: true
+            }),
+          ]),
+          h('div.submit', [
+            h('button.submitButton[data-icon=F]', i18n('signIn'))
+          ])
         ]),
         h('div.signup', [
           i18n('newToLichess') + ' ',
@@ -71,6 +82,8 @@ function submit(form: HTMLFormElement) {
   const login = form[0].value.trim()
   const pass = form[1].value
   if (!login || !pass) return
+  formError = null
+  redraw()
   window.cordova.plugins.Keyboard.close()
   session.login(login, pass)
   .then(() => {
@@ -84,18 +97,25 @@ function submit(form: HTMLFormElement) {
     challengesApi.refresh()
     session.refresh()
   })
-  .catch(err => {
-    if (err.ipban) {
+  .catch((err: ErrorResponse) => {
+    if (err.body.ipban) {
       close()
+    } else {
+      if (err.status !== 401) handleXhrError(err)
+      else {
+        if (err.body.global) {
+          formError = err.body.global[0]
+          redraw()
+        }
+      }
     }
-    throw err
   })
-  .catch(utils.handleXhrError)
 }
 
 function open() {
   router.backbutton.stack.push(helper.slidesOutDown(close, 'loginModal'))
   isOpen = true
+  formError = null
 }
 
 function close(fromBB?: string) {

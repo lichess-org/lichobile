@@ -10,6 +10,7 @@ export interface AnalyseData {
   takebackable: boolean
   correspondence?: CorrespondenceClockData
   clock?: ClockData
+  note?: string
   analysis?: RemoteEvalSummary
   userAnalysis: boolean
   tournament?: Tournament

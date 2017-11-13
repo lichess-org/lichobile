@@ -1,4 +1,5 @@
 import * as throttle from 'lodash/throttle'
+import { ErrorResponse } from '../../../http'
 import socket from '../../../socket'
 import redraw from '../../../utils/redraw'
 import * as utils from '../../../utils'
@@ -54,8 +55,8 @@ export default class TournamentCtrl {
       )
       redraw()
     })
-    .catch(err => {
-      if (utils.isFetchError(err) && err.response.status === 404) {
+    .catch((err: ErrorResponse) => {
+      if (err.status === 404) {
         this.notFound = true
         redraw()
       } else {
@@ -192,8 +193,8 @@ export default class TournamentCtrl {
     redraw()
   }
 
-  private onXhrError = (err: Error) => {
-    if (utils.isFetchError(err) && err.response.status === 404) {
+  private onXhrError = (err: ErrorResponse) => {
+    if (err.status === 404) {
       this.notFound = true
     }
     redraw()

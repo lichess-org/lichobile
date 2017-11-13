@@ -62,6 +62,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   private lastMoveMillis?: number
   private lastDrawOfferAtPly: number
   private clockIntervId: number
+  private clockTimeoutId: number
 
   public constructor(
     id: string,
@@ -127,9 +128,9 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (this.clock) {
       const tickNow = () => {
         this.clock && this.clock.tick()
-        if (gameApi.playable(this.data)) setTimeout(tickNow, 100)
+        if (gameApi.playable(this.data)) this.clockTimeoutId = setTimeout(tickNow, 100)
       }
-      setTimeout(tickNow, 100)
+      this.clockTimeoutId = setTimeout(tickNow, 100)
     }
 
     this.makeCorrespondenceClock()
@@ -552,6 +553,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public unload() {
+    clearTimeout(this.clockTimeoutId)
     clearInterval(this.clockIntervId)
     document.removeEventListener('resume', this.onResume)
     if (this.chat) this.chat.unload()

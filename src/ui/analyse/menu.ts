@@ -65,19 +65,22 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
     () => window.plugins.toast.show('Share PGN', 'short', 'bottom')
   )
 
+  const isOfflineOrNotPlayable =
+    ctrl.source === 'offline' || !gameApi.playable(ctrl.data)
+
   return h('div.analyseMenu', [
-    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? h('button[data-icon=U]', {
+     isOfflineOrNotPlayable ? h('button[data-icon=U]', {
       key: 'continueFromHere',
       oncreate: helper.ontap(() => {
         ctrl.menu.close()
         ctrl.continuePopup.open(ctrl.node.fen, ctrl.data.game.variant.key, ctrl.data.player.color)
       })
     }, i18n('continueFromHere')) : null,
-    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? h('button', {
+    isOfflineOrNotPlayable ? h('button', {
       key: 'boardEditor',
       oncreate: helper.ontap(() => router.set(`/editor/${encodeURIComponent(ctrl.node.fen)}`))
     }, [h('span.fa.fa-pencil'), i18n('boardEditor')]) : null,
-    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? h('button', {
+    isOfflineOrNotPlayable ? h('button', {
       key: 'sharePGN',
       oncreate: sharePGN
     }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : [h('span.fa.fa-share-alt'), i18n('sharePGN')]) : null,

@@ -86,7 +86,7 @@ function renderUserInfos(user: PuzzleUserData) {
   const height = 200
   return [
     h('p.trainingRatingHeader', h.trust(i18n('yourPuzzleRatingX', `<strong>${user.rating}</strong>`))),
-    user.history ? h('svg#training-graph', {
+    user.recent ? h('svg#training-graph', {
       width,
       height,
       oncreate() {
@@ -114,7 +114,7 @@ function renderRecent(user: PuzzleUserData) {
 }
 
 function drawChart(user: PuzzleUserData) {
-  const history = Array.from(user.history)
+  const history = Array.from(user.recent.map(x => x[2]))
   history.push(user.rating)
   const data = history.map((x, i) => [i + 1, x])
   const graph = select('#training-graph')

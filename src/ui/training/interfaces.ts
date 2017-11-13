@@ -1,23 +1,25 @@
-import { PuzzleData, Puzzle } from '../../lichess/interfaces/training'
+import { PuzzleData, Game } from '../../lichess/interfaces/training'
 
 export interface Data extends PuzzleData {
-  game: {
-    variant: {
-      key: VariantKey
-    }
-  }
-  player: {
-    color: Color
-  }
-  progress: any
-  playHistory: any
-  chess: any
-  puzzle: PimpedPuzzle
-  comment?: 'great' | 'retry' | 'fail'
-  replay?: any
+  game: PimpedGame
+  round?: any
 }
 
+export interface PimpedGame extends Game {
+  variant: {
+    key: VariantKey
+  }
+}
 
-export interface PimpedPuzzle extends Puzzle {
-  opponentColor: Color
+export type Mode = 'view' | 'play' | 'try'
+export type Feedback = 'init' | 'fail' | 'retry' | 'win' | 'good'
+
+export interface VM {
+  loading: boolean
+  initializing: boolean
+  moveValidationPending: boolean
+  mode: Mode
+  lastFeedback: Feedback
+  canViewSolution: boolean
+  resultSent: boolean
 }

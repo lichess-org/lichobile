@@ -1,7 +1,72 @@
 import settings from './settings'
 import { loadLocalJsonFile } from './utils'
 
+const defaultCode = 'en'
+
+let lang = defaultCode
 let messages = {} as StringMap
+
+export default function i18n(key: string, ...args: Array<string | number>): string {
+  let str: string = messages[key] || untranslated[key] || key
+  args.forEach(a => { str = str.replace('%s', String(a)) })
+  return str
+}
+
+export function getLang(): string {
+  return lang
+}
+
+export function loadPreferredLanguage(): Promise<string> {
+  const fromSettings = settings.general.lang()
+  if (fromSettings) {
+    return loadLanguage(fromSettings)
+  }
+
+  return new Promise(resolve => {
+    window.navigator.globalization.getPreferredLanguage(
+      l => resolve(l.value.split('-')[0]),
+      () => resolve(defaultCode)
+    )
+  })
+  .then((code: string) => {
+    settings.general.lang(code)
+    return code
+  })
+  .then(loadFile)
+  .then(loadMomentLocale)
+}
+
+export function getAvailableLanguages(): Promise<Array<[string, string]>> {
+  return loadLocalJsonFile('i18n/refs.json')
+}
+
+export function loadLanguage(lang: string): Promise<string> {
+  return loadFile(lang)
+  .then(loadMomentLocale)
+}
+
+function loadFile(code: string): Promise<string> {
+  return loadLocalJsonFile<StringMap>('i18n/' + code + '.json')
+  .then(data => {
+    lang = code
+    messages = data
+    return code
+  })
+  .catch(error => {
+    if (code === defaultCode) throw new Error(error)
+    return loadFile(defaultCode)
+  })
+}
+
+function loadMomentLocale(code: string): string {
+  if (code !== 'en') {
+    const script = document.createElement('script')
+    script.src = 'locale/' + code + '.js'
+    document.head.appendChild(script)
+  }
+  window.moment.locale(code)
+  return code
+}
 
 const untranslated: StringMap = {
   apiUnsupported: 'Your version of lichess app is too old! Please upgrade for free to the latest version.',
@@ -59,62 +124,4 @@ const untranslated: StringMap = {
   usernameUnacceptable: 'This username is not acceptable',
   usernameInvalid: 'The username contains invalid characters',
   offline: 'Offline'
-}
-
-const defaultCode = 'en'
-
-export default function i18n(key: string, ...args: Array<string | number>): string {
-  let str: string = messages[key] || untranslated[key] || key
-  args.forEach(a => { str = str.replace('%s', String(a)) })
-  return str
-}
-
-export function loadPreferredLanguage(): Promise<string> {
-  if (settings.general.lang()) {
-    return loadFromSettings()
-  }
-
-  return new Promise(resolve => {
-    window.navigator.globalization.getPreferredLanguage(
-      l => resolve(l.value.split('-')[0]),
-      () => resolve(defaultCode)
-    )
-  })
-  .then((code: string) => {
-    settings.general.lang(code)
-    return code
-  })
-  .then(loadFile)
-  .then(loadMomentLocale)
-}
-
-export function getAvailableLanguages(): Promise<Array<[string, string]>> {
-  return loadLocalJsonFile('i18n/refs.json')
-}
-
-export function loadFromSettings(): Promise<string> {
-  return loadFile(settings.general.lang())
-  .then(loadMomentLocale)
-}
-
-function loadFile(code: string): Promise<string> {
-  return loadLocalJsonFile<StringMap>('i18n/' + code + '.json')
-  .then(data => {
-    messages = data
-    return code
-  })
-  .catch(error => {
-    if (code === defaultCode) throw new Error(error)
-    return loadFile(defaultCode)
-  })
-}
-
-function loadMomentLocale(code: string): string {
-  if (code !== 'en') {
-    const script = document.createElement('script')
-    script.src = 'locale/' + code + '.js'
-    document.head.appendChild(script)
-  }
-  window.moment.locale(code)
-  return code
 }

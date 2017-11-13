@@ -1,16 +1,26 @@
 import * as throttle from 'lodash/throttle'
 import * as helper from '../../helper'
+import { ErrorResponse } from '../../../http'
 import redraw from '../../../utils/redraw'
 import { handleXhrError } from '../../../utils'
 import * as xhr from './../inboxXhr'
-import { SendErrorResponse, ComposeResponse } from '../interfaces'
+import { ComposeResponse } from '../interfaces'
 import router from '../../../router'
-import { FetchError } from '../../../http'
 import * as stream from 'mithril/stream'
+
+interface SendError {
+  username: Array<string>
+  subject: Array<string>
+  text: Array<string>
+}
+
+interface SendErrorResponse extends ErrorResponse {
+  body: SendError
+}
 
 export interface IComposeCtrl {
   id: Mithril.Stream<string>
-  errors: Mithril.Stream<SendErrorResponse>
+  errors: Mithril.Stream<SendError>
   send: (form: HTMLFormElement) => void
   onInput: (e: Event) => void
   autocompleteResults: Mithril.Stream<Array<string>>
@@ -19,7 +29,7 @@ export interface IComposeCtrl {
 export default function ComposeCtrl(userId: string): IComposeCtrl {
 
   const id = stream<string>(userId)
-  const errors = stream<SendErrorResponse>()
+  const errors = stream<SendError>()
   const autocompleteResults = stream<string[]>([])
 
   function send(form: HTMLFormElement) {
@@ -41,17 +51,14 @@ export default function ComposeCtrl(userId: string): IComposeCtrl {
   window.addEventListener('native.keyboardhide', helper.onKeyboardHide)
   window.addEventListener('native.keyboardshow', helper.onKeyboardShow)
 
-  function handleSendError (error: FetchError) {
-    error.response.json()
-    .then((errorResponse: SendErrorResponse) => {
-      if (errorResponse && (errorResponse.username || errorResponse.subject || errorResponse.text)) {
-        errors(errorResponse)
-        redraw()
-      }
-      else
-        throw error
-    })
-    .catch(handleXhrError)
+  function handleSendError(error: SendErrorResponse) {
+    if (error.body && (error.body.username || error.body.subject || error.body.text)) {
+      errors(error.body)
+      redraw()
+    }
+    else {
+      handleXhrError(error)
+    }
   }
 
   return {

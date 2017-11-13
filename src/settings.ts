@@ -57,7 +57,7 @@ export interface AiSettings extends GameSettings {
 
 export default {
   general: {
-    lang: localstorageprop<string>('settings.lang', 'en'),
+    lang: localstorageprop<string | null>('settings.lang', null),
     sound: localstorageprop('settings.sound', true),
     theme: {
       availableBackgroundThemes: [
@@ -97,6 +97,7 @@ export default {
         'shapes',
         'chessnut',
         'chess7',
+        'riohacha',
         'symmetric'
       ],
       board: localstorageprop('settings.theme.board', 'brown'),

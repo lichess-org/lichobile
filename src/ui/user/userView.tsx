@@ -20,7 +20,10 @@ export function header(user: UserFullProfile, ctrl: UserCtrl) {
 
   const title = h('div.title', [
     icon,
-    <span>{(user.title ? `${user.title} ` : '') + user.username}</span>
+    h('span', [
+      ...(user.title ? [h('span.userTitle', user.title), ' '] : []),
+      user.username
+    ])
   ])
 
   const backButton = !ctrl.isMe() ? renderBackbutton(title) : null

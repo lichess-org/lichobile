@@ -145,7 +145,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     .then(() => {
       if (setupFen) {
         this.vm.setupFen = undefined
-        router.replaceState('/otb')
+        router.replacePath('/otb')
       }
     })
   }

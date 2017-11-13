@@ -13,7 +13,7 @@ export function tellWorker<A>(worker: Worker, topic: string, payload?: A): void 
 }
 
 export function askWorker<A, B>(worker: Worker, msg: WorkerMessage<A>): Promise<B> {
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     function listen(e: MessageEvent) {
       if (e.data.topic === msg.topic && (msg.reqid === undefined || e.data.reqid === msg.reqid)) {
         worker.removeEventListener('message', listen)

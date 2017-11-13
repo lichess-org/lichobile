@@ -1,5 +1,5 @@
 import { fetchJSON, fetchText } from '../../../http'
-import { noop, serializeQueryParameters } from '../../../utils'
+import { serializeQueryParameters } from '../../../utils'
 import i18n from '../../../i18n'
 import { OnlineGameData } from '../../../lichess/interfaces/game'
 
@@ -27,7 +27,6 @@ export function syncNote(gameId: string, notes: string) {
     },
     body: serializeQueryParameters({ text: notes })
   }, false)
-  .then(noop)
   .catch(err => {
     window.plugins.toast.show(i18n('notesSynchronizationHasFailed'), 'short', 'center')
     throw err

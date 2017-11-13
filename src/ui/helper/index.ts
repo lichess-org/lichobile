@@ -40,14 +40,14 @@ export function onPageLeave(anim: (el: HTMLElement) => Promise<void>, cleanup?: 
 }
 
 // el fade in transition, can be applied to any element
-export function elFadeIn(el: HTMLElement) {
+export function elFadeIn(el: HTMLElement, duration = animDuration, origOpacity = '0.5', endOpacity = '1') {
   let tId: number
 
-  el.style.opacity = '0.5'
-  el.style.transition = `opacity ${animDuration}ms ease-out`
+  el.style.opacity = origOpacity
+  el.style.transition = `opacity ${duration}ms ease-out`
 
   setTimeout(() => {
-    el.style.opacity = '1'
+    el.style.opacity = endOpacity
   })
 
   function after() {
@@ -60,7 +60,7 @@ export function elFadeIn(el: HTMLElement) {
 
   el.addEventListener('transitionend', after, false)
   // in case transitionend does not fire
-  tId = setTimeout(after, animDuration + 10)
+  tId = setTimeout(after, duration + 10)
 }
 
 // page slide transition
@@ -153,11 +153,11 @@ export function slidesInUp(vnode: Mithril.DOMNode): Promise<HTMLElement> {
   .catch(console.log.bind(console))
 }
 
-export function slidesOutDown(callback: () => void, elID: string): () => Promise<HTMLElement> {
-  return function() {
+export function slidesOutDown(callback: (fromBB?: string) => void, elID: string): () => Promise<HTMLElement> {
+  return function(fromBB?: string) {
     const el = document.getElementById(elID)
     return Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
-    .then(utils.autoredraw.bind(undefined, callback))
+    .then(() => utils.autoredraw(() => callback(fromBB)))
     .catch(console.log.bind(console))
   }
 }
@@ -171,11 +171,11 @@ export function slidesInLeft(vnode: Mithril.DOMNode): Promise<HTMLElement> {
   .catch(console.log.bind(console))
 }
 
-export function slidesOutRight(callback: () => void, elID: string): () => Promise<HTMLElement> {
-  return function() {
+export function slidesOutRight(callback: (fromBB?: string) => void, elID: string): () => Promise<HTMLElement> {
+  return function(fromBB?: string) {
     const el = document.getElementById(elID)
     return Zanimo(el, 'transform', 'translateX(100%)', 250, 'ease-out')
-    .then(utils.autoredraw.bind(undefined, callback))
+    .then(() => utils.autoredraw(() => callback(fromBB)))
     .catch(console.log.bind(console))
   }
 }

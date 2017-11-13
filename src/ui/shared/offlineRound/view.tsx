@@ -186,6 +186,7 @@ export function renderForwardButton(ctrl: OfflineRoundInterface) {
   })
 }
 
+// TODO replace by sit.san in version 5.4.0
 function renderTd(sit: GameSituation, curPly: number) {
   if (sit && sit.pgnMoves.length) {
     const san = sit.pgnMoves[sit.pgnMoves.length - 1]

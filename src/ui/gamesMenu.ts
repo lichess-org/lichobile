@@ -1,6 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import * as IScroll from 'iscroll'
 import * as utils from '../utils'
+import { positionsCache } from '../utils/gamePosition'
 import { getOfflineGames } from '../utils/offlineGames'
 import { playerName as liPlayerName } from '../lichess/player'
 import { OnlineGameData } from '../lichess/interfaces/game'
@@ -130,7 +131,7 @@ function close(fromBB?: string) {
 
 function joinGame(g: NowPlayingGame) {
   lastJoined = g
-  utils.gamePosCache.set(g.fullId, { fen: g.fen, orientation: g.color })
+  positionsCache.set(g.fullId, { fen: g.fen, orientation: g.color })
   close()
   router.set('/game/' + g.fullId)
 }

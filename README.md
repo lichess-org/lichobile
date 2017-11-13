@@ -44,6 +44,14 @@ To build and watch for changes:
 
     $ npm run watch
 
+## Run the tests
+
+    $ npm run test
+
+## Run in a browser
+
+   chromium --user-data-dir=/tmp/lichobile-chrom --disable-web-security ~/lichobile/www/index.html
+
 ## Build cordova application and run on device
 
 Be sure to check requirements above.
@@ -79,4 +87,4 @@ Through XCode, in the build settings menu:
 
 ## Advanced setup
 
-See the wiki.
+See the [wiki](https://github.com/veloce/lichobile/wiki/Setting-a-lichess-dev-server-for-the-app).

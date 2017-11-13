@@ -67,15 +67,31 @@ function processQuerystring(e?: PopStateEvent) {
   if (!matched) router.run('/')
 }
 
-function replaceState(path: string) {
+function assignState(state?: { [k: string]: any }, path?: string) {
+  // try catch to avoid ios 9 100th pushState call DOM error
+  // see https://forums.developer.apple.com/thread/36650
+  // and https://bugs.webkit.org/show_bug.cgi?id=156115
+  // (may be only 100 calls per 30s interval in ios 10... need to test)
   try {
-    window.history.replaceState(window.history.state, '', '?=' + path)
+    const newState = state ?
+      Object.assign({}, window.history.state, state) :
+      window.history.state
+
+    if (path !== undefined) {
+      window.history.replaceState(newState, '', '?=' + path)
+    } else {
+      window.history.replaceState(newState, '')
+    }
   } catch (e) { console.error(e) }
 }
 
-function setStateParams(params: StringMap) {
+function replacePath(path: string) {
+  assignState(undefined, path)
+}
+
+function setQueryParams(params: StringMap) {
   const path = get().replace(/\?.+$/, '')
-  replaceState(path + `?${serializeQueryParameters(params)}`)
+  replacePath(path + `?${serializeQueryParameters(params)}`)
 }
 
 const backbutton = (() => {
@@ -115,7 +131,7 @@ function doSet(path: string, replace = false) {
   // reset backbutton stack when changing route
   backbutton.stack = []
   if (replace) {
-    replaceState(path)
+    replacePath(path)
   } else {
     const stateId = uid()
     currentStateId = stateId
@@ -155,8 +171,9 @@ export default {
   reload(): void {
     set(get(), true)
   },
-  replaceState,
-  setStateParams,
+  replacePath,
+  setQueryParams,
+  assignState,
   backHistory,
   getViewSlideDirection(): string {
     return viewSlideDirection

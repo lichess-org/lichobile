@@ -1,5 +1,6 @@
 import router from '../../router'
-import { hasNetwork, handleXhrError, gamePosCache } from '../../utils'
+import { hasNetwork, handleXhrError } from '../../utils'
+import { positionsCache } from '../../utils/gamePosition'
 import { getOfflineGameData, saveOfflineGameData, removeOfflineGameData } from '../../utils/offlineGames'
 import { game as gameXhr } from '../../xhr'
 import storage from '../../storage'
@@ -123,7 +124,7 @@ const GameScreen: Mithril.Component<Attrs, State> = {
       board = () => viewOnlyBoardContent(pov.fen, pov.color, pov.lastMove,
         pov.variant.key)
     } else {
-      const g = gamePosCache.get(attrs.id)
+      const g = positionsCache.get(attrs.id)
       if (g)
         board = () => viewOnlyBoardContent(g.fen, g.orientation)
       else

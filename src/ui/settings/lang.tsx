@@ -3,7 +3,7 @@ import redraw from '../../utils/redraw'
 import * as helper from '../helper'
 import formWidgets from '../shared/form'
 import layout from '../layout'
-import i18n, { loadFromSettings, getAvailableLanguages } from '../../i18n'
+import i18n, { loadLanguage, getAvailableLanguages } from '../../i18n'
 import settings from '../../settings'
 import { setServerLang } from '../../xhr'
 import * as stream from 'mithril/stream'
@@ -36,9 +36,10 @@ export const LangPrefScreen: Mithril.Component<{}, State> = {
           {formWidgets.renderRadio(l[1], 'lang', l[0],
             settings.general.lang() === l[0],
             e => {
-              settings.general.lang((e.target as HTMLInputElement).value)
-              setServerLang((e.target as HTMLInputElement).value)
-              loadFromSettings()
+              const lang = (e.target as HTMLInputElement).value
+              settings.general.lang(lang)
+              setServerLang(lang)
+              loadLanguage(lang)
             }
           )}
         </li>

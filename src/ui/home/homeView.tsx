@@ -32,10 +32,10 @@ export function body(ctrl: HomeState) {
   return (
     <div className="native_scroller page">
       <div className="home">
-        <section>
-          <div>{nbPlayers}</div>
-          <div>{nbGames}</div>
-        </section>
+        <div className="stats">
+          <div className="numPlayers">{nbPlayers}</div>
+          <div className="numGames">{nbGames}</div>
+        </div>
         <section id="homeCreate">
           <button className="fatButton" oncreate={helper.ontapY(newGameForm.openRealTime)}>{i18n('createAGame')}</button>
         </section>

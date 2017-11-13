@@ -130,7 +130,7 @@ function renderContent() {
   ])
 }
 
-function renderQuickSetup() {
+export function renderQuickSetup() {
   return h('div.newGame-pools', { key: 'quickSetup' }, xhr.cachedPools.length ?
     xhr.cachedPools
       .map(p => renderPool(p))

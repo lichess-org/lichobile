@@ -41,7 +41,6 @@ export function body(ctrl: HomeState) {
         </section>
         {renderDailyPuzzle(ctrl, isPortrait)}
         {renderTimeline(ctrl)}
-        {renderWeekLeaders(ctrl)}
       </div>
     </div>
   )

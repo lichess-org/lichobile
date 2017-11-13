@@ -1,5 +1,6 @@
 import store from './storage'
 import * as range from 'lodash/range'
+import { ClockType, ClockTypeWithNone } from './ui/shared/clock/interfaces'
 
 export interface SettingsProp<T> {
   (): T
@@ -168,7 +169,67 @@ export default {
     variant: localstorageprop<VariantKey>('settings.otb.variant', 'standard'),
     availableVariants: offlineAvailableVariants,
     whitePlayer: localstorageprop('settings.otb.whitePlayer', 'White'),
-    blackPlayer: localstorageprop('settings.otb.blackPlayer', 'Black')
+    blackPlayer: localstorageprop('settings.otb.blackPlayer', 'Black'),
+
+    clock: {
+      availableClocks: [
+        ['No Clock', 'none'],
+        ['Sudden Death', 'simple'],
+        ['Increment', 'increment'],
+        ['Increment with Handicap', 'handicapInc'],
+        ['Simple Delay', 'delay'],
+        ['Bronstein Delay', 'bronstein'],
+        ['Hourglass', 'hourglass'],
+        ['Stage', 'stage']
+      ],
+
+      clockType: localstorageprop<ClockTypeWithNone>('settings.otb.clock.clockType', 'none'),
+
+      simple: {
+        time: localstorageprop('settings.otb.clock.simple.time', '5')
+      },
+
+      increment: {
+        time: localstorageprop('settings.otb.clock.increment.time', '3'),
+        increment: localstorageprop('settings.otb.clock.increment.increment', '2')
+      },
+
+      handicapInc: {
+        topTime: localstorageprop('settings.otb.clock.handicapInc.topTime', '3'),
+        topIncrement: localstorageprop('settings.otb.clock.handicapInc.topIncrement', '2'),
+        bottomTime: localstorageprop('settings.otb.clock.handicapInc.bottomTime', '3'),
+        bottomIncrement: localstorageprop('settings.otb.clock.handicapInc.bottomIncrement', '2')
+      },
+
+      delay: {
+        time: localstorageprop('settings.otb.clock.delay.time', '3'),
+        increment: localstorageprop('settings.otb.clock.delay.increment', '2')
+      },
+
+      bronstein: {
+        time: localstorageprop('settings.otb.clock.bronstein.time', '3'),
+        increment: localstorageprop('settings.otb.clock.bronstein.increment', '2')
+      },
+
+      hourglass: {
+        time: localstorageprop('settings.otb.clock.hourglass.time', '5')
+      },
+
+      stage: {
+        stages: localstorageprop('settings.otb.clock.stage.stages', [{time: '120', moves: '40'}, {time: '60', moves: null}]),
+        increment: localstorageprop('settings.otb.clock.stage.increment', '30')
+      },
+
+      availableTimes: [['0', '0'], ['½', '0.5'], ['¾', '0.75'], ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'], ['6', '6'], ['7', '7'], ['8', '8'], ['9', '9'], ['10', '10'], ['15', '15'], ['20', '20'], ['25', '25'], ['30', '30'], ['45', '45'], ['60', '60'], ['90', '90'], ['120', '120'], ['150', '150'], ['180', '180']
+      ],
+
+      availableIncrements: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+        '10', '15', '20', '25', '30', '45', '60', '90', '120', '150', '180'
+      ],
+
+      availableMoves: ['5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60'
+      ]
+    }
   },
 
   clock: {
@@ -182,7 +243,7 @@ export default {
       ['Stage', 'stage']
     ],
 
-    clockType: localstorageprop('settings.clock.clockType', 'simple'),
+    clockType: localstorageprop<ClockType>('settings.clock.clockType', 'simple'),
 
     simple: {
       time: localstorageprop('settings.clock.simple.time', '5')

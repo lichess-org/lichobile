@@ -10,6 +10,8 @@ import CrazyPocket from '../../shared/round/crazy/CrazyPocket'
 import { OfflineRoundInterface, Position, Material } from '../round'
 import settings from '../../../settings'
 import Replay from './Replay'
+import { IChessClock, IStageClock } from '../clock/interfaces'
+import { formatClockTime } from '../round/clock/clockView'
 
 let pieceNotation: boolean
 
@@ -22,7 +24,7 @@ function getChecksCount(ctrl: OfflineRoundInterface, color: Color) {
     return 0
 }
 
-export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.Children, material: Material, position: Position, isPortrait: boolean, otbFlip?: boolean, customPieceTheme?: string) {
+export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.Children, material: Material, position: Position, isPortrait: boolean, otbFlip?: boolean, customPieceTheme?: string, clock?: IChessClock) {
   const sit = ctrl.replay.situation()
   const isCrazy = !!sit.crazyhouse
   const key = isPortrait ? position + '-portrait' : position + '-landscape'
@@ -31,17 +33,19 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
 
   const className = [
     'playTable',
+    'offline',
     position,
     isCrazy ? 'crazy' : '',
     otbFlip !== undefined ? otbFlip ? 'mode_flip' : 'mode_facing' : '',
-    ctrl.chessground.state.turnColor === 'white' ? 'turn_white' : 'turn_black'
+    ctrl.chessground.state.turnColor === ctrl.data.player.color ? 'player_turn' : 'opponent_turn'
   ].join(' ')
 
   return (
-    <section className={className} key={key}>
+    <section id={position + '_info'} className={className} key={key}>
       <div key="infos" className={'antagonistInfos offline' + (isCrazy ? ' crazy' : '')}>
         <div className="antagonistUser">
           {content}
+          {isCrazy && clock ? renderClock(clock, antagonistColor) : ''}
         </div>
         { !isCrazy ? <div className="ratingAndMaterial">
           {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
@@ -51,13 +55,16 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
         </div> : null
         }
       </div>
-      {sit.crazyhouse ? h(CrazyPocket, {
-        ctrl,
-        crazyData: sit.crazyhouse,
-        color: antagonistColor,
-        position,
-        customPieceTheme
-      }) : null}
+      {sit.crazyhouse ?
+        h(CrazyPocket, {
+          ctrl,
+          crazyData: sit.crazyhouse,
+          color: antagonistColor,
+          position,
+          customPieceTheme
+        })
+        :
+        clock ? renderClock(clock, antagonistColor) : null}
     </section>
   )
 }
@@ -218,4 +225,29 @@ function autoScroll(movelist: HTMLElement) {
   if (!movelist) return
   const plyEl = (movelist.querySelector('.current') || movelist.querySelector('tr:first-child')) as HTMLElement
   if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2
+}
+
+function renderClock(clock: IChessClock, color: Color) {
+  const runningColor = clock.activeSide()
+  const time = clock.getTime(color)
+  const isRunning = runningColor === color
+  let className = helper.classSet({
+    clock: true,
+    outoftime: !time,
+    running: isRunning,
+    offlineClock: true
+  })
+  const clockTime = h('div', {
+    className
+  }, formatClockTime(time, isRunning))
+
+  const moves = clock.clockType === 'stage' ? (clock as IStageClock).getMoves(color) : null
+  className = helper.classSet({
+    clockMoves: true
+  })
+  const clockMoves = h('div', {
+    className
+  }, 'Moves: ' + moves)
+  const clockInfo = h('div', {className: 'clockInfo'}, [clockTime, moves ? clockMoves : null])
+  return clockInfo
 }

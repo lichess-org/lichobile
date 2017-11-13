@@ -4,33 +4,33 @@ import clockSettings from './clockSettings'
 import clockSet from './clockSet'
 import * as stream from 'mithril/stream'
 
-import { ClockType, IChessClock, IStageClock } from './interfaces'
+import { ClockType, IChessClock } from '../shared/clock/interfaces'
 
 export interface IChessClockCtrl {
   hideStatusBar: () => void
   startStop: () => void
   clockSettingsCtrl: any
-  clockObj: Mithril.Stream<IChessClock | IStageClock>
+  clockObj: Mithril.Stream<IChessClock>
   reload: () => void
   goHome: () => void
-  clockTap: (side: 'top' | 'bottom') => void
+  clockTap: (side: 'white' | 'black') => void
   clockType: Mithril.Stream<ClockType>
 }
 
 export default function ChessClockCtrl(): IChessClockCtrl {
 
-  const clockType: Mithril.Stream<ClockType> = stream(settings.clock.clockType() as ClockType)
+  const clockType: Mithril.Stream<ClockType> = stream(settings.clock.clockType())
   const clockObj: Mithril.Stream<IChessClock> = stream(clockSet[clockType()]())
 
   function reload() {
     if (clockObj() && clockObj().isRunning() && !clockObj().flagged()) return
-    clockType(settings.clock.clockType() as ClockType)
+    clockType(settings.clock.clockType())
     clockObj(clockSet[clockType()]())
   }
 
   const clockSettingsCtrl = clockSettings.controller(reload, clockObj)
 
-  function clockTap(side: 'top' | 'bottom') {
+  function clockTap(side: 'white' | 'black') {
     clockObj().clockHit(side)
   }
 

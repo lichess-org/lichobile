@@ -60,4 +60,44 @@
         > .fa
           margin 0
 
+.clockMoves
+  transform translateZ(0)
+  max-width 120px
+  font-family Cousine
+  text-align right
+  font-size 15px
+  padding 4px 5px 2px
+  line-height 1
+  color #8c8c8c
+  background-color #262626
 
+.clock.outoftime
+    background-color #a00000
+
+.antagonistInfos.crazy
+  >.antagonistUser
+    >.clockInfo
+      >.clock
+        max-width 68px
+        font-size 20px
+        padding 2px 2px 2px
+      >.clockMoves
+        max-width 68px
+        font-size 12px
+        padding 2px 2px 2px
+
+#player_info
+  >.pocket
+    >piece
+      transform rotate(0deg)
+
+#opponent_info
+  >.pocket
+    >piece
+      transform rotate(0deg)
+
+.playTable.offline.mode_facing.opponent
+  transform rotate(180deg)
+
+.playTable.offline.mode_flip.opponent_turn
+  transform rotate(180deg)

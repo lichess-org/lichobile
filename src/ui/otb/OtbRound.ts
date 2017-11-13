@@ -23,6 +23,9 @@ import actions from './actions'
 import newGameMenu, { NewOtbGameCtrl } from './newOtbGame'
 import importGamePopup, { Controller as ImportGameController } from './importGamePopup'
 
+import { IChessClock, ClockTypeWithNone } from '../shared/clock/interfaces'
+import clockSet from './clockSet'
+
 interface InitPayload {
   variant: VariantKey
   fen?: string
@@ -38,6 +41,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public chessground: Chessground
   public replay: Replay
   public vm: OtbVM
+  public clock: IChessClock
 
   public constructor(
     saved?: StoredOfflineGame | null,
@@ -69,10 +73,10 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
         try {
           this.init(saved.data, saved.situations, saved.ply)
         } catch (e) {
-          this.startNewGame(currentVariant)
+          this.startNewGame(currentVariant, undefined, settings.otb.clock.clockType())
         }
       } else {
-        this.startNewGame(currentVariant)
+        this.startNewGame(currentVariant, undefined, settings.otb.clock.clockType())
       }
     }
   }
@@ -98,6 +102,12 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
       this.replay.init(variant, initialFen, situations, ply)
     }
 
+    if (data.offlineClock) {
+      const clockType = data.offlineClock.clockType
+      this.clock = clockSet[clockType](this.onFlag)
+      this.clock.setState(data.offlineClock)
+    }
+
     if (!this.chessground) {
       this.chessground = ground.make(this.data, this.replay.situation(), this.userMove, this.onUserNewPiece, this.onMove, this.onNewPiece)
     } else {
@@ -107,13 +117,15 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     redraw()
   }
 
-  public startNewGame(variant: VariantKey, setupFen?: string) {
+  public startNewGame(variant: VariantKey, setupFen?: string, clockType?: ClockTypeWithNone) {
     const payload: InitPayload = {
       variant
     }
     if (setupFen) {
       payload.fen = setupFen
     }
+
+    const clock = clockType ? clockSet[clockType](this.onFlag) : null
 
     chess.init(payload)
     .then((data: chess.InitResponse) => {
@@ -126,7 +138,8 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
         color: this.data && oppositeColor(this.data.player.color) || data.setup.player,
         pref: {
           centerPiece: true
-        }
+        },
+        clock: clock ? clock.getState() : null
       }), [data.setup], 0)
     })
     .then(() => {
@@ -189,6 +202,14 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     sound.move()
   }
 
+  private onFlag = (color: Color) => {
+    const winner = color === 'white' ? 'black' : 'white'
+    setResult(this, {id: 35, name: 'outoftime'}, winner)
+    sound.dong()
+    this.onGameEnd()
+    this.save()
+  }
+
   public apply(sit: chess.GameSituation) {
     if (sit) {
       const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null
@@ -204,6 +225,9 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   }
 
   public onReplayAdded = (sit: chess.GameSituation) => {
+    const lastMovePlayer = sit.player === 'white' ? 'black' : 'white'
+    if (this.clock)
+      this.clock.clockHit(lastMovePlayer)
     this.data.game.fen = sit.fen
     this.apply(sit)
     setResult(this, sit.status)
@@ -221,6 +245,8 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   }
 
   public onGameEnd = () => {
+    if (this.clock && this.clock.isRunning())
+      this.clock.startStop()
     this.chessground.stop()
     setTimeout(() => {
       this.actions.open()

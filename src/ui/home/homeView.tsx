@@ -8,6 +8,7 @@ import { renderTourJoin, renderGameEnd, renderFollow } from '../timeline'
 import MiniBoard from '../shared/miniBoard'
 import { HomeState } from './interfaces'
 import { renderQuickSetup } from '../newGameForm'
+import newGameForm from '../newGameForm'
 
 export function body(ctrl: HomeState) {
   const isPortrait = helper.isPortrait()
@@ -35,7 +36,7 @@ export function body(ctrl: HomeState) {
         </div>
         <div className="homeCreate">
           <h2 className="homeTitle">Quick game</h2>
-          {renderQuickSetup()}
+          {renderQuickSetup(newGameForm.openRealTime)}
         </div>
         {renderDailyPuzzle(ctrl, isPortrait)}
         {renderTimeline(ctrl)}

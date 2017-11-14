@@ -9,6 +9,7 @@ import MiniBoard from '../shared/miniBoard'
 import { HomeState } from './interfaces'
 import { renderQuickSetup } from '../newGameForm'
 import newGameForm from '../newGameForm'
+import { Tournament } from '../../lichess/interfaces/tournament'
 
 export function body(ctrl: HomeState) {
   const isPortrait = helper.isPortrait()
@@ -38,11 +39,26 @@ export function body(ctrl: HomeState) {
           <h2 className="homeTitle">Quick game</h2>
           {renderQuickSetup(() => newGameForm.openRealTime('custom'))}
         </div>
+        {renderFeaturedTournaments(ctrl.featuredTournaments())}
         {renderDailyPuzzle(ctrl, isPortrait)}
         {renderTimeline(ctrl)}
       </div>
     </div>
   )
+}
+
+function renderTournament(t: Tournament) {
+  return(
+    <div className="featuredTournament">
+      {t.fullName}
+    </div>
+    )
+}
+
+function renderFeaturedTournaments(tournaments: Tournament[]) {
+  return tournaments ? h('div.featuredTournaments', { key: 'featuredTournaments' },
+    tournaments.map(t => renderTournament(t)))
+  : null
 }
 
 function miniBoardSize(isPortrait: boolean) {

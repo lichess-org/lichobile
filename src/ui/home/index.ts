@@ -6,12 +6,12 @@ import { dropShadowHeader } from '../shared/common'
 import { HomeState } from './interfaces'
 import redraw from '../../utils/redraw'
 import { timeline as timelineXhr } from '../../xhr'
-import { dailyPuzzle as dailyPuzzleXhr, topPlayersOfTheWeek as topPlayersOfTheWeekXhr } from './homeXhr'
+import { dailyPuzzle as dailyPuzzleXhr, featuredTournaments as featuredTournamentsXhr } from './homeXhr'
 import { hasNetwork, noop } from '../../utils'
 import { isForeground, setForeground } from '../../utils/appMode'
 import { supportedTypes as supportedTimelineTypes } from '../timeline'
 import { PongMessage, TimelineEntry, DailyPuzzle } from '../../lichess/interfaces'
-import { User } from '../../lichess/interfaces/user'
+import { Tournament } from '../../lichess/interfaces/tournament'
 import * as stream from 'mithril/stream'
 
 const HomeScreen: Mithril.Component<{}, HomeState> = {
@@ -20,7 +20,7 @@ const HomeScreen: Mithril.Component<{}, HomeState> = {
     const nbConnectedPlayers = stream<number>()
     const nbGamesInPlay = stream<number>()
     const dailyPuzzle = stream<DailyPuzzle>()
-    const weekTopPlayers = stream<Array<User>>([])
+    const featuredTournaments = stream<Tournament[]>()
     const timeline = stream<TimelineEntry[]>([])
 
     function init() {
@@ -35,12 +35,12 @@ const HomeScreen: Mithril.Component<{}, HomeState> = {
 
         Promise.all([
           dailyPuzzleXhr(),
-          topPlayersOfTheWeekXhr()
+          featuredTournamentsXhr()
         ])
         .then(results => {
-          const [dailyData, topPlayersData] = results
+          const [dailyData, featuredTournamentsData] = results
           dailyPuzzle(dailyData.puzzle)
-          weekTopPlayers(topPlayersData)
+          featuredTournaments(featuredTournamentsData.featured)
           redraw()
         })
         .catch(noop)
@@ -75,7 +75,7 @@ const HomeScreen: Mithril.Component<{}, HomeState> = {
       nbGamesInPlay,
       dailyPuzzle,
       timeline,
-      weekTopPlayers,
+      featuredTournaments,
       init,
       onResume
     }

@@ -29,8 +29,10 @@ export default {
 
   close,
 
-  openRealTime() {
+  openRealTime(tab?: string) {
     humanSetup.timeMode('1')
+    if (tab)
+      tabPreset = tab
     open()
   },
 

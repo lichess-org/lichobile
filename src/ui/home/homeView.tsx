@@ -36,7 +36,7 @@ export function body(ctrl: HomeState) {
         </div>
         <div className="homeCreate">
           <h2 className="homeTitle">Quick game</h2>
-          {renderQuickSetup(newGameForm.openRealTime)}
+          {renderQuickSetup(() => newGameForm.openRealTime('custom'))}
         </div>
         {renderDailyPuzzle(ctrl, isPortrait)}
         {renderTimeline(ctrl)}

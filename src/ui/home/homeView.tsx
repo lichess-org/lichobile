@@ -9,7 +9,8 @@ import MiniBoard from '../shared/miniBoard'
 import { HomeState } from './interfaces'
 import { renderQuickSetup } from '../newGameForm'
 import newGameForm from '../newGameForm'
-import { Tournament } from '../../lichess/interfaces/tournament'
+import { TournamentListItem } from '../../lichess/interfaces/tournament'
+import { renderTournamentList } from '../tournament/tournamentsListView'
 
 export function body(ctrl: HomeState) {
   const isPortrait = helper.isPortrait()
@@ -36,10 +37,13 @@ export function body(ctrl: HomeState) {
           <div className="numGames">{nbGames}</div>
         </div>
         <div className="homeCreate">
-          <h2 className="homeTitle">Quick game</h2>
+          <h2 className="homeTitle">Quick Game</h2>
           {renderQuickSetup(() => newGameForm.openRealTime('custom'))}
         </div>
-        {renderFeaturedTournaments(ctrl.featuredTournaments())}
+        <div className="homeTournament">
+          <h2 className="homeTitle">Featured Tournaments</h2>
+          {renderFeaturedTournaments(ctrl.featuredTournaments())}
+        </div>
         {renderDailyPuzzle(ctrl, isPortrait)}
         {renderTimeline(ctrl)}
       </div>
@@ -47,18 +51,8 @@ export function body(ctrl: HomeState) {
   )
 }
 
-function renderTournament(t: Tournament) {
-  return(
-    <div className="featuredTournament">
-      {t.fullName}
-    </div>
-    )
-}
-
-function renderFeaturedTournaments(tournaments: Tournament[]) {
-  return tournaments ? h('div.featuredTournaments', { key: 'featuredTournaments' },
-    tournaments.map(t => renderTournament(t)))
-  : null
+function renderFeaturedTournaments(tournaments: TournamentListItem[]) {
+  return tournaments ? renderTournamentList(tournaments) : null
 }
 
 function miniBoardSize(isPortrait: boolean) {

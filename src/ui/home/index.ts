@@ -11,7 +11,7 @@ import { hasNetwork, noop } from '../../utils'
 import { isForeground, setForeground } from '../../utils/appMode'
 import { supportedTypes as supportedTimelineTypes } from '../timeline'
 import { PongMessage, TimelineEntry, DailyPuzzle } from '../../lichess/interfaces'
-import { Tournament } from '../../lichess/interfaces/tournament'
+import { TournamentListItem } from '../../lichess/interfaces/tournament'
 import * as stream from 'mithril/stream'
 
 const HomeScreen: Mithril.Component<{}, HomeState> = {
@@ -20,7 +20,7 @@ const HomeScreen: Mithril.Component<{}, HomeState> = {
     const nbConnectedPlayers = stream<number>()
     const nbGamesInPlay = stream<number>()
     const dailyPuzzle = stream<DailyPuzzle>()
-    const featuredTournaments = stream<Tournament[]>()
+    const featuredTournaments = stream<TournamentListItem[]>()
     const timeline = stream<TimelineEntry[]>([])
 
     function init() {

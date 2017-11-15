@@ -5,7 +5,7 @@
     width 100%
     display flex
     flex-flow row nowrap
-    justify-content space-evenly
+    justify-content space-between
     >.numPlayers
       flex 0 1 auto
     >.numGames
@@ -14,10 +14,16 @@
     >.newGame-pools
       padding 0px
       >.newGame-pool
-        color black
+        background-color lighten(bgdark, 2%)
+        border 1px solid #3d3d3d
+        color inherit
+
   >.homeTournament
     >.homeTitle
       margin 5px 0 5px
+    >.tournamentList
+      >.tournament_item
+        padding 10px
 
 .homeTitle
   font-weight bold

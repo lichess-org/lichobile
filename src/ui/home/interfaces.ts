@@ -11,5 +11,5 @@ export interface HomeState {
 }
 
 export interface FeaturedTournamentData {
-	featured: Tournament[]
+  featured: Tournament[]
 }

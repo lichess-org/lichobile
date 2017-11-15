@@ -12,5 +12,5 @@ export function dailyPuzzle(): Promise<{ puzzle: DailyPuzzle }> {
 }
 
 export function featuredTournaments(): Promise<FeaturedTournamentData> {
-	return fetchJSON('/tournament/featured', undefined, false)
+  return fetchJSON('/tournament/featured', undefined, false)
 }

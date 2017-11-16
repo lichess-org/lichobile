@@ -1,4 +1,4 @@
-bglightOdd = darken(themeBgLight, 5%)
+bglightEven = darken(themeBgLight, 5%)
 
 .view-container.light
   main
@@ -45,7 +45,7 @@ bglightOdd = darken(themeBgLight, 5%)
   .list_item
     border-bottom-color #ddd
     &.even
-      background-color bglightOdd
+      background-color bglightEven
     &.active
       background-color themeBgLightActive
 
@@ -116,8 +116,8 @@ bglightOdd = darken(themeBgLight, 5%)
   .userGame
     background-color themeBgLight
     color textLightBg
-    &.odd
-      background-color bglightOdd
+    &.even
+      background-color bglightEven
 
   .rankingPlayer
     &.active
@@ -162,3 +162,16 @@ bglightOdd = darken(themeBgLight, 5%)
   .theme-progressBarContainer
     border-color textLightGray
     color textLightBg
+
+  .homeCreate
+    >.newGame-pools
+      >.newGame-pool
+        background-color darken(bglight, 2%)
+        border 1px solid #3d3d3d
+        color inherit
+        &.active
+          background-color darken(bglight, 8%)
+
+  .ceval-pv
+    &.even
+      background-color darken(bglight, 4%)

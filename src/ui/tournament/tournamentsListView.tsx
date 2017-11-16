@@ -48,7 +48,7 @@ export function renderTournamentsList(ctrl: TournamentsListCtrl) {
       className: 'tournamentTabsWrapper',
       selectedIndex: ctrl.currentTab,
       content: tabsContent,
-      renderer: renderTabContent,
+      renderer: renderTournamentList,
       onTabChange: ctrl.onTabChange
     })
   ]
@@ -65,7 +65,7 @@ export function renderFooter() {
   )
 }
 
-function renderTabContent(list: Array<TournamentListItem>) {
+export function renderTournamentList(list: Array<TournamentListItem>) {
   return h('ul.native_scroller.tournamentList', {
     oncreate: helper.ontapXY(onTournamentTap, undefined, helper.getLI)
   }, list.map(renderTournamentListItem))

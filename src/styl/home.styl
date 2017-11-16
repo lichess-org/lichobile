@@ -1,9 +1,39 @@
 .home
-  padding 10px
+  padding-top 5px
+  >*
+    padding 0px 10px
+  >.stats
+    font-size 1em
+    width 100%
+    display flex
+    flex-flow row nowrap
+    justify-content space-between
+    >.numPlayers
+      flex 0 1 auto
+    >.numGames
+      flex 0 1 auto
+  >.homeCreate
+    >.newGame-pools
+      padding 0px
+      >.newGame-pool
+        background-color lighten(bgdark, 2%)
+        border 1px solid #3d3d3d
+        color inherit
+        &.active
+          background-color lighten(bgdark, 8%)
+
+  >.homeTournament
+    padding 0px
+    >.homeTitle
+      margin 5px 0 5px
+    >.tournamentList
+      >.tournament_item
+        padding 10px
 
 .homeTitle
   font-weight bold
-  margin 25px 0 5px
+  text-align center
+  margin 10px 0 5px
 
 .homeOffline
   height 100%
@@ -29,7 +59,9 @@
   padding-bottom 15px
 
 #timeline
+  padding 0px
   .timelineEntry
+    padding 10px
     font-size 0.9em
 
 #weekTopPlayers

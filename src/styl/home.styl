@@ -1,5 +1,7 @@
 .home
-  padding 10px
+  padding-top 5px
+  >*
+    padding 0px 10px
   >.stats
     font-size 1em
     width 100%
@@ -17,8 +19,11 @@
         background-color lighten(bgdark, 2%)
         border 1px solid #3d3d3d
         color inherit
+        &.active
+          background-color lighten(bgdark, 8%)
 
   >.homeTournament
+    padding 0px
     >.homeTitle
       margin 5px 0 5px
     >.tournamentList
@@ -54,7 +59,9 @@
   padding-bottom 15px
 
 #timeline
+  padding 0px
   .timelineEntry
+    padding 10px
     font-size 0.9em
 
 #weekTopPlayers

@@ -104,7 +104,7 @@
         </host>
     </universal-links>
     <engine name="android" spec="~6.2.2" />
-    <engine name="ios" spec="^4.5.1" />
+    <engine name="ios" spec="~4.5.1" />
     <plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" spec="https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface" />
     <plugin name="cordova-plugin-app-event" spec="git+https://github.com/katzer/cordova-plugin-app-event.git#1.2.1" />
     <plugin name="cordova-plugin-appversion" spec="~1.0.0" />

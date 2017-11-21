@@ -16,6 +16,7 @@
     >.newGame-pools
       padding 0px
       >.newGame-pool
+        box-shadow none
         background-color lighten(bgdark, 2%)
         border 1px solid #3d3d3d
         color inherit
@@ -96,3 +97,26 @@
         display flex
         justify-content center
         align-items center
+
+
+
+.view-container.light
+  .homeCreate
+    >.newGame-pools
+      >.newGame-pool
+        background-color darken(bglight, 2%)
+        border-color borderLightGray
+        color inherit
+        &.active
+          background-color themeBgLightActive
+
+
+.view-container.transp
+  .homeCreate
+    >.newGame-pools
+      >.newGame-pool
+        border-color transpWhite02
+        background-color transpWhite005
+        &.active
+          background-color transpWhite01
+

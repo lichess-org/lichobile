@@ -1,4 +1,4 @@
-bglightOdd = darken(themeBgLight, 5%)
+bglightEven = darken(themeBgLight, 5%)
 
 .view-container.light
   main
@@ -44,8 +44,8 @@ bglightOdd = darken(themeBgLight, 5%)
 
   .list_item
     border-bottom-color #ddd
-    &.odd
-      background-color bglightOdd
+    &.even
+      background-color bglightEven
     &.active
       background-color themeBgLightActive
 
@@ -116,8 +116,8 @@ bglightOdd = darken(themeBgLight, 5%)
   .userGame
     background-color themeBgLight
     color textLightBg
-    &.odd
-      background-color bglightOdd
+    &.even
+      background-color bglightEven
 
   .rankingPlayer
     &.active

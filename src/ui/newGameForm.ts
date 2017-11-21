@@ -29,8 +29,10 @@ export default {
 
   close,
 
-  openRealTime() {
+  openRealTime(tab?: string) {
     humanSetup.timeMode('1')
+    if (tab)
+      tabPreset = tab
     open()
   },
 
@@ -116,7 +118,10 @@ function renderContent() {
       ))
     ]),
     tabPreset === 'quick' ?
-    renderQuickSetup() :
+    renderQuickSetup(() => {
+      tabPreset = 'custom'
+      humanSetup.preset('custom')
+    }) :
     renderCustomSetup(
       'human',
       conf,
@@ -130,16 +135,13 @@ function renderContent() {
   ])
 }
 
-function renderQuickSetup() {
+export function renderQuickSetup(onCustom: () => void) {
   return h('div.newGame-pools', { key: 'quickSetup' }, xhr.cachedPools.length ?
     xhr.cachedPools
       .map(p => renderPool(p))
       .concat(h('div.newGame-pool', {
           key: 'pool-custom',
-          oncreate: helper.ontap(() => {
-            tabPreset = 'custom'
-            humanSetup.preset('custom')
-          })
+          oncreate: helper.ontap(onCustom)
         }, h('div.newGame-custom', 'Custom'))
       ) : spinner.getVdom()
   )

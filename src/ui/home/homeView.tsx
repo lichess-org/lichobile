@@ -1,16 +1,16 @@
 import * as h from 'mithril/hyperscript'
 import router from '../../router'
 import { emptyFen } from '../../utils/fen'
-import { gameIcon, hasNetwork } from '../../utils'
+import { hasNetwork } from '../../utils'
 import i18n from '../../i18n'
 import * as helper from '../helper'
-import newGameForm from '../newGameForm'
-import settings from '../../settings'
-import { User } from '../../lichess/interfaces/user'
-import { userStatus } from '../shared/common'
 import { renderTourJoin, renderGameEnd, renderFollow } from '../timeline'
 import MiniBoard from '../shared/miniBoard'
 import { HomeState } from './interfaces'
+import { renderQuickSetup } from '../newGameForm'
+import newGameForm from '../newGameForm'
+import { TournamentListItem } from '../../lichess/interfaces/tournament'
+import { renderTournamentList } from '../tournament/tournamentsListView'
 
 export function body(ctrl: HomeState) {
   const isPortrait = helper.isPortrait()
@@ -32,19 +32,27 @@ export function body(ctrl: HomeState) {
   return (
     <div className="native_scroller page">
       <div className="home">
-        <section>
-          <div>{nbPlayers}</div>
-          <div>{nbGames}</div>
-        </section>
-        <section id="homeCreate">
-          <button className="fatButton" oncreate={helper.ontapY(newGameForm.openRealTime)}>{i18n('createAGame')}</button>
-        </section>
+        <div className="stats">
+          <div className="numPlayers">{nbPlayers}</div>
+          <div className="numGames">{nbGames}</div>
+        </div>
+        <div className="homeCreate">
+          <h2 className="homeTitle">Quick Game</h2>
+          {renderQuickSetup(() => newGameForm.openRealTime('custom'))}
+        </div>
+        <div className="homeTournament">
+          <h2 className="homeTitle">Featured Tournaments</h2>
+          {renderFeaturedTournaments(ctrl.featuredTournaments())}
+        </div>
         {renderDailyPuzzle(ctrl, isPortrait)}
         {renderTimeline(ctrl)}
-        {renderWeekLeaders(ctrl)}
       </div>
     </div>
   )
+}
+
+function renderFeaturedTournaments(tournaments: TournamentListItem[]) {
+  return tournaments ? renderTournamentList(tournaments) : null
 }
 
 function miniBoardSize(isPortrait: boolean) {
@@ -103,48 +111,5 @@ function renderTimeline(ctrl: HomeState) {
         </button>
       </div>
     </section>
-  )
-}
-
-function renderWeekLeaders(ctrl: HomeState) {
-  const players = ctrl.weekTopPlayers()
-
-  if (players.length === 0) return null
-
-  return (
-    <section id="weekTopPlayers">
-      <h2 className="homeTitle">{i18n('leaderboard')}</h2>
-      <ul className="items_list_block">
-        { players.map(renderPlayer) }
-      </ul>
-      <div className="moreButton">
-        <button oncreate={helper.ontapY(() => router.set('/ranking'))}>
-          {i18n('more')}
-        </button>
-      </div>
-    </section>
-  )
-}
-
-function renderPlayer(p: User) {
-  const perfKey = Object.keys(p.perfs)[0]
-  const perf = p.perfs[perfKey]
-
-  const supportedPerfs = settings.game.supportedVariants.concat([
-    'blitz', 'bullet', 'classical'
-  ])
-
-  if (supportedPerfs.indexOf(perfKey) === -1) return null
-
-  return (
-    <li key={perfKey} className="list_item playerSuggestion" oncreate={helper.ontapY(() => router.set('/@/' + p.id))}>
-      {userStatus(p)}
-      <div className="playerMiniPerf">
-        <span className="rating" data-icon={gameIcon(perfKey)}>
-          {perf.rating}
-        </span>
-        {helper.progress(perf.progress)}
-      </div>
-    </li>
   )
 }

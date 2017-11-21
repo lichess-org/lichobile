@@ -1,12 +1,12 @@
 import router from '../../router'
 import { fetchJSON } from '../../http'
-import { PuzzleData, RoundData } from '../../lichess/interfaces/training'
+import { PuzzleData, RoundData, PuzzleOutcome } from '../../lichess/interfaces/training'
 
-export function round(id: number, win: boolean): Promise<RoundData> {
-  return fetchJSON(`/training/${id}/round2`, {
+export function round(outcome: PuzzleOutcome): Promise<RoundData> {
+  return fetchJSON(`/training/${outcome.id}/round2`, {
     method: 'POST',
     body: JSON.stringify({
-      win: win ? 1 : 0
+      win: outcome.win ? 1 : 0
     })
   })
 }
@@ -33,5 +33,18 @@ export function newPuzzle(): Promise<PuzzleData> {
   .then(cfg => {
     router.assignState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
     return cfg
+  })
+}
+
+export function newPuzzles(num: number): Promise<PuzzleData[]> {
+  return fetchJSON<PuzzleData[]>(`/training/load/` + num)
+}
+
+export function solvePuzzles(outcomes: PuzzleOutcome[]>): Promise<RoundData> {
+  return fetchJSON(`/training/solve`, {
+    method: 'POST',
+    body: JSON.stringify({
+      solutions: outcomes.map((s: { id: number, win: boolean }) => ({ id: s.id, win: s.win ? 1 : 0 }))
+    })
   })
 }

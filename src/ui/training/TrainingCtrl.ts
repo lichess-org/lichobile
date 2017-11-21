@@ -359,7 +359,7 @@ export default class TrainingCtrl implements PromotingInterface {
   private sendResult = (win: boolean) => {
     if (this.vm.resultSent) return
     this.vm.resultSent = true
-    xhr.round(this.data.puzzle.id, win)
+    xhr.round({ id: this.data.puzzle.id, win })
     .then((res) => {
       this.data.user = res.user
       this.data.round = res.round

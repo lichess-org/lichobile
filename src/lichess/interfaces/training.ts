@@ -50,6 +50,11 @@ export interface Puzzle {
   branch: Tree.Node
 }
 
+export interface PuzzleOutcome {
+  id: number
+  win: boolean
+}
+
 export interface UserData {
   // [id, diff, rating]
   recent: Array<[number, number, number]>

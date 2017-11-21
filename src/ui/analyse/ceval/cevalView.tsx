@@ -63,7 +63,7 @@ function renderCevalPvs(ctrl: AnalyseCtrl) {
       const san = pv2san(ctrl.ceval.variant, node.fen, false, pvs[i].moves, pvs[i].mate)
       return h('li.ceval-pv', {
         'data-uci': pvs[i].moves[0],
-        className: i % 2 ? 'even' : 'odd'
+        className: (i % 2 === 0) ? 'even' : 'odd'
       }, [
         h('strong.ceval-pv_eval', pvs[i].mate !== undefined ? ('#' + pvs[i].mate) : renderEval(pvs[i].cp!)),
         h('div.ceval-pv-line', san)

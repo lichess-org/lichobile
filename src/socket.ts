@@ -13,6 +13,9 @@ import friendsApi, { Friend } from './lichess/friends'
 import challengesApi from './lichess/challenges'
 import { ChallengesData } from './lichess/interfaces/challenge'
 import session from './session'
+import settings from './settings'
+import * as trainingXhr from './ui/training/xhr'
+import { PuzzleData } from './lichess/interfaces/training'
 
 export interface LichessMessage<T> {
   t: string
@@ -334,8 +337,18 @@ function redirectToGame(obj: string | RedirectObj) {
 function onConnected() {
   if (!connectedWS) {
     connectedWS = true
+    syncPuzzles()
     redraw()
   }
+}
+
+function syncPuzzles() {
+  const unsolved = settings.training.unsolvedPuzzles
+  const puzzleDeficit = Math.max(settings.training.puzzleBufferLen - unsolved().length, 0)
+  if (puzzleDeficit)
+    trainingXhr.newPuzzles(puzzleDeficit).then((newPuzzles: PuzzleData[]) => unsolved(unsolved().concat(newPuzzles)))
+  if (settings.training.solvedPuzzles().length)
+    trainingXhr.solvePuzzles(settings.training.solvedPuzzles())
 }
 
 function onDisconnected() {

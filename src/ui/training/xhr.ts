@@ -40,7 +40,7 @@ export function newPuzzles(num: number): Promise<PuzzleData[]> {
   return fetchJSON<PuzzleData[]>(`/training/load/` + num)
 }
 
-export function solvePuzzles(outcomes: PuzzleOutcome[]>): Promise<RoundData> {
+export function solvePuzzles(outcomes: PuzzleOutcome[]): Promise<any> {
   return fetchJSON(`/training/solve`, {
     method: 'POST',
     body: JSON.stringify({

@@ -1,6 +1,7 @@
 import store from './storage'
 import * as range from 'lodash/range'
 import { ClockType, ClockTypeWithNone } from './ui/shared/clock/interfaces'
+import { PuzzleData, PuzzleOutcome } from './lichess/interfaces/training'
 
 export interface SettingsProp<T> {
   (): T
@@ -428,5 +429,11 @@ export default {
 
   importer: {
     analyse: localstorageprop('importer.analyse', false)
+  },
+
+  training: {
+    puzzleBufferLen: 50,
+    unsolvedPuzzles: localstorageprop<PuzzleData[]>('training.puzzleBuffer', []),
+    solvedPuzzles: localstorageprop<PuzzleOutcome[]>('training.puzzleBuffer', [])
   }
 }

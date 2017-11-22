@@ -1,4 +1,3 @@
-import i18n from '../../i18n'
 import settings from '../../settings'
 import Chessground from '../../chessground/Chessground'
 import BoardBrush, { Shape } from './BoardBrush'
@@ -66,14 +65,7 @@ const Board: Mithril.Component<Attrs, State> = {
           oncreate={this.boardOnCreate}
           onremove={this.boardOnRemove}
         />
-        { chessground.state.premovable.current || chessground.state.predroppable.current ?
-          <div className="board_alert">
-            {i18n('premoveEnabledClickAnywhereToCancel')}
-          </div> : alert ?
-          <div className="board_alert">
-            {alert}
-          </div> : null
-        }
+        { alert ? <div className="board_alert">{alert}</div> : null }
         {
           !!shapes ?
             BoardBrush(

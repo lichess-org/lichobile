@@ -16,7 +16,7 @@ export function parsePossibleMoves(possibleMoves?: StringMap): DestsMap {
   const r: DestsMap = {}
   const keys = Object.keys(possibleMoves)
   for (let i = 0, ilen = keys.length; i < ilen; i++) {
-    const mvs = possibleMoves[keys[i]]
+    const mvs = possibleMoves[keys[i]]!
     const a: Array<Key> = []
     for (let j = 0, jlen = mvs.length; j < jlen; j += 2) {
       a.push(<Key>mvs.substr(j, 2))

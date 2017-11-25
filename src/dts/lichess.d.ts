@@ -4,14 +4,16 @@ declare type Centis = number
 declare type Millis = number
 
 declare type StringMap = {
-  [i: string]: string
+  [i: string]: string | undefined
 }
 
 declare type SanChar = 'P' | 'N' | 'B' | 'R' | 'Q'
 
 declare type Color = 'white' | 'black'
 
-declare type ColorMap<T> = { [C in Color]: T }
+declare type ColorMap<T> = {
+  [C in Color]: T | undefined
+}
 
 declare type VariantKey = 'standard' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse'
 
@@ -37,7 +39,7 @@ declare type Fen = string
 declare type Ply = number
 
 declare type DestsMap = {
-  [index: string]: Array<Key>
+  [index: string]: Key[] | undefined
 }
 
 interface LichessOptions {

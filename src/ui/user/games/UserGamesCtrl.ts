@@ -83,7 +83,7 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
     .map(k => {
       return {
         key: <GameFilter>k,
-        label: filters[k],
+        label: filters[k]!,
         count: scrollState.user ? scrollState.user.count[k] : 0
       }
     })

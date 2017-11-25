@@ -33,7 +33,11 @@ export default function moveTest(
   const curLine = progress.reduce((acc: Line, uci: Uci) => {
     if (!acc) return undefined
     if (isLineFeedback(acc)) return acc
-    return acc[uci] || acc[altCastles[uci]]
+    // trick typescript into thinking altCastles[uci] is defined to avoid
+    // Error TS2538: Type 'undefined' cannot be used as an index type
+    // actually we don't care if it's undefined since acc[undefined] don't
+    // throw and return undefined
+    return acc[uci] || acc[altCastles[uci]!]
   }, puzzle.lines)
 
   if (!curLine) {

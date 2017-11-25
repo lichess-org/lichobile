@@ -175,7 +175,9 @@ export default class TrainingCtrl implements PromotingInterface {
     .catch(this.onXhrError)
   }
 
-  public retry = router.reload
+  public retry = () => {
+    xhr.loadPuzzle(this.data.puzzle.id).then(this.init)
+  }
 
   public share = () => {
     window.plugins.socialsharing.share(null, null, null, `http://lichess.org/training/${this.data.puzzle.id}`)

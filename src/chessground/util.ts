@@ -60,8 +60,8 @@ export function opposite(color: Color) {
   return color === 'white' ? 'black' : 'white'
 }
 
-export function containsX<T>(xs: T[], x: T) {
-  return xs.indexOf(x) !== -1
+export function containsX<T>(xs: T[] | undefined, x: T) {
+  return xs !== undefined && xs.indexOf(x) !== -1
 }
 
 export function distance(pos1: NumberPair, pos2: NumberPair) {

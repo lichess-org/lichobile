@@ -61,7 +61,7 @@ export function opposite(color: Color) {
 }
 
 export function containsX<T>(xs: T[], x: T) {
-  return xs && xs.indexOf(x) !== -1
+  return xs !== undefined && xs.indexOf(x) !== -1
 }
 
 export function distance(pos1: NumberPair, pos2: NumberPair) {

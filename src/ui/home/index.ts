@@ -20,7 +20,7 @@ const HomeScreen: Mithril.Component<{}, HomeState> = {
     const nbConnectedPlayers = stream<number>()
     const nbGamesInPlay = stream<number>()
     const dailyPuzzle = stream<DailyPuzzle>()
-    const featuredTournaments = stream<TournamentListItem[]>()
+    const featuredTournaments = stream<TournamentListItem[]>([])
     const timeline = stream<TimelineEntry[]>([])
 
     function init() {

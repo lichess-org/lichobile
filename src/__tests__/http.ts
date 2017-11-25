@@ -1,3 +1,5 @@
+import 'whatwg-fetch'
+
 const testConfig = {
   apiEndPoint: 'http://test.org',
   fetchTimeoutMs: 10,
@@ -15,6 +17,10 @@ import * as http from '../http'
 
 process.on('unhandledRejection', error => {
   // catch all unhandled rejection here to avoid node warning
+})
+
+beforeAll(() => {
+  global.Headers = Headers
 })
 
 describe('HTTP fetch wrapper', () => {
@@ -135,10 +141,10 @@ describe('HTTP fetch wrapper', () => {
     expect(global.fetch.mock.calls[0][1]).toEqual({
       method: 'GET',
       credentials: 'include',
-      headers: {
+      headers: new Headers({
         'X-Requested-With': 'XMLHttpRequest',
         'Accept': 'application/vnd.lichess.v1+json'
-      }
+      })
     })
   })
 
@@ -165,11 +171,11 @@ describe('HTTP fetch wrapper', () => {
     expect(global.fetch.mock.calls[0][1]).toEqual({
       method: 'POST',
       credentials: 'include',
-      headers: {
+      headers: new Headers({
         'X-Requested-With': 'XMLHttpRequest',
         'Accept': 'application/vnd.lichess.v1+json',
         'Content-Type': 'application/json; charset=UTF-8'
-      },
+      }),
       body: '{}'
     })
   })

@@ -5,6 +5,7 @@
     "target": "es6",
     "suppressImplicitAnyIndexErrors": false,
     "strict": true,
+    "strictFunctionTypes": false,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "jsx": "preserve"

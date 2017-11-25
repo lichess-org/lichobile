@@ -36,7 +36,6 @@
   // flex height
   height initial
   font-size 0.9em
-  padding 0 10px
   flex 1 1 auto
   &.gameOver
     font-style italic
@@ -50,7 +49,7 @@
 .ceval-pv
   display flex
   flex-flow row nowrap
-  padding 0.5em 0
+  padding 0.5em 10px
   &.active
     opacity 0.9
   &.even
@@ -70,9 +69,15 @@
     animation fa-spin 5s infinite steps(8)
 
 .view-container.light
+  .ceval-pv.even
+    background-color lighten(bglightEven, 40%)
+
   .ceval-Wrapper strong
     color inherit
 
 .view-container.transp
+  .ceval-pv.even
+    background-color transpWhite005
+
   .ceval-Wrapper strong
     color textTransp

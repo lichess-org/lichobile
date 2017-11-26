@@ -11,8 +11,11 @@ export interface ErrorResponse {
   body: any
 }
 
-export interface RequestOpts extends RequestInit {
+export interface RequestOpts {
+  method?: 'GET' | 'POST'
+  body?: any
   query?: Object
+  headers?: StringMap
 }
 
 function addQuerystring(url: string, querystring: string): string {
@@ -33,9 +36,16 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
     if (feedback) spinner.stop()
   }
 
-  const cfg: RequestInit = {
+  if (opts && opts.query) {
+    const query = buildQueryString(opts.query)
+    if (query !== '') {
+      url = addQuerystring(url, query)
+    }
+    delete opts.query
+  }
+
+  const cfg = {
     method: 'GET',
-    credentials: 'include',
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
       'Accept': 'application/vnd.lichess.v' + globalConfig.apiVersion + '+json'
@@ -44,23 +54,21 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
 
   merge(cfg, opts)
 
-  // by default POST and PUT send json except if defined otherwise in caller
-  if ((cfg.method === 'POST' || cfg.method === 'PUT') &&
-    !(<StringMap>cfg.headers)['Content-Type']
-  ) {
-    (<StringMap>cfg.headers)['Content-Type'] = 'application/json; charset=UTF-8'
-    // always send a json body
-    if (!cfg.body) {
-      cfg.body = '{}'
-    }
+  const init: RequestInit = {
+    ...cfg,
+    credentials: 'include',
+    headers: new Headers(cfg.headers)
   }
 
-  if (opts && opts.query) {
-    const query = buildQueryString(opts.query)
-    if (query !== '') {
-      url = addQuerystring(url, query)
+  // by default POST and PUT send json except if defined otherwise in caller
+  if ((init.method === 'POST' || init.method === 'PUT') &&
+    !(<Headers>init.headers).get('Content-Type')
+  ) {
+    (<Headers>init.headers).append('Content-Type', 'application/json; charset=UTF-8')
+    // always send a json body
+    if (!init.body) {
+      init.body = '{}'
     }
-    delete opts.query
   }
 
   const fullUrl = url.indexOf('http') > -1 ? url : baseUrl + url
@@ -73,7 +81,7 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
   })
 
   const respOrTimeout: Promise<Response> = Promise.race([
-    fetch(fullUrl, cfg),
+    fetch(fullUrl, init),
     timeoutPromise as Promise<Response>
   ])
 

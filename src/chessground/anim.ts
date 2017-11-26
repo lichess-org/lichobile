@@ -24,7 +24,7 @@ export interface AnimPlan {
 }
 
 export interface AnimCurrent {
-  start: number
+  start: number | null
   duration: number
   plan: AnimPlan
 }
@@ -133,13 +133,16 @@ function roundBy(n: number, by: number) {
   return Math.round(n * by) / by
 }
 
-function step(ctrl: Chessground) {
+function step(ctrl: Chessground, now: number) {
   const state = ctrl.state
   const cur = state.animation.current
-  if (!cur) return
-  // animation was canceled
-  if (!cur) return
-  const rest = 1 - (Date.now() - cur.start) / cur.duration
+  // animation was cancelled
+  if (cur === null) {
+    ctrl.redrawSync()
+    return
+  }
+  if (cur.start === null) cur.start = now
+  const rest = 1 - (now - cur.start) / cur.duration
   if (rest <= 0) {
     state.animation.current = null
     ctrl.redrawSync()
@@ -153,7 +156,7 @@ function step(ctrl: Chessground) {
       cfg[1] = [roundBy(cfg[0][0] * ease, 10), roundBy(cfg[0][1] * ease, 10)]
     }
     ctrl.redrawSync()
-    state.batchRAF(() => step(ctrl))
+    state.batchRAF((n: number) => step(ctrl, n))
   }
 }
 
@@ -163,13 +166,13 @@ function animate<A>(mutation: Mutation<A>, ctrl: Chessground) {
   const result = mutation(state)
   const plan = computePlan(prevPieces, state, ctrl.dom!)
   if (Object.keys(plan.anims).length > 0 || Object.keys(plan.captured).length > 0) {
-    const alreadyRunning = state.animation.current && state.animation.current.start
+    const alreadyRunning = state.animation.current && state.animation.current.start !== null
     state.animation.current = {
-      start: Date.now(),
+      start: null,
       duration: state.animation.duration,
       plan
     }
-    if (!alreadyRunning) state.batchRAF(() => step(ctrl))
+    if (!alreadyRunning) state.batchRAF((now: number) => step(ctrl, now))
   } else {
     ctrl.redraw()
   }

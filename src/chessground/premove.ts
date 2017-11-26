@@ -46,7 +46,7 @@ function king(color: Color, rookFiles: number[], canCastle: boolean): Mobility {
   )
 }
 
-function rookFilesOf(pieces: cg.Pieces, color: Color) {
+function rookFilesOf(pieces: cg.Pieces, color: Color): number[] {
   let piece: Piece
   return Object.keys(pieces)
   .filter(key => {

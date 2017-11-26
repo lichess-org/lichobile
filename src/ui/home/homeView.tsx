@@ -40,10 +40,7 @@ export function body(ctrl: HomeState) {
           <h2 className="homeTitle">Quick Game</h2>
           {renderQuickSetup(() => newGameForm.openRealTime('custom'))}
         </div>
-        <div className="homeTournament">
-          <h2 className="homeTitle">Featured Tournaments</h2>
-          {renderFeaturedTournaments(ctrl.featuredTournaments())}
-        </div>
+        {renderFeaturedTournaments(ctrl.featuredTournaments())}
         {renderDailyPuzzle(ctrl, isPortrait)}
         {renderTimeline(ctrl)}
       </div>
@@ -52,7 +49,15 @@ export function body(ctrl: HomeState) {
 }
 
 function renderFeaturedTournaments(tournaments: TournamentListItem[]) {
-  return tournaments ? renderTournamentList(tournaments) : null
+  if (tournaments.length)
+    return (
+      <div className="homeTournament">
+        <h2 className="homeTitle">Featured Tournaments</h2>
+        {renderTournamentList(tournaments)}
+      </div>
+    )
+  else
+    return null
 }
 
 function miniBoardSize(isPortrait: boolean) {

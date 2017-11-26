@@ -3,18 +3,18 @@ import * as cg from './interfaces'
 import * as util from './util'
 import premove from './premove'
 
-export function toggleOrientation(state: State) {
+export function toggleOrientation(state: State): void {
   state.orientation = util.opposite(state.orientation)
 }
 
-export function reset(state: State) {
+export function reset(state: State): void {
   state.lastMove = null
   setSelected(state, null)
   unsetPremove(state)
   unsetPredrop(state)
 }
 
-export function setPieces(state: State, pieces: cg.PiecesDiff) {
+export function setPieces(state: State, pieces: cg.PiecesDiff): void {
   for (let key in pieces) {
     const piece = pieces[key]
     if (piece) state.pieces[key] = piece
@@ -22,7 +22,7 @@ export function setPieces(state: State, pieces: cg.PiecesDiff) {
   }
 }
 
-export function setCheck(state: State, color: Color | boolean) {
+export function setCheck(state: State, color: Color | boolean): void {
   if (color === true) color = state.turnColor
   if (!color) state.check = null
   else for (let k in state.pieces) {
@@ -32,7 +32,7 @@ export function setCheck(state: State, color: Color | boolean) {
   }
 }
 
-export function setPremove(state: State, orig: Key, dest: Key) {
+export function setPremove(state: State, orig: Key, dest: Key): void {
   unsetPredrop(state)
   state.premovable.current = [orig, dest]
   setTimeout(() => {
@@ -40,14 +40,14 @@ export function setPremove(state: State, orig: Key, dest: Key) {
   }, 0)
 }
 
-export function unsetPremove(state: State) {
+export function unsetPremove(state: State): void {
   if (state.premovable.current) {
     state.premovable.current = null
     setTimeout(state.premovable.events.unset)
   }
 }
 
-export function setPredrop(state: State, role: Role, key: Key) {
+export function setPredrop(state: State, role: Role, key: Key): void {
   unsetPremove(state)
   state.predroppable.current = {
     role: role,
@@ -58,7 +58,7 @@ export function setPredrop(state: State, role: Role, key: Key) {
   }, 0)
 }
 
-export function unsetPredrop(state: State) {
+export function unsetPredrop(state: State): void {
   if (state.predroppable.current) {
     state.predroppable.current = null
     setTimeout(() => {
@@ -101,7 +101,7 @@ export function userMove(state: State, orig: Key, dest: Key): boolean {
   return false
 }
 
-export function dropNewPiece(state: State, orig: Key, dest: Key, force = false) {
+export function dropNewPiece(state: State, orig: Key, dest: Key, force = false): void {
   if (canDrop(state, orig, dest) || force) {
     const piece = state.pieces[orig]
     delete state.pieces[orig]
@@ -122,7 +122,7 @@ export function dropNewPiece(state: State, orig: Key, dest: Key, force = false) 
   setSelected(state, null)
 }
 
-export function selectSquare(state: State, key: Key) {
+export function selectSquare(state: State, key: Key): void {
   if (state.selected) {
     if (key) {
       if (state.selected !== key) userMove(state, state.selected, key)
@@ -130,7 +130,7 @@ export function selectSquare(state: State, key: Key) {
   } else if (isMovable(state, key) || isPremovable(state, key)) setSelected(state, key)
 }
 
-export function setSelected(state: State, key: Key | null) {
+export function setSelected(state: State, key: Key | null): void {
   state.selected = key
   if (key && isPremovable(state, key))
     state.premovable.dests = premove(state.pieces, key, state.premovable.castle)
@@ -143,7 +143,7 @@ export function unselect(state: State): void {
   state.premovable.dests = null
 }
 
-export function isMovable(state: State, orig: Key) {
+export function isMovable(state: State, orig: Key): boolean {
   const piece = state.pieces[orig]
   return piece && (
     state.movable.color === 'both' || (
@@ -152,13 +152,13 @@ export function isMovable(state: State, orig: Key) {
     ))
 }
 
-export function canMove(state: State, orig: Key, dest: Key) {
+export function canMove(state: State, orig: Key, dest: Key): boolean {
   return orig !== dest && isMovable(state, orig) && (
-    state.movable.free || (!!state.movable.dests && util.containsX(state.movable.dests[orig], dest))
+    state.movable.free || (state.movable.dests !== null && util.containsX(state.movable.dests[orig], dest))
   )
 }
 
-export function canDrop(state: State, orig: Key, dest: Key) {
+export function canDrop(state: State, orig: Key, dest: Key): boolean {
   const piece = state.pieces[orig]
   return piece && dest && (orig === dest || !state.pieces[dest]) && (
     state.movable.color === 'both' || (
@@ -167,20 +167,20 @@ export function canDrop(state: State, orig: Key, dest: Key) {
     ))
 }
 
-export function isPremovable(state: State, orig: Key) {
+export function isPremovable(state: State, orig: Key): boolean {
   const piece = state.pieces[orig]
   return piece && state.premovable.enabled &&
     state.movable.color === piece.color &&
     state.turnColor !== piece.color
 }
 
-export function canPremove(state: State, orig: Key, dest: Key) {
+export function canPremove(state: State, orig: Key, dest: Key): boolean {
   return orig !== dest &&
     isPremovable(state, orig) &&
     util.containsX(premove(state.pieces, orig, state.premovable.castle), dest)
 }
 
-export function canPredrop(state: State, orig: Key, dest: Key) {
+export function canPredrop(state: State, orig: Key, dest: Key): boolean {
   const piece = state.pieces[orig]
   return piece && dest &&
     (!state.pieces[dest] || state.pieces[dest].color !== state.movable.color) &&
@@ -190,7 +190,7 @@ export function canPredrop(state: State, orig: Key, dest: Key) {
     state.turnColor !== piece.color
 }
 
-export function isDraggable(state: State, orig: Key) {
+export function isDraggable(state: State, orig: Key): boolean {
   const piece = state.pieces[orig]
   return piece && state.draggable.enabled && (
     state.movable.color === 'both' || (
@@ -201,7 +201,7 @@ export function isDraggable(state: State, orig: Key) {
   )
 }
 
-export function playPremove(state: State) {
+export function playPremove(state: State): void {
   const move = state.premovable.current
   if (!move) return
   const orig = move[0], dest = move[1]
@@ -217,7 +217,7 @@ export function playPremove(state: State) {
   unsetPremove(state)
 }
 
-export function playPredrop(state: State, validate: (d: cg.Drop) => boolean) {
+export function playPredrop(state: State, validate: (d: cg.Drop) => boolean): boolean {
   const drop = state.predroppable.current
   if (!drop) return false
   let success = false
@@ -240,13 +240,13 @@ export function playPredrop(state: State, validate: (d: cg.Drop) => boolean) {
   return success
 }
 
-export function cancelMove(state: State) {
+export function cancelMove(state: State): void {
   unsetPremove(state)
   unsetPredrop(state)
   setSelected(state, null)
 }
 
-export function stop(state: State) {
+export function stop(state: State): void {
   state.movable.color = null
   state.movable.dests = {}
   cancelMove(state)
@@ -313,7 +313,7 @@ function baseUserMove(state: State, orig: Key, dest: Key): boolean {
   return result
 }
 
-function tryAutoCastle(state: State, orig: Key, dest: Key) {
+function tryAutoCastle(state: State, orig: Key, dest: Key): void {
   if (!state.autoCastle) return
   const king = state.pieces[dest]
   if (king.role !== 'king') return

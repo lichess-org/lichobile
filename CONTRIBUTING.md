@@ -28,6 +28,8 @@ Mithril views should be written with the hyperscript function (imported as h),
 and not JSX. Current JSX views are here for legacy reasons.
 
 We use [tslint](https://palantir.github.io/tslint/) to enforce some coding conventions.
-Before sending a pull request, please run the linter and ensure there is no error:
 
-    $ npm run lint
+Before sending a pull request, please ensure the following command run
+without error (it will run lint, tests, and compilation in release mode):
+
+    $ npm run build-stage

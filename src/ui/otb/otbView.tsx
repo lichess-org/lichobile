@@ -102,7 +102,7 @@ function renderGameActionsBar(ctrl: OtbRound) {
             )}
           />
           :
-          <button key="disabled-pause" className="fa action_bar_button fa-pause disabled"/>
+          <button className="fa action_bar_button fa-pause disabled"/>
         )
         : null
       }

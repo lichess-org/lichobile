@@ -22,7 +22,7 @@ export interface State {
   }
   initBounds: ClientRect | null // set bounds here for perf improvement since they won't
                                 // be computed on dom attach with getBoundingClientRect
-  batchRAF: (renderFunction: () => void) => void
+  batchRAF: (renderFunction: (ts?: number) => void) => void
   animation: {
     enabled: boolean
     duration: number

@@ -4,6 +4,7 @@ export interface PuzzleData {
   puzzle: Puzzle
   game: Game
   user?: UserData
+  online?: boolean
 }
 
 export interface PuzzleSyncData {

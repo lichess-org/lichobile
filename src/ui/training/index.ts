@@ -7,13 +7,14 @@ import { emptyFen } from '../../utils/fen'
 import * as helper from '../helper'
 import layout from '../layout'
 import ViewOnlyBoard from '../shared/ViewOnlyBoard'
-import { connectingHeader } from '../shared/common'
-import { syncPuzzles, loadNextPuzzle } from './utils'
+import { syncPuzzles } from './utils'
 import { renderContent, renderHeader, overlay } from './trainingView'
 import * as xhr from './xhr'
 import TrainingCtrl from './TrainingCtrl'
+import { connectingHeader } from '../shared/common'
 import router from '../../router'
 import settings from '../../settings'
+import { loadNextPuzzle } from './utils'
 
 interface Attrs {
   id?: string
@@ -27,6 +28,18 @@ interface State {
 
 // cache last state to retrieve it when navigating back
 const cachedState: State = {}
+
+function loadOfflinePuzzle() {
+  const cfg = loadNextPuzzle()
+  if (cfg !== null) {
+    this.ctrl = new TrainingCtrl(cfg)
+    cachedState.ctrl = this.ctrl
+  }
+  else {
+    window.plugins.toast.show(`No puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`, 'short', 'center')
+    router.set('/')
+  }
+}
 
 export default {
   oninit({ attrs }) {
@@ -45,17 +58,7 @@ export default {
         .catch(handleXhrError)
       }
     } else {
-      syncPuzzles()
-      const cfg = loadNextPuzzle()
-      console.log(cfg)
-      if (cfg !== null) {
-        this.ctrl = new TrainingCtrl(cfg)
-        cachedState.ctrl = this.ctrl
-      }
-      else {
-        window.plugins.toast.show(`No puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`, 'short', 'center')
-        router.set('/')
-      }
+      syncPuzzles().then(loadOfflinePuzzle.bind(this), loadOfflinePuzzle.bind(this))
     }
 
     socket.createDefault()

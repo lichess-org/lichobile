@@ -24,6 +24,7 @@ export function loadPuzzle(id: number): Promise<PuzzleData> {
   return fetchJSON<PuzzleData>(`/training/${id}/load`)
   .then(cfg => {
     router.assignState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
+    cfg.online = true
     return cfg
   })
 }
@@ -32,11 +33,13 @@ export function newPuzzle(): Promise<PuzzleData> {
   return fetchJSON<PuzzleData>('/training/new')
   .then(cfg => {
     router.assignState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
+    cfg.online = true
     return cfg
   })
 }
 
 export function newPuzzles(num: number): Promise<PuzzleSyncData> {
+  console.log('num ' + num)
   return fetchJSON<PuzzleSyncData>('/training/batch',{
     method: 'GET',
     query: { nb: num }

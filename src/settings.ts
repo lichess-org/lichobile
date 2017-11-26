@@ -432,8 +432,8 @@ export default {
   },
 
   training: {
-    puzzleBufferLen: 50,
-    unsolvedPuzzles: localstorageprop<PuzzleData[]>('training.puzzleBuffer', []),
-    solvedPuzzles: localstorageprop<PuzzleOutcome[]>('training.puzzleBuffer', [])
+    puzzleBufferLen: 25,
+    unsolvedPuzzles: localstorageprop<PuzzleData[]>('training.unsolvedPuzzles', []),
+    solvedPuzzles: localstorageprop<PuzzleOutcome[]>('training.solvedPuzzles', [])
   }
 }

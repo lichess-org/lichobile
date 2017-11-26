@@ -13,6 +13,7 @@ import settings from '../../settings'
 import { PuzzleData } from '../../lichess/interfaces/training'
 import promotion from '../shared/offlineRound/promotion'
 import { PromotingInterface } from '../shared/round'
+import { syncPuzzles } from './utils'
 
 import moveTest from './moveTest'
 import makeData from './data'
@@ -49,6 +50,7 @@ export default class TrainingCtrl implements PromotingInterface {
   }
 
   public init = (cfg: PuzzleData) => {
+    console.log(cfg)
     this.vm = {
       mode: 'play',
       initializing: true,
@@ -361,12 +363,25 @@ export default class TrainingCtrl implements PromotingInterface {
   private sendResult = (win: boolean) => {
     if (this.vm.resultSent) return
     this.vm.resultSent = true
-    xhr.round({ id: this.data.puzzle.id, win })
-    .then((res) => {
-      this.data.user = res.user
-      this.data.round = res.round
-      redraw()
-    })
+    if (this.data.online) {
+      xhr.round({ id: this.data.puzzle.id, win })
+      .then((res) => {
+        this.data.user = res.user
+        this.data.round = res.round
+        redraw()
+      })
+    }
+    else {
+      const solved = settings.training.solvedPuzzles()
+      solved.push({ id: this.data.puzzle.id, win })
+      settings.training.solvedPuzzles(solved)
+
+      const unsolved = settings.training.unsolvedPuzzles()
+      unsolved.shift
+      settings.training.solvedPuzzles(solved)
+
+      syncPuzzles()
+    }
   }
 
   private onXhrSuccess = ()  => {

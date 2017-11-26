@@ -6,6 +6,16 @@ export interface PuzzleData {
   user?: UserData
 }
 
+export interface PuzzleSyncData {
+  puzzles: PuzzleData[]
+  user: PuzzleUserData
+}
+
+export interface PuzzleUserData {
+  rating: number
+  recent: number[][]
+}
+
 export interface Round {
   win: boolean
   userRatingDiff: number

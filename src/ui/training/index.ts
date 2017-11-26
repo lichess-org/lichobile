@@ -8,10 +8,12 @@ import * as helper from '../helper'
 import layout from '../layout'
 import ViewOnlyBoard from '../shared/ViewOnlyBoard'
 import { connectingHeader } from '../shared/common'
-
+import { syncPuzzles, loadNextPuzzle } from './utils'
 import { renderContent, renderHeader, overlay } from './trainingView'
 import * as xhr from './xhr'
 import TrainingCtrl from './TrainingCtrl'
+import router from '../../router'
+import settings from '../../settings'
 
 interface Attrs {
   id?: string
@@ -43,12 +45,17 @@ export default {
         .catch(handleXhrError)
       }
     } else {
-      xhr.newPuzzle()
-      .then(cfg => {
+      syncPuzzles()
+      const cfg = loadNextPuzzle()
+      console.log(cfg)
+      if (cfg !== null) {
         this.ctrl = new TrainingCtrl(cfg)
         cachedState.ctrl = this.ctrl
-      })
-      .catch(handleXhrError)
+      }
+      else {
+        window.plugins.toast.show(`No puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`, 'short', 'center')
+        router.set('/')
+      }
     }
 
     socket.createDefault()

@@ -12,11 +12,13 @@ main
   background bgdark
   color textDarkBg
   overflow hidden
+  display flex
+  flex-flow column nowrap
 
 .main_header
   position relative
   background headerBgDark
-  height headerHeight
+  flex 0 0 headerHeight
   color headerBgDarkColor
   > nav
     height 100%
@@ -236,12 +238,13 @@ main
 
 .content
   width 100%
-  height "calc(100% - %s)" % headerHeight
-  &.withFooter
-    height "calc(100% - %s - %s)" % (headerHeight footerHeight)
+  flex 1 1 auto
+  display flex
+  flex-flow column nowrap
   &.fullScreen
     height 100%
 
-
 .main_footer
-  height footerHeight
+  flex 0 0 footerHeight
+  display flex
+  flex-flow column nowrap

@@ -30,7 +30,7 @@ export function tournamentBody(ctrl: TournamentCtrl) {
   const data = ctrl.tournament
   if (!data) return null
 
-  return h('div.tournamentContainer.native_scroller.page.withFooter', [
+  return h('div.tournamentContainer.native_scroller.page', [
     tournamentHeader(data),
     data.podium ? tournamentPodium(data.podium) : null,
     tournamentLeaderboard(ctrl),

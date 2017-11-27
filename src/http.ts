@@ -110,7 +110,7 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
             } catch (_) {
               reject({
                 status: r.status,
-                body: bodyText
+                body: r.statusText
               })
             }
           })

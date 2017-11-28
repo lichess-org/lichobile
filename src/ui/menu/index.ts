@@ -123,6 +123,11 @@ export function getMenuWidth() {
   return vw * menuSizeRatio
 }
 
+export function showHint(el: HTMLElement) {
+  Zanimo(el, 'visibility', 'visible', 100)
+  Zanimo(el, 'transform', 'translate3d(-95%, 0, 0)', 100, 'ease-out')
+}
+
 export function translateMenu(el: HTMLElement, xPos: number) {
   el.style.transform = `translate3d(${xPos}px, 0, 0)`
 }

@@ -45,6 +45,9 @@ function main() {
     return true
   }
 
+  // disable globally context menu
+  window.oncontextmenu = () => false
+
   // pull session data once (to log in user automatically thanks to cookie)
   // and also listen to online event in case network was disconnected at app
   // startup

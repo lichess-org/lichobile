@@ -30,8 +30,8 @@ export default {
     return h('div.view-container', { className: bgClass(background) }, [
       h('main#page', {
         className: color,
-        oncreate: handleMenuOpen
       }, [
+        h('div.edge_menu_area', { oncreate: handleMenuOpen }),
         h('header.main_header.board', header()),
         h('div.content_round', content()),
         h('div#menu-close-overlay', { oncreate: menu.backdropCloseHandler })
@@ -57,7 +57,8 @@ export default {
   ) {
     background = background || settings.general.theme.background()
     return h('div.view-container', { className: bgClass(background) }, [
-      h('main#page', { oncreate: handleMenuOpen }, [
+      h('main#page', [
+        h('div.edge_menu_area', { oncreate: handleMenuOpen }),
         h('header.main_header', header()),
         h('div#free_content.content', content()),
         footer ? h('footer.main_footer', footer()) : null,

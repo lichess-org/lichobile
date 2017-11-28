@@ -2,12 +2,11 @@ import * as Hammer from 'hammerjs'
 import redraw from '../../utils/redraw'
 import * as menu from '.'
 
-export const EDGE_SLIDE_THRESHOLD = 40
-
 interface OpenSlideHandlerState {
   menuElement: HTMLElement | null
   backDropElement: HTMLElement | null
   canSlide: boolean
+  hintedX: number | null
 }
 
 export default function OpenSlideHandler(
@@ -19,7 +18,8 @@ export default function OpenSlideHandler(
   const state: OpenSlideHandlerState = {
     menuElement: null,
     backDropElement: null,
-    canSlide: false
+    canSlide: false,
+    hintedX: null
   }
 
   const mc = new Hammer.Manager(mainEl, {
@@ -27,16 +27,47 @@ export default function OpenSlideHandler(
   })
   mc.add(new Hammer.Pan({
     direction: Hammer.DIRECTION_HORIZONTAL,
-    threshold: 5
+    threshold: 0
   }))
+  mc.add(new Hammer.Press())
+
+  mc.on('press', (e: HammerInput) => {
+    state.menuElement = document.getElementById('side_menu')
+    if (state.menuElement && !menu.isSliding()) {
+      menu.showHint(state.menuElement)
+      state.hintedX = e.center.x
+    }
+  })
+
+  mc.on('hammer.input', (e: HammerInput) => {
+    // handle both press end and pan end
+    if (e.eventType === Hammer.INPUT_END || e.eventType === Hammer.INPUT_CANCEL) {
+      state.hintedX = null
+      if (state.canSlide) {
+        menu.isSliding(false)
+        state.canSlide = false
+        const velocity = e.velocityX
+        const delta = e.deltaX
+        if (
+          velocity >= 0 &&
+          (delta >= maxSlide * menu.OPEN_AFTER_SLIDE_RATIO || velocity > 0.2)
+        ) {
+          menu.open()
+        } else {
+          menu.close()
+        }
+      } else {
+        menu.close()
+      }
+    }
+  })
 
   mc.on('panstart', (e: HammerInput) => {
     if (
       e.target.nodeName === 'PIECE' ||
       e.target.nodeName === 'SQUARE' ||
       // svg element className is not a string
-      (e.target.className.startsWith && e.target.className.startsWith('cg-board manipulable')) ||
-      e.center.x > EDGE_SLIDE_THRESHOLD
+      (e.target.className.startsWith && e.target.className.startsWith('cg-board manipulable'))
     ) {
       state.canSlide = false
     } else {
@@ -57,24 +88,9 @@ export default function OpenSlideHandler(
       e.preventDefault()
       const delta = e.deltaX
       if (delta <= maxSlide) {
-        menu.translateMenu(state.menuElement!, -maxSlide + delta)
+        const shift = state.hintedX !== null ? maxSlide * 0.05 - state.hintedX : 0
+        menu.translateMenu(state.menuElement!, -maxSlide + delta + shift)
         menu.backdropOpacity(state.backDropElement!, (delta / maxSlide * 100) / 100 / 2)
-      }
-    }
-  })
-  mc.on('panend pancancel', (e: HammerInput) => {
-    if (state.canSlide) {
-      menu.isSliding(false)
-      state.canSlide = false
-      const velocity = e.velocityX
-      const delta = e.deltaX
-      if (
-        velocity >= 0 &&
-        (delta >= maxSlide * menu.OPEN_AFTER_SLIDE_RATIO || velocity > 0.2)
-      ) {
-        menu.open()
-      } else {
-        menu.close()
       }
     }
   })

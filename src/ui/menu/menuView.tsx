@@ -67,7 +67,7 @@ function renderHeader(user?: Session) {
         </h2> : null
       }
       { hasNetwork() && user ?
-        <h2 key="username-connected" className="username connected">
+        <h2 key="username-connected" className="username connected" oncreate={helper.ontapXY(menu.route('/@/' + user.id))}>
           { user.patron ?
             <div className="patron" data-icon="" /> : null
           }

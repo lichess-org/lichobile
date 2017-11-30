@@ -180,9 +180,14 @@ export default class TrainingCtrl implements PromotingInterface {
   }
 
   public retry = () => {
-    const lastPuzzle = settings.training.lastPuzzle()
-    if (lastPuzzle)
-      this.init(lastPuzzle)
+    if (this.data.online) {
+      xhr.loadPuzzle(this.data.puzzle.id).then(this.init)
+    }
+    else {
+      const lastPuzzle = settings.training.lastPuzzle()
+      if (lastPuzzle)
+        this.init(lastPuzzle)
+    }
   }
 
   public share = () => {
@@ -362,6 +367,7 @@ export default class TrainingCtrl implements PromotingInterface {
   private sendResult = (win: boolean) => {
     if (this.vm.resultSent) return
     this.vm.resultSent = true
+
     if (this.data.online) {
       xhr.round({ id: this.data.puzzle.id, win })
       .then((res) => {
@@ -385,7 +391,6 @@ export default class TrainingCtrl implements PromotingInterface {
   }
 
   private onPuzzleLoad = ()  => {
-    this.vm.loading = false
     redraw()
   }
 

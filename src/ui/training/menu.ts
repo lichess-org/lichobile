@@ -56,7 +56,9 @@ export default {
 function renderTrainingMenu(ctrl: TrainingCtrl) {
   if (ctrl.user) {
     return renderUserInfos(ctrl.user)
-  } else {
+  } else if (ctrl.data && ctrl.data.online && ctrl.data.user) {
+    return renderUserInfos(ctrl.data.user)
+  }{
     return renderSigninBox()
   }
 }

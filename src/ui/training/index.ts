@@ -46,7 +46,8 @@ export default {
         this.ctrl = new TrainingCtrl(cfg)
         cachedState.ctrl = this.ctrl
       }
-      syncPuzzles().then(loadOfflinePuzzle.bind(undefined, onSuccess, puzzleLoadFailure), loadOfflinePuzzle.bind(undefined, onSuccess, puzzleLoadFailure))
+      const afterSync = () => loadOfflinePuzzle(onSuccess, puzzleLoadFailure)
+      syncPuzzles().then(afterSync, afterSync)
     }
 
     socket.createDefault()

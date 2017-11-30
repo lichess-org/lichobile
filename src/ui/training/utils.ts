@@ -11,7 +11,8 @@ export function syncPuzzles() {
     puzzlesLoaded = xhr.newPuzzles(puzzleDeficit).then((syncData: PuzzleSyncData) => {
       unsolved(unsolved().concat(syncData.puzzles))
       settings.training.user(syncData.user)
-    }).then(() => true, () => false)
+      return true
+    })
   }
   if (settings.training.solvedPuzzles().length) {
     xhr.solvePuzzles(settings.training.solvedPuzzles()).then(() => settings.training.solvedPuzzles([]), () => {})

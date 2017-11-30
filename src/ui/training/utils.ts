@@ -12,7 +12,7 @@ export function syncPuzzles() {
       unsolved(unsolved().concat(syncData.puzzles))
       settings.training.user(syncData.user)
       return true
-    })
+    }).catch(() => false)
   }
   if (settings.training.solvedPuzzles().length) {
     xhr.solvePuzzles(settings.training.solvedPuzzles()).then(() => settings.training.solvedPuzzles([]), () => {})
@@ -28,17 +28,17 @@ function loadNextPuzzle() {
     return null
 }
 
-export function loadOfflinePuzzle(onSuccess: (p: PuzzleData) => void, onFailure: () => void) {
+export function loadOfflinePuzzle(): Promise<PuzzleData> {
   const cfg = loadNextPuzzle()
   if (cfg !== null) {
-    onSuccess(cfg)
+    return Promise.resolve(cfg)
   }
   else {
-    onFailure()
+    return Promise.reject('No additional offline puzzles available. Go online to get another ${settings.training.puzzleBufferLen}')
   }
 }
 
-export function puzzleLoadFailure () {
-  window.plugins.toast.show(`No puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`, 'short', 'center')
+export function puzzleLoadFailure (reason: string) {
+  window.plugins.toast.show(reason, 'short', 'center')
   router.set('/')
 }

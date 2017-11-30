@@ -15,6 +15,7 @@ import { connectingHeader } from '../shared/common'
 import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
 import { State } from './interfaces'
 import { PuzzleData } from '../../lichess/interfaces/training'
+import settings from '../../settings'
 
 interface Attrs {
   id?: string
@@ -46,7 +47,7 @@ export default {
         this.ctrl = new TrainingCtrl(cfg)
         cachedState.ctrl = this.ctrl
       }
-      const afterSync = () => loadOfflinePuzzle(onSuccess, puzzleLoadFailure)
+      const afterSync = () => loadOfflinePuzzle().then(onSuccess, puzzleLoadFailure)
       syncPuzzles().then(afterSync, afterSync)
     }
 

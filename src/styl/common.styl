@@ -10,6 +10,8 @@ html
 body
   background-color #000
   overflow hidden
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
 
 // workaround for ios: the direct parent of an input must have user-select: text
 .allow_select
@@ -302,6 +304,9 @@ span.fa
   flex 0 0 footerHeight
   width 100%
   overflow hidden
+  // iphone X support
+  margin-bottom: constant(safe-area-inset-bottom);
+  margin-bottom: env(safe-area-inset-bottom);
 
 .action_bar_button
   flex 1 1 25%

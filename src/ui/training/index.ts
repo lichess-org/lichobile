@@ -12,9 +12,9 @@ import { renderContent, renderHeader, overlay } from './trainingView'
 import * as xhr from './xhr'
 import TrainingCtrl from './TrainingCtrl'
 import { connectingHeader } from '../shared/common'
-import router from '../../router'
-import settings from '../../settings'
-import { loadNextPuzzle } from './utils'
+import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
+import { State } from './interfaces'
+import { PuzzleData } from '../../lichess/interfaces/training'
 
 interface Attrs {
   id?: string
@@ -22,24 +22,8 @@ interface Attrs {
   initColor?: Color
 }
 
-interface State {
-  ctrl?: TrainingCtrl
-}
-
 // cache last state to retrieve it when navigating back
 const cachedState: State = {}
-
-function loadOfflinePuzzle(state: State) {
-  const cfg = loadNextPuzzle()
-  if (cfg !== null) {
-    state.ctrl = new TrainingCtrl(cfg)
-    cachedState.ctrl = state.ctrl
-  }
-  else {
-    window.plugins.toast.show(`No puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`, 'short', 'center')
-    router.set('/')
-  }
-}
 
 export default {
   oninit({ attrs }) {
@@ -58,7 +42,11 @@ export default {
         .catch(handleXhrError)
       }
     } else {
-      syncPuzzles().then(loadOfflinePuzzle.bind(undefined, this), loadOfflinePuzzle.bind(undefined, this))
+      const onSuccess = (cfg: PuzzleData) => {
+        this.ctrl = new TrainingCtrl(cfg)
+        cachedState.ctrl = this.ctrl
+      }
+      syncPuzzles().then(loadOfflinePuzzle.bind(undefined, onSuccess, puzzleLoadFailure), loadOfflinePuzzle.bind(undefined, onSuccess, puzzleLoadFailure))
     }
 
     socket.createDefault()

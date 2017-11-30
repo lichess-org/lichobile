@@ -1,12 +1,10 @@
 import * as debounce from 'lodash/debounce'
 import Chessground from '../../chessground/Chessground'
-import { ErrorResponse } from '../../http'
 import { build as makeTree, ops as treeOps, path as treePath, TreeWrapper, Tree } from '../shared/tree'
 import router from '../../router'
 import redraw from '../../utils/redraw'
 import signals from '../../signals'
 import * as chess from '../../chess'
-import { handleXhrError } from '../../utils'
 import * as chessFormat from '../../utils/chessFormat'
 import sound from '../../sound'
 import settings from '../../settings'
@@ -21,6 +19,7 @@ import makeGround from './ground'
 import menu, { IMenuCtrl } from './menu'
 import * as xhr from './xhr'
 import { VM, Data, Feedback } from './interfaces'
+import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
 
 export default class TrainingCtrl implements PromotingInterface {
   data: Data
@@ -167,14 +166,12 @@ export default class TrainingCtrl implements PromotingInterface {
     this.chessground.stop()
   }
 
-  public newPuzzle = (feedback: boolean) => {
-    if (feedback) this.showLoading()
-    xhr.newPuzzle()
-    .then(cfg => {
+  public newPuzzle = () => {
+    const onSuccess = (cfg: PuzzleData) => {
       this.init(cfg)
-    })
-    .then(this.onXhrSuccess)
-    .catch(this.onXhrError)
+      this.onPuzzleLoad
+    }
+    loadOfflinePuzzle(onSuccess, puzzleLoadFailure)
   }
 
   public retry = () => {
@@ -241,11 +238,6 @@ export default class TrainingCtrl implements PromotingInterface {
     if (!this.node) return false
     if (this.vm.mode === 'view') return true
     return !!this.node.end
-  }
-
-  private showLoading = () => {
-    this.vm.loading = true
-    redraw()
   }
 
   private sendMove = (orig: Key, dest: Key, prom?: Role) => {
@@ -377,23 +369,18 @@ export default class TrainingCtrl implements PromotingInterface {
       settings.training.solvedPuzzles(solved)
 
       const unsolved = settings.training.unsolvedPuzzles()
-      unsolved.shift
-      settings.training.solvedPuzzles(solved)
+      unsolved.shift()
+      settings.training.unsolvedPuzzles(unsolved)
 
       syncPuzzles()
     }
   }
 
-  private onXhrSuccess = ()  => {
+  private onPuzzleLoad = ()  => {
     this.vm.loading = false
     redraw()
   }
 
-  private onXhrError = (res: ErrorResponse) => {
-    this.vm.loading = false
-    redraw()
-    handleXhrError(res)
-  }
 }
 
 function isMoveRequest(v: Feedback | chess.MoveRequest): v is chess.MoveRequest {

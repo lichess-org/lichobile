@@ -1,6 +1,7 @@
 import * as xhr from './xhr'
+import { PuzzleSyncData, PuzzleData } from '../../lichess/interfaces/training'
+import router from '../../router'
 import settings from '../../settings'
-import { PuzzleSyncData } from '../../lichess/interfaces/training'
 
 export function syncPuzzles() {
   const unsolved = settings.training.unsolvedPuzzles
@@ -8,21 +9,21 @@ export function syncPuzzles() {
   console.log('solved puzzles')
   console.log(settings.training.solvedPuzzles())
   console.log('puzzle deficit ' + puzzleDeficit)
-  let promises = []
+  let puzzlesLoaded = Promise.resolve(true)
   if (puzzleDeficit) {
-    promises.push(xhr.newPuzzles(puzzleDeficit).then((syncData: PuzzleSyncData) => unsolved(unsolved().concat(syncData.puzzles))))
+    puzzlesLoaded = xhr.newPuzzles(puzzleDeficit).then((syncData: PuzzleSyncData) => unsolved(unsolved().concat(syncData.puzzles))).then(() => true, () => false)
   }
   console.log('solved puzzles')
   console.log(settings.training.solvedPuzzles())
   console.log('unsolved puzzles')
   console.log(settings.training.unsolvedPuzzles())
   if (settings.training.solvedPuzzles().length) {
-    promises.push(xhr.solvePuzzles(settings.training.solvedPuzzles()))
+    xhr.solvePuzzles(settings.training.solvedPuzzles()).then(() => settings.training.solvedPuzzles([]))
   }
-  return Promise.all(promises)
+  return puzzlesLoaded
 }
 
-export function loadNextPuzzle() {
+function loadNextPuzzle() {
   const unsolved = settings.training.unsolvedPuzzles()
   console.log('unsolved puzzles')
   console.log(unsolved)
@@ -30,4 +31,19 @@ export function loadNextPuzzle() {
     return unsolved[0]
   else
     return null
+}
+
+export function loadOfflinePuzzle(onSuccess: (p: PuzzleData) => void, onFailure: () => void) {
+  const cfg = loadNextPuzzle()
+  if (cfg !== null) {
+    onSuccess(cfg)
+  }
+  else {
+    onFailure()
+  }
+}
+
+export function puzzleLoadFailure () {
+  window.plugins.toast.show(`No puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`, 'short', 'center')
+  router.set('/')
 }

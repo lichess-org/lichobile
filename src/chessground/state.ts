@@ -21,8 +21,6 @@ export interface State {
     lastMove: boolean // add last-move class to squares
     check: boolean // add check class to squares
   }
-  initBounds: ClientRect | null // set bounds here for perf improvement since they won't
-                                // be computed on dom attach with getBoundingClientRect
   batchRAF: (renderFunction: (ts?: number) => void) => void
   animation: {
     enabled: boolean
@@ -100,7 +98,6 @@ export function makeDefaults(): State {
     fixed: false,
     exploding: null,
     batchRAF: requestAnimationFrame.bind(window),
-    initBounds: null,
     highlight: {
       lastMove: true,
       check: true

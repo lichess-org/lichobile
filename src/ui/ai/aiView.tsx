@@ -16,7 +16,7 @@ export function renderContent(ctrl: AiRound) {
 
   const material = ctrl.chessground.getMaterialDiff()
   const isPortrait = helper.isPortrait()
-  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, 'game')
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait)
   const replayTable = renderReplayTable(ctrl.replay)
 
   const aiName = (

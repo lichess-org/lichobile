@@ -18,7 +18,7 @@ export default class Chessground {
     this.state = initBoard(cfg)
   }
 
-  attach(wrapper: HTMLElement, bounds?: ClientRect) {
+  attach(wrapper: HTMLElement) {
     const isViewOnly = this.state.fixed || this.state.viewOnly
     const board = document.createElement('div')
     board.className = 'cg-board'
@@ -27,20 +27,18 @@ export default class Chessground {
 
     wrapper.appendChild(board)
 
-    const wrapperBounds = this.state.fixed ? {
-      // dummy bounds since fixed board doesn't use bounds
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      height: 0,
-      width: 0
-    } : wrapper.getBoundingClientRect()
-
     this.dom = {
       board,
       elements: {},
-      bounds: bounds || this.state.initBounds || wrapperBounds
+      bounds: this.state.fixed ? {
+        // dummy bounds since fixed board doesn't use bounds
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 0,
+        width: 0
+      } : wrapper.getBoundingClientRect()
     }
 
     this.redrawSync()

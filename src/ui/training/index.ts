@@ -29,11 +29,11 @@ interface State {
 // cache last state to retrieve it when navigating back
 const cachedState: State = {}
 
-function loadOfflinePuzzle() {
+function loadOfflinePuzzle(state: State) {
   const cfg = loadNextPuzzle()
   if (cfg !== null) {
-    this.ctrl = new TrainingCtrl(cfg)
-    cachedState.ctrl = this.ctrl
+    state.ctrl = new TrainingCtrl(cfg)
+    cachedState.ctrl = state.ctrl
   }
   else {
     window.plugins.toast.show(`No puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`, 'short', 'center')
@@ -58,7 +58,7 @@ export default {
         .catch(handleXhrError)
       }
     } else {
-      syncPuzzles().then(loadOfflinePuzzle.bind(this), loadOfflinePuzzle.bind(this))
+      syncPuzzles().then(loadOfflinePuzzle.bind(undefined, this), loadOfflinePuzzle.bind(undefined, this))
     }
 
     socket.createDefault()

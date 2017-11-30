@@ -137,7 +137,7 @@ function renderStats(user: UserFullProfile) {
 function renderRatings(user: UserFullProfile) {
   function isShowing(p: { key: string, perf: { games: number }}) {
     return [
-      'blitz', 'bullet', 'classical', 'correspondence'
+      'blitz', 'bullet', 'classical', 'rapid', 'correspondence'
     ].indexOf(p.key) !== -1 || p.perf.games > 0
   }
 

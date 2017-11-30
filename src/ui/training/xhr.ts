@@ -39,7 +39,6 @@ export function newPuzzle(): Promise<PuzzleData> {
 }
 
 export function newPuzzles(num: number): Promise<PuzzleSyncData> {
-  console.log('num ' + num)
   return fetchJSON<PuzzleSyncData>('/training/batch',{
     method: 'GET',
     query: { nb: num }

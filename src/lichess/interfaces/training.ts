@@ -9,12 +9,7 @@ export interface PuzzleData {
 
 export interface PuzzleSyncData {
   puzzles: PuzzleData[]
-  user: PuzzleUserData
-}
-
-export interface PuzzleUserData {
-  rating: number
-  recent: number[][]
+  user?: UserData
 }
 
 export interface Round {

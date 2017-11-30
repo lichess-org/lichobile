@@ -8,7 +8,7 @@ import * as chess from '../../chess'
 import * as chessFormat from '../../utils/chessFormat'
 import sound from '../../sound'
 import settings from '../../settings'
-import { PuzzleData } from '../../lichess/interfaces/training'
+import { PuzzleData, UserData as PuzzleUserData } from '../../lichess/interfaces/training'
 import promotion from '../shared/offlineRound/promotion'
 import { PromotingInterface } from '../shared/round'
 import { syncPuzzles } from './utils'
@@ -23,6 +23,7 @@ import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
 
 export default class TrainingCtrl implements PromotingInterface {
   data: Data
+  user: PuzzleUserData
   tree: TreeWrapper
   menu: IMenuCtrl
   chessground: Chessground
@@ -49,7 +50,11 @@ export default class TrainingCtrl implements PromotingInterface {
   }
 
   public init = (cfg: PuzzleData) => {
-    console.log(cfg)
+    const user = settings.training.user()
+    if (user) {
+      this.user = user
+    }
+
     this.vm = {
       mode: 'play',
       initializing: true,
@@ -175,7 +180,9 @@ export default class TrainingCtrl implements PromotingInterface {
   }
 
   public retry = () => {
-    xhr.loadPuzzle(this.data.puzzle.id).then(this.init)
+    const lastPuzzle = settings.training.lastPuzzle()
+    if (lastPuzzle)
+      this.init(lastPuzzle)
   }
 
   public share = () => {
@@ -369,9 +376,10 @@ export default class TrainingCtrl implements PromotingInterface {
       settings.training.solvedPuzzles(solved)
 
       const unsolved = settings.training.unsolvedPuzzles()
-      unsolved.shift()
-      settings.training.unsolvedPuzzles(unsolved)
-
+      if (unsolved[0].puzzle.id === this.data.puzzle.id) {
+        settings.training.lastPuzzle(unsolved.shift())
+        settings.training.unsolvedPuzzles(unsolved)
+      }
       syncPuzzles()
     }
   }

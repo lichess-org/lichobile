@@ -6,27 +6,21 @@ import settings from '../../settings'
 export function syncPuzzles() {
   const unsolved = settings.training.unsolvedPuzzles
   const puzzleDeficit = Math.max(settings.training.puzzleBufferLen - unsolved().length, 0)
-  console.log('solved puzzles')
-  console.log(settings.training.solvedPuzzles())
-  console.log('puzzle deficit ' + puzzleDeficit)
   let puzzlesLoaded = Promise.resolve(true)
   if (puzzleDeficit) {
-    puzzlesLoaded = xhr.newPuzzles(puzzleDeficit).then((syncData: PuzzleSyncData) => unsolved(unsolved().concat(syncData.puzzles))).then(() => true, () => false)
+    puzzlesLoaded = xhr.newPuzzles(puzzleDeficit).then((syncData: PuzzleSyncData) => {
+      unsolved(unsolved().concat(syncData.puzzles))
+      settings.training.user(syncData.user)
+    }).then(() => true, () => false)
   }
-  console.log('solved puzzles')
-  console.log(settings.training.solvedPuzzles())
-  console.log('unsolved puzzles')
-  console.log(settings.training.unsolvedPuzzles())
   if (settings.training.solvedPuzzles().length) {
-    xhr.solvePuzzles(settings.training.solvedPuzzles()).then(() => settings.training.solvedPuzzles([]))
+    xhr.solvePuzzles(settings.training.solvedPuzzles()).then(() => settings.training.solvedPuzzles([]), () => {})
   }
   return puzzlesLoaded
 }
 
 function loadNextPuzzle() {
   const unsolved = settings.training.unsolvedPuzzles()
-  console.log('unsolved puzzles')
-  console.log(unsolved)
   if (unsolved.length > 0)
     return unsolved[0]
   else

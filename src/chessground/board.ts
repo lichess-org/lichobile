@@ -252,21 +252,6 @@ export function stop(state: State): void {
   cancelMove(state)
 }
 
-export function getKeyAtDomPos(state: State, pos: NumberPair, bounds: ClientRect): Key | null {
-  if (typeof bounds !== 'object') {
-    throw new Error('function getKeyAtDomPos require bounds object arg')
-  }
-  const asWhite = state.orientation === 'white'
-  const x = Math.ceil(8 * ((pos[0] - bounds.left) / bounds.width))
-  const ox = (asWhite ? x : 9 - x) as cg.Coord
-  const y = Math.ceil(8 - (8 * ((pos[1] - bounds.top) / bounds.height)))
-  const oy = (asWhite ? y : 9 - y) as cg.Coord
-  if (ox > 0 && ox < 9 && oy > 0 && oy < 9) {
-    return util.pos2key([ox, oy])
-  }
-  return null
-}
-
 function baseMove(state: State, orig: Key, dest: Key): boolean {
   if (orig === dest || !state.pieces[orig]) return false
   const captured = (

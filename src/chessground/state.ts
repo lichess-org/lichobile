@@ -13,6 +13,7 @@ export interface State {
   symmetricCoordinates: boolean // symmetric coords for otb
   autoCastle: boolean // immediately complete the castle by moving the rook after king move
   viewOnly: boolean // don't bind events: the user will never be able to move pieces around
+  fixed: boolean // board is viewOnly and pieces won't move
   exploding: cg.Exploding | null
   otb: boolean // is this an otb game?
   otbMode: cg.OtbMode
@@ -96,6 +97,7 @@ export function makeDefaults(): State {
     otbMode: 'facing' as cg.OtbMode,
     autoCastle: false,
     viewOnly: false,
+    fixed: false,
     exploding: null,
     batchRAF: requestAnimationFrame.bind(window),
     initBounds: null,

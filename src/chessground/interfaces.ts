@@ -20,6 +20,7 @@ export interface InitConfig {
   symmetricCoordinates?: boolean
   autoCastle?: boolean
   viewOnly?: boolean
+  fixed?: boolean
   initBounds?: ClientRect
   otb?: boolean
   otbMode?: OtbMode

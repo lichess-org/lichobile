@@ -260,6 +260,7 @@ function tournamentFeaturedGame(ctrl: TournamentCtrl) {
       <div key={featured.id} className="tournamentMiniBoard">
         {h(miniBoard, {
           bounds: miniBoardSize(isPortrait),
+          fixed: false,
           fen: featured.fen,
           lastMove: featured.lastMove,
           orientation: 'white',

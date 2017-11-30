@@ -1,4 +1,5 @@
 import * as cg from './interfaces'
+import { State } from './state'
 import Chessground from './Chessground'
 import * as board from './board'
 import * as util from './util'
@@ -76,7 +77,7 @@ export function start(ctrl: Chessground, e: TouchEvent) {
   const dom = ctrl.dom!
   const bounds = dom.bounds
   const position = util.eventPosition(e)
-  const orig = board.getKeyAtDomPos(state, position, bounds)
+  const orig = getKeyAtDomPos(state, position, bounds)
   if (!orig) return
   const previouslySelected = state.selected
   const hadPremove = !!state.premovable.current
@@ -198,6 +199,21 @@ export function cancel(ctrl: Chessground) {
   }
 }
 
+function getKeyAtDomPos(state: State, pos: NumberPair, bounds: ClientRect): Key | null {
+  if (typeof bounds !== 'object') {
+    throw new Error('function getKeyAtDomPos require bounds object arg')
+  }
+  const asWhite = state.orientation === 'white'
+  const x = Math.ceil(8 * ((pos[0] - bounds.left) / bounds.width))
+  const ox = (asWhite ? x : 9 - x) as cg.Coord
+  const y = Math.ceil(8 - (8 * ((pos[1] - bounds.top) / bounds.height)))
+  const oy = (asWhite ? y : 9 - y) as cg.Coord
+  if (ox > 0 && ox < 9 && oy > 0 && oy < 9) {
+    return util.pos2key([ox, oy])
+  }
+  return null
+}
+
 function processDrag(ctrl: Chessground) {
   const state = ctrl.state
   const dom = ctrl.dom!
@@ -246,7 +262,7 @@ function processDrag(ctrl: Chessground) {
           cur.epos[1] - cur.rel[1]
         ]
 
-        cur.over = board.getKeyAtDomPos(state, cur.epos, bounds)
+        cur.over = getKeyAtDomPos(state, cur.epos, bounds)
 
         // move piece
         const translate = util.posToTranslate(cur.origPos, asWhite, bounds)

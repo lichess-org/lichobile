@@ -13,7 +13,6 @@ import { TournamentListItem } from '../../lichess/interfaces/tournament'
 import { renderTournamentList } from '../tournament/tournamentsListView'
 
 export function body(ctrl: HomeState) {
-  const isPortrait = helper.isPortrait()
   const nbPlayers = i18n('nbConnectedPlayers', ctrl.nbConnectedPlayers() || '?')
   const nbGames = i18n('nbGamesInPlay', ctrl.nbGamesInPlay() || '?')
 
@@ -41,7 +40,7 @@ export function body(ctrl: HomeState) {
           {renderQuickSetup(() => newGameForm.openRealTime('custom'))}
         </div>
         {renderFeaturedTournaments(ctrl.featuredTournaments())}
-        {renderDailyPuzzle(ctrl, isPortrait)}
+        {renderDailyPuzzle(ctrl)}
         {renderTimeline(ctrl)}
       </div>
     </div>
@@ -60,25 +59,13 @@ function renderFeaturedTournaments(tournaments: TournamentListItem[]) {
     return null
 }
 
-function miniBoardSize(isPortrait: boolean) {
-  const { vh, vw } = helper.viewportDim()
-  const side = isPortrait ? vw * 0.66 : vh * 0.66
-  const bounds = {
-    height: side,
-    width: side
-  }
-  return bounds
-}
-
-function renderDailyPuzzle(ctrl: HomeState, isPortrait: boolean) {
+function renderDailyPuzzle(ctrl: HomeState) {
   const puzzle = ctrl.dailyPuzzle()
   const boardConf = puzzle ? {
-    bounds: miniBoardSize(isPortrait),
     fen: puzzle.fen,
     orientation: puzzle.color,
     link: () => router.set(`/training/${puzzle.id}?initFen=${puzzle.fen}&initColor=${puzzle.color}`),
   } : {
-    bounds: miniBoardSize(isPortrait),
     orientation: 'white' as Color,
     fen: emptyFen
   }

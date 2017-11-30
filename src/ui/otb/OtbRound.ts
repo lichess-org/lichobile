@@ -41,7 +41,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public chessground: Chessground
   public replay: Replay
   public vm: OtbVM
-  public clock: IChessClock
+  public clock?: IChessClock
 
   public constructor(
     saved?: StoredOfflineGame | null,
@@ -106,6 +106,9 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
       const clockType = data.offlineClock.clockType
       this.clock = clockSet[clockType](this.onFlag)
       this.clock.setState(data.offlineClock)
+    }
+    else {
+      this.clock = undefined
     }
 
     if (!this.chessground) {

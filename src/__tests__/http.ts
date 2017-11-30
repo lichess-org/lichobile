@@ -72,6 +72,7 @@ describe('HTTP fetch wrapper', () => {
       const body = 'bad'
       return Promise.resolve({
         status: 400,
+        statusText: 'Bad request',
         ok: false,
         json() {
           return Promise.resolve().then(() => JSON.parse(body))
@@ -89,7 +90,7 @@ describe('HTTP fetch wrapper', () => {
 
     await expect(http.fetchText('/api/hello')).rejects.toEqual({
       status: 400,
-      body: 'bad'
+      body: 'Bad request'
     })
   })
 

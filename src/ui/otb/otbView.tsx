@@ -97,7 +97,7 @@ function renderGameActionsBar(ctrl: OtbRound) {
         ((!ctrl.clock.flagged() && ctrl.clock.activeSide()) ?
           <button id="playPause" className={'fa action_bar_button ' + (ctrl.clock.isRunning() ? 'fa-pause' : 'fa-play')}
             oncreate={helper.ontap(
-              () => ctrl.clock.startStop(),
+              () => ctrl.clock ? ctrl.clock.startStop() : null,
               () => window.plugins.toast.show(i18n('chessClock'), 'short', 'bottom')
             )}
           />

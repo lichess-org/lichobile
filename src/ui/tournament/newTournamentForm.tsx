@@ -2,10 +2,10 @@ import settings from '../../settings'
 import i18n from '../../i18n'
 import router from '../../router'
 import * as utils from '../../utils'
+import { standardFen } from '../../lichess/variant'
 import { TournamentCreateResponse } from '../../lichess/interfaces/tournament'
 import popupWidget from '../shared/popup'
 import formWidgets from '../shared/form'
-import { initialPositionFen } from '../../utils/fen'
 import TournamentsListCtrl from './TournamentsListCtrl'
 import * as xhr from './tournamentXhr'
 
@@ -52,7 +52,7 @@ function renderForm(ctrl: TournamentsListCtrl) {
             Position
           </label>
           <select id="select_start_position" className="positions">
-            <option value={initialPositionFen}>Initial Position</option>
+            <option value={standardFen}>Initial Position</option>
             {ctrl.startPositions.map(c => {
               return (
                 <optgroup label={c.name}>

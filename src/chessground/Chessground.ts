@@ -18,10 +18,11 @@ export default class Chessground {
     this.state = initBoard(cfg)
   }
 
-  attach(wrapper: HTMLElement, bounds?: ClientRect) {
+  attach(wrapper: HTMLElement) {
+    const isViewOnly = this.state.fixed || this.state.viewOnly
     const board = document.createElement('div')
     board.className = 'cg-board'
-    if (this.state.viewOnly) board.className += ' view-only'
+    if (isViewOnly) board.className += ' view-only'
     else board.className += ' manipulable'
 
     wrapper.appendChild(board)
@@ -29,19 +30,27 @@ export default class Chessground {
     this.dom = {
       board,
       elements: {},
-      bounds: bounds || this.state.initBounds || wrapper.getBoundingClientRect()
+      bounds: this.state.fixed ? {
+        // dummy bounds since fixed board doesn't use bounds
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 0,
+        width: 0
+      } : wrapper.getBoundingClientRect()
     }
 
     this.redrawSync()
 
-    if (!this.state.viewOnly) {
+    if (!isViewOnly) {
       board.addEventListener('touchstart', (e: TouchEvent) => drag.start(this, e))
       board.addEventListener('touchmove', (e: TouchEvent) => drag.move(this, e))
       board.addEventListener('touchend', (e: TouchEvent) => drag.end(this, e))
       board.addEventListener('touchcancel', () => drag.cancel(this))
     }
 
-    if (!this.state.viewOnly) {
+    if (!isViewOnly) {
       const shadow = document.createElement('div')
       shadow.className = 'cg-square-target'
       shadow.style.transform = util.translate3dAway
@@ -49,7 +58,7 @@ export default class Chessground {
       this.dom.elements.shadow = shadow
     }
 
-    if (!this.state.viewOnly && this.state.draggable.showGhost) {
+    if (!isViewOnly && this.state.draggable.showGhost) {
       const ghost = document.createElement('piece')
       ghost.className = 'ghost'
       ghost.style.transform = util.translateAway

@@ -68,22 +68,14 @@
   background lighten(bgdark, 5%)
   flex 1 1 auto
   > .tab-content
-    // must not have height, use flex to stretch content to the max height instead
-    height initial
-    display flex
     > div
       width 100%
-    > .native_scroller
-      // same: let flex compute height
-      height initial
     @media only screen and (orientation: landscape)
       width 'calc(100vw - 100vh + %s)' % headerHeight
 
 .analyse_actions_bar
   flex 0 0 40px
-  display flex
   padding 0
-  height initial
   width 100%
   overflow hidden
 

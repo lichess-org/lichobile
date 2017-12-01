@@ -16,9 +16,10 @@ export interface Attrs {
   link?: () => void
   gameObj?: MiniBoardGameObj
   lastMove?: string
-  bounds: Bounds
+  bounds?: Bounds
   customPieceTheme?: string
   variant?: VariantKey
+  fixed?: boolean
 }
 
 interface State {

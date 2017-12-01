@@ -34,7 +34,7 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
   const opponentName = i18n(ctrl.data.opponent.color)
   const replayTable = renderReplayTable(ctrl.replay)
   const isPortrait = helper.isPortrait()
-  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game')
+  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait)
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,

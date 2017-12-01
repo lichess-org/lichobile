@@ -130,7 +130,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const material = ctrl.chessground.getMaterialDiff()
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait)
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait)
-  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game')
+  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait)
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,

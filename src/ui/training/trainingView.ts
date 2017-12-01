@@ -1,6 +1,6 @@
 import * as h from 'mithril/hyperscript'
 import i18n from '../../i18n'
-import Board from '../shared/Board'
+import Board, { Bounds } from '../shared/Board'
 import { view as renderPromotion } from '../shared/offlineRound/promotion'
 import { header, connectingHeader } from '../shared/common'
 import * as helper from '../helper'
@@ -20,7 +20,7 @@ export function renderHeader(ctrl: TrainingCtrl) {
   ]))
 }
 
-export function renderContent(ctrl: TrainingCtrl, key: string, bounds: ClientRect) {
+export function renderContent(ctrl: TrainingCtrl, key: string, bounds: Bounds) {
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     bounds,

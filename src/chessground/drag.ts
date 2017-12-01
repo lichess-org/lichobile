@@ -253,7 +253,7 @@ function processDrag(ctrl: Chessground) {
             const translation = util.posToTranslate(
               util.key2pos(cur.orig), state.orientation === 'white', bounds
             )
-            ghost.style.transform = util.translate(translation)
+            ghost.style.transform = util.transform(state, cur.piece.color, util.translate(translation))
           }
         }
 

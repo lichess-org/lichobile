@@ -7,6 +7,7 @@ import * as chessFormat from '../../utils/chessFormat'
 import { build as makeTree, path as treePath, ops as treeOps, TreeWrapper, Tree } from '../shared/tree'
 import redraw from '../../utils/redraw'
 import session from '../../session'
+import vibrate from '../../vibrate'
 import sound from '../../sound'
 import socket from '../../socket'
 import { openingSensibleVariants } from '../../lichess/variant'
@@ -371,6 +372,18 @@ export default class AnalyseCtrl {
   mergeAnalysisData(data: AnalyseDataWithTree): void {
     this.tree.merge(data.tree)
     this.data.analysis = data.analysis
+    const analysisComplete = this.mainline.every(n => n.eval !== undefined)
+    if (analysisComplete) {
+      this.analysisProgress = false
+      this.retroGlowing = true
+      setTimeout(() => {
+        this.retroGlowing = false
+        redraw()
+      }, 1000 * 8)
+      sound.dong()
+      vibrate.quick()
+      redraw()
+    }
     if (this.retro) this.retro.onMergeAnalysisData()
     redraw()
   }

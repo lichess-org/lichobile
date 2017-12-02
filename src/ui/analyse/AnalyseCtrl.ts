@@ -370,10 +370,16 @@ export default class AnalyseCtrl {
   }
 
   mergeAnalysisData(data: AnalyseDataWithTree): void {
+    if (!this.analysisProgress) {
+      this.analysisProgress = true
+      redraw()
+    }
     this.tree.merge(data.tree)
     this.data.analysis = data.analysis
-    const analysisComplete = this.mainline.every(n => n.eval !== undefined)
+    const anaMainline = treeOps.mainlineNodeList(data.tree)
+    const analysisComplete = anaMainline.every(n => n.eval !== undefined)
     if (analysisComplete) {
+      this.data.treeParts = anaMainline
       this.analysisProgress = false
       this.retroGlowing = true
       setTimeout(() => {

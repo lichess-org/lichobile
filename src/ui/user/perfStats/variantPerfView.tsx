@@ -9,7 +9,7 @@ import i18n from '../../../i18n'
 import * as helper from '../../helper'
 import { GraphPoint } from '../../../lichess/interfaces/user'
 
-import { State } from './'
+import { State } from '.'
 
 interface DateRating {
   date: Date
@@ -20,7 +20,7 @@ type GraphData = Array<DateRating>
 const ONE_YEAR = 1000 * 60 * 60 * 24 * 365
 
 export function renderBody(ctrl: State) {
-  const data = ctrl.variantPerfData()
+  const data = ctrl.perfData()
 
   if (!data) return null
 

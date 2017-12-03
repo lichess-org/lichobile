@@ -89,7 +89,7 @@ function renderPlayer(user: User) {
       return curr
     else
       return prev
-  })
+  }) as PerfKey
   return (
     <li className="list_item playerSuggestion nav" data-id={user.id}>
       {userStatus(user)}

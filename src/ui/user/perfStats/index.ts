@@ -1,25 +1,25 @@
+import * as h from 'mithril/hyperscript'
 import * as stream from 'mithril/stream'
 import * as helper from '../../helper'
 import * as xhr from '../userXhr'
 import socket from '../../../socket'
-import { handleXhrError } from '../../../utils'
+import { handleXhrError, gameIcon } from '../../../utils'
 import redraw from '../../../utils/redraw'
 import spinner from '../../../spinner'
 import { header as headerWidget, backButton } from '../../shared/common'
 import { shortPerfTitle } from '../../../lichess/perfs'
-import { User, VariantPerfStats } from '../../../lichess/interfaces/user'
-import { VariantKey } from '../../../lichess/interfaces/variant'
+import { User, PerfStats } from '../../../lichess/interfaces/user'
 import layout from '../../layout'
 import { renderBody } from './variantPerfView'
 
 interface Attrs {
   id: string
-  variant: VariantKey
+  perf: PerfKey
 }
 
 export interface State {
   user: Mithril.Stream<User>
-  variantPerfData: Mithril.Stream<VariantPerfStats>
+  perfData: Mithril.Stream<PerfStats>
 }
 
 const VariantPerfScreen: Mithril.Component<Attrs, State> = {
@@ -27,22 +27,22 @@ const VariantPerfScreen: Mithril.Component<Attrs, State> = {
 
   oninit(vnode) {
     const userId = vnode.attrs.id
-    const variant = vnode.attrs.variant
+    const perf = vnode.attrs.perf
     const user = stream() as Mithril.Stream<User>
-    const variantPerfData = stream() as Mithril.Stream<VariantPerfStats>
+    const perfData = stream() as Mithril.Stream<PerfStats>
 
     socket.createDefault()
 
     spinner.spin()
     Promise.all([
       xhr.user(userId, false),
-      xhr.variantperf(userId, variant)
+      xhr.variantperf(userId, perf)
     ])
     .then(results => {
       spinner.stop()
       const [userData, variantData] = results
       user(userData)
-      variantPerfData(variantData)
+      perfData(variantData)
       redraw()
     })
     .catch(err => {
@@ -52,16 +52,19 @@ const VariantPerfScreen: Mithril.Component<Attrs, State> = {
 
     vnode.state = {
       user,
-      variantPerfData
+      perfData
     }
   },
 
   view(vnode) {
     const ctrl = vnode.state
     const userId = vnode.attrs.id
-    const variant = vnode.attrs.variant
+    const perf = vnode.attrs.perf
     const header = () => headerWidget(null,
-      backButton(userId + ' ' + shortPerfTitle(variant as PerfKey) + ' stats')
+      backButton(h('div.main_header_title', [
+        h('span.withIcon', { 'data-icon': gameIcon(perf) }),
+        userId + ' ' + shortPerfTitle(perf as PerfKey) + ' stats'
+      ]))
     )
 
     return layout.free(header, () => renderBody(ctrl))

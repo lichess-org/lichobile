@@ -315,7 +315,7 @@ function tvChannelSelector(ctrl: OnlineRound) {
   const channels = perfApi.perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]])
   channels.unshift(['Top rated', 'best'])
   channels.push(['Computer', 'computer'])
-  const channel = settings.tv.channel()
+  const channel = settings.tv.channel() as PerfKey
   const icon = utils.gameIcon(channel)
 
   return (

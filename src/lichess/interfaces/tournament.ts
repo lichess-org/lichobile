@@ -25,7 +25,7 @@ export interface Tournament {
   standing: StandingPage
   startsAt: string
   system: string
-  variant: string
+  variant: VariantKey
   verdicts: Verdicts
   position?: Opening
 }

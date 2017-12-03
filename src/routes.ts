@@ -22,7 +22,7 @@ import user from './ui/user'
 import userFollowing from './ui/user/following'
 import userFollowers from './ui/user/followers'
 import userGames from './ui/user/games'
-import userVariantPerf from './ui/user/variantperf'
+import userPerfStats from './ui/user/perfStats'
 import userTV from './ui/user/tv'
 import players from './ui/players'
 import ranking from './ui/players/ranking'
@@ -66,7 +66,7 @@ export default {
       '@/:id/followers': userFollowers,
       '@/:id/games': userGames,
       '@/:id/games/:filter': userGames,
-      '@/:id/:variant/perf': userVariantPerf,
+      '@/:id/:perf/perf': userPerfStats,
       '@/:id/tv': userTV,
       'clock': clock,
       'editor': editor,

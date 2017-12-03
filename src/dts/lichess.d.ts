@@ -17,8 +17,8 @@ declare type ColorMap<T> = {
 
 declare type VariantKey = 'standard' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse'
 
-declare type Speed = 'bullet' | 'blitz' | 'rapid' | 'classical' | 'correspondence' | 'unlimited'
-declare type PerfKey = 'bullet' | 'blitz' | 'rapid' | 'classical' | 'correspondence' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse' | 'puzzle'
+declare type Speed = 'ultraBullet' | 'bullet' | 'blitz' | 'rapid' | 'classical' | 'correspondence'
+declare type PerfKey = Speed | VariantKey | 'puzzle'
 
 declare type Role = 'king' | 'queen' | 'knight' | 'bishop' | 'rook' | 'pawn'
 

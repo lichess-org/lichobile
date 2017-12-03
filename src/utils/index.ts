@@ -89,6 +89,7 @@ export function noop() {}
 const perfIconsMap: {[index: string]: string} = {
   bullet: 'T',
   blitz: ')',
+  rapid: '#',
   classical: '+',
   correspondence: ';',
   chess960: '\'',

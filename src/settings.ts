@@ -141,8 +141,8 @@ export default {
       db: localstorageprop('settings.analyse.explorer.db', 'lichess'),
       availableRatings: [1600, 1800, 2000, 2200, 2500],
       rating: localstorageprop('settings.analyse.explorer.rating', [1600, 1800, 2000, 2200, 2500]),
-      availableSpeeds: ['bullet', 'blitz', 'classical'],
-      speed: localstorageprop('settings.analyse.explorer.speed', ['bullet', 'blitz', 'classical'])
+      availableSpeeds: ['bullet', 'blitz', 'rapid', 'classical'],
+      speed: localstorageprop('settings.analyse.explorer.speed', ['bullet', 'blitz', 'rapid', 'classical'])
     }
   },
 

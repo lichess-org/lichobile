@@ -89,6 +89,7 @@ export function noop() {}
 const perfIconsMap: {[index: string]: string} = {
   bullet: 'T',
   blitz: ')',
+  rapid: '#',
   classical: '+',
   correspondence: ';',
   chess960: '\'',
@@ -104,7 +105,7 @@ const perfIconsMap: {[index: string]: string} = {
   ultraBullet: '{'
 }
 
-export function gameIcon(perf?: string): string {
+export function gameIcon(perf?: PerfKey): string {
   return perf ? perfIconsMap[perf] || '8' : '8'
 }
 

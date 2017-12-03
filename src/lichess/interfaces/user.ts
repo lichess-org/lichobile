@@ -123,7 +123,7 @@ export interface UserGameWithDate extends UserGame {
 
 export type GraphPoint = [number, number, number, number]
 
-export interface VariantPerfStats {
+export interface PerfStats {
   user: LightUser
   perf: any
   rank: number

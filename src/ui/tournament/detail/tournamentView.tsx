@@ -3,7 +3,7 @@ import router from '../../../router'
 import session from '../../../session'
 import i18n from '../../../i18n'
 import { Tournament, StandingPlayer, PodiumPlace } from '../../../lichess/interfaces/tournament'
-import { gameIcon, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils'
+import { formatTournamentDuration, formatTournamentTimeControl } from '../../../utils'
 import * as helper from '../../helper'
 import settings from '../../../settings'
 import miniBoard from '../../shared/miniBoard'
@@ -68,7 +68,7 @@ export function timeInfo(key: string, seconds?: number, preceedingText?: string)
 }
 
 function tournamentHeader(data: Tournament) {
-  const variant = variantDisplay(data)
+  const variant = data.perf.name
   const control = formatTournamentTimeControl(data.clock)
   const conditionsClass = [
     'tournamentConditions',
@@ -78,7 +78,7 @@ function tournamentHeader(data: Tournament) {
   return (
     <div key="header" className="tournamentHeader">
       <div className="tournamentInfoTime">
-        <strong className="tournamentInfo withIcon" data-icon={gameIcon(variantKey(data))}>
+        <strong className="tournamentInfo withIcon" data-icon={data.perf.icon}>
           {variant + ' • ' + control + ' • ' + formatTournamentDuration(data.minutes) }
         </strong>
       </div>
@@ -142,26 +142,6 @@ function withdrawButton(ctrl: TournamentCtrl, t: Tournament) {
     </button>
   )
 }
-
-function variantDisplay(data: Tournament) {
-  let variant = variantKey(data)
-  variant = variant.split(' ')[0]
-
-  if (variant.length > 0) {
-    variant = variant.charAt(0).toUpperCase() + variant.substring(1)
-  }
-
-  return variant
-}
-
-function variantKey(data: Tournament) {
-  let variant = data.variant
-  if (variant === 'standard') {
-    variant = data.perf.name.toLowerCase()
-  }
-  return variant
-}
-
 
 function getLeaderboardItemEl(e: Event) {
   const target = e.target as HTMLElement

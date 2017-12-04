@@ -128,5 +128,5 @@
     <plugin name="cordova-universal-links-plugin" spec="git+https://github.com/flipflopapp/cordova-universal-links-plugin.git#be60a9b" />
     <plugin name="de.appplant.cordova.plugin.local-notification" spec="git+https://github.com/katzer/cordova-plugin-local-notifications.git#0.8.5" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
-    <plugin name="onesignal-cordova-plugin" spec="~2.0.11" />
+    <plugin name="onesignal-cordova-plugin" spec="2.2.4" />
 </widget>

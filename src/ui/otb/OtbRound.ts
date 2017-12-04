@@ -60,13 +60,16 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     }
 
     if (setupFen) {
-      this.newGameMenu.isOpen(true)
+      this.newGameMenu.open()
 
       if (setupVariant) {
         settings.otb.variant(setupVariant)
       }
     }
-
+    else {
+      if (!saved || saved.ply === 0)
+        this.newGameMenu.open()
+    }
     const currentVariant = <VariantKey>settings.otb.variant()
     if (!setupFen) {
       if (saved) {
@@ -83,9 +86,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
 
   public init(data: OfflineGameData, situations: Array<chess.GameSituation>, ply: number) {
     this.actions.close()
-    this.newGameMenu.close()
     this.data = data
-
     const variant = this.data.game.variant.key
     const initialFen = this.data.game.initialFen
 

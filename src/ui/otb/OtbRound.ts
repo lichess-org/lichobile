@@ -88,7 +88,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public init(data: OfflineGameData, situations: Array<chess.GameSituation>, ply: number) {
     this.actions.close()
     this.data = data
-    
+
     const variant = this.data.game.variant.key
     const initialFen = this.data.game.initialFen
 

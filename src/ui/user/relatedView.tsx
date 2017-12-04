@@ -43,7 +43,7 @@ export function renderBody(ctrl: IRelationCtrl) {
 
 function renderPlayer(ctrl: IRelationCtrl, obj: Related) {
   const status = obj.online ? 'online' : 'offline'
-  const perfKey = obj.perfs && Object.keys(obj.perfs)[0]
+  const perfKey = obj.perfs && Object.keys(obj.perfs)[0] as PerfKey
   const perf = obj.perfs && obj.perfs[perfKey]
   const userLink = helper.ontapY(() => router.set(`/@/${obj.user}`))
   return (

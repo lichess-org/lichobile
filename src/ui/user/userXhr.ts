@@ -1,4 +1,4 @@
-import { UserFullProfile, GameFilter, UserGameWithDate, VariantPerfStats } from '../../lichess/interfaces/user'
+import { UserFullProfile, GameFilter, UserGameWithDate, PerfStats } from '../../lichess/interfaces/user'
 import { Paginator } from '../../lichess/interfaces'
 import { OnlineGameData } from '../../lichess/interfaces/game'
 import { Related } from '../../lichess/interfaces/user'
@@ -67,6 +67,6 @@ export function tv(userId: string): Promise<OnlineGameData> {
   return fetchJSON(`/@/${userId}/tv`)
 }
 
-export function variantperf(userId: string, variantKey: string): Promise<VariantPerfStats> {
-  return fetchJSON(`/@/${userId}/perf/${variantKey}?graph=1`, undefined, false)
+export function variantperf(userId: string, perfKey: PerfKey): Promise<PerfStats> {
+  return fetchJSON(`/@/${userId}/perf/${perfKey}?graph=1`, undefined, false)
 }

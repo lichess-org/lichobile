@@ -2,10 +2,15 @@ import settings from '../../settings'
 import Chessground from '../../chessground/Chessground'
 import BoardBrush, { Shape } from './BoardBrush'
 
+export interface Bounds {
+  width: number
+  height: number
+}
+
 export interface Attrs {
   variant: VariantKey
   chessground: Chessground
-  bounds: ClientRect
+  bounds: Bounds
   wrapperClasses?: string
   customPieceTheme?: string
   shapes?: Shape[]
@@ -22,10 +27,10 @@ interface State {
 const Board: Mithril.Component<Attrs, State> = {
   oninit(vnode) {
 
-    const { chessground, bounds } = vnode.attrs
+    const { chessground } = vnode.attrs
 
     this.boardOnCreate = ({ dom }: Mithril.DOMNode) => {
-      chessground.attach(dom as HTMLElement, bounds)
+      chessground.attach(dom as HTMLElement)
     }
 
     this.boardOnRemove = () => {

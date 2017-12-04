@@ -104,9 +104,12 @@ h3.fullname
     line-height 30px
 
 .userGamesWrapper
-  height 100%
+  flex 1 1 auto
+  display flex
+  flex-flow column nowrap
 
 .select_games_filter
+  flex 0 0 40px
   margin 0
   background headerBgDark
   box-shadow none
@@ -122,14 +125,16 @@ h3.fullname
     color lighten(labelText, 50%)
     padding-left 32px
 
-.scroller.games
-  height calc(100% - 40px)
+.userGame-scroller
+  flex 1 1 auto
+  display flex
+  flex-flow column nowrap
 
 .userGame-loader
+  flex 1 1 auto
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
 
 .userGame
   display flex

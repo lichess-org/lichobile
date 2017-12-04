@@ -3,11 +3,7 @@ import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import Chessground from '../../chessground/Chessground'
 import { uciToMove } from '../../utils/chessFormat'
 import settings from '../../settings'
-
-interface Bounds {
-  width: number
-  height: number
-}
+import { Bounds } from './Board'
 
 export interface Attrs {
   fen: string
@@ -16,6 +12,7 @@ export interface Attrs {
   bounds?: Bounds
   customPieceTheme?: string
   variant?: VariantKey
+  fixed?: boolean
 }
 
 interface Config {
@@ -25,8 +22,8 @@ interface Config {
   viewOnly: boolean
   minimalDom: boolean
   coordinates: boolean
+  fixed: boolean
   lastMove: KeyPair | null
-  initBounds?: ClientRect
 }
 
 interface State {
@@ -88,28 +85,16 @@ const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
 
 export default ViewOnlyBoard
 
-function makeConfig({ fen, lastMove, orientation, bounds }: Attrs) {
-  // view only boards needs only width and height
-  let initBounds
-  if (bounds) {
-    initBounds = {
-      height: bounds.height,
-      width: bounds.width,
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0
-    }
-  }
+function makeConfig({ fen, lastMove, orientation, fixed = true }: Attrs) {
   const conf: Config = {
     batchRAF: batchRequestAnimationFrame,
     viewOnly: true,
+    fixed,
     minimalDom: true,
     coordinates: false,
     fen,
     lastMove: lastMove ? uciToMove(lastMove) : null,
-    orientation: orientation || 'white',
-    initBounds
+    orientation: orientation || 'white'
   }
 
   return conf

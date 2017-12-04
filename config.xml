@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="500201" id="org.lichess.mobileapp" version="5.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="500300" id="org.lichess.mobileapp" version="5.3.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>lichess</name>
     <description>lichess.org mobile application</description>
     <author email="vincent.velociter@gmail.com" href="https://github.com/veloce/lichobile">Vincent Velociter</author>
@@ -53,16 +53,14 @@
         <icon height="50" src="res/ios/icons/icon-50.png" width="50" />
         <icon height="100" src="res/ios/icons/icon-50@2x.png" width="100" />
         <icon height="167" src="res/ios/icons/icon-83.5@2x.png" width="167" />
-        <splash height="480" src="res/ios/screens/Default~iphone.png" width="320" />
-        <splash height="960" src="res/ios/screens/Default@2x~iphone_640x960.png" width="640" />
-        <splash height="1024" src="res/ios/screens/Default-Portrait~ipad_768x1024.png" width="768" />
-        <splash height="2048" src="res/ios/screens/Default-Portrait@2x~ipad_1536x2048.png" width="1536" />
-        <splash height="768" src="res/ios/screens/Default-Landscape~ipad_1024x768.png" width="1024" />
-        <splash height="1536" src="res/ios/screens/Default-Landscape@2x~ipad_2048x1536.png" width="2048" />
-        <splash height="1136" src="res/ios/screens/Default-568h@2x~iphone_640x1136.png" width="640" />
-        <splash height="1334" src="res/ios/screens/Default-750@2x~iphone6-portrait_750x1334.png" width="750" />
-        <splash height="2208" src="res/ios/screens/Default-1242@3x~iphone6s-portrait_1242x2208.png" width="1242" />
-        <splash height="1242" src="res/ios/screens/Default-1242@3x~iphone6s-landscape_2208x1242.png" width="2208" />
+        <splash src="res/ios/screens/Default@2x~iphone~anyany.png" />
+        <splash src="res/ios/screens/Default@2x~iphone~comany.png" />
+        <splash src="res/ios/screens/Default@2x~iphone~comcom.png" />
+        <splash src="res/ios/screens/Default@3x~iphone~anyany.png" />
+        <splash src="res/ios/screens/Default@3x~iphone~anycom.png" />
+        <splash src="res/ios/screens/Default@3x~iphone~comany.png" />
+        <splash src="res/ios/screens/Default@2x~ipad~anyany.png" />
+        <splash src="res/ios/screens/Default@2x~ipad~comany.png" />
     </platform>
     <preference name="Orientation" value="default" />
     <preference name="SuppressesLongPressGesture" value="true" />
@@ -104,7 +102,7 @@
         </host>
     </universal-links>
     <engine name="android" spec="~6.2.2" />
-    <engine name="ios" spec="~4.5.1" />
+    <engine name="ios" spec="~4.5.4" />
     <plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" spec="https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface" />
     <plugin name="cordova-plugin-app-event" spec="git+https://github.com/katzer/cordova-plugin-app-event.git#1.2.1" />
     <plugin name="cordova-plugin-appversion" spec="~1.0.0" />
@@ -120,14 +118,14 @@
     <plugin name="cordova-plugin-inappbrowser" spec="~1.6.1" />
     <plugin name="cordova-plugin-insomnia" spec="~4.2.0" />
     <plugin name="cordova-plugin-network-information" spec="~1.3.1" />
-    <plugin name="cordova-plugin-splashscreen" spec="~4.0.1" />
-    <plugin name="cordova-plugin-statusbar" spec="~2.2.1" />
+    <plugin name="cordova-plugin-splashscreen" spec="^4.1.0" />
+    <plugin name="cordova-plugin-statusbar" spec="~2.3.0" />
     <plugin name="cordova-plugin-stockfish" spec="git+https://github.com/veloce/cordova-plugin-stockfish.git#v1.5.0" />
     <plugin name="cordova-plugin-vibration" spec="~2.1.3" />
     <plugin name="cordova-plugin-whitelist" spec="~1.3.1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="~5.1.3" />
     <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
-    <plugin name="cordova-universal-links-plugin" spec="~1.2.1" />
+    <plugin name="cordova-universal-links-plugin" spec="git+https://github.com/flipflopapp/cordova-universal-links-plugin.git#be60a9b" />
     <plugin name="de.appplant.cordova.plugin.local-notification" spec="git+https://github.com/katzer/cordova-plugin-local-notifications.git#0.8.5" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
     <plugin name="onesignal-cordova-plugin" spec="~2.0.11" />

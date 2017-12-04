@@ -6,6 +6,7 @@ import router from '../../router'
 import ButtonHandler from './button'
 import { UserGamePlayer } from '../../lichess/interfaces/user'
 import { Player } from '../../lichess/interfaces/game'
+import { Bounds } from '../shared/Board'
 
 export interface ViewportDim {
   vw: number
@@ -271,44 +272,26 @@ export function isPortrait(): boolean {
   }
 }
 
-export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mode: string, halfsize: boolean = false): ClientRect  {
+export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, halfsize: boolean = false): Bounds {
   const { vh, vw } = viewportDim
   const is43 = is43Aspect()
 
   if (isPortrait) {
     if (halfsize) {
       const side = (vh - headerHeight) / 2
-      const pTop = headerHeight
-      const margin = (vw - side) / 2
       return {
-        top: pTop,
-        right: margin,
-        bottom: pTop + side,
-        left: margin,
         width: side,
         height: side
       }
     }
     else if (is43) {
-      const contentHeight = vh - headerHeight
       const side = vw * 0.98
-      const pTop = headerHeight + (mode === 'game' ? ((contentHeight - side - footerHeight) / 2) : 0)
       return {
-        top: pTop,
-        right: vw * 0.01,
-        bottom: pTop + side,
-        left: vw * 0.01,
         width: side,
         height: side
       }
     } else {
-      const contentHeight = vh - headerHeight
-      const pTop = headerHeight + (mode === 'game' ? ((contentHeight - vw - footerHeight) / 2) : 0)
       return {
-        top: pTop,
-        right: vw,
-        bottom: pTop + vw,
-        left: 0,
         width: vw,
         height: vw
       }
@@ -316,22 +299,13 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mo
   } else {
     if (is43) {
       const wsSide = vh - headerHeight - (vh * 0.12)
-      const wsTop = headerHeight + ((vh - wsSide - headerHeight) / 2)
       return {
-        top: wsTop,
-        right: wsSide,
-        bottom: wsTop + wsSide,
-        left: 0,
         width: wsSide,
         height: wsSide
       }
     } else {
       const lSide = vh - headerHeight
       return {
-        top: headerHeight,
-        right: lSide,
-        bottom: headerHeight + lSide,
-        left: 0,
         width: lSide,
         height: lSide
       }

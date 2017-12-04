@@ -15,7 +15,7 @@ export default function view(ctrl: Editor) {
   const color = ctrl.chessground.state.orientation
   const opposite = color === 'white' ? 'black' : 'white'
   const isPortrait = helper.isPortrait()
-  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'editor')
+  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait)
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,

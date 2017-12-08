@@ -16,18 +16,19 @@ export interface Tournament {
   pairingsClosed: boolean
   perf: Perf
   podium?: Array<PodiumPlace>
+  position?: Opening
   private: boolean
   quote?: Quote
   schedule: Schedule
   secondsToStart?: number
   secondsToFinish?: number
   socketVersion: number
+  spotlight?: Spotlight
   standing: StandingPage
   startsAt: string
   system: string
   variant: VariantKey
   verdicts: Verdicts
-  position?: Opening
 }
 
 interface Perf {
@@ -106,6 +107,12 @@ interface Schedule {
   speed: string
 }
 
+export interface Spotlight {
+  iconFont: string
+  headline: string
+  description: string
+}
+
 export interface StandingPage {
   page: number
   players: Array<StandingPlayer>
@@ -128,7 +135,7 @@ interface Sheet {
   total: number
 }
 
-interface Verdicts {
+export interface Verdicts {
   accepted: boolean
   list: Array<Verdict>
 }

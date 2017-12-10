@@ -2,7 +2,8 @@ import * as h from 'mithril/hyperscript'
 import router from '../../../router'
 import session from '../../../session'
 import i18n from '../../../i18n'
-import { Tournament, StandingPlayer, PodiumPlace } from '../../../lichess/interfaces/tournament'
+import { Tournament, StandingPlayer, PodiumPlace, Spotlight, Verdicts } from '../../../lichess/interfaces/tournament'
+import { Opening } from '../../../lichess/interfaces/game'
 import { formatTournamentDuration, formatTournamentTimeControl } from '../../../utils'
 import * as helper from '../../helper'
 import settings from '../../../settings'
@@ -68,46 +69,75 @@ export function timeInfo(key: string, seconds?: number, preceedingText?: string)
 }
 
 function tournamentHeader(data: Tournament) {
+  return (
+    <div key="header" className="tournamentHeader">
+      {tournamentTimeInfo(data)}
+      {data.spotlight ? tournamentSpotlightInfo(data.spotlight) : null}
+      {tournamentCreatorInfo(data)}
+      {data.position ? tournamentPositionInfo(data.position) : null}
+      {data.verdicts.list.length > 0 ? tournamentConditions(data.verdicts) : null}
+   </div>
+  )
+}
+
+function tournamentTimeInfo(data: Tournament) {
   const variant = data.perf.name
   const control = formatTournamentTimeControl(data.clock)
+  return (
+    <div className="tournamentTimeInfo">
+      <strong className="tournamentInfo withIcon" data-icon={data.perf.icon}>
+        {variant + ' • ' + control + ' • ' + formatTournamentDuration(data.minutes)}
+      </strong>
+    </div>
+  )
+}
+
+function tournamentCreatorInfo(data: Tournament) {
+  return (
+    <div className="tournamentCreatorInfo">
+      {data.createdBy === 'lichess' ? i18n('tournamentOfficial') : i18n('by', data.createdBy)}
+      &nbsp;•&nbsp;
+          {window.moment(data.startsAt).calendar()}
+    </div>
+  )
+}
+
+function tournamentPositionInfo(position: Opening) {
+  return (
+    <div className={'tournamentPositionInfo' + (position.wikiPath ? ' withLink' : '')}
+      oncreate={helper.ontapY(() => position && position.wikiPath &&
+        window.open(`https://en.wikipedia.org/wiki/${position.wikiPath}`)
+      )}
+    >
+      {position.eco + ' ' + position.name}
+    </div>
+  )
+}
+
+function tournamentConditions(verdicts: Verdicts) {
   const conditionsClass = [
     'tournamentConditions',
     session.isConnected() ? '' : 'anonymous',
-    data.verdicts.accepted ? 'accepted' : 'rejected'
+    verdicts.accepted ? 'accepted' : 'rejected'
   ].join(' ')
   return (
-    <div key="header" className="tournamentHeader">
-      <div className="tournamentInfoTime">
-        <strong className="tournamentInfo withIcon" data-icon={data.perf.icon}>
-          {variant + ' • ' + control + ' • ' + formatTournamentDuration(data.minutes) }
-        </strong>
-      </div>
-      <div className="tournamentCreatorInfo">
-        { data.createdBy === 'lichess' ? i18n('tournamentOfficial') : i18n('by', data.createdBy) }
-        &nbsp;•&nbsp;
-        { window.moment(data.startsAt).calendar() }
-      </div>
-      { data.position ?
-      <div className={'tournamentPositionInfo' + (data.position.wikiPath ? ' withLink' : '')}
-        oncreate={helper.ontapY(() => data.position && data.position.wikiPath &&
-          window.open(`https://en.wikipedia.org/wiki/${data.position.wikiPath}`)
-        )}
-      >
-        {data.position.eco + ' ' + data.position.name}
-      </div> : null
-      }
-      { data.verdicts.list.length > 0 ?
-        <div className={conditionsClass} data-icon="7">
-          { data.verdicts.list.map(o => {
-            return (
-              <p className={'condition ' + (o.verdict === 'ok' ? 'accepted' : 'rejected')}>
-                { o.condition }
-              </p>
-            )
-          })}
-        </div> : null
-      }
-   </div>
+    <div className={conditionsClass} data-icon="7">
+      {verdicts.list.map(o => {
+        return (
+          <p className={'condition ' + (o.verdict === 'ok' ? 'accepted' : 'rejected')}>
+            {o.condition}
+          </p>
+        )
+      })}
+    </div>
+  )
+}
+
+function tournamentSpotlightInfo(spotlight: Spotlight) {
+  return (
+    <div className="tournamentSpotlightInfo">
+      {spotlight.description}
+    </div>
   )
 }
 

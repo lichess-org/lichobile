@@ -201,7 +201,7 @@ function createTapHandler(
   scrollX?: boolean,
   scrollY?: boolean,
   getElement?: (e: TouchEvent) => HTMLElement,
-  redrawService: () => void | null = redraw
+  redrawService: (() => void) | null = redraw
 ) {
   return function(vnode: Mithril.DOMNode) {
     ButtonHandler(vnode.dom as HTMLElement,
@@ -224,19 +224,36 @@ export function ontouch(handler: TapHandler) {
   }
 }
 
-export function ontap(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: RepeatHandler, getElement?: (e: TouchEvent) => HTMLElement) {
+export function ontap(
+  tapHandler: TapHandler,
+  holdHandler?: TapHandler,
+  repeatHandler?: RepeatHandler,
+  getElement?: (e: TouchEvent) => HTMLElement
+) {
   return createTapHandler(tapHandler, holdHandler, repeatHandler, false, false, getElement)
+}
+
+export function noRedrawTap(tapHandler: TapHandler) {
+  return createTapHandler(tapHandler, undefined, undefined, false, false, undefined, null)
 }
 
 export function ontapX(tapHandler: TapHandler, holdHandler?: TapHandler) {
   return createTapHandler(tapHandler, holdHandler, undefined, true, false)
 }
 
-export function ontapY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement) {
+export function ontapY(
+  tapHandler: TapHandler,
+  holdHandler?: TapHandler,
+  getElement?: (e: TouchEvent) => HTMLElement
+) {
   return createTapHandler(tapHandler, holdHandler, undefined, false, true, getElement)
 }
 
-export function ontapXY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement) {
+export function ontapXY(
+  tapHandler: TapHandler,
+  holdHandler?: TapHandler,
+  getElement?: (e: TouchEvent) => HTMLElement,
+) {
   return createTapHandler(tapHandler, holdHandler, undefined, true, true, getElement)
 }
 

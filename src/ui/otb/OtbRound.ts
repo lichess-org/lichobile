@@ -160,12 +160,30 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     router.set(`/analyse/offline/otb/${this.data.player.color}?ply=${this.replay.ply}&curFen=${this.replay.situation().fen}`)
   }
 
-  public save() {
+  public save = () => {
     setCurrentOTBGame({
       data: this.data,
       situations: this.replay.situations,
       ply: this.replay.ply
     })
+  }
+
+  public saveClock = () => {
+    if (this.clock && this.clock.isRunning()) {
+      this.clock.startStop()
+    }
+    this.save()
+  }
+
+  public isClockEnabled = (): boolean => {
+    return !!this.clock &&
+      this.clock.flagged() === undefined && this.clock.activeSide() !== undefined
+  }
+
+  public toggleClockPlay = (): void => {
+    if (this.clock && this.isClockEnabled()) {
+      this.clock.startStop()
+    }
   }
 
   public sharePGN = () => {

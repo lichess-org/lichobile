@@ -8,11 +8,13 @@ export function syncPuzzles() {
   const unsolved = settings.training.unsolvedPuzzles
   const user = settings.training.user()
   const curRating = user ? user.rating : null
+  const discardedPuzzles: OfflinePuzzle[] = []
   // Cull puzzles that were retreived when the user's rating was significantly different than it is now
   if (curRating)
     unsolved(unsolved().reduce((acc: OfflinePuzzle[], cur: OfflinePuzzle) => {
       const ratingDiff = (curRating && cur.userRating) ? Math.abs(curRating - cur.userRating) : 0
       if (ratingDiff < settings.training.ratingDiffThreshold) {
+        discardedPuzzles.push(cur)
         acc.push(cur)
       }
       return acc
@@ -29,7 +31,11 @@ export function syncPuzzles() {
       })))
       settings.training.user(syncData.user)
       return true
-    }).catch(() => false)
+    }).catch(() => {
+      // If loading new puzzles fails, add back the discarded ones to avoid potentially running out of puzzles
+      unsolved(unsolved().concat(discardedPuzzles))
+      return false
+    })
   }
   if (settings.training.solvedPuzzles().length) {
     xhr.solvePuzzles(settings.training.solvedPuzzles()).then(() => settings.training.solvedPuzzles([]), () => {})

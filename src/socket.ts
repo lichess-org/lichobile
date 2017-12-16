@@ -93,6 +93,9 @@ const defaultHandlers: MessageHandlers = {
   },
   mlat: (mlat: number) => {
     currentMoveLatency = mlat
+  },
+  deployPost() {
+    tellWorker(worker, 'deploy')
   }
 }
 

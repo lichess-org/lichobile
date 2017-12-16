@@ -15,8 +15,6 @@ import * as helper from '../helper'
 import friendsApi from '../../lichess/friends'
 
 import * as menu from '.'
-import CloseSlideHandler from './CloseSlideHandler'
-import CloseSwipeHandler from './CloseSwipeHandler'
 
 interface PingData {
   ping: number | undefined
@@ -26,28 +24,15 @@ interface PingData {
 const pingHelp = 'PING: Network lag between you and lichess; SERVER: Time to process a move on lichess server'
 
 export default {
-  onbeforeupdate() {
-    return menu.isOpen() || menu.isSliding()
-  },
   view() {
     const user = session.get()
 
     return (
-      <aside id="side_menu"
-        oncreate={({ dom }: Mithril.DOMNode) => {
-          if (window.cordova.platformId === 'ios') {
-            CloseSwipeHandler(dom as HTMLElement)
-          } else {
-            CloseSlideHandler(dom as HTMLElement)
-          }
-        }}
-      >
-        <div className="native_scroller">
-          {renderHeader(user)}
-          { hasNetwork() && user ? profileActionsToggle() : null }
-          {user && menu.profileMenuOpen() ? renderProfileActions(user) : renderLinks(user)}
-        </div>
-      </aside>
+      <div className="native_scroller">
+        {renderHeader(user)}
+        { hasNetwork() && user ? profileActionsToggle() : null }
+        {user && menu.profileMenuOpen() ? renderProfileActions(user) : renderLinks(user)}
+      </div>
     )
   }
 } as Mithril.Component<{}, {}>
@@ -250,10 +235,9 @@ function renderLinks(user?: Session) {
 }
 
 function profileActionsToggle() {
-
   return (
     <div key="user-button" className="menu-toggleButton side_link"
-      oncreate={helper.ontapXY(menu.toggleHeader)}
+      oncreate={helper.ontapXY(menu.profileMenuToggle)}
     >
       <span className="fa fa-exchange" />
       {menu.profileMenuOpen() ? 'Main menu' : 'User menu'}

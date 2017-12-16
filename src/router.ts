@@ -23,7 +23,10 @@ const router = new Rlite()
 let currentStateId: number = 0
 let viewSlideDirection = 'fwd'
 
-export function defineRoutes(mountPoint: HTMLElement, routes: {[index: string]: Mithril.Component<any, any>}) {
+export function defineRoutes(
+  mountPoint: HTMLElement,
+  routes: {[index: string]: Mithril.Component<any, any>}
+) {
   for (let route in routes) {
     const component = routes[route]
     router.add(route, function onRouteMatch({ params }) {

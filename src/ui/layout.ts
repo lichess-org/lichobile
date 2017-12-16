@@ -1,8 +1,5 @@
 import * as h from 'mithril/hyperscript'
 import settings from '../settings'
-import * as menu from './menu'
-import MenuOpenSlideHandler from './menu/OpenSlideHandler'
-import MenuView from './menu/menuView'
 import gamesMenu from './gamesMenu'
 import newGameForm from './newGameForm'
 import playMachineForm from './playMachineForm'
@@ -31,12 +28,9 @@ export default {
       h('main#page', {
         className: color,
       }, [
-        h('div.edge_menu_area', { oncreate: handleMenuOpen }),
         h('header.main_header.board', header()),
         h('div.content_round', content()),
-        h('div#menu-close-overlay', { oncreate: menu.backdropCloseHandler })
       ]),
-      h(MenuView),
       gamesMenu.view(),
       loginModal.view(),
       signupModal.view(),
@@ -58,13 +52,10 @@ export default {
     background = background || settings.general.theme.background()
     return h('div.view-container', { className: bgClass(background) }, [
       h('main#page', [
-        h('div.edge_menu_area', { oncreate: handleMenuOpen }),
         h('header.main_header', header()),
         h('div#free_content.content', content()),
         footer ? h('footer.main_footer', footer()) : null,
-        h('div#menu-close-overlay', { oncreate: menu.backdropCloseHandler })
       ]),
-      h(MenuView),
       gamesMenu.view(),
       loginModal.view(),
       signupModal.view(),
@@ -86,10 +77,6 @@ export default {
       overlay ? overlay() : null
     ])
   }
-}
-
-function handleMenuOpen({ dom }: Mithril.DOMNode) {
-  MenuOpenSlideHandler(dom as HTMLElement)
 }
 
 function bgClass(bgTheme: string) {

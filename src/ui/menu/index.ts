@@ -2,11 +2,17 @@ import * as stream from 'mithril/stream'
 import * as Zanimo from 'zanimo'
 import { hasNetwork } from '../../utils'
 import session from '../../session'
-import redraw from '../../utils/redraw'
+import globalRedraw from '../../utils/redraw'
 import router from '../../router'
 import socket from '../../socket'
 import * as inboxXhr from '../inbox/inboxXhr'
-import { viewportDim, ontap } from '../helper'
+import { viewportDim } from '../helper'
+import ButtonHandler from '../helper/button'
+
+import redrawMenu from './redraw'
+import OpenSlideHandler from './OpenSlideHandler'
+import CloseSlideHandler from './CloseSlideHandler'
+import CloseSwipeHandler from './CloseSwipeHandler'
 
 export const OPEN_AFTER_SLIDE_RATIO = 0.6
 
@@ -21,12 +27,33 @@ export const ping = stream(0)
 // used to redraw before opening
 export const isSliding = stream(false)
 
+export function init() {
+  const edgeArea = document.getElementById('edge_menu_area')
+  const backdrop = document.getElementById('menu-close-overlay')
+  const menu = document.getElementById('side_menu')
+  if (edgeArea) {
+    OpenSlideHandler(edgeArea)
+  }
+  if (backdrop) {
+    ButtonHandler(backdrop, () => close())
+  }
+  if (menu) {
+    if (window.cordova.platformId === 'ios') {
+      CloseSwipeHandler(menu)
+    } else {
+      CloseSlideHandler(menu)
+    }
+    redrawMenu()
+  }
+}
+
 export function toggle() {
   if (isOpen()) close()
   else open()
 }
 
 export function open() {
+  redrawMenu()
   isOpen(true)
   router.backbutton.stack.push(close)
   if (hasNetwork()) {
@@ -45,7 +72,7 @@ export function open() {
       'translate3d(0,0,0)', 250, 'ease-out'
     )
   ])
-  .then(redraw)
+  .then(redrawMenu)
   .catch(console.log.bind(console))
 }
 
@@ -86,20 +113,22 @@ export function popup(action: () => void) {
   return function() {
     return close().then(() => {
       action()
-      redraw()
+      globalRedraw()
     })
   }
 }
 
-export function toggleHeader() {
+export function profileMenuToggle() {
   inboxXhr.inbox(false)
   .then(data => {
     inboxUnreadCount(data.currentPageResults.reduce((acc, x) =>
       (acc + (x.isUnread ? 1 : 0)), 0)
     )
-    redraw()
+    redrawMenu()
   })
-  return profileMenuOpen() ? profileMenuOpen(false) : profileMenuOpen(true)
+  if (profileMenuOpen()) profileMenuOpen(false)
+  else profileMenuOpen(true)
+  redrawMenu()
 }
 
 export function getServerLags() {
@@ -109,7 +138,7 @@ export function getServerLags() {
       ping(p)
       mlat(socket.getCurrentMoveLatency())
       if (isOpen()) {
-        redraw()
+        redrawMenu()
         setTimeout(getServerLags, 1000)
       }
     })
@@ -135,7 +164,3 @@ export function translateMenu(el: HTMLElement, xPos: number) {
 export function backdropOpacity(el: HTMLElement, opacity: number) {
   el.style.opacity = `${opacity}`
 }
-
-export const backdropCloseHandler = ontap(() => {
-  close()
-})

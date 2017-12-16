@@ -26,6 +26,7 @@ import routes from './routes'
 import deepLinks from './deepLinks'
 import { isForeground, setForeground, setBackground } from './utils/appMode'
 import { loadCachedImages } from './bgtheme'
+import { init as menuInit } from './ui/menu'
 
 let firstConnection = true
 
@@ -33,6 +34,7 @@ function main() {
 
   routes.init()
   deepLinks.init()
+  menuInit()
 
   // cached background images
   loadCachedImages()

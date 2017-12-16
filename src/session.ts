@@ -179,13 +179,15 @@ function login(username: string, password: string): Promise<Session | LobbyData>
 }
 
 function logout() {
-  return fetchJSON('/logout', { method: 'POST' }, true)
-  .then(() => {
-    session = undefined
-    friendsApi.clear()
-    push.unregister()
-    redraw()
-  })
+  return push.unregister()
+  .then(() =>
+    fetchJSON('/logout', { method: 'POST' }, true)
+    .then(() => {
+      session = undefined
+      friendsApi.clear()
+      redraw()
+    })
+  )
   .catch(handleXhrError)
 }
 

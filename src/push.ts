@@ -44,8 +44,8 @@ export default {
     }
   },
 
-  unregister() {
-    fetchText('/mobile/unregister', { method: 'POST' })
+  unregister(): Promise<string> {
+    return fetchText('/mobile/unregister', { method: 'POST' })
   }
 }
 

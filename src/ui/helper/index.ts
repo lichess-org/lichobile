@@ -194,12 +194,20 @@ export function fadesOut(callback: () => void, selector?: string, time = 150): (
 type TapHandler = (e: TouchEvent) => void
 type RepeatHandler = () => boolean
 
-function createTapHandler(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: RepeatHandler, scrollX?: boolean, scrollY?: boolean, getElement?: (e: TouchEvent) => HTMLElement) {
+function createTapHandler(
+  tapHandler: TapHandler,
+  holdHandler?: TapHandler,
+  repeatHandler?: RepeatHandler,
+  scrollX?: boolean,
+  scrollY?: boolean,
+  getElement?: (e: TouchEvent) => HTMLElement,
+  redrawService: () => void | null = redraw
+) {
   return function(vnode: Mithril.DOMNode) {
     ButtonHandler(vnode.dom as HTMLElement,
       (e: TouchEvent) => {
         tapHandler(e)
-        redraw()
+        if (redrawService !== null) redrawService()
       },
       holdHandler ? (e: TouchEvent) => utils.autoredraw(() => holdHandler(e)) : undefined,
       repeatHandler,

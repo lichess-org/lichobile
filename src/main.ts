@@ -118,8 +118,6 @@ function onOnline() {
       .then(syncWithNowPlayingGames)
       .then(() => xhr.setServerLang(getLang()))
       .catch(() => {
-        // in case session was terminated by server
-        push.unregister()
         console.log('connected as anonymous')
       })
 

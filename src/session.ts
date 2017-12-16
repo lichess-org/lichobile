@@ -8,6 +8,7 @@ import redraw from './utils/redraw'
 import { fetchJSON, fetchText, ErrorResponse } from './http'
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils'
 import i18n from './i18n'
+import push from './push'
 import settings from './settings'
 import friendsApi from './lichess/friends'
 import challengesApi from './lichess/challenges'
@@ -182,6 +183,7 @@ function logout() {
   .then(() => {
     session = undefined
     friendsApi.clear()
+    push.unregister()
     redraw()
   })
   .catch(handleXhrError)

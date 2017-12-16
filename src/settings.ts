@@ -2,6 +2,7 @@ import store from './storage'
 import * as range from 'lodash/range'
 import { ClockType, ClockTypeWithNone } from './ui/shared/clock/interfaces'
 import { PuzzleData, PuzzleOutcome, UserData as PuzzleUserData } from './lichess/interfaces/training'
+import { OfflinePuzzle } from './ui/training/interfaces'
 
 export interface SettingsProp<T> {
   (): T
@@ -432,8 +433,9 @@ export default {
   },
 
   training: {
-    puzzleBufferLen: 25,
-    unsolvedPuzzles: localstorageprop<PuzzleData[]>('training.unsolvedPuzzles', []),
+    puzzleBufferLen: 50,
+    ratingDiffThreshold: 100,
+    unsolvedPuzzles: localstorageprop<OfflinePuzzle[]>('training.unsolvedPuzzles', []),
     solvedPuzzles: localstorageprop<PuzzleOutcome[]>('training.solvedPuzzles', []),
     user: localstorageprop<PuzzleUserData | undefined>('training.user', undefined),
     lastPuzzle: localstorageprop<PuzzleData | undefined>('training.lastPuzzle', undefined),

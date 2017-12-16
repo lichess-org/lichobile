@@ -6,6 +6,10 @@ export interface Data extends PuzzleData {
   round?: any
 }
 
+export interface OfflinePuzzle extends PuzzleData {
+  userRating?: number
+}
+
 export interface PimpedGame extends Game {
   variant: {
     key: VariantKey

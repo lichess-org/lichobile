@@ -15,7 +15,6 @@ import { connectingHeader } from '../shared/common'
 import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
 import { State } from './interfaces'
 import { PuzzleData } from '../../lichess/interfaces/training'
-import settings from '../../settings'
 
 interface Attrs {
   id?: string

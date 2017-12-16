@@ -69,52 +69,25 @@ function renderHeader(user?: Session) {
   )
 }
 
-function renderProfileActions(user: Session) {
-  return (
-    <ul className="side_links profileActions">
-      <li className="side_link" key="profile" oncreate={helper.ontapXY(menu.route('/@/' + user.id))}>
-        <span className="fa fa-user" />{i18n('profile')}
-      </li>
-      <li className="side_link" key="message" oncreate={helper.ontapXY(menu.route('/inbox'))}>
-        <span className="fa fa-envelope"/>{i18n('inbox') + ((menu.inboxUnreadCount() !== null && menu.inboxUnreadCount() > 0) ? (' (' + menu.inboxUnreadCount() + ')') : '')}
-      </li>
-      <li className="side_link" oncreate={helper.ontapXY(menu.popup(friendsPopup.open))}>
-        <span data-icon="f" />
-        {i18n('onlineFriends') + ` (${friendsApi.count()})`}
-      </li>
-      <li className="side_link" oncreate={helper.ontapXY(menu.route(`/@/${user.id}/following`))}>
-        <span className="fa fa-arrow-circle-right" />
-        {i18n('nbFollowing', user.nbFollowing || 0)}
-      </li>
-      <li className="side_link" oncreate={helper.ontapXY(menu.route(`/@/${user.id}/followers`))}>
-        <span className="fa fa-arrow-circle-left" />
-        {i18n('nbFollowers', user.nbFollowers || 0)}
-      </li>
-      <li className="side_link" oncreate={helper.ontapXY(menu.route('/settings/preferences'))}>
-        <span data-icon="%" />
-        {i18n('preferences')}
-      </li>
-      <li className="side_link" oncreate={helper.ontapXY(() => {
-        session.logout()
-        menu.profileMenuOpen(false)
-      })}>
-        <span data-icon="w" />
-        {i18n('logOut')}
-      </li>
-    </ul>
-  )
-}
-
 const popupActionMap: { [index: string]: () => void } = {
   gamesMenu: () => gamesMenu.open(),
   createGame: () => newGameForm.openRealTime(),
   challenge: () => challengeForm.open(),
-  machine: () => playMachineForm.open()
+  machine: () => playMachineForm.open(),
+  friends: () => friendsPopup.open(),
+}
+
+const actionMap: { [index: string]: () => void } = {
+  logout: () => {
+    session.logout()
+    menu.profileMenuOpen(false)
+  }
 }
 
 interface MenuLinkDataset extends DOMStringMap {
   route?: string
   popup?: string
+  action?: string
 }
 function onLinkTap(e: Event) {
   const el = helper.getLI(e)
@@ -123,7 +96,42 @@ function onLinkTap(e: Event) {
     menu.route(ds.route)()
   } else if (el && ds.popup) {
     menu.popup(popupActionMap[ds.popup])()
+  } else if (el && ds.action) {
+    actionMap[ds.action]()
   }
+}
+
+function renderProfileActions(user: Session) {
+  return (
+    <ul className="side_links profileActions" oncreate={helper.ontapXY(onLinkTap, undefined, helper.getLI)}>
+      <li className="side_link" key="profile" data-route={'/@/' + user.id}>
+        <span className="fa fa-user" />{i18n('profile')}
+      </li>
+      <li className="side_link" key="message" data-route="/inbox">
+        <span className="fa fa-envelope"/>{i18n('inbox') + ((menu.inboxUnreadCount() !== null && menu.inboxUnreadCount() > 0) ? (' (' + menu.inboxUnreadCount() + ')') : '')}
+      </li>
+      <li className="side_link" data-popup="friends">
+        <span data-icon="f" />
+        {i18n('onlineFriends') + ` (${friendsApi.count()})`}
+      </li>
+      <li className="side_link" data-route={`/@/${user.id}/following`}>
+        <span className="fa fa-arrow-circle-right" />
+        {i18n('nbFollowing', user.nbFollowing || 0)}
+      </li>
+      <li className="side_link" data-route={`/@/${user.id}/followers`}>
+        <span className="fa fa-arrow-circle-left" />
+        {i18n('nbFollowers', user.nbFollowers || 0)}
+      </li>
+      <li className="side_link" data-route={'/settings/preferences'}>
+        <span data-icon="%" />
+        {i18n('preferences')}
+      </li>
+      <li className="side_link" data-action="logout">
+        <span data-icon="w" />
+        {i18n('logOut')}
+      </li>
+    </ul>
+  )
 }
 
 function renderLinks(user?: Session) {

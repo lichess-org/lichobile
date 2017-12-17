@@ -13,8 +13,8 @@ import settings from './settings'
 import friendsApi from './lichess/friends'
 import challengesApi from './lichess/challenges'
 import { SettingsProp } from './settings'
-
 import { LobbyData, NowPlayingGame } from './lichess/interfaces'
+import menuRedraw from './ui/menu/redraw'
 
 type PrefValue = number | string | boolean
 interface Prefs {
@@ -186,6 +186,7 @@ function logout() {
       session = undefined
       friendsApi.clear()
       redraw()
+      menuRedraw()
     })
   )
   .catch(handleXhrError)

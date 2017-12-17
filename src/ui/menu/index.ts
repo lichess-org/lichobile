@@ -1,7 +1,6 @@
 import * as stream from 'mithril/stream'
 import * as Zanimo from 'zanimo'
 import { hasNetwork } from '../../utils'
-import session from '../../session'
 import globalRedraw from '../../utils/redraw'
 import router from '../../router'
 import socket from '../../socket'
@@ -132,7 +131,7 @@ export function profileMenuToggle() {
 }
 
 export function getServerLags() {
-  if (hasNetwork() && session.isConnected()) {
+  if (hasNetwork()) {
     socket.getCurrentPing()
     .then((p: number) => {
       ping(p)

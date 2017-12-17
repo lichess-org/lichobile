@@ -1,6 +1,6 @@
 import * as Hammer from 'hammerjs'
-import redraw from '../../utils/redraw'
 import * as menu from '.'
+import redrawMenu from './redraw'
 
 interface OpenSlideHandlerState {
   menuElement: HTMLElement | null
@@ -78,7 +78,7 @@ export default function OpenSlideHandler(
         state.backDropElement.style.visibility = 'visible'
         state.canSlide = true
         menu.isSliding(true)
-        redraw()
+        redrawMenu()
       }
     }
   })

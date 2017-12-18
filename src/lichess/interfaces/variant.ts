@@ -2,8 +2,8 @@
 export type VariantKey = 'standard' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse'
 
 export interface Variant {
-  key: VariantKey
-  name: string
-  short: string
-  title?: string
+  readonly key: VariantKey
+  readonly name: string
+  readonly short: string
+  readonly title?: string
 }

@@ -1,48 +1,48 @@
 type ChallengeStatus = 'created' | 'offline' | 'canceled' | 'declined' | 'accepted'
 
 export interface ChallengeUser {
-  id: string
-  name: string
-  rating: number
-  provisional?: boolean
+  readonly id: string
+  readonly name: string
+  readonly rating: number
+  readonly provisional?: boolean
 }
 
 export interface TimeControl {
-  type: 'clock' | 'correspondence' | 'unlimited'
-  show?: string
-  daysPerTurn?: number
-  limit: number
-  increment: number
+  readonly type: 'clock' | 'correspondence' | 'unlimited'
+  readonly show?: string
+  readonly daysPerTurn?: number
+  readonly limit: number
+  readonly increment: number
 }
 
 export interface TimeControlClock extends TimeControl {
-  show: string
+  readonly show: string
 }
 
 export interface TimeControlCorrespondence extends TimeControl {
-  daysPerTurn: number
+  readonly daysPerTurn: number
 }
 
 export interface Challenge {
-  id: string
-  direction: 'in' | 'out'
-  status: ChallengeStatus
-  challenger?: ChallengeUser
-  destUser?: ChallengeUser
-  variant: Variant
-  initialFen: string | null
-  rated: boolean
-  timeControl: TimeControl
-  color: Color | 'random'
-  perf: {
-    icon: string
-    name: string
+  readonly id: string
+  readonly direction: 'in' | 'out'
+  readonly status: ChallengeStatus
+  readonly challenger?: ChallengeUser
+  readonly destUser?: ChallengeUser
+  readonly variant: Variant
+  readonly initialFen: string | null
+  readonly rated: boolean
+  readonly timeControl: TimeControl
+  readonly color: Color | 'random'
+  readonly perf: {
+    readonly icon: string
+    readonly name: string
   }
 }
 
 export interface ChallengesData {
-  in: Array<Challenge>
-  out: Array<Challenge>
+  readonly in: Array<Challenge>
+  readonly out: Array<Challenge>
 }
 
 export function isTimeControlClock(t: TimeControl): t is TimeControlClock {

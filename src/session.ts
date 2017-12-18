@@ -22,34 +22,34 @@ interface Prefs {
 }
 
 interface Profile {
-  country?: string
-  location?: string
-  bio?: string
-  firstName?: string
-  lastName?: string
+  readonly country?: string
+  readonly location?: string
+  readonly bio?: string
+  readonly firstName?: string
+  readonly lastName?: string
 }
 
 export interface Session {
-  id: string
-  username: string
-  title?: string
-  online: boolean
-  engine: boolean
-  booster: boolean
-  troll?: boolean
-  kid: boolean
-  patron: boolean
-  language?: string
-  profile?: Profile
-  perfs: any
-  createdAt: number
-  seenAt: number
-  playTime: number
-  nowPlaying: Array<NowPlayingGame>
-  prefs: Prefs
-  nbChallenges: number
-  nbFollowers: number
-  nbFollowing: number
+  readonly id: string
+  readonly username: string
+  readonly title?: string
+  readonly online: boolean
+  readonly engine: boolean
+  readonly booster: boolean
+  readonly troll?: boolean
+  readonly kid: boolean
+  readonly patron: boolean
+  readonly language?: string
+  readonly profile?: Profile
+  readonly perfs: any
+  readonly createdAt: number
+  readonly seenAt: number
+  readonly playTime: number
+  readonly nowPlaying: ReadonlyArray<NowPlayingGame>
+  readonly prefs: Prefs
+  readonly nbChallenges: number
+  readonly nbFollowers: number
+  readonly nbFollowing: number
 }
 
 let session: Session | undefined

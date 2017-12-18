@@ -1,45 +1,45 @@
 import { Opening } from './game'
 
 export interface Tournament {
-  clock: TournamentClock
-  createdBy: string
+  readonly clock: TournamentClock
+  readonly createdBy: string
   featured?: FeaturedGame
-  fullName: string
-  id: string
-  isFinished: boolean
-  isRecentlyFinished?: boolean
-  isStarted: boolean
-  me?: TournamentMe
-  minutes: number
-  nbPlayers: number
-  pairings: Array<TournamentPairing>
-  pairingsClosed: boolean
-  perf: Perf
-  podium?: Array<PodiumPlace>
-  position?: Opening
-  private: boolean
-  quote?: Quote
-  schedule: Schedule
-  secondsToStart?: number
-  secondsToFinish?: number
-  socketVersion: number
-  spotlight?: Spotlight
-  standing: StandingPage
-  startsAt: string
-  system: string
-  variant: VariantKey
-  verdicts: Verdicts
+  readonly fullName: string
+  readonly id: string
+  readonly isFinished: boolean
+  readonly isRecentlyFinished?: boolean
+  readonly isStarted: boolean
+  readonly me?: TournamentMe
+  readonly minutes: number
+  readonly nbPlayers: number
+  readonly pairings: Array<TournamentPairing>
+  readonly pairingsClosed: boolean
+  readonly perf: Perf
+  readonly podium?: Array<PodiumPlace>
+  readonly position?: Opening
+  readonly private: boolean
+  readonly quote?: Quote
+  readonly schedule: Schedule
+  readonly secondsToStart?: number
+  readonly secondsToFinish?: number
+  readonly socketVersion: number
+  readonly spotlight?: Spotlight
+  readonly standing: StandingPage
+  readonly startsAt: string
+  readonly system: string
+  readonly variant: VariantKey
+  readonly verdicts: Verdicts
 }
 
 interface Perf {
-  icon: string
-  name: string
-  position?: number
+  readonly icon: string
+  readonly name: string
+  readonly position?: number
 }
 
 export interface TournamentClock {
-  increment: number
-  limit: number
+  readonly increment: number
+  readonly limit: number
 }
 
 interface FeaturedGame {
@@ -56,131 +56,131 @@ interface FeaturedGame {
 
 interface TournamentMe {
   rank: number
-  username: string
-  withdraw: boolean
+  readonly username: string
+  readonly withdraw: boolean
 }
 
 interface FeaturedColorPlayer {
-  name: string
-  rank: number
-  rating: number
-  ratingDiff: number
+  readonly name: string
+  readonly rank: number
+  readonly rating: number
+  readonly ratingDiff: number
 }
 
 interface FeaturedPlayer {
-  rating: number
-  user: FeaturedPlayerUser
+  readonly rating: number
+  readonly user: FeaturedPlayerUser
 }
 
 interface FeaturedPlayerUser {
-  username: string
+  readonly username: string
 }
 
 interface FeaturedClock {
-  increment: number
-  initial: number
+  readonly increment: number
+  readonly initial: number
 }
 
 interface TournamentPairing {
-  id: string
-  s: number
-  u: Array<string>
+  readonly id: string
+  readonly s: number
+  readonly u: Array<string>
 }
 
 export interface PodiumPlace {
-  name: string
-  nb: PlayerInfoNb
-  performance: number
-  rank: number
-  rating: number
-  ratingDiff: number
-  score: number
+  readonly name: string
+  readonly nb: PlayerInfoNb
+  readonly performance: number
+  readonly rank: number
+  readonly rating: number
+  readonly ratingDiff: number
+  readonly score: number
 }
 
 interface Quote {
-  author: string
-  text: string
+  readonly author: string
+  readonly text: string
 }
 
 interface Schedule {
-  freq: string
-  speed: string
+  readonly freq: string
+  readonly speed: string
 }
 
 export interface Spotlight {
-  iconFont: string
-  headline: string
-  description: string
+  readonly iconFont: string
+  readonly headline: string
+  readonly description: string
 }
 
 export interface StandingPage {
-  page: number
-  players: Array<StandingPlayer>
+  readonly page: number
+  readonly players: Array<StandingPlayer>
 }
 
 export interface StandingPlayer {
-  name: string
-  provisional: boolean
-  rank: number
-  rating: number
-  ratingDiff: number
-  score: number
-  sheet: Sheet
-  withdraw?: boolean
+  readonly name: string
+  readonly provisional: boolean
+  readonly rank: number
+  readonly rating: number
+  readonly ratingDiff: number
+  readonly score: number
+  readonly sheet: Sheet
+  readonly withdraw?: boolean
 }
 
 interface Sheet {
-  fire: boolean
-  scores: Array<Array<number>>
-  total: number
+  readonly fire: boolean
+  readonly scores: Array<Array<number>>
+  readonly total: number
 }
 
 export interface Verdicts {
-  accepted: boolean
-  list: Array<Verdict>
+  readonly accepted: boolean
+  readonly list: Array<Verdict>
 }
 
 interface Verdict {
-  condition: string
-  verdict: string
+  readonly condition: string
+  readonly verdict: string
 }
 
 export interface PlayerInfo {
-  pairings: Array<PlayerInfoPairing>
-  player: PlayerInfoPlayer
+  readonly pairings: Array<PlayerInfoPairing>
+  readonly player: PlayerInfoPlayer
 }
 
 export interface PlayerInfoPairing {
-  berserk: boolean
-  color: Color
-  id: string
-  op: PlayerInfoOpponent
-  score: [number, number] | number | null
-  status: number
-  win: boolean | null
+  readonly berserk: boolean
+  readonly color: Color
+  readonly id: string
+  readonly op: PlayerInfoOpponent
+  readonly score: [number, number] | number | null
+  readonly status: number
+  readonly win: boolean | null
 }
 
 interface PlayerInfoOpponent {
-  name: string
-  rating: number
+  readonly name: string
+  readonly rating: number
 }
 
 interface PlayerInfoPlayer {
-  fire: boolean
-  id: string
-  name: string
-  nb: PlayerInfoNb
-  performance: number
-  rank: number
-  rating: number
-  ratingDiff: number
-  score: number | Array<number>
+  readonly fire: boolean
+  readonly id: string
+  readonly name: string
+  readonly nb: PlayerInfoNb
+  readonly performance: number
+  readonly rank: number
+  readonly rating: number
+  readonly ratingDiff: number
+  readonly score: number | Array<number>
 }
 
 interface PlayerInfoNb {
-  berserk: number
-  game: number
-  win: number
+  readonly berserk: number
+  readonly game: number
+  readonly win: number
 }
 
 export interface TournamentLists {
@@ -191,37 +191,37 @@ export interface TournamentLists {
 }
 
 export interface TournamentListItem {
-  clock: TournamentClock
-  conditions: Conditions
-  createdBy: string
-  finishesAt: number
-  fullName: string
-  id: string
-  minutes: number
-  nbPlayers: number
-  perf: Perf
-  private: boolean
-  rated: boolean
-  schedule?: Schedule
-  secondsToStart: number
-  startsAt: number
-  status: number
-  system: string
-  variant: Variant
-  winner: WinnerUser
+  readonly clock: TournamentClock
+  readonly conditions: Conditions
+  readonly createdBy: string
+  readonly finishesAt: number
+  readonly fullName: string
+  readonly id: string
+  readonly minutes: number
+  readonly nbPlayers: number
+  readonly perf: Perf
+  readonly private: boolean
+  readonly rated: boolean
+  readonly schedule?: Schedule
+  readonly secondsToStart: number
+  readonly startsAt: number
+  readonly status: number
+  readonly system: string
+  readonly variant: Variant
+  readonly winner: WinnerUser
 }
 
 interface WinnerUser {
-  id: string
-  name: string
-  title: string
+  readonly id: string
+  readonly name: string
+  readonly title: string
 }
 
 interface Conditions {
-  maxRating: string
-  nbRatedGame: string
+  readonly maxRating: string
+  readonly nbRatedGame: string
 }
 
 export interface TournamentCreateResponse {
-  id: string
+  readonly id: string
 }

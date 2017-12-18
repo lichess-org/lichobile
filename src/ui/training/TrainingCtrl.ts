@@ -364,7 +364,6 @@ export default class TrainingCtrl implements PromotingInterface {
     xhr.round(this.data.puzzle.id, win)
     .then((res) => {
       this.data.user = res.user
-      this.data.round = res.round
       redraw()
     })
   }

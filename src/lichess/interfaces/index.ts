@@ -2,113 +2,113 @@ import { GameData } from './game'
 import { AnalyseData } from './analyse'
 
 export interface Pool {
-  id: string
-  lim: number
-  inc: number
-  perf: string
+  readonly id: string
+  readonly lim: number
+  readonly inc: number
+  readonly perf: string
 }
 
 export interface PoolMember {
-  id: string
+  readonly id: string
 }
 
 export interface LobbyData {
-  lobby: {
-    version: number
-    pools: Array<Pool>
+  readonly lobby: {
+    readonly version: number
+    readonly pools: Array<Pool>
   }
 }
 
 export interface HookData {
-  hook: {
-    id: string
+  readonly hook: {
+    readonly id: string
   }
 }
 
 export interface LightPlayer {
-  name: string
-  title?: string
-  rating?: number
+  readonly name: string
+  readonly title?: string
+  readonly rating?: number
 }
 
 export type ModeId = 0 | 1 // casual | rated
 export type TimeModeId = 0 | 1 | 2 // unlimited | realTime | correspondence
 
 export interface SeekSetup {
-  variant: number
-  timeMode: TimeModeId
-  days: number
-  time: number
-  increment: number
-  color: Color | 'random'
+  readonly variant: number
+  readonly timeMode: TimeModeId
+  readonly days: number
+  readonly time: number
+  readonly increment: number
+  readonly color: Color | 'random'
 }
 
 export interface HumanSeekSetup extends SeekSetup {
-  mode: ModeId
-  ratingMin?: number
-  ratingMax?: number
+  readonly mode: ModeId
+  readonly ratingMin?: number
+  readonly ratingMax?: number
 }
 
 export interface AiSeekSetup extends SeekSetup {
-  level: number
-  fen?: string
+  readonly level: number
+  readonly fen?: string
 }
 
 export interface CorrespondenceSeek {
-  id: string
-  username: string
-  rating: number
-  variant: Variant
-  mode: ModeId
-  days: number
-  color: Color
-  perf: {
-    icon: string
-    name: PerfKey
+  readonly id: string
+  readonly username: string
+  readonly rating: number
+  readonly variant: Variant
+  readonly mode: ModeId
+  readonly days: number
+  readonly color: Color
+  readonly perf: {
+    readonly icon: string
+    readonly name: PerfKey
   }
 }
 
 export interface PongMessage {
-  d: number
-  r: number
+  readonly d: number
+  readonly r: number
 }
 
 export interface TimelineEntry {
-  data: any
-  date: number
-  type: string
+  readonly data: any
+  readonly date: number
+  readonly type: string
 }
 
 export interface TimelineData {
-  entries: Array<TimelineEntry>
+  readonly entries: Array<TimelineEntry>
 }
 
 export interface DailyPuzzle {
-  id: string
-  fen: string
-  color: Color
+  readonly id: string
+  readonly fen: string
+  readonly color: Color
 }
 
 export interface NowPlayingOpponent {
-  username: string
-  id?: string
-  rating?: number
-  ai?: number
+  readonly username: string
+  readonly id?: string
+  readonly rating?: number
+  readonly ai?: number
 }
 
 export interface NowPlayingGame {
-  gameId: string
-  fullId: string
-  isMyTurn: boolean
-  lastMove?: string
-  variant: Variant
-  speed: Speed
-  perf: PerfKey
-  color: Color
-  fen: string
-  rated: boolean
-  opponent: NowPlayingOpponent
-  secondsLeft?: number
+  readonly gameId: string
+  readonly fullId: string
+  readonly isMyTurn: boolean
+  readonly lastMove?: string
+  readonly variant: Variant
+  readonly speed: Speed
+  readonly perf: PerfKey
+  readonly color: Color
+  readonly fen: string
+  readonly rated: boolean
+  readonly opponent: NowPlayingOpponent
+  readonly secondsLeft?: number
 }
 
 export interface MiniUserPlayer {
@@ -116,53 +116,53 @@ export interface MiniUserPlayer {
   data: any
 }
 export interface MiniUser {
-  player: MiniUserPlayer
-  opponent: MiniUserPlayer
-  [index: string]: MiniUserPlayer
+  readonly player: MiniUserPlayer
+  readonly opponent: MiniUserPlayer
+  readonly [index: string]: MiniUserPlayer
 }
 
 export interface MiniBoardGameObjPlayer {
-  rating: number
-  user: {
-    username: string
+  readonly rating: number
+  readonly user: {
+    readonly username: string
   }
 }
 
 export interface MiniBoardGameObj {
-  player: MiniBoardGameObjPlayer
-  opponent: MiniBoardGameObjPlayer
-  clock?: {
-    initial: number
-    increment: number
+  readonly player: MiniBoardGameObjPlayer
+  readonly opponent: MiniBoardGameObjPlayer
+  readonly clock?: {
+    readonly initial: number
+    readonly increment: number
   }
-  correspondence?: {
-    daysPerTurn: number
+  readonly correspondence?: {
+    readonly daysPerTurn: number
   }
 }
 
 export interface Paginator<T> {
-  currentPage: number
-  maxPerPage: number
-  currentPageResults: Array<T>
-  nbResults: number
-  previousPage: number
-  nextPage: number
-  nbPages: number
+  readonly currentPage: number
+  readonly maxPerPage: number
+  readonly currentPageResults: Array<T>
+  readonly nbResults: number
+  readonly previousPage: number
+  readonly nextPage: number
+  readonly nbPages: number
 }
 
 interface ApiVersion {
-  version: number
-  deprecatedAt: Timestamp
-  unsupportedAt: Timestamp
+  readonly version: number
+  readonly deprecatedAt: Timestamp
+  readonly unsupportedAt: Timestamp
 }
 
 export interface ApiStatus {
-  api: {
-    current: number
-    olds: ApiVersion[]
+  readonly api: {
+    readonly current: number
+    readonly olds: ApiVersion[]
   }
   // version is detected as buggy
-  mustUpgrade?: boolean
+  readonly mustUpgrade?: boolean
 }
 
 export function isPoolMember(conf: PoolMember | SeekSetup): conf is PoolMember {

@@ -4,9 +4,15 @@ import { hasNetwork } from '../../utils'
 import globalRedraw from '../../utils/redraw'
 import router from '../../router'
 import socket from '../../socket'
+import session from '../../session'
 import * as inboxXhr from '../inbox/inboxXhr'
 import { viewportDim } from '../helper'
 import ButtonHandler from '../helper/button'
+import newGameForm from '../newGameForm'
+import gamesMenu from '../gamesMenu'
+import friendsPopup from '../friendsPopup'
+import challengeForm from '../challengeForm'
+import playMachineForm from '../playMachineForm'
 
 import redrawMenu from './redraw'
 import OpenSlideHandler from './OpenSlideHandler'
@@ -102,19 +108,39 @@ export function close(fromBB?: string) {
   .catch(console.log.bind(console))
 }
 
+const popupActionMap = {
+  gamesMenu: () => gamesMenu.open(),
+  createGame: () => newGameForm.openRealTime(),
+  challenge: () => challengeForm.open(),
+  machine: () => playMachineForm.open(),
+  friends: () => friendsPopup.open(),
+}
+
+const actionMap = {
+  logout: () => {
+    session.logout()
+    profileMenuOpen(false)
+  }
+}
+
+export type PopupAction = keyof typeof popupActionMap
+export type Action = keyof typeof actionMap
+
 export function route(route: string) {
   return function() {
     return close().then(() => router.set(route))
   }
 }
 
-export function popup(action: () => void) {
-  return function() {
-    return close().then(() => {
-      action()
-      globalRedraw()
-    })
-  }
+export function popup(action: PopupAction) {
+  return close().then(() => {
+    popupActionMap[action]()
+    globalRedraw()
+  })
+}
+
+export function action(action: Action): void {
+  actionMap[action]()
 }
 
 export function profileMenuToggle() {

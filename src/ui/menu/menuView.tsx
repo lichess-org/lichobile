@@ -3,11 +3,6 @@ import * as h from 'mithril/hyperscript'
 import socket from '../../socket'
 import session, { Session } from '../../session'
 import loginModal from '../loginModal'
-import newGameForm from '../newGameForm'
-import gamesMenu from '../gamesMenu'
-import friendsPopup from '../friendsPopup'
-import challengeForm from '../challengeForm'
-import playMachineForm from '../playMachineForm'
 import i18n from '../../i18n'
 import { hasNetwork } from '../../utils'
 import { getOfflineGames } from '../../utils/offlineGames'
@@ -20,8 +15,6 @@ interface PingData {
   ping: number | undefined
   server: number | undefined
 }
-
-const pingHelp = 'PING: Network lag between you and lichess; SERVER: Time to process a move on lichess server'
 
 export default {
   view() {
@@ -36,6 +29,8 @@ export default {
     )
   }
 } as Mithril.Component<{}, {}>
+
+const pingHelp = 'PING: Network lag between you and lichess; SERVER: Time to process a move on lichess server'
 
 function renderHeader(user?: Session) {
   return (
@@ -69,25 +64,10 @@ function renderHeader(user?: Session) {
   )
 }
 
-const popupActionMap: { [index: string]: () => void } = {
-  gamesMenu: () => gamesMenu.open(),
-  createGame: () => newGameForm.openRealTime(),
-  challenge: () => challengeForm.open(),
-  machine: () => playMachineForm.open(),
-  friends: () => friendsPopup.open(),
-}
-
-const actionMap: { [index: string]: () => void } = {
-  logout: () => {
-    session.logout()
-    menu.profileMenuOpen(false)
-  }
-}
-
 interface MenuLinkDataset extends DOMStringMap {
   route?: string
-  popup?: string
-  action?: string
+  popup?: menu.PopupAction
+  action?: menu.Action
 }
 function onLinkTap(e: Event) {
   const el = helper.getLI(e)
@@ -95,9 +75,9 @@ function onLinkTap(e: Event) {
   if (el && ds.route) {
     menu.route(ds.route)()
   } else if (el && ds.popup) {
-    menu.popup(popupActionMap[ds.popup])()
+    menu.popup(ds.popup)
   } else if (el && ds.action) {
-    actionMap[ds.action]()
+    menu.action(ds.action)
   }
 }
 

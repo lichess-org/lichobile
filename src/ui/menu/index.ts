@@ -77,7 +77,6 @@ export function open() {
       'translate3d(0,0,0)', 250, 'ease-out'
     )
   ])
-  .then(redrawMenu)
   .catch(console.log.bind(console))
 }
 

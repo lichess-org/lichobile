@@ -1,9 +1,10 @@
 import * as Hammer from 'hammerjs'
-import * as menu from '.'
 
-export default function CloseSwipeHandler(el: HTMLElement) {
+import MenuCtrl from './MenuCtrl'
 
-  const mc = new Hammer.Manager(el, {
+export default function CloseSwipeHandler(menu: MenuCtrl) {
+
+  const mc = new Hammer.Manager(menu.menuEl, {
     inputClass: Hammer.TouchInput
   })
   mc.add(new Hammer.Swipe({

@@ -9,30 +9,16 @@ import { getOfflineGames } from '../../utils/offlineGames'
 import * as helper from '../helper'
 import friendsApi from '../../lichess/friends'
 
-import * as menu from '.'
+import MenuCtrl, { PopupAction, Action } from './MenuCtrl'
 
 interface PingData {
   ping: number | undefined
   server: number | undefined
 }
 
-export default {
-  view() {
-    const user = session.get()
-
-    return (
-      <div className="native_scroller">
-        {renderHeader(user)}
-        { hasNetwork() && user ? profileActionsToggle() : null }
-        {user && menu.profileMenuOpen() ? renderProfileActions(user) : renderLinks(user)}
-      </div>
-    )
-  }
-} as Mithril.Component<{}, {}>
-
 const pingHelp = 'PING: Network lag between you and lichess; SERVER: Time to process a move on lichess server'
 
-function renderHeader(user?: Session) {
+export function renderHeader(ctrl: MenuCtrl, user?: Session) {
   return (
     <header className="side_menu_header">
       { session.isKidMode() ? <div key="kiddo" className="kiddo">😊</div> : null }
@@ -47,14 +33,14 @@ function renderHeader(user?: Session) {
         </h2> : null
       }
       { hasNetwork() && user ?
-        <h2 key="username-connected" className="username connected" oncreate={helper.ontapXY(menu.route('/@/' + user.id))}>
+        <h2 key="username-connected" className="username connected" oncreate={helper.ontapXY(ctrl.route('/@/' + user.id))}>
           { user.patron ?
             <div className="patron" data-icon="" /> : null
           }
           { user.username }
         </h2> : null
       }
-      { hasNetwork() && session.isConnected() ? networkStatus() : null }
+      { hasNetwork() && session.isConnected() ? networkStatus(ctrl) : null }
       { hasNetwork() && !user ?
         <button key="login-button" className="login" oncreate={helper.ontapXY(loginModal.open)}>
           {i18n('signIn')}
@@ -66,29 +52,29 @@ function renderHeader(user?: Session) {
 
 interface MenuLinkDataset extends DOMStringMap {
   route?: string
-  popup?: menu.PopupAction
-  action?: menu.Action
+  popup?: PopupAction
+  action?: Action
 }
-function onLinkTap(e: Event) {
+function onLinkTap(ctrl: MenuCtrl, e: Event) {
   const el = helper.getLI(e)
   const ds = el.dataset as MenuLinkDataset
   if (el && ds.route) {
-    menu.route(ds.route)()
+    ctrl.route(ds.route)()
   } else if (el && ds.popup) {
-    menu.popup(ds.popup)
+    ctrl.popup(ds.popup)
   } else if (el && ds.action) {
-    menu.action(ds.action)
+    MenuCtrl.action(ctrl, ds.action)
   }
 }
 
-function renderProfileActions(user: Session) {
+export function renderProfileActions(ctrl: MenuCtrl, user: Session) {
   return (
-    <ul className="side_links profileActions" oncreate={helper.ontapXY(onLinkTap, undefined, helper.getLI)}>
+    <ul className="side_links profileActions" oncreate={helper.ontapXY(e => onLinkTap(ctrl, e), undefined, helper.getLI)}>
       <li className="side_link" key="profile" data-route={'/@/' + user.id}>
         <span className="fa fa-user" />{i18n('profile')}
       </li>
       <li className="side_link" key="message" data-route="/inbox">
-        <span className="fa fa-envelope"/>{i18n('inbox') + ((menu.inboxUnreadCount() !== null && menu.inboxUnreadCount() > 0) ? (' (' + menu.inboxUnreadCount() + ')') : '')}
+        <span className="fa fa-envelope"/>{i18n('inbox') + ((ctrl.inboxUnreadCount > 0) ? (' (' + ctrl.inboxUnreadCount + ')') : '')}
       </li>
       <li className="side_link" data-popup="friends">
         <span data-icon="f" />
@@ -114,11 +100,11 @@ function renderProfileActions(user: Session) {
   )
 }
 
-function renderLinks(user?: Session) {
+export function renderLinks(ctrl: MenuCtrl, user?: Session) {
   const offlineGames = getOfflineGames()
 
   return (
-    <ul className="side_links" oncreate={helper.ontapXY(onLinkTap, undefined, helper.getLI)}>
+    <ul className="side_links" oncreate={helper.ontapXY(e => onLinkTap(ctrl, e), undefined, helper.getLI)}>
       <li className="side_link" key="home" data-route="/">
         <span className="fa fa-home" />Home
       </li>
@@ -222,20 +208,20 @@ function renderLinks(user?: Session) {
   )
 }
 
-function profileActionsToggle() {
+export function profileActionsToggle(ctrl: MenuCtrl) {
   return (
     <div key="user-button" className="menu-toggleButton side_link"
-      oncreate={helper.ontapXY(menu.profileMenuToggle)}
+      oncreate={helper.ontapXY(ctrl.profileMenuToggle)}
     >
       <span className="fa fa-exchange" />
-      {menu.profileMenuOpen() ? 'Main menu' : 'User menu'}
+      {ctrl.profileMenuOpen ? 'Main menu' : 'User menu'}
     </div>
   )
 }
 
-function networkStatus() {
-  const ping = menu.ping()
-  const server = menu.mlat()
+function networkStatus(ctrl: MenuCtrl) {
+  const ping = ctrl.ping
+  const server = ctrl.mlat
   return (
     <div key="server-lag" className="pingServerLed"
       oncreate={helper.ontapXY(() => window.plugins.toast.show(pingHelp, 'long', 'top'))}

@@ -1,28 +1,24 @@
 import * as Hammer from 'hammerjs'
-import * as menu from '.'
-import redrawMenu from './redraw'
+
+import MenuCtrl from './MenuCtrl'
 
 interface OpenSlideHandlerState {
-  menuElement: HTMLElement | null
-  backDropElement: HTMLElement | null
   canSlide: boolean
   hintedX: number | null
 }
 
 export default function OpenSlideHandler(
-  mainEl: HTMLElement
+  menu: MenuCtrl
 ) {
 
   const maxSlide = menu.getMenuWidth()
 
   const state: OpenSlideHandlerState = {
-    menuElement: null,
-    backDropElement: null,
     canSlide: false,
     hintedX: null
   }
 
-  const mc = new Hammer.Manager(mainEl, {
+  const mc = new Hammer.Manager(menu.edgeEl, {
     inputClass: Hammer.TouchInput
   })
   mc.add(new Hammer.Pan({
@@ -32,9 +28,8 @@ export default function OpenSlideHandler(
   mc.add(new Hammer.Press())
 
   mc.on('press', (e: HammerInput) => {
-    state.menuElement = document.getElementById('side_menu')
-    if (state.menuElement && !menu.isSliding()) {
-      menu.showHint(state.menuElement)
+    if (!menu.isSliding) {
+      menu.showHint()
       state.hintedX = e.center.x
     }
   })
@@ -44,13 +39,13 @@ export default function OpenSlideHandler(
     if (e.eventType === Hammer.INPUT_END || e.eventType === Hammer.INPUT_CANCEL) {
       state.hintedX = null
       if (state.canSlide) {
-        menu.isSliding(false)
+        menu.isSliding = false
         state.canSlide = false
         const velocity = e.velocityX
         const delta = e.deltaX
         if (
           velocity >= 0 &&
-          (delta >= maxSlide * menu.OPEN_AFTER_SLIDE_RATIO || velocity > 0.2)
+          (delta >= maxSlide * MenuCtrl.OPEN_AFTER_SLIDE_RATIO || velocity > 0.2)
         ) {
           menu.open()
         } else {
@@ -71,15 +66,11 @@ export default function OpenSlideHandler(
     ) {
       state.canSlide = false
     } else {
-      state.menuElement = document.getElementById('side_menu')
-      state.backDropElement = document.getElementById('menu-close-overlay')
-      if (state.menuElement && state.backDropElement) {
-        state.menuElement.style.visibility = 'visible'
-        state.backDropElement.style.visibility = 'visible'
-        state.canSlide = true
-        menu.isSliding(true)
-        redrawMenu()
-      }
+      menu.menuEl.style.visibility = 'visible'
+      menu.backdropEl.style.visibility = 'visible'
+      state.canSlide = true
+      menu.isSliding = true
+      MenuCtrl.redraw()
     }
   })
   mc.on('panmove', (e: HammerInput) => {
@@ -89,8 +80,8 @@ export default function OpenSlideHandler(
       const delta = e.deltaX
       if (delta <= maxSlide) {
         const shift = state.hintedX !== null ? maxSlide * 0.05 - state.hintedX : 0
-        menu.translateMenu(state.menuElement!, -maxSlide + delta + shift)
-        menu.backdropOpacity(state.backDropElement!, (delta / maxSlide * 100) / 100 / 2)
+        menu.translateMenu(-maxSlide + delta + shift)
+        menu.backdropOpacity((delta / maxSlide * 100) / 100 / 2)
       }
     }
   })

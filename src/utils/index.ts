@@ -304,7 +304,7 @@ const userPattern = /(^|[^\w@#/])@([\w-]{2,})/g
 
 function userLinkReplace(orig: string, prefix: String, user: string) {
   if (user.length > 20) return orig;
-  return prefix + '<a href="/@/' + user + '">@' + user + "</a>";
+  return prefix + '<a href="' + globalConfig.apiEndPoint + '/@/' + user + '">@' + user + "</a>";
 }
 
 function autoLink(html: string) {

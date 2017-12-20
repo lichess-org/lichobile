@@ -96,6 +96,7 @@
             <path event="tv" url="/tv" />
             <path event="tvChannel" url="/tv/*" />
             <path event="userVariantProfile" url="/@/*/perf/*" />
+            <path event="userTV" url="/@/*/tv" />
             <path event="userProfile" url="/@/*" />
             <path event="signupConfirm" url="/signup/confirm/*" />
             <path event="other" url="*" />

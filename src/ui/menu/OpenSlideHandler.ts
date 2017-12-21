@@ -1,54 +1,76 @@
 import * as Hammer from 'hammerjs'
-import redraw from '../../utils/redraw'
-import * as menu from '.'
 
-export const EDGE_SLIDE_THRESHOLD = 40
+import MenuCtrl from './MenuCtrl'
 
 interface OpenSlideHandlerState {
-  menuElement: HTMLElement | null
-  backDropElement: HTMLElement | null
   canSlide: boolean
+  hintedX: number | null
 }
 
 export default function OpenSlideHandler(
-  mainEl: HTMLElement
+  menu: MenuCtrl
 ) {
 
   const maxSlide = menu.getMenuWidth()
 
   const state: OpenSlideHandlerState = {
-    menuElement: null,
-    backDropElement: null,
-    canSlide: false
+    canSlide: false,
+    hintedX: null
   }
 
-  const mc = new Hammer.Manager(mainEl, {
+  const mc = new Hammer.Manager(menu.edgeEl, {
     inputClass: Hammer.TouchInput
   })
   mc.add(new Hammer.Pan({
     direction: Hammer.DIRECTION_HORIZONTAL,
-    threshold: 5
+    threshold: 0
   }))
+  mc.add(new Hammer.Press())
+
+  mc.on('press', (e: HammerInput) => {
+    if (!menu.isSliding) {
+      menu.showHint()
+      state.hintedX = e.center.x
+    }
+  })
+
+  mc.on('hammer.input', (e: HammerInput) => {
+    // handle both press end and pan end
+    if (e.eventType === Hammer.INPUT_END || e.eventType === Hammer.INPUT_CANCEL) {
+      state.hintedX = null
+      if (state.canSlide) {
+        menu.isSliding = false
+        state.canSlide = false
+        const velocity = e.velocityX
+        const delta = e.deltaX
+        if (
+          velocity >= 0 &&
+          (delta >= maxSlide * MenuCtrl.OPEN_AFTER_SLIDE_RATIO || velocity > 0.2)
+        ) {
+          menu.open()
+        } else {
+          menu.close()
+        }
+      } else {
+        menu.close()
+      }
+    }
+  })
 
   mc.on('panstart', (e: HammerInput) => {
     if (
       e.target.nodeName === 'PIECE' ||
       e.target.nodeName === 'SQUARE' ||
       // svg element className is not a string
-      (e.target.className.startsWith && e.target.className.startsWith('cg-board manipulable')) ||
-      e.center.x > EDGE_SLIDE_THRESHOLD
+      (e.target.className.startsWith && e.target.className.startsWith('cg-board manipulable'))
     ) {
       state.canSlide = false
     } else {
-      state.menuElement = document.getElementById('side_menu')
-      state.backDropElement = document.getElementById('menu-close-overlay')
-      if (state.menuElement && state.backDropElement) {
-        state.menuElement.style.visibility = 'visible'
-        state.backDropElement.style.visibility = 'visible'
-        state.canSlide = true
-        menu.isSliding(true)
-        redraw()
-      }
+      menu.menuEl.style.visibility = 'visible'
+      menu.backdropEl.style.visibility = 'visible'
+      state.canSlide = true
+      menu.isSliding = true
+      MenuCtrl.redraw()
     }
   })
   mc.on('panmove', (e: HammerInput) => {
@@ -57,24 +79,9 @@ export default function OpenSlideHandler(
       e.preventDefault()
       const delta = e.deltaX
       if (delta <= maxSlide) {
-        menu.translateMenu(state.menuElement!, -maxSlide + delta)
-        menu.backdropOpacity(state.backDropElement!, (delta / maxSlide * 100) / 100 / 2)
-      }
-    }
-  })
-  mc.on('panend pancancel', (e: HammerInput) => {
-    if (state.canSlide) {
-      menu.isSliding(false)
-      state.canSlide = false
-      const velocity = e.velocityX
-      const delta = e.deltaX
-      if (
-        velocity >= 0 &&
-        (delta >= maxSlide * menu.OPEN_AFTER_SLIDE_RATIO || velocity > 0.2)
-      ) {
-        menu.open()
-      } else {
-        menu.close()
+        const shift = state.hintedX !== null ? maxSlide * 0.05 - state.hintedX : 0
+        menu.translateMenu(-maxSlide + delta + shift)
+        menu.backdropOpacity((delta / maxSlide * 100) / 100 / 2)
       }
     }
   })

@@ -26,6 +26,7 @@ import routes from './routes'
 import deepLinks from './deepLinks'
 import { isForeground, setForeground, setBackground } from './utils/appMode'
 import { loadCachedImages } from './bgtheme'
+import { init as menuInit } from './ui/menu'
 
 let firstConnection = true
 
@@ -33,6 +34,7 @@ function main() {
 
   routes.init()
   deepLinks.init()
+  menuInit()
 
   // cached background images
   loadCachedImages()
@@ -44,6 +46,9 @@ function main() {
   window.shouldRotateToOrientation = () => {
     return true
   }
+
+  // disable globally context menu
+  window.oncontextmenu = () => false
 
   // pull session data once (to log in user automatically thanks to cookie)
   // and also listen to online event in case network was disconnected at app

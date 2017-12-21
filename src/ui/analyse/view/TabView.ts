@@ -1,5 +1,4 @@
 import * as h from 'mithril/hyperscript'
-import { EDGE_SLIDE_THRESHOLD } from '../../menu/OpenSlideHandler'
 import * as Hammer from 'hammerjs'
 import { viewportDim, findParentBySelector, headerHeight } from '../../helper'
 
@@ -38,18 +37,16 @@ export default {
     }))
 
     this.mc.on('swiperight swipeleft', (e: HammerInput) => {
-      if (e.center.x - e.deltaX > EDGE_SLIDE_THRESHOLD) {
-        const tab = findParentBySelector(e.target, '.tab-content')
-        if (tab) {
-          const ds = tab.dataset as DOMStringMap
-          const index = Number(ds.index)
-          if (index !== undefined) {
-            if (e.direction === Hammer.DIRECTION_LEFT && index < this.nbTabs - 1) {
-              attrs.onTabChange(index + 1)
-            }
-            else if (e.direction === Hammer.DIRECTION_RIGHT && index > 0) {
-              attrs.onTabChange(index - 1)
-            }
+      const tab = findParentBySelector(e.target, '.tab-content')
+      if (tab) {
+        const ds = tab.dataset as DOMStringMap
+        const index = Number(ds.index)
+        if (index !== undefined) {
+          if (e.direction === Hammer.DIRECTION_LEFT && index < this.nbTabs - 1) {
+            attrs.onTabChange(index + 1)
+          }
+          else if (e.direction === Hammer.DIRECTION_RIGHT && index > 0) {
+            attrs.onTabChange(index - 1)
           }
         }
       }

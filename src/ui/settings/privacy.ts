@@ -8,34 +8,29 @@ import { LichessPropOption, ChallengeChoices, Challenge } from '../../lichess/pr
 import { SettingsProp } from '../../settings'
 import * as h from 'mithril/hyperscript'
 
-interface State {
+interface Ctrl {
   follow: SettingsProp<boolean>
   challenge: SettingsProp<number>
 }
 
-const PrivacyPrefScreen: Mithril.Component<{}, State> = {
+export default {
   oncreate: helper.viewSlideIn,
 
-  oninit: function(vnode) {
-    const follow = session.lichessBackedProp<boolean>('prefs.follow', session.savePreferences, true)
-    const challenge = session.lichessBackedProp<number>('prefs.challenge', session.savePreferences, Challenge.ALWAYS)
-
-    vnode.state = {
-      follow,
-      challenge
+  oninit() {
+    this.ctrl = {
+      follow: session.lichessBackedProp<boolean>('prefs.follow', session.savePreferences, true),
+      challenge: session.lichessBackedProp<number>('prefs.challenge', session.savePreferences, Challenge.ALWAYS)
     }
   },
 
-  view: function(vnode) {
-    const ctrl = vnode.state
+  view() {
+    const ctrl = this.ctrl
     const header = () => dropShadowHeader(null, backButton(i18n('privacy')))
     return layout.free(header, renderBody.bind(undefined, ctrl))
   }
-}
+} as Mithril.Component<{}, { ctrl: Ctrl }>
 
-export default PrivacyPrefScreen
-
-function renderBody(ctrl: State) {
+function renderBody(ctrl: Ctrl) {
   return [
     h('ul.native_scroller.page.settings_list.game', [
       h('li.list_item', formWidgets.renderCheckbox(i18n('letOtherPlayersFollowYou'),

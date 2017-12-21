@@ -137,7 +137,7 @@ function savePreferences() {
   }, true)
 }
 
-function lichessBackedProp<T>(path: string, prefRequest: () => Promise<string>, defaultVal: T): SettingsProp<T> {
+function lichessBackedProp<T extends string | number | boolean>(path: string, prefRequest: () => Promise<string>, defaultVal: T): SettingsProp<T> {
   return function() {
     if (arguments.length) {
       let oldPref: T

@@ -8,19 +8,23 @@ import { SettingsProp } from '../../settings'
 import { LichessPropOption, Takeback, SubmitMove, AutoQueen, AutoThreefold, SubmitMoveChoices, TakebackChoices, AutoQueenChoices, AutoThreefoldChoices } from '../../lichess/prefs'
 import * as h from 'mithril/hyperscript'
 
-interface State {
-  premove: SettingsProp<boolean>
-  takeback: SettingsProp<number>
-  autoQueen: SettingsProp<number>
-  autoThreefold: SettingsProp<number>
-  submitMove: SettingsProp<number>
+interface Ctrl {
+  readonly premove: SettingsProp<boolean>
+  readonly takeback: SettingsProp<number>
+  readonly autoQueen: SettingsProp<number>
+  readonly autoThreefold: SettingsProp<number>
+  readonly submitMove: SettingsProp<number>
 }
 
-const GameBehaviorPrefScreen: Mithril.Component<{}, State> = {
+interface State {
+  ctrl: Ctrl
+}
+
+export default {
   oncreate: helper.viewSlideIn,
 
-  oninit: function(vnode) {
-    vnode.state = {
+  oninit() {
+    this.ctrl = {
       premove: session.lichessBackedProp<boolean>('prefs.premove', session.savePreferences, true),
       takeback: session.lichessBackedProp<number>('prefs.takeback', session.savePreferences, Takeback.ALWAYS),
       autoQueen: session.lichessBackedProp<number>('prefs.autoQueen', session.savePreferences, AutoQueen.PREMOVE),
@@ -29,16 +33,14 @@ const GameBehaviorPrefScreen: Mithril.Component<{}, State> = {
     }
   },
 
-  view: function(vnode) {
-    const ctrl = vnode.state
+  view() {
+    const ctrl = this.ctrl
     const header = () => dropShadowHeader(null, backButton(i18n('gameBehavior')))
     return layout.free(header, () => renderBody(ctrl))
   }
-}
+} as Mithril.Component<{}, State>
 
-export default GameBehaviorPrefScreen
-
-function renderBody(ctrl: State) {
+function renderBody(ctrl: Ctrl) {
   return [
     h('ul.native_scroller.page.settings_list.game', [
       h('li.list_item', formWidgets.renderCheckbox(i18n('premovesPlayingDuringOpponentTurn'),

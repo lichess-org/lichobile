@@ -33,7 +33,7 @@ export const LoadingBoard = {
 
 export function menuButton() {
   return (
-    <button key="main-menu" className="fa fa-navicon main_header_button menu_button" oncreate={helper.noRedrawTap(menu.toggle)}>
+    <button key="main-menu" className="fa fa-navicon main_header_button menu_button" oncreate={helper.ontap(menu.toggle)}>
     </button>
   )
 }

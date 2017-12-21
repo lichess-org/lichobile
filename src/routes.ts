@@ -40,7 +40,7 @@ import { defineRoutes } from './router'
 
 export default {
   init() {
-    defineRoutes(document.getElementById('viewport')!, {
+    defineRoutes(document.body, {
       '': home,
       'timeline': timeline,
       'otb': otb,

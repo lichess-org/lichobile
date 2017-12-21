@@ -12,7 +12,6 @@ import i18n from '../i18n'
 import router from '../router'
 import { closeIcon } from './shared/icons'
 import signupModal from './signupModal'
-import MenuCtrl from './menu/MenuCtrl'
 
 let isOpen = false
 let formError: string | null = null
@@ -92,7 +91,6 @@ function submit(form: HTMLFormElement) {
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center')
     signals.afterLogin.dispatch()
     redraw()
-    MenuCtrl.redraw()
     // reconnect socket to refresh friends...
     socket.connect()
     push.register()

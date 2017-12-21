@@ -194,20 +194,12 @@ export function fadesOut(callback: () => void, selector?: string, time = 150): (
 type TapHandler = (e: TouchEvent) => void
 type RepeatHandler = () => boolean
 
-function createTapHandler(
-  tapHandler: TapHandler,
-  holdHandler?: TapHandler,
-  repeatHandler?: RepeatHandler,
-  scrollX?: boolean,
-  scrollY?: boolean,
-  getElement?: (e: TouchEvent) => HTMLElement,
-  redrawService: (() => void) | null = redraw
-) {
+function createTapHandler(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: RepeatHandler, scrollX?: boolean, scrollY?: boolean, getElement?: (e: TouchEvent) => HTMLElement) {
   return function(vnode: Mithril.DOMNode) {
     ButtonHandler(vnode.dom as HTMLElement,
       (e: TouchEvent) => {
         tapHandler(e)
-        if (redrawService !== null) redrawService()
+        redraw()
       },
       holdHandler ? (e: TouchEvent) => utils.autoredraw(() => holdHandler(e)) : undefined,
       repeatHandler,
@@ -224,36 +216,19 @@ export function ontouch(handler: TapHandler) {
   }
 }
 
-export function ontap(
-  tapHandler: TapHandler,
-  holdHandler?: TapHandler,
-  repeatHandler?: RepeatHandler,
-  getElement?: (e: TouchEvent) => HTMLElement
-) {
+export function ontap(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: RepeatHandler, getElement?: (e: TouchEvent) => HTMLElement) {
   return createTapHandler(tapHandler, holdHandler, repeatHandler, false, false, getElement)
-}
-
-export function noRedrawTap(tapHandler: TapHandler) {
-  return createTapHandler(tapHandler, undefined, undefined, false, false, undefined, null)
 }
 
 export function ontapX(tapHandler: TapHandler, holdHandler?: TapHandler) {
   return createTapHandler(tapHandler, holdHandler, undefined, true, false)
 }
 
-export function ontapY(
-  tapHandler: TapHandler,
-  holdHandler?: TapHandler,
-  getElement?: (e: TouchEvent) => HTMLElement
-) {
+export function ontapY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement) {
   return createTapHandler(tapHandler, holdHandler, undefined, false, true, getElement)
 }
 
-export function ontapXY(
-  tapHandler: TapHandler,
-  holdHandler?: TapHandler,
-  getElement?: (e: TouchEvent) => HTMLElement,
-) {
+export function ontapXY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement) {
   return createTapHandler(tapHandler, holdHandler, undefined, true, true, getElement)
 }
 

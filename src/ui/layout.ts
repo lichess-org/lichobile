@@ -72,7 +72,7 @@ export default {
     background = background || settings.general.theme.background()
     return h('div.view-container', { className: bgClass(background) }, [
       h('main#page', [
-        h('div.content.fullScreen', content())
+        h('div.content.standaloneClock', content())
       ]),
       overlay ? overlay() : null
     ])

@@ -10,18 +10,22 @@ import { renderHeader, renderLinks, renderProfileActions, profileActionsToggle }
 
 let menu: MenuCtrl
 
+interface MenuProps {
+  ctrl: MenuCtrl
+}
+
 const SideMenu = {
-  view() {
+  view({ attrs }) {
+    const { ctrl } = attrs
     const user = session.get()
 
     return h('div.native_scroller', [
-      renderHeader(menu, user),
-      hasNetwork() && user ? profileActionsToggle(menu) : null,
-      user && menu.profileMenuOpen ? renderProfileActions(menu, user) : renderLinks(menu, user)
+      renderHeader(ctrl, user),
+      hasNetwork() && user ? profileActionsToggle(ctrl) : null,
+      user && menu.profileMenuOpen ? renderProfileActions(ctrl, user) : renderLinks(ctrl, user)
     ])
   }
-} as Mithril.Component<{}, {}>
-
+} as Mithril.Component<MenuProps, {}>
 
 export function init() {
   const edgeAreaEl = document.getElementById('edge_menu_area')
@@ -32,7 +36,7 @@ export function init() {
     menu = new MenuCtrl(menuEl, edgeAreaEl, backdropEl)
 
     function redraw() {
-      RenderService.render(menuEl!, Vnode(SideMenu))
+      RenderService.render(menuEl!, Vnode(SideMenu, undefined, { ctrl: menu }))
     }
 
     signals.redrawMenu.add(redraw)
@@ -40,6 +44,8 @@ export function init() {
 }
 
 export function toggle() {
-  if (menu.isOpen) menu.close()
-  else menu.open()
+  if (menu !== undefined) {
+    if (menu.isOpen) menu.close()
+      else menu.open()
+  }
 }

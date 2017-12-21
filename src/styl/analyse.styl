@@ -198,7 +198,7 @@ inline
   display: inline;
   font-style: italic;
   font-size: 0.9em;
-  opacity: 0.8;
+  color rgba(textDarkBg, 0.8)
   &:before, &:after
     vertical-align 45%
   &:before
@@ -215,17 +215,6 @@ comment
   margin 0 0.2em 0 0.1em
   word-wrap break-word
   vertical-align 45%
-
-.analyse-engine_info
-  flex 1 0
-  font-size 0.65em
-  padding 3px
-  overflow hidden
-  opacity 0.8
-  > p
-    white-space nowrap
-    overflow hidden
-    text-overflow ellipsis
 
 .analyse-gameInfos
   display flex
@@ -285,7 +274,7 @@ comment
   .analyse-tabs
     color darken(headerBgDarkColor, 5%)
 
-  comment
+  inline, comment
     color rgba(textLightBg, 0.5)
 
   index
@@ -346,7 +335,7 @@ comment
   index
     color transpWhite04
 
-  comment
+  inline, comment
     color transpWhite05
 
   .analyse-cevalBox, .analyse-infosBox
@@ -355,9 +344,6 @@ comment
   .ceval-curEval
     background transparent
     border-right 1px solid transpWhite01
-
-  .analyse-engine_info
-    padding-left 5px
 
   .analyse-openingBox
     background rgba(255,255,255,0.1)

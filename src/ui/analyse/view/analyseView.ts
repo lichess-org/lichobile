@@ -170,7 +170,7 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Bas
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[], isPortrait: boolean) {
 
   const tabsContent = availTabs.map(t =>
-    TabsContentRendererMap[t.id](ctrl)
+    TabsContentRendererMap[t.id]
   )
 
   return h('div.analyse-table', {
@@ -178,9 +178,10 @@ function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[], isPortrait: boo
   }, [
     renderAnalyseTabs(ctrl, availTabs),
     h(TabView, {
+      ctrl,
       className: 'analyse-tabsContent',
       selectedIndex: ctrl.currentTabIndex(availTabs),
-      content: tabsContent,
+      contentRenderers: tabsContent,
       onTabChange: ctrl.onTabChange,
       isPortrait
     }),

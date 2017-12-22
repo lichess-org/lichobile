@@ -39,7 +39,7 @@ function renderAnalysis(ctrl: AnalyseCtrl, vd: helper.ViewportDim, isPortrait: b
       oncreate({ dom }: Mithril.DOMNode) {
         setTimeout(() => {
           this.updateCurPly = drawAcplChart(dom as SVGElement, ctrl.data, ctrl.node.ply)
-        }, 300)
+        }, 100)
       },
       onupdate() {
         if (this.updateCurPly) batchRequestAnimationFrame(() => {
@@ -118,7 +118,7 @@ function renderMoveTimes(ctrl: AnalyseCtrl, moveCentis: number[], vd: helper.Vie
       oncreate({ dom }: Mithril.DOMNode) {
         setTimeout(() => {
           this.updateCurPly = drawMoveTimesChart(dom as SVGElement, ctrl.data, moveCentis, ctrl.node.ply)
-        }, 300)
+        }, 100)
       },
       onupdate() {
         if (this.updateCurPly) batchRequestAnimationFrame(() => {

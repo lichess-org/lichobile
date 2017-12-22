@@ -3,7 +3,7 @@ import * as helper from '../../helper'
 import { header as headerWidget, backButton, userStatus } from '../../shared/common'
 import layout from '../../layout'
 import i18n from '../../../i18n'
-import { linkify } from '../../../utils'
+import { linkify } from '../../../utils/html'
 import redraw from '../../../utils/redraw'
 import { ThreadState, Post, ThreadAttrs } from '../interfaces'
 

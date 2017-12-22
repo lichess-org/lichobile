@@ -285,28 +285,3 @@ export function shallowEqual(objA: OAny, objB: OAny): boolean {
 
   return true
 }
-
-export function linkify(text: string): string {
-  const escaped = escapeHtml(text)
-  const linked = autoLink(escaped)
-  return linked
-}
-
-const linkPattern = /(^|[\s\n]|<[A-Za-z]*\/?>)((?:(?:https?):\/\/|lichess\.org\/)[\-A-Z0-9+\u0026\u2019@#\/%?=()~_|!:,.;]*[\-A-Z0-9+\u0026@#\/%=~()_|])/gi
-
-function linkReplace(_: string, before: string, url: string) {
-  const fullUrl = url.indexOf('http') === 0 ? url : 'https://' + url
-  const minUrl = url.replace(/^(?:https:\/\/)?(.+)$/, '$1')
-  return before + '<a href="#" onClick="window.open(\'' + fullUrl + '\', \'_system\')">' + minUrl + '</a>'
-}
-
-const userPattern = /(^|[^\w@#/])@([\w-]{2,})/g
-
-function userLinkReplace(orig: string, prefix: String, user: string) {
-  if (user.length > 20) return orig
-  return prefix + '<a href="#" onClick="window.open(\'' + globalConfig.apiEndPoint + '/@/' + user + '\', \'_system\')">@' + user + '</a>'
-}
-
-function autoLink(html: string) {
-  return html.replace(linkPattern, linkReplace).replace(userPattern, userLinkReplace)
-}

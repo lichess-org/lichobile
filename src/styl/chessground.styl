@@ -39,12 +39,12 @@ piece
   position absolute
   top 0
   left 0
-  background-size cover
   width 12.5%
   height 12.5%
-  z-index 2
+  background-size cover
+  &.anim
+    z-index 3
   &.captured
-    z-index 1
     opacity 0.5
   &.dragging
     z-index 4
@@ -62,7 +62,6 @@ piece
   height 25%
   background-color rgba(0, 0, 0, 0.2)
   border-radius 50%
-  z-index 3
 
 .orientation-black
   > li-coords.files

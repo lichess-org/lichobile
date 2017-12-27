@@ -44,17 +44,10 @@ export default class Chessground {
     this.redrawSync()
 
     if (!isViewOnly) {
-      board.addEventListener('touchstart', (e: TouchEvent) => drag.start(this, e))
-      board.addEventListener('touchmove', (e: TouchEvent) => drag.move(this, e))
-      board.addEventListener('touchend', (e: TouchEvent) => drag.end(this, e))
-      board.addEventListener('touchcancel', () => drag.cancel(this))
-    }
-
-    if (!isViewOnly) {
       const shadow = document.createElement('div')
       shadow.className = 'cg-square-target'
       shadow.style.transform = util.translate3dAway
-      this.dom.board.parentNode!.appendChild(shadow)
+      wrapper.appendChild(shadow)
       this.dom.elements.shadow = shadow
     }
 
@@ -62,15 +55,22 @@ export default class Chessground {
       const ghost = document.createElement('piece')
       ghost.className = 'ghost'
       ghost.style.transform = util.translateAway
-      this.dom.board.parentNode!.appendChild(ghost)
+      wrapper.appendChild(ghost)
       this.dom.elements.ghost = ghost
     }
 
     if (this.state.coordinates) {
-      makeCoords((this.dom.board.parentNode! as HTMLElement), !!this.state.symmetricCoordinates)
+      makeCoords((wrapper), !!this.state.symmetricCoordinates)
       if (this.state.symmetricCoordinates) {
-        makeSymmCoords(this.dom.board.parentNode! as HTMLElement)
+        makeSymmCoords(wrapper)
       }
+    }
+
+    if (!isViewOnly) {
+      board.addEventListener('touchstart', (e: TouchEvent) => drag.start(this, e))
+      board.addEventListener('touchmove', (e: TouchEvent) => drag.move(this, e))
+      board.addEventListener('touchend', (e: TouchEvent) => drag.end(this, e))
+      board.addEventListener('touchcancel', () => drag.cancel(this))
     }
 
     window.addEventListener('resize', this.onOrientationChange)

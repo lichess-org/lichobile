@@ -313,22 +313,6 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, ha
   }
 }
 
-export function variantReminder(el: HTMLElement, icon: string): void {
-  const div = document.createElement('div')
-  div.className = 'variant_reminder'
-  div.dataset['icon'] = icon
-  el.appendChild(div)
-  setTimeout(function() {
-    const r = el.querySelector('.variant_reminder')
-    if (r) {
-      r.classList.add('gone')
-      setTimeout(function() {
-        if (el && r) el.removeChild(r)
-      }, 600)
-    }
-  }, 800)
-}
-
 export function autofocus(vnode: Mithril.DOMNode): void {
   (vnode.dom as HTMLElement).focus()
 }

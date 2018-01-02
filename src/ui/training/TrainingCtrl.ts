@@ -1,18 +1,17 @@
 import * as debounce from 'lodash/debounce'
 import Chessground from '../../chessground/Chessground'
-import { ErrorResponse } from '../../http'
 import { build as makeTree, ops as treeOps, path as treePath, TreeWrapper, Tree } from '../shared/tree'
 import router from '../../router'
 import redraw from '../../utils/redraw'
 import signals from '../../signals'
 import * as chess from '../../chess'
-import { handleXhrError } from '../../utils'
 import * as chessFormat from '../../utils/chessFormat'
 import sound from '../../sound'
 import settings from '../../settings'
-import { PuzzleData } from '../../lichess/interfaces/training'
+import { PuzzleData, UserData as PuzzleUserData } from '../../lichess/interfaces/training'
 import promotion from '../shared/offlineRound/promotion'
 import { PromotingInterface } from '../shared/round'
+import { syncPuzzles } from './utils'
 
 import moveTest from './moveTest'
 import makeData from './data'
@@ -20,9 +19,11 @@ import makeGround from './ground'
 import menu, { IMenuCtrl } from './menu'
 import * as xhr from './xhr'
 import { VM, Data, Feedback } from './interfaces'
+import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
 
 export default class TrainingCtrl implements PromotingInterface {
   data: Data
+  user: PuzzleUserData
   tree: TreeWrapper
   menu: IMenuCtrl
   chessground: Chessground
@@ -49,6 +50,11 @@ export default class TrainingCtrl implements PromotingInterface {
   }
 
   public init = (cfg: PuzzleData) => {
+    const user = settings.training.user()
+    if (user) {
+      this.user = user
+    }
+
     this.vm = {
       mode: 'play',
       initializing: true,
@@ -165,18 +171,23 @@ export default class TrainingCtrl implements PromotingInterface {
     this.chessground.stop()
   }
 
-  public newPuzzle = (feedback: boolean) => {
-    if (feedback) this.showLoading()
-    xhr.newPuzzle()
-    .then(cfg => {
+  public newPuzzle = () => {
+    const onSuccess = (cfg: PuzzleData) => {
       this.init(cfg)
-    })
-    .then(this.onXhrSuccess)
-    .catch(this.onXhrError)
+      this.onPuzzleLoad
+    }
+    loadOfflinePuzzle().then(onSuccess, puzzleLoadFailure)
   }
 
   public retry = () => {
-    xhr.loadPuzzle(this.data.puzzle.id).then(this.init)
+    if (this.data.online) {
+      xhr.loadPuzzle(this.data.puzzle.id).then(this.init)
+    }
+    else {
+      const lastPuzzle = settings.training.lastPuzzle()
+      if (lastPuzzle)
+        this.init(lastPuzzle)
+    }
   }
 
   public share = () => {
@@ -239,11 +250,6 @@ export default class TrainingCtrl implements PromotingInterface {
     if (!this.node) return false
     if (this.vm.mode === 'view') return true
     return !!this.node.end
-  }
-
-  private showLoading = () => {
-    this.vm.loading = true
-    redraw()
   }
 
   private sendMove = (orig: Key, dest: Key, prom?: Role) => {
@@ -361,22 +367,30 @@ export default class TrainingCtrl implements PromotingInterface {
   private sendResult = (win: boolean) => {
     if (this.vm.resultSent) return
     this.vm.resultSent = true
-    xhr.round(this.data.puzzle.id, win)
-    .then((res) => {
-      this.data.user = res.user
-      redraw()
-    })
+
+    if (this.data.online) {
+      xhr.round({ id: this.data.puzzle.id, win })
+      .then((res) => {
+        this.data.user = res.user
+        redraw()
+      })
+    }
+    else {
+      const solved = settings.training.solvedPuzzles()
+      solved.push({ id: this.data.puzzle.id, win })
+      settings.training.solvedPuzzles(solved)
+
+      const unsolved = settings.training.unsolvedPuzzles()
+      if (unsolved[0].puzzle.id === this.data.puzzle.id) {
+        settings.training.lastPuzzle(unsolved.shift())
+        settings.training.unsolvedPuzzles(unsolved)
+      }
+      syncPuzzles()
+    }
   }
 
-  private onXhrSuccess = ()  => {
-    this.vm.loading = false
+  private onPuzzleLoad = ()  => {
     redraw()
-  }
-
-  private onXhrError = (res: ErrorResponse) => {
-    this.vm.loading = false
-    redraw()
-    handleXhrError(res)
   }
 }
 

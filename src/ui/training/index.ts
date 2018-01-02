@@ -7,20 +7,19 @@ import { emptyFen } from '../../utils/fen'
 import * as helper from '../helper'
 import layout from '../layout'
 import ViewOnlyBoard from '../shared/ViewOnlyBoard'
-import { connectingHeader } from '../shared/common'
-
+import { syncPuzzles } from './utils'
 import { renderContent, renderHeader, overlay } from './trainingView'
 import * as xhr from './xhr'
 import TrainingCtrl from './TrainingCtrl'
+import { connectingHeader } from '../shared/common'
+import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
+import { State } from './interfaces'
+import { PuzzleData } from '../../lichess/interfaces/training'
 
 interface Attrs {
   id?: string
   initFen?: string
   initColor?: Color
-}
-
-interface State {
-  ctrl?: TrainingCtrl
 }
 
 // cache last state to retrieve it when navigating back
@@ -43,12 +42,12 @@ export default {
         .catch(handleXhrError)
       }
     } else {
-      xhr.newPuzzle()
-      .then(cfg => {
+      const onSuccess = (cfg: PuzzleData) => {
         this.ctrl = new TrainingCtrl(cfg)
         cachedState.ctrl = this.ctrl
-      })
-      .catch(handleXhrError)
+      }
+      const afterSync = () => loadOfflinePuzzle().then(onSuccess, puzzleLoadFailure)
+      syncPuzzles().then(afterSync, afterSync)
     }
 
     socket.createDefault()

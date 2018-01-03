@@ -215,6 +215,11 @@ function renderLinks(user?: Session) {
       <li className="sep_link" key="sep_link_offline">
         {i18n('playOffline')}
       </li>
+      {!hasNetwork() ?
+        <li className="side_link" key="training" data-route="/training">
+          <span data-icon="-" />{i18n('training')}
+        </li> : null
+      }
       <li className="side_link" key="play_ai" data-route="/ai">
         <span className="fa fa-cogs"/>{i18n('playOfflineComputer')}
       </li>

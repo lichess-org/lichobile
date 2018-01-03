@@ -46,12 +46,14 @@ export default {
         .catch(handleXhrError)
       }
     } else {
-      const onSuccess = (cfg: PuzzleData) => {
-        this.ctrl = new TrainingCtrl(cfg, database)
-        cachedState.ctrl = this.ctrl
-      }
-      const afterSync = () => loadOfflinePuzzle(database).then(onSuccess, puzzleLoadFailure)
-      syncPuzzles(database).then(afterSync, afterSync)
+      syncPuzzles(database)
+        .then(() => loadOfflinePuzzle(database))
+        .catch(() => loadOfflinePuzzle(database))
+        .then((cfg: PuzzleData) => {
+          this.ctrl = new TrainingCtrl(cfg, database)
+          cachedState.ctrl = this.ctrl
+        })
+        .catch(puzzleLoadFailure)
     }
 
     socket.createDefault()

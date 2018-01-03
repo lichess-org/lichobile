@@ -58,7 +58,7 @@ export function loadOfflinePuzzle(database: OfflinePuzzleDatabase): Promise<Puzz
   if (unsolved.length > 0)
     return Promise.resolve(unsolved[0])
   else
-    return Promise.reject('No additional offline puzzles available. Go online to get another ${settings.training.puzzleBufferLen}')
+    return Promise.reject(`No additional offline puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`)
 }
 
 export function puzzleLoadFailure (reason: string) {

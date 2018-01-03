@@ -5,37 +5,43 @@ import settings from '../../settings'
 import { OfflinePuzzle, OfflinePuzzleDatabase } from './interfaces'
 
 export function syncPuzzles(database: OfflinePuzzleDatabase) {
-  const unsolved = database.unsolvedPuzzles
+  let unsolved = database.unsolvedPuzzles()
   const user = database.user()
   const curRating = user ? user.rating : null
   const discardedPuzzles: OfflinePuzzle[] = []
   // Cull puzzles that were retreived when the user's rating was significantly different than it is now
   if (curRating)
-    unsolved(unsolved().reduce((acc: OfflinePuzzle[], cur: OfflinePuzzle) => {
+    unsolved = unsolved.reduce((acc: OfflinePuzzle[], cur: OfflinePuzzle) => {
       const ratingDiff = (curRating && cur.userRating) ? Math.abs(curRating - cur.userRating) : 0
       if (ratingDiff < settings.training.ratingDiffThreshold) {
         discardedPuzzles.push(cur)
         acc.push(cur)
       }
       return acc
-    }, []))
+    }, [])
 
-  const puzzleDeficit = Math.max(settings.training.puzzleBufferLen - unsolved().length, 0)
+  const puzzleDeficit = Math.max(settings.training.puzzleBufferLen - unsolved.length, 0)
   let puzzlesLoaded = Promise.resolve(true)
   if (puzzleDeficit) {
     puzzlesLoaded = xhr.newPuzzles(puzzleDeficit).then((syncData: PuzzleSyncData) => {
-      unsolved(unsolved().concat(syncData.puzzles.map((puzzle: OfflinePuzzle) => {
+      unsolved = unsolved.concat(syncData.puzzles.map((puzzle: OfflinePuzzle) => {
         if (syncData.user)
           puzzle.userRating = syncData.user.rating
         return puzzle
-      })))
+      }))
       database.user(syncData.user)
       return true
     }).catch(() => {
       // If loading new puzzles fails, add back the discarded ones to avoid potentially running out of puzzles
-      unsolved(unsolved().concat(discardedPuzzles))
+      unsolved = unsolved.concat(discardedPuzzles)
       return false
+    }).then((retVal: boolean) => {
+      database.unsolvedPuzzles(unsolved)
+      return retVal
     })
+  }
+  else {
+    database.unsolvedPuzzles(unsolved)
   }
   if (database.solvedPuzzles().length) {
     xhr.solvePuzzles(database.solvedPuzzles()).then(() => database.solvedPuzzles([]), () => { })

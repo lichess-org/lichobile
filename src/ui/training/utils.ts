@@ -15,7 +15,7 @@ export function syncPuzzles(database: OfflinePuzzleDatabase) {
       const ratingDiff = (curRating && cur.userRating) ? Math.abs(curRating - cur.userRating) : 0
       if (ratingDiff < settings.training.ratingDiffThreshold) {
         discardedPuzzles.push(cur)
-        acc.push(cur)
+        return acc.concat([cur])
       }
       return acc
     }, [])

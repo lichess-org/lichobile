@@ -1,13 +1,9 @@
 import * as cgUtil from '../../../chessground/util'
+import { Bounds } from '../Board'
 import { Shape } from '.'
 import { Brush } from './brushes'
 
 type BoardPos = [number, number]
-
-interface Bounds {
-  width: number
-  height: number
-}
 
 const key2pos: (key: Key) => BoardPos = cgUtil.key2pos
 

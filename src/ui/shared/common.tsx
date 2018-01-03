@@ -263,7 +263,7 @@ export function miniUser(user: User | undefined, mini: any, isOpen: boolean, clo
         </div>
         { mini.perfs ?
           <div className="mini_perfs">
-          {Object.keys(mini.perfs).map(p => {
+          {Object.keys(mini.perfs).map((p: PerfKey) => {
             const perf = mini.perfs[p]
             return (
               <div className="perf">

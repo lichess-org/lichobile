@@ -1,7 +1,11 @@
 import { fetchJSON } from '../../http'
 import { DailyPuzzle } from '../../lichess/interfaces'
 import { OnlineGameData } from '../../lichess/interfaces/game'
-import { FeaturedTournamentData } from './interfaces'
+import { TournamentListItem } from '../../lichess/interfaces/tournament'
+
+interface FeaturedTournamentData {
+  featured: TournamentListItem[]
+}
 
 export function featured(feedback: boolean): Promise<OnlineGameData> {
   return fetchJSON('/tv', undefined, feedback)

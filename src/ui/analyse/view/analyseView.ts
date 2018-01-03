@@ -7,6 +7,7 @@ import continuePopup from '../../shared/continuePopup'
 import { view as renderPromotion } from '../../shared/offlineRound/promotion'
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard'
 import { notesView } from '../../shared/round/notes'
+import { Bounds } from '../../shared/Board'
 import menu from '../menu'
 import analyseSettings from '../analyseSettings'
 import TabNavigation from '../../shared/TabNavigation'
@@ -26,7 +27,7 @@ import renderBoard from './boardView'
 import renderGameInfos from './gameInfosView'
 import renderActionsBar from './actionsView'
 
-export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: ClientRect) {
+export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Bounds) {
   const availTabs = ctrl.availableTabs()
 
   return h.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
@@ -39,7 +40,7 @@ export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Cl
   ])
 }
 
-export function viewOnlyBoard(color: Color, bounds: ClientRect, isSmall: boolean, fen: string) {
+export function viewOnlyBoard(color: Color, bounds: Bounds, isSmall: boolean, fen: string) {
   return h('section.board_wrapper', {
     className: isSmall ? 'halfsize' : ''
   }, h(ViewOnlyBoard, { orientation: color, bounds, fen }))
@@ -169,7 +170,7 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Bas
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[], isPortrait: boolean) {
 
   const tabsContent = availTabs.map(t =>
-    TabsContentRendererMap[t.id](ctrl)
+    TabsContentRendererMap[t.id]
   )
 
   return h('div.analyse-table', {
@@ -177,9 +178,10 @@ function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[], isPortrait: boo
   }, [
     renderAnalyseTabs(ctrl, availTabs),
     h(TabView, {
+      ctrl,
       className: 'analyse-tabsContent',
       selectedIndex: ctrl.currentTabIndex(availTabs),
-      content: tabsContent,
+      contentRenderers: tabsContent,
       onTabChange: ctrl.onTabChange,
       isPortrait
     }),

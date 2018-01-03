@@ -68,7 +68,7 @@ function onTap(ctrl: IUserGamesCtrl, e: Event) {
 function renderAllGames(ctrl: IUserGamesCtrl) {
   const { games  } = ctrl.scrollState
   return (
-    <div id="scroller-wrapper" className="scroller native_scroller games"
+    <div id="scroller-wrapper" className="native_scroller userGame-scroller"
       oncreate={helper.ontapY(e => onTap(ctrl, e!), undefined, helper.getLI)}
       onscroll={throttle(ctrl.onScroll, 30)}
     >

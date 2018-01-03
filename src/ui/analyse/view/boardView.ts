@@ -1,7 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import { flatten, noNull } from '../../../utils'
 import * as chessFormat from '../../../utils/chessFormat'
-import Board from '../../shared/Board'
+import Board, { Bounds } from '../../shared/Board'
 import { Shape } from '../../shared/BoardBrush'
 import * as treeOps from '../../shared/tree/ops'
 
@@ -10,7 +10,7 @@ import AnalyseCtrl from '../AnalyseCtrl'
 
 export default function renderBoard(
   ctrl: AnalyseCtrl,
-  bounds: ClientRect,
+  bounds: Bounds,
   availTabs: Tab[]
 ) {
   const curTab = ctrl.currentTab(availTabs)

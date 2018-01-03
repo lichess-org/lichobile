@@ -59,9 +59,7 @@ export default {
     return h('div.view-container', { className: bgClass(background) }, [
       h('main#page', { oncreate: handleMenuOpen }, [
         h('header.main_header', header()),
-        h('div#free_content.content', {
-          className: footer ? 'withFooter' : ''
-        }, content()),
+        h('div#free_content.content', content()),
         footer ? h('footer.main_footer', footer()) : null,
         h('div#menu-close-overlay', { oncreate: menu.backdropCloseHandler })
       ]),

@@ -62,7 +62,7 @@ gulp.task('scripts', () => {
     .plugin(tsify)
     .transform(babelify, {
       extensions: ['.tsx', '.ts', '.js', '.jsx'],
-      presets: ['es2015']
+      presets: ['env']
     })
     .bundle()
     .pipe(source('app.js'))
@@ -84,7 +84,7 @@ gulp.task('watch-scripts', () => {
     .plugin(tsify)
     .transform(babelify, {
       extensions: ['.tsx', '.ts', '.js', '.jsx'],
-      presets: ['es2015']
+      presets: ['env']
     })
   );
 

@@ -8,6 +8,7 @@ interface Perf {
 const perfMap: { [k: string]: Perf } = {
   bullet: { name: 'Bullet', shortName: 'Bullet' },
   blitz: { name: 'Blitz', shortName: 'Blitz' },
+  rapid: { name: 'Rapid', shortName: 'Rapid' },
   classical: { name: 'Classical', shortName: 'Classic' },
   correspondence: { name: 'Correspondence', shortName: 'Corresp.' },
   crazyhouse: { name: 'Crazyhouse', shortName: 'Crazy' },

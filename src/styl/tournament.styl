@@ -36,13 +36,10 @@
   text-align left
   font-weight bold
   color gold
-  margin 10px 0 5px
+  margin 5px 0 5px
 
 .tournamentFeatured
   text-align center
-
-.tournamentTabsWrapper
-  height 'calc(100% - %s)' % footerHeight
 
 .tournamentStandings
   width 100%
@@ -96,10 +93,15 @@ td.tournamentPoints
   font-weight: bold
 
 .tournamentHeader
-  padding 10px
+  padding 10px 10px 0px 10px
 
-.tournamentConditions, .tournamentCreatorInfo, .tournamentPositionInfo
-  padding-bottom 0.8em
+.tournamentConditions, .tournamentCreatorInfo, .tournamentPositionInfo, .tournamentTimeInfo, .tournamentSpotlightInfo
+  margin-bottom 0.4em
+  padding-bottom 0.4em
+  border-bottom 1px solid borderColor
+
+.tournamentSpotlightInfo
+  font-size 0.8em
 
 .tournamentConditions
   position relative
@@ -129,7 +131,7 @@ td.tournamentPoints
   p
     margin-bottom 0.5em
 
-.tournamentInfoTime
+.tournamentTimeInfo
   padding-bottom 0.6em
   display flex
   justify-content space-between
@@ -305,6 +307,9 @@ td.tournamentPoints
   >.popup_content
     padding 0
 
+.view-container.light
+  .tournamentConditions, .tournamentCreatorInfo, .tournamentPositionInfo, .tournamentTimeInfo, .tournamentSpotlightInfo
+    border-color borderLightGray
 
 .view-container.transp
   .navigationButton.tournament-me
@@ -314,3 +319,6 @@ td.tournamentPoints
       background transparent
       border-color transpWhite02
       box-shadow 0 0 10px rgba(255,255,255,0.4)
+
+  .tournamentConditions, .tournamentCreatorInfo, .tournamentPositionInfo, .tournamentTimeInfo, .tournamentSpotlightInfo
+    border-color transpWhite01

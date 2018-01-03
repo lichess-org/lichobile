@@ -3,7 +3,6 @@ import * as helper from '../helper'
 import { body } from './homeView'
 import layout from '../layout'
 import { dropShadowHeader } from '../shared/common'
-import { HomeState } from './interfaces'
 import redraw from '../../utils/redraw'
 import { timeline as timelineXhr } from '../../xhr'
 import { dailyPuzzle as dailyPuzzleXhr, featuredTournaments as featuredTournamentsXhr } from './homeXhr'
@@ -14,9 +13,18 @@ import { PongMessage, TimelineEntry, DailyPuzzle } from '../../lichess/interface
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
 import * as stream from 'mithril/stream'
 
-const HomeScreen: Mithril.Component<{}, HomeState> = {
-  oninit(vnode) {
+export interface Ctrl {
+  nbConnectedPlayers: Mithril.Stream<number>
+  nbGamesInPlay: Mithril.Stream<number>
+  dailyPuzzle: Mithril.Stream<any>
+  featuredTournaments: Mithril.Stream<Array<TournamentListItem>>
+  timeline: Mithril.Stream<Array<any>>
+  init(): void
+  onResume(): void
+}
 
+export default {
+  oninit() {
     const nbConnectedPlayers = stream<number>()
     const nbGamesInPlay = stream<number>()
     const dailyPuzzle = stream<DailyPuzzle>()
@@ -70,7 +78,7 @@ const HomeScreen: Mithril.Component<{}, HomeState> = {
     document.addEventListener('online', init)
     document.addEventListener('resume', onResume)
 
-    vnode.state = {
+    this.ctrl = {
       nbConnectedPlayers,
       nbGamesInPlay,
       dailyPuzzle,
@@ -85,14 +93,13 @@ const HomeScreen: Mithril.Component<{}, HomeState> = {
 
   onremove() {
     socket.destroy()
-    document.removeEventListener('online', this.init)
-    document.removeEventListener('resume', this.onResume)
+    document.removeEventListener('online', this.ctrl.init)
+    document.removeEventListener('resume', this.ctrl.onResume)
   },
+
   view() {
     const header = () => dropShadowHeader('lichess.org')
 
-    return layout.free(header, () => body(this))
+    return layout.free(header, () => body(this.ctrl))
   }
-}
-
-export default HomeScreen
+} as Mithril.Component<{}, { ctrl: Ctrl }>

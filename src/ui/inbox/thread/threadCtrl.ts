@@ -1,16 +1,22 @@
-import socket from '../../../socket'
 import redraw from '../../../utils/redraw'
 import { handleXhrError } from '../../../utils'
 import * as xhr from './../inboxXhr'
 import * as helper from '../../helper'
-import { ThreadData, ThreadAttrs, ThreadState } from '../interfaces'
+import { ThreadData } from '../interfaces'
 import router from '../../../router'
 import * as stream from 'mithril/stream'
 
-export default function oninit(vnode: Mithril.Vnode<ThreadAttrs, ThreadState>): void {
-  socket.createDefault()
+export interface IThreadCtrl {
+  id: Mithril.Stream<string>
+  thread: Mithril.Stream<ThreadData>
+  deleteAttempted: Mithril.Stream<boolean>
+  sendResponse: (form: HTMLFormElement) => void
+  deleteThread: (id: string) => void
+  onKeyboardShow(e: Event): void
+}
 
-  const id = stream<string>(vnode.attrs.id)
+export default function ThreadCtrl(threadId: string): IThreadCtrl {
+  const id = stream<string>(threadId)
   const thread = stream<ThreadData>()
   const deleteAttempted = stream<boolean>(false)
 
@@ -28,7 +34,7 @@ export default function oninit(vnode: Mithril.Vnode<ThreadAttrs, ThreadState>): 
   })
   .catch(handleXhrError)
 
-  vnode.state = <ThreadState> {
+  return {
     id,
     thread,
     deleteAttempted,

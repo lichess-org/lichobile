@@ -11,8 +11,8 @@
     font-size 0.8em
 
 .playTable
+  flex 1 1 auto
   position relative
-  height "calc((100% - 100vw - %s) / 2)" % footerHeight
   padding 0 10px
   display flex
   justify-content space-between
@@ -21,7 +21,6 @@
   &.crazy
     padding 0
   @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
-    height "calc((100% - 98vw - %s) / 2)" % footerHeight
     width 98vw
     margin 0 auto
   @media only screen and (orientation: landscape)
@@ -118,7 +117,6 @@
   color red
 
 .antagonistInfos
-  max-width calc(100% - 120px)
   overflow hidden
   .rating
     font-size 0.9em
@@ -137,11 +135,7 @@
       visibility hidden
   &.active
     background-color lighten(bgdark, 8%)
-  &.offline
-    max-width 100%
   &.crazy
-    width calc(100vw / 8 * 3)
-    max-width calc(100vw / 8 * 3)
     padding 0 10px
     .ratingAndMaterial
       height inherit
@@ -153,13 +147,8 @@
       &.correspondence
         font-size 13px
   @media only screen and (min-width 600px)
-    max-width calc(100% - 160px)
     .ratingAndMaterial
       height 25px
-  @media only screen and (orientation: landscape)
-    &.crazy
-      width 'calc((100vh - %s) / 8 * 3)' % headerHeight
-      max-width 'calc((100vh - %s) / 8 * 3)' % headerHeight
   @media only screen and (min-width 600px)
     &.crazy
       > .antagonistUser
@@ -429,7 +418,6 @@
     align-items center
 
 .pocket
-  width calc(100vw / 8 * 5)
   height calc(100vw / 8 + 10px)
   max-height "calc((100vh - 100vw - %s - %s) / 2)" % (headerHeight footerHeight)
   background #cdcdcd
@@ -441,7 +429,6 @@
   justify-content space-around
   @media only screen and (orientation: landscape)
     height 'calc((100vh - %s) / 8 + 10px)' % headerHeight
-    max-width 60%
     max-height 55px
   @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
     height 'calc((100vh - %s - 12vh) / 8 + 10px)' % headerHeight

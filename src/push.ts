@@ -44,8 +44,8 @@ export default {
     }
   },
 
-  unregister() {
-    fetchText('/mobile/unregister', { method: 'POST' })
+  unregister(): Promise<string> {
+    return fetchText('/mobile/unregister', { method: 'POST' })
   }
 }
 
@@ -55,6 +55,7 @@ function notificationReceivedCallback(data: NotificationReceivedData) {
     if (data.isAppInFocus) {
       switch (additionalData.userData.type) {
         case 'challengeAccept':
+          session.refresh()
           sendLocalNotif(
             data.payload.title,
             data.payload.body,
@@ -65,6 +66,7 @@ function notificationReceivedCallback(data: NotificationReceivedData) {
         case 'gameTakebackOffer':
         case 'gameDrawOffer':
         case 'gameFinish':
+          session.refresh()
           sendLocalNotif(
             data.payload.title,
             data.payload.body,

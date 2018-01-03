@@ -1,7 +1,7 @@
 import { Tree } from '../../ui/shared/tree'
 
 export interface PuzzleData {
-  puzzle: Puzzle
+  readonly puzzle: Puzzle
   game: Game
   user?: UserData
   online?: boolean
@@ -13,47 +13,47 @@ export interface PuzzleSyncData {
 }
 
 export interface Round {
-  win: boolean
-  userRatingDiff: number
+  readonly win: boolean
+  readonly userRatingDiff: number
 }
 
 export interface RoundData {
-  round: Round
-  user?: UserData
-  voted: number | null
+  readonly round: Round
+  readonly user?: UserData
+  readonly voted: number | null
 }
 
 export interface Game {
-  id: string
-  clock: string
-  perf: {
-    icon: string
-    name: string
+  readonly id: string
+  readonly clock: string
+  readonly perf: {
+    readonly icon: string
+    readonly name: string
   }
-  players: [Player, Player]
-  rated: boolean
-  treeParts: Tree.Node
+  readonly players: [Player, Player]
+  readonly rated: boolean
+  readonly treeParts: Tree.Node
 }
 
 export interface Player {
-  color: Color
-  name: string
-  userId: string
+  readonly color: Color
+  readonly name: string
+  readonly userId: string
 }
 
 export interface Puzzle {
-  id: number
-  rating: number
-  attempts: number
-  fen: string
-  color: Color
-  initialMove: KeyPair
-  initialPly: number
-  gameId: string
-  lines: Lines
-  enabled: boolean
-  vote: number
-  branch: Tree.Node
+  readonly id: number
+  readonly rating: number
+  readonly attempts: number
+  readonly fen: string
+  readonly color: Color
+  readonly initialMove: KeyPair
+  readonly initialPly: number
+  readonly gameId: string
+  readonly lines: Lines
+  readonly enabled: boolean
+  readonly vote: number
+  readonly branch: Tree.Node
 }
 
 export interface PuzzleOutcome {
@@ -63,8 +63,8 @@ export interface PuzzleOutcome {
 
 export interface UserData {
   // [id, diff, rating]
-  recent: Array<[number, number, number]>
-  rating: number
+  readonly recent: Array<[number, number, number]>
+  readonly rating: number
 }
 
 export type LineFeedback = 'win' | 'retry'

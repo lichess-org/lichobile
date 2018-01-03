@@ -246,6 +246,17 @@ StrongSocket.prototype = {
     }
   },
 
+  /**
+   * When the server restarts, we don't want to overload it
+   * with thousands of clients trying to reconnect as soon as possible.
+   * Instead, we wait between 10 to 20 seconds before reconnecting.
+   * The added random allows sampling reconnections nicely.
+   */
+  deploy: function() {
+    this.disconnect();
+    this.scheduleConnect(10 * 1000 + Math.random() * 10 * 1000);
+  },
+
   onError: function(e) {
     var self = this;
     postMessage({ topic: 'onError' });
@@ -344,6 +355,9 @@ self.onmessage = function(msg) {
     case 'currentLag':
       if (socketInstance) postMessage({ topic: 'currentLag', payload: socketInstance.currentLag });
       else postMessage({ topic: 'currentLag', payload: null });
+      break;
+    case 'deploy':
+      socketInstance.deploy();
       break;
     default:
       throw new Error('socker worker message not supported: ' + msg.data.topic);

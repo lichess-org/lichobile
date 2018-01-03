@@ -3,6 +3,8 @@ import { EDGE_SLIDE_THRESHOLD } from '../../menu/OpenSlideHandler'
 import * as Hammer from 'hammerjs'
 import { viewportDim, findParentBySelector, headerHeight } from '../../helper'
 
+import AnalyseCtrl from '../AnalyseCtrl'
+
 /*
  * We cannot do simple object identity check currently on analysis data
  * (and maybe we don't want to do it)
@@ -10,8 +12,9 @@ import { viewportDim, findParentBySelector, headerHeight } from '../../helper'
  */
 
 interface Attrs {
+  ctrl: AnalyseCtrl,
   selectedIndex: number
-  content: Mithril.BaseNode[]
+  contentRenderers: ReadonlyArray<(ctrl: AnalyseCtrl) => Mithril.BaseNode>
   onTabChange: (i: number) => void
   className?: string
   isPortrait: boolean
@@ -24,7 +27,7 @@ interface State {
 
 export default {
   oninit({ attrs }) {
-    this.nbTabs = attrs.content.length
+    this.nbTabs = attrs.contentRenderers.length
   },
 
   oncreate({ attrs, dom }) {
@@ -57,7 +60,7 @@ export default {
   },
 
   onupdate({ attrs }) {
-    this.nbTabs = attrs.content.length
+    this.nbTabs = attrs.contentRenderers.length
   },
 
   onremove() {
@@ -68,7 +71,7 @@ export default {
     const vd = viewportDim()
     const curIndex = attrs.selectedIndex
     const totWidth = attrs.isPortrait ? vd.vw : vd.vw - vd.vh + headerHeight
-    const width = attrs.content.length * totWidth
+    const width = attrs.contentRenderers.length * totWidth
     const shift = -(curIndex * totWidth)
 
     const style = {
@@ -79,27 +82,10 @@ export default {
     return h('div.tabs-view', {
       style,
       className: attrs.className
-    }, attrs.content.map((_: any, index: number) =>
+    }, attrs.contentRenderers.map((_: any, index: number) =>
       h('div.tab-content', {
         'data-index': index
-      }, h(Tab, { index, ...attrs }))
+      },  attrs.selectedIndex === index ? attrs.contentRenderers[index](attrs.ctrl) : null)
     ))
   }
 } as Mithril.Component<Attrs, State>
-
-
-// --
-
-interface TabAttrs extends Attrs {
-  index: number
-}
-const Tab: Mithril.Component<TabAttrs, {}> = {
-
-  onbeforeupdate({ attrs }) {
-    return attrs.selectedIndex === attrs.index
-  },
-
-  view({ attrs }) {
-    return attrs.content[attrs.index]
-  }
-}

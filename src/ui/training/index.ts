@@ -71,7 +71,7 @@ export default {
 
   view({ attrs }) {
     const isPortrait = helper.isPortrait()
-    const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'training')
+    const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait)
     const key = isPortrait ? 'o-portrait' : 'o-landscape'
 
     if (this.ctrl) {

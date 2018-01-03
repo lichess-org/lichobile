@@ -24,6 +24,7 @@ export default {
     universalLinks.subscribe('tv', () => router.set('/tv'))
     universalLinks.subscribe('tvChannel', (eventData: UniversalLinks.EventData) => router.set('/tv/' + eventData.path.split('/').pop()))
     universalLinks.subscribe('userVariantProfile', handleVariantProfile)
+    universalLinks.subscribe('userTV', (eventData: UniversalLinks.EventData) => router.set('/@/' + eventData.path.split('/')[2] + '/tv'))
     universalLinks.subscribe('userProfile', (eventData: UniversalLinks.EventData) => router.set('/@/' + eventData.path.split('/').pop()))
     universalLinks.subscribe('signupConfirm', (data: UniversalLinks.EventData) => {
       const token = data.path.split('/').pop()

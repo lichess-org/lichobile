@@ -127,7 +127,7 @@ export default {
 
     if (this.ctrl) {
 
-      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', this.ctrl.settings.s.smallBoard)
+      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, this.ctrl.settings.s.smallBoard)
       const backButton = this.ctrl.shouldGoBack ?
         renderBackbutton(h(GameTitle, { data: this.ctrl.data, subTitle: 'players' })) : null
 
@@ -145,7 +145,7 @@ export default {
       )
     } else {
       const isSmall = settings.analyse.smallBoard()
-      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', isSmall)
+      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, isSmall)
       return layout.board(
         loadingBackbutton,
         () => [

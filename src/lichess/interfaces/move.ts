@@ -1,47 +1,47 @@
 import { GameStatus, Pockets } from './game'
 
 export interface MoveRequest {
-  u: string
+  readonly u: string
 }
 
 export interface DropRequest {
-  role: Role
-  pos: Key
+  readonly role: Role
+  readonly pos: Key
 }
 
 export interface MoveOrDrop {
-  fen: string
-  threefold: boolean
-  check: boolean
-  ply: number
-  wDraw: boolean
-  bDraw: boolean
-  uci: string
-  san: string
-  dests: StringMap
-  status?: GameStatus
-  winner?: Color
-  crazyhouse?: {
-    pockets: Pockets
+  readonly fen: string
+  readonly threefold: boolean
+  readonly check: boolean
+  readonly ply: number
+  readonly wDraw: boolean
+  readonly bDraw: boolean
+  readonly uci: string
+  readonly san: string
+  readonly dests: StringMap
+  readonly status?: GameStatus
+  readonly winner?: Color
+  readonly crazyhouse?: {
+    readonly pockets: Pockets
   }
   clock?: {
-    white: number
-    black: number
-    lag?: number
+    readonly white: number
+    readonly black: number
+    readonly lag?: number
   }
-  promotion?: {
-    key: Key
-    pieceClass: Role
+  readonly promotion?: {
+    readonly key: Key
+    readonly pieceClass: Role
   }
-  enpassant?: {
-    key: Key
-    color: Color
+  readonly enpassant?: {
+    readonly key: Key
+    readonly color: Color
   }
-  drops?: Array<string>
-  castle?: {
-    king: KeyPair
-    rook: KeyPair
-    color: Color
+  readonly drops?: Array<string>
+  readonly castle?: {
+    readonly king: KeyPair
+    readonly rook: KeyPair
+    readonly color: Color
   }
 }
 
@@ -51,12 +51,12 @@ export interface Move extends MoveOrDrop {
 
 export interface Drop extends MoveOrDrop {
   isDrop: boolean
-  role: Role
+  readonly role: Role
 }
 
 export interface AfterMoveMeta {
-  premove?: boolean
-  predrop?: boolean
+  readonly premove?: boolean
+  readonly predrop?: boolean
 }
 
 export function isMove(o: MoveOrDrop): o is Move {

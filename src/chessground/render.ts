@@ -5,12 +5,12 @@ import * as util from './util'
 export function renderBoard(d: State, dom: cg.DOM) {
   const boardElement = dom.board
   const asWhite = d.orientation === 'white'
+  const posToTranslate = d.fixed ? posToTranslateRel : posToTranslateAbs(dom.bounds)
   const orientationChange = d.prev.orientation && d.prev.orientation !== d.orientation
   d.prev.orientation = d.orientation
   const boundsChange = d.prev.bounds && d.prev.bounds !== dom.bounds
   d.prev.bounds = dom.bounds
   const allChange = boundsChange || orientationChange
-  const bounds = dom.bounds
   const pieces = d.pieces
   const anims = d.animation.current && d.animation.current.plan.anims
   const capturedPieces = d.animation.current && d.animation.current.plan.captured
@@ -41,13 +41,12 @@ export function renderBoard(d: State, dom: cg.DOM) {
     anim = anims && anims[k]
     captured = capturedPieces && capturedPieces[k]
     if (isPieceNode(el)) {
-      const pieceClass = el.cgRole + el.cgColor
       // if piece not being dragged anymore, remove dragging style
       if (el.cgDragging && (!d.draggable.current || d.draggable.current.orig !== k)) {
         el.classList.remove('dragging')
         el.classList.remove('magnified')
-        translate = util.posToTranslate(util.key2pos(k), asWhite, bounds)
-        el.style.transform = util.transform(d, el.cgColor, util.translate(translate))
+        translate = posToTranslate(util.key2pos(k), asWhite)
+        positionPiece(d, el, el.cgColor, translate)
         el.cgDragging = false
       }
       // remove captured class if it still remains
@@ -57,35 +56,38 @@ export function renderBoard(d: State, dom: cg.DOM) {
       }
       // there is now a piece at this dom key
       if (pieceAtKey) {
+        const pieceAtKeyName = pieceNameOf(pieceAtKey)
         // continue animation if already animating and same color
         // (otherwise it could animate a captured piece)
-        if (anim && el.cgAnimating && el.cgColor === pieceAtKey.color) {
-          translate = util.posToTranslate(util.key2pos(k), asWhite, bounds)
+        if (anim && el.cgAnimating && el.cgPiece === pieceAtKeyName) {
+          translate = posToTranslate(util.key2pos(k), asWhite)
           translate[0] += anim[1][0]
           translate[1] += anim[1][1]
-          el.style.transform = util.transform(d, el.cgColor, util.translate(translate))
+          el.classList.add('anim')
+          positionPiece(d, el, el.cgColor, translate)
         } else if (el.cgAnimating) {
-          translate = util.posToTranslate(util.key2pos(k), asWhite, bounds)
-          el.style.transform = util.transform(d, el.cgColor, util.translate(translate))
+          translate = posToTranslate(util.key2pos(k), asWhite)
+          positionPiece(d, el, el.cgColor, translate)
+          el.classList.remove('anim')
           el.cgAnimating = false
         }
         // same piece: flag as same
-        if (!allChange && !otbChange && el.cgColor === pieceAtKey.color && el.cgRole === pieceAtKey.role) {
+        if (el.cgPiece === pieceAtKeyName && !allChange && !otbChange && (!captured || !el.cgCaptured)) {
           samePieces.add(k)
         }
         // different piece: flag as moved unless it is a captured piece
         else {
-          if (captured && captured.role === el.cgRole && captured.color === el.cgColor) {
+          if (captured && pieceNameOf(captured) === el.cgPiece) {
             el.classList.add('captured')
             el.cgCaptured = true
           } else {
-            movedPieces.set(pieceClass, (movedPieces.get(pieceClass) || []).concat(el))
+            movedPieces.set(el.cgPiece, (movedPieces.get(el.cgPiece) || []).concat(el))
           }
         }
       }
       // no piece: flag as moved
       else {
-        movedPieces.set(pieceClass, (movedPieces.get(pieceClass) || []).concat(el))
+        movedPieces.set(el.cgPiece, (movedPieces.get(el.cgPiece) || []).concat(el))
       }
     }
     else if (isSquareNode(el)) {
@@ -102,6 +104,28 @@ export function renderBoard(d: State, dom: cg.DOM) {
     el = el.nextSibling as cg.KeyedNode
   }
 
+  // walk over all squares in current set, apply dom changes to moved squares
+  // or append new squares
+  squares.forEach((squareClass: string, k: Key) => {
+    if (!sameSquares.has(k)) {
+      mvdset = movedSquares.get(squareClass)
+      mvd = mvdset && mvdset.pop()
+      if (mvd) {
+        mvd.cgKey = k
+        translate = posToTranslate(util.key2pos(k), asWhite)
+        positionSquare(d, mvd, translate)
+      }
+      else {
+        const se = document.createElement('square') as cg.SquareNode
+        se.className = squareClass
+        se.cgKey = k
+        translate = posToTranslate(util.key2pos(k), asWhite)
+        positionSquare(d, se, translate)
+        boardElement.insertBefore(se, boardElement.firstChild)
+      }
+    }
+  })
+
   // walk over all pieces in current set, apply dom changes to moved pieces
   // or append new pieces
   for (let j = 0, jlen = piecesKeys.length; j < jlen; j++) {
@@ -116,53 +140,33 @@ export function renderBoard(d: State, dom: cg.DOM) {
       if (mvd) {
         // apply dom changes
         mvd.cgKey = k
-        translate = util.posToTranslate(util.key2pos(k), asWhite, bounds)
+        translate = posToTranslate(util.key2pos(k), asWhite)
         if (anim) {
           mvd.cgAnimating = true
           translate[0] += anim[1][0]
           translate[1] += anim[1][1]
         }
-        mvd.style.transform = util.transform(d, mvd.cgColor, util.translate(translate))
+        positionPiece(d, mvd, mvd.cgColor, translate)
       }
       // no piece in moved obj: insert the new piece
       else {
         const pe = document.createElement('piece') as cg.PieceNode
-        pe.className = pieceClassOf(p)
-        pe.cgRole = p.role
+        const pName = pieceNameOf(p)
+        pe.className = pName
+        pe.cgPiece = pName
         pe.cgColor = p.color
         pe.cgKey = k
-        translate = util.posToTranslate(util.key2pos(k), asWhite, bounds)
+        translate = posToTranslate(util.key2pos(k), asWhite)
         if (anim) {
           pe.cgAnimating = true
           translate[0] += anim[1][0]
           translate[1] += anim[1][1]
         }
-        pe.style.transform = util.transform(d, p.color, util.translate(translate))
+        positionPiece(d, pe, p.color, translate)
         boardElement.appendChild(pe)
       }
     }
   }
-
-  // walk over all squares in current set, apply dom changes to moved squares
-  // or append new squares
-  squares.forEach((squareClass: string, k: Key) => {
-    if (!sameSquares.has(k)) {
-      mvdset = movedSquares.get(squareClass)
-      mvd = mvdset && mvdset.pop()
-      if (mvd) {
-        mvd.cgKey = k
-        translate = util.posToTranslate(util.key2pos(k), asWhite, bounds)
-        mvd.style.transform = util.translate(translate)
-      }
-      else {
-        const se = document.createElement('square') as cg.SquareNode
-        se.className = squareClass
-        se.cgKey = k
-        se.style.transform = util.translate(util.posToTranslate(util.key2pos(k), asWhite, bounds))
-        boardElement.appendChild(se)
-      }
-    }
-  })
 
   // remove any dom el that remains in the moved sets
   const rmEl = (e: HTMLElement) => boardElement.removeChild(e)
@@ -184,6 +188,41 @@ export function makeSymmCoords(el: HTMLElement) {
   el.appendChild(coords)
 }
 
+function posToTranslateBase(pos: cg.Pos, asWhite: boolean, xFactor: number, yFactor: number): NumberPair {
+  return [
+    (asWhite ? pos[0] - 1 : 8 - pos[0]) * xFactor,
+    (asWhite ? 8 - pos[1] : pos[1] - 1) * yFactor
+  ]
+}
+
+const posToTranslateAbs = (bounds: ClientRect) => {
+  const xFactor = bounds.width / 8
+  const yFactor = bounds.height / 8
+  return (pos: cg.Pos, asWhite: boolean) => posToTranslateBase(pos, asWhite, xFactor, yFactor)
+}
+
+const posToTranslateRel: (pos: cg.Pos, asWhite: boolean) => NumberPair =
+  (pos, asWhite) => posToTranslateBase(pos, asWhite, 12.5, 12.5)
+
+function positionPiece(d: State, el: HTMLElement, color: Color, pos: NumberPair) {
+  if (d.fixed) {
+    el.style.left = pos[0] + '%'
+    el.style.top = pos[1] + '%'
+  }
+  else {
+    el.style.transform = util.transform(d, color, util.translate(pos))
+  }
+}
+
+function positionSquare(d: State, el: HTMLElement, pos: NumberPair) {
+  if (d.fixed) {
+    el.style.left = pos[0] + '%'
+    el.style.top = pos[1] + '%'
+  } else {
+    el.style.transform = util.translate(pos)
+  }
+}
+
 function isPieceNode(el: cg.PieceNode | cg.SquareNode): el is cg.PieceNode {
   return el.tagName === 'PIECE'
 }
@@ -191,7 +230,7 @@ function isSquareNode(el: cg.PieceNode | cg.SquareNode): el is cg.SquareNode {
   return el.tagName === 'SQUARE'
 }
 
-function pieceClassOf(p: Piece) {
+function pieceNameOf(p: Piece) {
   return p.role + ' ' + p.color
 }
 

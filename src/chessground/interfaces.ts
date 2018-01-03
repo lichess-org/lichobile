@@ -20,7 +20,7 @@ export interface InitConfig {
   symmetricCoordinates?: boolean
   autoCastle?: boolean
   viewOnly?: boolean
-  initBounds?: ClientRect
+  fixed?: boolean
   otb?: boolean
   otbMode?: OtbMode
   highlight?: {
@@ -124,8 +124,9 @@ export interface KeyedNode extends HTMLElement {
   cgKey: Key
 }
 export interface PieceNode extends KeyedNode {
-  cgRole: Role
   cgColor: Color
+  // role + color
+  cgPiece: string
   cgAnimating?: boolean
   cgCaptured?: boolean
   cgDragging?: boolean

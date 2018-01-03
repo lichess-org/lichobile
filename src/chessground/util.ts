@@ -33,9 +33,11 @@ export function boardpos(pos: cg.Pos, asWhite: boolean): BoardPos {
 
 export function posToTranslate(pos: cg.Pos, asWhite: boolean, bounds: ClientRect): NumberPair {
   return [
-    (asWhite ? pos[0] - 1 : 8 - pos[0]) * bounds.width / 8, (asWhite ? 8 - pos[1] : pos[1] - 1) * bounds.height / 8
+    (asWhite ? pos[0] - 1 : 8 - pos[0]) * bounds.width / 8,
+    (asWhite ? 8 - pos[1] : pos[1] - 1) * bounds.height / 8
   ]
 }
+
 
 export function invertKey(k: Key): Key {
   return (files[8 - fileNumbers[k[0]]] + (9 - Number(k[1]))) as Key

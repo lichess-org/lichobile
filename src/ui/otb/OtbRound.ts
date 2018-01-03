@@ -60,11 +60,15 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     }
 
     if (setupFen) {
-      this.newGameMenu.isOpen(true)
+      this.newGameMenu.open()
 
       if (setupVariant) {
         settings.otb.variant(setupVariant)
       }
+    }
+    else {
+      if (!saved || saved.ply === 0)
+        this.newGameMenu.open()
     }
 
     const currentVariant = <VariantKey>settings.otb.variant()
@@ -83,7 +87,6 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
 
   public init(data: OfflineGameData, situations: Array<chess.GameSituation>, ply: number) {
     this.actions.close()
-    this.newGameMenu.close()
     this.data = data
 
     const variant = this.data.game.variant.key
@@ -157,12 +160,30 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     router.set(`/analyse/offline/otb/${this.data.player.color}?ply=${this.replay.ply}&curFen=${this.replay.situation().fen}`)
   }
 
-  public save() {
+  public save = () => {
     setCurrentOTBGame({
       data: this.data,
       situations: this.replay.situations,
       ply: this.replay.ply
     })
+  }
+
+  public saveClock = () => {
+    if (this.clock && this.clock.isRunning()) {
+      this.clock.startStop()
+    }
+    this.save()
+  }
+
+  public isClockEnabled = (): boolean => {
+    return !!this.clock &&
+      this.clock.flagged() === undefined && this.clock.activeSide() !== undefined
+  }
+
+  public toggleClockPlay = (): void => {
+    if (this.clock && this.isClockEnabled()) {
+      this.clock.startStop()
+    }
   }
 
   public sharePGN = () => {

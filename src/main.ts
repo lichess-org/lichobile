@@ -105,8 +105,7 @@ function onOnline() {
 
       xhr.status()
 
-      // pre fetch and cache available pools
-      xhr.lobby()
+      getPools()
 
       session.rememberLogin()
       .then(() => {
@@ -117,7 +116,9 @@ function onOnline() {
       .then(session.nowPlaying)
       .then(syncWithNowPlayingGames)
       .then(() => xhr.setServerLang(getLang()))
-      .catch(() => console.log('connected as anonymous'))
+      .catch(() => {
+        console.log('connected as anonymous')
+      })
 
     } else {
       socket.connect()
@@ -144,6 +145,22 @@ function onPause() {
   setBackground()
   lobby.appCancelSeeking()
   socket.disconnect()
+}
+
+// pre fetch and cache available pools
+// retry 5 times
+let nbRetries = 1
+function getPools() {
+  xhr.lobby()
+  .then(() => {
+    if (nbRetries > 1) redraw()
+  })
+  .catch(() => {
+    if (nbRetries <= 5) {
+      nbRetries++
+      setTimeout(getPools, nbRetries * 1000)
+    }
+  })
 }
 
 document.addEventListener('deviceready',

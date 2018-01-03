@@ -8,6 +8,7 @@ import redraw from './utils/redraw'
 import { fetchJSON, fetchText, ErrorResponse } from './http'
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils'
 import i18n from './i18n'
+import push from './push'
 import settings from './settings'
 import friendsApi from './lichess/friends'
 import challengesApi from './lichess/challenges'
@@ -21,34 +22,34 @@ interface Prefs {
 }
 
 interface Profile {
-  country?: string
-  location?: string
-  bio?: string
-  firstName?: string
-  lastName?: string
+  readonly country?: string
+  readonly location?: string
+  readonly bio?: string
+  readonly firstName?: string
+  readonly lastName?: string
 }
 
 export interface Session {
-  id: string
-  username: string
-  title?: string
-  online: boolean
-  engine: boolean
-  booster: boolean
-  troll?: boolean
-  kid: boolean
-  patron: boolean
-  language?: string
-  profile?: Profile
-  perfs: any
-  createdAt: number
-  seenAt: number
-  playTime: number
-  nowPlaying: Array<NowPlayingGame>
-  prefs: Prefs
-  nbChallenges: number
-  nbFollowers: number
-  nbFollowing: number
+  readonly id: string
+  readonly username: string
+  readonly title?: string
+  readonly online: boolean
+  readonly engine: boolean
+  readonly booster: boolean
+  readonly troll?: boolean
+  readonly kid: boolean
+  readonly patron: boolean
+  readonly language?: string
+  readonly profile?: Profile
+  readonly perfs: any
+  readonly createdAt: number
+  readonly seenAt: number
+  readonly playTime: number
+  readonly nowPlaying: ReadonlyArray<NowPlayingGame>
+  readonly prefs: Prefs
+  readonly nbChallenges: number
+  readonly nbFollowers: number
+  readonly nbFollowing: number
 }
 
 let session: Session | undefined
@@ -136,7 +137,7 @@ function savePreferences() {
   }, true)
 }
 
-function lichessBackedProp<T>(path: string, prefRequest: () => Promise<string>, defaultVal: T): SettingsProp<T> {
+function lichessBackedProp<T extends string | number | boolean>(path: string, prefRequest: () => Promise<string>, defaultVal: T): SettingsProp<T> {
   return function() {
     if (arguments.length) {
       let oldPref: T
@@ -178,12 +179,15 @@ function login(username: string, password: string): Promise<Session | LobbyData>
 }
 
 function logout() {
-  return fetchJSON('/logout', { method: 'POST' }, true)
-  .then(() => {
-    session = undefined
-    friendsApi.clear()
-    redraw()
-  })
+  return push.unregister()
+  .then(() =>
+    fetchJSON('/logout', { method: 'POST' }, true)
+    .then(() => {
+      session = undefined
+      friendsApi.clear()
+      redraw()
+    })
+  )
   .catch(handleXhrError)
 }
 

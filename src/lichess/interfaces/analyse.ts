@@ -2,34 +2,34 @@ import { Game, Player, ClockData, CorrespondenceClockData } from './game'
 import { Tree } from '../../ui/shared/tree'
 
 export interface AnalyseData {
-  game: Game
-  player: Player
-  opponent: Player
+  readonly game: Game
+  readonly player: Player
+  readonly opponent: Player
   orientation: Color
-  spectator?: boolean // for compat with GameData, for game functions
-  takebackable: boolean
-  correspondence?: CorrespondenceClockData
-  clock?: ClockData
+  readonly spectator?: boolean // for compat with GameData, for game functions
+  readonly takebackable: boolean
+  readonly correspondence?: CorrespondenceClockData
+  readonly clock?: ClockData
   note?: string
   analysis?: RemoteEvalSummary
-  userAnalysis: boolean
-  tournament?: Tournament
-  forecast?: any
+  readonly userAnalysis: boolean
+  readonly tournament?: Tournament
+  readonly forecast?: any
   treeParts: Array<Partial<Tree.Node>>
-  evalPut?: boolean
+  readonly evalPut?: boolean
   // practiceGoal?: PracticeGoal
-  pref: any
+  readonly pref: any
   // offline analyse don't have it
-  url?: {
-    round: string
-    socket: string
+  readonly url?: {
+    readonly round: string
+    readonly socket: string
   }
 }
 
 export interface OnlineAnalyseData extends AnalyseData {
-  url: {
-    round: string
-    socket: string
+  readonly url: {
+    readonly round: string
+    readonly socket: string
   }
 }
 export function isOnlineAnalyseData(d: AnalyseData): d is OnlineAnalyseData {
@@ -37,45 +37,45 @@ export function isOnlineAnalyseData(d: AnalyseData): d is OnlineAnalyseData {
 }
 
 export interface AnalyseDataWithTree extends AnalyseData {
-  tree: Tree.Node
+  readonly tree: Tree.Node
 }
 
 export interface Glyph {
-  symbol: string
-  name: string
+  readonly symbol: string
+  readonly name: string
 }
 
 export type CommentAuthor = string | { name: string }
 
 export interface EvalJugdment {
-  comment: string
-  glyph: Glyph
-  name: string
+  readonly comment: string
+  readonly glyph: Glyph
+  readonly name: string
 }
 
 export interface RemoteEval {
-  cp: number
-  best?: string
-  mate?: number
-  variation?: string
-  judgment?: EvalJugdment
+  readonly cp: number
+  readonly best?: string
+  readonly mate?: number
+  readonly variation?: string
+  readonly judgment?: EvalJugdment
 }
 
 interface PlayerEvalSummary {
-  acpl: number
-  blunder: number
-  inaccuracy: number
-  mistake: number
-  [i: string]: number
+  readonly acpl: number
+  readonly blunder: number
+  readonly inaccuracy: number
+  readonly mistake: number
+  readonly [i: string]: number
 }
 
 export interface RemoteEvalSummary {
-  white: PlayerEvalSummary
-  black: PlayerEvalSummary
+  readonly white: PlayerEvalSummary
+  readonly black: PlayerEvalSummary
 }
 
 interface Tournament {
-  id: string
-  name: string
-  running: boolean
+  readonly id: string
+  readonly name: string
+  readonly running: boolean
 }

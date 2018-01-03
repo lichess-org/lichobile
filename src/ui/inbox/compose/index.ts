@@ -15,7 +15,7 @@ interface State {
   ctrl: IComposeCtrl
 }
 
-const ComposeScreen: Mithril.Component<Attrs, State> = {
+export default {
 
   oninit({ attrs }) {
     socket.createDefault()
@@ -37,6 +37,4 @@ const ComposeScreen: Mithril.Component<Attrs, State> = {
     const bodyCtrl = () => composeBody(this.ctrl)
     return layout.free(headerCtrl, bodyCtrl)
   }
-}
-
-export default ComposeScreen
+} as Mithril.Component<Attrs, State>

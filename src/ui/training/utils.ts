@@ -53,22 +53,12 @@ export function syncPuzzles(database: OfflinePuzzleDatabase) {
   return puzzlesLoaded
 }
 
-function loadNextPuzzle(database: OfflinePuzzleDatabase) {
+export function loadOfflinePuzzle(database: OfflinePuzzleDatabase): Promise<PuzzleData> {
   const unsolved = database.unsolvedPuzzles()
   if (unsolved.length > 0)
-    return unsolved[0]
+    return Promise.resolve(unsolved[0])
   else
-    return null
-}
-
-export function loadOfflinePuzzle(database: OfflinePuzzleDatabase): Promise<PuzzleData> {
-  const cfg = loadNextPuzzle(database)
-  if (cfg !== null) {
-    return Promise.resolve(cfg)
-  }
-  else {
     return Promise.reject('No additional offline puzzles available. Go online to get another ${settings.training.puzzleBufferLen}')
-  }
 }
 
 export function puzzleLoadFailure (reason: string) {

@@ -44,9 +44,11 @@ export function syncPuzzles(database: OfflinePuzzleDatabase) {
     database.unsolvedPuzzles(unsolved)
   }
 
-  let solved = database.solvedPuzzles()
+  const solved = database.solvedPuzzles()
   if (solved.length) {
-    xhr.solvePuzzles(solved).then(() => database.solvedPuzzles([]), () => { })
+    xhr.solvePuzzles(solved)
+      .then(() => database.solvedPuzzles([]))
+      .catch(() => { })
   }
   return puzzlesLoaded
 }

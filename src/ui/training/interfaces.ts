@@ -1,5 +1,4 @@
 import { Game, PuzzleData, PuzzleOutcome, UserData as PuzzleUserData } from '../../lichess/interfaces/training'
-import TrainingCtrl from './TrainingCtrl'
 import { SettingsProp } from '../../settings'
 import { OfflinePuzzle } from './interfaces'
 
@@ -37,8 +36,3 @@ export interface VM {
   canViewSolution: boolean
   resultSent: boolean
 }
-
-export interface State {
-  ctrl?: TrainingCtrl
-}
-

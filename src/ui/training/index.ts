@@ -13,7 +13,6 @@ import * as xhr from './xhr'
 import TrainingCtrl from './TrainingCtrl'
 import { connectingHeader } from '../shared/common'
 import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
-import { State } from './interfaces'
 import { PuzzleData } from '../../lichess/interfaces/training'
 import database from './database'
 
@@ -21,6 +20,10 @@ interface Attrs {
   id?: string
   initFen?: string
   initColor?: Color
+}
+
+export interface State {
+  ctrl?: TrainingCtrl
 }
 
 // cache last state to retrieve it when navigating back

@@ -1,5 +1,6 @@
-import { PuzzleData, Game } from '../../lichess/interfaces/training'
-import TrainingCtrl from './TrainingCtrl'
+import { Game, PuzzleData, PuzzleOutcome, UserData as PuzzleUserData } from '../../lichess/interfaces/training'
+import { SettingsProp } from '../../settings'
+import { OfflinePuzzle } from './interfaces'
 
 export interface Data extends PuzzleData {
   game: PimpedGame
@@ -8,6 +9,13 @@ export interface Data extends PuzzleData {
 
 export interface OfflinePuzzle extends PuzzleData {
   userRating?: number
+}
+
+export interface OfflinePuzzleDatabase {
+  unsolvedPuzzles: SettingsProp<OfflinePuzzle[]>,
+  solvedPuzzles: SettingsProp<PuzzleOutcome[]>,
+  user: SettingsProp<PuzzleUserData | undefined>,
+  lastPuzzle: SettingsProp<PuzzleData | undefined>
 }
 
 export interface PimpedGame extends Game {
@@ -27,8 +35,4 @@ export interface VM {
   lastFeedback: Feedback
   canViewSolution: boolean
   resultSent: boolean
-}
-
-export interface State {
-  ctrl?: TrainingCtrl
 }

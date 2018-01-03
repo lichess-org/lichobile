@@ -13,13 +13,17 @@ import * as xhr from './xhr'
 import TrainingCtrl from './TrainingCtrl'
 import { connectingHeader } from '../shared/common'
 import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
-import { State } from './interfaces'
 import { PuzzleData } from '../../lichess/interfaces/training'
+import database from './database'
 
 interface Attrs {
   id?: string
   initFen?: string
   initColor?: Color
+}
+
+export interface State {
+  ctrl?: TrainingCtrl
 }
 
 // cache last state to retrieve it when navigating back
@@ -36,18 +40,20 @@ export default {
       else {
         xhr.loadPuzzle(numId)
         .then(cfg => {
-          this.ctrl = new TrainingCtrl(cfg)
+          this.ctrl = new TrainingCtrl(cfg, database)
           cachedState.ctrl = this.ctrl
         })
         .catch(handleXhrError)
       }
     } else {
-      const onSuccess = (cfg: PuzzleData) => {
-        this.ctrl = new TrainingCtrl(cfg)
-        cachedState.ctrl = this.ctrl
-      }
-      const afterSync = () => loadOfflinePuzzle().then(onSuccess, puzzleLoadFailure)
-      syncPuzzles().then(afterSync, afterSync)
+      syncPuzzles(database)
+        .then(() => loadOfflinePuzzle(database))
+        .catch(() => loadOfflinePuzzle(database))
+        .then((cfg: PuzzleData) => {
+          this.ctrl = new TrainingCtrl(cfg, database)
+          cachedState.ctrl = this.ctrl
+        })
+        .catch(puzzleLoadFailure)
     }
 
     socket.createDefault()

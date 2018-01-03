@@ -15,6 +15,7 @@ import { connectingHeader } from '../shared/common'
 import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
 import { State } from './interfaces'
 import { PuzzleData } from '../../lichess/interfaces/training'
+import database from './database'
 
 interface Attrs {
   id?: string
@@ -36,18 +37,18 @@ export default {
       else {
         xhr.loadPuzzle(numId)
         .then(cfg => {
-          this.ctrl = new TrainingCtrl(cfg)
+          this.ctrl = new TrainingCtrl(cfg, database)
           cachedState.ctrl = this.ctrl
         })
         .catch(handleXhrError)
       }
     } else {
       const onSuccess = (cfg: PuzzleData) => {
-        this.ctrl = new TrainingCtrl(cfg)
+        this.ctrl = new TrainingCtrl(cfg, database)
         cachedState.ctrl = this.ctrl
       }
-      const afterSync = () => loadOfflinePuzzle().then(onSuccess, puzzleLoadFailure)
-      syncPuzzles().then(afterSync, afterSync)
+      const afterSync = () => loadOfflinePuzzle(database).then(onSuccess, puzzleLoadFailure)
+      syncPuzzles(database).then(afterSync, afterSync)
     }
 
     socket.createDefault()

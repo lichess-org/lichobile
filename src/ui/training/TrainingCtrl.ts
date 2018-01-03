@@ -18,7 +18,7 @@ import makeData from './data'
 import makeGround from './ground'
 import menu, { IMenuCtrl } from './menu'
 import * as xhr from './xhr'
-import { VM, Data, Feedback } from './interfaces'
+import { VM, Data, Feedback, OfflinePuzzleDatabase } from './interfaces'
 import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
 
 export default class TrainingCtrl implements PromotingInterface {
@@ -27,6 +27,7 @@ export default class TrainingCtrl implements PromotingInterface {
   tree: TreeWrapper
   menu: IMenuCtrl
   chessground: Chessground
+  offlineDatabase: OfflinePuzzleDatabase
 
   // current tree state, cursor, and denormalized node lists
   path: Tree.Path
@@ -40,8 +41,9 @@ export default class TrainingCtrl implements PromotingInterface {
 
   pieceTheme: string
 
-  constructor(cfg: PuzzleData) {
+  constructor(cfg: PuzzleData, offlineDatabase: OfflinePuzzleDatabase) {
     this.menu = menu.controller(this)
+    this.offlineDatabase = offlineDatabase
     this.init(cfg)
 
     this.pieceTheme = settings.general.theme.piece()
@@ -50,7 +52,7 @@ export default class TrainingCtrl implements PromotingInterface {
   }
 
   public init = (cfg: PuzzleData) => {
-    const user = settings.training.user()
+    const user = this.offlineDatabase.user()
     if (user) {
       this.user = user
     }
@@ -176,7 +178,7 @@ export default class TrainingCtrl implements PromotingInterface {
       this.init(cfg)
       this.onPuzzleLoad
     }
-    loadOfflinePuzzle().then(onSuccess, puzzleLoadFailure)
+    loadOfflinePuzzle(this.offlineDatabase).then(onSuccess, puzzleLoadFailure)
   }
 
   public retry = () => {
@@ -184,7 +186,7 @@ export default class TrainingCtrl implements PromotingInterface {
       xhr.loadPuzzle(this.data.puzzle.id).then(this.init)
     }
     else {
-      const lastPuzzle = settings.training.lastPuzzle()
+      const lastPuzzle = this.offlineDatabase.lastPuzzle()
       if (lastPuzzle)
         this.init(lastPuzzle)
     }
@@ -377,16 +379,16 @@ export default class TrainingCtrl implements PromotingInterface {
       })
     }
     else {
-      const solved = settings.training.solvedPuzzles()
+      const solved = this.offlineDatabase.solvedPuzzles()
       solved.push({ id: this.data.puzzle.id, win })
-      settings.training.solvedPuzzles(solved)
+      this.offlineDatabase.solvedPuzzles(solved)
 
-      const unsolved = settings.training.unsolvedPuzzles()
+      const unsolved = this.offlineDatabase.unsolvedPuzzles()
       if (unsolved[0].puzzle.id === this.data.puzzle.id) {
-        settings.training.lastPuzzle(unsolved.shift())
-        settings.training.unsolvedPuzzles(unsolved)
+        this.offlineDatabase.lastPuzzle(unsolved.shift())
+        this.offlineDatabase.unsolvedPuzzles(unsolved)
       }
-      syncPuzzles()
+      syncPuzzles(this.offlineDatabase)
     }
   }
 

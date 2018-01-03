@@ -2,11 +2,11 @@ import * as xhr from './xhr'
 import { PuzzleSyncData, PuzzleData } from '../../lichess/interfaces/training'
 import router from '../../router'
 import settings from '../../settings'
-import { OfflinePuzzle } from './interfaces'
+import { OfflinePuzzle, OfflinePuzzleDatabase } from './interfaces'
 
-export function syncPuzzles() {
-  const unsolved = settings.training.unsolvedPuzzles
-  const user = settings.training.user()
+export function syncPuzzles(database: OfflinePuzzleDatabase) {
+  const unsolved = database.unsolvedPuzzles
+  const user = database.user()
   const curRating = user ? user.rating : null
   const discardedPuzzles: OfflinePuzzle[] = []
   // Cull puzzles that were retreived when the user's rating was significantly different than it is now
@@ -29,7 +29,7 @@ export function syncPuzzles() {
           puzzle.userRating = syncData.user.rating
         return puzzle
       })))
-      settings.training.user(syncData.user)
+      database.user(syncData.user)
       return true
     }).catch(() => {
       // If loading new puzzles fails, add back the discarded ones to avoid potentially running out of puzzles
@@ -37,22 +37,22 @@ export function syncPuzzles() {
       return false
     })
   }
-  if (settings.training.solvedPuzzles().length) {
-    xhr.solvePuzzles(settings.training.solvedPuzzles()).then(() => settings.training.solvedPuzzles([]), () => {})
+  if (database.solvedPuzzles().length) {
+    xhr.solvePuzzles(database.solvedPuzzles()).then(() => database.solvedPuzzles([]), () => { })
   }
   return puzzlesLoaded
 }
 
-function loadNextPuzzle() {
-  const unsolved = settings.training.unsolvedPuzzles()
+function loadNextPuzzle(database: OfflinePuzzleDatabase) {
+  const unsolved = database.unsolvedPuzzles()
   if (unsolved.length > 0)
     return unsolved[0]
   else
     return null
 }
 
-export function loadOfflinePuzzle(): Promise<PuzzleData> {
-  const cfg = loadNextPuzzle()
+export function loadOfflinePuzzle(database: OfflinePuzzleDatabase): Promise<PuzzleData> {
+  const cfg = loadNextPuzzle(database)
   if (cfg !== null) {
     return Promise.resolve(cfg)
   }

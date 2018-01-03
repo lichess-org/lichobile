@@ -178,7 +178,7 @@ export default class TrainingCtrl implements PromotingInterface {
       this.init(cfg)
       this.onPuzzleLoad
     }
-    loadOfflinePuzzle(this.offlineDatabase).then(onSuccess, puzzleLoadFailure)
+    loadOfflinePuzzle(this.offlineDatabase).then(onSuccess).catch(puzzleLoadFailure)
   }
 
   public retry = () => {

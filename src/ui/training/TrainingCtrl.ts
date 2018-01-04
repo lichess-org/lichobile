@@ -1,3 +1,4 @@
+import * as cloneDeep from 'lodash/cloneDeep'
 import * as debounce from 'lodash/debounce'
 import Chessground from '../../chessground/Chessground'
 import { build as makeTree, ops as treeOps, path as treePath, TreeWrapper, Tree } from '../shared/tree'
@@ -14,17 +15,15 @@ import { PromotingInterface } from '../shared/round'
 import { syncPuzzles } from './utils'
 
 import moveTest from './moveTest'
-import makeData from './data'
 import makeGround from './ground'
 import menu, { IMenuCtrl } from './menu'
 import * as xhr from './xhr'
-import { VM, Data, Feedback, OfflinePuzzleDatabase } from './interfaces'
+import { VM, Data, PimpedGame, Feedback, OfflinePuzzleDatabase } from './interfaces'
 import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
 
 export default class TrainingCtrl implements PromotingInterface {
   data: Data
   user: PuzzleUserData
-  tree: TreeWrapper
   menu: IMenuCtrl
   chessground: Chessground
   offlineDatabase: OfflinePuzzleDatabase
@@ -41,59 +40,18 @@ export default class TrainingCtrl implements PromotingInterface {
 
   pieceTheme: string
 
+  private tree: TreeWrapper
+  private initialData: PuzzleData
+
   constructor(cfg: PuzzleData, offlineDatabase: OfflinePuzzleDatabase) {
     this.menu = menu.controller(this)
     this.offlineDatabase = offlineDatabase
+    this.initialData = cfg
     this.init(cfg)
 
     this.pieceTheme = settings.general.theme.piece()
 
     signals.afterLogin.add(this.retry)
-  }
-
-  public init = (cfg: PuzzleData) => {
-    const user = this.offlineDatabase.user()
-    if (user) {
-      this.user = user
-    }
-
-    this.vm = {
-      mode: 'play',
-      initializing: true,
-      lastFeedback: 'init',
-      moveValidationPending: false,
-      loading: false,
-      canViewSolution: false,
-      resultSent: false
-    }
-
-    this.data = makeData(cfg)
-    this.tree = makeTree(treeOps.reconstruct([
-      // make root node with puzzle initial state
-      {
-        fen: this.data.puzzle.fen,
-        ply: this.data.puzzle.initialPly - 1,
-        id: ''
-      },
-      this.data.game.treeParts
-    ]))
-    this.initialPath = treePath.fromNodeList(treeOps.mainlineNodeList(this.tree.root))
-    this.initialNode = this.tree.nodeAtPath(this.initialPath)
-    this.setPath(treePath.init(this.initialPath))
-    this.updateBoard()
-
-    // play opponent first move with delay
-    setTimeout(() => {
-      this.jump(this.initialPath, true)
-      this.vm.initializing = false
-    }, 1000)
-
-    setTimeout(() => {
-      this.vm.canViewSolution = true
-      redraw()
-    }, 5000)
-
-    redraw()
   }
 
   public player = (): Color => this.data.puzzle.color
@@ -168,11 +126,6 @@ export default class TrainingCtrl implements PromotingInterface {
     return false
   }
 
-  public reload = (cfg: PuzzleData) => {
-    this.data = makeData(cfg)
-    this.chessground.stop()
-  }
-
   public newPuzzle = () => {
     const onSuccess = (cfg: PuzzleData) => {
       this.init(cfg)
@@ -182,14 +135,7 @@ export default class TrainingCtrl implements PromotingInterface {
   }
 
   public retry = () => {
-    if (this.data.online) {
-      xhr.loadPuzzle(this.data.puzzle.id).then(this.init)
-    }
-    else {
-      const lastPuzzle = this.offlineDatabase.lastPuzzle()
-      if (lastPuzzle)
-        this.init(lastPuzzle)
-    }
+    this.init(this.initialData)
   }
 
   public share = () => {
@@ -202,6 +148,63 @@ export default class TrainingCtrl implements PromotingInterface {
   }
 
   // --
+
+  private init(cfg: PuzzleData) {
+
+    router.assignState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
+
+    // TODO remove this and instead associate userId to puzzle db
+    const user = this.offlineDatabase.user()
+    if (user) {
+      this.user = user
+    }
+
+    this.vm = {
+      mode: 'play',
+      initializing: true,
+      lastFeedback: 'init',
+      moveValidationPending: false,
+      loading: false,
+      canViewSolution: false,
+      resultSent: false
+    }
+
+    const data = cloneDeep(cfg)
+    const variant = {
+      key: 'standard' as VariantKey
+    }
+    const pimpedGame: PimpedGame = { ...data.game, variant }
+    const pimpedData: Data = { ...data, game: pimpedGame }
+
+    this.data = pimpedData
+
+    this.tree = makeTree(treeOps.reconstruct([
+      // make root node with puzzle initial state
+      {
+        fen: this.data.puzzle.fen,
+        ply: this.data.puzzle.initialPly - 1,
+        id: ''
+      },
+      this.data.game.treeParts
+    ]))
+    this.initialPath = treePath.fromNodeList(treeOps.mainlineNodeList(this.tree.root))
+    this.initialNode = this.tree.nodeAtPath(this.initialPath)
+    this.setPath(treePath.init(this.initialPath))
+    this.updateBoard()
+
+    // play opponent first move with delay
+    setTimeout(() => {
+      this.jump(this.initialPath, true)
+      this.vm.initializing = false
+    }, 1000)
+
+    setTimeout(() => {
+      this.vm.canViewSolution = true
+      redraw()
+    }, 5000)
+
+    redraw()
+  }
 
   private updateBoard() {
     const node = this.node
@@ -379,13 +382,14 @@ export default class TrainingCtrl implements PromotingInterface {
     }
     else {
       const solved = this.offlineDatabase.solvedPuzzles()
-      solved.push({ id: this.data.puzzle.id, win })
-      this.offlineDatabase.solvedPuzzles(solved)
+      this.offlineDatabase.solvedPuzzles(solved.concat([{
+        id: this.data.puzzle.id,
+        win
+      }]))
 
       const unsolved = this.offlineDatabase.unsolvedPuzzles()
       if (unsolved[0].puzzle.id === this.data.puzzle.id) {
-        this.offlineDatabase.lastPuzzle(unsolved.shift())
-        this.offlineDatabase.unsolvedPuzzles(unsolved)
+        this.offlineDatabase.unsolvedPuzzles(unsolved.slice(1))
       }
       syncPuzzles(this.offlineDatabase)
     }

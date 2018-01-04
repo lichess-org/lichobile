@@ -1,4 +1,3 @@
-import router from '../../router'
 import { fetchJSON } from '../../http'
 import { PuzzleData, PuzzleSyncData, RoundData, PuzzleOutcome } from '../../lichess/interfaces/training'
 
@@ -23,7 +22,6 @@ export function vote(id: number, v: number): Promise<any> {
 export function loadPuzzle(id: number): Promise<PuzzleData> {
   return fetchJSON<PuzzleData>(`/training/${id}/load`)
   .then(cfg => {
-    router.assignState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
     cfg.online = true
     return cfg
   })
@@ -32,7 +30,6 @@ export function loadPuzzle(id: number): Promise<PuzzleData> {
 export function newPuzzle(): Promise<PuzzleData> {
   return fetchJSON<PuzzleData>('/training/new')
   .then(cfg => {
-    router.assignState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
     cfg.online = true
     return cfg
   })

@@ -54,6 +54,11 @@ export default {
 }
 
 function renderTrainingMenu(ctrl: TrainingCtrl) {
+  // TODO review this
+  // if offline we can show last rating graph possibly
+  // but last played puzzle doesn't make sense since we can't access them
+  // and if we do this, in case we're offline we should display an info like
+  // "you are offline, so rating may not be up to date"
   if (ctrl.user) {
     return renderUserInfos(ctrl.user)
   } else if (ctrl.data && ctrl.data.online && ctrl.data.user) {

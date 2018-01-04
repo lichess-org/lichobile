@@ -15,7 +15,6 @@ export interface OfflinePuzzleDatabase {
   unsolvedPuzzles: SettingsProp<OfflinePuzzle[]>,
   solvedPuzzles: SettingsProp<PuzzleOutcome[]>,
   user: SettingsProp<PuzzleUserData | undefined>,
-  lastPuzzle: SettingsProp<PuzzleData | undefined>
 }
 
 export interface PimpedGame extends Game {

@@ -215,6 +215,7 @@ export function lichessAssetSrc(path: string) {
 // https://github.com/twitter/hogan.js/blob/master/lib/template.js#L325-L335
 const rAmp = /&/g
 const rLt = /</g
+const rGt = />/g
 const rApos = /\'/g
 const rQuot = /\"/g
 const hChars = /[&<>\"\']/
@@ -223,6 +224,7 @@ export function escapeHtml(str: string) {
     return str
     .replace(rAmp, '&amp;')
     .replace(rLt, '&lt;')
+    .replace(rGt, '&gt;')
     .replace(rApos, '&apos;')
     .replace(rQuot, '&quot;')
   }

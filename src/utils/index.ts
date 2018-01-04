@@ -211,28 +211,6 @@ export function lichessAssetSrc(path: string) {
   return `${globalConfig.apiEndPoint}/assets/${path}`
 }
 
-// Implementation originally from Twitter's Hogan.js:
-// https://github.com/twitter/hogan.js/blob/master/lib/template.js#L325-L335
-const rAmp = /&/g
-const rLt = /</g
-const rGt = />/g
-const rApos = /\'/g
-const rQuot = /\"/g
-const hChars = /[&<>\"\']/
-export function escapeHtml(str: string) {
-  if (hChars.test(String(str))) {
-    return str
-    .replace(rAmp, '&amp;')
-    .replace(rLt, '&lt;')
-    .replace(rGt, '&gt;')
-    .replace(rApos, '&apos;')
-    .replace(rQuot, '&quot;')
-  }
-  else {
-    return str
-  }
-}
-
 export function displayTime(time: string): string {
   if (time === '0.75') return '¾'
   if (time === '0.5') return '½'

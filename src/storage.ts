@@ -5,22 +5,42 @@ function withStorage<T>(f: (s: Storage) => T | void): T | void | null {
   } catch (e) {}
 }
 
+export interface StoredProp<T> {
+  (): T
+  (value: T): T
+}
+
 export default {
-  get<T>(k: string): T | null {
-    return withStorage((s) => {
-      const item = s.getItem(k)
-      return item ? JSON.parse(item) : null
-    })
-  },
-  remove(k: string): void {
-    withStorage((s) => {
-      s.removeItem(k)
-    })
-  },
-  set<T>(k: string, v: T): void {
-    withStorage((s) => {
-      s.removeItem(k)
-      s.setItem(k, JSON.stringify(v))
-    })
+  get,
+  set,
+  remove,
+  prop,
+}
+
+function get<T>(k: string): T | null {
+  return withStorage((s) => {
+    const item = s.getItem(k)
+    return item ? JSON.parse(item) : null
+  })
+}
+
+function remove(k: string): void {
+  withStorage((s) => {
+    s.removeItem(k)
+  })
+}
+
+function set<T>(k: string, v: T): void {
+  withStorage((s) => {
+    s.removeItem(k)
+    s.setItem(k, JSON.stringify(v))
+  })
+}
+
+function prop<T>(key: string, initialValue: T): StoredProp<T> {
+  return function() {
+    if (arguments.length) set(key, arguments[0])
+    const ret = get<T>(key)
+    return (ret !== null && ret !== undefined) ? ret : initialValue
   }
 }

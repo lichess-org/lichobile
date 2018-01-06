@@ -1,19 +1,6 @@
-import store from './storage'
+import store, { StoredProp } from './storage'
 import * as range from 'lodash/range'
 import { ClockType, ClockTypeWithNone } from './ui/shared/clock/interfaces'
-
-export interface SettingsProp<T> {
-  (): T
-  (value: T): T
-}
-
-export function localstorageprop<T>(key: string, initialValue: T): SettingsProp<T> {
-  return function() {
-    if (arguments.length) store.set(key, arguments[0])
-    const ret = store.get<T>(key)
-    return (ret !== null && ret !== undefined) ? ret : initialValue
-  }
-}
 
 function tupleOf(x: number) {
   return [x.toString(), x.toString()]
@@ -32,33 +19,33 @@ const offlineAvailableVariants: [string, VariantKey][] = [
 ]
 
 export interface GameSettings {
-  time: SettingsProp<string>
-  timeMode: SettingsProp<string>
-  increment: SettingsProp<string>
-  color: SettingsProp<string>
-  mode?: SettingsProp<string>
-  variant: SettingsProp<string>
-  ratingMin?: SettingsProp<string>
-  ratingMax?: SettingsProp<string>
-  days?: SettingsProp<string>
-  level?: SettingsProp<string>
+  time: StoredProp<string>
+  timeMode: StoredProp<string>
+  increment: StoredProp<string>
+  color: StoredProp<string>
+  mode?: StoredProp<string>
+  variant: StoredProp<string>
+  ratingMin?: StoredProp<string>
+  ratingMax?: StoredProp<string>
+  days?: StoredProp<string>
+  level?: StoredProp<string>
 }
 
 export interface HumanSettings extends GameSettings {
-  mode: SettingsProp<string>
-  ratingMin: SettingsProp<string>
-  ratingMax: SettingsProp<string>
-  days: SettingsProp<string>
+  mode: StoredProp<string>
+  ratingMin: StoredProp<string>
+  ratingMax: StoredProp<string>
+  days: StoredProp<string>
 }
 
 export interface AiSettings extends GameSettings {
-  level: SettingsProp<string>
+  level: StoredProp<string>
 }
 
 export default {
   general: {
-    lang: localstorageprop<string | null>('settings.lang', null),
-    sound: localstorageprop('settings.sound', true),
+    lang: store.prop<string | null>('settings.lang', null),
+    sound: store.prop('settings.sound', true),
     theme: {
       availableBackgroundThemes: [
         { key: 'dark', name: 'bgThemeDark', ext: '' },
@@ -71,7 +58,7 @@ export default {
         { key: 'wood', name: 'bgThemeWood', ext: 'jpg' },
         { key: 'space', name: 'bgThemeVioletSpace', ext: 'jpg' },
       ],
-      background: localstorageprop('settings.bgTheme', 'dark'),
+      background: store.prop('settings.bgTheme', 'dark'),
       availableBoardThemes: [
         ['boardThemeBrown', 'brown'],
         ['boardThemeBlue', 'blue'],
@@ -100,14 +87,14 @@ export default {
         'riohacha',
         'symmetric'
       ],
-      board: localstorageprop('settings.theme.board', 'brown'),
-      piece: localstorageprop('settings.theme.piece', 'cburnett')
+      board: store.prop('settings.theme.board', 'brown'),
+      piece: store.prop('settings.theme.piece', 'cburnett')
     },
-    vibrateOnGameEvents: localstorageprop('settings.vibrateOnGameEvents', false),
+    vibrateOnGameEvents: store.prop('settings.vibrateOnGameEvents', false),
     notifications: {
-      allow: localstorageprop('settings.notifications', true),
-      vibrate: localstorageprop('settings.notifications.vibrate', true),
-      sound: localstorageprop('settings.notifications.sound', true)
+      allow: store.prop('settings.notifications', true),
+      vibrate: store.prop('settings.notifications.vibrate', true),
+      sound: store.prop('settings.notifications.sound', true)
     }
   },
 
@@ -115,13 +102,13 @@ export default {
     supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
       'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings', 'crazyhouse'
     ],
-    animations: localstorageprop('settings.gameAnimations', true),
-    highlights: localstorageprop('settings.boardHighlights', true),
-    pieceDestinations: localstorageprop('settings.pieceDestinations', true),
-    coords: localstorageprop('settings.coords', true),
-    magnified: localstorageprop('settings.pieceMagnified', true),
-    pieceNotation: localstorageprop('settings.pieceNotation', true),
-    zenMode: localstorageprop('settings.zenMode', false)
+    animations: store.prop('settings.gameAnimations', true),
+    highlights: store.prop('settings.boardHighlights', true),
+    pieceDestinations: store.prop('settings.pieceDestinations', true),
+    coords: store.prop('settings.coords', true),
+    magnified: store.prop('settings.pieceMagnified', true),
+    pieceNotation: store.prop('settings.pieceNotation', true),
+    zenMode: store.prop('settings.zenMode', false)
   },
 
   analyse: {
@@ -129,20 +116,20 @@ export default {
       'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings', 'crazyhouse'
     ],
     availableVariants: offlineAvailableVariants,
-    syntheticVariant: localstorageprop<VariantKey>('settings.analyse.syntheticVariant', 'standard'),
-    enableCeval: localstorageprop('settings.analyse.enableCeval', false),
-    cevalMultiPvs: localstorageprop<number>('settings.ceval.multipv', 1),
-    cevalCores: localstorageprop<number>('settings.ceval.cores', 1),
-    cevalInfinite: localstorageprop<boolean>('settings.ceval.infinite', false),
-    showBestMove: localstorageprop('settings.analyse.showBestMove', true),
-    showComments: localstorageprop('settings.analyse.showComments', true),
-    smallBoard: localstorageprop('settings.analyse.smallBoard', true),
+    syntheticVariant: store.prop<VariantKey>('settings.analyse.syntheticVariant', 'standard'),
+    enableCeval: store.prop('settings.analyse.enableCeval', false),
+    cevalMultiPvs: store.prop<number>('settings.ceval.multipv', 1),
+    cevalCores: store.prop<number>('settings.ceval.cores', 1),
+    cevalInfinite: store.prop<boolean>('settings.ceval.infinite', false),
+    showBestMove: store.prop('settings.analyse.showBestMove', true),
+    showComments: store.prop('settings.analyse.showComments', true),
+    smallBoard: store.prop('settings.analyse.smallBoard', true),
     explorer: {
-      db: localstorageprop('settings.analyse.explorer.db', 'lichess'),
+      db: store.prop('settings.analyse.explorer.db', 'lichess'),
       availableRatings: [1600, 1800, 2000, 2200, 2500],
-      rating: localstorageprop('settings.analyse.explorer.rating', [1600, 1800, 2000, 2200, 2500]),
+      rating: store.prop('settings.analyse.explorer.rating', [1600, 1800, 2000, 2200, 2500]),
       availableSpeeds: ['bullet', 'blitz', 'rapid', 'classical'],
-      speed: localstorageprop('settings.analyse.explorer.speed', ['bullet', 'blitz', 'rapid', 'classical'])
+      speed: store.prop('settings.analyse.explorer.speed', ['bullet', 'blitz', 'rapid', 'classical'])
     }
   },
 
@@ -157,19 +144,19 @@ export default {
       ['Stockfish', '7'],
       ['Stockfish', '8']
     ],
-    color: localstorageprop<Color | 'random'>('settings.ai.color', 'white'),
-    opponent: localstorageprop('settings.ai.opponent', '1'),
-    variant: localstorageprop<VariantKey>('settings.ai.variant', 'standard'),
+    color: store.prop<Color | 'random'>('settings.ai.color', 'white'),
+    opponent: store.prop('settings.ai.opponent', '1'),
+    variant: store.prop<VariantKey>('settings.ai.variant', 'standard'),
     availableVariants: offlineAvailableVariants
   },
 
   otb: {
-    flipPieces: localstorageprop('settings.otb.flipPieces', false),
-    useSymmetric: localstorageprop('settings.otb.useSymmetric', false),
-    variant: localstorageprop<VariantKey>('settings.otb.variant', 'standard'),
+    flipPieces: store.prop('settings.otb.flipPieces', false),
+    useSymmetric: store.prop('settings.otb.useSymmetric', false),
+    variant: store.prop<VariantKey>('settings.otb.variant', 'standard'),
     availableVariants: offlineAvailableVariants,
-    whitePlayer: localstorageprop('settings.otb.whitePlayer', 'White'),
-    blackPlayer: localstorageprop('settings.otb.blackPlayer', 'Black'),
+    whitePlayer: store.prop('settings.otb.whitePlayer', 'White'),
+    blackPlayer: store.prop('settings.otb.blackPlayer', 'Black'),
 
     clock: {
       availableClocks: [
@@ -183,41 +170,41 @@ export default {
         ['Stage', 'stage']
       ],
 
-      clockType: localstorageprop<ClockTypeWithNone>('settings.otb.clock.clockType', 'none'),
+      clockType: store.prop<ClockTypeWithNone>('settings.otb.clock.clockType', 'none'),
 
       simple: {
-        time: localstorageprop('settings.otb.clock.simple.time', '5')
+        time: store.prop('settings.otb.clock.simple.time', '5')
       },
 
       increment: {
-        time: localstorageprop('settings.otb.clock.increment.time', '3'),
-        increment: localstorageprop('settings.otb.clock.increment.increment', '2')
+        time: store.prop('settings.otb.clock.increment.time', '3'),
+        increment: store.prop('settings.otb.clock.increment.increment', '2')
       },
 
       handicapInc: {
-        topTime: localstorageprop('settings.otb.clock.handicapInc.topTime', '3'),
-        topIncrement: localstorageprop('settings.otb.clock.handicapInc.topIncrement', '2'),
-        bottomTime: localstorageprop('settings.otb.clock.handicapInc.bottomTime', '3'),
-        bottomIncrement: localstorageprop('settings.otb.clock.handicapInc.bottomIncrement', '2')
+        topTime: store.prop('settings.otb.clock.handicapInc.topTime', '3'),
+        topIncrement: store.prop('settings.otb.clock.handicapInc.topIncrement', '2'),
+        bottomTime: store.prop('settings.otb.clock.handicapInc.bottomTime', '3'),
+        bottomIncrement: store.prop('settings.otb.clock.handicapInc.bottomIncrement', '2')
       },
 
       delay: {
-        time: localstorageprop('settings.otb.clock.delay.time', '3'),
-        increment: localstorageprop('settings.otb.clock.delay.increment', '2')
+        time: store.prop('settings.otb.clock.delay.time', '3'),
+        increment: store.prop('settings.otb.clock.delay.increment', '2')
       },
 
       bronstein: {
-        time: localstorageprop('settings.otb.clock.bronstein.time', '3'),
-        increment: localstorageprop('settings.otb.clock.bronstein.increment', '2')
+        time: store.prop('settings.otb.clock.bronstein.time', '3'),
+        increment: store.prop('settings.otb.clock.bronstein.increment', '2')
       },
 
       hourglass: {
-        time: localstorageprop('settings.otb.clock.hourglass.time', '5')
+        time: store.prop('settings.otb.clock.hourglass.time', '5')
       },
 
       stage: {
-        stages: localstorageprop('settings.otb.clock.stage.stages', [{time: '120', moves: '40'}, {time: '60', moves: null}]),
-        increment: localstorageprop('settings.otb.clock.stage.increment', '30')
+        stages: store.prop('settings.otb.clock.stage.stages', [{time: '120', moves: '40'}, {time: '60', moves: null}]),
+        increment: store.prop('settings.otb.clock.stage.increment', '30')
       },
 
       availableTimes: [['0', '0'], ['½', '0.5'], ['¾', '0.75'], ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'], ['6', '6'], ['7', '7'], ['8', '8'], ['9', '9'], ['10', '10'], ['15', '15'], ['20', '20'], ['25', '25'], ['30', '30'], ['45', '45'], ['60', '60'], ['90', '90'], ['120', '120'], ['150', '150'], ['180', '180']
@@ -243,41 +230,41 @@ export default {
       ['Stage', 'stage']
     ],
 
-    clockType: localstorageprop<ClockType>('settings.clock.clockType', 'simple'),
+    clockType: store.prop<ClockType>('settings.clock.clockType', 'simple'),
 
     simple: {
-      time: localstorageprop('settings.clock.simple.time', '5')
+      time: store.prop('settings.clock.simple.time', '5')
     },
 
     increment: {
-      time: localstorageprop('settings.clock.increment.time', '3'),
-      increment: localstorageprop('settings.clock.increment.increment', '2')
+      time: store.prop('settings.clock.increment.time', '3'),
+      increment: store.prop('settings.clock.increment.increment', '2')
     },
 
     handicapInc: {
-      topTime: localstorageprop('settings.clock.handicapInc.topTime', '3'),
-      topIncrement: localstorageprop('settings.clock.handicapInc.topIncrement', '2'),
-      bottomTime: localstorageprop('settings.clock.handicapInc.bottomTime', '3'),
-      bottomIncrement: localstorageprop('settings.clock.handicapInc.bottomIncrement', '2')
+      topTime: store.prop('settings.clock.handicapInc.topTime', '3'),
+      topIncrement: store.prop('settings.clock.handicapInc.topIncrement', '2'),
+      bottomTime: store.prop('settings.clock.handicapInc.bottomTime', '3'),
+      bottomIncrement: store.prop('settings.clock.handicapInc.bottomIncrement', '2')
     },
 
     delay: {
-      time: localstorageprop('settings.clock.delay.time', '3'),
-      increment: localstorageprop('settings.clock.delay.increment', '2')
+      time: store.prop('settings.clock.delay.time', '3'),
+      increment: store.prop('settings.clock.delay.increment', '2')
     },
 
     bronstein: {
-      time: localstorageprop('settings.clock.bronstein.time', '3'),
-      increment: localstorageprop('settings.clock.bronstein.increment', '2')
+      time: store.prop('settings.clock.bronstein.time', '3'),
+      increment: store.prop('settings.clock.bronstein.increment', '2')
     },
 
     hourglass: {
-      time: localstorageprop('settings.clock.hourglass.time', '5')
+      time: store.prop('settings.clock.hourglass.time', '5')
     },
 
     stage: {
-      stages: localstorageprop('settings.clock.stage.stages', [{time: '120', moves: '40'}, {time: '60', moves: null}]),
-      increment: localstorageprop('settings.clock.stage.increment', '30')
+      stages: store.prop('settings.clock.stage.stages', [{time: '120', moves: '40'}, {time: '60', moves: null}]),
+      increment: store.prop('settings.clock.stage.increment', '30')
     },
 
     availableTimes: [['0', '0'], ['½', '0.5'], ['¾', '0.75'], ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'], ['6', '6'], ['7', '7'], ['8', '8'], ['9', '9'], ['10', '10'], ['15', '15'], ['20', '20'], ['25', '25'], ['30', '30'], ['45', '45'], ['60', '60'], ['90', '90'], ['120', '120'], ['150', '150'], ['180', '180']
@@ -305,7 +292,7 @@ export default {
     },
 
     ai: {
-      color: localstorageprop('settings.game.ai.color', 'random'),
+      color: store.prop('settings.game.ai.color', 'random'),
       availableVariants: [
         ['Standard', '1'],
         ['Crazyhouse', '10'],
@@ -318,16 +305,16 @@ export default {
         ['Racing Kings', '9'],
         ['From Position', '3']
       ],
-      variant: localstorageprop('settings.game.ai.variant', '1'),
+      variant: store.prop('settings.game.ai.variant', '1'),
       availableTimeModes: [
         ['unlimited', '0'],
         ['realTime', '1']
       ],
-      timeMode: localstorageprop('settings.game.ai.clock', '1'),
-      time: localstorageprop('settings.game.ai.time', '10'),
-      increment: localstorageprop('settings.game.ai.increment', '0'),
-      days: localstorageprop('settings.game.ai.days', '2'),
-      level: localstorageprop('settings.game.ai.aiLevel', '3')
+      timeMode: store.prop('settings.game.ai.clock', '1'),
+      time: store.prop('settings.game.ai.time', '10'),
+      increment: store.prop('settings.game.ai.increment', '0'),
+      days: store.prop('settings.game.ai.days', '2'),
+      level: store.prop('settings.game.ai.aiLevel', '3')
     },
 
     human: {
@@ -346,22 +333,22 @@ export default {
         min: range(800, 2900, 100).map(tupleOf),
         max: range(900, 3000, 100).map(tupleOf)
       },
-      ratingMin: localstorageprop('settings.game.human.rating.min', '800'),
-      ratingMax: localstorageprop('settings.game.human.rating.max', '2900'),
-      color: localstorageprop('settings.game.human.color', 'random'),
-      variant: localstorageprop('settings.game.human.variant', '1'),
+      ratingMin: store.prop('settings.game.human.rating.min', '800'),
+      ratingMax: store.prop('settings.game.human.rating.max', '2900'),
+      color: store.prop('settings.game.human.color', 'random'),
+      variant: store.prop('settings.game.human.variant', '1'),
       availableTimeModes: [
         ['realTime', '1'],
         ['correspondence', '2'],
         ['unlimited', '0']
       ],
-      timeMode: localstorageprop('settings.game.human.clock', '1'),
-      time: localstorageprop('settings.game.human.time', '5'),
-      increment: localstorageprop('settings.game.human.increment', '0'),
-      days: localstorageprop('settings.game.human.days', '2'),
-      mode: localstorageprop('settings.game.human.mode', '0'),
-      preset: localstorageprop('settings.game.human.preset', 'quick'),
-      pool: localstorageprop('settings.game.human.pool', ''),
+      timeMode: store.prop('settings.game.human.clock', '1'),
+      time: store.prop('settings.game.human.time', '5'),
+      increment: store.prop('settings.game.human.increment', '0'),
+      days: store.prop('settings.game.human.days', '2'),
+      mode: store.prop('settings.game.human.mode', '0'),
+      preset: store.prop('settings.game.human.preset', 'quick'),
+      pool: store.prop('settings.game.human.pool', ''),
     },
 
     challenge: {
@@ -377,18 +364,18 @@ export default {
         ['Racing Kings', '9'],
         ['From Position', '3']
       ],
-      color: localstorageprop('settings.game.invite.color', 'random'),
-      variant: localstorageprop('settings.game.invite.variant', '1'),
+      color: store.prop('settings.game.invite.color', 'random'),
+      variant: store.prop('settings.game.invite.variant', '1'),
       availableTimeModes: [
         ['realTime', '1'],
         ['correspondence', '2'],
         ['unlimited', '0']
       ],
-      timeMode: localstorageprop('settings.game.invite.clock', '1'),
-      time: localstorageprop('settings.game.invite.time', '5'),
-      increment: localstorageprop('settings.game.invite.increment', '0'),
-      days: localstorageprop('settings.game.invite.days', '2'),
-      mode: localstorageprop('settings.game.invite.mode', '0')
+      timeMode: store.prop('settings.game.invite.clock', '1'),
+      time: store.prop('settings.game.invite.time', '5'),
+      increment: store.prop('settings.game.invite.increment', '0'),
+      days: store.prop('settings.game.invite.days', '2'),
+      mode: store.prop('settings.game.invite.mode', '0')
     }
   },
 
@@ -412,22 +399,22 @@ export default {
     availableIncrements: ['0', '1', '2'],
     availableDurations: ['20', '25', '30', '35', '40', '45', '50', '55', '60', '70', '80', '90', '100', '110', '120'],
     availableTimesToStart: ['1', '2', '3', '5', '10', '15', '20', '30', '45', '60'],
-    variant: localstorageprop('settings.tournament.variant', '1'),
-    mode: localstorageprop('settings.tournament.mode', '0'),
-    time: localstorageprop('settings.tournament.time', '5'),
-    increment: localstorageprop('settings.tournament.increment', '0'),
-    duration: localstorageprop('settings.tournament.duration', '45'),
-    timeToStart: localstorageprop('settings.tournament.timeToStart', '15'),
-    position: localstorageprop('settings.tournament.timeToStart', '15'),
-    private: localstorageprop('settings.tournament.private', false)
+    variant: store.prop('settings.tournament.variant', '1'),
+    mode: store.prop('settings.tournament.mode', '0'),
+    time: store.prop('settings.tournament.time', '5'),
+    increment: store.prop('settings.tournament.increment', '0'),
+    duration: store.prop('settings.tournament.duration', '45'),
+    timeToStart: store.prop('settings.tournament.timeToStart', '15'),
+    position: store.prop('settings.tournament.timeToStart', '15'),
+    private: store.prop('settings.tournament.private', false)
   },
 
   tv: {
-    channel: localstorageprop('settings.tv.channel', 'best')
+    channel: store.prop('settings.tv.channel', 'best')
   },
 
   importer: {
-    analyse: localstorageprop('importer.analyse', false)
+    analyse: store.prop('importer.analyse', false)
   },
 
   training: {

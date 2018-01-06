@@ -1,9 +1,9 @@
 import { PuzzleOutcome, UserData as PuzzleUserData } from '../../lichess/interfaces/training'
 import { OfflinePuzzle } from './interfaces'
-import { localstorageprop } from '../../settings'
+import store from '../../storage'
 
 export default {
-  unsolvedPuzzles: localstorageprop<OfflinePuzzle[]>('training.unsolvedPuzzles', []),
-  solvedPuzzles: localstorageprop<PuzzleOutcome[]>('training.solvedPuzzles', []),
-  user: localstorageprop<PuzzleUserData | undefined>('training.user', undefined),
+  unsolvedPuzzles: store.prop<OfflinePuzzle[]>('training.unsolvedPuzzles', []),
+  solvedPuzzles: store.prop<PuzzleOutcome[]>('training.solvedPuzzles', []),
+  user: store.prop<PuzzleUserData | undefined>('training.user', undefined),
 }

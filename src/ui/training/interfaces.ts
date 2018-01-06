@@ -1,5 +1,5 @@
 import { Game, PuzzleData, PuzzleOutcome, UserData as PuzzleUserData } from '../../lichess/interfaces/training'
-import { SettingsProp } from '../../settings'
+import { StoredProp } from '../../storage'
 import { OfflinePuzzle } from './interfaces'
 
 export interface Data extends PuzzleData {
@@ -12,9 +12,9 @@ export interface OfflinePuzzle extends PuzzleData {
 }
 
 export interface OfflinePuzzleDatabase {
-  unsolvedPuzzles: SettingsProp<OfflinePuzzle[]>,
-  solvedPuzzles: SettingsProp<PuzzleOutcome[]>,
-  user: SettingsProp<PuzzleUserData | undefined>,
+  unsolvedPuzzles: StoredProp<OfflinePuzzle[]>,
+  solvedPuzzles: StoredProp<PuzzleOutcome[]>,
+  user: StoredProp<PuzzleUserData | undefined>,
 }
 
 export interface PimpedGame extends Game {

@@ -5,12 +5,12 @@ import layout from '../layout'
 import i18n from '../../i18n'
 import session from '../../session'
 import { LichessPropOption, ChallengeChoices, Challenge } from '../../lichess/prefs'
-import { SettingsProp } from '../../settings'
+import { StoredProp } from '../../storage'
 import * as h from 'mithril/hyperscript'
 
 interface Ctrl {
-  follow: SettingsProp<boolean>
-  challenge: SettingsProp<number>
+  follow: StoredProp<boolean>
+  challenge: StoredProp<number>
 }
 
 export default {

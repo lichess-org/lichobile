@@ -4,16 +4,16 @@ import layout from '../layout'
 import i18n from '../../i18n'
 import * as helper from '../helper'
 import session from '../../session'
-import { SettingsProp } from '../../settings'
+import { StoredProp } from '../../storage'
 import { LichessPropOption, Takeback, SubmitMove, AutoQueen, AutoThreefold, SubmitMoveChoices, TakebackChoices, AutoQueenChoices, AutoThreefoldChoices } from '../../lichess/prefs'
 import * as h from 'mithril/hyperscript'
 
 interface Ctrl {
-  readonly premove: SettingsProp<boolean>
-  readonly takeback: SettingsProp<number>
-  readonly autoQueen: SettingsProp<number>
-  readonly autoThreefold: SettingsProp<number>
-  readonly submitMove: SettingsProp<number>
+  readonly premove: StoredProp<boolean>
+  readonly takeback: StoredProp<number>
+  readonly autoQueen: StoredProp<number>
+  readonly autoThreefold: StoredProp<number>
+  readonly submitMove: StoredProp<number>
 }
 
 interface State {

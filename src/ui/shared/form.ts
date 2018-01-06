@@ -1,7 +1,7 @@
 import i18n from '../../i18n'
 import redraw from '../../utils/redraw'
 import * as h from 'mithril/hyperscript'
-import { SettingsProp } from '../../settings'
+import { StoredProp } from '../../storage'
 
 type SelectOption = string[]
 type SelectOptionGroup = Array<SelectOption>
@@ -39,11 +39,11 @@ export default {
     label: string,
     name: string,
     options: Array<SelectOption>,
-    settingsProp: SettingsProp<string>,
+    settingsProp: StoredProp<string>,
     isDisabled?: boolean,
     onChangeCallback?: (v: string) => void
   ) {
-    const storedValue = settingsProp()
+    const prop = settingsProp()
     return [
       h('label', {
         'for': 'select_' + name
@@ -57,7 +57,7 @@ export default {
           if (onChangeCallback) onChangeCallback(val)
           setTimeout(redraw, 10)
         }
-      }, options.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])))
+      }, options.map(e => renderOption(e[0], e[1], prop, e[2], e[3])))
     ]
   },
 
@@ -65,10 +65,10 @@ export default {
     label: string,
     name: string,
     options: Array<LichessPropOption>,
-    settingsProp: SettingsProp<number>,
+    settingsProp: StoredProp<number>,
     isDisabled?: boolean
   ) {
-    const storedValue = settingsProp()
+    const prop = settingsProp()
     return [
       h('label', {
         'for': 'select_' + name
@@ -80,14 +80,14 @@ export default {
           const val = (e.target as HTMLSelectElement).value
           settingsProp(~~val)
         }
-      }, options.map(e => renderLichessPropOption(e[1], e[0], storedValue, e[2])))
+      }, options.map(e => renderLichessPropOption(e[1], e[0], prop, e[2])))
     ]
   },
 
   renderCheckbox(
     label: string,
     name: string,
-    settingsProp: SettingsProp<boolean>,
+    settingsProp: StoredProp<boolean>,
     callback?: (v: boolean) => void,
     disabled?: boolean
   ) {
@@ -116,11 +116,11 @@ export default {
     label: string,
     name: string,
     options: Array<Array<string | SelectOptionGroup>>,
-    settingsProp: SettingsProp<string>,
+    settingsProp: StoredProp<string>,
     isDisabled?: boolean,
     onChangeCallback?: (v: string) => void
   ) {
-    const storedValue = settingsProp()
+    const prop = settingsProp()
     return [
       h('label', {
         'for': 'select_' + name
@@ -134,7 +134,7 @@ export default {
           if (onChangeCallback) onChangeCallback(val)
           setTimeout(() => redraw(), 10)
         }
-      }, options.map(e => renderOptionGroup(e[0] as string, e[1], storedValue, e[2] as string, e[3] as string)))
+      }, options.map(e => renderOptionGroup(e[0] as string, e[1], prop, e[2] as string, e[3] as string)))
     ]
   },
 
@@ -144,7 +144,7 @@ export default {
     min: number,
     max: number,
     step: number,
-    prop: SettingsProp<number>,
+    prop: StoredProp<number>,
     onChange: (v: number) => void
   ) {
     const value = prop()
@@ -169,34 +169,34 @@ export default {
   }
 }
 
-function renderOption(label: string, value: string, storedValue: string, labelArg?: string, labelArg2?: string) {
+function renderOption(label: string, value: string, prop: string, labelArg?: string, labelArg2?: string) {
   const l = labelArg && labelArg2 ? i18n(label, labelArg, labelArg2) :
     labelArg ? i18n(label, labelArg) : i18n(label)
   return h('option', {
     key: value,
     value,
-    selected: storedValue === value
+    selected: prop === value
   }, l)
 }
 
-function renderLichessPropOption(label: string, value: number, storedValue: number, labelArg?: string) {
+function renderLichessPropOption(label: string, value: number, prop: number, labelArg?: string) {
   const l = labelArg ? i18n(label, labelArg) : i18n(label)
   return h('option', {
     key: value,
     value,
-    selected: storedValue === value
+    selected: prop === value
   }, l)
 }
 
 
-function renderOptionGroup(label: string, value: string | SelectOptionGroup, storedValue: string, labelArg: string, labelArg2: string): Mithril.Children {
+function renderOptionGroup(label: string, value: string | SelectOptionGroup, prop: string, labelArg: string, labelArg2: string): Mithril.Children {
   if (typeof value === 'string') {
-    return renderOption(label, value, storedValue, labelArg, labelArg2)
+    return renderOption(label, value, prop, labelArg, labelArg2)
   }
   else {
     return h('optgroup', {
       key: label,
       label
-    }, value.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])))
+    }, value.map(e => renderOption(e[0], e[1], prop, e[2], e[3])))
   }
 }

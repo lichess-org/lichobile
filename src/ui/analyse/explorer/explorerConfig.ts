@@ -1,21 +1,22 @@
 import * as h from 'mithril/hyperscript'
 import * as helper from '../../helper'
 import router from '../../../router'
-import settings, { SettingsProp } from '../../../settings'
+import settings from '../../../settings'
+import { StoredProp } from '../../../storage'
 import * as stream from 'mithril/stream'
 
 interface Data {
   db: {
     available: string[]
-    selected: SettingsProp<string>
+    selected: StoredProp<string>
   },
   rating: {
     available: number[]
-    selected: SettingsProp<number[]>
+    selected: StoredProp<number[]>
   },
   speed: {
     available: string[]
-    selected: SettingsProp<string[]>
+    selected: StoredProp<string[]>
   }
 }
 
@@ -79,7 +80,7 @@ export default {
       onClose(openedWith !== serialize())
     }
 
-    function toggleMany(c: SettingsProp<any>, value: any) {
+    function toggleMany(c: StoredProp<any>, value: any) {
       if (c().indexOf(value) === -1) c(c().concat([value]))
       else if (c().length > 1) c(c().filter((v: any) => {
         return v !== value

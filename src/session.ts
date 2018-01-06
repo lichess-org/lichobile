@@ -12,7 +12,7 @@ import push from './push'
 import settings from './settings'
 import friendsApi from './lichess/friends'
 import challengesApi from './lichess/challenges'
-import { SettingsProp } from './settings'
+import { StoredProp } from './storage'
 
 import { LobbyData, NowPlayingGame } from './lichess/interfaces'
 
@@ -137,7 +137,7 @@ function savePreferences() {
   }, true)
 }
 
-function lichessBackedProp<T extends string | number | boolean>(path: string, prefRequest: () => Promise<string>, defaultVal: T): SettingsProp<T> {
+function lichessBackedProp<T extends string | number | boolean>(path: string, prefRequest: () => Promise<string>, defaultVal: T): StoredProp<T> {
   return function() {
     if (arguments.length) {
       let oldPref: T

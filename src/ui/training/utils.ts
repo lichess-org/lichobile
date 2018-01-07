@@ -7,8 +7,10 @@ import { OfflinePuzzle, Database, OfflineData } from './database'
 export function syncPuzzles(database: Database, user: Session): Promise<OfflineData> {
   return database.fetch(user.id)
   .then(data => {
-    const unsolved = data.unsolved
-    const puzzleDeficit = Math.max(settings.training.puzzleBufferLen - unsolved.length, 0)
+    const puzzleDeficit = Math.max(
+      settings.training.puzzleBufferLen - data.unsolved.length,
+      0
+    )
 
     return Promise.all([
       puzzleDeficit > 0 ? xhr.newPuzzles(puzzleDeficit) : Promise.resolve({

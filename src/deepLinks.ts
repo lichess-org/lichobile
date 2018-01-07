@@ -14,6 +14,7 @@ export default {
     universalLinks.subscribe('analysisPosition', handleAnalysisPosition)
     universalLinks.subscribe('challenge', (eventData: UniversalLinks.EventData) => router.set('/challenge/' + eventData.path.split('/').pop()))
     universalLinks.subscribe('editor', () => router.set('/editor'))
+    universalLinks.subscribe('editorPosition', handleEditorPosition)
     universalLinks.subscribe('inbox', () => router.set('/inbox'))
     universalLinks.subscribe('inboxNew', () => router.set('/inbox/new'))
     universalLinks.subscribe('players', () => router.set('/players'))
@@ -57,6 +58,13 @@ function handleAnalysisPosition (eventData: UniversalLinks.EventData) {
   let pathSuffix = eventData.path.replace('/analysis', '')
   pathSuffix = cleanFenUri(pathSuffix)
   router.set(`/analyse/fen/${encodeURIComponent(pathSuffix)}`)
+}
+
+// handle links like https://lichess.org/editor/1k6/1r6/2K5/Q7/8/8/8/8_w_-_-
+function handleEditorPosition (eventData: UniversalLinks.EventData) {
+  let pathSuffix = eventData.path.replace('/editor', '')
+  pathSuffix = cleanFenUri(pathSuffix)
+  router.set(`/editor/${encodeURIComponent(pathSuffix)}`)
 }
 
 function handleTrainingProblem (eventData: UniversalLinks.EventData) {

@@ -87,6 +87,7 @@
             <path event="analysisPosition" url="/analysis/*" />
             <path event="challenge" url="/challenge/*" />
             <path event="editor" url="/editor" />
+            <path event="editorPosition" url="/editor/*" />
             <path event="inbox" url="/inbox" />
             <path event="inboxNew" url="/inbox/new" />
             <path event="players" url="/player" />

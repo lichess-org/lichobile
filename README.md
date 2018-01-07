@@ -50,7 +50,7 @@ To build and watch for changes:
 
 ## Run in a browser
 
-   chromium --user-data-dir=/tmp/lichobile-chrom --disable-web-security ~/lichobile/www/index.html
+    $ chromium --user-data-dir=/tmp/lichobile-chrom --disable-web-security ~/lichobile/www/index.html
 
 ## Build cordova application and run on device
 

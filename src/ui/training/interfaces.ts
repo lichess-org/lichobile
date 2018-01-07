@@ -1,20 +1,8 @@
-import { Game, PuzzleData, PuzzleOutcome, UserData as PuzzleUserData } from '../../lichess/interfaces/training'
-import { StoredProp } from '../../storage'
-import { OfflinePuzzle } from './interfaces'
+import { Game, PuzzleData } from '../../lichess/interfaces/training'
 
 export interface Data extends PuzzleData {
   game: PimpedGame
   round?: any
-}
-
-export interface OfflinePuzzle extends PuzzleData {
-  userRating?: number
-}
-
-export interface OfflinePuzzleDatabase {
-  unsolvedPuzzles: StoredProp<OfflinePuzzle[]>,
-  solvedPuzzles: StoredProp<PuzzleOutcome[]>,
-  user: StoredProp<PuzzleUserData | undefined>,
 }
 
 export interface PimpedGame extends Game {

@@ -8,8 +8,8 @@ export interface PuzzleData {
 }
 
 export interface PuzzleSyncData {
-  puzzles: PuzzleData[]
-  user?: UserData
+  readonly puzzles: PuzzleData[]
+  readonly user: UserData
 }
 
 export interface Round {

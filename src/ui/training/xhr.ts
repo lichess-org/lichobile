@@ -42,7 +42,7 @@ export function newPuzzles(num: number): Promise<PuzzleSyncData> {
   })
 }
 
-export function solvePuzzles(outcomes: PuzzleOutcome[]): Promise<any> {
+export function solvePuzzles(outcomes: PuzzleOutcome[]): Promise<void> {
   return fetchJSON(`/training/batch`, {
     method: 'POST',
     body: JSON.stringify({

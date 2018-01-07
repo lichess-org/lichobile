@@ -1,6 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import signals from '../../signals'
 import socket from '../../socket'
+import session from '../../session'
 import redraw from '../../utils/redraw'
 import { handleXhrError, safeStringToNum } from '../../utils'
 import { emptyFen } from '../../utils/fen'
@@ -46,14 +47,24 @@ export default {
         .catch(handleXhrError)
       }
     } else {
-      syncPuzzles(database)
-        .then(() => loadOfflinePuzzle(database))
-        .catch(() => loadOfflinePuzzle(database))
+      const user = session.get()
+      if (user) {
+        syncPuzzles(database, user)
+          .then(() => loadOfflinePuzzle(database, user))
+          .catch(() => loadOfflinePuzzle(database, user))
+          .then((cfg: PuzzleData) => {
+            this.ctrl = new TrainingCtrl(cfg, database)
+            cachedState.ctrl = this.ctrl
+          })
+          .catch(puzzleLoadFailure)
+      }
+      else {
+        xhr.newPuzzle()
         .then((cfg: PuzzleData) => {
           this.ctrl = new TrainingCtrl(cfg, database)
           cachedState.ctrl = this.ctrl
         })
-        .catch(puzzleLoadFailure)
+      }
     }
 
     socket.createDefault()

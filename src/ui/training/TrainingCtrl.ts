@@ -7,6 +7,7 @@ import redraw from '../../utils/redraw'
 import signals from '../../signals'
 import * as chess from '../../chess'
 import * as chessFormat from '../../utils/chessFormat'
+import session from '../../session'
 import sound from '../../sound'
 import settings from '../../settings'
 import { PuzzleData, UserData as PuzzleUserData } from '../../lichess/interfaces/training'
@@ -18,15 +19,16 @@ import moveTest from './moveTest'
 import makeGround from './ground'
 import menu, { IMenuCtrl } from './menu'
 import * as xhr from './xhr'
-import { VM, Data, PimpedGame, Feedback, OfflinePuzzleDatabase } from './interfaces'
+import { VM, Data, PimpedGame, Feedback } from './interfaces'
 import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
+import { Database } from './database'
 
 export default class TrainingCtrl implements PromotingInterface {
   data: Data
   user: PuzzleUserData
   menu: IMenuCtrl
   chessground: Chessground
-  offlineDatabase: OfflinePuzzleDatabase
+  database: Database
 
   // current tree state, cursor, and denormalized node lists
   path: Tree.Path
@@ -43,9 +45,9 @@ export default class TrainingCtrl implements PromotingInterface {
   private tree: TreeWrapper
   private initialData: PuzzleData
 
-  constructor(cfg: PuzzleData, offlineDatabase: OfflinePuzzleDatabase) {
+  constructor(cfg: PuzzleData, database: Database) {
     this.menu = menu.controller(this)
-    this.offlineDatabase = offlineDatabase
+    this.database = database
     this.initialData = cfg
     this.init(cfg)
 
@@ -129,9 +131,17 @@ export default class TrainingCtrl implements PromotingInterface {
   public newPuzzle = () => {
     const onSuccess = (cfg: PuzzleData) => {
       this.init(cfg)
-      this.onPuzzleLoad
+      redraw()
     }
-    loadOfflinePuzzle(this.offlineDatabase).then(onSuccess).catch(puzzleLoadFailure)
+    const user = session.get()
+    if (user) {
+      loadOfflinePuzzle(this.database, user)
+      .then(onSuccess)
+      .catch(puzzleLoadFailure)
+    } else {
+      xhr.newPuzzle()
+      .then(onSuccess)
+    }
   }
 
   public retry = () => {
@@ -152,12 +162,6 @@ export default class TrainingCtrl implements PromotingInterface {
   private init(cfg: PuzzleData) {
 
     router.assignState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
-
-    // TODO remove this and instead associate userId to puzzle db
-    const user = this.offlineDatabase.user()
-    if (user) {
-      this.user = user
-    }
 
     this.vm = {
       mode: 'play',
@@ -372,31 +376,31 @@ export default class TrainingCtrl implements PromotingInterface {
   private sendResult = (win: boolean) => {
     if (this.vm.resultSent) return
     this.vm.resultSent = true
+    const user = session.get()
 
-    if (this.data.online) {
+    if (user && !this.data.online) {
+      this.database.fetch(user.id)
+      .then(data => {
+        this.database.save(user.id, {
+          ...data,
+          solved: data.solved.concat([{
+            id: this.data.puzzle.id,
+            win
+          }]),
+          unsolved: data.unsolved.filter(p => p.puzzle.id === this.data.puzzle.id)
+        })
+        .then(() => {
+          syncPuzzles(this.database, user)
+        })
+      })
+    }
+    else {
       xhr.round({ id: this.data.puzzle.id, win })
       .then((res) => {
         this.data.user = res.user
         redraw()
       })
     }
-    else {
-      const solved = this.offlineDatabase.solvedPuzzles()
-      this.offlineDatabase.solvedPuzzles(solved.concat([{
-        id: this.data.puzzle.id,
-        win
-      }]))
-
-      const unsolved = this.offlineDatabase.unsolvedPuzzles()
-      if (unsolved[0].puzzle.id === this.data.puzzle.id) {
-        this.offlineDatabase.unsolvedPuzzles(unsolved.slice(1))
-      }
-      syncPuzzles(this.offlineDatabase)
-    }
-  }
-
-  private onPuzzleLoad = ()  => {
-    redraw()
   }
 }
 

@@ -1,6 +1,15 @@
 import asyncStorage from '../../asyncStorage'
 import { PuzzleOutcome, PuzzleData, UserData } from '../../lichess/interfaces/training'
 
+const db = {
+  fetch,
+  save,
+}
+
+export default db
+
+export type Database = typeof db
+
 export interface OfflinePuzzle extends PuzzleData {
   userRating?: number
 }
@@ -14,23 +23,9 @@ export interface UserOfflineData {
 type UserId = string
 export type OfflineData = Map<UserId, UserOfflineData>
 
-export interface Database {
-  fetch(userId: UserId): Promise<UserOfflineData>
-  save(userId: UserId, userData: UserOfflineData): Promise<OfflineData>
-}
-
-function fetch(userId: UserId): Promise<UserOfflineData> {
-  return new Promise ((resolve, reject) => {
-    asyncStorage.getItem<OfflineData>('trainingOfflinePuzzles')
-    .then(data => {
-      const userData = data && data.get(userId)
-      if (userData) {
-        resolve(userData)
-      } else {
-        reject(new Error(`No data found for user: ${userId}`))
-      }
-    })
-  })
+function fetch(userId: UserId): Promise<UserOfflineData | null> {
+  return asyncStorage.getItem<OfflineData>('trainingOfflinePuzzles')
+  .then(data => (data && data.get(userId)) || null)
 }
 
 function save(userId: UserId, userData: UserOfflineData): Promise<OfflineData> {
@@ -42,7 +37,3 @@ function save(userId: UserId, userData: UserOfflineData): Promise<OfflineData> {
   })
 }
 
-export default {
-  fetch,
-  save,
-} as Database

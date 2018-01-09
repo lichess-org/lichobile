@@ -51,7 +51,7 @@ export default {
       if (user) {
         syncPuzzles(database, user)
           .then(() => loadOfflinePuzzle(database, user))
-          .catch(() => loadOfflinePuzzle(database, user))
+          .catch(xhr.newPuzzle)
           .then((cfg: PuzzleData) => {
             this.ctrl = new TrainingCtrl(cfg, database)
             cachedState.ctrl = this.ctrl

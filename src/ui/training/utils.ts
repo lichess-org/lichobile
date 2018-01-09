@@ -7,22 +7,25 @@ import { OfflinePuzzle, Database, OfflineData } from './database'
 export function syncPuzzles(database: Database, user: Session): Promise<OfflineData> {
   return database.fetch(user.id)
   .then(data => {
+    const unsolved = data ? data.unsolved : []
+    const solved = data ? data.solved : []
+
     const puzzleDeficit = Math.max(
-      settings.training.puzzleBufferLen - data.unsolved.length,
+      settings.training.puzzleBufferLen - unsolved.length,
       0
     )
 
     return Promise.all([
-      puzzleDeficit > 0 ? xhr.newPuzzles(puzzleDeficit) : Promise.resolve({
+      (data === null || puzzleDeficit > 0) ? xhr.newPuzzles(puzzleDeficit) : Promise.resolve({
         puzzles: [],
         user: data.user,
       }),
-      data.solved.length > 0 ? xhr.solvePuzzles(data.solved) : Promise.resolve(),
+      solved.length > 0 ? xhr.solvePuzzles(solved) : Promise.resolve(),
     ])
     .then(([newData, _]) => {
       return database.save(user.id, {
         user: newData.user,
-        unsolved: data.unsolved.concat(newData.puzzles),
+        unsolved: unsolved.concat(newData.puzzles),
         solved: []
       })
     })
@@ -33,7 +36,7 @@ export function loadOfflinePuzzle(database: Database, user: Session): Promise<Of
   return new Promise((resolve, reject) => {
     database.fetch(user.id)
     .then(data => {
-      if (data.unsolved.length > 0) resolve(data.unsolved[0])
+      if (data && data.unsolved.length > 0) resolve(data.unsolved[0])
       else reject(`No additional offline puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`)
     })
   })

@@ -381,17 +381,20 @@ export default class TrainingCtrl implements PromotingInterface {
     if (user && !this.data.online) {
       this.database.fetch(user.id)
       .then(data => {
-        this.database.save(user.id, {
-          ...data,
-          solved: data.solved.concat([{
-            id: this.data.puzzle.id,
-            win
-          }]),
-          unsolved: data.unsolved.filter(p => p.puzzle.id === this.data.puzzle.id)
-        })
-        .then(() => {
-          syncPuzzles(this.database, user)
-        })
+        // if we reach here there must be data
+        if (data) {
+          this.database.save(user.id, {
+            ...data,
+            solved: data.solved.concat([{
+              id: this.data.puzzle.id,
+              win
+            }]),
+            unsolved: data.unsolved.filter(p => p.puzzle.id !== this.data.puzzle.id)
+          })
+          .then(() => {
+            syncPuzzles(this.database, user)
+          })
+        }
       })
     }
     else {

@@ -13,12 +13,6 @@ const keyRegistry = {
 
 type Key = keyof typeof keyRegistry
 
-interface AsyncStorage {
-  getItem<T>(key: Key): Promise<T | null>
-  setItem<T>(key: Key, value: T): Promise<T>
-  removeItem(key: Key): Promise<void>
-}
-
 export default {
   getItem<T>(key: Key): Promise<T | null> {
     return appStore.getItem(keyRegistry[key])
@@ -29,4 +23,4 @@ export default {
   removeItem(key: Key): Promise<void> {
     return appStore.removeItem(keyRegistry[key])
   }
-} as AsyncStorage
+}

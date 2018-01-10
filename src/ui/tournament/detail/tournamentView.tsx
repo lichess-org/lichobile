@@ -242,7 +242,7 @@ function renderPlayerEntry(userName: string, player: StandingPlayer) {
     <tr key={player.name} data-player={player.name} className={'list_item' + (isMe ? ' tournament-me' : '')} >
       <td className="tournamentPlayer">
         <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '. ')} </span>
-        <span> {player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span>
+        <span> {player.name + ' (' + player.rating + ') '} </span>
       </td>
       <td className="tournamentPoints">
         <span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon="Q">
@@ -314,7 +314,7 @@ function renderPlace(data: PodiumPlace) {
       <div className="username" oncreate={helper.ontap(() => router.set('/@/' + data.name))}>
         {data.name}
       </div>
-      <div className="rating"> {data.rating} {helper.progress(data.ratingDiff)} </div>
+      <div className="rating"> {data.rating} </div>
       <table className="stats">
         <tr>
           <td className="statName">

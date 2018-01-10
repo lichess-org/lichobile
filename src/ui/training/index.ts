@@ -8,12 +8,11 @@ import { emptyFen } from '../../utils/fen'
 import * as helper from '../helper'
 import layout from '../layout'
 import ViewOnlyBoard from '../shared/ViewOnlyBoard'
-import { syncPuzzles } from './utils'
 import { renderContent, renderHeader, overlay } from './trainingView'
 import * as xhr from './xhr'
 import TrainingCtrl from './TrainingCtrl'
 import { connectingHeader } from '../shared/common'
-import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
+import { syncAndLoadNewPuzzle, puzzleLoadFailure } from './utils'
 import { PuzzleData } from '../../lichess/interfaces/training'
 import database from './database'
 
@@ -49,14 +48,13 @@ export default {
     } else {
       const user = session.get()
       if (user) {
-        syncPuzzles(database, user)
-          .then(() => loadOfflinePuzzle(database, user))
-          .catch(xhr.newPuzzle)
-          .then((cfg: PuzzleData) => {
-            this.ctrl = new TrainingCtrl(cfg, database)
-            cachedState.ctrl = this.ctrl
-          })
-          .catch(puzzleLoadFailure)
+        syncAndLoadNewPuzzle(database, user)
+        .catch(xhr.newPuzzle)
+        .then((cfg: PuzzleData) => {
+          this.ctrl = new TrainingCtrl(cfg, database)
+          cachedState.ctrl = this.ctrl
+        })
+        .catch(puzzleLoadFailure)
       }
       else {
         xhr.newPuzzle()

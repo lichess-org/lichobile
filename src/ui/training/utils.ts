@@ -2,8 +2,19 @@ import * as xhr from './xhr'
 import router from '../../router'
 import { Session } from '../../session'
 import settings from '../../settings'
-import { OfflinePuzzle, Database, OfflineData } from './database'
+import { PuzzleData } from '../../lichess/interfaces/training'
+import { Database, OfflineData } from './database'
 
+/*
+ * Synchronize puzzles with server.
+ * The goal is to keep a queue of 50 (see settings) puzzles in the offline database,
+ * so that they can be played offline at any time.
+ *
+ * Each time a puzzle is solved or a new puzzle is requested, this function is called.
+ * It keeps track of solved puzzles and unsolved ones. Solved ones are synchronized
+ * so that rating is up to date server side, and unsolved ones are downloaded
+ * when needed, ie. when the queue length is less than 50.
+ */
 export function syncPuzzles(database: Database, user: Session): Promise<OfflineData> {
   return database.fetch(user.id)
   .then(data => {
@@ -32,13 +43,26 @@ export function syncPuzzles(database: Database, user: Session): Promise<OfflineD
   })
 }
 
-export function loadOfflinePuzzle(database: Database, user: Session): Promise<OfflinePuzzle> {
+/*
+ * Synchronize puzzles with server and load a new puzzle from offline database.
+ *
+ */
+export function syncAndLoadNewPuzzle(database: Database, user: Session): Promise<PuzzleData> {
   return new Promise((resolve, reject) => {
-    database.fetch(user.id)
-    .then(data => {
-      if (data && data.unsolved.length > 0) resolve(data.unsolved[0])
-      else reject(`No additional offline puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`)
+    syncPuzzles(database, user)
+    .then(() => {
+      database.fetch(user.id)
+      .then(data => {
+        if (data && data.unsolved.length > 0) {
+          resolve(data.unsolved[0])
+        }
+        else {
+          reject(`No additional offline puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`)
+        }
+      })
+      .catch(reject)
     })
+    .catch(reject)
   })
 }
 

@@ -3,8 +3,10 @@ import { select } from 'd3-selection'
 import { scaleLinear } from 'd3-scale'
 import { area as d3Area } from 'd3-shape'
 import { axisLeft } from 'd3-axis'
+import session from '../../session'
 import i18n from '../../i18n'
 import router from '../../router'
+import redraw from '../../utils/redraw'
 import { UserData as PuzzleUserData } from '../../lichess/interfaces/training'
 import loginModal from '../loginModal'
 import popupWidget from '../shared/popup'
@@ -17,16 +19,29 @@ export interface IMenuCtrl {
   close: () => void
   isOpen: () => boolean
   root: TrainingCtrl
+  user: () => PuzzleUserData | null
 }
 
 export default {
 
   controller(root: TrainingCtrl): IMenuCtrl {
     let isOpen = false
+    let puzzleUser: PuzzleUserData | null = null
 
     function open() {
       router.backbutton.stack.push(close)
       isOpen = true
+
+      const user = session.get()
+      if (user) {
+        root.database.fetch(user.id)
+        .then(data => {
+          if (data) {
+            puzzleUser = data.user
+            redraw()
+          }
+        })
+      }
     }
 
     function close(fromBB?: string) {
@@ -38,7 +53,8 @@ export default {
       open,
       close,
       isOpen: () => isOpen,
-      root
+      user: () => puzzleUser,
+      root,
     }
   },
 
@@ -46,24 +62,23 @@ export default {
     return popupWidget(
       'trainingMenu',
       undefined,
-      () => renderTrainingMenu(ctrl.root),
+      () => renderTrainingMenu(ctrl),
       ctrl.isOpen(),
       ctrl.close
     )
   }
 }
 
-function renderTrainingMenu(ctrl: TrainingCtrl) {
-  // TODO review this
-  // if offline we can show last rating graph possibly
-  // but last played puzzle doesn't make sense since we can't access them
-  // and if we do this, in case we're offline we should display an info like
-  // "you are offline, so rating may not be up to date"
-  if (ctrl.user) {
-    return renderUserInfos(ctrl.user)
-  } else if (ctrl.data && ctrl.data.online && ctrl.data.user) {
-    return renderUserInfos(ctrl.data.user)
-  }{
+function renderTrainingMenu(ctrl: IMenuCtrl) {
+  const puzzleUser = ctrl.user()
+
+  if (ctrl.root.data && ctrl.root.data.online && ctrl.root.data.user) {
+    return renderUserInfos(ctrl.root.data.user)
+  }
+  else if (puzzleUser !== null) {
+    return renderUserInfos(puzzleUser)
+  }
+  else {
     return renderSigninBox()
   }
 }

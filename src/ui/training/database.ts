@@ -10,14 +10,10 @@ export default db
 
 export type Database = typeof db
 
-export interface OfflinePuzzle extends PuzzleData {
-  userRating?: number
-}
-
 export interface UserOfflineData {
   user: UserData
   solved: PuzzleOutcome[]
-  unsolved: OfflinePuzzle[]
+  unsolved: PuzzleData[]
 }
 
 type UserId = string

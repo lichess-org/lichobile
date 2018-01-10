@@ -20,7 +20,7 @@ import makeGround from './ground'
 import menu, { IMenuCtrl } from './menu'
 import * as xhr from './xhr'
 import { VM, Data, PimpedGame, Feedback } from './interfaces'
-import { loadOfflinePuzzle, puzzleLoadFailure } from './utils'
+import { syncAndLoadNewPuzzle, puzzleLoadFailure } from './utils'
 import { Database } from './database'
 
 export default class TrainingCtrl implements PromotingInterface {
@@ -135,7 +135,7 @@ export default class TrainingCtrl implements PromotingInterface {
     }
     const user = session.get()
     if (user) {
-      loadOfflinePuzzle(this.database, user)
+      syncAndLoadNewPuzzle(this.database, user)
       .then(onSuccess)
       .catch(puzzleLoadFailure)
     } else {

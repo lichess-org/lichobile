@@ -13,14 +13,13 @@ import settings from '../../settings'
 import { PuzzleData, UserData as PuzzleUserData } from '../../lichess/interfaces/training'
 import promotion from '../shared/offlineRound/promotion'
 import { PromotingInterface } from '../shared/round'
-import { syncPuzzles } from './utils'
 
 import moveTest from './moveTest'
 import makeGround from './ground'
 import menu, { IMenuCtrl } from './menu'
 import * as xhr from './xhr'
 import { VM, Data, PimpedGame, Feedback } from './interfaces'
-import { syncAndLoadNewPuzzle, puzzleLoadFailure } from './utils'
+import { syncPuzzleResult, syncAndLoadNewPuzzle, puzzleLoadFailure } from './offlineService'
 import { Database } from './database'
 
 export default class TrainingCtrl implements PromotingInterface {
@@ -377,28 +376,13 @@ export default class TrainingCtrl implements PromotingInterface {
     if (this.vm.resultSent) return
     this.vm.resultSent = true
     const user = session.get()
+    const outcome = { id: this.data.puzzle.id, win }
 
     if (user && !this.data.online) {
-      this.database.fetch(user.id)
-      .then(data => {
-        // if we reach here there must be data
-        if (data) {
-          this.database.save(user.id, {
-            ...data,
-            solved: data.solved.concat([{
-              id: this.data.puzzle.id,
-              win
-            }]),
-            unsolved: data.unsolved.filter(p => p.puzzle.id !== this.data.puzzle.id)
-          })
-          .then(() => {
-            syncPuzzles(this.database, user)
-          })
-        }
-      })
+      syncPuzzleResult(this.database, user, outcome)
     }
     else {
-      xhr.round({ id: this.data.puzzle.id, win })
+      xhr.round(outcome)
       .then((res) => {
         this.data.user = res.user
         redraw()

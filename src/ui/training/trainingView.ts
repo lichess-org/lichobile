@@ -79,7 +79,7 @@ function renderViewControls(ctrl: TrainingCtrl) {
       oncreate: helper.ontap(ctrl.retry)
     }, [h('span.fa.fa-refresh'), i18n('retryThisPuzzle')]),
     h('div.li-button.training-control.continue', {
-      oncreate: helper.ontap(ctrl.newPuzzle.bind(ctrl, true))
+      oncreate: helper.ontap(ctrl.newPuzzle)
     }, [h('span.fa.fa-play'), i18n('continueTraining')])
   ]
 }

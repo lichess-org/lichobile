@@ -3,7 +3,9 @@ import * as debounce from 'lodash/debounce'
 import Chessground from '../../chessground/Chessground'
 import { build as makeTree, ops as treeOps, path as treePath, TreeWrapper, Tree } from '../shared/tree'
 import router from '../../router'
+import { ErrorResponse } from '../../http'
 import redraw from '../../utils/redraw'
+import { handleXhrError } from '../../utils'
 import signals from '../../signals'
 import * as chess from '../../chess'
 import * as chessFormat from '../../utils/chessFormat'
@@ -129,6 +131,7 @@ export default class TrainingCtrl implements PromotingInterface {
 
   public newPuzzle = () => {
     const onSuccess = (cfg: PuzzleData) => {
+      this.vm.loading = false
       this.init(cfg)
       redraw()
     }
@@ -138,8 +141,11 @@ export default class TrainingCtrl implements PromotingInterface {
       .then(onSuccess)
       .catch(puzzleLoadFailure)
     } else {
+      this.vm.loading = true
+      redraw()
       xhr.newPuzzle()
       .then(onSuccess)
+      .catch(this.onXhrError)
     }
   }
 
@@ -388,6 +394,12 @@ export default class TrainingCtrl implements PromotingInterface {
         redraw()
       })
     }
+  }
+
+  private onXhrError = (res: ErrorResponse) => {
+    this.vm.loading = false
+    redraw()
+    handleXhrError(res)
   }
 }
 

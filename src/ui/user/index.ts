@@ -1,6 +1,6 @@
 import * as helper from '../helper'
 import { loadingBackbutton } from '../shared/common'
-import userCtrl, { UserCtrl } from './userCtrl'
+import UserCtrl, { IUserCtrl } from './UserCtrl'
 import socket from '../../socket'
 import * as view from './userView'
 import layout from '../layout'
@@ -10,14 +10,14 @@ interface Attrs {
 }
 
 interface State {
-  user: UserCtrl
+  user: IUserCtrl
 }
 
 const UserScreen: Mithril.Component<Attrs, State> = {
   oninit({ attrs }) {
     socket.createDefault()
 
-    this.user = userCtrl(attrs.id)
+    this.user = UserCtrl(attrs.id)
   },
 
   oncreate(vnode: Mithril.DOMNode) {

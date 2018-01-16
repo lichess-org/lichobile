@@ -1,5 +1,3 @@
-import { UserFullProfile } from './interfaces/user'
-
 interface Perf {
   name: string
   shortName: string
@@ -24,25 +22,6 @@ const perfMap: { [k: string]: Perf } = {
 export const perfTypes = Object.keys(perfMap).map(k =>
   [k, perfMap[k].name, perfMap[k].shortName]
 )
-
-export default function userPerfs(user: UserFullProfile) {
-  const res = perfTypes.map(p => {
-    const perf = user.perfs[p[0]]
-    return {
-      key: p[0] as PerfKey,
-      name: p[1],
-      perf: perf || '-'
-    }
-  })
-
-  if (user.perfs.puzzle) res.push({
-    key: 'puzzle',
-    name: 'Training',
-    perf: user.perfs.puzzle
-  })
-
-  return res
-}
 
 export function perfTitle(key: PerfKey): string {
   const p = perfMap[key]

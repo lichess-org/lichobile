@@ -6,6 +6,7 @@ import { axisLeft } from 'd3-axis'
 import session from '../../session'
 import i18n from '../../i18n'
 import router from '../../router'
+import { hasNetwork } from '../../utils'
 import redraw from '../../utils/redraw'
 import { UserData as PuzzleUserData } from '../../lichess/interfaces/training'
 import loginModal from '../loginModal'
@@ -115,7 +116,7 @@ function renderUserInfos(user: PuzzleUserData) {
         drawChart(user)
       }
     }) : null,
-    renderRecent(user)
+    hasNetwork() ? renderRecent(user) : null,
   ]
 }
 

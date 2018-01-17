@@ -18,13 +18,26 @@ export function body(ctrl: Ctrl) {
   const nbGames = i18n('nbGamesInPlay', ctrl.nbGamesInPlay() || '?')
 
   if (!hasNetwork()) {
+    const puzzleData = ctrl.offlinePuzzle()
+    const boardConf = puzzleData ? {
+      fen: puzzleData.puzzle.fen,
+      orientation: puzzleData.puzzle.color,
+      link: () => router.set('/training'),
+    } : null
+
     return (
       <div className="page homeOffline">
-        <section id="homeCreate">
+        <section className="playOffline">
           <h2>{i18n('playOffline')}</h2>
           <button className="fatButton" oncreate={helper.ontapY(() => router.set('/ai'))}>{i18n('playOfflineComputer')}</button>
           <button className="fatButton" oncreate={helper.ontapY(() => router.set('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
         </section>
+        { puzzleData && boardConf ?
+        <section className="miniPuzzle">
+          <h2 className="homeTitle">{`${i18n('training')} offline`}</h2>
+          {h(MiniBoard, boardConf)}
+        </section> : undefined
+        }
       </div>
     )
   }
@@ -72,7 +85,7 @@ function renderDailyPuzzle(ctrl: Ctrl) {
   }
 
   return (
-    <section id="dailyPuzzle" key={puzzle ? puzzle.id : 'empty'}>
+    <section className="miniPuzzle" key={puzzle ? puzzle.id : 'empty'}>
       <h2 className="homeTitle">{i18n('puzzleOfTheDay')}</h2>
       {h(MiniBoard, boardConf)}
     </section>

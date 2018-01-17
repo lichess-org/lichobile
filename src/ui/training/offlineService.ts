@@ -32,6 +32,24 @@ export function syncAndLoadNewPuzzle(
 }
 
 /*
+ * Load a new puzzle from offline database.
+ */
+export function loadNewPuzzle(database: Database, user: Session): Promise<PuzzleData> {
+  return new Promise((resolve, reject) => {
+    database.fetch(user.id)
+    .then(data => {
+      if (data && data.unsolved.length > 0) {
+        resolve(data.unsolved[0])
+      }
+      else {
+        reject(`No additional offline puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`)
+      }
+    })
+    .catch(reject)
+  })
+}
+
+/*
  * Save puzzle result in database and synchronize with server.
  */
 export function syncPuzzleResult(

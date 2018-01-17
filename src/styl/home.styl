@@ -38,22 +38,32 @@
 .homeOffline
   flex 1 1 auto
   display flex
-  flex-flow column wrap
+  flex-flow column nowrap
   justify-content center
   h2
-    width 80%
     margin 0 auto
-    font-size 1.5em
+    font-size 1.3em
     font-weight bold
     opacity 0.6
+    &.homeTitle
+      margin-bottom 1em
 
-#homeFeatured, #dailyPuzzle
+.playOffline
+  display flex
+  flex-flow column nowrap
+  justify-content center
+  align-items center
+  margin-bottom 1em
+  > .fatButton
+    margin 1em
+
+#homeFeatured, .miniPuzzle
   display flex
   flex-flow column wrap
   justify-content flex-start
   align-items center
 
-#dailyPuzzle
+.miniPuzzle
   padding-bottom 15px
   .homeTitle
     margin-top 15px

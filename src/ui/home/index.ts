@@ -1,17 +1,22 @@
+import * as stream from 'mithril/stream'
 import socket from '../../socket'
-import * as helper from '../helper'
-import { body } from './homeView'
-import layout from '../layout'
-import { dropShadowHeader } from '../shared/common'
 import redraw from '../../utils/redraw'
 import { timeline as timelineXhr } from '../../xhr'
-import { dailyPuzzle as dailyPuzzleXhr, featuredTournaments as featuredTournamentsXhr } from './homeXhr'
 import { hasNetwork, noop } from '../../utils'
 import { isForeground, setForeground } from '../../utils/appMode'
-import { supportedTypes as supportedTimelineTypes } from '../timeline'
 import { PongMessage, TimelineEntry, DailyPuzzle } from '../../lichess/interfaces'
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
-import * as stream from 'mithril/stream'
+import { PuzzleData } from '../../lichess/interfaces/training'
+import session from '../../session'
+import * as helper from '../helper'
+import layout from '../layout'
+import { dropShadowHeader } from '../shared/common'
+import { supportedTypes as supportedTimelineTypes } from '../timeline'
+import offlinePuzzleDB from '../training/database'
+import { loadNewPuzzle } from '../training/offlineService'
+
+import { dailyPuzzle as dailyPuzzleXhr, featuredTournaments as featuredTournamentsXhr } from './homeXhr'
+import { body } from './homeView'
 
 export interface Ctrl {
   nbConnectedPlayers: Mithril.Stream<number>
@@ -19,6 +24,7 @@ export interface Ctrl {
   dailyPuzzle: Mithril.Stream<any>
   featuredTournaments: Mithril.Stream<Array<TournamentListItem>>
   timeline: Mithril.Stream<Array<any>>
+  offlinePuzzle: Mithril.Stream<PuzzleData | undefined>
   init(): void
   onResume(): void
 }
@@ -30,6 +36,7 @@ export default {
     const dailyPuzzle = stream<DailyPuzzle>()
     const featuredTournaments = stream<TournamentListItem[]>([])
     const timeline = stream<TimelineEntry[]>([])
+    const offlinePuzzle = stream<PuzzleData | undefined>(undefined)
 
     function init() {
       if (isForeground()) {
@@ -71,8 +78,16 @@ export default {
       init()
     }
 
+    const user = session.get()
+
     if (hasNetwork()) {
       init()
+    } else if (user) {
+      loadNewPuzzle(offlinePuzzleDB, user)
+      .then(data => {
+        offlinePuzzle(data)
+        redraw()
+      })
     }
 
     document.addEventListener('online', init)
@@ -84,6 +99,7 @@ export default {
       dailyPuzzle,
       timeline,
       featuredTournaments,
+      offlinePuzzle,
       init,
       onResume
     }

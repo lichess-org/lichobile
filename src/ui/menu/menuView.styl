@@ -32,28 +32,33 @@
   transform translate3d(-100%, 0,0)
   section
     padding 0 15px
-  .login
-    color: #fff;
-    background: #454545;
-    padding: 10px;
-    width: 80%;
-    text-transform: uppercase;
-    margin 10px 0
-    &.active
-      background lighten(#454545, 5%)
   h3
     text-transform uppercase
     color #fff
     font-weight normal
     margin 40px 0px 30px 0
 
+.signInButton
+  display: block;
+  width: 70%;
+  padding: 1em 0.25em;
+  margin: 20px auto;
+  border: 1px solid #323232;
+  background: #111
+  font-weight: bold;
+  border-radius: 2px;
+
 .side_menu_header
+  display flex
+  flex-flow column nowrap
+  justify-content center
   background #1a1a1a
   color darken(#fff, 8%)
-  text-align center
-  position relative
-  padding 10px 0
+  padding 1em 0
+  min-height 65px
   > .kiddo
+    display flex
+    justify-content center
     height 50px
     width 100%
     font-size 46px

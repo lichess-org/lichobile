@@ -53,18 +53,20 @@ function renderHeader(user?: Session) {
   return (
     <header className="side_menu_header">
       { session.isKidMode() ? <div key="kiddo" className="kiddo">😊</div> : null }
-      <h2 className="username" oncreate={helper.ontapXY(profileLink)}>
-        { user && user.patron ?
-          <div className="patron" data-icon="" /> : null
-        }
-        { user ? user.username : 'Anonymous' }
-      </h2>
-      { networkStatus() }
       { hasNetwork() && !user ?
-        <button className="login" oncreate={helper.ontapXY(loginModal.open)}>
+        <button className="signInButton" oncreate={helper.ontapXY(loginModal.open)}>
           {i18n('signIn')}
         </button> : null
       }
+      { user ?
+        <h2 className="username" oncreate={helper.ontapXY(profileLink)}>
+          { user.patron ?
+            <div className="patron" data-icon="" /> : null
+          }
+          {user.username}
+        </h2> : null
+      }
+      { networkStatus() }
     </header>
   )
 }

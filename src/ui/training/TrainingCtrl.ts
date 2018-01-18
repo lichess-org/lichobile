@@ -12,7 +12,7 @@ import * as chessFormat from '../../utils/chessFormat'
 import session from '../../session'
 import sound from '../../sound'
 import settings from '../../settings'
-import { PuzzleData, UserData as PuzzleUserData } from '../../lichess/interfaces/training'
+import { PuzzleData } from '../../lichess/interfaces/training'
 import promotion from '../shared/offlineRound/promotion'
 import { PromotingInterface } from '../shared/round'
 
@@ -26,7 +26,6 @@ import { Database } from './database'
 
 export default class TrainingCtrl implements PromotingInterface {
   data: Data
-  user: PuzzleUserData
   menu: IMenuCtrl
   chessground: Chessground
   database: Database

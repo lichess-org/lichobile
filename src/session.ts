@@ -78,6 +78,7 @@ function restoreStoredSession(): void {
     session = d || undefined
     if (d !== null) {
       signals.sessionRestored.dispatch()
+      redraw()
     }
   })
 }

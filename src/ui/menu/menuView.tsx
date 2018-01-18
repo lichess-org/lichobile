@@ -202,7 +202,7 @@ function renderLinks(user?: Session) {
       <li className="sep_link" key="sep_link_offline">
         {i18n('playOffline')}
       </li>
-      {!hasNetwork() ?
+      {!hasNetwork() && user ?
         <li className="side_link" key="training" data-route="/training">
           <span data-icon="-" />{i18n('training')}
         </li> : null

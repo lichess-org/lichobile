@@ -62,6 +62,7 @@ export default {
           this.ctrl = new TrainingCtrl(cfg, database)
           cachedState.ctrl = this.ctrl
         })
+        .catch(handleXhrError)
       }
     }
 

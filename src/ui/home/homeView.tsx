@@ -26,7 +26,7 @@ export function body(ctrl: Ctrl) {
     } : null
 
     return (
-      <div className="page homeOffline">
+      <div className="page native_scroller homeOffline">
         <section className="playOffline">
           <h2>{i18n('playOffline')}</h2>
           <button className="fatButton" oncreate={helper.ontapY(() => router.set('/ai'))}>{i18n('playOfflineComputer')}</button>
@@ -34,7 +34,7 @@ export function body(ctrl: Ctrl) {
         </section>
         { puzzleData && boardConf ?
         <section className="miniPuzzle">
-          <h2 className="homeTitle">{`${i18n('training')} offline`}</h2>
+          <h2 className="homeTitle">{i18n('training')}</h2>
           {h(MiniBoard, boardConf)}
         </section> : undefined
         }

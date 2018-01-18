@@ -8,6 +8,7 @@ import { PongMessage, TimelineEntry, DailyPuzzle } from '../../lichess/interface
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
 import { PuzzleData } from '../../lichess/interfaces/training'
 import session from '../../session'
+import signals from '../../signals'
 import * as helper from '../helper'
 import layout from '../layout'
 import { dropShadowHeader } from '../shared/common'
@@ -27,6 +28,7 @@ export interface Ctrl {
   offlinePuzzle: Mithril.Stream<PuzzleData | undefined>
   init(): void
   onResume(): void
+  loadOfflinePuzzle(): void
 }
 
 export default {
@@ -78,18 +80,24 @@ export default {
       init()
     }
 
-    const user = session.get()
+    function loadOfflinePuzzle() {
+      const user = session.get()
+      if (user) {
+        loadNewPuzzle(offlinePuzzleDB, user)
+        .then(data => {
+          offlinePuzzle(data)
+          redraw()
+        })
+      }
+    }
 
     if (hasNetwork()) {
       init()
-    } else if (user) {
-      loadNewPuzzle(offlinePuzzleDB, user)
-      .then(data => {
-        offlinePuzzle(data)
-        redraw()
-      })
+    } else {
+      loadOfflinePuzzle()
     }
 
+    signals.sessionRestored.add(loadOfflinePuzzle)
     document.addEventListener('online', init)
     document.addEventListener('resume', onResume)
 
@@ -101,7 +109,8 @@ export default {
       featuredTournaments,
       offlinePuzzle,
       init,
-      onResume
+      onResume,
+      loadOfflinePuzzle,
     }
   },
 
@@ -111,6 +120,7 @@ export default {
     socket.destroy()
     document.removeEventListener('online', this.ctrl.init)
     document.removeEventListener('resume', this.ctrl.onResume)
+    signals.sessionRestored.remove(this.ctrl.loadOfflinePuzzle)
   },
 
   view() {

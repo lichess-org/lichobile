@@ -5,6 +5,7 @@ import * as mapValues from 'lodash/mapValues'
 import * as mapKeys from 'lodash/mapKeys'
 import * as throttle from 'lodash/throttle'
 import redraw from './utils/redraw'
+import signals from './signals'
 import { fetchJSON, fetchText, ErrorResponse } from './http'
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils'
 import i18n from './i18n'
@@ -75,6 +76,9 @@ function restoreStoredSession(): void {
   asyncStorage.getItem<Session>('session')
   .then(d => {
     session = d || undefined
+    if (d !== null) {
+      signals.sessionRestored.dispatch()
+    }
   })
 }
 

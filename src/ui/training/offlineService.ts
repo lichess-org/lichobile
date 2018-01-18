@@ -4,7 +4,7 @@ import settings from '../../settings'
 import { PuzzleData, PuzzleOutcome } from '../../lichess/interfaces/training'
 
 import * as xhr from './xhr'
-import { Database, OfflineData } from './database'
+import { Database, UserOfflineData } from './database'
 
 /*
  * Synchronize puzzles with server and load a new puzzle from offline database.
@@ -15,17 +15,13 @@ export function syncAndLoadNewPuzzle(
 ): Promise<PuzzleData> {
   return new Promise((resolve, reject) => {
     syncPuzzles(database, user)
-    .then(() => {
-      database.fetch(user.id)
-      .then(data => {
-        if (data && data.unsolved.length > 0) {
-          resolve(data.unsolved[0])
-        }
-        else {
-          reject(`No additional offline puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`)
-        }
-      })
-      .catch(reject)
+    .then(data => {
+      if (data && data.unsolved.length > 0) {
+        resolve(data.unsolved[0])
+      }
+      else {
+        reject(`No additional offline puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`)
+      }
     })
     .catch(reject)
   })
@@ -90,8 +86,11 @@ export function puzzleLoadFailure(reason: string) {
  * It keeps track of solved puzzles and unsolved ones. Solved ones are synchronized
  * so that rating is up to date server side, and unsolved ones are downloaded
  * when needed, ie. when the queue length is less than 50.
+ *
+ * Returns a Promise with synchronized data or null if no data was already here
+ * and synchronization could not be performed (when offline for instance).
  */
-function syncPuzzles(database: Database, user: Session): Promise<OfflineData> {
+function syncPuzzles(database: Database, user: Session): Promise<UserOfflineData | null> {
   return database.fetch(user.id)
   .then(data => {
     const unsolved = data ? data.unsolved : []
@@ -115,6 +114,9 @@ function syncPuzzles(database: Database, user: Session): Promise<OfflineData> {
         unsolved: unsolved.concat(newData.puzzles),
         solved: []
       })
+      .then(o => o.get(user.id)!)
     })
+    // when offline, sync cannot be done so we return same data
+    .catch(() => data)
   })
 }

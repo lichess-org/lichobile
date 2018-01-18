@@ -26,18 +26,20 @@ export function body(ctrl: Ctrl) {
     } : null
 
     return (
-      <div className="page native_scroller homeOffline">
-        <section className="playOffline">
-          <h2>{i18n('playOffline')}</h2>
-          <button className="fatButton" oncreate={helper.ontapY(() => router.set('/ai'))}>{i18n('playOfflineComputer')}</button>
-          <button className="fatButton" oncreate={helper.ontapY(() => router.set('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
-        </section>
-        { puzzleData && boardConf ?
-        <section className="miniPuzzle">
-          <h2 className="homeTitle">{i18n('training')}</h2>
-          {h(MiniBoard, boardConf)}
-        </section> : undefined
-        }
+      <div className="page native_scroller">
+        <div className="homeOffline">
+          <section className="playOffline">
+            <h2>{i18n('playOffline')}</h2>
+            <button className="fatButton" oncreate={helper.ontapY(() => router.set('/ai'))}>{i18n('playOfflineComputer')}</button>
+            <button className="fatButton" oncreate={helper.ontapY(() => router.set('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
+          </section>
+          { puzzleData && boardConf ?
+          <section className="miniPuzzle">
+            <h2 className="homeTitle">{i18n('training')}</h2>
+            {h(MiniBoard, boardConf)}
+          </section> : undefined
+          }
+        </div>
       </div>
     )
   }

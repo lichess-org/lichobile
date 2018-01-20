@@ -66,7 +66,7 @@ function renderHeader(user?: Session) {
           {user.username}
         </h2> : null
       }
-      { networkStatus() }
+      { networkStatus(user) }
     </header>
   )
 }
@@ -253,7 +253,7 @@ function profileActionsToggle() {
   )
 }
 
-function networkStatus() {
+function networkStatus(user?: Session) {
   const ping = menu.ping()
   const server = menu.mlat()
   return (
@@ -268,10 +268,12 @@ function networkStatus() {
                 <span className="pingKey">Ping&nbsp;&nbsp;&nbsp;</span>
                 <strong className="pingValue">{socket.isConnected() && ping ? ping : '?'}</strong> ms
               </div>
-              <div>
-                <span className="pingKey">Server&nbsp;</span>
-                <strong className="pingValue">{socket.isConnected() && server ? server : '?'}</strong> ms
-              </div>
+              { user ?
+                <div>
+                  <span className="pingKey">Server&nbsp;</span>
+                  <strong className="pingValue">{socket.isConnected() && server ? server : '?'}</strong> ms
+                </div> : null
+              }
             </div>
           ) : (
             <div>

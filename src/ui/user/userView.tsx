@@ -85,7 +85,7 @@ function renderProfile(user: ProfileUser) {
           }
           <p className="location">
             {location}
-            {country ?
+            {country && hasNetwork() ?
             <span className="country">
               {location ? ',' : ''} <img className="flag" src={lichessAssetSrc('images/flags/' + user.profile.country + '.png')} />
               {country}

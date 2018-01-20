@@ -13,7 +13,7 @@ import session from '../../session'
 import { IUserCtrl, ProfileUser, isSessionUser, isFullUser } from './UserCtrl'
 
 export function header(user: ProfileUser, ctrl: IUserCtrl) {
-  const status = user.online ? 'online' : 'offline'
+  const status = hasNetwork() && user.online ? 'online' : 'offline'
   const icon = user.patron ?
     <span className={'userStatus patron ' + status} data-icon="" /> :
     <span className={'fa fa-circle userStatus ' + status} />

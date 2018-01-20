@@ -23,7 +23,7 @@ export function renderHeader(ctrl: TrainingCtrl) {
     ] as Mithril.Child[]).concat(!ctrl.data.online && !hasNetwork() ? [
       ' • ',
       h('span.fa.fa-database'),
-      `${maxPuzzles + 1 - ctrl.nbUnsolved}/${maxPuzzles}`
+      `${ctrl.nbUnsolved}/${maxPuzzles}`
     ] : [])),
   ]))
 }

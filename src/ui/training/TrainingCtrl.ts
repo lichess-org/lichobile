@@ -21,7 +21,7 @@ import makeGround from './ground'
 import menu, { IMenuCtrl } from './menu'
 import * as xhr from './xhr'
 import { VM, Data, PimpedGame, Feedback } from './interfaces'
-import { syncPuzzleResult, syncAndLoadNewPuzzle, puzzleLoadFailure } from './offlineService'
+import { syncPuzzleResult, syncAndLoadNewPuzzle, nbRemainingPuzzles, puzzleLoadFailure } from './offlineService'
 import { Database } from './database'
 
 export default class TrainingCtrl implements PromotingInterface {
@@ -37,6 +37,8 @@ export default class TrainingCtrl implements PromotingInterface {
   mainline: Tree.Node[]
   initialPath: Tree.Path
   initialNode: Tree.Node
+
+  nbUnsolved: number
 
   vm: VM
 
@@ -175,6 +177,15 @@ export default class TrainingCtrl implements PromotingInterface {
       loading: false,
       canViewSolution: false,
       resultSent: false
+    }
+
+    const user = session.get()
+    if (user) {
+      nbRemainingPuzzles(this.database, user)
+      .then(nb => {
+        this.nbUnsolved = nb
+        redraw()
+      })
     }
 
     const data = cloneDeep(cfg)

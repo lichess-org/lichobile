@@ -46,6 +46,14 @@ export function loadNewPuzzle(database: Database, user: Session): Promise<Puzzle
 }
 
 /*
+ * Get the number of remaining puzzles in unsolved queue
+ */
+export function nbRemainingPuzzles(database: Database, user: Session): Promise<number> {
+  return database.fetch(user.id)
+  .then(data => data && data.unsolved.length || 0)
+}
+
+/*
  * Save puzzle result in database and synchronize with server.
  */
 export function syncPuzzleResult(

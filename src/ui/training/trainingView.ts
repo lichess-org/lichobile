@@ -1,5 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import i18n from '../../i18n'
+import { hasNetwork } from '../../utils'
+import settings from '../../settings'
 import Board, { Bounds } from '../shared/Board'
 import { view as renderPromotion } from '../shared/offlineRound/promotion'
 import { header, connectingHeader } from '../shared/common'
@@ -10,13 +12,19 @@ import TrainingCtrl from './TrainingCtrl'
 
 
 export function renderHeader(ctrl: TrainingCtrl) {
+  const maxPuzzles = settings.training.puzzleBufferLen
+
   return ctrl.vm.loading ?
   connectingHeader() : header(h('div.main_header_title.withSub', [
     h('h1', i18n('puzzleId', ctrl.data.puzzle.id)),
-    h('h2.header-subTitle', [
+    h('h2.header-subTitle', ([
       i18n('rating'), ' ' + (ctrl.vm.mode === 'view' ? ctrl.data.puzzle.rating : '?'),
       ' • ', i18n('playedXTimes', ctrl.data.puzzle.attempts)
-    ])
+    ] as Mithril.Child[]).concat(!ctrl.data.online && !hasNetwork() ? [
+      ' • ',
+      h('span.fa.fa-database'),
+      `${maxPuzzles + 1 - ctrl.nbUnsolved}/${maxPuzzles}`
+    ] : [])),
   ]))
 }
 

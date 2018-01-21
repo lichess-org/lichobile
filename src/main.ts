@@ -109,8 +109,8 @@ function onOnline() {
       getPools()
 
       session.rememberLogin()
-      .then((session) => {
-        const serverLang = session.language && session.language.split('-')[0]
+      .then((user) => {
+        const serverLang = user.language && user.language.split('-')[0]
         if (serverLang) {
           ensureLangIsAvailable(serverLang)
           .then(lang => {
@@ -118,8 +118,6 @@ function onOnline() {
             loadLanguage(lang)
           })
         }
-      })
-      .then(() => {
         push.register()
         challengesApi.refresh()
         syncWithNowPlayingGames(session.nowPlaying())

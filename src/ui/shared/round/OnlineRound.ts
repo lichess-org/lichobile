@@ -145,7 +145,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     )
 
     document.addEventListener('resume', this.onResume)
-    window.plugins.insomnia.keepAwake()
 
     redraw()
   }
@@ -520,7 +519,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
     if (this.clock && o.clock) this.clock.setClock(d, o.clock.wc * .01, o.clock.bc * .01)
 
-    window.plugins.insomnia.allowSleepAgain()
     if (this.data.game.speed === 'correspondence') {
       removeOfflineGameData(this.data.url.round.substr(1))
     }

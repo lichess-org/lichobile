@@ -152,7 +152,6 @@ export default class AnalyseCtrl {
 
     setTimeout(this.debouncedScroll, 250)
     setTimeout(this.initCeval, 1000)
-    window.plugins.insomnia.keepAwake()
   }
 
   canDrop = () => {

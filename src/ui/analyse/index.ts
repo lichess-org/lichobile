@@ -3,6 +3,7 @@ import socket from '../../socket'
 import settings from '../../settings'
 import router from '../../router'
 import redraw from '../../utils/redraw'
+import * as sleepUtils from '../../utils/sleep'
 import { handleXhrError, safeStringToNum } from '../../utils'
 import i18n from '../../i18n'
 import { specialFenVariants } from '../../lichess/variant'
@@ -46,6 +47,8 @@ export default {
     const tab = safeStringToNum(vnode.attrs.tab)
 
     const shouldGoBack = gameId !== undefined
+
+    sleepUtils.keepAwake()
 
     if (source === 'online' && gameId) {
       const now = performance.now()
@@ -114,7 +117,7 @@ export default {
   },
 
   onremove() {
-    window.plugins.insomnia.allowSleepAgain()
+    sleepUtils.allowSleepAgain()
     socket.destroy()
     if (this.ctrl) {
       this.ctrl.unload()

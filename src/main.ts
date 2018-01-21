@@ -14,7 +14,8 @@ import { hasNetwork } from './utils'
 import { syncWithNowPlayingGames } from './utils/offlineGames'
 import redraw from './utils/redraw'
 import session from './session'
-import { loadPreferredLanguage, getLang } from './i18n'
+import settings from './settings'
+import { loadPreferredLanguage, ensureLangIsAvailable, loadLanguage } from './i18n'
 import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
 import * as helper from './ui/helper'
@@ -108,14 +109,22 @@ function onOnline() {
       getPools()
 
       session.rememberLogin()
+      .then((session) => {
+        const serverLang = session.language && session.language.split('-')[0]
+        if (serverLang) {
+          ensureLangIsAvailable(serverLang)
+          .then(lang => {
+            settings.general.lang(lang)
+            loadLanguage(lang)
+          })
+        }
+      })
       .then(() => {
         push.register()
         challengesApi.refresh()
+        syncWithNowPlayingGames(session.nowPlaying())
         redraw()
       })
-      .then(session.nowPlaying)
-      .then(syncWithNowPlayingGames)
-      .then(() => xhr.setServerLang(getLang()))
       .catch(() => {
         console.log('connected as anonymous')
       })

@@ -88,7 +88,7 @@ export function getOfflineGameData(id: string): OnlineGameData | null {
   return stored && stored[id]
 }
 
-export function saveOfflineGameData(id: string, gameData: OnlineGameData) {
+export function saveOfflineGameData(id: string, gameData: OnlineGameData): void {
   const stored = storage.get<StoredOfflineGames>(offlineCorresStorageKey) || {}
   const toStore = cloneDeep(gameData)
   toStore.player.onGame = false
@@ -100,7 +100,7 @@ export function saveOfflineGameData(id: string, gameData: OnlineGameData) {
   nbOfflineGames = undefined
 }
 
-export function removeOfflineGameData(id: string) {
+export function removeOfflineGameData(id: string): void {
   const stored = storage.get<StoredOfflineGames>(offlineCorresStorageKey)
   if (stored && stored[id]) {
     delete stored[id]
@@ -109,7 +109,7 @@ export function removeOfflineGameData(id: string) {
   storage.set(offlineCorresStorageKey, stored)
 }
 
-export function syncWithNowPlayingGames(nowPlaying: Array<NowPlayingGame>) {
+export function syncWithNowPlayingGames(nowPlaying: Array<NowPlayingGame>): void {
   if (nowPlaying === undefined) return
 
   const stored = storage.get<StoredOfflineGames>(offlineCorresStorageKey) || {}

@@ -245,27 +245,25 @@ function rememberLogin(): Promise<Session> {
 }
 
 function refresh(): void {
-  if (hasNetwork() && isConnected()) {
-    fetchJSON<Session>('/account/info')
-    .then((data: Session) => {
-      session = data
-      storeSession(data)
-      // if server tells me, reload challenges
-      if (session.nbChallenges !== challengesApi.incoming().length) {
-        challengesApi.refresh().then(redraw)
-      }
+  fetchJSON<Session>('/account/info')
+  .then((data: Session) => {
+    session = data
+    storeSession(data)
+    // if server tells me, reload challenges
+    if (session.nbChallenges !== challengesApi.incoming().length) {
+      challengesApi.refresh().then(redraw)
+    }
+    redraw()
+  })
+  .catch((err: ErrorResponse) => {
+    if (session !== undefined && err.status === 401) {
+      session = undefined
+      clearStoredSession()
       redraw()
-    })
-    .catch((err: ErrorResponse) => {
-      if (session && err.status === 401) {
-        session = undefined
-        clearStoredSession()
-        redraw()
-        window.plugins.toast.show(i18n('signedOut'), 'short', 'center')
-      }
-      throw err
-    })
-  }
+      window.plugins.toast.show(i18n('signedOut'), 'short', 'center')
+    }
+    throw err
+  })
 }
 
 function backgroundRefresh(): void {

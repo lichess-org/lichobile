@@ -16,6 +16,11 @@ export function getLang(): string {
   return lang
 }
 
+/*
+ * Load either lang stored as a setting or default app language.
+ * It is called during app initialization, when we don't know yet server lang
+ * preference.
+ */
 export function loadPreferredLanguage(): Promise<string> {
   const fromSettings = settings.general.lang()
   if (fromSettings) {
@@ -36,8 +41,20 @@ export function loadPreferredLanguage(): Promise<string> {
   .then(loadMomentLocale)
 }
 
-export function getAvailableLanguages(): Promise<Array<[string, string]>> {
+export function getAvailableLanguages(): Promise<ReadonlyArray<[string, string]>> {
   return loadLocalJsonFile('i18n/refs.json')
+}
+
+export function ensureLangIsAvailable(lang: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    getAvailableLanguages()
+    .then(langs => {
+      const l = langs.find(l => l[0] === lang)
+      if (l !== undefined) resolve(l[0])
+      else reject(new Error(`Lang ${l} is not available in the application.`))
+    })
+  })
+
 }
 
 export function loadLanguage(lang: string): Promise<string> {

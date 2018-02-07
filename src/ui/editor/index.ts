@@ -1,5 +1,6 @@
 import * as helper from '../helper'
 import socket from '../../socket'
+import * as sleepUtils from '../../utils/sleep'
 import Editor from './Editor'
 import editorView from './editorView'
 
@@ -15,11 +16,13 @@ const EditorScreen: Mithril.Component<Attrs, State> = {
   oninit({ attrs }) {
     socket.createDefault()
 
+    sleepUtils.keepAwake()
+
     this.editor = new Editor(attrs.fen)
   },
   oncreate: helper.viewFadeIn,
   onremove() {
-    window.plugins.insomnia.allowSleepAgain()
+    sleepUtils.allowSleepAgain()
   },
   view() {
     return editorView(this.editor)

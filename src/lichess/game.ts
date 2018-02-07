@@ -47,11 +47,15 @@ export function mandatory(data: OnlineGameData) {
 }
 
 export function playedTurns(data: OnlineGameData | AnalyseData) {
-  return data.game.turns - data.game.startedAtTurn
+  return data.game.turns - (data.game.startedAtTurn || 0)
+}
+
+export function bothPlayersHavePlayed(data: OnlineGameData): boolean {
+  return playedTurns(data) > 1
 }
 
 export function abortable(data: OnlineGameData) {
-  return playable(data) && playedTurns(data) < 2 && !mandatory(data)
+  return playable(data) && !bothPlayersHavePlayed(data) && !mandatory(data)
 }
 
 export function takebackable(data: OnlineGameData): boolean {

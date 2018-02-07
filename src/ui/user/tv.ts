@@ -2,6 +2,7 @@ import * as h from 'mithril/hyperscript'
 import router from '../../router'
 import socket from '../../socket'
 import * as helper from '../helper'
+import * as sleepUtils from '../../utils/sleep'
 import { handleXhrError } from '../../utils'
 import { LoadingBoard } from '../shared/common'
 import OnlineRound from '../shared/round/OnlineRound'
@@ -18,6 +19,8 @@ interface State {
 
 const UserTv: Mithril.Component<Attrs, State> = {
   oninit(vnode) {
+    sleepUtils.keepAwake()
+
     const userId = vnode.attrs.id
     const onRedirect = () => router.set(`/@/${userId}/tv`, true)
 
@@ -32,7 +35,7 @@ const UserTv: Mithril.Component<Attrs, State> = {
   oncreate: helper.viewFadeIn,
 
   onremove() {
-    window.plugins.insomnia.allowSleepAgain()
+    sleepUtils.allowSleepAgain()
     socket.destroy()
     if (this.round) {
       this.round.unload()

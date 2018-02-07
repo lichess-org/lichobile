@@ -13,6 +13,19 @@ body
   padding-top: constant(safe-area-inset-top);
   padding-top: env(safe-area-inset-top);
 
+a
+  color linkBlue
+  text-decoration none
+
+.external_link
+  &::before
+    content "\f08e"
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+
 // workaround for ios: the direct parent of an input must have user-select: text
 .allow_select
   user-select text

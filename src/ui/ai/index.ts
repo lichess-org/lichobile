@@ -1,6 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import socket from '../../socket'
 import { getCurrentAIGame } from '../../utils/offlineGames'
+import * as sleepUtils from '../../utils/sleep'
 import * as helper from '../helper'
 import { playerFromFen } from '../../utils/fen'
 import { standardFen } from '../../lichess/variant'
@@ -22,7 +23,7 @@ interface State {
   round: AiRound
 }
 
-const AiScreen: Mithril.Component<Attrs, State> = {
+export default {
   oninit({ attrs }) {
     socket.createDefault()
 
@@ -33,11 +34,11 @@ const AiScreen: Mithril.Component<Attrs, State> = {
 
     this.round = new AiRound(saved, setupFen, setupVariant, setupColor)
 
-    window.plugins.insomnia.keepAwake()
+    sleepUtils.keepAwake()
   },
   oncreate: helper.viewFadeIn,
   onremove() {
-    window.plugins.insomnia.allowSleepAgain()
+    sleepUtils.allowSleepAgain()
     if (this.round) this.round.engine.exit()
   },
   view() {
@@ -59,6 +60,4 @@ const AiScreen: Mithril.Component<Attrs, State> = {
       () => overlay(this.round)
     )
   }
-}
-
-export default AiScreen
+} as Mithril.Component<Attrs, State>

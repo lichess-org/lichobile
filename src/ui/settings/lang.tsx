@@ -11,7 +11,7 @@ import * as stream from 'mithril/stream'
 type Lang = [string, string]
 
 interface State {
-  langs: Mithril.Stream<Array<Lang>>
+  langs: Mithril.Stream<ReadonlyArray<Lang>>
 }
 
 export const LangPrefScreen: Mithril.Component<{}, State> = {

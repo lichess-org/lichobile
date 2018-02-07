@@ -2,6 +2,7 @@ import * as h from 'mithril/hyperscript'
 import router from '../router'
 import socket from '../socket'
 import * as helper from './helper'
+import * as sleepUtils from '../utils/sleep'
 import { handleXhrError } from '../utils'
 import * as xhr from '../xhr'
 import { LoadingBoard } from './shared/common'
@@ -22,6 +23,8 @@ interface State {
 
 const TV: Mithril.Component<TVAttrs, State> = {
   oninit(vnode) {
+    sleepUtils.keepAwake()
+
     const onChannelChange = () => router.set('/tv', true)
     const onFeatured = () => router.set('/tv', true)
 
@@ -40,7 +43,7 @@ const TV: Mithril.Component<TVAttrs, State> = {
   oncreate: helper.viewFadeIn,
 
   onremove() {
-    window.plugins.insomnia.allowSleepAgain()
+    sleepUtils.allowSleepAgain()
     socket.destroy()
     if (this.round) {
       this.round.unload()

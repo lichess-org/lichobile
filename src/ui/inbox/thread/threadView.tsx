@@ -2,7 +2,7 @@ import * as h from 'mithril/hyperscript'
 import * as helper from '../../helper'
 import { userStatus } from '../../shared/common'
 import i18n from '../../../i18n'
-import { escapeHtml } from '../../../utils'
+import { linkify } from '../../../utils/html'
 import redraw from '../../../utils/redraw'
 import { Post } from '../interfaces'
 
@@ -54,7 +54,7 @@ function renderPost(post: Post, index: number, posts: Array<Post>) {
         {postDateFormat(post.createdAt)}
       </div>
       <div className="text">
-        {h.trust(escapeHtml(post.text).replace(/\n/g, '<br>'))}
+        {h.trust(linkify(post.text).replace(/\n/g, '<br>'))}
       </div>
     </div>
   )

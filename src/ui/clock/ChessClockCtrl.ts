@@ -53,7 +53,6 @@ export default function ChessClockCtrl(): IChessClockCtrl {
   if (window.cordova.platformId === 'android') {
     window.AndroidFullScreen.immersiveMode()
   }
-  window.plugins.insomnia.keepAwake()
   document.addEventListener('resume', hideStatusBar)
   window.addEventListener('resize', hideStatusBar)
 

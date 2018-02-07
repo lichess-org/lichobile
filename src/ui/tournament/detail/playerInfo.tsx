@@ -100,7 +100,7 @@ export default {
             { closeIcon }
           </button>
           <h2 className="playerModalHeader">
-            {player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)}
+            {player.rank + '. ' + player.name + ' (' + player.rating + ') '}
           </h2>
         </header>
         <div className="modal_content">

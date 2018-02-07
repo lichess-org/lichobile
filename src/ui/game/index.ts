@@ -4,6 +4,7 @@ import { positionsCache } from '../../utils/gamePosition'
 import { getOfflineGameData, saveOfflineGameData, removeOfflineGameData } from '../../utils/offlineGames'
 import { game as gameXhr } from '../../xhr'
 import storage from '../../storage'
+import * as sleepUtils from '../../utils/sleep'
 import OnlineRound from '../shared/round/OnlineRound'
 import * as helper from '../helper'
 import * as gameApi from '../../lichess/game'
@@ -32,6 +33,8 @@ interface State {
 const GameScreen: Mithril.Component<Attrs, State> = {
   oninit(vnode) {
     let gameData: OnlineGameData
+
+    sleepUtils.keepAwake()
 
     if (hasNetwork()) {
       const now = performance.now()
@@ -107,7 +110,7 @@ const GameScreen: Mithril.Component<Attrs, State> = {
   },
 
   onremove() {
-    window.plugins.insomnia.allowSleepAgain()
+    sleepUtils.allowSleepAgain()
     socket.destroy()
     if (this.round) {
       this.round.unload()

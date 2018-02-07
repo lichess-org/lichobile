@@ -3,6 +3,7 @@ import socket from '../../socket'
 import redraw from '../../utils/redraw'
 import * as helper from '../helper'
 import router from '../../router'
+import * as sleepUtils from '../../utils/sleep'
 import { handleXhrError } from '../../utils'
 import { acceptChallenge, declineChallenge, cancelChallenge, getChallenge } from '../../xhr'
 import { Challenge } from '../../lichess/interfaces/challenge'
@@ -26,14 +27,14 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
 
   onremove() {
     socket.destroy()
-    window.plugins.insomnia.allowSleepAgain()
+    sleepUtils.allowSleepAgain()
     clearTimeout(this.pingTimeoutId)
   },
 
   oninit(vnode) {
     const challenge: Mithril.Stream<Challenge | undefined> = stream(undefined)
 
-    window.plugins.insomnia.keepAwake()
+    sleepUtils.keepAwake()
 
     const reloadChallenge = () => {
       const c = challenge()

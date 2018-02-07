@@ -2,6 +2,7 @@ import * as h from 'mithril/hyperscript'
 import socket from '../../socket'
 import * as helper from '../helper'
 import { getCurrentOTBGame } from '../../utils/offlineGames'
+import * as sleepUtils from '../../utils/sleep'
 import { playerFromFen } from '../../utils/fen'
 import { standardFen } from '../../lichess/variant'
 import settings from '../../settings'
@@ -32,13 +33,13 @@ const OtbScreen: Mithril.Component<Attrs, State> = {
 
     this.round = new OtbRound(saved, setupFen, setupVariant)
 
-    window.plugins.insomnia.keepAwake()
+    sleepUtils.keepAwake()
     document.addEventListener('pause', this.round.saveClock)
     window.addEventListener('unload', this.round.saveClock)
   },
   oncreate: helper.viewFadeIn,
   onremove() {
-    window.plugins.insomnia.allowSleepAgain()
+    sleepUtils.allowSleepAgain()
     document.removeEventListener('pause', this.round.saveClock)
     window.removeEventListener('unload', this.round.saveClock)
     this.round.saveClock()

@@ -1,6 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import * as utils from '../utils'
 import redraw from '../utils/redraw'
+import * as sleepUtils from '../utils/sleep'
 import session from '../session'
 import settings from '../settings'
 import spinner from '../spinner'
@@ -152,7 +153,7 @@ function doStartSeeking(conf: PoolMember | HumanSeekSetup) {
   router.backbutton.stack.push(userCancelSeeking)
 
   isOpenAndSeeking = true
-  window.plugins.insomnia.keepAwake()
+  sleepUtils.keepAwake()
 
   if (isPoolMember(conf)) enterPool(conf)
   else if (isSeekSetup(conf)) sendHook(conf)
@@ -184,7 +185,7 @@ function userCancelSeeking(fromBB?: string) {
   stopAndClose(fromBB)
   leavePoolOrCancelHook()
   socket.restorePrevious()
-  window.plugins.insomnia.allowSleepAgain()
+  sleepUtils.allowSleepAgain()
 }
 
 function sendHook(setup: HumanSeekSetup) {

@@ -1,6 +1,8 @@
+import * as sleepUtils from '../../utils/sleep'
 import * as helper from '../helper'
-import ChessClockCtrl, { IChessClockCtrl } from './ChessClockCtrl'
 import layout from '../layout'
+
+import ChessClockCtrl, { IChessClockCtrl } from './ChessClockCtrl'
 import { clockBody, renderClockSettingsOverlay } from './clockView'
 
 interface State {
@@ -11,6 +13,7 @@ const ChessClockScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewFadeIn,
 
   oninit() {
+    sleepUtils.keepAwake()
     this.ctrl = ChessClockCtrl()
   },
 
@@ -19,6 +22,7 @@ const ChessClockScreen: Mithril.Component<{}, State> = {
     if (c !== undefined) {
       c.clear()
     }
+    sleepUtils.allowSleepAgain()
     document.removeEventListener('resume', this.ctrl.hideStatusBar)
     window.removeEventListener('resize', this.ctrl.hideStatusBar)
     window.StatusBar.show()

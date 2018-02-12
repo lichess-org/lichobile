@@ -5,7 +5,7 @@ import { build as makeTree, ops as treeOps, path as treePath, TreeWrapper, Tree 
 import router from '../../router'
 import { ErrorResponse } from '../../http'
 import redraw from '../../utils/redraw'
-import { handleXhrError } from '../../utils'
+import { hasNetwork, handleXhrError } from '../../utils'
 import signals from '../../signals'
 import * as chess from '../../chess'
 import * as chessFormat from '../../utils/chessFormat'
@@ -160,7 +160,11 @@ export default class TrainingCtrl implements PromotingInterface {
 
   public goToAnalysis = () => {
     const puzzle = this.data.puzzle
-    router.set(`/analyse/online/${puzzle.gameId}/${puzzle.color}?ply=${puzzle.initialPly}&curFen=${puzzle.fen}`)
+    if (hasNetwork()) {
+      router.set(`/analyse/online/${puzzle.gameId}/${puzzle.color}?ply=${puzzle.initialPly}&curFen=${puzzle.fen}`)
+    } else {
+      router.set(`/analyse/variant/standard/fen/${encodeURIComponent(this.initialNode.fen)}`)
+    }
   }
 
   // --

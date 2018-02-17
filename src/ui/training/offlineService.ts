@@ -81,6 +81,7 @@ export function syncPuzzleResult(
 }
 
 export function puzzleLoadFailure(reason: string) {
+  console.log(reason)
   window.plugins.toast.show(reason, 'short', 'center')
   router.set('/')
 }
@@ -122,7 +123,7 @@ function syncPuzzles(database: Database, user: Session): Promise<UserOfflineData
         unsolved: unsolved.concat(newData.puzzles),
         solved: []
       })
-      .then(o => o.get(user.id)!)
+      .then(o => o[user.id]!)
     })
     // when offline, sync cannot be done so we return same data
     .catch(() => data)

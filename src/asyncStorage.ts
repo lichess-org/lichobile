@@ -1,7 +1,7 @@
 import * as localForage from 'localforage'
 
 const appStore = localForage.createInstance({
-  driver: localForage.INDEXEDDB,
+  // driver: localForage.INDEXEDDB,
   name: 'AppStore',
   version: 1.0,
 })

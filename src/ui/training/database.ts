@@ -17,18 +17,22 @@ export interface UserOfflineData {
 }
 
 type UserId = string
-export type OfflineData = Map<UserId, UserOfflineData>
+type OfflineData = {
+  [key: string]: UserOfflineData
+}
 
 function fetch(userId: UserId): Promise<UserOfflineData | null> {
   return asyncStorage.getItem<OfflineData>('trainingOfflinePuzzles')
-  .then(data => (data && data.get(userId)) || null)
+  .then(data => {
+    return data && data[userId] || null
+  })
 }
 
 function save(userId: UserId, userData: UserOfflineData): Promise<OfflineData> {
   return asyncStorage.getItem<OfflineData>('trainingOfflinePuzzles')
   .then(data => {
-    const map: OfflineData = data || new Map()
-    map.set(userId, userData)
+    const map: OfflineData = data || {}
+    map[userId] = userData
     return asyncStorage.setItem('trainingOfflinePuzzles', map)
   })
 }

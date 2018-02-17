@@ -24,10 +24,8 @@ const SettingsScreen: Mithril.Component<{}, {}> = {
 export default SettingsScreen
 
 function renderBody() {
-  return h('div', {
-    style: { width: '100%', height: '100%' }
-  }, [
-    h('ul.settings_list.general.native_scroller.page', [
+  return [
+    h('ul.settings_list.native_scroller.page', [
       utils.hasNetwork() && session.isConnected() ? h('li.list_item.nav', {
         key: 'preferences',
         oncreate: helper.ontapY(() => router.set('/settings/preferences'))
@@ -58,5 +56,5 @@ function renderBody() {
       }, i18n('soundAndNotifications'))
     ]),
     window.AppVersion ? h('section.app_version', 'v' + window.AppVersion.version) : null
-  ])
+  ]
 }

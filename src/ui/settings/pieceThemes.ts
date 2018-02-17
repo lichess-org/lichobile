@@ -26,7 +26,7 @@ function renderBody() {
 export default {
   oncreate: helper.viewSlideIn,
 
-  view: function() {
+  view() {
     const header = () => dropShadowHeader(null, backButton(i18n('pieces')))
     return layout.free(header, renderBody)
   }

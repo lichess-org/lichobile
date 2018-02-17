@@ -31,7 +31,6 @@ interface InitPayload {
   fen?: string
 }
 
-
 export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public setupFen: string | undefined
   public data: OfflineGameData
@@ -236,6 +235,10 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
 
   public apply(sit: chess.GameSituation) {
     if (sit) {
+      if (this.clock && this.clock.activeSide() !== sit.player) {
+        this.clock.clockHit(oppositeColor(sit.player))
+      }
+
       const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null
       this.chessground.set({
         fen: sit.fen,
@@ -250,8 +253,9 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
 
   public onReplayAdded = (sit: chess.GameSituation) => {
     const lastMovePlayer = sit.player === 'white' ? 'black' : 'white'
-    if (this.clock)
+    if (this.clock) {
       this.clock.clockHit(lastMovePlayer)
+    }
     this.data.game.fen = sit.fen
     this.apply(sit)
     setResult(this, sit.status)
@@ -269,8 +273,9 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   }
 
   public onGameEnd = () => {
-    if (this.clock && this.clock.isRunning())
+    if (this.clock && this.clock.isRunning()) {
       this.clock.startStop()
+    }
     this.chessground.stop()
     setTimeout(() => {
       this.actions.open()

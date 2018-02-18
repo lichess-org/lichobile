@@ -52,7 +52,7 @@
         "@types/d3": "4.5.0",
         "@types/hammerjs": "2.0.35",
         "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",
-        "cordova-android": "6.2.2",
+        "cordova-android": "7.0.0",
         "cordova-ios": "4.5.4",
         "cordova-plugin-app-event": "git+https://github.com/katzer/cordova-plugin-app-event.git#1.2.1",
         "cordova-plugin-appversion": "1.0.0",

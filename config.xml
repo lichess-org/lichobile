@@ -129,7 +129,7 @@
     <plugin name="de.appplant.cordova.plugin.local-notification" spec="git+https://github.com/katzer/cordova-plugin-local-notifications.git#0.8.5" />
     <plugin name="ionic-plugin-keyboard" spec="2.2.1" />
     <plugin name="onesignal-cordova-plugin" spec="2.2.4" />
-    <engine name="android" spec="6.2.2" />
-    <engine name="ios" spec="4.5.4" />
     <plugin name="cordova-plugin-network-information" spec="2.0.1" />
+    <engine name="android" spec="7.0.0" />
+    <engine name="ios" spec="4.5.4" />
 </widget>

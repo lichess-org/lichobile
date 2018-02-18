@@ -81,7 +81,6 @@ export function syncPuzzleResult(
 }
 
 export function puzzleLoadFailure(reason: string) {
-  console.log(reason)
   window.plugins.toast.show(reason, 'short', 'center')
   router.set('/')
 }

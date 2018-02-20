@@ -50,7 +50,6 @@ export default class TrainingCtrl implements PromotingInterface {
   constructor(cfg: PuzzleData, database: Database) {
     this.menu = menu.controller(this)
     this.database = database
-    this.initialData = cfg
     this.init(cfg)
 
     this.pieceTheme = settings.general.theme.piece()
@@ -170,6 +169,7 @@ export default class TrainingCtrl implements PromotingInterface {
   // --
 
   private init(cfg: PuzzleData) {
+    this.initialData = cfg
 
     router.assignState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
 

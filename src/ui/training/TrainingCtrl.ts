@@ -50,9 +50,9 @@ export default class TrainingCtrl implements PromotingInterface {
   constructor(cfg: PuzzleData, database: Database) {
     this.menu = menu.controller(this)
     this.database = database
-    this.init(cfg)
-
     this.pieceTheme = settings.general.theme.piece()
+
+    this.init(cfg)
 
     signals.afterLogin.add(this.retry)
   }

@@ -63,7 +63,7 @@ export default function ExplorerCtrl(
       redraw()
     })
     .catch(handleFetchError)
-  }, 1000)
+  }, 1000, { leading: true, trailing: true })
 
   const fetchTablebase = debounce((fen: string): Promise<void> => {
     return tablebaseXhr(effectiveVariant, fen)
@@ -76,7 +76,7 @@ export default function ExplorerCtrl(
       redraw()
     })
     .catch(handleFetchError)
-  }, 500)
+  }, 500, { leading: true, trailing: true })
 
   function fetch(fen: string) {
     const hasTablebase = ['standard', 'chess960', 'atomic', 'antichess'].includes(effectiveVariant)

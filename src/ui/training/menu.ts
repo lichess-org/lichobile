@@ -20,14 +20,19 @@ export interface IMenuCtrl {
   close: () => void
   isOpen: () => boolean
   root: TrainingCtrl
-  user: () => PuzzleUserData | null
+  user: () => OfflineUser | null
+}
+
+interface OfflineUser {
+  username: string
+  data: PuzzleUserData
 }
 
 export default {
 
   controller(root: TrainingCtrl): IMenuCtrl {
     let isOpen = false
-    let puzzleUser: PuzzleUserData | null = null
+    let puzzleUser: OfflineUser | null = null
 
     function open() {
       router.backbutton.stack.push(close)
@@ -38,7 +43,10 @@ export default {
         root.database.fetch(user.id)
         .then(data => {
           if (data) {
-            puzzleUser = data.user
+            puzzleUser = {
+              username: user.username,
+              data: data.user,
+            }
             redraw()
           }
         })
@@ -74,10 +82,13 @@ function renderTrainingMenu(ctrl: IMenuCtrl) {
   const puzzleUser = ctrl.user()
 
   if (ctrl.root.data && ctrl.root.data.online && ctrl.root.data.user) {
-    return renderUserInfos(ctrl.root.data.user)
+    return renderUserInfosOnline(ctrl.root.data.user)
+  }
+  else if (puzzleUser !== null && hasNetwork()) {
+    return renderUserInfosOnline(puzzleUser.data)
   }
   else if (puzzleUser !== null) {
-    return renderUserInfos(puzzleUser)
+    return renderUserInfosOffline(puzzleUser, ctrl)
   }
   else {
     return renderSigninBox()
@@ -96,7 +107,16 @@ function renderSigninBox() {
   ])
 }
 
-function renderUserInfos(user: PuzzleUserData) {
+function renderUserInfosOffline(user: OfflineUser, ctrl: IMenuCtrl) {
+  return h('div.training-offlineInfos', [
+    h('p', ['You are currently offline. Your last recorded rating as ', h('strong', user.username), ' is ', h('strong', user.data.rating), '.']),
+    h('p', 'You still have ', h('strong', ctrl.root.nbUnsolved), ' saved puzzles to solve.'),
+    h('p', 'Puzzles are automatically downloaded by batches so you can solve them seamlessly when having bad network conditions or when you are offline.'),
+    h('p', 'Your puzzle history and rating will be updated as soon as you are back online.'),
+  ])
+}
+
+function renderUserInfosOnline(user: PuzzleUserData) {
   const { vw } = helper.viewportDim()
   let width: number
   // see overlay-popup.styl for popup width
@@ -116,7 +136,7 @@ function renderUserInfos(user: PuzzleUserData) {
         drawChart(user)
       }
     }) : null,
-    hasNetwork() ? renderRecent(user) : null,
+    renderRecent(user),
   ]
 }
 

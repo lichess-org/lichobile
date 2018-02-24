@@ -109,14 +109,16 @@ function syncPuzzles(database: Database, user: Session): Promise<UserOfflineData
       0
     )
 
-    return Promise.all([
-      (data === null || puzzleDeficit > 0) ? xhr.newPuzzles(puzzleDeficit) : Promise.resolve({
+    const solvePromise = solved.length > 0 ? xhr.solvePuzzles(solved) : Promise.resolve()
+
+    return solvePromise
+    .then(() => data === null || puzzleDeficit > 0 ?
+      xhr.newPuzzles(puzzleDeficit) : Promise.resolve({
         puzzles: [],
         user: data.user,
-      }),
-      solved.length > 0 ? xhr.solvePuzzles(solved) : Promise.resolve(),
-    ])
-    .then(([newData, _]) => {
+      })
+    )
+    .then(newData => {
       return database.save(user.id, {
         user: newData.user,
         unsolved: unsolved.concat(newData.puzzles),

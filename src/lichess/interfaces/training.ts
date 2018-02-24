@@ -63,7 +63,7 @@ export interface PuzzleOutcome {
 
 export interface UserData {
   // [id, diff, rating]
-  readonly recent: Array<[number, number, number]>
+  readonly recent: ReadonlyArray<[number, number, number]>
   readonly rating: number
 }
 

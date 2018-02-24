@@ -111,7 +111,7 @@ function renderUserInfosOffline(user: OfflineUser, ctrl: IMenuCtrl) {
   return h('div.training-offlineInfos', [
     h('p', ['You are currently offline. Your last recorded rating as ', h('strong', user.username), ' is ', h('strong', user.data.rating), '.']),
     h('p', 'You still have ', h('strong', ctrl.root.nbUnsolved), ' saved puzzles to solve.'),
-    h('p', 'Puzzles are automatically downloaded by batches so you can solve them seamlessly when having bad network conditions or when you are offline.'),
+    h('p', 'Puzzles are automatically downloaded by batches so you can solve them seamlessly while having bad network conditions or when you are offline.'),
     h('p', 'Your puzzle history and rating will be updated as soon as you are back online.'),
   ])
 }

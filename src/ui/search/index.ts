@@ -16,7 +16,7 @@ interface State {
   ctrl: ISearchCtrl
 }
 
-const SearchScreen: Mithril.Component<Attrs, State> = {
+export default {
   oncreate: helper.viewFadeIn,
 
   oninit({ attrs }) {
@@ -30,6 +30,4 @@ const SearchScreen: Mithril.Component<Attrs, State> = {
       () => renderSearchForm(this.ctrl)
     )
   }
-}
-
-export default SearchScreen
+} as Mithril.Component<Attrs, State>

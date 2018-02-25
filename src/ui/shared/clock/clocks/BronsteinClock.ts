@@ -130,12 +130,16 @@ export default function BronsteinClock(time: number, increment: number, onFlag: 
     return color === 'white' ? whiteTime() : blackTime()
   }
 
-  function takeback(): void {
+  function toggleActiveSide(): void {
     if (state.activeSide)
-      if (state.activeSide === 'white')
+      if (state.activeSide === 'white') {
+        blackTimestamp = performance.now()
         state.activeSide = 'black'
-      else
+      }
+      else {
+        whiteTimestamp = performance.now()
         state.activeSide = 'white'
+      }
   }
 
   const clockType: ClockType = 'bronstein'
@@ -152,7 +156,7 @@ export default function BronsteinClock(time: number, increment: number, onFlag: 
     whiteTime,
     blackTime,
     getTime,
-    takeback,
+    toggleActiveSide,
     clear() {
       clearInterval(clockInterval)
     }

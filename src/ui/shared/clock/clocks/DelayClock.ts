@@ -129,12 +129,16 @@ export default function DelayClock(time: number, increment: number, onFlag: (col
     return color === 'white' ? whiteTime() : blackTime()
   }
 
-  function takeback(): void {
+  function toggleActiveSide(): void {
     if (state.activeSide)
-      if (state.activeSide === 'white')
+      if (state.activeSide === 'white') {
+        blackTimestamp = performance.now()
         state.activeSide = 'black'
-      else
+      }
+      else {
+        whiteTimestamp = performance.now()
         state.activeSide = 'white'
+      }
   }
 
   const clockType: ClockType = 'delay'
@@ -151,7 +155,7 @@ export default function DelayClock(time: number, increment: number, onFlag: (col
     whiteTime,
     blackTime,
     getTime,
-    takeback,
+    toggleActiveSide,
     clear() {
       clearInterval(clockInterval)
     }

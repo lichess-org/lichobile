@@ -158,12 +158,16 @@ export default function StageClock(stages: Stage[], increment: number, onFlag: (
     return color === 'white' ? whiteMoves() : blackMoves()
   }
 
-  function takeback(): void {
+  function toggleActiveSide(): void {
     if (state.activeSide)
-      if (state.activeSide === 'white')
+      if (state.activeSide === 'white') {
+        blackTimestamp = performance.now()
         state.activeSide = 'black'
-      else
+      }
+      else {
+        whiteTimestamp = performance.now()
         state.activeSide = 'white'
+      }
   }
 
   const clockType: ClockType = 'stage'
@@ -183,7 +187,7 @@ export default function StageClock(stages: Stage[], increment: number, onFlag: (
     blackMoves,
     getTime,
     getMoves,
-    takeback,
+    toggleActiveSide,
     clear() {
       clearInterval(clockInterval)
     }

@@ -236,7 +236,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public apply(sit: chess.GameSituation) {
     if (sit) {
       if (this.clock && this.clock.activeSide() !== sit.player) {
-        this.clock.clockHit(oppositeColor(sit.player))
+        this.clock.toggleActiveSide()
       }
 
       const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null

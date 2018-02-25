@@ -117,12 +117,16 @@ export default function HourglassClock(time: number, onFlag: (color: Color) => v
     return color === 'white' ? whiteTime() : blackTime()
   }
 
-  function takeback(): void {
+  function toggleActiveSide(): void {
     if (state.activeSide)
-      if (state.activeSide === 'white')
+      if (state.activeSide === 'white') {
+        blackTimestamp = performance.now()
         state.activeSide = 'black'
-      else
+      }
+      else {
+        whiteTimestamp = performance.now()
         state.activeSide = 'white'
+      }
   }
 
   const clockType: ClockType = 'hourglass'
@@ -139,7 +143,7 @@ export default function HourglassClock(time: number, onFlag: (color: Color) => v
     whiteTime,
     blackTime,
     getTime,
-    takeback,
+    toggleActiveSide,
     clear() {
       clearInterval(clockInterval)
     }

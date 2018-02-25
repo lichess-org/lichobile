@@ -1,6 +1,6 @@
 import { formatTimeInSecs } from '../../../utils'
 import { ClockType, IChessClock, IStageClock, ClockSettings, StageSetting } from './interfaces'
-import { SettingsProp } from '../../../settings'
+import { StoredProp } from '../../../storage'
 import redraw from '../../../utils/redraw'
 import * as helper from '../../helper'
 import * as utils from '../../../utils'
@@ -22,7 +22,7 @@ export function isStageClock(c: IChessClock): c is IStageClock {
   return (c as IStageClock).whiteMoves !== undefined
 }
 
-export function addStage (stagesSetting: SettingsProp<Array<StageSetting>>) {
+export function addStage (stagesSetting: StoredProp<Array<StageSetting>>) {
   let stages = stagesSetting()
   stages[stages.length - 1].moves = stages[stages.length - 2].moves
   stages.push({time: stages[stages.length - 1].time, moves: null})
@@ -30,7 +30,7 @@ export function addStage (stagesSetting: SettingsProp<Array<StageSetting>>) {
   redraw()
 }
 
-export function removeStage (stagesSetting: SettingsProp<Array<StageSetting>>) {
+export function removeStage (stagesSetting: StoredProp<Array<StageSetting>>) {
   let stages = stagesSetting()
   if (stages.length <= 2)
     return

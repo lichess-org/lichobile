@@ -81,7 +81,7 @@ export interface RankingUser extends BaseUser {
 }
 
 export type RankingKey = PerfKey | 'online'
-export type Rankings = Record<RankingKey, Array<RankingUser>>
+export type Rankings = Record<RankingKey, ReadonlyArray<RankingUser>>
 
 export interface UserGamePlayer {
   readonly user?: LightUser
@@ -131,7 +131,7 @@ export interface PerfStats {
   readonly rank: number
   readonly percentile: number
   readonly stat: any
-  readonly graph: Array<GraphPoint>
+  readonly graph: ReadonlyArray<GraphPoint>
 }
 
 export type Relation = boolean

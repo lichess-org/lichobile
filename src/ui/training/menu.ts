@@ -3,8 +3,11 @@ import { select } from 'd3-selection'
 import { scaleLinear } from 'd3-scale'
 import { area as d3Area } from 'd3-shape'
 import { axisLeft } from 'd3-axis'
+import session from '../../session'
 import i18n from '../../i18n'
 import router from '../../router'
+import { hasNetwork } from '../../utils'
+import redraw from '../../utils/redraw'
 import { UserData as PuzzleUserData } from '../../lichess/interfaces/training'
 import loginModal from '../loginModal'
 import popupWidget from '../shared/popup'
@@ -17,16 +20,37 @@ export interface IMenuCtrl {
   close: () => void
   isOpen: () => boolean
   root: TrainingCtrl
+  user: () => OfflineUser | null
+}
+
+interface OfflineUser {
+  username: string
+  data: PuzzleUserData
 }
 
 export default {
 
   controller(root: TrainingCtrl): IMenuCtrl {
     let isOpen = false
+    let puzzleUser: OfflineUser | null = null
 
     function open() {
       router.backbutton.stack.push(close)
       isOpen = true
+
+      const user = session.get()
+      if (user) {
+        root.database.fetch(user.id)
+        .then(data => {
+          if (data) {
+            puzzleUser = {
+              username: user.username,
+              data: data.user,
+            }
+            redraw()
+          }
+        })
+      }
     }
 
     function close(fromBB?: string) {
@@ -38,7 +62,8 @@ export default {
       open,
       close,
       isOpen: () => isOpen,
-      root
+      user: () => puzzleUser,
+      root,
     }
   },
 
@@ -46,17 +71,26 @@ export default {
     return popupWidget(
       'trainingMenu',
       undefined,
-      () => renderTrainingMenu(ctrl.root),
+      () => renderTrainingMenu(ctrl),
       ctrl.isOpen(),
       ctrl.close
     )
   }
 }
 
-function renderTrainingMenu(ctrl: TrainingCtrl) {
-  if (ctrl.data && ctrl.data.user) {
-    return renderUserInfos(ctrl.data.user)
-  } else {
+function renderTrainingMenu(ctrl: IMenuCtrl) {
+  const puzzleUser = ctrl.user()
+
+  if (ctrl.root.data && ctrl.root.data.online && ctrl.root.data.user) {
+    return renderUserInfosOnline(ctrl.root.data.user)
+  }
+  else if (puzzleUser !== null && hasNetwork()) {
+    return renderUserInfosOnline(puzzleUser.data)
+  }
+  else if (puzzleUser !== null) {
+    return renderUserInfosOffline(puzzleUser, ctrl)
+  }
+  else {
     return renderSigninBox()
   }
 }
@@ -73,7 +107,16 @@ function renderSigninBox() {
   ])
 }
 
-function renderUserInfos(user: PuzzleUserData) {
+function renderUserInfosOffline(user: OfflineUser, ctrl: IMenuCtrl) {
+  return h('div.training-offlineInfos', [
+    h('p', ['You are currently offline. Your last recorded rating as ', h('strong', user.username), ' is ', h('strong', user.data.rating), '.']),
+    h('p', 'You still have ', h('strong', ctrl.root.nbUnsolved), ' saved puzzles to solve.'),
+    h('p', 'Puzzles are automatically downloaded by batches so you can solve them seamlessly while having bad network conditions or when you are offline.'),
+    h('p', 'Your puzzle history and rating will be updated as soon as you are back online.'),
+  ])
+}
+
+function renderUserInfosOnline(user: PuzzleUserData) {
   const { vw } = helper.viewportDim()
   let width: number
   // see overlay-popup.styl for popup width
@@ -93,7 +136,7 @@ function renderUserInfos(user: PuzzleUserData) {
         drawChart(user)
       }
     }) : null,
-    renderRecent(user)
+    renderRecent(user),
   ]
 }
 

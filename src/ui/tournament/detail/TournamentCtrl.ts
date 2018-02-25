@@ -14,14 +14,14 @@ import socketHandler from './socketHandler'
 const MAX_PER_PAGE = 10
 
 interface PagesCache {
-  [n: number]: Array<StandingPlayer>
+  [n: number]: ReadonlyArray<StandingPlayer>
 }
 
 export default class TournamentCtrl {
   public id: string
   public tournament: Tournament
   public page: number = 1
-  public currentPageResults: Array<StandingPlayer>
+  public currentPageResults: ReadonlyArray<StandingPlayer>
   public hasJoined: boolean = false
   public notFound: boolean = false
   public focusOnMe: boolean = false

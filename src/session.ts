@@ -5,6 +5,7 @@ import * as mapValues from 'lodash/mapValues'
 import * as mapKeys from 'lodash/mapKeys'
 import * as throttle from 'lodash/throttle'
 import redraw from './utils/redraw'
+import signals from './signals'
 import { fetchJSON, fetchText, ErrorResponse } from './http'
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils'
 import i18n from './i18n'
@@ -12,7 +13,8 @@ import push from './push'
 import settings from './settings'
 import friendsApi from './lichess/friends'
 import challengesApi from './lichess/challenges'
-import { SettingsProp } from './settings'
+import { StoredProp } from './storage'
+import asyncStorage from './asyncStorage'
 
 import { LobbyData, NowPlayingGame } from './lichess/interfaces'
 
@@ -54,15 +56,34 @@ export interface Session {
 
 let session: Session | undefined
 
-function isConnected() {
+function isConnected(): boolean {
   return !!session
 }
 
-function getSession() {
+function getSession(): Session | undefined {
   return session
 }
 
-function getUserId() {
+function storeSession(d: Session): void {
+  asyncStorage.setItem('session', d)
+}
+
+function clearStoredSession(): void {
+  asyncStorage.removeItem('session')
+}
+
+function restoreStoredSession(): void {
+  asyncStorage.getItem<Session>('session')
+  .then(d => {
+    session = d || undefined
+    if (d !== null) {
+      signals.sessionRestored.dispatch()
+      redraw()
+    }
+  })
+}
+
+function getUserId(): string | undefined {
   return session && session.id
 }
 
@@ -137,7 +158,7 @@ function savePreferences() {
   }, true)
 }
 
-function lichessBackedProp<T extends string | number | boolean>(path: string, prefRequest: () => Promise<string>, defaultVal: T): SettingsProp<T> {
+function lichessBackedProp<T extends string | number | boolean>(path: string, prefRequest: () => Promise<string>, defaultVal: T): StoredProp<T> {
   return function() {
     if (arguments.length) {
       let oldPref: T
@@ -171,6 +192,7 @@ function login(username: string, password: string): Promise<Session | LobbyData>
   .then((data: Session | LobbyData) => {
     if (isSession(data)) {
       session = <Session>data
+      storeSession(data)
       return session
     } else {
       throw { ipban: true }
@@ -184,6 +206,7 @@ function logout() {
     fetchJSON('/logout', { method: 'POST' }, true)
     .then(() => {
       session = undefined
+      clearStoredSession()
       friendsApi.clear()
       redraw()
     })
@@ -195,6 +218,7 @@ function confirmEmail(token: string): Promise<Session> {
   return fetchJSON(`/signup/confirm/${token}`, undefined, true)
   .then((data: Session) => {
     session = data
+    storeSession(data)
     return session
   })
 }
@@ -215,30 +239,31 @@ function rememberLogin(): Promise<Session> {
   return fetchJSON('/account/info')
   .then((data: Session) => {
     session = data
+    storeSession(data)
     return data
   })
 }
 
 function refresh(): void {
-  if (hasNetwork() && isConnected()) {
-    fetchJSON<Session>('/account/info')
-    .then((data: Session) => {
-      session = data
-      // if server tells me, reload challenges
-      if (session.nbChallenges !== challengesApi.incoming().length) {
-        challengesApi.refresh().then(redraw)
-      }
+  fetchJSON<Session>('/account/info')
+  .then((data: Session) => {
+    session = data
+    storeSession(data)
+    // if server tells me, reload challenges
+    if (session.nbChallenges !== challengesApi.incoming().length) {
+      challengesApi.refresh().then(redraw)
+    }
+    redraw()
+  })
+  .catch((err: ErrorResponse) => {
+    if (session !== undefined && err.status === 401) {
+      session = undefined
+      clearStoredSession()
       redraw()
-    })
-    .catch((err: ErrorResponse) => {
-      if (session && err.status === 401) {
-        session = undefined
-        redraw()
-        window.plugins.toast.show(i18n('signedOut'), 'short', 'center')
-      }
-      throw err
-    })
-  }
+      window.plugins.toast.show(i18n('signedOut'), 'short', 'center')
+    }
+    throw err
+  })
 }
 
 function backgroundRefresh(): void {
@@ -246,6 +271,7 @@ function backgroundRefresh(): void {
     fetchJSON<Session>('/account/info')
     .then((data: Session) => {
       session = data
+      storeSession(data)
       // if server tells me, reload challenges
       if (session.nbChallenges !== challengesApi.incoming().length) {
         challengesApi.refresh().then(redraw)
@@ -262,6 +288,7 @@ export default {
   signup,
   login: throttle(login, 1000),
   rememberLogin: throttle(rememberLogin, 1000),
+  restoreStoredSession,
   refresh: throttle(refresh, 1000),
   backgroundRefresh: throttle(backgroundRefresh, 1000),
   savePreferences: throttle(savePreferences, 1000),

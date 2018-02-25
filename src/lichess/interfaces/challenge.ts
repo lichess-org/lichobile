@@ -41,8 +41,8 @@ export interface Challenge {
 }
 
 export interface ChallengesData {
-  readonly in: Array<Challenge>
-  readonly out: Array<Challenge>
+  readonly in: ReadonlyArray<Challenge>
+  readonly out: ReadonlyArray<Challenge>
 }
 
 export function isTimeControlClock(t: TimeControl): t is TimeControlClock {

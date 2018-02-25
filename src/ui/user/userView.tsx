@@ -1,19 +1,19 @@
 import * as h from 'mithril/hyperscript'
-import userPerfs from '../../lichess/perfs'
+import router from '../../router'
 import { dropShadowHeader, backButton as renderBackbutton } from '../shared/common'
 import { getLanguageNativeName } from '../../utils/langs'
-import { lichessAssetSrc } from '../../utils'
+import { hasNetwork, lichessAssetSrc, gameIcon } from '../../utils'
+import { perfTypes, provisionalDeviation } from '../../lichess/perfs'
+import { Perf } from '../../lichess/interfaces/user'
 import * as xhr from '../../xhr'
-import renderPerf from '../shared/perf'
 import i18n from '../../i18n'
 import countries from '../../utils/countries'
 import * as helper from '../helper'
 import session from '../../session'
-import { UserFullProfile } from '../../lichess/interfaces/user'
-import { UserCtrl } from './userCtrl'
+import { IUserCtrl, ProfileUser, isSessionUser, isFullUser } from './UserCtrl'
 
-export function header(user: UserFullProfile, ctrl: UserCtrl) {
-  const status = user.online ? 'online' : 'offline'
+export function header(user: ProfileUser, ctrl: IUserCtrl) {
+  const status = hasNetwork() && user.online ? 'online' : 'offline'
   const icon = user.patron ?
     <span className={'userStatus patron ' + status} data-icon="" /> :
     <span className={'fa fa-circle userStatus ' + status} />
@@ -30,7 +30,7 @@ export function header(user: UserFullProfile, ctrl: UserCtrl) {
   return dropShadowHeader(backButton ? null : title, backButton)
 }
 
-export function profile(user: UserFullProfile, ctrl: UserCtrl) {
+export function profile(user: ProfileUser, ctrl: IUserCtrl) {
   return (
     <div id="userProfile" className="native_scroller page">
       {renderWarnings(user)}
@@ -43,7 +43,7 @@ export function profile(user: UserFullProfile, ctrl: UserCtrl) {
   )
 }
 
-function renderWarnings(user: UserFullProfile) {
+function renderWarnings(user: ProfileUser) {
   if (!user.engine && !user.booster) return null
 
   return (
@@ -58,7 +58,7 @@ function renderWarnings(user: UserFullProfile) {
   )
 }
 
-function renderProfile(user: UserFullProfile) {
+function renderProfile(user: ProfileUser) {
   if (user.profile) {
     let fullname = ''
     if (user.profile.firstName) fullname += user.profile.firstName
@@ -85,7 +85,7 @@ function renderProfile(user: UserFullProfile) {
           }
           <p className="location">
             {location}
-            {country ?
+            {country && hasNetwork() ?
             <span className="country">
               {location ? ',' : ''} <img className="flag" src={lichessAssetSrc('images/flags/' + user.profile.country + '.png')} />
               {country}
@@ -103,7 +103,7 @@ function renderProfile(user: UserFullProfile) {
     return null
 }
 
-function renderPatron(user: UserFullProfile) {
+function renderPatron(user: ProfileUser) {
   if (user.patron)
     return (
       <p className="user-patron"
@@ -118,9 +118,16 @@ function renderPatron(user: UserFullProfile) {
     return null
 }
 
-function renderStats(user: UserFullProfile) {
-  const totalPlayTime = user.playTime ? 'Time spent playing: ' + window.moment.duration(user.playTime.total, 'seconds').humanize() : null
-  const tvTime = user.playTime && user.playTime.tv > 0 ? 'Time on TV: ' + window.moment.duration(user.playTime.tv, 'seconds').humanize() : null
+function renderStats(user: ProfileUser) {
+  let totalPlayTime: string | null = null
+  let tvTime: string | null = null
+
+  if (isFullUser(user)) {
+    totalPlayTime = user.playTime ? 'Time spent playing: ' + window.moment.duration(user.playTime.total, 'seconds').humanize() : null
+    tvTime = user.playTime && user.playTime.tv > 0 ? 'Time on TV: ' + window.moment.duration(user.playTime.tv, 'seconds').humanize() : null
+  } else if (isSessionUser(user)) {
+    totalPlayTime = user.playTime ? 'Time spent playing: ' + window.moment.duration(user.playTime, 'seconds').humanize() : null
+  }
 
   return (
     <section className="userStats">
@@ -134,7 +141,52 @@ function renderStats(user: UserFullProfile) {
   )
 }
 
-function renderRatings(user: UserFullProfile) {
+function userPerfs(user: ProfileUser) {
+  const res = perfTypes.map(p => {
+    const perf = user.perfs[p[0]]
+    return {
+      key: p[0] as PerfKey,
+      name: p[1],
+      perf: perf || '-'
+    }
+  })
+
+  if (user.perfs.puzzle) res.push({
+    key: 'puzzle',
+    name: 'Training',
+    perf: user.perfs.puzzle
+  })
+
+  return res
+}
+
+function variantPerfAvailable(key: PerfKey, perf: Perf) {
+  return (key !== 'puzzle' && perf.games > 0)
+}
+
+function renderPerf(key: PerfKey, name: string, perf: Perf, user: ProfileUser) {
+
+  const avail = variantPerfAvailable(key, perf)
+
+  return h('div', {
+    className: 'profilePerf' + (avail ? ' nav' : ''),
+    'data-icon': gameIcon(key),
+    oncreate: helper.ontapY(() => {
+      if (hasNetwork() && avail) router.set(`/@/${user.id}/${key}/perf`)
+    })
+  }, [
+    h('span.name', name),
+    h('div.rating', [
+      perf.rating,
+      perf.rd >= provisionalDeviation ? '?' : null,
+      helper.progress(perf.prog),
+      h('span.nb', '/ ' + perf.games)
+    ])
+  ])
+}
+
+
+function renderRatings(user: ProfileUser) {
   function isShowing(p: { key: string, perf: { games: number }}) {
     return [
       'blitz', 'bullet', 'rapid', 'classical', 'correspondence'
@@ -148,15 +200,17 @@ function renderRatings(user: UserFullProfile) {
   )
 }
 
-function renderActions(ctrl: UserCtrl, user: UserFullProfile) {
+function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
   return (
     <section id="userProfileActions" className="items_list_block noPadding">
-      <div className="list_item nav"
-        oncreate={helper.ontapY(ctrl.goToGames)}
-        key="view_all_games"
-      >
-        {i18n('viewAllNbGames', user.count.all)}
-      </div>
+      { isFullUser(user) ?
+        <div className="list_item nav"
+          oncreate={helper.ontapY(ctrl.goToGames)}
+          key="view_all_games"
+        >
+          {i18n('viewAllNbGames', user.count.all)}
+        </div> : null
+      }
       { session.isConnected() && !ctrl.isMe() ?
       <div className="list_item" key="challenge_to_play" data-icon="U"
         oncreate={helper.ontapY(ctrl.challenge)}
@@ -164,12 +218,13 @@ function renderActions(ctrl: UserCtrl, user: UserFullProfile) {
         {i18n('challengeToPlay')}
       </div> : null
       }
-      <div className="list_item nav" data-icon="1"
+      { !ctrl.isMe() ? <div className="list_item nav" data-icon="1"
         oncreate={helper.ontapY(ctrl.goToUserTV)}
         key="user_tv"
       >
         {i18n('watchGames')}
-      </div>
+      </div> : null
+      }
       { session.isConnected() && !ctrl.isMe() ?
       <div className="list_item nav" key="compose_message" data-icon="m"
         oncreate={helper.ontapY(ctrl.composeMessage)}
@@ -177,7 +232,7 @@ function renderActions(ctrl: UserCtrl, user: UserFullProfile) {
         {i18n('composeMessage')}
       </div> : null
       }
-      {user.followable && !ctrl.isMe() ?
+      {session.isConnected() && isFullUser(user) && user.followable && !ctrl.isMe() ?
       <div className={['list_item', user.blocking ? 'disabled' : ''].join(' ')} key="user_following">
         <div className="check_container">
           <label htmlFor="user_following">{i18n('follow')}</label>
@@ -187,7 +242,7 @@ function renderActions(ctrl: UserCtrl, user: UserFullProfile) {
         </div>
       </div> : null
       }
-      { session.isConnected() && !ctrl.isMe() ?
+      {session.isConnected() && isFullUser(user) && !ctrl.isMe() ?
       <div className={['list_item', user.following ? 'disabled' : ''].join(' ')} key="user_blocking">
         <div className="check_container">
           <label htmlFor="user_blocking">{i18n('block')}</label>

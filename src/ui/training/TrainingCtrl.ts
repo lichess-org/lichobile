@@ -1,13 +1,15 @@
+import * as cloneDeep from 'lodash/cloneDeep'
 import * as debounce from 'lodash/debounce'
 import Chessground from '../../chessground/Chessground'
-import { ErrorResponse } from '../../http'
 import { build as makeTree, ops as treeOps, path as treePath, TreeWrapper, Tree } from '../shared/tree'
 import router from '../../router'
+import { ErrorResponse } from '../../http'
 import redraw from '../../utils/redraw'
+import { hasNetwork, handleXhrError } from '../../utils'
 import signals from '../../signals'
 import * as chess from '../../chess'
-import { handleXhrError } from '../../utils'
 import * as chessFormat from '../../utils/chessFormat'
+import session from '../../session'
 import sound from '../../sound'
 import settings from '../../settings'
 import { PuzzleData } from '../../lichess/interfaces/training'
@@ -15,17 +17,18 @@ import promotion from '../shared/offlineRound/promotion'
 import { PromotingInterface } from '../shared/round'
 
 import moveTest from './moveTest'
-import makeData from './data'
 import makeGround from './ground'
 import menu, { IMenuCtrl } from './menu'
 import * as xhr from './xhr'
-import { VM, Data, Feedback } from './interfaces'
+import { VM, Data, PimpedGame, Feedback } from './interfaces'
+import { syncPuzzleResult, syncAndLoadNewPuzzle, nbRemainingPuzzles, puzzleLoadFailure } from './offlineService'
+import { Database } from './database'
 
 export default class TrainingCtrl implements PromotingInterface {
   data: Data
-  tree: TreeWrapper
   menu: IMenuCtrl
   chessground: Chessground
+  database: Database
 
   // current tree state, cursor, and denormalized node lists
   path: Tree.Path
@@ -35,57 +38,23 @@ export default class TrainingCtrl implements PromotingInterface {
   initialPath: Tree.Path
   initialNode: Tree.Node
 
+  nbUnsolved: number
+
   vm: VM
 
   pieceTheme: string
 
-  constructor(cfg: PuzzleData) {
-    this.menu = menu.controller(this)
-    this.init(cfg)
+  private tree: TreeWrapper
+  private initialData: PuzzleData
 
+  constructor(cfg: PuzzleData, database: Database) {
+    this.menu = menu.controller(this)
+    this.database = database
     this.pieceTheme = settings.general.theme.piece()
 
+    this.init(cfg)
+
     signals.afterLogin.add(this.retry)
-  }
-
-  public init = (cfg: PuzzleData) => {
-    this.vm = {
-      mode: 'play',
-      initializing: true,
-      lastFeedback: 'init',
-      moveValidationPending: false,
-      loading: false,
-      canViewSolution: false,
-      resultSent: false
-    }
-
-    this.data = makeData(cfg)
-    this.tree = makeTree(treeOps.reconstruct([
-      // make root node with puzzle initial state
-      {
-        fen: this.data.puzzle.fen,
-        ply: this.data.puzzle.initialPly - 1,
-        id: ''
-      },
-      this.data.game.treeParts
-    ]))
-    this.initialPath = treePath.fromNodeList(treeOps.mainlineNodeList(this.tree.root))
-    this.initialNode = this.tree.nodeAtPath(this.initialPath)
-    this.setPath(treePath.init(this.initialPath))
-    this.updateBoard()
-
-    // play opponent first move with delay
-    setTimeout(() => {
-      this.jump(this.initialPath, true)
-      this.vm.initializing = false
-    }, 1000)
-
-    setTimeout(() => {
-      this.vm.canViewSolution = true
-      redraw()
-    }, 5000)
-
-    redraw()
   }
 
   public player = (): Color => this.data.puzzle.color
@@ -160,23 +129,28 @@ export default class TrainingCtrl implements PromotingInterface {
     return false
   }
 
-  public reload = (cfg: PuzzleData) => {
-    this.data = makeData(cfg)
-    this.chessground.stop()
-  }
-
-  public newPuzzle = (feedback: boolean) => {
-    if (feedback) this.showLoading()
-    xhr.newPuzzle()
-    .then(cfg => {
+  public newPuzzle = () => {
+    const onSuccess = (cfg: PuzzleData) => {
+      this.vm.loading = false
       this.init(cfg)
-    })
-    .then(this.onXhrSuccess)
-    .catch(this.onXhrError)
+      redraw()
+    }
+    const user = session.get()
+    if (user) {
+      syncAndLoadNewPuzzle(this.database, user)
+      .then(onSuccess)
+      .catch(puzzleLoadFailure)
+    } else {
+      this.vm.loading = true
+      redraw()
+      xhr.newPuzzle()
+      .then(onSuccess)
+      .catch(this.onXhrError)
+    }
   }
 
   public retry = () => {
-    xhr.loadPuzzle(this.data.puzzle.id).then(this.init)
+    this.init(this.initialData)
   }
 
   public share = () => {
@@ -185,10 +159,75 @@ export default class TrainingCtrl implements PromotingInterface {
 
   public goToAnalysis = () => {
     const puzzle = this.data.puzzle
-    router.set(`/analyse/online/${puzzle.gameId}/${puzzle.color}?ply=${puzzle.initialPly}&curFen=${puzzle.fen}`)
+    if (hasNetwork()) {
+      router.set(`/analyse/online/${puzzle.gameId}/${puzzle.color}?ply=${puzzle.initialPly}&curFen=${puzzle.fen}`)
+    } else {
+      router.set(`/analyse/variant/standard/fen/${encodeURIComponent(this.initialNode.fen)}`)
+    }
   }
 
   // --
+
+  private init(cfg: PuzzleData) {
+    this.initialData = cfg
+
+    router.assignState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
+
+    this.vm = {
+      mode: 'play',
+      initializing: true,
+      lastFeedback: 'init',
+      moveValidationPending: false,
+      loading: false,
+      canViewSolution: false,
+      resultSent: false
+    }
+
+    const user = session.get()
+    if (user) {
+      nbRemainingPuzzles(this.database, user)
+      .then(nb => {
+        this.nbUnsolved = nb
+        redraw()
+      })
+    }
+
+    const data = cloneDeep(cfg)
+    const variant = {
+      key: 'standard' as VariantKey
+    }
+    const pimpedGame: PimpedGame = { ...data.game, variant }
+    const pimpedData: Data = { ...data, game: pimpedGame }
+
+    this.data = pimpedData
+
+    this.tree = makeTree(treeOps.reconstruct([
+      // make root node with puzzle initial state
+      {
+        fen: this.data.puzzle.fen,
+        ply: this.data.puzzle.initialPly - 1,
+        id: ''
+      },
+      this.data.game.treeParts
+    ]))
+    this.initialPath = treePath.fromNodeList(treeOps.mainlineNodeList(this.tree.root))
+    this.initialNode = this.tree.nodeAtPath(this.initialPath)
+    this.setPath(treePath.init(this.initialPath))
+    this.updateBoard()
+
+    // play opponent first move with delay
+    setTimeout(() => {
+      this.jump(this.initialPath, true)
+      this.vm.initializing = false
+    }, 1000)
+
+    setTimeout(() => {
+      this.vm.canViewSolution = true
+      redraw()
+    }, 5000)
+
+    redraw()
+  }
 
   private updateBoard() {
     const node = this.node
@@ -239,11 +278,6 @@ export default class TrainingCtrl implements PromotingInterface {
     if (!this.node) return false
     if (this.vm.mode === 'view') return true
     return !!this.node.end
-  }
-
-  private showLoading = () => {
-    this.vm.loading = true
-    redraw()
   }
 
   private sendMove = (orig: Key, dest: Key, prom?: Role) => {
@@ -361,16 +395,19 @@ export default class TrainingCtrl implements PromotingInterface {
   private sendResult = (win: boolean) => {
     if (this.vm.resultSent) return
     this.vm.resultSent = true
-    xhr.round(this.data.puzzle.id, win)
-    .then((res) => {
-      this.data.user = res.user
-      redraw()
-    })
-  }
+    const user = session.get()
+    const outcome = { id: this.data.puzzle.id, win }
 
-  private onXhrSuccess = ()  => {
-    this.vm.loading = false
-    redraw()
+    if (user && !this.data.online) {
+      syncPuzzleResult(this.database, user, outcome)
+    }
+    else {
+      xhr.round(outcome)
+      .then((res) => {
+        this.data.user = res.user
+        redraw()
+      })
+    }
   }
 
   private onXhrError = (res: ErrorResponse) => {

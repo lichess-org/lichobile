@@ -15,7 +15,7 @@ export interface PoolMember {
 export interface LobbyData {
   readonly lobby: {
     readonly version: number
-    readonly pools: Array<Pool>
+    readonly pools: ReadonlyArray<Pool>
   }
 }
 
@@ -80,7 +80,7 @@ export interface TimelineEntry {
 }
 
 export interface TimelineData {
-  readonly entries: Array<TimelineEntry>
+  readonly entries: ReadonlyArray<TimelineEntry>
 }
 
 export interface DailyPuzzle {

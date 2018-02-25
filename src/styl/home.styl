@@ -35,26 +35,43 @@
   text-align center
   margin 10px 0 5px
 
-.homeOffline
-  flex 1 1 auto
+.homeOfflineWrapper
+  flex-grow 1
   display flex
-  flex-flow column wrap
+  flex-flow column nowrap
+  &.withBoard
+    display initial
+
+.homeOffline
+  flex-grow 1
+  display flex
+  flex-flow column nowrap
   justify-content center
   h2
-    width 80%
     margin 0 auto
-    font-size 1.5em
+    font-size 1.3em
     font-weight bold
     opacity 0.6
+    &.homeTitle
+      margin-bottom 0.5em
 
-#homeFeatured, #dailyPuzzle
+.playOffline
   display flex
-  flex-flow column wrap
+  flex-flow column nowrap
+  justify-content center
+  align-items center
+  margin-top 1em
+  > .fatButton
+    margin 1em
+
+.miniPuzzle
+  display flex
+  flex-flow column nowrap
   justify-content flex-start
   align-items center
 
-#dailyPuzzle
-  padding-bottom 15px
+.miniPuzzle
+  margin-bottom 15px
   .homeTitle
     margin-top 15px
 

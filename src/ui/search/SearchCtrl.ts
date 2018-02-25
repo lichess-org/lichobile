@@ -34,6 +34,7 @@ let cachedSearchState: SearchState
 
 export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl {
 
+  // used to restore scroll position only once from cached state
   let initialized = false
 
   const query: SearchQuery = {

@@ -1,6 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import signals from '../../signals'
 import socket from '../../socket'
+import session from '../../session'
 import redraw from '../../utils/redraw'
 import { handleXhrError, safeStringToNum } from '../../utils'
 import * as sleepUtils from '../../utils/sleep'
@@ -8,11 +9,13 @@ import { emptyFen } from '../../utils/fen'
 import * as helper from '../helper'
 import layout from '../layout'
 import ViewOnlyBoard from '../shared/ViewOnlyBoard'
-import { connectingHeader } from '../shared/common'
-
 import { renderContent, renderHeader, overlay } from './trainingView'
 import * as xhr from './xhr'
 import TrainingCtrl from './TrainingCtrl'
+import { connectingHeader } from '../shared/common'
+import { syncAndLoadNewPuzzle, puzzleLoadFailure } from './offlineService'
+import { PuzzleData } from '../../lichess/interfaces/training'
+import database from './database'
 
 interface Attrs {
   id?: string
@@ -20,7 +23,7 @@ interface Attrs {
   initColor?: Color
 }
 
-interface State {
+export interface State {
   ctrl?: TrainingCtrl
 }
 
@@ -38,18 +41,30 @@ export default {
       else {
         xhr.loadPuzzle(numId)
         .then(cfg => {
-          this.ctrl = new TrainingCtrl(cfg)
+          this.ctrl = new TrainingCtrl(cfg, database)
           cachedState.ctrl = this.ctrl
         })
         .catch(handleXhrError)
       }
     } else {
-      xhr.newPuzzle()
-      .then(cfg => {
-        this.ctrl = new TrainingCtrl(cfg)
-        cachedState.ctrl = this.ctrl
-      })
-      .catch(handleXhrError)
+      const user = session.get()
+      if (user) {
+        syncAndLoadNewPuzzle(database, user)
+        .catch(xhr.newPuzzle)
+        .then((cfg: PuzzleData) => {
+          this.ctrl = new TrainingCtrl(cfg, database)
+          cachedState.ctrl = this.ctrl
+        })
+        .catch(puzzleLoadFailure)
+      }
+      else {
+        xhr.newPuzzle()
+        .then((cfg: PuzzleData) => {
+          this.ctrl = new TrainingCtrl(cfg, database)
+          cachedState.ctrl = this.ctrl
+        })
+        .catch(handleXhrError)
+      }
     }
 
     socket.createDefault()

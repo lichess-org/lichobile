@@ -51,6 +51,8 @@ function main() {
   // startup
   if (hasNetwork()) {
     onOnline()
+  } else {
+    session.restoreStoredSession()
   }
 
   window.cordova.plugins.notification.local.on('click', (notification: LocalNotification) => {

@@ -4,6 +4,12 @@ export interface PuzzleData {
   readonly puzzle: Puzzle
   game: Game
   user?: UserData
+  online?: boolean
+}
+
+export interface PuzzleSyncData {
+  readonly puzzles: ReadonlyArray<PuzzleData>
+  readonly user: UserData
 }
 
 export interface Round {
@@ -50,9 +56,14 @@ export interface Puzzle {
   readonly branch: Tree.Node
 }
 
+export interface PuzzleOutcome {
+  id: number
+  win: boolean
+}
+
 export interface UserData {
   // [id, diff, rating]
-  readonly recent: Array<[number, number, number]>
+  readonly recent: ReadonlyArray<[number, number, number]>
   readonly rating: number
 }
 

@@ -9,7 +9,7 @@ import friendsPopup from '../friendsPopup'
 import challengeForm from '../challengeForm'
 import playMachineForm from '../playMachineForm'
 import i18n from '../../i18n'
-import { hasNetwork } from '../../utils'
+import { hasNetwork, noop } from '../../utils'
 import { getOfflineGames } from '../../utils/offlineGames'
 import * as helper from '../helper'
 import friendsApi from '../../lichess/friends'
@@ -17,11 +17,6 @@ import friendsApi from '../../lichess/friends'
 import * as menu from '.'
 import CloseSlideHandler from './CloseSlideHandler'
 import CloseSwipeHandler from './CloseSwipeHandler'
-
-interface PingData {
-  ping: number | undefined
-  server: number | undefined
-}
 
 const pingHelp = 'PING: Network lag between you and lichess; SERVER: Time to process a move on lichess server'
 
@@ -53,33 +48,25 @@ export default {
 } as Mithril.Component<{}, {}>
 
 function renderHeader(user?: Session) {
+  const profileLink = user ? menu.route('/@/' + user.id) : noop
+
   return (
     <header className="side_menu_header">
       { session.isKidMode() ? <div key="kiddo" className="kiddo">😊</div> : null }
-      { !hasNetwork() ?
-        <h2 key="username-offline" className="username">
-          {i18n('offline')}
-        </h2> : null
-      }
       { hasNetwork() && !user ?
-        <h2 key="username-anon" className="username">
-          Anonymous
-        </h2> : null
-      }
-      { hasNetwork() && user ?
-        <h2 key="username-connected" className="username connected" oncreate={helper.ontapXY(menu.route('/@/' + user.id))}>
-          { user.patron ?
-            <div className="patron" data-icon="" /> : null
-          }
-          { user.username }
-        </h2> : null
-      }
-      { hasNetwork() && session.isConnected() ? networkStatus() : null }
-      { hasNetwork() && !user ?
-        <button key="login-button" className="login" oncreate={helper.ontapXY(loginModal.open)}>
+        <button className="signInButton" oncreate={helper.ontapXY(loginModal.open)}>
           {i18n('signIn')}
         </button> : null
       }
+      { user ?
+        <h2 className="username" oncreate={helper.ontapXY(profileLink)}>
+          { user.patron ?
+            <div className="patron" data-icon="" /> : null
+          }
+          {user.username}
+        </h2> : null
+      }
+      { networkStatus(user) }
     </header>
   )
 }
@@ -215,6 +202,11 @@ function renderLinks(user?: Session) {
       <li className="sep_link" key="sep_link_offline">
         {i18n('playOffline')}
       </li>
+      {!hasNetwork() && user ?
+        <li className="side_link" key="training" data-route="/training">
+          <span data-icon="-" />{i18n('training')}
+        </li> : null
+      }
       <li className="side_link" key="play_ai" data-route="/ai">
         <span className="fa fa-cogs"/>{i18n('playOfflineComputer')}
       </li>
@@ -261,7 +253,7 @@ function profileActionsToggle() {
   )
 }
 
-function networkStatus() {
+function networkStatus(user?: Session) {
   const ping = menu.ping()
   const server = menu.mlat()
   return (
@@ -269,26 +261,37 @@ function networkStatus() {
       oncreate={helper.ontapXY(() => window.plugins.toast.show(pingHelp, 'long', 'top'))}
     >
       <div className="pingServer">
-        {signalBars({ ping, server })}
-        <div>
-          <span className="pingKey">Ping&nbsp;&nbsp;&nbsp;</span>
-          <strong className="pingValue">{socket.isConnected() && ping ? ping : '?'}</strong> ms
-        </div>
-        <div>
-          <span className="pingKey">Server&nbsp;</span>
-          <strong className="pingValue">{socket.isConnected() && server ? server : '?'}</strong> ms
-        </div>
+        { signalBars(hasNetwork() ? ping : undefined)}
+        { hasNetwork() ? (
+            <div>
+              <div>
+                <span className="pingKey">Ping&nbsp;&nbsp;&nbsp;</span>
+                <strong className="pingValue">{socket.isConnected() && ping ? ping : '?'}</strong> ms
+              </div>
+              { user ?
+                <div>
+                  <span className="pingKey">Server&nbsp;</span>
+                  <strong className="pingValue">{socket.isConnected() && server ? server : '?'}</strong> ms
+                </div> : null
+              }
+            </div>
+          ) : (
+            <div>
+              Offline
+            </div>
+          )
+        }
       </div>
     </div>
   )
 }
 
-function signalBars(d: PingData) {
+function signalBars(ping?: number) {
   const lagRating =
-    !d.ping ? 0 :
-    (d.ping < 150) ? 4 :
-    (d.ping < 300) ? 3 :
-    (d.ping < 500) ? 2 : 1
+    ping === undefined ? 0 :
+    (ping < 150) ? 4 :
+    (ping < 300) ? 3 :
+    (ping < 500) ? 2 : 1
   const bars = []
   for (let i = 1; i <= 4; i++) bars.push(h(i <= lagRating ? 'i' : 'i.off'))
   return h('signal.q' + lagRating, bars)

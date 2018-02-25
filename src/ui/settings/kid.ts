@@ -3,11 +3,11 @@ import { dropShadowHeader, backButton } from '../shared/common'
 import formWidgets from '../shared/form'
 import layout from '../layout'
 import session from '../../session'
-import { SettingsProp } from '../../settings'
+import { StoredProp } from '../../storage'
 import * as h from 'mithril/hyperscript'
 
 interface State {
-  kidMode: SettingsProp<boolean>
+  kidMode: StoredProp<boolean>
 }
 
 const KidPrefScreen: Mithril.Component<{}, State> = {

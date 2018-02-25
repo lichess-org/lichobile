@@ -32,46 +32,46 @@
   transform translate3d(-100%, 0,0)
   section
     padding 0 15px
-  .login
-    color: #fff;
-    background: #454545;
-    padding: 10px;
-    width: 80%;
-    text-transform: uppercase;
-    margin 10px 0
-    &.active
-      background lighten(#454545, 5%)
   h3
     text-transform uppercase
     color #fff
     font-weight normal
     margin 40px 0px 30px 0
 
+.signInButton
+  width: 60%;
+  padding: 0.8em 0.25em;
+  margin: 15px auto
+  border: 1px solid #323232;
+  background: #111
+  font-weight: bold;
+  border-radius: 2px;
+
 .side_menu_header
+  display flex
+  flex-flow column nowrap
+  justify-content center
   background #1a1a1a
   color darken(#fff, 8%)
-  text-align center
-  position relative
-  padding 10px 0
+  padding 1em 0
+  min-height 65px
   > .kiddo
+    display flex
+    justify-content center
     height 50px
     width 100%
     font-size 46px
     color gold
   > .username
-    height 60px
     white-space nowrap
     width 100%
-    line-height 40px
+    line-height 45px
     font-size 1.5rem
     display flex
-    align-items center
-    justify-content center
     width 100%
-    &.connected
-      justify-content flex-start
-      position relative
-      padding-left 15px
+    justify-content flex-start
+    position relative
+    padding-left 15px
 
 .menu-toggleButton
   background #282828
@@ -86,17 +86,15 @@
 .pingServerLed
   margin-left 15px
   margin-right 50px
-  position relative
   > .pingServer
-    padding-left 40px
+    display flex
+    align-items center
     color darken(#fff, 40%)
     white-space nowrap
     font-size 0.75em
     text-align left
     > signal
-      position absolute
-      left 0
-      top 10px
+      margin-right 1em
     .pingKey
       display inline-block
       width 45px

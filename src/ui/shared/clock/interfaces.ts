@@ -1,4 +1,4 @@
-import { SettingsProp } from '../../../settings'
+import { StoredProp } from '../../../storage'
 
 export type ClockType = 'simple' | 'increment' | 'handicapInc' | 'delay' | 'bronstein' | 'hourglass' | 'stage'
 export type ClockTypeWithNone = ClockType | 'none'
@@ -65,49 +65,49 @@ export type ClockState = IChessBasicClockState | IChessHandicapIncClockState | I
 export type ClockSettings = ClockClockSettings | OtbClockSettings
 
 export interface ClockClockSettings extends BaseClockSettings {
-  clockType: SettingsProp<ClockType>,
+  clockType: StoredProp<ClockType>,
 }
 
 export interface OtbClockSettings extends BaseClockSettings {
-  clockType: SettingsProp<ClockTypeWithNone>,
+  clockType: StoredProp<ClockTypeWithNone>,
 }
 
 export interface BaseClockSettings {
   availableClocks: Array<Array<string>>,
 
   simple: {
-    time: SettingsProp<string>
+    time: StoredProp<string>
   },
 
   increment: {
-    time: SettingsProp<string>,
-    increment: SettingsProp<string>
+    time: StoredProp<string>,
+    increment: StoredProp<string>
   },
 
   handicapInc: {
-    topTime: SettingsProp<string>,
-    topIncrement: SettingsProp<string>,
-    bottomTime: SettingsProp<string>,
-    bottomIncrement: SettingsProp<string>
+    topTime: StoredProp<string>,
+    topIncrement: StoredProp<string>,
+    bottomTime: StoredProp<string>,
+    bottomIncrement: StoredProp<string>
   },
 
   delay: {
-    time: SettingsProp<string>,
-    increment: SettingsProp<string>
+    time: StoredProp<string>,
+    increment: StoredProp<string>
   },
 
   bronstein: {
-    time: SettingsProp<string>,
-    increment: SettingsProp<string>
+    time: StoredProp<string>,
+    increment: StoredProp<string>
   },
 
   hourglass: {
-    time: SettingsProp<string>
+    time: StoredProp<string>
   },
 
   stage: {
-    stages: SettingsProp<Array<StageSetting>>,
-    increment: SettingsProp<string>
+    stages: StoredProp<Array<StageSetting>>,
+    increment: StoredProp<string>
   },
 
   availableTimes: Array<Array<string>>,

@@ -8,6 +8,7 @@ import i18n from '../../../i18n'
 import session from '../../../session'
 import spinner from '../../../spinner'
 import GameItem from '../../shared/GameItem'
+import gameStatus from '../../../lichess/status'
 
 import { IUserGamesCtrl, } from './UserGamesCtrl'
 
@@ -54,7 +55,7 @@ function onTap(ctrl: IUserGamesCtrl, e: Event) {
         const userColor: Color = g.players.white.userId === userId ? 'white' : 'black'
         positionsCache.set(g.id, { fen: g.fen, orientation: userColor })
         const mePlaying = session.getUserId() === userId
-        if (mePlaying) {
+        if (mePlaying || (g.source !== 'import' && g.status.id < gameStatus.ids.aborted)) {
           router.set(`/game/${id}/${userColor}?goingBack=1`)
         } else {
           router.set(`/analyse/online/${id}/${userColor}?curFen=${g.fen}`)

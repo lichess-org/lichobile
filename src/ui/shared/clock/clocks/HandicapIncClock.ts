@@ -120,6 +120,14 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
     return color === 'white' ? whiteTime() : blackTime()
   }
 
+  function takeback(): void {
+    if (state.activeSide)
+      if (state.activeSide === 'white')
+        state.activeSide = 'black'
+      else
+        state.activeSide = 'white'
+  }
+
   const clockType: ClockType = 'handicapInc'
 
   return {
@@ -134,6 +142,7 @@ export default function HandicapIncClock(whiteTimeParam: number, whiteIncrement:
     whiteTime,
     blackTime,
     getTime,
+    takeback,
     clear() {
       clearInterval(clockInterval)
     }

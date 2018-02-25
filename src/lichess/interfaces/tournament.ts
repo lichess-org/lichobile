@@ -12,10 +12,10 @@ export interface Tournament {
   readonly me?: TournamentMe
   readonly minutes: number
   readonly nbPlayers: number
-  readonly pairings: Array<TournamentPairing>
+  readonly pairings: ReadonlyArray<TournamentPairing>
   readonly pairingsClosed: boolean
   readonly perf: Perf
-  readonly podium?: Array<PodiumPlace>
+  readonly podium?: ReadonlyArray<PodiumPlace>
   readonly position?: Opening
   readonly private: boolean
   readonly quote?: Quote
@@ -84,7 +84,7 @@ interface FeaturedClock {
 interface TournamentPairing {
   readonly id: string
   readonly s: number
-  readonly u: Array<string>
+  readonly u: ReadonlyArray<string>
 }
 
 export interface PodiumPlace {
@@ -115,7 +115,7 @@ export interface Spotlight {
 
 export interface StandingPage {
   readonly page: number
-  readonly players: Array<StandingPlayer>
+  readonly players: ReadonlyArray<StandingPlayer>
 }
 
 export interface StandingPlayer {
@@ -131,13 +131,13 @@ export interface StandingPlayer {
 
 interface Sheet {
   readonly fire: boolean
-  readonly scores: Array<Array<number>>
+  readonly scores: ReadonlyArray<ReadonlyArray<number>>
   readonly total: number
 }
 
 export interface Verdicts {
   readonly accepted: boolean
-  readonly list: Array<Verdict>
+  readonly list: ReadonlyArray<Verdict>
 }
 
 interface Verdict {
@@ -146,7 +146,7 @@ interface Verdict {
 }
 
 export interface PlayerInfo {
-  readonly pairings: Array<PlayerInfoPairing>
+  readonly pairings: ReadonlyArray<PlayerInfoPairing>
   readonly player: PlayerInfoPlayer
 }
 
@@ -174,7 +174,7 @@ interface PlayerInfoPlayer {
   readonly rank: number
   readonly rating: number
   readonly ratingDiff: number
-  readonly score: number | Array<number>
+  readonly score: number | ReadonlyArray<number>
 }
 
 interface PlayerInfoNb {

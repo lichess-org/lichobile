@@ -168,7 +168,7 @@ export interface GameCrowd {
 export interface GameWatchers {
   readonly anons: number
   readonly nb: number
-  readonly users: Array<string>
+  readonly users: ReadonlyArray<string>
 }
 
 export interface GameStatus {
@@ -201,7 +201,7 @@ export interface GameStep {
   readonly check: boolean
   readonly checkCount?: CheckCount
   readonly dests?: DestsMap
-  readonly drops?: Array<string>
+  readonly drops?: ReadonlyArray<string>
   readonly crazy?: {
     readonly pockets: Pockets
   }

@@ -293,7 +293,7 @@ function miniBoardSize(isPortrait: boolean) {
   return bounds
 }
 
-function tournamentPodium(podium: Array<PodiumPlace>) {
+function tournamentPodium(podium: ReadonlyArray<PodiumPlace>) {
   return (
     <div key="podium" className="podium">
       { renderPlace(podium[1]) }

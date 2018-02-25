@@ -5,8 +5,8 @@ import * as throttle from 'lodash/throttle'
 import { getChallenges } from '../xhr'
 import { Challenge, ChallengesData, isTimeControlClock, isTimeControlCorrespondence } from '../lichess/interfaces/challenge'
 
-let incoming: Array<Challenge> = []
-let sending: Array<Challenge> = []
+let incoming: ReadonlyArray<Challenge> = []
+let sending: ReadonlyArray<Challenge> = []
 
 function supportedAndCreated(c: Challenge) {
   return settings.game.supportedVariants.indexOf(c.variant.key) !== -1 &&

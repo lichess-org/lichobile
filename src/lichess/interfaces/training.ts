@@ -8,7 +8,7 @@ export interface PuzzleData {
 }
 
 export interface PuzzleSyncData {
-  readonly puzzles: PuzzleData[]
+  readonly puzzles: ReadonlyArray<PuzzleData>
   readonly user: UserData
 }
 

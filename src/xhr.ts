@@ -107,7 +107,7 @@ export function acceptChallenge(id: string): Promise<OnlineGameData> {
   return fetchJSON(`/challenge/${id}/accept`, { method: 'POST'}, true)
 }
 
-export let cachedPools: Array<Pool> = []
+export let cachedPools: ReadonlyArray<Pool> = []
 export function lobby(feedback?: boolean): Promise<LobbyData> {
   return fetchJSON('/', undefined, feedback)
   .then((d: LobbyData) => {

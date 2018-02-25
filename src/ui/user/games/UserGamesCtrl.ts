@@ -49,6 +49,7 @@ const filters: StringMap = {
 let cachedScrollState: ScrollState
 
 export default function UserGamesCtrl(userId: string, filter?: string): IUserGamesCtrl {
+  // used to restore scroll position only once from cached state
   let initialized = false
 
   const scrollStateId = window.history.state.scrollStateId

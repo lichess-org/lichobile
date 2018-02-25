@@ -126,22 +126,23 @@ function onTap (ctrl: ISearchCtrl, e: Event) {
 }
 
 function renderResult(ctrl: ISearchCtrl) {
-  const children = ctrl.searchState.searching ?
-    spinner.getVdom('monochrome') : ctrl.searchState.games.length === 0 ?
-      h('div.search-empty', 'No game found') :
-      h.fragment({ oncreate: ctrl.onGamesLoaded }, [
-        ctrl.searchState.games.map((g: UserGameWithDate, index: number) =>
-          h(GameItem, { key: g.id, g, index, boardTheme: ctrl.boardTheme })
-        ),
-        ctrl.searchState.paginator && ctrl.searchState.paginator.nextPage ?
-          h('li.moreButton', {
-            key: 'more',
-          }, [
-            h('button', {
-              oncreate: helper.ontap(ctrl.more)
-            }, h('span.fa.fa-arrow-down'))
-          ]) : null
-      ])
+  const children = ctrl.searchState.searching ?  spinner.getVdom('monochrome') :
+    ctrl.searchState.paginator === undefined ? null :
+      ctrl.searchState.games.length === 0 ?
+        h('div.search-empty', 'No game found') :
+          h.fragment({ oncreate: ctrl.onGamesLoaded }, [
+            ctrl.searchState.games.map((g: UserGameWithDate, index: number) =>
+              h(GameItem, { key: g.id, g, index, boardTheme: ctrl.boardTheme })
+            ),
+            ctrl.searchState.paginator && ctrl.searchState.paginator.nextPage ?
+              h('li.moreButton', {
+                key: 'more',
+              }, [
+                h('button', {
+                  oncreate: helper.ontap(ctrl.more)
+                }, h('span.fa.fa-arrow-down'))
+              ]) : null
+          ])
 
   return h('ul.searchGamesList', {
     className: ctrl.searchState.searching ? 'searching' : '',

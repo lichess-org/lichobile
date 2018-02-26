@@ -58,18 +58,16 @@ export default function BronsteinClock(time: number, increment: number, onFlag: 
 
     if (side === 'white') {
       if (state.activeSide === 'white') {
-        state.activeSide = 'black'
         state.whiteTime = state.whiteTime + (state.increment - state.whiteDelay)
-        state.whiteDelay = state.increment
+        state.blackDelay = state.increment
       }
       blackTimestamp = performance.now()
       state.activeSide = 'black'
     }
     else {
       if (state.activeSide === 'black') {
-        state.activeSide = 'white'
         state.blackTime = state.blackTime + (state.increment - state.blackDelay)
-        state.blackDelay = state.increment
+        state.whiteDelay = state.increment
       }
       whiteTimestamp = performance.now()
       state.activeSide = 'white'
@@ -130,6 +128,18 @@ export default function BronsteinClock(time: number, increment: number, onFlag: 
     return color === 'white' ? whiteTime() : blackTime()
   }
 
+  function toggleActiveSide(): void {
+    if (state.activeSide)
+      if (state.activeSide === 'white') {
+        blackTimestamp = performance.now()
+        state.activeSide = 'black'
+      }
+      else {
+        whiteTimestamp = performance.now()
+        state.activeSide = 'white'
+      }
+  }
+
   const clockType: ClockType = 'bronstein'
 
   return {
@@ -144,6 +154,7 @@ export default function BronsteinClock(time: number, increment: number, onFlag: 
     whiteTime,
     blackTime,
     getTime,
+    toggleActiveSide,
     clear() {
       clearInterval(clockInterval)
     }

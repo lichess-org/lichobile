@@ -117,6 +117,18 @@ export default function HourglassClock(time: number, onFlag: (color: Color) => v
     return color === 'white' ? whiteTime() : blackTime()
   }
 
+  function toggleActiveSide(): void {
+    if (state.activeSide)
+      if (state.activeSide === 'white') {
+        blackTimestamp = performance.now()
+        state.activeSide = 'black'
+      }
+      else {
+        whiteTimestamp = performance.now()
+        state.activeSide = 'white'
+      }
+  }
+
   const clockType: ClockType = 'hourglass'
 
   return {
@@ -131,6 +143,7 @@ export default function HourglassClock(time: number, onFlag: (color: Color) => v
     whiteTime,
     blackTime,
     getTime,
+    toggleActiveSide,
     clear() {
       clearInterval(clockInterval)
     }

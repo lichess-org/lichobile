@@ -127,6 +127,7 @@ function renderHeader(ctrl: OnlineRound) {
 }
 
 function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
+  console.log(ctrl.data)
   const material = ctrl.chessground.getMaterialDiff()
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait)
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait)

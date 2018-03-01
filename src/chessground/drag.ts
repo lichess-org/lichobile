@@ -192,7 +192,7 @@ export function end(ctrl: Chessground, e: TouchEvent) {
 
 export function cancel(ctrl: Chessground) {
   const state = ctrl.state
-  removeDragElements(ctrl.dom!)
+  if (ctrl.dom) removeDragElements(ctrl.dom)
   if (state.draggable.current) {
     state.draggable.current = null
     board.unselect(state)

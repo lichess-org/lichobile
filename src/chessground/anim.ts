@@ -164,8 +164,11 @@ function animate<A>(mutation: Mutation<A>, ctrl: Chessground) {
   const state = ctrl.state
   const prevPieces: cg.Pieces = {...state.pieces}
   const result = mutation(state)
-  const plan = computePlan(prevPieces, state, ctrl.dom!)
-  if (Object.keys(plan.anims).length > 0 || Object.keys(plan.captured).length > 0) {
+  const plan = ctrl.dom !== undefined ?
+    computePlan(prevPieces, state, ctrl.dom) : undefined
+  if (plan !== undefined &&
+    (Object.keys(plan.anims).length > 0 || Object.keys(plan.captured).length > 0)
+  ) {
     const alreadyRunning = state.animation.current && state.animation.current.start !== null
     state.animation.current = {
       start: null,

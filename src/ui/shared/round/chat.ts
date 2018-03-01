@@ -18,7 +18,7 @@ export class Chat {
   public isShadowban: boolean
   public showing: boolean
   public messages: ChatMsg[]
-  public unread: boolean
+  public nbUnread: number
   public inputValue: string
   private storageId: string
 
@@ -30,24 +30,14 @@ export class Chat {
     this.showing = false
     this.messages = root.data.chat || []
     this.inputValue = ''
-    this.unread = false
+    this.nbUnread = 0
 
     if (gameApi.playable(this.root.data)) {
       this.checkUnreadFromStorage()
-      this.storeLength()
     }
 
     window.addEventListener('native.keyboardhide', onKeyboardHide)
     window.addEventListener('native.keyboardshow', onKeyboardShow)
-  }
-
-  private checkUnreadFromStorage() {
-    const nbMessages = storage.get(this.storageId) || 0
-    if (this.messages && nbMessages < this.messages.length) this.unread = true
-  }
-
-  private storeLength() {
-    storage.set(this.storageId, this.messages.length)
   }
 
   public canTalk = (data: OnlineGameData) => {
@@ -57,13 +47,16 @@ export class Chat {
   public open = () => {
     router.backbutton.stack.push(helper.slidesOutDown(this.close, 'chat'))
     this.showing = true
+    this.nbUnread = 0
+    this.storeNbRead()
   }
 
   public close = (fromBB?: string) => {
     window.cordova.plugins.Keyboard.close()
     if (fromBB !== 'backbutton' && this.showing) router.backbutton.stack.pop()
     this.showing = false
-    this.unread = false
+    this.nbUnread = 0
+    this.storeNbRead()
   }
 
   public onReload = (messages?: ChatMsg[]) => {
@@ -72,13 +65,13 @@ export class Chat {
     }
     this.messages = messages
     this.checkUnreadFromStorage()
-    this.storeLength()
   }
 
   public append = (msg: ChatMsg) => {
     this.messages.push(msg)
-    this.storeLength()
-    if (msg.u !== 'lichess') this.unread = true
+    if (msg.u !== 'lichess') {
+      this.nbUnread++
+    }
     redraw()
   }
 
@@ -86,11 +79,11 @@ export class Chat {
     let prev: ChatMsg
     let ls: ChatMsg[] = []
     this.messages.forEach((line: ChatMsg) => {
-      if (!line.d &&
-        (!prev || !compactableDeletedLines(prev, line)) &&
-        (!line.r || this.isShadowban) &&
-        !isSpam(line.t)
-      ) ls.push(line)
+      if (this.isLegitMsg(line) &&
+        (!prev || !compactableDeletedLines(prev, line))
+      ) {
+        ls.push(line)
+      }
       prev = line
     })
     return ls
@@ -100,6 +93,26 @@ export class Chat {
     if (!gameApi.playable(this.root.data)) storage.remove(this.storageId)
     document.removeEventListener('native.keyboardhide', onKeyboardHide)
     document.removeEventListener('native.keyboardshow', onKeyboardShow)
+  }
+
+  // --
+
+  private isLegitMsg = (msg: ChatMsg) => {
+    return !msg.d && (!msg.r || this.isShadowban) && !isSpam(msg.t)
+  }
+
+  private checkUnreadFromStorage() {
+    const storedNb = storage.get<number>(this.storageId) || 0
+    const actualNb = this.messages.filter(this.isLegitMsg).length
+    if (this.messages !== undefined &&
+      storedNb < actualNb
+    ) {
+      this.nbUnread = this.nbUnread + (actualNb - storedNb)
+    }
+  }
+
+  private storeNbRead() {
+    storage.set<number>(this.storageId, this.messages.filter(this.isLegitMsg).length)
   }
 }
 

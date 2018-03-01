@@ -500,17 +500,19 @@ function renderGameActionsBar(ctrl: OnlineRound) {
     <button className={gmClass} data-icon={gmDataIcon} key="gameMenu" oncreate={helper.ontap(ctrl.showActions)} /> :
     <button className={gmClass} key="gameMenu" oncreate={helper.ontap(ctrl.showActions)} />
 
-  const chatClass = [
-    'action_bar_button',
-    ctrl.chat && ctrl.chat.unread ? 'glow' : ''
-  ].join(' ')
-
   return (
     <section className="actions_bar">
       {gmButton}
       {ctrl.chat ?
-      <button className={chatClass} data-icon="c" key="chat"
-        oncreate={helper.ontap(ctrl.chat.open)} /> : null
+        <button className="action_bar_button withChip" data-icon="c" key="chat"
+          oncreate={helper.ontap(ctrl.chat.open)}
+        >
+         { ctrl.chat.nbUnread > 0 ?
+          <span className="chip">
+            { ctrl.chat.nbUnread <= 99 ? ctrl.chat.nbUnread : 99 }
+          </span> : null
+         }
+        </button> : null
       }
       {ctrl.notes ? gameButton.notes(ctrl) : null}
       {gameButton.flipBoard(ctrl)}

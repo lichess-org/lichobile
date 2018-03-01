@@ -335,6 +335,8 @@ span.fa
     padding-right: 15px;
   &:last-child
     border-right none
+  &.withChip
+    position relative
   &.disabled, &:disabled
     opacity 0.5
   &.active
@@ -352,6 +354,12 @@ span.fa
   @media only screen and (max-height 400px) and (orientation landscape)
     &:before
       font-size 16px
+  > .chip
+    line-height 15px
+    height 21px
+    width 21px
+    border-color bgdark
+    right 10px
 
 .action_create_button
   flex 1 1 25%

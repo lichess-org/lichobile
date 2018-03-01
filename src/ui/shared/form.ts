@@ -1,7 +1,9 @@
+import * as h from 'mithril/hyperscript'
+
 import i18n from '../../i18n'
 import redraw from '../../utils/redraw'
-import * as h from 'mithril/hyperscript'
 import { StoredProp } from '../../storage'
+import * as helper from '../helper'
 
 type SelectOption = string[]
 type SelectOptionGroup = Array<SelectOption>
@@ -136,6 +138,25 @@ export default {
         }
       }, options.map(e => renderOptionGroup(e[0] as string, e[1], prop, e[2] as string, e[3] as string)))
     ]
+  },
+
+  renderMultipleChoiceButton<T>(
+    label: string,
+    options: ReadonlyArray<{ label: string, value: T }>,
+    prop: StoredProp<T>
+  ) {
+    const selected = prop()
+    return h('div.form-multipleChoiceContainer', [
+      h('label', label),
+      h('div.form-multipleChoice', options.map(o => {
+        return h('span', {
+          className: o.value === selected ? 'selected' : '',
+          oncreate: helper.ontap(() => {
+            prop(o.value)
+          })
+        }, o.label)
+      }))
+    ])
   },
 
   renderSlider(

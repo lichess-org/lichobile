@@ -285,9 +285,11 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
   const isCrazy = !!step.crazy
   const playable = gameApi.playable(ctrl.data)
   const myTurn = gameApi.isPlayerTurn(ctrl.data)
+  const classN = 'playTable' + (isCrazy ? ' crazy' : '') +
+    (ctrl.vm.clockPosition === 'left' ? ' clockOnLeft' : '')
 
   return (
-    <section className={'playTable' + (isCrazy ? ' crazy' : '')}>
+    <section className={classN}>
       {renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy)}
       { !!step.crazy ?
         h(CrazyPocket, {

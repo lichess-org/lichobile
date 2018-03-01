@@ -194,6 +194,20 @@ button.fat
   &.active
     background lighten(gold, 10%)
 
+.form-multipleChoiceContainer
+  display flex
+  justify-content space-between
+  align-items center
+  min-height 30px
+  > .form-multipleChoice
+    margin 0
+    flex-grow 1
+    max-width 50%
+    border-radius 2px
+    span
+      &.selected
+        background gold
+
 .form-multipleChoice
   display: flex;
   max-width 300px
@@ -225,7 +239,12 @@ button.fat
 
   .form-multipleChoice
     span
-      border-color #eee
+      border-color #ccc
+
+.view-container.transp
+  .form-multipleChoice
+    span
+      border-color transpWhite015
 
 .no_arrow_after
   label:after

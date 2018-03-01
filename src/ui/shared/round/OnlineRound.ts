@@ -5,6 +5,7 @@ import redraw from '../../../utils/redraw'
 import { saveOfflineGameData, removeOfflineGameData } from '../../../utils/offlineGames'
 import { hasNetwork, boardOrientation } from '../../../utils'
 import session from '../../../session'
+import settings from '../../../settings'
 import socket from '../../../socket'
 import router from '../../../router'
 import sound from '../../../sound'
@@ -41,6 +42,7 @@ interface VM {
   dropToSubmit: DropRequest | null
   tClockEl: HTMLElement | null
   offlineWatcher: boolean
+  clockPosition: 'right' | 'left'
 }
 
 export default class OnlineRound implements OnlineRoundInterface {
@@ -93,6 +95,7 @@ export default class OnlineRound implements OnlineRoundInterface {
           data: null
         }
       },
+      clockPosition: settings.game.clockPosition() || 'right',
       showingActions: false,
       confirmResign: false,
       goneBerserk: {

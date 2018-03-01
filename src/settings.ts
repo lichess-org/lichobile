@@ -19,27 +19,27 @@ const offlineAvailableVariants: [string, VariantKey][] = [
 ]
 
 export interface GameSettings {
-  time: StoredProp<string>
-  timeMode: StoredProp<string>
-  increment: StoredProp<string>
-  color: StoredProp<string>
-  mode?: StoredProp<string>
-  variant: StoredProp<string>
-  ratingMin?: StoredProp<string>
-  ratingMax?: StoredProp<string>
-  days?: StoredProp<string>
-  level?: StoredProp<string>
+  readonly time: StoredProp<string>
+  readonly timeMode: StoredProp<string>
+  readonly increment: StoredProp<string>
+  readonly color: StoredProp<string>
+  readonly mode?: StoredProp<string>
+  readonly variant: StoredProp<string>
+  readonly ratingMin?: StoredProp<string>
+  readonly ratingMax?: StoredProp<string>
+  readonly days?: StoredProp<string>
+  readonly level?: StoredProp<string>
 }
 
 export interface HumanSettings extends GameSettings {
-  mode: StoredProp<string>
-  ratingMin: StoredProp<string>
-  ratingMax: StoredProp<string>
-  days: StoredProp<string>
+  readonly mode: StoredProp<string>
+  readonly ratingMin: StoredProp<string>
+  readonly ratingMax: StoredProp<string>
+  readonly days: StoredProp<string>
 }
 
 export interface AiSettings extends GameSettings {
-  level: StoredProp<string>
+  readonly level: StoredProp<string>
 }
 
 export default {
@@ -102,13 +102,14 @@ export default {
     supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
       'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings', 'crazyhouse'
     ],
-    animations: store.prop('settings.gameAnimations', true),
-    highlights: store.prop('settings.boardHighlights', true),
-    pieceDestinations: store.prop('settings.pieceDestinations', true),
-    coords: store.prop('settings.coords', true),
-    magnified: store.prop('settings.pieceMagnified', true),
-    pieceNotation: store.prop('settings.pieceNotation', true),
-    zenMode: store.prop('settings.zenMode', false)
+    animations: store.prop<boolean>('settings.gameAnimations', true),
+    highlights: store.prop<boolean>('settings.boardHighlights', true),
+    pieceDestinations: store.prop<boolean>('settings.pieceDestinations', true),
+    coords: store.prop<boolean>('settings.coords', true),
+    magnified: store.prop<boolean>('settings.pieceMagnified', true),
+    pieceNotation: store.prop<boolean>('settings.pieceNotation', true),
+    zenMode: store.prop<boolean>('settings.zenMode', false),
+    clockPosition: store.prop<'right' | 'left'>('settings.game.inversedClockPos', 'right'),
   },
 
   analyse: {

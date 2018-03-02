@@ -7,9 +7,9 @@ import settings from '../../settings'
 import i18n from '../../i18n'
 import { User } from '../../lichess/interfaces/user'
 
-import { State } from './'
+import { IPlayersCtrl } from './PlayersCtrl'
 
-export function header(ctrl: State) {
+export function header(ctrl: IPlayersCtrl) {
   return [
     <nav>
       {menuButton()}
@@ -24,7 +24,17 @@ export function header(ctrl: State) {
   ]
 }
 
-export function searchModal(ctrl: State) {
+export function body(ctrl: IPlayersCtrl) {
+  return (
+    <ul className="playersSuggestion native_scroller page"
+      oncreate={helper.ontapY(onPlayerTap, undefined, helper.getLI)}
+    >
+      {ctrl.players().map(renderPlayer)}
+    </ul>
+  )
+}
+
+export function searchModal(ctrl: IPlayersCtrl) {
   if (!ctrl.isSearchOpen())
     return null
 
@@ -69,16 +79,6 @@ function onPlayerTap(e: Event) {
   if (el && ds.id) {
     router.set('/@/' + ds.id)
   }
-}
-
-export function body(ctrl: State) {
-  return (
-    <ul className="playersSuggestion native_scroller page"
-      oncreate={helper.ontapY(onPlayerTap, undefined, helper.getLI)}
-    >
-      {ctrl.players().map(renderPlayer)}
-    </ul>
-  )
 }
 
 function renderPlayer(user: User) {

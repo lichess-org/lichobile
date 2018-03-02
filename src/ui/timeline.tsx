@@ -13,23 +13,19 @@ import { TimelineEntry } from '../lichess/interfaces'
 export const supportedTypes = ['follow', 'game-end', 'tour-join']
 
 interface State {
-  timeline: Mithril.Stream<Array<TimelineEntry>>
+  timeline: Mithril.Stream<ReadonlyArray<TimelineEntry>>
 }
 
-const TimelineScreen: Mithril.Component<{}, State> = {
-  oninit(vnode) {
-    const timeline = stream([] as TimelineEntry[])
+export default {
+  oninit() {
+    this.timeline = stream([] as TimelineEntry[])
 
     timelineXhr()
     .then(data => {
-      timeline(data.entries.filter(o => supportedTypes.indexOf(o.type) !== -1))
+      this.timeline(data.entries.filter(o => supportedTypes.indexOf(o.type) !== -1))
       redraw()
     })
     .catch(handleXhrError)
-
-    vnode.state = {
-      timeline
-    }
   },
 
   oncreate: helper.viewFadeIn,
@@ -38,9 +34,7 @@ const TimelineScreen: Mithril.Component<{}, State> = {
     const header = () => headerWidget(null, backButton(i18n('timeline')))
     return layout.free(header, () => renderBody(this))
   }
-}
-
-export default TimelineScreen
+} as Mithril.Component<{}, State>
 
 function renderBody(ctrl: State) {
   return (

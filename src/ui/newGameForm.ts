@@ -74,15 +74,15 @@ function close(fromBB?: string) {
 function goSeek(conf: PoolMember | HumanSeekSetup) {
   close()
 
-  // pool or real time seek
+  // pool
   if (isPoolMember(conf)) {
     lobby.startSeeking(conf)
   }
-  // correspondence or unlimited seek
+  // real time seek
   else if (isSeekSetup(conf) && conf.timeMode === 1) {
     lobby.startSeeking(conf)
   }
-  // correspondence seek
+  // correspondence or unlimited seek
   else {
     xhr.seekGame(conf)
     .then(() => router.set('/correspondence'))

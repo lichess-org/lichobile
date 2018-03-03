@@ -244,8 +244,8 @@ function rememberLogin(): Promise<Session> {
   })
 }
 
-function refresh(): void {
-  fetchJSON<Session>('/account/info')
+function refresh(): Promise<void> {
+  return fetchJSON<Session>('/account/info')
   .then((data: Session) => {
     session = data
     storeSession(data)
@@ -262,7 +262,6 @@ function refresh(): void {
       redraw()
       window.plugins.toast.show(i18n('signedOut'), 'short', 'center')
     }
-    throw err
   })
 }
 

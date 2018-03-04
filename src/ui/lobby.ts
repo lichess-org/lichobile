@@ -2,6 +2,7 @@ import * as h from 'mithril/hyperscript'
 import * as utils from '../utils'
 import redraw from '../utils/redraw'
 import * as sleepUtils from '../utils/sleep'
+import storage from '../storage'
 import session from '../session'
 import settings from '../settings'
 import spinner from '../spinner'
@@ -15,6 +16,8 @@ import { humanSetupFromSettings } from '../lichess/setup'
 import * as helper from './helper'
 import { loader } from './shared/common'
 import popupWidget from './shared/popup'
+
+const SETUP_STORAGE_KEY = 'setup.custom.last'
 
 let nbPlayers = 0
 let nbGames = 0
@@ -35,8 +38,12 @@ let poolInIntervalId: number
 const socketHandlers = {
   redirect: (d: RedirectObj) => {
     stopAndClose()
-    if (currentSetup !== null && isPoolMember(currentSetup)) {
-      leavePool(currentSetup)
+    if (currentSetup !== null)  {
+      if (isPoolMember(currentSetup)) {
+        leavePool(currentSetup)
+      } else {
+        storage.set(SETUP_STORAGE_KEY, currentSetup)
+      }
     }
     socket.redirectToGame(d)
   },
@@ -64,8 +71,10 @@ export default {
       const poolId = clock.initial / 60 + '+' + clock.increment
       doStartSeeking({ id: poolId })
     } else {
-      const setup = currentSetup && isSeekSetup(currentSetup) ?
-        currentSetup : humanSetupFromSettings(settings.gameSetup.human)
+      const setup = currentSetup && isSeekSetup(currentSetup) ? currentSetup :
+        storage.get<HumanSeekSetup>(SETUP_STORAGE_KEY) ||
+        humanSetupFromSettings(settings.gameSetup.human)
+
       doStartSeeking(setup, data.game.id)
     }
   },

@@ -57,7 +57,7 @@ export interface Session {
 let session: Session | undefined
 
 function isConnected(): boolean {
-  return !!session
+  return session !== undefined
 }
 
 function getSession(): Session | undefined {

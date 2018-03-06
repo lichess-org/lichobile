@@ -75,8 +75,18 @@ function loadFile(code: string): Promise<string> {
   })
 }
 
+function isLocaleLoaded(code: string): boolean {
+  const scripts = document.head.getElementsByTagName('script')
+  for (let i = 0, len = scripts.length; i < len; i++) {
+    if (scripts[i].getAttribute('src') === 'locale/' + code + '.js') {
+      return true
+    }
+  }
+  return false
+}
+
 function loadMomentLocale(code: string): string {
-  if (code !== 'en') {
+  if (code !== 'en' && !isLocaleLoaded(code)) {
     const script = document.createElement('script')
     script.src = 'locale/' + code + '.js'
     document.head.appendChild(script)

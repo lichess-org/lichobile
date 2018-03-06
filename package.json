@@ -86,7 +86,7 @@
         "localforage": "1.5.5",
         "lodash": "4.17.4",
         "mithril": "1.1.6",
-        "moment": "2.14.1",
+        "moment": "2.21.0",
         "onesignal-cordova-plugin": "2.2.4",
         "raven-js": "3.17.0",
         "rlite-router": "1.1.3",

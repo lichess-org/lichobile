@@ -6,6 +6,7 @@
     <content src="index.html" />
     <access origin="https://lichess.org" />
     <access origin="https://*.lichess.org" />
+    <access origin="https://*.lichess.ovh" />
     <access origin="https://sentry.io" />
     <access origin="https://veloce.github.io" />
     <access origin="https://listage.ovh" />

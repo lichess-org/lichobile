@@ -1,7 +1,7 @@
-let callbacks: Set<() => void> = new Set()
-let batching = false
-
 type Callback = (ts?: number) => void
+
+let callbacks: Set<Callback> = new Set()
+let batching = false
 
 export function batchRequestAnimationFrame(callback: Callback) {
   callbacks.add(callback)
@@ -12,7 +12,7 @@ export function batchRequestAnimationFrame(callback: Callback) {
       batching = false
       callbacks = new Set()
       // console.log(Array.from(batch).map(f => f.name))
-      batch.forEach((f: Callback) => f(ts))
+      batch.forEach(f => f(ts))
     })
   }
 }

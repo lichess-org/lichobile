@@ -12,8 +12,6 @@ const stylus = require('gulp-stylus');
 const autoprefixer = require('gulp-autoprefixer');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify-es').default;
-const sourcemaps = require('gulp-sourcemaps');
-const buffer = require('vinyl-buffer')
 
 const SRC = 'src'
 const DEST = 'www'
@@ -74,13 +72,10 @@ gulp.task('scripts', () => {
     .transform(babelify, babelSettings)
     .bundle()
     .pipe(source('app.js'))
-    .pipe(buffer())
-    .pipe(sourcemaps.init({loadMaps: true}))
     // work around Safari 10/11 bugs in loop scoping and await
     // see https://www.npmjs.com/package/uglify-es
     .pipe(uglify({ safari10: true }))
     .on('error', error => gutil.log(gutil.colors.red(error.message)))
-    .pipe(sourcemaps.write('../'))
     .pipe(gulp.dest(DEST));
 
 });

@@ -150,8 +150,7 @@ move
   padding: 0.25em 0.17em
   overflow hidden
   white-space nowrap
-  &.current, &.active
-    border-radius 3px
+  border-radius 3px
   &.current
     color #fff
     background rgba(blue, 0.8)
@@ -159,7 +158,9 @@ move
     > index
       color #fff
   &.active
-      background lighten(bgdark, 10%)
+    background lighten(bgdark, 10%)
+  &.currentPlayable
+    border: 1px solid orange
 
 glyph
   font-size 0.85em

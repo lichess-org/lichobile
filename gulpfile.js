@@ -36,6 +36,17 @@ const paths = {
   ]
 };
 
+const browsers = ['and_chr >= 53', 'ios_saf >= 10']
+
+const babelSettings = {
+  extensions: ['.tsx', '.ts', '.js', '.jsx'],
+  presets: [['env', {
+    targets: {
+      browsers
+    }
+  }]]
+}
+
 gulp.task('html', () => {
   const context = require('./' + options.env);
   context.TARGET = options.target;
@@ -52,7 +63,7 @@ gulp.task('styl', () => {
   .pipe(stylus({
     compress: options.mode === 'release'
   }))
-  .pipe(autoprefixer({ browsers: ['and_chr >= 50', 'ios_saf >= 9']}))
+  .pipe(autoprefixer({ browsers }))
   .pipe(rename('app.css'))
   .pipe(gulp.dest(DEST + '/css/compiled/'));
 });
@@ -60,10 +71,7 @@ gulp.task('styl', () => {
 gulp.task('scripts', () => {
   return browserify(SRC + '/main.ts', { debug: true })
     .plugin(tsify)
-    .transform(babelify, {
-      extensions: ['.tsx', '.ts', '.js', '.jsx'],
-      presets: ['env']
-    })
+    .transform(babelify, babelSettings)
     .bundle()
     .pipe(source('app.js'))
     .pipe(buffer())
@@ -82,10 +90,7 @@ gulp.task('watch-scripts', () => {
   const bundleStream = watchify(
     browserify(SRC + '/main.ts', opts)
     .plugin(tsify)
-    .transform(babelify, {
-      extensions: ['.tsx', '.ts', '.js', '.jsx'],
-      presets: ['env']
-    })
+    .transform(babelify, babelSettings)
   );
 
   function rebundle() {

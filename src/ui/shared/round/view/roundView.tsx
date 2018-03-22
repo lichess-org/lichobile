@@ -78,15 +78,17 @@ function renderTitle(ctrl: OnlineRound) {
       return h('div.main_header_title.withSub', {
         key: 'user-tv'
       }, [
-        h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), ctrl.data.userTV]),
-        h('h2.header-subTitle', tournament ? [
-          h('span.fa.fa-trophy'),
-          h(CountdownTimer, { seconds: tournament.secondsToFinish || 0 }),
-          h('span', ' • ' + tournament.name)
-        ] : [
+        h('h1.header-gameTitle', [
           h(`span.withIcon[data-icon=${utils.gameIcon(ctrl.data.game.perf)}]`),
           gameApi.title(ctrl.data)
-        ])
+        ]),
+        h('h2.header-subTitle', [
+          h('span.withIcon[data-icon=1]'), ctrl.data.userTV,
+        ].concat(tournament ? [
+          ' • ',
+          h('span.fa.fa-trophy'),
+          h(CountdownTimer, { seconds: tournament.secondsToFinish || 0 }),
+        ] : [])),
       ])
     }
     else {

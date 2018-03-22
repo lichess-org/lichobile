@@ -87,7 +87,7 @@ export default {
   },
 
   renderCheckbox(
-    label: string,
+    label: Mithril.Children,
     name: string,
     settingsProp: StoredProp<boolean>,
     callback?: (v: boolean) => void,

@@ -20,7 +20,7 @@ export default function renderBoard(
 
   let nextBest: string | undefined
   let curBestShape: Shape[] = []
-  if (curTab.id !== 'explorer' && !ctrl.retro && ctrl.settings.s.showBestMove) {
+  if (!ctrl.retro && ctrl.settings.s.showBestMove) {
     nextBest = ctrl.nextNodeBest()
     curBestShape = nextBest ? moveOrDropShape(nextBest, 'paleBlue', player) :
       ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
@@ -38,8 +38,7 @@ export default function renderBoard(
   const badMoveShape: Shape[] = badNode && badNode.uci ?
     moveOrDropShape(badNode.uci, 'paleRed', player) : []
 
-  const shapes: Shape[] = nextMoveShape.length > 0 ?
-  nextMoveShape : flatten([pastBestShape, curBestShape, badMoveShape].filter(noNull))
+  const shapes: Shape[] = flatten([nextMoveShape, pastBestShape, curBestShape, badMoveShape].filter(noNull))
 
   return h(Board, {
     key: ctrl.settings.s.smallBoard ? 'board-small' : 'board-full',

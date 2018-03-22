@@ -24,8 +24,8 @@ export const brushes: { [key: string]: Brush } = {
   palePurple: {
     key: 'pp',
     color: '#4b0082',
-    opacity: 0.4,
-    lineWidth: 15,
+    opacity: 0.35,
+    lineWidth: 10,
     circleMargin: 0
   },
   paleRed: {

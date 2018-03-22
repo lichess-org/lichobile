@@ -234,11 +234,8 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
   const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
     '#' + ctrl.data.tournament.ranks[player.color] + ' ' : null
 
-  const isZen = settings.game.zenMode() && !ctrl.data.player.spectator &&
-    !(gameStatusApi.finished(ctrl.data) || gameStatusApi.aborted(ctrl.data))
-
   return (
-    <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '') + (isZen ? ' zen' : '')} oncreate={vConf}>
+    <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '') + (ctrl.isZen() ? ' zen' : '')} oncreate={vConf}>
       <h2 className="antagonistUser">
         { user && user.patron ?
           <span className={'patron status ' + (player.onGame ? 'ongame' : 'offgame')} data-icon="" />

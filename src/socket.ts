@@ -282,6 +282,31 @@ function createLobby(
   setupConnection(setup, socketHandlers)
 }
 
+function createAnalysis(
+  handlers: MessageHandlers
+) {
+    const socketHandlers = {
+      events: { ...defaultHandlers, ...handlers },
+      onOpen: session.backgroundRefresh
+    }
+    const opts = {
+      options: {
+        name: 'analysis',
+        debug: globalConfig.mode === 'dev',
+        pingDelay: 3000,
+        sendOnOpen: [{t: 'following_onlines'}],
+        registeredEvents: Object.keys(socketHandlers.events)
+      }
+    }
+    const setup = {
+      clientId: newSri(),
+      socketEndPoint: globalConfig.socketEndPoint,
+      url: '/analysis/socket',
+      opts
+    }
+    setupConnection(setup, socketHandlers)
+}
+
 function createDefault() {
   if (hasNetwork()) {
     const socketHandlers = {
@@ -354,6 +379,7 @@ export default {
   createLobby,
   createTournament,
   createDefault,
+  createAnalysis,
   redirectToGame,
   setVersion(version: number) {
     tellWorker(worker, 'setVersion', version)

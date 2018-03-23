@@ -7,7 +7,7 @@ import { Opts, Work, ICevalCtrl } from './interfaces'
 export default function CevalCtrl(
   variant: VariantKey,
   allowed: boolean,
-  emit: (work: Work, res?: Tree.ClientEval) => void,
+  emit: (path: string, res?: Tree.ClientEval) => void,
   initOpts: Opts
 ): ICevalCtrl {
 
@@ -32,7 +32,7 @@ export default function CevalCtrl(
   }
 
   function onEmit(work: Work, res?: Tree.ClientEval) {
-    emit(work, res)
+    emit(work.path, res)
   }
 
   function start(path: Tree.Path, nodes: Tree.Node[], forceRetroOpts: boolean) {
@@ -106,6 +106,7 @@ export default function CevalCtrl(
       return engine.isSearching()
     },
     maxDepth,
+    effectiveMaxDepth,
     minDepth,
     variant,
     start,
@@ -125,6 +126,9 @@ export default function CevalCtrl(
     },
     setMultiPv(pv: number) {
       opts.multiPv = pv
+    },
+    getMultiPv(): number {
+      return opts.multiPv
     },
     toggleInfinite() {
       opts.infinite = !opts.infinite

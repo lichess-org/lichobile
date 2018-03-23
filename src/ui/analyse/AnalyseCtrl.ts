@@ -22,7 +22,7 @@ import { NotesCtrl } from '../shared/round/notes'
 import * as util from './util'
 import CevalCtrl from './ceval/CevalCtrl'
 import RetroCtrl, { IRetroCtrl } from './retrospect/RetroCtrl'
-import { ICevalCtrl, Work as CevalWork } from './ceval/interfaces'
+import { ICevalCtrl } from './ceval/interfaces'
 import crazyValid from './crazy/crazyValid'
 import ExplorerCtrl from './explorer/ExplorerCtrl'
 import { IExplorerCtrl } from './explorer/interfaces'
@@ -30,6 +30,7 @@ import menu, { IMainMenuCtrl } from './menu'
 import analyseSettings, { ISettingsCtrl } from './analyseSettings'
 import ground from './ground'
 import socketHandler from './analyseSocketHandler'
+import { make as makeEvalCache, EvalCache } from './evalCache'
 import { Source } from './interfaces'
 import * as tabs from './tabs'
 
@@ -47,6 +48,7 @@ export default class AnalyseCtrl {
   retro: IRetroCtrl | null
   explorer: IExplorerCtrl
   tree: TreeWrapper
+  evalCache: EvalCache
 
   // current tree state, cursor, and denormalized node lists
   path: Tree.Path
@@ -97,6 +99,8 @@ export default class AnalyseCtrl {
       router.set('/')
     }
 
+    this.instanciateEvalCache()
+
     this.tree = makeTree(treeOps.reconstruct(this.data.treeParts))
 
     this.settings = analyseSettings.controller(this)
@@ -141,7 +145,7 @@ export default class AnalyseCtrl {
     ) {
       this.connectGameSocket()
     } else {
-      socket.createDefault()
+      socket.createAnalysis(socketHandler(this))
     }
 
     this.updateBoard()
@@ -255,6 +259,7 @@ export default class AnalyseCtrl {
   startCeval = () => {
     if (this.ceval.enabled() && this.canUseCeval()) {
       this.ceval.start(this.path, this.nodeList, !!this.retro)
+      this.evalCache.fetch(this.path, this.ceval.getMultiPv())
     }
   }
 
@@ -469,6 +474,24 @@ export default class AnalyseCtrl {
     return true
   }
 
+  private canEvalGet = (node: Tree.Node): boolean => node.ply < 15
+
+  private instanciateEvalCache() {
+    this.evalCache = makeEvalCache({
+      variant: this.data.game.variant.key,
+      canGet: this.canEvalGet,
+      canPut: (node: Tree.Node) => {
+        return Boolean(this.data.evalPut && this.canEvalGet(node) && (
+          // only put decent opening moves
+          !node.ceval!.mate && Math.abs(node.ceval!.cp!) < 99
+        ))
+      },
+      getNode: () => this.node,
+      receive: this.onCevalMsg
+    })
+  }
+
+
   private sendMove = (orig: Key, dest: Key, prom?: Role) => {
     const move: chess.MoveRequest = {
       orig,
@@ -549,9 +572,12 @@ export default class AnalyseCtrl {
       .indexOf(this.data.game.variant.key) !== -1
   }
 
-  private onCevalMsg = (work: CevalWork, ceval?: Tree.ClientEval) => {
+  private onCevalMsg = (path: string, ceval?: Tree.ClientEval) => {
+    if (ceval && ceval.cloud) {
+      console.log('ceval', ceval)
+    }
     if (ceval) {
-      this.tree.updateAt(work.path, (node: Tree.Node) => {
+      this.tree.updateAt(path, (node: Tree.Node) => {
         if (node.ceval && node.ceval.depth >= ceval.depth) return
 
         if (node.ceval === undefined) {
@@ -565,8 +591,12 @@ export default class AnalyseCtrl {
           node.ceval.best = node.ceval.pvs[0].moves[0]
         }
 
-        if (work.path === this.path) {
+        if (path === this.path) {
           if (this.retro) this.retro.onCeval()
+          this.evalCache.onCeval()
+          if (ceval.cloud && ceval.depth >= this.ceval.effectiveMaxDepth()) {
+            this.ceval.stop()
+          }
           redraw()
         }
       })

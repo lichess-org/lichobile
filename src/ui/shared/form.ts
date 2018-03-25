@@ -3,12 +3,11 @@ import * as h from 'mithril/hyperscript'
 import i18n from '../../i18n'
 import redraw from '../../utils/redraw'
 import { StoredProp } from '../../storage'
+import { LichessPropOption } from '../../lichess/prefs'
 import * as helper from '../helper'
 
 type SelectOption = string[]
 type SelectOptionGroup = Array<SelectOption>
-
-type LichessPropOption = [number, string, string | undefined]
 
 export default {
 
@@ -144,12 +143,15 @@ export default {
   renderMultipleChoiceButton<T>(
     label: string,
     options: ReadonlyArray<{ label: string, value: T }>,
-    prop: StoredProp<T>
+    prop: StoredProp<T>,
+    wrap: boolean = false
   ) {
     const selected = prop()
     return h('div.form-multipleChoiceContainer', [
       h('label', label),
-      h('div.form-multipleChoice', options.map(o => {
+      h('div.form-multipleChoice', {
+        className: wrap ? 'wrap' : ''
+      }, options.map(o => {
         return h('span', {
           className: o.value === selected ? 'selected' : '',
           oncreate: helper.ontap(() => {
@@ -158,6 +160,14 @@ export default {
         }, o.label)
       }))
     ])
+  },
+
+  lichessPropToOption([value, label, labelArg]: LichessPropOption) {
+    const l = labelArg !== undefined ? i18n(label, labelArg) : i18n(label)
+    return {
+      label: l,
+      value
+    }
   },
 
   renderSlider(

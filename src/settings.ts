@@ -110,6 +110,7 @@ export default {
     pieceNotation: store.prop<boolean>('settings.pieceNotation', true),
     zenMode: store.prop<boolean>('settings.zenMode', false),
     clockPosition: store.prop<'right' | 'left'>('settings.game.inversedClockPos', 'right'),
+    pieceMove: store.prop<'tap' | 'drag' | 'both'>('settings.game.pieceMove', 'both'),
   },
 
   analyse: {

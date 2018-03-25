@@ -197,14 +197,10 @@ button.fat
     background lighten(gold, 10%)
 
 .form-multipleChoiceContainer
-  display flex
-  justify-content space-between
-  align-items center
-  min-height 30px
   > .form-multipleChoice
     margin 0
-    flex-grow 1
-    max-width 50%
+    margin-top 15px
+    max-width initial
     border-radius 2px
     span
       &.selected
@@ -214,14 +210,19 @@ button.fat
   display: flex;
   max-width 300px
   margin 0 auto
+  &.wrap
+    flex-flow wrap
   span
+    display flex
+    justify-content center
+    align-items center
     flex-grow: 1;
-    padding: 5px 0;
+    font-size 0.9em
+    padding: 5px 10px
     text-align: center;
     transition: background 0.13s;
     border: 1px solid #3d3d3d;
     border-width: 1px 0 1px 1px;
-    text-transform: capitalize;
     &:first-child
       border-radius: 3px 0 0 3px;
     &:last-child

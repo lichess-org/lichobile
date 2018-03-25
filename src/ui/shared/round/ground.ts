@@ -21,6 +21,8 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): c
       chessFormat.uciTolastDrop(lastStep.uci) :
       null
 
+  const pieceMoveConf = settings.game.pieceMove()
+
   return {
     fen: fen,
     batchRAF: batchRequestAnimationFrame,
@@ -61,10 +63,14 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): c
       }
     },
     draggable: {
+      enabled: pieceMoveConf === 'drag' || pieceMoveConf === 'both',
       distance: 3,
       magnified: settings.game.magnified(),
       preventDefault: data.game.variant.key !== 'crazyhouse'
-    }
+    },
+    selectable: {
+      enabled: pieceMoveConf === 'tap' || pieceMoveConf === 'both'
+    },
   }
 }
 

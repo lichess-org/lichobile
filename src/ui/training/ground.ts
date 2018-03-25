@@ -7,6 +7,9 @@ import TrainingCtrl from './TrainingCtrl'
 export default function makeConfig(
   ctrl: TrainingCtrl,
   userMove: (orig: Key, dest: Key) => void): cg.InitConfig {
+
+  const pieceMoveConf = settings.game.pieceMove()
+
   return {
     batchRAF: batchRequestAnimationFrame,
     fen: ctrl.data.puzzle.fen,
@@ -33,8 +36,12 @@ export default function makeConfig(
       enabled: false
     },
     draggable: {
+      enabled: pieceMoveConf === 'drag' || pieceMoveConf === 'both',
       distance: 3,
       magnified: settings.game.magnified()
-    }
+    },
+    selectable: {
+      enabled: pieceMoveConf === 'tap' || pieceMoveConf === 'both'
+    },
   }
 }

@@ -67,6 +67,9 @@ export interface InitConfig {
     showGhost?: boolean
     deleteOnDropOff?: boolean
   }
+  selectable?: {
+    enabled: boolean
+  }
   events?: {
     change?: () => void
     move?: (orig: Key, dest: Key, capturedPiece?: Piece) => void

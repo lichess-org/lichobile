@@ -483,7 +483,7 @@ export default class AnalyseCtrl {
       canPut: (node: Tree.Node) => {
         return Boolean(this.data.evalPut && this.canEvalGet(node) && (
           // only put decent opening moves
-          !node.ceval!.mate && Math.abs(node.ceval!.cp!) < 99
+          node.ceval && node.ceval.mate && node.ceval.cp && Math.abs(node.ceval.cp) < 99
         ))
       },
       getNode: () => this.node,
@@ -573,9 +573,6 @@ export default class AnalyseCtrl {
   }
 
   private onCevalMsg = (path: string, ceval?: Tree.ClientEval) => {
-    if (ceval && ceval.cloud) {
-      console.log('ceval', ceval)
-    }
     if (ceval) {
       this.tree.updateAt(path, (node: Tree.Node) => {
         if (node.ceval && node.ceval.depth >= ceval.depth) return

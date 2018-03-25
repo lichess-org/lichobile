@@ -7,7 +7,8 @@ export interface CloudEval {
   fen: string
   knodes: number
   path: string
-  pvs: ReadonlyArray<{ cp?: number, moves: string, mate?: boolean }>
+  pvs: ReadonlyArray<{ cp?: number, moves: string, mate?: number }>
+  variant?: VariantKey
 }
 
 export interface EvalCache {
@@ -29,8 +30,8 @@ function qualityCheck(ev: Tree.ClientEval): boolean {
 }
 
 // from client eval to server eval
-function toPutData(variant: VariantKey, ev: Tree.ClientEval) {
-  const data: any = {
+function toPutData(variant: VariantKey, ev: Tree.ClientEval): CloudEval {
+  const data: Partial<CloudEval> = {
     fen: ev.fen,
     knodes: Math.round(ev.nodes / 1000),
     depth: ev.depth,
@@ -43,30 +44,29 @@ function toPutData(variant: VariantKey, ev: Tree.ClientEval) {
     })
   }
   if (variant !== 'standard') data.variant = variant
-  return data
+  return data as CloudEval
 }
 
 // from server eval to client eval
-function toCeval(e: CloudEval) {
-  console.log(e)
-  const res: any = {
+function toCeval(e: CloudEval): Tree.ClientEval {
+  const res: Partial<Tree.ClientEval> = {
     fen: e.fen,
     nodes: e.knodes * 1000,
     depth: e.depth,
     pvs: e.pvs.map(pv => {
-      const to: any = {
+      const to: Partial<Tree.PvData> = {
         moves: pv.moves.split(' ')
       }
       if (pv.cp !== undefined) to.cp = pv.cp
       else to.mate = pv.mate
-      return to
+      return to as Tree.PvData
     }),
     cloud: true
   }
-  if (res.pvs[0].cp !== undefined) res.cp = res.pvs[0].cp
-  else res.mate = res.pvs[0].mate
+  if (res.pvs![0].cp !== undefined) res.cp = res.pvs![0].cp
+  else res.mate = res.pvs![0].mate
   res.cloud = true
-  return res
+  return res as Tree.ClientEval
 }
 
 export interface Settings {

@@ -101,6 +101,7 @@ export default {
         'for': name
       }, label),
       h('input[type=checkbox]', {
+        id: name,
         name: name,
         disabled,
         checked: isOn,

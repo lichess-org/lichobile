@@ -67,10 +67,10 @@ export interface State {
     deleteOnDropOff: boolean // delete a piece when it is dropped off the board
     current: DragCurrent | null
   }
-  // selectable: {
-  //   // disable to enforce dragging over click-click move
-  //   enabled: boolean
-  // }
+  selectable: {
+    // disable to enforce dragging over click-click move
+    enabled: boolean
+  }
   events: {
     change?: () => void // called after the situation changes on the board
     // called after a piece has been moved.
@@ -133,10 +133,13 @@ export function makeDefaults(): State {
       distance: 3,
       magnified: true,
       centerPiece: false,
-    preventDefault: true,
+      preventDefault: true,
       showGhost: true,
       deleteOnDropOff: false,
       current: null
+    },
+    selectable: {
+      enabled: true
     },
     events: {},
     prev: {

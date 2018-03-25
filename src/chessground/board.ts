@@ -124,10 +124,14 @@ export function dropNewPiece(state: State, orig: Key, dest: Key, force = false):
 
 export function selectSquare(state: State, key: Key): void {
   if (state.selected) {
-    if (key) {
-      if (state.selected !== key) userMove(state, state.selected, key)
-    } else setSelected(state, null)
-  } else if (isMovable(state, key) || isPremovable(state, key)) setSelected(state, key)
+    if (state.selected === key && !state.draggable.enabled) {
+      unselect(state)
+    } else if (state.selectable.enabled && state.selected !== key) {
+      userMove(state, state.selected, key)
+    }
+  } else if (isMovable(state, key) || isPremovable(state, key)) {
+    setSelected(state, key)
+  }
 }
 
 export function setSelected(state: State, key: Key | null): void {

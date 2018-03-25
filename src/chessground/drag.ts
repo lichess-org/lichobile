@@ -106,7 +106,8 @@ export function start(ctrl: Chessground, e: TouchEvent) {
         position[0] - (squareBounds.left + squareBounds.width / 2),
         position[1] - (squareBounds.top + squareBounds.height / 2)
       ],
-      started: false,
+      // auto start drag if we're in drag'n drop only mode
+      started: state.selectable.enabled === false,
       over: orig,
       prevOver: null,
       element: util.getPieceByKey(dom, orig),
@@ -116,6 +117,9 @@ export function start(ctrl: Chessground, e: TouchEvent) {
     }
     if (state.draggable.magnified && state.draggable.centerPiece) {
       state.draggable.current.dec[1] = position[1] - (squareBounds.top + squareBounds.height)
+    }
+    if (state.draggable.current.started) {
+      processDrag(ctrl)
     }
   } else {
     if (hadPremove) board.unsetPremove(state)
@@ -180,6 +184,8 @@ export function end(ctrl: Chessground, e: TouchEvent) {
   }
 
   if (cur && cur.orig === cur.previouslySelected && (cur.orig === dest || !dest)) {
+    board.unselect(state)
+  } else if (!state.selectable.enabled) {
     board.unselect(state)
   }
 

@@ -578,10 +578,21 @@ export default class AnalyseCtrl {
         if (node.ceval && node.ceval.depth >= ceval.depth) return
 
         if (node.ceval === undefined) {
-          node.ceval = <Tree.ClientEval>Object.assign({}, ceval)
+          node.ceval = { ...ceval }
         }
         else {
-          node.ceval = <Tree.ClientEval>Object.assign(node.ceval, ceval)
+          node.ceval = { ...node.ceval, ...ceval }
+          // hitting a cloud eval after a local eval, we don't want maxDepth,
+          // knps and millis
+          if (ceval.cloud) {
+            node.ceval.maxDepth = undefined
+            node.ceval.knps = undefined
+            node.ceval.millis = undefined
+          }
+          // hitting a local eval after cloud, let's, just remove cloud flag
+          else {
+            node.ceval.cloud = false
+          }
         }
 
         if (node.ceval.pvs.length > 0) {

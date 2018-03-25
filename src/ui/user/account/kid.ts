@@ -1,10 +1,10 @@
-import * as helper from '../helper'
-import { dropShadowHeader, backButton } from '../shared/common'
-import formWidgets from '../shared/form'
-import layout from '../layout'
-import session from '../../session'
-import { StoredProp } from '../../storage'
 import * as h from 'mithril/hyperscript'
+import session from '../../../session'
+import { StoredProp } from '../../../storage'
+import formWidgets from '../../shared/form'
+import { dropShadowHeader, backButton } from '../../shared/common'
+import * as helper from '../../helper'
+import layout from '../../layout'
 
 interface State {
   kidMode: StoredProp<boolean>

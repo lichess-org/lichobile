@@ -106,13 +106,19 @@ function myTurnGames() {
   return nowPlaying().filter(e => e.isMyTurn)
 }
 
-function toggleKidMode() {
+function showSavedPrefToast(data: string): string {
+  window.plugins.toast.show('lichess server: ' + i18n('yourPreferencesHaveBeenSaved'), 'short', 'center')
+  return data
+}
+
+function toggleKidMode(): Promise<string> {
   return fetchText('/account/kidConfirm', {
     method: 'POST'
   })
+  .then(showSavedPrefToast)
 }
 
-function savePreferences() {
+function savePreferences(): Promise<string> {
 
   function numValue(v: boolean | number): string {
     if (v === true) return '1'
@@ -156,6 +162,7 @@ function savePreferences() {
     },
     body: serializeQueryParameters(Object.assign(rest, display, behavior))
   }, true)
+  .then(showSavedPrefToast)
 }
 
 function lichessBackedProp<T extends string | number | boolean>(path: string, prefRequest: () => Promise<string>, defaultVal: T): StoredProp<T> {

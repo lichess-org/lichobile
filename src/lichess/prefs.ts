@@ -1,14 +1,5 @@
 export type LichessPropOption = [number, string, string | undefined]
 
-export const Premove = {
-  NO: 0,
-  YES: 1
-}
-export const PremoveChoices = [
-  [ Premove.NO, 'no' ],
-  [ Premove.YES, 'yes' ]
-] as Array<LichessPropOption>
-
 export const AutoQueen = {
   NEVER: 1,
   PREMOVE: 2,

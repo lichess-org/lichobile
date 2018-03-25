@@ -64,8 +64,11 @@ function renderAppPrefs() {
 
 function renderLichessPrefs(ctrl: Ctrl) {
   return [
-    h('li.list_item', formWidgets.renderCheckbox(i18n('premovesPlayingDuringOpponentTurn'),
-    'premove', ctrl.premove)),
+    h('li.list_item', formWidgets.renderMultipleChoiceButton(
+      i18n('premovesPlayingDuringOpponentTurn'), [
+        { label: i18n('no'), value: false },
+        { label: i18n('yes'), value: true },
+      ], ctrl.premove)),
     h('li.list_item', formWidgets.renderMultipleChoiceButton(
       i18n('takebacksWithOpponentApproval'), TakebackChoices.map(formWidgets.lichessPropToOption), ctrl.takeback
     )),

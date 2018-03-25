@@ -12,6 +12,7 @@ const stylus = require('gulp-stylus');
 const autoprefixer = require('gulp-autoprefixer');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify-es').default;
+const buffer = require('vinyl-buffer')
 
 const SRC = 'src'
 const DEST = 'www'
@@ -45,6 +46,11 @@ const babelSettings = {
   }]]
 }
 
+function logErrorAndExit(error) {
+  gutil.log(gutil.colors.red(error.message))
+  process.exit(1)
+}
+
 gulp.task('html', () => {
   const context = require('./' + options.env);
   context.TARGET = options.target;
@@ -53,6 +59,7 @@ gulp.task('html', () => {
   console.log(context);
   return gulp.src(path.join(SRC, 'index.html'))
     .pipe(preprocess({context: context}))
+    .on('error', logErrorAndExit)
     .pipe(gulp.dest(DEST));
 });
 
@@ -63,6 +70,7 @@ gulp.task('styl', () => {
   }))
   .pipe(autoprefixer({ browsers }))
   .pipe(rename('app.css'))
+  .on('error', logErrorAndExit)
   .pipe(gulp.dest(DEST + '/css/compiled/'));
 });
 
@@ -72,12 +80,12 @@ gulp.task('scripts', () => {
     .transform(babelify, babelSettings)
     .bundle()
     .pipe(source('app.js'))
+    .pipe(buffer())
     // work around Safari 10/11 bugs in loop scoping and await
     // see https://www.npmjs.com/package/uglify-es
     .pipe(uglify({ safari10: true }))
-    .on('error', error => gutil.log(gutil.colors.red(error.message)))
+    .on('error', logErrorAndExit)
     .pipe(gulp.dest(DEST));
-
 });
 
 gulp.task('watch-scripts', () => {

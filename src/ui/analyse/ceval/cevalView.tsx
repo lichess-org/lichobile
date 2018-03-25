@@ -30,13 +30,13 @@ function renderCevalInfos(ctrl: AnalyseCtrl) {
     h('div.depth', [
       h('strong', 'Depth: '), ceval.depth + (isInfinite || ceval.maxDepth === undefined ? '' : `/${ceval.maxDepth}`)
     ]),
-    ceval.knps !== undefined ? h('div.knps', [
+    !ceval.cloud && ceval.knps !== undefined ? h('div.knps', [
       h('strong', 'kn/s: '), Math.round(ceval.knps)
     ]) : null,
     h('div.nodes', [
       h('strong', 'nodes: '), Math.round(ceval.nodes / 1000) + 'k'
     ]),
-    ceval.millis !== undefined ? h('div.time', [
+    !ceval.cloud && ceval.millis !== undefined ? h('div.time', [
       h('strong', 'time: '), formatTime(ceval.millis)
     ]) : null,
     ceval.cloud ? h('span.ceval-cloud', 'Cloud') : null

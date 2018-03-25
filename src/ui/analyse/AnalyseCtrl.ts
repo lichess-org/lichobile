@@ -480,17 +480,10 @@ export default class AnalyseCtrl {
     this.evalCache = makeEvalCache({
       variant: this.data.game.variant.key,
       canGet: this.canEvalGet,
-      canPut: (node: Tree.Node) => {
-        return Boolean(this.data.evalPut && this.canEvalGet(node) && (
-          // only put decent opening moves
-          node.ceval && node.ceval.mate && node.ceval.cp && Math.abs(node.ceval.cp) < 99
-        ))
-      },
       getNode: () => this.node,
       receive: this.onCevalMsg
     })
   }
-
 
   private sendMove = (orig: Key, dest: Key, prom?: Role) => {
     const move: chess.MoveRequest = {
@@ -601,7 +594,6 @@ export default class AnalyseCtrl {
 
         if (path === this.path) {
           if (this.retro) this.retro.onCeval()
-          this.evalCache.onCeval()
           if (ceval.cloud && ceval.depth >= this.ceval.effectiveMaxDepth()) {
             this.ceval.stop()
           }

@@ -1,4 +1,3 @@
-import * as throttle from 'lodash/throttle'
 import socket from '../../socket'
 import { Tree } from '../shared/tree'
 
@@ -12,42 +11,10 @@ export interface CloudEval {
 }
 
 export interface EvalCache {
-  onCeval(): void
   fetch(path: Tree.Path, multiPv: number): void
   onCloudEval(cloudEval: CloudEval): void
 }
 
-const evalPutMinDepth = 20
-const evalPutMinNodes = 3e6
-const evalPutMaxMoves = 10
-
-function qualityCheck(ev: Tree.ClientEval): boolean {
-  // below 500k nodes, the eval might come from an imminent threefold repetition
-  // and should therefore be ignored
-  return ev.nodes > 500000 && (
-    ev.depth >= evalPutMinDepth || ev.nodes > evalPutMinNodes
-  )
-}
-
-// from client eval to server eval
-function toPutData(variant: VariantKey, ev: Tree.ClientEval): CloudEval {
-  const data: Partial<CloudEval> = {
-    fen: ev.fen,
-    knodes: Math.round(ev.nodes / 1000),
-    depth: ev.depth,
-    pvs: ev.pvs.map(pv => {
-      return {
-        cp: pv.cp,
-        mate: pv.mate,
-        moves: pv.moves.slice(0, evalPutMaxMoves).join(' ')
-      }
-    })
-  }
-  if (variant !== 'standard') data.variant = variant
-  return data as CloudEval
-}
-
-// from server eval to client eval
 function toCeval(e: CloudEval): Tree.ClientEval {
   const res: Partial<Tree.ClientEval> = {
     fen: e.fen,
@@ -72,7 +39,6 @@ function toCeval(e: CloudEval): Tree.ClientEval {
 export interface Settings {
   variant: VariantKey
   canGet: (node: Tree.Node) => boolean
-  canPut: (node: Tree.Node) => boolean
   getNode: () => Tree.Node
   receive: (path: string, ceval?: Tree.ClientEval) => void
 }
@@ -80,18 +46,11 @@ export interface Settings {
 export function make({
   variant,
   canGet,
-  canPut,
   getNode,
   receive
 }: Settings): EvalCache {
   const fenFetched: Set<string> = new Set()
   return {
-    onCeval: throttle(() => {
-      const node = getNode(), ev = node.ceval
-      if (ev && !ev.cloud && fenFetched.has(node.fen) && qualityCheck(ev) && canPut(node)) {
-        socket.send('evalPut', toPutData(variant, ev))
-      }
-    }, 500),
     fetch(path: Tree.Path, multiPv: number): void {
       const node = getNode()
       if ((node.ceval && node.ceval.cloud) || !canGet(node)) return

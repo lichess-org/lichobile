@@ -78,9 +78,10 @@ function renderLichessPrefs(ctrl: Ctrl) {
     h('li.list_item', formWidgets.renderMultipleChoiceButton(
       i18n('claimDrawOnThreefoldRepetitionAutomatically').replace(/\%s/g, ''), AutoThreefoldChoices.map(formWidgets.lichessPropToOption), ctrl.autoThreefold
     )),
-    h('li.list_item', formWidgets.renderMultipleChoiceButton(
-      i18n('moveConfirmation'), SubmitMoveChoices.map(formWidgets.lichessPropToOption), ctrl.submitMove, true
-    )),
+    h('li.list_item', [
+      h('div.label', i18n('moveConfirmation')),
+      h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderLichessPropSelect('', 'moveConfirmation', SubmitMoveChoices, ctrl.submitMove))
+    ])
   ]
 }
 

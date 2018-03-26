@@ -107,7 +107,7 @@ function myTurnGames() {
 }
 
 function showSavedPrefToast(data: string): string {
-  window.plugins.toast.show('lichess server: ' + i18n('yourPreferencesHaveBeenSaved'), 'short', 'center')
+  window.plugins.toast.show('✓ Your preferences have been saved on lichess server.', 'short', 'center')
   return data
 }
 

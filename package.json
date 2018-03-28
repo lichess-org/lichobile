@@ -102,7 +102,7 @@
         "watch-dev": "gulp watch --env=env-dev.json",
         "watch-stage": "gulp watch --env=env-stage.json",
         "watch-prod": "gulp watch --env=env-prod.json",
-        "build-stage": "gulp --mode='release' --env=env-stage.json",
+        "build-stage": "BABEL_ENV=production gulp --mode='release' --env=env-stage.json",
         "prebuild-stage": "npm run lint && npm run test",
         "build-cordova-dev": "gulp --target='cordova' --env=env-dev.json",
         "build-cordova-stage": "gulp --target='cordova' --env=env-stage.json",

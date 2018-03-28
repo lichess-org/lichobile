@@ -18,7 +18,7 @@ export interface DragCurrent {
   started: boolean // whether the drag has started; as per the distance setting
   element: cg.PieceNode | null
   showGhost: boolean // whether to show ghost when dragging
-  originTarget: EventTarget,
+  originTarget: EventTarget | null,
   previouslySelected: Key | null
   newPiece?: boolean // it it a new piece from outside the board
   force?: boolean // can the new piece replace an existing one (editor)

@@ -48,25 +48,25 @@ interface VM {
 
 export default class OnlineRound implements OnlineRoundInterface {
   public id: string
-  public data: OnlineGameData
+  public data!: OnlineGameData
   public chessground: Chessground
   public clock: ClockCtrl | null
-  public correspondenceClock: CorresClockCtrl
+  public correspondenceClock!: CorresClockCtrl
   public chat: Chat | null
   public notes: NotesCtrl | null
   public onFeatured?: () => void
   public onTVChannelChange?: () => void
   public onUserTVRedirect?: () => void
   public vm: VM
-  public title: Mithril.Children
-  public subTitle: string
-  public tv: string
+  public title!: Mithril.Children
+  public subTitle!: string
+  public tv!: string
 
   private zenModeEnabled: boolean
   private lastMoveMillis?: number
-  private lastDrawOfferAtPly: number
-  private clockIntervId: number
-  private clockTimeoutId: number
+  private lastDrawOfferAtPly!: number
+  private clockIntervId!: number
+  private clockTimeoutId!: number
 
   public constructor(
     id: string,

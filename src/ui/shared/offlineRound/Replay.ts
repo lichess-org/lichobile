@@ -3,13 +3,13 @@ import * as chess from '../../../chess'
 import { GameStatus } from '../../../lichess/interfaces/game'
 
 export default class Replay {
-  private variant: VariantKey
-  private initialFen: string
+  private variant!: VariantKey
+  private initialFen!: string
   private onReplayAdded: (sit: chess.GameSituation) => void
   private onThreefoldRepetition: (newStatus: GameStatus) => void
 
-  public ply: number
-  public situations: Array<chess.GameSituation>
+  public ply!: number
+  public situations!: Array<chess.GameSituation>
 
   constructor(
     variant: VariantKey,

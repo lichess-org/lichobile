@@ -12537,31 +12537,6 @@ declare module _ {
         isWeakMap(): LoDashExplicitWrapper<boolean>;
     }
 
-    //_.isWeakSet
-    interface LoDashStatic {
-        /**
-         * Checks if value is classified as a WeakSet object.
-         *
-         * @param value The value to check.
-         * @returns Returns true if value is correctly classified, else false.
-         */
-        isWeakSet<T>(value?: any): value is WeakSet<T>;
-    }
-
-    interface LoDashImplicitWrapperBase<T, TWrapper> {
-        /**
-         * @see _.isWeakSet
-         */
-        isWeakSet(): boolean;
-    }
-
-    interface LoDashExplicitWrapperBase<T, TWrapper> {
-        /**
-         * @see _.isWeakSet
-         */
-        isWeakSet(): LoDashExplicitWrapper<boolean>;
-    }
-
     //_.lt
     interface LoDashStatic {
         /**
@@ -20363,13 +20338,6 @@ declare module "lodash/isUndefined" {
    const isUndefined: typeof _.isUndefined;
    export = isUndefined;
 }
-
-
-declare module "lodash/isWeakSet" {
-   const isWeakSet: typeof _.isWeakSet;
-   export = isWeakSet;
-}
-
 
 declare module "lodash/join" {
    const join: typeof _.join;

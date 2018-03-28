@@ -39,7 +39,7 @@ function close(fromBB?: string) {
 function renderForm(ctrl: TournamentsListCtrl) {
   return (
     <form id="tournamentCreateForm"
-    onsubmit={function(e: Event) {
+    onsubmit={(e: Event) => {
       e.preventDefault()
       return create(e.target as HTMLFormElement)
     }}>
@@ -47,23 +47,25 @@ function renderForm(ctrl: TournamentsListCtrl) {
         <div className="select_input">
           {formWidgets.renderSelect('Variant', 'variant', settings.tournament.availableVariants, settings.tournament.variant, false)}
         </div>
-        <div className={'select_input' + (settings.tournament.variant() !== '1' ? ' notVisible' : '')}>
-          <label for="select_start_position">
-            Position
-          </label>
-          <select id="select_start_position" className="positions">
-            <option value={standardFen}>Initial Position</option>
-            {ctrl.startPositions.map(c => {
-              return (
-                <optgroup label={c.name}>
-                  {c.positions.map(p =>
-                    <option value={p.fen}>{p.eco + ' ' + p.name}</option>
-                  )}
-                </optgroup>
-              )
-            })}
-          </select>
-        </div>
+        {ctrl.startPositions !== undefined ?
+          <div className={'select_input' + (settings.tournament.variant() !== '1' ? ' notVisible' : '')}>
+            <label for="select_start_position">
+              Position
+            </label>
+            <select id="select_start_position" className="positions">
+              <option value={standardFen}>Initial Position</option>
+              {ctrl.startPositions.map(c => {
+                return (
+                  <optgroup label={c.name}>
+                    {c.positions.map(p =>
+                      <option value={p.fen}>{p.eco + ' ' + p.name}</option>
+                    )}
+                  </optgroup>
+                )
+              })}
+            </select>
+          </div> : null
+        }
         <div className="select_input">
           {formWidgets.renderSelect('Mode', 'mode', settings.tournament.availableModes, settings.tournament.mode, false)}
         </div>

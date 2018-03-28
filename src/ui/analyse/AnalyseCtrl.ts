@@ -43,7 +43,7 @@ export default class AnalyseCtrl {
   menu: IMainMenuCtrl
   continuePopup: ContinuePopupController
   notes: NotesCtrl | null
-  chessground: Chessground
+  chessground!: Chessground
   ceval: ICevalCtrl
   retro: IRetroCtrl | null
   explorer: IExplorerCtrl
@@ -51,10 +51,10 @@ export default class AnalyseCtrl {
   evalCache: EvalCache
 
   // current tree state, cursor, and denormalized node lists
-  path: Tree.Path
-  node: Tree.Node
-  nodeList: Tree.Node[]
-  mainline: Tree.Node[]
+  path!: Tree.Path
+  node!: Tree.Node
+  nodeList!: Tree.Node[]
+  mainline!: Tree.Node[]
 
   // state flags
   onMainline: boolean = true
@@ -90,6 +90,7 @@ export default class AnalyseCtrl {
     this.orientation = orientation
     this.source = source
     this.synthetic = util.isSynthetic(data)
+    this.ongoing = !this.synthetic && gameApi.playable(data)
     this.initialPath = treePath.root
     this._currentTabIndex = tab !== undefined ? tab :
       this.synthetic ? 0 : 1
@@ -99,7 +100,12 @@ export default class AnalyseCtrl {
       router.set('/')
     }
 
-    this.instanciateEvalCache()
+    this.evalCache = makeEvalCache({
+      variant: this.data.game.variant.key,
+      canGet: this.canEvalGet,
+      getNode: () => this.node,
+      receive: this.onCevalMsg
+    })
 
     this.tree = makeTree(treeOps.reconstruct(this.data.treeParts))
 
@@ -475,15 +481,6 @@ export default class AnalyseCtrl {
   }
 
   private canEvalGet = (node: Tree.Node): boolean => node.ply < 15
-
-  private instanciateEvalCache() {
-    this.evalCache = makeEvalCache({
-      variant: this.data.game.variant.key,
-      canGet: this.canEvalGet,
-      getNode: () => this.node,
-      receive: this.onCevalMsg
-    })
-  }
 
   private sendMove = (orig: Key, dest: Key, prom?: Role) => {
     const move: chess.MoveRequest = {

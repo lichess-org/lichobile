@@ -1,4 +1,8 @@
-export type LichessPropOption = [number, string, string | undefined]
+export interface LichessPropOption extends Array<number | string> {
+    0: number
+    1: string
+    2: string
+}
 
 export const AutoQueen = {
   NEVER: 1,

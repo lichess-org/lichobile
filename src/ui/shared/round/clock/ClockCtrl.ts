@@ -40,7 +40,7 @@ export default class ClockCtrl {
     }
   }
 
-  times: Times
+  times!: Times
 
   emergMs: Millis
 

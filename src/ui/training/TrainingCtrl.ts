@@ -25,27 +25,27 @@ import { syncPuzzleResult, syncAndLoadNewPuzzle, nbRemainingPuzzles, puzzleLoadF
 import { Database } from './database'
 
 export default class TrainingCtrl implements PromotingInterface {
-  data: Data
+  data!: Data
   menu: IMenuCtrl
-  chessground: Chessground
+  chessground!: Chessground
   database: Database
 
   // current tree state, cursor, and denormalized node lists
-  path: Tree.Path
-  node: Tree.Node
-  nodeList: Tree.Node[]
-  mainline: Tree.Node[]
-  initialPath: Tree.Path
-  initialNode: Tree.Node
+  path!: Tree.Path
+  node!: Tree.Node
+  nodeList!: Tree.Node[]
+  mainline!: Tree.Node[]
+  initialPath!: Tree.Path
+  initialNode!: Tree.Node
 
-  nbUnsolved: number
+  nbUnsolved!: number
 
-  vm: VM
+  vm!: VM
 
   pieceTheme: string
 
-  private tree: TreeWrapper
-  private initialData: PuzzleData
+  private tree!: TreeWrapper
+  private initialData!: PuzzleData
 
   constructor(cfg: PuzzleData, database: Database) {
     this.menu = menu.controller(this)

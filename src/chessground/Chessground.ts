@@ -12,7 +12,7 @@ export default class Chessground {
   public state: State
   public dom?: cg.DOM
 
-  private resizeTimeoutId: number
+  private resizeTimeoutId: number = 0
 
   constructor(cfg: cg.InitConfig) {
     this.state = initBoard(cfg)

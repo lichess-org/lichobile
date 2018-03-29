@@ -3,7 +3,9 @@ import router from '../../../router'
 import i18n from '../../../i18n'
 import settings from '../../../settings'
 import * as utils from '../../../utils'
+import { emptyFen } from '../../../utils/fen'
 import continuePopup from '../../shared/continuePopup'
+import spinner from '../../../spinner'
 import { view as renderPromotion } from '../../shared/offlineRound/promotion'
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard'
 import { notesView } from '../../shared/round/notes'
@@ -11,6 +13,10 @@ import { Bounds } from '../../shared/Board'
 import menu from '../menu'
 import analyseSettings from '../analyseSettings'
 import TabNavigation from '../../shared/TabNavigation'
+import { loadingBackbutton, header, backButton as renderBackbutton } from '../../shared/common'
+import GameTitle from '../../shared/GameTitle'
+import * as helper from '../../helper'
+import layout from '../../layout'
 
 import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
@@ -27,7 +33,41 @@ import renderBoard from './boardView'
 import renderGameInfos from './gameInfosView'
 import renderActionsBar from './actionsView'
 
-export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Bounds) {
+export default function analyseView(ctrl?: AnalyseCtrl, color?: Color, curFen?: string) {
+  const isPortrait = helper.isPortrait()
+
+  if (ctrl) {
+
+    const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, ctrl.settings.s.smallBoard)
+    const backButton = ctrl.shouldGoBack ?
+    renderBackbutton(h(GameTitle, { data: ctrl.data, subTitle: 'players' })) : null
+
+    const title = ctrl.shouldGoBack ? null : h('div.main_header_title.withSub', {
+      key: 'title-selector'
+    }, [
+      h('div', i18n('analysis')),
+      renderVariantSelector(ctrl)
+    ])
+
+    return layout.board(
+      () => header(title, backButton),
+      () => renderContent(ctrl!, isPortrait, bounds),
+      () => overlay(ctrl!)
+    )
+  } else {
+    const isSmall = settings.analyse.smallBoard()
+    const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, isSmall)
+    return layout.board(
+      loadingBackbutton,
+      () => [
+        viewOnlyBoard(color || 'white', bounds, isSmall, curFen || emptyFen),
+        h('div.analyse-tableWrapper', spinner.getVdom('monochrome'))
+      ]
+    )
+  }
+}
+
+function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Bounds) {
   const availTabs = ctrl.availableTabs()
 
   return h.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
@@ -40,13 +80,13 @@ export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Bo
   ])
 }
 
-export function viewOnlyBoard(color: Color, bounds: Bounds, isSmall: boolean, fen: string) {
+function viewOnlyBoard(color: Color, bounds: Bounds, isSmall: boolean, fen: string) {
   return h('section.board_wrapper', {
     className: isSmall ? 'halfsize' : ''
   }, h(ViewOnlyBoard, { orientation: color, bounds, fen }))
 }
 
-export function overlay(ctrl: AnalyseCtrl) {
+function overlay(ctrl: AnalyseCtrl) {
   return [
     renderPromotion(ctrl),
     menu.view(ctrl.menu),
@@ -57,7 +97,7 @@ export function overlay(ctrl: AnalyseCtrl) {
   ]
 }
 
-export function renderVariantSelector(ctrl: AnalyseCtrl) {
+function renderVariantSelector(ctrl: AnalyseCtrl) {
   const variant = ctrl.data.game.variant.key
   const icon = utils.gameIcon(variant)
   let availVariants = settings.analyse.availableVariants

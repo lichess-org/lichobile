@@ -13,12 +13,14 @@ import socket from '../../socket'
 import { openingSensibleVariants } from '../../lichess/variant'
 import * as gameApi from '../../lichess/game'
 import { AnalyseData, AnalyseDataWithTree, isOnlineAnalyseData } from '../../lichess/interfaces/analyse'
+import { StudyData } from '../../lichess/interfaces/study'
 import { Opening } from '../../lichess/interfaces/game'
 import settings from '../../settings'
 import { oppositeColor, hasNetwork, noop } from '../../utils'
 import promotion from '../shared/offlineRound/promotion'
 import continuePopup, { Controller as ContinuePopupController } from '../shared/continuePopup'
 import { NotesCtrl } from '../shared/round/notes'
+
 import * as util from './util'
 import CevalCtrl from './ceval/CevalCtrl'
 import RetroCtrl, { IRetroCtrl } from './retrospect/RetroCtrl'
@@ -33,6 +35,7 @@ import socketHandler from './analyseSocketHandler'
 import { make as makeEvalCache, EvalCache } from './evalCache'
 import { Source } from './interfaces'
 import * as tabs from './tabs'
+import StudyCtrl from './study/StudyCtrl'
 
 export default class AnalyseCtrl {
   data: AnalyseData
@@ -49,6 +52,7 @@ export default class AnalyseCtrl {
   explorer: IExplorerCtrl
   tree: TreeWrapper
   evalCache: EvalCache
+  study?: StudyCtrl
 
   // current tree state, cursor, and denormalized node lists
   path!: Tree.Path
@@ -80,6 +84,7 @@ export default class AnalyseCtrl {
 
   constructor(
     data: AnalyseData,
+    study: StudyData | undefined,
     source: Source,
     orientation: Color,
     shouldGoBack: boolean,
@@ -106,6 +111,8 @@ export default class AnalyseCtrl {
       getNode: () => this.node,
       receive: this.onCevalMsg
     })
+
+    this.study = study !== undefined ? new StudyCtrl(study) : undefined
 
     this.tree = makeTree(treeOps.reconstruct(this.data.treeParts))
 

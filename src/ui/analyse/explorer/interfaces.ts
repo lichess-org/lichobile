@@ -1,5 +1,6 @@
 
 export interface IExplorerCtrl {
+  allowed: boolean
   setStep(): void
   loading: Mithril.Stream<boolean>
   failing: Mithril.Stream<boolean>

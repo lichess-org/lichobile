@@ -9,7 +9,8 @@ import { IExplorerCtrl, ExplorerData } from './interfaces'
 import AnalyseCtrl from '../AnalyseCtrl'
 
 export default function ExplorerCtrl(
-  root: AnalyseCtrl
+  root: AnalyseCtrl,
+  allowed: boolean
 ): IExplorerCtrl {
 
   const loading = stream(true)
@@ -109,6 +110,7 @@ export default function ExplorerCtrl(
   }
 
   return {
+    allowed,
     setStep,
     loading,
     failing,

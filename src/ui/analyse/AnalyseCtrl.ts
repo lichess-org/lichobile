@@ -127,7 +127,7 @@ export default class AnalyseCtrl {
 
     this.ceval = CevalCtrl(
       this.data.game.variant.key,
-      this.allowCeval(),
+      this.isCevalAllowed(),
       this.onCevalMsg,
       {
         multiPv: this.settings.s.cevalMultiPvs,
@@ -136,7 +136,8 @@ export default class AnalyseCtrl {
       }
     )
 
-    this.explorer = ExplorerCtrl(this)
+    const explorerAllowed = !this.study || this.study.data.chapter.features.explorer
+    this.explorer = ExplorerCtrl(this, explorerAllowed)
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50)
 
     const initPly = ply !== undefined ? ply : this.tree.lastPly()
@@ -216,7 +217,7 @@ export default class AnalyseCtrl {
     if (this.study || (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data))) {
       val = [...val, tabs.charts]
     }
-    if (hasNetwork()) val = [...val, tabs.explorer]
+    if (hasNetwork() && this.explorer.allowed) val = [...val, tabs.explorer]
 
     return val
   }
@@ -572,12 +573,18 @@ export default class AnalyseCtrl {
     redraw()
   }
 
-  private allowCeval() {
-    return (
-      this.source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)
-    ) &&
-      gameApi.analysableVariants
-      .indexOf(this.data.game.variant.key) !== -1
+  private isCevalAllowed() {
+    const study = this.study && this.study.data
+
+    if (!gameApi.analysableVariants.includes(this.data.game.variant.key)) {
+      return false
+    }
+
+    if (study && !(study.chapter.features.computer || study.chapter.practice)) {
+      return false
+    }
+
+    return this.source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)
   }
 
   private onCevalMsg = (path: string, ceval?: Tree.ClientEval) => {

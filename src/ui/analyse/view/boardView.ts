@@ -57,6 +57,7 @@ export function playerBar(ctrl: AnalyseCtrl, color: Color) {
   const study = ctrl.study && ctrl.study.data
   const pName = ctrl.playerName(color)
   let title, elo, result: string | undefined
+  if (pName === 'Anonymous') return null
   if (study) {
     title = findTag(study, `${color}title`)
     elo = findTag(study, `${color}elo`)

@@ -1,3 +1,5 @@
+import * as h from 'mithril/hyperscript'
+import i18n from '../../i18n'
 import socket from '../../socket'
 import settings from '../../settings'
 import router from '../../router'
@@ -7,9 +9,12 @@ import { handleXhrError, safeStringToNum } from '../../utils'
 import { specialFenVariants } from '../../lichess/variant'
 import { getAnalyseData, getCurrentAIGame, getCurrentOTBGame } from '../../utils/offlineGames'
 import * as helper from '../helper'
+import { header, backButton as renderBackbutton } from '../shared/common'
+import GameTitle from '../shared/GameTitle'
+import layout from '../layout'
 import { makeDefaultData } from './data'
 import { gameAnalysis as gameAnalysisXhr } from './analyseXhr'
-import analyseView from './view/analyseView'
+import { renderContent, overlay, loadingScreen, renderVariantSelector } from './view'
 import AnalyseCtrl from './AnalyseCtrl'
 import { Source } from './interfaces'
 
@@ -119,6 +124,27 @@ export default {
   },
 
   view(vnode) {
-    return analyseView(this.ctrl, vnode.attrs.color, vnode.attrs.curFen)
+    const isPortrait = helper.isPortrait()
+
+    if (this.ctrl) {
+      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, this.ctrl.settings.s.smallBoard)
+      const backButton = this.ctrl.shouldGoBack ?
+      renderBackbutton(h(GameTitle, { data: this.ctrl.data, subTitle: 'date' })) : null
+
+      const title = this.ctrl.shouldGoBack ? null : h('div.main_header_title.withSub', {
+        key: 'title-selector'
+      }, [
+        h('div', i18n('analysis')),
+        renderVariantSelector(this.ctrl)
+      ])
+
+      return layout.board(
+        () => header(title, backButton),
+        () => renderContent(this.ctrl!, isPortrait, bounds),
+        () => overlay(this.ctrl!)
+      )
+    } else {
+      return loadingScreen(isPortrait, vnode.attrs.color, vnode.attrs.curFen)
+    }
   }
 } as Mithril.Component<Attrs, State>

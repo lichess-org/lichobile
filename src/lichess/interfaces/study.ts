@@ -1,7 +1,7 @@
 import { AnalyseData } from './analyse'
 import { Tree } from '../../ui/shared/tree'
 
-export interface StudyData {
+export interface Study {
   readonly id: string
   readonly name: string
   readonly members: StudyMemberMap
@@ -32,7 +32,7 @@ export interface StudySettings {
 
 export interface ReloadData {
   readonly analysis: AnalyseData
-  readonly study: StudyData
+  readonly study: Study
 }
 
 interface Position {
@@ -74,7 +74,7 @@ export interface StudyChapterRelay {
 interface StudyChapterSetup {
   readonly gameId?: string
   readonly variant: {
-    readonly key: string
+    readonly key: VariantKey
     readonly name: string
   }
   readonly orientation: Color
@@ -97,4 +97,18 @@ export type TagTuple = [string, string]
 
 export interface LocalPaths {
   readonly [chapterId: string]: Tree.Path | undefined
+}
+
+export function findTag(study: Study, name: string): string | undefined {
+  const t = study.chapter.tags.find(t => t[0].toLowerCase() === name)
+  return t && t[1]
+}
+
+export function gameResult(study: Study, isWhite: boolean): string | undefined {
+  switch (findTag(study, 'result')) {
+    case '1-0': return isWhite ? '1' : '0'
+    case '0-1': return isWhite ? '0' : '1'
+    case '1/2-1/2': return '1/2'
+    default: return undefined
+  }
 }

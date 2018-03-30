@@ -1,10 +1,10 @@
 import { fetchJSON } from '../../../http'
-import { OnlineAnalyseData } from '../../../lichess/interfaces/analyse'
-import { StudyData } from '../../../lichess/interfaces/study'
+import { AnalyseData } from '../../../lichess/interfaces/analyse'
+import { Study } from '../../../lichess/interfaces/study'
 
 interface StudyXhrData {
-  analysis: OnlineAnalyseData
-  study: StudyData
+  analysis: AnalyseData
+  study: Study
 }
 
 export function load(id: string, chapterId?: string): Promise<StudyXhrData> {

@@ -4,7 +4,7 @@ export interface Tab {
   className: string
 }
 
-export const defaults: Tab[] = [
+export const defaults: ReadonlyArray<Tab> = [
   {
     id: 'infos',
     title: 'Game informations',

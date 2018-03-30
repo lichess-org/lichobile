@@ -1,6 +1,6 @@
 import { fixCrazySan } from '../../utils/chessFormat'
-import { Tree } from '../shared/tree'
 import { AnalyseData } from '../../lichess/interfaces/analyse'
+import { Tree } from '../shared/tree'
 import { Eval, NodeEvals } from './ceval/interfaces'
 
 export function readDrops(line?: string | null): string[] | null {

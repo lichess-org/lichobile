@@ -1,9 +1,9 @@
-import { StudyData } from '../../../lichess/interfaces/study'
+import { Study } from '../../../lichess/interfaces/study'
 
 export default class StudyCtrl {
-  public data: StudyData
+  public data: Study
 
-  constructor(data: StudyData) {
+  constructor(data: Study) {
     this.data = data
   }
 }

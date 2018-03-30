@@ -13,8 +13,7 @@ import { Bounds } from '../../shared/Board'
 import menu from '../menu'
 import analyseSettings from '../analyseSettings'
 import TabNavigation from '../../shared/TabNavigation'
-import { loadingBackbutton, header, backButton as renderBackbutton } from '../../shared/common'
-import GameTitle from '../../shared/GameTitle'
+import { loadingBackbutton } from '../../shared/common'
 import * as helper from '../../helper'
 import layout from '../../layout'
 
@@ -26,52 +25,31 @@ import renderCrazy from '../crazy/crazyView'
 import { view as renderContextMenu } from '../contextMenu'
 import TabView from './TabView'
 import Replay from './Replay'
-import Clocks from './clocks'
 import retroView from '../retrospect/retroView'
-import renderGameAnalysis from './gameAnalysis'
-import renderBoard from './boardView'
+import renderAnalysis from './analysisView'
+import renderBoard, { playerBar } from './boardView'
 import renderGameInfos from './gameInfosView'
 import renderActionsBar from './actionsView'
 
-export default function analyseView(ctrl?: AnalyseCtrl, color?: Color, curFen?: string) {
-  const isPortrait = helper.isPortrait()
-
-  if (ctrl) {
-
-    const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, ctrl.settings.s.smallBoard)
-    const backButton = ctrl.shouldGoBack ?
-    renderBackbutton(h(GameTitle, { data: ctrl.data, subTitle: 'players' })) : null
-
-    const title = ctrl.shouldGoBack ? null : h('div.main_header_title.withSub', {
-      key: 'title-selector'
-    }, [
-      h('div', i18n('analysis')),
-      renderVariantSelector(ctrl)
-    ])
-
-    return layout.board(
-      () => header(title, backButton),
-      () => renderContent(ctrl!, isPortrait, bounds),
-      () => overlay(ctrl!)
-    )
-  } else {
-    const isSmall = settings.analyse.smallBoard()
-    const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, isSmall)
-    return layout.board(
-      loadingBackbutton,
-      () => [
-        viewOnlyBoard(color || 'white', bounds, isSmall, curFen || emptyFen),
-        h('div.analyse-tableWrapper', spinner.getVdom('monochrome'))
-      ]
-    )
-  }
+export function loadingScreen(isPortrait: boolean, color?: Color, curFen?: string) {
+  const isSmall = settings.analyse.smallBoard()
+  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, isSmall)
+  return layout.board(
+    loadingBackbutton,
+    () => [
+      viewOnlyBoard(color || 'white', bounds, isSmall, curFen || emptyFen),
+      h('div.analyse-tableWrapper', spinner.getVdom('monochrome'))
+    ]
+  )
 }
 
-function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Bounds) {
+export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Bounds) {
   const availTabs = ctrl.availableTabs()
 
   return h.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
+    playerBar(ctrl, ctrl.topColor()),
     renderBoard(ctrl, bounds, availTabs),
+    playerBar(ctrl, ctrl.bottomColor()),
     h('div.analyse-tableWrapper', [
       ctrl.data.game.variant.key === 'crazyhouse' ? renderCrazy(ctrl) : null,
       renderAnalyseTable(ctrl, availTabs, isPortrait),
@@ -80,13 +58,7 @@ function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Bounds) {
   ])
 }
 
-function viewOnlyBoard(color: Color, bounds: Bounds, isSmall: boolean, fen: string) {
-  return h('section.board_wrapper', {
-    className: isSmall ? 'halfsize' : ''
-  }, h(ViewOnlyBoard, { orientation: color, bounds, fen }))
-}
-
-function overlay(ctrl: AnalyseCtrl) {
+export function overlay(ctrl: AnalyseCtrl) {
   return [
     renderPromotion(ctrl),
     menu.view(ctrl.menu),
@@ -97,7 +69,7 @@ function overlay(ctrl: AnalyseCtrl) {
   ]
 }
 
-function renderVariantSelector(ctrl: AnalyseCtrl) {
+export function renderVariantSelector(ctrl: AnalyseCtrl) {
   const variant = ctrl.data.game.variant.key
   const icon = utils.gameIcon(variant)
   let availVariants = settings.analyse.availableVariants
@@ -126,6 +98,12 @@ function renderVariantSelector(ctrl: AnalyseCtrl) {
   )
 }
 
+function viewOnlyBoard(color: Color, bounds: Bounds, isSmall: boolean, fen: string) {
+  return h('section.board_wrapper', {
+    className: isSmall ? 'halfsize' : ''
+  }, h(ViewOnlyBoard, { orientation: color, bounds, fen }))
+}
+
 function renderOpening(ctrl: AnalyseCtrl) {
   const opening = ctrl.tree.getOpening(ctrl.nodeList) || ctrl.data.game.opening
   if (opening) return h('div', {
@@ -136,7 +114,7 @@ function renderOpening(ctrl: AnalyseCtrl) {
   ])
 }
 
-function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: Tab[]) {
+function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
 
   const curTab = ctrl.currentTab(availTabs)
 
@@ -181,20 +159,8 @@ function renderTabTitle(ctrl: AnalyseCtrl, curTab: Tab) {
   return h.fragment({ key }, children)
 }
 
-function renderCheckCount(whitePov: boolean, checkCount: { white: number, black: number }) {
-  const w = h('span.color-icon.white', '+' + checkCount.black)
-  const b = h('span.color-icon.black', '+' + checkCount.white)
-  return h('div.analyse-checkCount', whitePov ? [w, b] : [b, w])
-}
-
 function renderReplay(ctrl: AnalyseCtrl) {
-  const checkCount = ctrl.node.checkCount
-  const showFb = ctrl.node.clock || checkCount
   return h('div.analyse-replayWrapper', [
-    showFb ? h('div.analyse-fixedBar', [
-      h(Clocks, { ctrl }),
-      checkCount ? renderCheckCount(ctrl.bottomColor() === 'white', checkCount) : null
-    ]) : null,
     h(Replay, { ctrl })
   ])
 }
@@ -203,11 +169,11 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Bas
   infos: renderGameInfos,
   moves: renderReplay,
   explorer: renderExplorer,
-  analysis: renderGameAnalysis,
+  analysis: renderAnalysis,
   ceval: renderCeval
 }
 
-function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: Tab[], isPortrait: boolean) {
+function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>, isPortrait: boolean) {
 
   const tabsContent = availTabs.map(t =>
     TabsContentRendererMap[t.id]

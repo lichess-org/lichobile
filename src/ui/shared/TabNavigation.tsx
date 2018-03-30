@@ -7,7 +7,7 @@ interface TabButton {
 }
 
 interface Attrs {
-  buttons: Array<TabButton>
+  buttons: ReadonlyArray<TabButton>
   selectedIndex: number
   onTabChange: (i: number) => void
   noIndicator?: boolean

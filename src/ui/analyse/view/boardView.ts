@@ -1,17 +1,20 @@
 import * as h from 'mithril/hyperscript'
 import { flatten, noNull } from '../../../utils'
 import * as chessFormat from '../../../utils/chessFormat'
+import gameStatusApi from '../../../lichess/status'
+import { findTag, gameResult } from '../../../lichess/interfaces/study'
 import Board, { Bounds } from '../../shared/Board'
 import { Shape } from '../../shared/BoardBrush'
 import * as treeOps from '../../shared/tree/ops'
 
+import Clock from './Clock'
 import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
 
 export default function renderBoard(
   ctrl: AnalyseCtrl,
   bounds: Bounds,
-  availTabs: Tab[]
+  availTabs: ReadonlyArray<Tab>
 ) {
   const curTab = ctrl.currentTab(availTabs)
   const player = ctrl.data.game.player
@@ -48,6 +51,40 @@ export default function renderBoard(
     shapes,
     wrapperClasses: ctrl.settings.s.smallBoard ? 'halfsize' : ''
   })
+}
+
+export function playerBar(ctrl: AnalyseCtrl, color: Color) {
+  const study = ctrl.study && ctrl.study.data
+  const pName = ctrl.playerName(color)
+  let title, elo, result: string | undefined
+  if (study) {
+    title = findTag(study, `${color}title`)
+    elo = findTag(study, `${color}elo`)
+    result = gameResult(study, color === 'white')
+  } else if (gameStatusApi.finished(ctrl.data)) {
+    const winner = ctrl.data.game.winner
+    result = winner === undefined ? '½' : winner === color ? '1' : '0'
+  }
+  const checkCount = ctrl.node.checkCount
+  const showRight = ctrl.node.clock || checkCount
+  return h(`div.player_bar.${color}`, {
+    className: ctrl.settings.s.smallBoard ? 'halfsize' : ''
+  }, [
+    h('div.info', [
+      result ? h('span.result', result) : null,
+      h('span.name', (title ? title + ' ' : '') + pName + (elo ? ` (${elo})` : '')),
+    ]),
+    showRight ? h('div.player_bar_clock', [
+      h(Clock, { ctrl, color }),
+      checkCount ? renderCheckCount(ctrl.bottomColor() === 'white', checkCount) : null
+    ]) : null,
+  ])
+}
+
+function renderCheckCount(whitePov: boolean, checkCount: { white: number, black: number }) {
+  const w = h('span.color-icon.white', '+' + checkCount.black)
+  const b = h('span.color-icon.black', '+' + checkCount.white)
+  return h('div.analyse-checkCount', whitePov ? [w, b] : [b, w])
 }
 
 function moveOrDropShape(uci: string, brush: string, player: Color): Shape[] {

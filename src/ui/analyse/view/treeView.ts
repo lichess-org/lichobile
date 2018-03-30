@@ -160,7 +160,7 @@ function renderInline(ctx: Ctx, node: Tree.Node, opts: Opts): Mithril.BaseNode {
 }
 
 function nodeClasses(c: AnalyseCtrl, path: Tree.Path): NodeClasses {
-  const currentPlayable = (path === c.initialPath && gameApi.playable(c.data))
+  const currentPlayable = !c.study && (path === c.initialPath && gameApi.playable(c.data))
   return {
     current: path === c.path,
     currentPlayable,

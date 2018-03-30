@@ -19,7 +19,7 @@ export interface AnalyseData {
   readonly evalPut?: boolean
   // practiceGoal?: PracticeGoal
   readonly pref: any
-  // offline analyse don't have it
+  // study and offline analyse don't have it
   readonly url?: {
     readonly round: string
     readonly socket: string

@@ -7,6 +7,7 @@ import * as gameApi from '../../../lichess/game'
 import spinner from '../../../spinner'
 import { playerName } from '../../../lichess/player'
 import { AnalyseData, RemoteEvalSummary } from '../../../lichess/interfaces/analyse'
+import { Study, findTag } from '../../../lichess/interfaces/study'
 import * as helper from '../../helper'
 
 import { requestComputerAnalysis } from '../analyseXhr'
@@ -14,18 +15,18 @@ import AnalyseCtrl from '../AnalyseCtrl'
 import drawAcplChart from '../charts/acpl'
 import drawMoveTimesChart from '../charts/moveTimes'
 
-export default function renderGameAnalysis(ctrl: AnalyseCtrl): Mithril.BaseNode {
+export default function renderAnalysis(ctrl: AnalyseCtrl): Mithril.BaseNode {
   const isPortrait = helper.isPortrait()
   const vd = helper.viewportDim()
   const d = ctrl.data
 
   return h('div.analyse-gameAnalysis.native_scroller',
-    d.analysis ? renderAnalysis(ctrl, vd, isPortrait) : renderAnalysisRequest(ctrl),
+    d.analysis ? renderAnalysisGraph(ctrl, vd, isPortrait) : renderAnalysisRequest(ctrl),
     d.game.moveCentis ? renderMoveTimes(ctrl, d.game.moveCentis, vd, isPortrait) : null
   )
 }
 
-function renderAnalysis(ctrl: AnalyseCtrl, vd: helper.ViewportDim, isPortrait: boolean) {
+function renderAnalysisGraph(ctrl: AnalyseCtrl, vd: helper.ViewportDim, isPortrait: boolean) {
   return h('div.analyse-computerAnalysis', {
     key: 'analysis'
   }, [
@@ -48,25 +49,34 @@ function renderAnalysis(ctrl: AnalyseCtrl, vd: helper.ViewportDim, isPortrait: b
         })
       }
     }),
-    h(AcplSummary, { d: ctrl.data, analysis: ctrl.data.analysis! })
+    h(AcplSummary, {
+      d: ctrl.data,
+      analysis: ctrl.data.analysis!,
+      study: ctrl.study && ctrl.study.data
+    })
   ])
 }
 
-const AcplSummary: Mithril.Component<{ d: AnalyseData, analysis: RemoteEvalSummary }, {}> = {
+const AcplSummary: Mithril.Component<{
+  d: AnalyseData
+  analysis: RemoteEvalSummary
+  study?: Study
+}, {}> = {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
     return !shallowEqual(attrs.analysis, oldattrs.analysis)
   },
 
   view({ attrs }) {
-    const { d, analysis } = attrs
+    const { d, analysis, study } = attrs
 
     return h('div.analyse-evalSummary', ['white', 'black'].map((color: Color) => {
       const p = gameApi.getPlayer(d, color)
+      const pName = study ? findTag(study, color) || 'Anonymous' : playerName(p)
 
       return h('table', [
         h('thead', h('tr', [
           h('th', h('span.color-icon.' + color)),
-          h('td', [playerName(p), p ? helper.renderRatingDiff(p) : null])
+          h('td', [pName, p ? helper.renderRatingDiff(p) : null])
         ])),
         h('tbody', [
           advices.map(a => {

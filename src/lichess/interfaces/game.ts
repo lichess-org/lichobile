@@ -88,6 +88,7 @@ export interface OnlineGame extends Game {
 
 export interface Player {
   readonly color: Color
+  readonly id?: string | null
   readonly rating?: number
   readonly user?: User
   readonly provisional?: boolean

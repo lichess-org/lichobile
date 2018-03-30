@@ -19,7 +19,6 @@
       height 'calc((100vh - %s) / 2)' % headerHeight
       width 'calc((100vh - %s) / 2)' % headerHeight
       align-self center
-      margin-top 2px
   @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
     height 98vw
     width 98vw
@@ -55,6 +54,34 @@
 .display_board
   width 100%
   height 100%
+
+.player_bar
+  display flex
+  flex-flow row nowrap
+  justify-content space-between
+  flex 0 0 auto
+  font-size 0.9em
+  color rgba(textDarkBg, 0.7)
+  > .info
+    display: flex;
+    flex-flow: row nowrap;
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right 10px
+    > .name
+      white-space nowrap
+      overflow hidden
+      text-overflow ellipsis
+    > .result
+      padding 0 5px
+      margin-right 5px
+      border-right 1px solid borderColor
+  > .player_bar_clock
+    flex 0 0 auto
+  &.halfsize
+    width 'calc((100vh - %s) / 2)' % headerHeight
+    align-self center
 
 .table
   display flex

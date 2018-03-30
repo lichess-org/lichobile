@@ -3,15 +3,16 @@ import * as h from 'mithril/hyperscript'
 import AnalyseCtrl from '../AnalyseCtrl'
 
 export default {
-  onbeforeupdate({ attrs }) {
-    return !attrs.ctrl.replaying
+  onbeforeupdate({ attrs }, { attrs: oldAttrs }) {
+    return attrs.color !== oldAttrs.color || !attrs.ctrl.replaying
   },
   view({ attrs }) {
-    const { ctrl } = attrs
+    const { ctrl, color } = attrs
     const node = ctrl.node, clock = node.clock
     if (clock === undefined) return
     const parentClock = ctrl.tree.getParentClock(node, ctrl.path)
     let whiteCentis, blackCentis
+    let centis
     const isWhiteTurn = node.ply % 2 === 0
     if (isWhiteTurn) {
       whiteCentis = parentClock
@@ -21,21 +22,14 @@ export default {
       whiteCentis = clock
       blackCentis = parentClock
     }
-    const whitePov = ctrl.bottomColor() === 'white'
-    const whiteEl = renderClock('white', whiteCentis!, isWhiteTurn)
-    const blackEl = renderClock('black', blackCentis!, !isWhiteTurn)
+    centis = color === 'white' ? whiteCentis! : blackCentis!
+    const current = color === 'white' ? isWhiteTurn : !isWhiteTurn
 
-    return h('div.analyse-clocks', whitePov ?
-      [blackEl, whiteEl] : [whiteEl, blackEl]
-    )
+    return h('span.analyse-clock', {
+      className: current ? 'current' : '',
+    }, clockContent(centis))
   }
-} as Mithril.Component<{ ctrl: AnalyseCtrl }, {}>
-
-function renderClock(color: Color, centis: number, current: boolean): Mithril.BaseNode {
-  return h('div.analyse-clock', {
-    className: current ? 'current' : '',
-  }, [h('span.color-icon.' + color), clockContent(centis)])
-}
+} as Mithril.Component<{ ctrl: AnalyseCtrl, color: Color }, {}>
 
 function clockContent(centis: number): Mithril.BaseNode {
   if (centis === undefined) return h('span.time', ['-'])

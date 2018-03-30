@@ -11,9 +11,10 @@ import vibrate from '../../vibrate'
 import sound from '../../sound'
 import socket from '../../socket'
 import { openingSensibleVariants } from '../../lichess/variant'
+import { playerName as gamePlayerName } from '../../lichess/player'
 import * as gameApi from '../../lichess/game'
 import { AnalyseData, AnalyseDataWithTree, isOnlineAnalyseData } from '../../lichess/interfaces/analyse'
-import { StudyData } from '../../lichess/interfaces/study'
+import { Study, findTag } from '../../lichess/interfaces/study'
 import { Opening } from '../../lichess/interfaces/game'
 import settings from '../../settings'
 import { oppositeColor, hasNetwork, noop } from '../../utils'
@@ -84,7 +85,7 @@ export default class AnalyseCtrl {
 
   constructor(
     data: AnalyseData,
-    study: StudyData | undefined,
+    studyData: Study | undefined,
     source: Source,
     orientation: Color,
     shouldGoBack: boolean,
@@ -112,7 +113,7 @@ export default class AnalyseCtrl {
       receive: this.onCevalMsg
     })
 
-    this.study = study !== undefined ? new StudyCtrl(study) : undefined
+    this.study = studyData !== undefined ? new StudyCtrl(studyData) : undefined
 
     this.tree = makeTree(treeOps.reconstruct(this.data.treeParts))
 
@@ -138,7 +139,7 @@ export default class AnalyseCtrl {
     this.explorer = ExplorerCtrl(this)
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50)
 
-    const initPly = ply || this.tree.lastPly()
+    const initPly = ply !== undefined ? ply : this.tree.lastPly()
 
     this.gamePath = (this.synthetic || this.ongoing) ? undefined :
       treePath.fromNodeList(treeOps.mainlineNodeList(this.tree.root))
@@ -179,6 +180,15 @@ export default class AnalyseCtrl {
     return this.data.game.player
   }
 
+  playerName(color: Color): string {
+    const p = gameApi.getPlayer(this.data, color)
+    return this.study ? findTag(this.study.data, color) || 'Anonymous' : gamePlayerName(p)
+  }
+
+  topColor(): Color {
+    return oppositeColor(this.bottomColor())
+  }
+
   bottomColor(): Color {
     return this.settings.s.flip ? oppositeColor(this.data.orientation) : this.data.orientation
   }
@@ -197,25 +207,26 @@ export default class AnalyseCtrl {
     }
   }
 
-  availableTabs = (): tabs.Tab[] => {
+  availableTabs = (): ReadonlyArray<tabs.Tab> => {
     let val = tabs.defaults
 
     if (this.synthetic) val = val.filter(t => t.id !== 'infos')
-    if (!this.retro && this.ceval.enabled()) val = val.concat([tabs.ceval])
-    if (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data)) {
-      val = val.concat([tabs.charts])
+    if (!this.retro && this.ceval.enabled()) val = [...val, tabs.ceval]
+    // TODO too short study chapters don't have analysis
+    if (this.study || (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data))) {
+      val = [...val, tabs.charts]
     }
-    if (hasNetwork()) val = val.concat([tabs.explorer])
+    if (hasNetwork()) val = [...val, tabs.explorer]
 
     return val
   }
 
-  currentTabIndex = (avail: tabs.Tab[]): number => {
+  currentTabIndex = (avail: ReadonlyArray<tabs.Tab>): number => {
     if (this._currentTabIndex > avail.length - 1) return avail.length - 1
     else return this._currentTabIndex
   }
 
-  currentTab = (avail: tabs.Tab[]): tabs.Tab => {
+  currentTab = (avail: ReadonlyArray<tabs.Tab>): tabs.Tab => {
     return avail[this.currentTabIndex(avail)]
   }
 

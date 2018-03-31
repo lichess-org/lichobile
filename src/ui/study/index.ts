@@ -11,6 +11,7 @@ import { notFound, studyHeader } from './studyView'
 
 export interface Attrs {
   id: string
+  chapterId?: string
   color?: Color
   ply?: string
   tab?: string
@@ -26,12 +27,13 @@ export interface State {
 export default {
   oninit(vnode) {
     const studyId = vnode.attrs.id
+    const studyChapterId = vnode.attrs.chapterId
     const now = performance.now()
     const orientation: Color = vnode.attrs.color || 'white'
     const ply = utils.safeStringToNum(vnode.attrs.ply)
     const tab = utils.safeStringToNum(vnode.attrs.tab)
 
-    loadStudy(studyId)
+    loadStudy(studyId, studyChapterId)
     .then(data => {
       const elapsed = performance.now() - now
       setTimeout(() => {

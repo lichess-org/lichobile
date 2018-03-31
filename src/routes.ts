@@ -95,6 +95,7 @@ export default {
       'tournament': tournamentsList,
       'tournament/:id': tournamentDetail,
       'study/:id': study,
+      'study/:id/chapter/:chapterId': study,
     })
   }
 }

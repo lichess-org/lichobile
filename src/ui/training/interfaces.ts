@@ -22,4 +22,6 @@ export interface VM {
   lastFeedback: Feedback
   canViewSolution: boolean
   resultSent: boolean
+  voted: boolean | null
+  vote: Number
 }

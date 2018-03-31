@@ -1,5 +1,6 @@
 import * as cloneDeep from 'lodash/cloneDeep'
 import * as debounce from 'lodash/debounce'
+import * as throttle from 'lodash/throttle'
 import Chessground from '../../chessground/Chessground'
 import { build as makeTree, ops as treeOps, path as treePath, TreeWrapper, Tree } from '../shared/tree'
 import router from '../../router'
@@ -153,6 +154,26 @@ export default class TrainingCtrl implements PromotingInterface {
     this.init(this.initialData)
   }
 
+  public upvote = () => {
+    this.vote(true)
+  }
+
+  public downvote = () => {
+    this.vote(false)
+  }
+
+  public vote = throttle((v: boolean) => {
+    this.vm.voted = v
+    xhr.vote(this.data.puzzle.id, v).then((res) => {
+      this.vm.vote = res[1]
+      redraw()
+    })
+  }, 1000)
+
+  public getVotes = () => {
+    return this.vm.vote
+  }
+
   public share = () => {
     window.plugins.socialsharing.share(null, null, null, `http://lichess.org/training/${this.data.puzzle.id}`)
   }
@@ -180,7 +201,9 @@ export default class TrainingCtrl implements PromotingInterface {
       moveValidationPending: false,
       loading: false,
       canViewSolution: false,
-      resultSent: false
+      resultSent: false,
+      voted: null,
+      vote: cfg.puzzle.vote,
     }
 
     const user = session.get()
@@ -404,6 +427,7 @@ export default class TrainingCtrl implements PromotingInterface {
     else {
       xhr.round(outcome)
       .then((res) => {
+        this.vm.voted = res.voted
         this.data.user = res.user
         redraw()
       })

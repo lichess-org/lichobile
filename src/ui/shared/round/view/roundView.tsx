@@ -54,11 +54,17 @@ function overlay(ctrl: OnlineRound) {
 }
 
 export function renderMaterial(material: Material) {
-  return Object.keys(material).map((role: Role) =>
-    h('div.tomb', { key: role }, range(material[role])
+  const tomb = Object.keys(material.pieces).map((role: Role) =>
+    h('div.tomb', { key: role }, range(material.pieces[role])
       .map(_ => h('piece', { className: role }))
     )
   )
+
+  if (material.score > 0) {
+    tomb.push(h('div.tomb', h('score', '+' + material.score)))
+  }
+
+  return tomb
 }
 
 function renderTitle(ctrl: OnlineRound) {

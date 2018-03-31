@@ -7,7 +7,7 @@ import { Data as TrainingData } from '../../training/interfaces'
 import { ClockTypeWithNone } from '../clock/interfaces'
 
 export type Position = 'player' | 'opponent'
-export type Material = { [role: string]: number }
+export type Material = { pieces: { [k: string]: number }, score: number }
 
 export interface BoardInterface {
   chessground: Chessground

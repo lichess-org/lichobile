@@ -1,6 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import i18n from '../../i18n'
 import { hasNetwork } from '../../utils'
+import session from '../../session'
 import settings from '../../settings'
 import Board, { Bounds } from '../shared/Board'
 import { view as renderPromotion } from '../shared/offlineRound/promotion'
@@ -155,34 +156,18 @@ function renderViewSolution(ctrl: TrainingCtrl) {
 }
 
 function renderVoteControls(ctrl: TrainingCtrl) {
-  if (ctrl.vm.voted === true) {
-    return [
-      h('span.fa.fa-caret-up'),
-      h('p', ctrl.getVotes()),
-      h('a', {
-        oncreate: helper.ontap(ctrl.downvote),
-      }, h('span.fa.fa-caret-down'))
-    ]
-  }
-
-  if (ctrl.vm.voted === false) {
-    return [
-      h('a', {
-        oncreate: helper.ontap(ctrl.upvote),
-      }, h('span.fa.fa-caret-up')),
-      h('p', ctrl.getVotes()),
-      h('span.fa.fa-caret-down')
-    ]
-  }
-
   return [
-    h('a', {
-      oncreate: helper.ontap(ctrl.upvote),
-    }, h('span.fa.fa-caret-up')),
     h('p', ctrl.getVotes()),
-    h('a', {
-      oncreate: helper.ontap(ctrl.downvote),
-    }, h('span.fa.fa-caret-down'))
+    h('div.buttons', [
+      h('span.fa.fa-caret-up', {
+        oncreate: helper.ontap(ctrl.upvote),
+        className: ctrl.vm.voted === true ? 'voted' : ''
+      }),
+      h('span.fa.fa-caret-down', {
+        oncreate: helper.ontap(ctrl.downvote),
+        className: ctrl.vm.voted === false ? 'voted' : ''
+      })
+    ])
   ]
 }
 
@@ -192,7 +177,8 @@ function renderResult(ctrl: TrainingCtrl) {
       h('div.training-half', [
         h('div.training-icon.win', '✓'),
         h('strong', [i18n('victory')]),
-        h('div.training-vote', renderVoteControls(ctrl))
+        hasNetwork() && session.isConnected() ?
+          h('div.training-vote', renderVoteControls(ctrl)) : null
       ]),
       h('div.training-half', renderViewControls(ctrl))
     ]
@@ -201,7 +187,8 @@ function renderResult(ctrl: TrainingCtrl) {
     return [
       h('div.training-half', [
         h('strong', 'Puzzle complete!'),
-        h('div.training-vote', renderVoteControls(ctrl))
+        hasNetwork() && session.isConnected() ?
+          h('div.training-vote', renderVoteControls(ctrl)) : null
       ]),
       h('div.training-half', renderViewControls(ctrl))
     ]

@@ -157,6 +157,31 @@
     &.down
       background red
 
+.training-offlineInfos
+  padding 10px
+  > p
+    margin-bottom 1em
+    &:last-child
+      margin-bottom 0
+
+.training-vote
+  display flex
+  flex-flow row nowrap
+  align-items center
+  margin-left 1em
+  > .buttons
+    margin-left 10px
+    display flex
+    flex-flow column nowrap
+    > span
+      margin 0
+      padding 0
+      color white
+      font-size 40px
+      line-height 25px
+      &.voted
+        color gold
+
 
 .view-container.light
   .training-control
@@ -173,22 +198,3 @@
     > .fatButton
       opacity 0.6
       box-shadow none
-
-.training-offlineInfos
-  padding 10px
-  > p
-    margin-bottom 1em
-    &:last-child
-      margin-bottom 0
-
-.training-vote
-  display flex
-  flex-flow column nowrap
-  text-align center
-  font-size 1.5em
-  > p
-    font-size 0.5em
-  > a
-    color white
-  > span
-    color yellow

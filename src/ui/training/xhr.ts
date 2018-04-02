@@ -10,7 +10,7 @@ export function round(outcome: PuzzleOutcome): Promise<RoundData> {
   })
 }
 
-export function vote(id: number, v: boolean): Promise<any> {
+export function vote(id: number, v: boolean): Promise<[boolean, number]> {
   return fetchJSON(`/training/${id}/vote`, {
     method: 'POST',
     body: JSON.stringify({

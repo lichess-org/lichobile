@@ -112,15 +112,15 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
   },
 
   view() {
-    let overlay: (() => Mithril.Children) | undefined = undefined
-    let board = () => viewOnlyBoardContent(standardFen, 'white')
+    let overlay: Mithril.Children | undefined = undefined
+    let board = viewOnlyBoardContent(standardFen, 'white')
 
     const challenge = this.challenge()
 
-    const header = () => headerWidget('lichess.org')
+    const header = headerWidget('lichess.org')
 
     if (challenge) {
-      board = () => viewOnlyBoardContent(
+      board = viewOnlyBoardContent(
         challenge.initialFen || standardFen,
         'white'
       )

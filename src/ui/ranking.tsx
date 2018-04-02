@@ -48,8 +48,8 @@ export default {
     const ctrl = vnode.state
 
     return layout.free(
-      () => dropShadowHeader(i18n('leaderboard')),
-      renderBody.bind(undefined, ctrl)
+      dropShadowHeader(i18n('leaderboard')),
+      renderBody(ctrl)
     )
   }
 } as Mithril.Component<{}, State>

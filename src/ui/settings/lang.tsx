@@ -28,7 +28,7 @@ export const LangPrefScreen: Mithril.Component<{}, State> = {
 
   view() {
     const ctrl = this
-    const header = () => dropShadowHeader(null, backButton(i18n('language')))
+    const header = dropShadowHeader(null, backButton(i18n('language')))
 
     function renderLang(l: Lang) {
       return (
@@ -54,7 +54,7 @@ export const LangPrefScreen: Mithril.Component<{}, State> = {
       )
     }
 
-    return layout.free(header, renderBody)
+    return layout.free(header, renderBody())
   }
 }
 

@@ -22,8 +22,8 @@ const PreferencesScreen: Mithril.Component<{}, {}> = {
   oncreate: helper.viewSlideIn,
 
   view: function() {
-    const header = () => dropShadowHeader(null, backButton(i18n('preferences')))
-    return layout.free(header, renderBody)
+    const header = dropShadowHeader(null, backButton(i18n('preferences')))
+    return layout.free(header, renderBody())
   }
 }
 

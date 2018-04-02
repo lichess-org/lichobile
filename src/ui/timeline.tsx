@@ -31,8 +31,8 @@ export default {
   oncreate: helper.viewFadeIn,
 
   view() {
-    const header = () => headerWidget(null, backButton(i18n('timeline')))
-    return layout.free(header, () => renderBody(this))
+    const header = headerWidget(null, backButton(i18n('timeline')))
+    return layout.free(header, renderBody(this))
   }
 } as Mithril.Component<{}, State>
 

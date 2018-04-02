@@ -88,9 +88,9 @@ export default function UserCtrl(userId: string): IUserCtrl {
 }
 
 export function isSessionUser(user: ProfileUser): user is Session {
-  return (<Session>user).kid !== undefined
+  return (<Session>user).prefs !== undefined
 }
 
 export function isFullUser(user: ProfileUser): user is UserFullProfile {
-  return (<UserFullProfile>user).url !== undefined
+  return (<UserFullProfile>user).count !== undefined
 }

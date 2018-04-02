@@ -37,8 +37,8 @@ export default {
 
   view() {
     const ctrl = this.ctrl
-    const header = () => dropShadowHeader(null, backButton(i18n('gameBehavior')))
-    return layout.free(header, () =>
+    const header = dropShadowHeader(null, backButton(i18n('gameBehavior')))
+    return layout.free(header,
       h('ul.native_scroller.page.settings_list.game',
         renderAppPrefs().concat(hasNetwork() && session.isConnected() ?
           renderLichessPrefs(ctrl) : []

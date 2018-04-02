@@ -73,9 +73,9 @@ export default {
   },
 
   view() {
-    const headerCtrl = () => header(i18n('inbox'))
-    const bodyCtrl = () => inboxBody(this.ctrl)
-    const footer = () => renderFooter(this.ctrl)
-    return layout.free(headerCtrl, bodyCtrl, footer)
+    const headerEl = header(i18n('inbox'))
+    const body = inboxBody(this.ctrl)
+    const footer = renderFooter(this.ctrl)
+    return layout.free(headerEl, body, footer)
   }
 } as Mithril.Component<{}, { ctrl: InboxCtrl }>

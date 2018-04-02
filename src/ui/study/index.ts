@@ -74,9 +74,9 @@ export default {
       const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, this.ctrl.settings.s.smallBoard)
 
       return layout.board(
-        () => studyHeader(this.ctrl!.study!.data),
-        () => renderContent(this.ctrl!, isPortrait, bounds),
-        () => overlay(this.ctrl!)
+        studyHeader(this.ctrl!.study!.data),
+        renderContent(this.ctrl!, isPortrait, bounds),
+        overlay(this.ctrl!)
       )
     } else {
       return loadingScreen(isPortrait, vnode.attrs.color, vnode.attrs.curFen)

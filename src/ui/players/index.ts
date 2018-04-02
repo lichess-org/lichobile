@@ -23,9 +23,9 @@ export default {
 
   view() {
     const ctrl = this.ctrl
-    const headerCtrl = () => header(ctrl)
-    const bodyCtrl = () => body(ctrl)
-    const searchModalCtrl = () => searchModal(ctrl)
+    const headerCtrl = header(ctrl)
+    const bodyCtrl = body(ctrl)
+    const searchModalCtrl = searchModal(ctrl)
 
     return layout.free(headerCtrl, bodyCtrl, undefined, searchModalCtrl)
   }

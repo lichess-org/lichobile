@@ -1,6 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import i18n from '../../i18n'
 import { hasNetwork } from '../../utils'
+import session from '../../session'
 import settings from '../../settings'
 import Board, { Bounds } from '../shared/Board'
 import { view as renderPromotion } from '../shared/offlineRound/promotion'
@@ -154,12 +155,30 @@ function renderViewSolution(ctrl: TrainingCtrl) {
   }, i18n('viewTheSolution')) : h('div.buttonPlaceholder', '')
 }
 
+function renderVoteControls(ctrl: TrainingCtrl) {
+  return [
+    h('p', ctrl.getVotes()),
+    h('div.buttons', [
+      h('span.fa.fa-caret-up', {
+        oncreate: helper.ontap(ctrl.upvote),
+        className: ctrl.vm.voted === true ? 'voted' : ''
+      }),
+      h('span.fa.fa-caret-down', {
+        oncreate: helper.ontap(ctrl.downvote),
+        className: ctrl.vm.voted === false ? 'voted' : ''
+      })
+    ])
+  ]
+}
+
 function renderResult(ctrl: TrainingCtrl) {
   if (ctrl.vm.lastFeedback === 'win') {
     return [
       h('div.training-half', [
         h('div.training-icon.win', '✓'),
-        h('strong', [i18n('victory')])
+        h('strong', [i18n('victory')]),
+        hasNetwork() && session.isConnected() ?
+          h('div.training-vote', renderVoteControls(ctrl)) : null
       ]),
       h('div.training-half', renderViewControls(ctrl))
     ]
@@ -167,7 +186,9 @@ function renderResult(ctrl: TrainingCtrl) {
   else {
     return [
       h('div.training-half', [
-        h('strong', 'Puzzle complete!')
+        h('strong', 'Puzzle complete!'),
+        hasNetwork() && session.isConnected() ?
+          h('div.training-vote', renderVoteControls(ctrl)) : null
       ]),
       h('div.training-half', renderViewControls(ctrl))
     ]

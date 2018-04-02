@@ -35,9 +35,9 @@ export default function view(ctrl: OnlineRound) {
   const isPortrait = helper.isPortrait()
 
   return layout.board(
-    () => renderHeader(ctrl),
-    () => renderContent(ctrl, isPortrait),
-    () => overlay(ctrl)
+    renderHeader(ctrl),
+    renderContent(ctrl, isPortrait),
+    overlay(ctrl)
   )
 }
 
@@ -54,11 +54,17 @@ function overlay(ctrl: OnlineRound) {
 }
 
 export function renderMaterial(material: Material) {
-  return Object.keys(material).map((role: Role) =>
-    h('div.tomb', { key: role }, range(material[role])
+  const tomb = Object.keys(material.pieces).map((role: Role) =>
+    h('div.tomb', { key: role }, range(material.pieces[role])
       .map(_ => h('piece', { className: role }))
     )
   )
+
+  if (material.score > 0) {
+    tomb.push(h('span', '+' + material.score))
+  }
+
+  return tomb
 }
 
 function renderTitle(ctrl: OnlineRound) {

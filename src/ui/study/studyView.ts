@@ -6,8 +6,8 @@ import layout from '../layout'
 
 export function notFound() {
   return layout.free(
-    () => header(null, backButton('Not Found')),
-    () => h('div')
+    header(null, backButton('Not Found')),
+    h('div')
   )
 }
 

@@ -25,8 +25,8 @@ export default {
 
   view() {
     const ctrl = this.ctrl
-    const header = () => dropShadowHeader(null, backButton(i18n('privacy')))
-    return layout.free(header, renderBody.bind(undefined, ctrl))
+    const header = dropShadowHeader(null, backButton(i18n('privacy')))
+    return layout.free(header, renderBody(ctrl))
   }
 } as Mithril.Component<{}, { ctrl: Ctrl }>
 

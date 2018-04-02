@@ -26,8 +26,8 @@ export default {
   view() {
     if (this.ctrl.notFound) {
       return layout.free(
-        () => headerWidget(null, backButton(i18n('tournamentNotFound'))),
-        () => h('div.tournamentNotFound', { key: 'tournament-not-found' }, [
+        headerWidget(null, backButton(i18n('tournamentNotFound'))),
+        h('div.tournamentNotFound', { key: 'tournament-not-found' }, [
           h('p', i18n('tournamentDoesNotExist')),
           h('p', i18n('tournamentMayHaveBeenCanceled'))
         ])
@@ -35,10 +35,10 @@ export default {
     }
 
     const tournament = this.ctrl.tournament
-    let header: () => Mithril.Children
+    let header: Mithril.Children
 
     if (tournament) {
-      header = () => headerWidget(null,
+      header = headerWidget(null,
         backButton(h('div.main_header_title.withSub', [
           h('h1', [
             h('span.fa.fa-trophy'),
@@ -52,16 +52,16 @@ export default {
         ]))
       )
     } else {
-      header = connectingHeader
+      header = connectingHeader()
     }
 
-    const body = () => tournamentBody(this.ctrl)
-    const footer = () => renderFooter(this.ctrl)
-    const faqOverlay = () => renderFAQOverlay(this.ctrl)
-    const playerInfoOverlay = () => renderPlayerInfoOverlay(this.ctrl)
-    const overlay = () => [
-      faqOverlay(),
-      playerInfoOverlay(),
+    const body = tournamentBody(this.ctrl)
+    const footer = renderFooter(this.ctrl)
+    const faqOverlay = renderFAQOverlay(this.ctrl)
+    const playerInfoOverlay = renderPlayerInfoOverlay(this.ctrl)
+    const overlay = [
+      faqOverlay,
+      playerInfoOverlay,
       passwordForm.view()
     ]
 

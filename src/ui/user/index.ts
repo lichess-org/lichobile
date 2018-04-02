@@ -33,13 +33,13 @@ const UserScreen: Mithril.Component<Attrs, State> = {
 
     if (user) {
       return layout.free(
-        () => view.header(user, this.user),
-        () => view.profile(user, this.user)
+        view.header(user, this.user),
+        view.profile(user, this.user)
       )
     } else {
       return layout.free(
-        () => loadingBackbutton(),
-        () => null
+        loadingBackbutton(),
+        null
       )
     }
   }

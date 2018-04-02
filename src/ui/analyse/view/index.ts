@@ -35,8 +35,8 @@ export function loadingScreen(isPortrait: boolean, color?: Color, curFen?: strin
   const isSmall = settings.analyse.smallBoard()
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, isSmall)
   return layout.board(
-    loadingBackbutton,
-    () => [
+    loadingBackbutton(),
+    [
       viewOnlyBoard(color || 'white', bounds, isSmall, curFen || emptyFen),
       h('div.analyse-tableWrapper', spinner.getVdom('monochrome'))
     ]

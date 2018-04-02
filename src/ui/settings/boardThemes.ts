@@ -34,7 +34,7 @@ export default {
   oncreate: helper.viewSlideIn,
 
   view: function() {
-    const header = () => dropShadowHeader(null, backButton(i18n('board')))
-    return layout.free(header, renderBody)
+    const header = dropShadowHeader(null, backButton(i18n('board')))
+    return layout.free(header, renderBody())
   }
 }

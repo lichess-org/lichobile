@@ -40,8 +40,8 @@ function renderBody() {
 export default {
   oncreate: helper.viewSlideIn,
 
-  view: function() {
-    const header = () => dropShadowHeader(null, backButton(i18n('gameDisplay')))
-    return layout.free(header, renderBody)
+  view() {
+    const header = dropShadowHeader(null, backButton(i18n('gameDisplay')))
+    return layout.free(header, renderBody())
   }
 }

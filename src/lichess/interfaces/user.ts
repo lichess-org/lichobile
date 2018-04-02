@@ -23,7 +23,6 @@ export interface UserFullProfile extends User {
   readonly nbFollowers: number
   readonly nbFollowing: number
   readonly playing: string
-  readonly url: string
   readonly count: UserGamesCount
   readonly blocking?: boolean
   readonly followable?: boolean

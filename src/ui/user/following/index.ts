@@ -22,8 +22,8 @@ export default {
   },
   view() {
     return layout.free(
-      () => header('Following'),
-      () => renderBody(this.ctrl)
+      header('Following'),
+      renderBody(this.ctrl)
     )
   }
 } as Mithril.Component<Attrs, State>

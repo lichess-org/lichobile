@@ -61,7 +61,7 @@ export function renderMaterial(material: Material) {
   )
 
   if (material.score > 0) {
-    tomb.push(h('div.tomb', h('score', '+' + material.score)))
+    tomb.push(h('span', '+' + material.score))
   }
 
   return tomb

@@ -35,9 +35,9 @@ export default function view(ctrl: OnlineRound) {
   const isPortrait = helper.isPortrait()
 
   return layout.board(
-    () => renderHeader(ctrl),
-    () => renderContent(ctrl, isPortrait),
-    () => overlay(ctrl)
+    renderHeader(ctrl),
+    renderContent(ctrl, isPortrait),
+    overlay(ctrl)
   )
 }
 

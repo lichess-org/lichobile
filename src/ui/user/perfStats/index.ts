@@ -55,13 +55,13 @@ export default {
   view(vnode) {
     const userId = vnode.attrs.id
     const perf = vnode.attrs.perf
-    const header = () => headerWidget(null,
+    const header = headerWidget(null,
       backButton(h('div.main_header_title', [
         h('span.withIcon', { 'data-icon': gameIcon(perf) }),
         userId + ' ' + shortPerfTitle(perf as PerfKey) + ' stats'
       ]))
     )
 
-    return layout.free(header, () => renderBody(this))
+    return layout.free(header, renderBody(this))
   }
 } as Mithril.Component<Attrs, State>

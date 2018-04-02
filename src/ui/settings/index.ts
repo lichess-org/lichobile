@@ -14,8 +14,8 @@ const SettingsScreen: Mithril.Component<{}, {}> = {
   },
 
   view() {
-    const header = () => dropShadowHeader(null, backButton(i18n('settings')))
-    return layout.free(header, renderBody)
+    const header = dropShadowHeader(null, backButton(i18n('settings')))
+    return layout.free(header, renderBody())
   }
 }
 

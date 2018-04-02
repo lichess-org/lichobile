@@ -18,8 +18,8 @@ const KidPrefScreen: Mithril.Component<{}, State> = {
   },
 
   view() {
-    const header = () => dropShadowHeader(null, backButton('Kid mode'))
-    return layout.free(header, () => renderBody(this))
+    const header = dropShadowHeader(null, backButton('Kid mode'))
+    return layout.free(header, renderBody(this))
   }
 }
 

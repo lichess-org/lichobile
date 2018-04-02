@@ -1,15 +1,15 @@
-import layout from '../layout'
+import * as h from 'mithril/hyperscript'
 import router from '../../router'
+import settings from '../../settings'
 import { header } from '../shared/common'
 import Board from '../shared/Board'
 import * as helper from '../helper'
 import i18n from '../../i18n'
-import menu from './menu'
+import layout from '../layout'
 import continuePopup from '../shared/continuePopup'
 import pasteFenPopup from './pasteFenPopup'
-import settings from '../../settings'
-import * as h from 'mithril/hyperscript'
 import Editor from './Editor'
+import menu from './menu'
 
 export default function view(ctrl: Editor) {
   const color = ctrl.chessground.state.orientation
@@ -23,8 +23,9 @@ export default function view(ctrl: Editor) {
     bounds
   })
 
-  function content() {
-    return h.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
+  return layout.board(
+    header(i18n('boardEditor')),
+    h.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
       board,
       h('div.editor-wrapper', [
         h('div#boardEditor.editor-table', {
@@ -39,21 +40,12 @@ export default function view(ctrl: Editor) {
         ]),
         renderActionsBar(ctrl)
       ])
-    ])
-  }
-
-  function overlay() {
-    return [
+    ]),
+    [
       menu.view(ctrl.menu),
       continuePopup.view(ctrl.continuePopup),
       pasteFenPopup.view(ctrl.pasteFenPopup)
     ]
-  }
-
-  return layout.board(
-    () => header(i18n('boardEditor')),
-    content,
-    overlay
   )
 }
 

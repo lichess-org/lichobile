@@ -26,8 +26,8 @@ export default {
 
   view() {
     return layout.free(
-      () => headerWidget(i18n('advancedSearch')),
-      () => renderSearchForm(this.ctrl)
+      headerWidget(i18n('advancedSearch')),
+      renderSearchForm(this.ctrl)
     )
   }
 } as Mithril.Component<Attrs, State>

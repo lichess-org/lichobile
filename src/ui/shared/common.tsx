@@ -25,8 +25,8 @@ import { BaseUser, User } from '../../lichess/interfaces/user'
 export const LoadingBoard = {
   view() {
     return layout.board(
-      connectingHeader,
-      () => viewOnlyBoardContent(emptyFen, 'white')
+      connectingHeader(),
+      viewOnlyBoardContent(emptyFen, 'white')
     )
   }
 }

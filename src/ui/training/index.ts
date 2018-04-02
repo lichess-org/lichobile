@@ -87,15 +87,15 @@ export default {
 
     if (this.ctrl) {
       return layout.board(
-        () => renderHeader(this.ctrl!),
-        () => renderContent(this.ctrl!, key, bounds),
-        () => overlay(this.ctrl!)
+        renderHeader(this.ctrl!),
+        renderContent(this.ctrl!, key, bounds),
+        overlay(this.ctrl!)
       )
     }
     else {
       return layout.board(
-        connectingHeader,
-        () => h.fragment({ key: key + '-no-data' }, [
+        connectingHeader(),
+        h.fragment({ key: key + '-no-data' }, [
           h('section.board_wrapper', [
             h(ViewOnlyBoard, {
               fen: attrs.initFen || emptyFen,

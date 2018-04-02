@@ -31,10 +31,10 @@ export default {
   },
 
   view() {
-    const headerCtrl = () => headerWidget(null,
+    const header = headerWidget(null,
       backButton(i18n('composeMessage'))
     )
-    const bodyCtrl = () => composeBody(this.ctrl)
-    return layout.free(headerCtrl, bodyCtrl)
+    const body = composeBody(this.ctrl)
+    return layout.free(header, body)
   }
 } as Mithril.Component<Attrs, State>

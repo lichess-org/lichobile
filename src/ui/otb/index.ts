@@ -45,23 +45,23 @@ const OtbScreen: Mithril.Component<Attrs, State> = {
     this.round.saveClock()
   },
   view() {
-    let content: () => Mithril.Children, header: () => Mithril.Children
+    let content: Mithril.Children, header: Mithril.Children
     const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined
 
     if (this.round.data && this.round.chessground) {
-      header = () => renderHeader(h(GameTitle, { data: this.round.data }))
-      content = () => renderContent(this.round, pieceTheme)
+      header = renderHeader(h(GameTitle, { data: this.round.data }))
+      content = renderContent(this.round, pieceTheme)
     } else {
       const fen = this.round.vm.setupFen || this.round.vm.savedFen || standardFen
       const color = fen ? playerFromFen(fen) : 'white'
-      header = () => renderHeader(i18n('playOnTheBoardOffline'))
-      content = () => viewOnlyBoardContent(fen, color, undefined, 'standard', undefined, pieceTheme)
+      header = renderHeader(i18n('playOnTheBoardOffline'))
+      content = viewOnlyBoardContent(fen, color, undefined, 'standard', undefined, pieceTheme)
     }
 
     return layout.board(
       header,
       content,
-      () => overlay(this.round),
+      overlay(this.round),
       this.round.data && this.round.data.player.color || 'white'
     )
   }

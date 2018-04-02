@@ -29,11 +29,11 @@ export default {
 
   view() {
     const ctrl = this.ctrl
-    const body = () => renderTournamentsList(ctrl)
-    const footer = session.isConnected() ? () => renderFooter() : undefined
-    const overlay = () => newTournamentForm.view(ctrl)
+    const body = renderTournamentsList(ctrl)
+    const footer = session.isConnected() ? renderFooter() : undefined
+    const overlay = newTournamentForm.view(ctrl)
 
-    return layout.free(() => header(i18n('tournaments')), body, footer, overlay)
+    return layout.free(header(i18n('tournaments')), body, footer, overlay)
   }
 
 } as Mithril.Component<Attrs, State>

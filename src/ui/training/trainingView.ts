@@ -154,12 +154,45 @@ function renderViewSolution(ctrl: TrainingCtrl) {
   }, i18n('viewTheSolution')) : h('div.buttonPlaceholder', '')
 }
 
+function renderVoteControls(ctrl: TrainingCtrl) {
+  if (ctrl.vm.voted === true) {
+    return [
+      h('span.fa.fa-caret-up'),
+      h('p', ctrl.getVotes()),
+      h('a', {
+        oncreate: helper.ontap(ctrl.downvote),
+      }, h('span.fa.fa-caret-down'))
+    ]
+  }
+
+  if (ctrl.vm.voted === false) {
+    return [
+      h('a', {
+        oncreate: helper.ontap(ctrl.upvote),
+      }, h('span.fa.fa-caret-up')),
+      h('p', ctrl.getVotes()),
+      h('span.fa.fa-caret-down')
+    ]
+  }
+
+  return [
+    h('a', {
+      oncreate: helper.ontap(ctrl.upvote),
+    }, h('span.fa.fa-caret-up')),
+    h('p', ctrl.getVotes()),
+    h('a', {
+      oncreate: helper.ontap(ctrl.downvote),
+    }, h('span.fa.fa-caret-down'))
+  ]
+}
+
 function renderResult(ctrl: TrainingCtrl) {
   if (ctrl.vm.lastFeedback === 'win') {
     return [
       h('div.training-half', [
         h('div.training-icon.win', '✓'),
-        h('strong', [i18n('victory')])
+        h('strong', [i18n('victory')]),
+        h('div.training-vote', renderVoteControls(ctrl))
       ]),
       h('div.training-half', renderViewControls(ctrl))
     ]
@@ -167,7 +200,8 @@ function renderResult(ctrl: TrainingCtrl) {
   else {
     return [
       h('div.training-half', [
-        h('strong', 'Puzzle complete!')
+        h('strong', 'Puzzle complete!'),
+        h('div.training-vote', renderVoteControls(ctrl))
       ]),
       h('div.training-half', renderViewControls(ctrl))
     ]

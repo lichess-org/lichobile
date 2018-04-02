@@ -20,7 +20,7 @@ export interface Round {
 export interface RoundData {
   readonly round: Round
   readonly user?: UserData
-  readonly voted: number | null
+  readonly voted: boolean | null
 }
 
 export interface Game {

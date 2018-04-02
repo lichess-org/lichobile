@@ -8,6 +8,15 @@ import { renderBoard, makeCoords, makeSymmCoords } from './render'
 import { anim, skip as skipAnim } from './anim'
 import * as drag from './drag'
 
+const pieceScores: {[id: string]: number} = {
+  pawn: 1,
+  knight: 3,
+  bishop: 3,
+  rook: 5,
+  queen: 9,
+  king: 0
+}
+
 export default class Chessground {
   public state: State
   public dom?: cg.DOM
@@ -98,6 +107,7 @@ export default class Chessground {
   }
 
   getMaterialDiff(): cg.MaterialDiff {
+    let score = 0
     const counts: { [role: string]: number } = {
       king: 0,
       queen: 0,
@@ -110,15 +120,16 @@ export default class Chessground {
     for (let i = 0; i < piecesKeys.length; i++) {
       const p = this.state.pieces[piecesKeys[i]]
       counts[p.role] += (p.color === 'white') ? 1 : -1
+      score += pieceScores[p.role] * (p.color === 'white' ? 1 : -1)
     }
     const diff: cg.MaterialDiff = {
-      white: {},
-      black: {}
+      white: {pieces: {}, score: score},
+      black: {pieces: {}, score: -score}
     }
     for (let role in counts) {
       const c = counts[role]
-      if (c > 0) diff.white[role] = c
-      else if (c < 0) diff.black[role] = -c
+      if (c > 0) diff.white.pieces[role] = c
+      else if (c < 0) diff.black.pieces[role] = -c
     }
     return diff
   }

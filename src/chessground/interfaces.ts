@@ -87,10 +87,10 @@ export interface SetConfig {
   dests?: DestsMap | null
 }
 
-// {white: {pawn: 3 queen: 1}, black: {bishop: 2}}
+// {white: {pieces: {pawn: 3 queen: 1}, score: 6}, black: {pieces: {bishop: 2}, score: -6}
 export interface MaterialDiff {
-  white: { [k: string]: number }
-  black: { [k: string]: number }
+  white: { pieces: { [k: string]: number }, score: number }
+  black: { pieces: { [k: string]: number }, score: number }
 }
 
 export interface DOM {

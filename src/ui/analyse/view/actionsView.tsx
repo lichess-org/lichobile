@@ -36,6 +36,11 @@ export default function renderActionsBar(ctrl: AnalyseCtrl) {
         disabled={!!ctrl.retro}
         oncreate={helper.ontap(ctrl.stopff, undefined, ctrl.fastforward)}
       />
+      { ctrl.study ?
+        <button key="forward" className="action_bar_button fa fa-bars"
+          oncreate={helper.ontap(ctrl.study.sideMenu.open)}
+        /> : null
+      }
     </section>
   )
 }

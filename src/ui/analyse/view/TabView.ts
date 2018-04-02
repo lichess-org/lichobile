@@ -1,5 +1,5 @@
 import * as h from 'mithril/hyperscript'
-import { EDGE_SLIDE_THRESHOLD } from '../../menu/OpenSlideHandler'
+import { EDGE_SLIDE_THRESHOLD } from '../../menu'
 import * as Hammer from 'hammerjs'
 import { viewportDim, findParentBySelector, headerHeight } from '../../helper'
 

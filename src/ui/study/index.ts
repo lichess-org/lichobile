@@ -1,4 +1,6 @@
+import * as h from 'mithril/hyperscript'
 import redraw from '../../utils/redraw'
+import router from '../../router'
 import * as utils from '../../utils'
 import * as helper from '../helper'
 import layout from '../layout'
@@ -7,7 +9,8 @@ import AnalyseCtrl from '../analyse/AnalyseCtrl'
 import { renderContent, overlay, loadingScreen } from '../analyse/view'
 import { load as loadStudy } from '../analyse/study/studyXhr'
 
-import { notFound, studyHeader } from './studyView'
+import { notFound, studyHeader } from './view/studyView'
+import RightSideMenu from './view/RightSideMenu'
 
 export interface Attrs {
   id: string
@@ -60,7 +63,11 @@ export default {
   },
 
   oncreate(vnode) {
-    helper.pageSlideIn(vnode.dom as HTMLElement)
+    if (router.get().startsWith('/study')) {
+      helper.elFadeIn(vnode.dom as HTMLElement)
+    } else {
+      helper.pageSlideIn(vnode.dom as HTMLElement)
+    }
   },
 
   view(vnode) {
@@ -69,14 +76,19 @@ export default {
     }
 
     const isPortrait = helper.isPortrait()
+    const ctrl = this.ctrl
 
-    if (this.ctrl) {
-      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, this.ctrl.settings.s.smallBoard)
+    if (ctrl) {
+      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, ctrl.settings.s.smallBoard)
 
       return layout.board(
-        studyHeader(this.ctrl!.study!.data),
-        renderContent(this.ctrl!, isPortrait, bounds),
-        overlay(this.ctrl!)
+        studyHeader(ctrl.study!.data),
+        renderContent(ctrl, isPortrait, bounds),
+        [
+          ...overlay(ctrl),
+          h(RightSideMenu, { studyCtrl: ctrl.study! }),
+          h('div#study-menu-close-overlay', { oncreate: helper.ontap(() => ctrl.study!.sideMenu.close()) })
+        ]
       )
     } else {
       return loadingScreen(isPortrait, vnode.attrs.color, vnode.attrs.curFen)

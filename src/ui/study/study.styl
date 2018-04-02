@@ -1,0 +1,63 @@
+#studyMenu
+  background white
+  color textGray
+  position absolute
+  visibility hidden
+  right 0
+  top 0
+  bottom 0
+  height 100%
+  min-height 100%
+  max-height 100%
+  width 85%
+  display flex
+  flex-flow column nowrap
+  @media only screen and (min-width 500px)
+    width 50%
+  @media only screen and (min-width 960px)
+    width 35%
+  overflow hidden
+  z-index 100
+  box-shadow: -2px 0px 3px rgba(0, 0, 0, 0.3)
+  transform translate3d(100%, 0,0)
+  section
+    padding 0 15px
+  h3
+    text-transform uppercase
+    color #fff
+    font-weight normal
+    margin 40px 0px 30px 0
+
+
+#study-menu-close-overlay
+  height 100%
+  width 100%
+  z-index 99
+  background rgb(0,0,0)
+  opacity 0
+  visibility hidden
+  position absolute
+  top 0
+  left 0
+
+.study-chapters-title
+  font-size 1.1em
+  text-transform uppercase
+  color blue
+  font-weight bold
+  padding 10px
+
+.study-chapter-link
+  padding 15px 5px
+  word-wrap break-word
+  display flex
+  flex-flow row nowrap
+  &.current
+    background palerBlue
+  &.active
+    background veryPaleBlue
+  > .chapNum
+    flex 0 0 40px
+    color blue
+    font-weight bold
+    text-align center

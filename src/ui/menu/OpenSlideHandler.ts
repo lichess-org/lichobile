@@ -2,8 +2,6 @@ import * as Hammer from 'hammerjs'
 import redraw from '../../utils/redraw'
 import * as menu from '.'
 
-export const EDGE_SLIDE_THRESHOLD = 40
-
 interface OpenSlideHandlerState {
   menuElement: HTMLElement | null
   backDropElement: HTMLElement | null
@@ -36,7 +34,7 @@ export default function OpenSlideHandler(
       e.target.nodeName === 'SQUARE' ||
       // svg element className is not a string
       (e.target.className.startsWith && e.target.className.startsWith('cg-board manipulable')) ||
-      e.center.x > EDGE_SLIDE_THRESHOLD
+      e.center.x > menu.EDGE_SLIDE_THRESHOLD
     ) {
       state.canSlide = false
     } else {

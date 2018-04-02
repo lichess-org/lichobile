@@ -8,6 +8,7 @@ import * as inboxXhr from '../inbox/inboxXhr'
 import { viewportDim, ontap } from '../helper'
 
 export const OPEN_AFTER_SLIDE_RATIO = 0.6
+export const EDGE_SLIDE_THRESHOLD = 40
 
 let pingsTimeoutID: number
 

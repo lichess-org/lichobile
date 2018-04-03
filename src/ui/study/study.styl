@@ -1,6 +1,6 @@
 #studyMenu
   background white
-  color textGray
+  color textDarkGray
   position absolute
   visibility hidden
   right 0
@@ -40,15 +40,15 @@
   top 0
   left 0
 
-.study-chapters-title
+.study-menu-title
   font-size 1.1em
   text-transform uppercase
   color blue
   font-weight bold
-  padding 10px
+  padding 10px 1em
 
-.study-chapter-link
-  padding 15px 5px
+.study-menu-link
+  padding 12px 1em
   word-wrap break-word
   display flex
   flex-flow row nowrap
@@ -56,8 +56,10 @@
     background palerBlue
   &.active
     background veryPaleBlue
-  > .chapNum
-    flex 0 0 40px
+  > .bullet
+    margin-right 1em
     color blue
     font-weight bold
     text-align center
+    &.fa
+      margin-top 3px

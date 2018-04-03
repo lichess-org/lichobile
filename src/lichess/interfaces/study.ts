@@ -86,7 +86,14 @@ interface StudyChapterFeatures {
   readonly explorer: boolean
 }
 
-export type StudyMember = any
+export interface StudyMember {
+  addedAt: number
+  role: 'r' | 'w'
+  user: {
+    id: string
+    name: string
+  }
+}
 
 export interface StudyMemberMap {
   readonly [id: string]: StudyMember | undefined

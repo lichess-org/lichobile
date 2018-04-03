@@ -16,10 +16,18 @@ export default {
   view({ attrs }) {
     const { studyCtrl } = attrs
     const study = studyCtrl.data
+    const membersIds = Object.keys(study.members)
     return h('aside#studyMenu', [
       h('div.native_scroller', [
-        h('h2.study-chapters-title', `${study.chapters.length} chapters`),
-        h('ul', {
+        h('h2.study-menu-title', `${membersIds.length} members`),
+        h('ul', membersIds.map(id =>
+          h('li.study-menu-link', [
+            h('span.fa.fa-user.bullet'),
+            h('span', study.members[id]!.user.name)
+          ])
+        )),
+        h('h2.study-menu-title', `${study.chapters.length} chapters`),
+        h('ol', {
           oncreate: helper.ontapXY(e => {
             const el = helper.getLI(e)
             const id = el && (el.dataset as DataSet).id
@@ -29,12 +37,12 @@ export default {
             }
           }, undefined, helper.getLI)
         }, study.chapters.map((c, i) => {
-          return h('li.study-chapter-link', {
+          return h('li.study-menu-link', {
             'data-id': c.id,
             className: study.chapter.id === c.id ? 'current' : ''
           }, [
-            h('span.chapNum', i + 1),
-            h('span.chapName', c.name)
+            h('span.bullet', i + 1),
+            h('span', c.name)
           ])
         }))
       ])

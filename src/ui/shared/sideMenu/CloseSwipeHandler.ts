@@ -1,7 +1,8 @@
 import * as Hammer from 'hammerjs'
-import * as menu from '.'
 
-export default function CloseSwipeHandler(el: HTMLElement) {
+import SideMenuCtrl from './SideMenuCtrl'
+
+export default function CloseSwipeHandler(el: HTMLElement, ctrl: SideMenuCtrl) {
 
   const mc = new Hammer.Manager(el, {
     inputClass: Hammer.TouchInput
@@ -13,6 +14,6 @@ export default function CloseSwipeHandler(el: HTMLElement) {
   }))
 
   mc.on('swipeleft', () => {
-    menu.close()
+    ctrl.close()
   })
 }

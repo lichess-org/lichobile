@@ -1,6 +1,8 @@
 import * as h from 'mithril/hyperscript'
 import router from '../../../router'
 import * as helper from '../../helper'
+import CloseSlideHandler from '../../shared/sideMenu/CloseSlideHandler'
+import CloseSwipeHandler from '../../shared/sideMenu/CloseSwipeHandler'
 
 import StudyCtrl from '../../analyse/study/StudyCtrl'
 
@@ -13,11 +15,23 @@ interface DataSet extends DOMStringMap {
 }
 
 export default {
+  onbeforeupdate({ attrs }) {
+    const sm = attrs.studyCtrl.sideMenu
+    return sm.isOpen || sm.isSliding
+  },
   view({ attrs }) {
     const { studyCtrl } = attrs
     const study = studyCtrl.data
     const membersIds = Object.keys(study.members)
-    return h('aside#studyMenu', [
+    return h('aside#studyMenu', {
+      oncreate: ({ dom }: Mithril.DOMNode) => {
+        if (window.cordova.platformId === 'ios') {
+          CloseSwipeHandler(dom as HTMLElement, studyCtrl.sideMenu)
+        } else {
+          CloseSlideHandler(dom as HTMLElement, studyCtrl.sideMenu)
+        }
+      }
+    }, [
       h('div.native_scroller', [
         h('h2.study-menu-title', `${membersIds.length} members`),
         h('ul', membersIds.map(id =>

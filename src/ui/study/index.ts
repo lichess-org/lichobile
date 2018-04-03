@@ -4,6 +4,7 @@ import router from '../../router'
 import * as utils from '../../utils'
 import * as helper from '../helper'
 import layout from '../layout'
+import EdgeOpenHandler, { HammerHandlers } from '../shared/sideMenu/EdgeOpenHandler'
 
 import AnalyseCtrl from '../analyse/AnalyseCtrl'
 import { renderContent, overlay, loadingScreen } from '../analyse/view'
@@ -25,6 +26,7 @@ export interface Attrs {
 export interface State {
   ctrl?: AnalyseCtrl
   notFound?: boolean
+  hammerHandlers?: HammerHandlers
 }
 
 export default {
@@ -49,6 +51,7 @@ export default {
           ply || 0,
           tab
         )
+        this.hammerHandlers = EdgeOpenHandler(this.ctrl.study!.sideMenu)
         redraw()
       }, Math.max(400 - elapsed, 0))
     })
@@ -77,8 +80,9 @@ export default {
 
     const isPortrait = helper.isPortrait()
     const ctrl = this.ctrl
+    const hammerHandlers = this.hammerHandlers
 
-    if (ctrl) {
+    if (ctrl && hammerHandlers) {
       const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, ctrl.settings.s.smallBoard)
 
       return layout.board(
@@ -87,8 +91,11 @@ export default {
         [
           ...overlay(ctrl),
           h(RightSideMenu, { studyCtrl: ctrl.study! }),
-          h('div#study-menu-close-overlay', { oncreate: helper.ontap(() => ctrl.study!.sideMenu.close()) })
-        ]
+          h('div#studyMenu-backdrop.menu-backdrop', {
+            oncreate: helper.ontap(() => ctrl.study!.sideMenu.close())
+          })
+        ],
+        hammerHandlers
       )
     } else {
       return loadingScreen(isPortrait, vnode.attrs.color, vnode.attrs.curFen)

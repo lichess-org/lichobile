@@ -1,7 +1,7 @@
+import * as Hammer from 'hammerjs'
 import * as h from 'mithril/hyperscript'
 import settings from '../settings'
 import * as menu from './menu'
-import MenuOpenSlideHandler from './menu/OpenSlideHandler'
 import MenuView from './menu/menuView'
 import gamesMenu from './gamesMenu'
 import newGameForm from './newGameForm'
@@ -11,12 +11,14 @@ import loginModal from './loginModal'
 import signupModal from './signupModal'
 import friendsPopup from './friendsPopup'
 import lobby from './lobby'
+import EdgeOpenHandler, { HammerHandlers } from './shared/sideMenu/EdgeOpenHandler'
+import MainBoard from './shared/layout/MainBoard'
 
 let background: string
 
 export default {
 
-  onBackgroundChange: function(bg: string) {
+  onBackgroundChange(bg: string) {
     background = bg
   },
 
@@ -24,18 +26,12 @@ export default {
     header: Mithril.Children,
     content: Mithril.Children,
     overlay?: Mithril.Children,
+    hammerHandlers?: HammerHandlers,
     color?: string
   ) {
     background = background || settings.general.theme.background()
     return h('div.view-container', { className: bgClass(background) }, [
-      h('main#page', {
-        className: color,
-        oncreate: handleMenuOpen
-      }, [
-        h('header.main_header.board', header),
-        h('div.content_round', content),
-        h('div#menu-close-overlay', { oncreate: menu.backdropCloseHandler })
-      ]),
+      h(MainBoard, { header, color, hammerHandlers }, content),
       h(MenuView),
       gamesMenu.view(),
       loginModal.view(),
@@ -61,7 +57,7 @@ export default {
         h('header.main_header', header),
         h('div#free_content.content', content),
         footer ? h('footer.main_footer', footer) : null,
-        h('div#menu-close-overlay', { oncreate: menu.backdropCloseHandler })
+        h('div#menu-close-overlay.menu-backdrop', { oncreate: menu.backdropCloseHandler })
       ]),
       h(MenuView),
       gamesMenu.view(),
@@ -88,7 +84,19 @@ export default {
 }
 
 function handleMenuOpen({ dom }: Mithril.DOMNode) {
-  MenuOpenSlideHandler(dom as HTMLElement)
+  const mainEl = dom as HTMLElement
+  const mc = new Hammer.Manager(mainEl, {
+    inputClass: Hammer.TouchInput
+  })
+  mc.add(new Hammer.Pan({
+    direction: Hammer.DIRECTION_HORIZONTAL,
+    threshold: 5
+  }))
+
+  const defaultHandlers: HammerHandlers = EdgeOpenHandler(menu.mainMenuCtrl)
+  for (const eventName in defaultHandlers) {
+    mc.on(eventName, defaultHandlers[eventName])
+  }
 }
 
 function bgClass(bgTheme: string) {

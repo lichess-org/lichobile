@@ -1,6 +1,7 @@
-import * as h from 'mithril/hyperscript'
-import { EDGE_SLIDE_THRESHOLD } from '../menu'
 import * as Hammer from 'hammerjs'
+import * as h from 'mithril/hyperscript'
+
+import { EDGE_SLIDE_THRESHOLD } from './sideMenu'
 import { viewportDim, findParentBySelector } from '../helper'
 
 

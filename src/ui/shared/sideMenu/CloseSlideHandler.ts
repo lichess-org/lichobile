@@ -1,5 +1,7 @@
 import * as Hammer from 'hammerjs'
-import * as menu from '.'
+
+import { getMenuWidth, translateMenu, backdropOpacity, OPEN_AFTER_SLIDE_RATIO } from '.'
+import SideMenuCtrl from './SideMenuCtrl'
 
 interface CloseSlideHandlerState {
   backDropElement: HTMLElement | null
@@ -7,9 +9,10 @@ interface CloseSlideHandlerState {
   isScrolling: boolean
 }
 
-export default function CloseSlideHandler(el: HTMLElement) {
+export default function CloseSlideHandler(el: HTMLElement, ctrl: SideMenuCtrl) {
 
-  const maxSlide = menu.getMenuWidth()
+  const side = ctrl.side
+  const menuWidth = getMenuWidth()
 
   const state: CloseSlideHandlerState = {
     backDropElement: null,
@@ -26,7 +29,7 @@ export default function CloseSlideHandler(el: HTMLElement) {
   }))
 
   mc.on('panstart', (e: HammerInput) => {
-    state.backDropElement = document.getElementById('menu-close-overlay')
+    state.backDropElement = ctrl.getBackdropEl()
     state.startingY = e.center.y
     state.isScrolling = false
   })
@@ -44,9 +47,16 @@ export default function CloseSlideHandler(el: HTMLElement) {
         if (state.isScrolling) return
       }
 
-      if (e.deltaX < 0 && e.deltaX >= -maxSlide) {
-        menu.translateMenu(el, e.deltaX)
-        menu.backdropOpacity(state.backDropElement!, ((maxSlide + e.deltaX) / maxSlide * 100) / 100 / 2)
+      if (side === 'left') {
+        if (e.deltaX < 0 && e.deltaX >= -menuWidth) {
+          translateMenu(el, e.deltaX)
+          backdropOpacity(state.backDropElement!, ((menuWidth + e.deltaX) / menuWidth * 100) / 100 / 2)
+        }
+      } else {
+        if (e.deltaX > 0 && e.deltaX <= menuWidth) {
+          translateMenu(el, e.deltaX)
+          backdropOpacity(state.backDropElement!, ((menuWidth - e.deltaX) / menuWidth * 100) / 100 / 2)
+        }
       }
     }
   })
@@ -56,14 +66,26 @@ export default function CloseSlideHandler(el: HTMLElement) {
       // we don't want to close menu accidentaly when scrolling thus it is important
       // to check X velocity only
       const velocity = e.velocityX
-      if (
-        velocity <= 0 &&
-        (e.deltaX < -(maxSlide - maxSlide * menu.OPEN_AFTER_SLIDE_RATIO) || velocity < -0.4)
-      ) {
-        menu.close()
-      }
-      else {
-        menu.open()
+      if (side === 'left') {
+        if (
+          velocity <= 0 &&
+          (e.deltaX < -(menuWidth - menuWidth * OPEN_AFTER_SLIDE_RATIO) || velocity < -0.4)
+        ) {
+          ctrl.close()
+        }
+        else {
+          ctrl.open()
+        }
+      } else {
+        if (
+          velocity >= 0 &&
+          (e.deltaX > (menuWidth - menuWidth * OPEN_AFTER_SLIDE_RATIO) || velocity > 0.4)
+        ) {
+          ctrl.close()
+        }
+        else {
+          ctrl.open()
+        }
       }
     }
   })

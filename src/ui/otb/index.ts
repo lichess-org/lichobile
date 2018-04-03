@@ -62,6 +62,7 @@ const OtbScreen: Mithril.Component<Attrs, State> = {
       header,
       content,
       overlay(this.round),
+      undefined,
       this.round.data && this.round.data.player.color || 'white'
     )
   }

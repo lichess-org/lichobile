@@ -2,27 +2,28 @@ import * as h from 'mithril/hyperscript'
 
 import socket from '../../socket'
 import session, { Session } from '../../session'
+import i18n from '../../i18n'
+import { hasNetwork, noop } from '../../utils'
+import { getOfflineGames } from '../../utils/offlineGames'
+import friendsApi from '../../lichess/friends'
+
 import loginModal from '../loginModal'
 import newGameForm from '../newGameForm'
 import gamesMenu from '../gamesMenu'
 import friendsPopup from '../friendsPopup'
 import challengeForm from '../challengeForm'
 import playMachineForm from '../playMachineForm'
-import i18n from '../../i18n'
-import { hasNetwork, noop } from '../../utils'
-import { getOfflineGames } from '../../utils/offlineGames'
 import * as helper from '../helper'
-import friendsApi from '../../lichess/friends'
+import CloseSlideHandler from '../shared/sideMenu/CloseSlideHandler'
+import CloseSwipeHandler from '../shared/sideMenu/CloseSwipeHandler'
 
 import * as menu from '.'
-import CloseSlideHandler from './CloseSlideHandler'
-import CloseSwipeHandler from './CloseSwipeHandler'
 
 const pingHelp = 'PING: Network lag between you and lichess; SERVER: Time to process a move on lichess server'
 
 export default {
   onbeforeupdate() {
-    return menu.isOpen() || menu.isSliding()
+    return menu.mainMenuCtrl.isOpen || menu.mainMenuCtrl.isSliding
   },
   view() {
     const user = session.get()
@@ -31,9 +32,9 @@ export default {
       <aside id="side_menu"
         oncreate={({ dom }: Mithril.DOMNode) => {
           if (window.cordova.platformId === 'ios') {
-            CloseSwipeHandler(dom as HTMLElement)
+            CloseSwipeHandler(dom as HTMLElement, menu.mainMenuCtrl)
           } else {
-            CloseSlideHandler(dom as HTMLElement)
+            CloseSlideHandler(dom as HTMLElement, menu.mainMenuCtrl)
           }
         }}
       >

@@ -1,5 +1,6 @@
 import * as h from 'mithril/hyperscript'
 import i18n  from '../../../i18n'
+import socket from '../../../socket'
 import { handleXhrError, shallowEqual } from '../../../utils'
 import redraw from '../../../utils/redraw'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
@@ -20,10 +21,11 @@ export default function renderAnalysis(ctrl: AnalyseCtrl): Mithril.BaseNode {
   const vd = helper.viewportDim()
   const d = ctrl.data
 
-  return h('div.analyse-gameAnalysis.native_scroller',
-    d.analysis ? renderAnalysisGraph(ctrl, vd, isPortrait) : renderAnalysisRequest(ctrl),
+  return h('div.analyse-gameAnalysis.native_scroller', [
+    d.analysis ? renderAnalysisGraph(ctrl, vd, isPortrait) :
+      ctrl.study ? renderStudyAnalysisRequest(ctrl) : renderGameAnalysisRequest(ctrl),
     d.game.moveCentis ? renderMoveTimes(ctrl, d.game.moveCentis, vd, isPortrait) : null
-  )
+  ])
 }
 
 function renderAnalysisGraph(ctrl: AnalyseCtrl, vd: helper.ViewportDim, isPortrait: boolean) {
@@ -96,8 +98,8 @@ const AcplSummary: Mithril.Component<{
   }
 }
 
-function renderAnalysisRequest(ctrl: AnalyseCtrl) {
-  return h('div.analyse-computerAnalysis', {
+function renderGameAnalysisRequest(ctrl: AnalyseCtrl) {
+  return h('div.analyse-computerAnalysis.request', {
     key: 'request-analysis'
   }, [
     ctrl.analysisProgress ? h('div.analyse-requestProgress', [
@@ -114,6 +116,30 @@ function renderAnalysisRequest(ctrl: AnalyseCtrl) {
       })
     }, [i18n('requestAComputerAnalysis')])
   ])
+}
+
+function renderStudyAnalysisRequest(ctrl: AnalyseCtrl) {
+  return h('div.analyse-computerAnalysis.request', {
+    key: 'request-analysis'
+  }, ctrl.mainline.length < 5 ? h('p', 'The study is too short to be analysed.') :
+      !ctrl.study!.canContribute() ? h('p', 'Only the study contributors can request a computer analysis') : [
+        h('p', [
+          'Get a full server-side computer analysis of the main line.',
+          h('br'),
+          'Make sure the chapter is complete, for you can only request analysis once.'
+        ]),
+        ctrl.analysisProgress ? h('div.analyse-requestProgress', [
+          h('span', 'Analysis in progress'),
+          spinner.getVdom('monochrome')
+        ]) : h('button.fatButton', {
+          oncreate: helper.ontapXY(() => {
+            socket.send('requestAnalysis', ctrl.study!.data.chapter.id)
+            ctrl.analysisProgress = true
+            redraw()
+          })
+        }, [i18n('requestAComputerAnalysis')])
+    ]
+  )
 }
 
 function renderMoveTimes(ctrl: AnalyseCtrl, moveCentis: number[], vd: helper.ViewportDim, isPortrait: boolean) {

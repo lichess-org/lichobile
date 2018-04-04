@@ -1,4 +1,6 @@
 .analyse-gameAnalysis
+  display flex
+  flex-flow column nowrap
   .title
     display block
     font-size 0.8em
@@ -9,6 +11,14 @@
   display flex
   justify-content center
   align-items center
+
+.analyse-computerAnalysis
+  &.request
+    flex-grow 1
+    display flex
+    align-items center
+    > p
+      padding 1em
 
 .analyse-chart
   background linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 20%, rgba(128, 128, 128, 0.2) 50%, rgba(255, 255, 255, 0) 80%, rgba(255, 255, 255, 0) 100%)

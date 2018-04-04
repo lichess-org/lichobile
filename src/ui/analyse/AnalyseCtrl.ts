@@ -22,7 +22,7 @@ import { NotesCtrl } from '../shared/round/notes'
 import * as util from './util'
 import CevalCtrl from './ceval/CevalCtrl'
 import RetroCtrl, { IRetroCtrl } from './retrospect/RetroCtrl'
-import { ICevalCtrl, Work as CevalWork } from './ceval/interfaces'
+import { ICevalCtrl } from './ceval/interfaces'
 import crazyValid from './crazy/crazyValid'
 import ExplorerCtrl from './explorer/ExplorerCtrl'
 import { IExplorerCtrl } from './explorer/interfaces'
@@ -30,6 +30,7 @@ import menu, { IMainMenuCtrl } from './menu'
 import analyseSettings, { ISettingsCtrl } from './analyseSettings'
 import ground from './ground'
 import socketHandler from './analyseSocketHandler'
+import { make as makeEvalCache, EvalCache } from './evalCache'
 import { Source } from './interfaces'
 import * as tabs from './tabs'
 
@@ -42,17 +43,18 @@ export default class AnalyseCtrl {
   menu: IMainMenuCtrl
   continuePopup: ContinuePopupController
   notes: NotesCtrl | null
-  chessground: Chessground
+  chessground!: Chessground
   ceval: ICevalCtrl
   retro: IRetroCtrl | null
   explorer: IExplorerCtrl
   tree: TreeWrapper
+  evalCache: EvalCache
 
   // current tree state, cursor, and denormalized node lists
-  path: Tree.Path
-  node: Tree.Node
-  nodeList: Tree.Node[]
-  mainline: Tree.Node[]
+  path!: Tree.Path
+  node!: Tree.Node
+  nodeList!: Tree.Node[]
+  mainline!: Tree.Node[]
 
   // state flags
   onMainline: boolean = true
@@ -88,6 +90,7 @@ export default class AnalyseCtrl {
     this.orientation = orientation
     this.source = source
     this.synthetic = util.isSynthetic(data)
+    this.ongoing = !this.synthetic && gameApi.playable(data)
     this.initialPath = treePath.root
     this._currentTabIndex = tab !== undefined ? tab :
       this.synthetic ? 0 : 1
@@ -96,6 +99,13 @@ export default class AnalyseCtrl {
       window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center')
       router.set('/')
     }
+
+    this.evalCache = makeEvalCache({
+      variant: this.data.game.variant.key,
+      canGet: this.canEvalGet,
+      getNode: () => this.node,
+      receive: this.onCevalMsg
+    })
 
     this.tree = makeTree(treeOps.reconstruct(this.data.treeParts))
 
@@ -141,7 +151,7 @@ export default class AnalyseCtrl {
     ) {
       this.connectGameSocket()
     } else {
-      socket.createDefault()
+      socket.createAnalysis(socketHandler(this))
     }
 
     this.updateBoard()
@@ -255,6 +265,7 @@ export default class AnalyseCtrl {
   startCeval = () => {
     if (this.ceval.enabled() && this.canUseCeval()) {
       this.ceval.start(this.path, this.nodeList, !!this.retro)
+      this.evalCache.fetch(this.path, this.ceval.getMultiPv())
     }
   }
 
@@ -469,6 +480,8 @@ export default class AnalyseCtrl {
     return true
   }
 
+  private canEvalGet = (node: Tree.Node): boolean => node.ply < 15
+
   private sendMove = (orig: Key, dest: Key, prom?: Role) => {
     const move: chess.MoveRequest = {
       orig,
@@ -549,24 +562,38 @@ export default class AnalyseCtrl {
       .indexOf(this.data.game.variant.key) !== -1
   }
 
-  private onCevalMsg = (work: CevalWork, ceval?: Tree.ClientEval) => {
+  private onCevalMsg = (path: string, ceval?: Tree.ClientEval) => {
     if (ceval) {
-      this.tree.updateAt(work.path, (node: Tree.Node) => {
+      this.tree.updateAt(path, (node: Tree.Node) => {
         if (node.ceval && node.ceval.depth >= ceval.depth) return
 
         if (node.ceval === undefined) {
-          node.ceval = <Tree.ClientEval>Object.assign({}, ceval)
+          node.ceval = { ...ceval }
         }
         else {
-          node.ceval = <Tree.ClientEval>Object.assign(node.ceval, ceval)
+          node.ceval = { ...node.ceval, ...ceval }
+          // hitting a cloud eval after a local eval, we don't want maxDepth,
+          // knps and millis
+          if (ceval.cloud) {
+            node.ceval.maxDepth = undefined
+            node.ceval.knps = undefined
+            node.ceval.millis = undefined
+          }
+          // hitting a local eval after cloud, let's, just remove cloud flag
+          else {
+            node.ceval.cloud = false
+          }
         }
 
         if (node.ceval.pvs.length > 0) {
           node.ceval.best = node.ceval.pvs[0].moves[0]
         }
 
-        if (work.path === this.path) {
+        if (path === this.path) {
           if (this.retro) this.retro.onCeval()
+          if (ceval.cloud && ceval.depth >= this.ceval.effectiveMaxDepth()) {
+            this.ceval.stop()
+          }
           redraw()
         }
       })

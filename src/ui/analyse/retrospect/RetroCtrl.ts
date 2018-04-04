@@ -141,7 +141,7 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
   function isCevalReady(node: Tree.Node): boolean {
     return node.ceval ? (
       node.ceval.depth >= 18 ||
-      (node.ceval.depth >= 14 && node.ceval.millis > 7000)
+      (node.ceval.depth >= 14 && node.ceval.millis !== undefined && node.ceval.millis > 7000)
     ) : false
   }
 

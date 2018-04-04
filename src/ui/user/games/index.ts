@@ -27,9 +27,9 @@ const UserGames: Mithril.Component<Attrs, State> = {
   view(vnode) {
     const username = vnode.attrs.id
 
-    const header = () => headerWidget(null, backButton(username + ' games'))
+    const header = headerWidget(null, backButton(username + ' games'))
 
-    return layout.free(header, () => renderBody(this.ctrl))
+    return layout.free(header, renderBody(this.ctrl))
   }
 }
 

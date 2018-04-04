@@ -80,6 +80,10 @@ function renderProfileActions(user: Session) {
       <li className="side_link" key="message" oncreate={helper.ontapXY(menu.route('/inbox'))}>
         <span className="fa fa-envelope"/>{i18n('inbox') + ((menu.inboxUnreadCount() !== null && menu.inboxUnreadCount() > 0) ? (' (' + menu.inboxUnreadCount() + ')') : '')}
       </li>
+      <li className="side_link" oncreate={helper.ontapXY(menu.route('/account/preferences'))}>
+        <span data-icon="%" />
+        {i18n('preferences')}
+      </li>
       <li className="side_link" oncreate={helper.ontapXY(menu.popup(friendsPopup.open))}>
         <span data-icon="f" />
         {i18n('onlineFriends') + ` (${friendsApi.count()})`}
@@ -91,10 +95,6 @@ function renderProfileActions(user: Session) {
       <li className="side_link" oncreate={helper.ontapXY(menu.route(`/@/${user.id}/followers`))}>
         <span className="fa fa-arrow-circle-left" />
         {i18n('nbFollowers', user.nbFollowers || 0)}
-      </li>
-      <li className="side_link" oncreate={helper.ontapXY(menu.route('/settings/preferences'))}>
-        <span data-icon="%" />
-        {i18n('preferences')}
       </li>
       <li className="side_link" oncreate={helper.ontapXY(() => {
         session.logout()

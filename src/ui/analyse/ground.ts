@@ -12,6 +12,7 @@ function makeConfig(
   onMove: (orig: Key, dest: Key, capturedPiece?: Piece) => void,
   onNewPiece: (piece: Piece, pos: Key) => void
 ): cg.InitConfig {
+  const pieceMoveConf = settings.game.pieceMove()
   return {
     fen: config.fen,
     batchRAF: batchRequestAnimationFrame,
@@ -27,7 +28,11 @@ function makeConfig(
       showDests: settings.game.pieceDestinations()
     },
     draggable: {
+      enabled: pieceMoveConf === 'drag' || pieceMoveConf === 'both',
       magnified: settings.game.magnified()
+    },
+    selectable: {
+      enabled: pieceMoveConf === 'tap' || pieceMoveConf === 'both'
     },
     events: {
       move: onMove,

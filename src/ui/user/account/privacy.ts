@@ -1,12 +1,12 @@
-import * as helper from '../helper'
-import { dropShadowHeader, backButton } from '../shared/common'
-import formWidgets from '../shared/form'
-import layout from '../layout'
-import i18n from '../../i18n'
-import session from '../../session'
-import { LichessPropOption, ChallengeChoices, Challenge } from '../../lichess/prefs'
-import { StoredProp } from '../../storage'
 import * as h from 'mithril/hyperscript'
+import i18n from '../../../i18n'
+import session from '../../../session'
+import { LichessPropOption, ChallengeChoices, Challenge } from '../../../lichess/prefs'
+import { StoredProp } from '../../../storage'
+import { dropShadowHeader, backButton } from '../../shared/common'
+import formWidgets from '../../shared/form'
+import layout from '../../layout'
+import * as helper from '../../helper'
 
 interface Ctrl {
   follow: StoredProp<boolean>
@@ -25,8 +25,8 @@ export default {
 
   view() {
     const ctrl = this.ctrl
-    const header = () => dropShadowHeader(null, backButton(i18n('privacy')))
-    return layout.free(header, renderBody.bind(undefined, ctrl))
+    const header = dropShadowHeader(null, backButton(i18n('privacy')))
+    return layout.free(header, renderBody(ctrl))
   }
 } as Mithril.Component<{}, { ctrl: Ctrl }>
 

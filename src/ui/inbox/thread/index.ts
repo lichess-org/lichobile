@@ -29,10 +29,10 @@ export default {
   },
 
   view() {
-    const headerCtrl = () => headerWidget(null,
+    const header = headerWidget(null,
       backButton(this.ctrl.thread() ? this.ctrl.thread().name : undefined)
     )
-    const bodyCtrl = () => threadBody(this.ctrl)
-    return layout.free(headerCtrl, bodyCtrl)
+    const body = threadBody(this.ctrl)
+    return layout.free(header, body)
   }
 } as Mithril.Component<Attrs, State>

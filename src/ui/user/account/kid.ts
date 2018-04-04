@@ -1,10 +1,10 @@
-import * as helper from '../helper'
-import { dropShadowHeader, backButton } from '../shared/common'
-import formWidgets from '../shared/form'
-import layout from '../layout'
-import session from '../../session'
-import { StoredProp } from '../../storage'
 import * as h from 'mithril/hyperscript'
+import session from '../../../session'
+import { StoredProp } from '../../../storage'
+import formWidgets from '../../shared/form'
+import { dropShadowHeader, backButton } from '../../shared/common'
+import * as helper from '../../helper'
+import layout from '../../layout'
 
 interface State {
   kidMode: StoredProp<boolean>
@@ -14,12 +14,12 @@ const KidPrefScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewSlideIn,
 
   oninit() {
-    this.kidMode = session.lichessBackedProp<boolean>('kid', session.toggleKidMode, false)
+    this.kidMode = session.lichessBackedProp<boolean>('kid', session.setKidMode, false)
   },
 
   view() {
-    const header = () => dropShadowHeader(null, backButton('Kid mode'))
-    return layout.free(header, () => renderBody(this))
+    const header = dropShadowHeader(null, backButton('Kid mode'))
+    return layout.free(header, renderBody(this))
   }
 }
 

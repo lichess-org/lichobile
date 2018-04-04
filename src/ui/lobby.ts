@@ -2,6 +2,7 @@ import * as h from 'mithril/hyperscript'
 import * as utils from '../utils'
 import redraw from '../utils/redraw'
 import * as sleepUtils from '../utils/sleep'
+import storage from '../storage'
 import session from '../session'
 import settings from '../settings'
 import spinner from '../spinner'
@@ -10,10 +11,13 @@ import * as xhr from '../xhr'
 import i18n from '../i18n'
 import socket, { SEEKING_SOCKET_NAME, RedirectObj } from '../socket'
 import { PongMessage, PoolMember, HumanSeekSetup, isPoolMember, isSeekSetup } from '../lichess/interfaces'
+import { OnlineGameData } from '../lichess/interfaces/game'
 import { humanSetupFromSettings } from '../lichess/setup'
 import * as helper from './helper'
 import { loader } from './shared/common'
 import popupWidget from './shared/popup'
+
+const SETUP_STORAGE_KEY = 'setup.custom.last'
 
 let nbPlayers = 0
 let nbGames = 0
@@ -34,8 +38,12 @@ let poolInIntervalId: number
 const socketHandlers = {
   redirect: (d: RedirectObj) => {
     stopAndClose()
-    if (currentSetup !== null && isPoolMember(currentSetup)) {
-      leavePool(currentSetup)
+    if (currentSetup !== null)  {
+      if (isPoolMember(currentSetup)) {
+        leavePool(currentSetup)
+      } else {
+        storage.set(SETUP_STORAGE_KEY, currentSetup)
+      }
     }
     socket.redirectToGame(d)
   },
@@ -48,13 +56,7 @@ const socketHandlers = {
 
 export default {
   startSeeking(conf: PoolMember | HumanSeekSetup) {
-    // anon. can't enter pool: we'll just create a similar hook
-    if (isPoolMember(conf) && !session.isConnected()) {
-      doStartAnonPoolSeek(conf)
-    }
-    else {
-      doStartSeeking(conf)
-    }
+    doStartSeeking(conf)
   },
 
   appCancelSeeking() {
@@ -63,19 +65,17 @@ export default {
     }
   },
 
-  onNewOpponent() {
-    if (currentSetup) doStartSeeking(currentSetup)
-    // if no setup get it from localstorage
-    else {
-      const conf = settings.gameSetup.human
-      const poolId = conf.pool()
-      if (poolId && conf.preset() === 'quick') {
-        const pm = { id: poolId }
-        if (!session.isConnected()) doStartAnonPoolSeek(pm)
-        else doStartSeeking(pm)
-      } else {
-        doStartSeeking(humanSetupFromSettings(conf))
-      }
+  onNewOpponent(data: OnlineGameData) {
+    if (data.game.source === 'pool') {
+      const clock = data.clock!
+      const poolId = clock.initial / 60 + '+' + clock.increment
+      doStartSeeking({ id: poolId })
+    } else {
+      const setup = currentSetup && isSeekSetup(currentSetup) ? currentSetup :
+        storage.get<HumanSeekSetup>(SETUP_STORAGE_KEY) ||
+        humanSetupFromSettings(settings.gameSetup.human)
+
+      doStartSeeking(setup, data.game.id)
     }
   },
 
@@ -143,37 +143,28 @@ function renderCustomSetup(setup: HumanSeekSetup) {
 }
 
 function renderPoolSetup(member: PoolMember) {
-  const variantMode = ` • Standard • ${i18n('rated')}`
+  // pool is always rated, this is a hack for anon. fake pool
+  const mode = session.isConnected() ? i18n('rated') : i18n('casual')
+  const variantMode = ` • Standard • ${mode}`
   return h('div.gameInfos', [
     h('span[data-icon=p]', member.id), variantMode
   ])
 }
 
-function doStartSeeking(conf: PoolMember | HumanSeekSetup) {
+/*
+ * Start seeking according to conf
+ *
+ * @conf either Pool or Seek
+ * @gameId? if provided this argument will trigger a seek like xhr
+ */
+function doStartSeeking(conf: PoolMember | HumanSeekSetup, gameId?: string) {
   router.backbutton.stack.push(userCancelSeeking)
 
   isOpenAndSeeking = true
   sleepUtils.keepAwake()
 
   if (isPoolMember(conf)) enterPool(conf)
-  else if (isSeekSetup(conf)) sendHook(conf)
-}
-
-function doStartAnonPoolSeek(poolMember: PoolMember) {
-  const pool = xhr.cachedPools.find(p => p.id  === poolMember.id)
-  if (pool) {
-    doStartSeeking({
-      mode: 0,
-      variant: 1,
-      timeMode: 1,
-      time: pool.lim,
-      increment: pool.inc,
-      days: 1,
-      color: 'random'
-    })
-  } else {
-    window.plugins.toast.show('Error. Could not find pool', 'short', 'center')
-  }
+  else sendHook(conf, gameId)
 }
 
 function stopAndClose(fromBB?: string) {
@@ -188,7 +179,7 @@ function userCancelSeeking(fromBB?: string) {
   sleepUtils.allowSleepAgain()
 }
 
-function sendHook(setup: HumanSeekSetup) {
+function sendHook(setup: HumanSeekSetup, gameId?: string) {
   currentSetup = setup
   if (hookId) {
     // normally can't create hook if already have a hook
@@ -201,7 +192,10 @@ function sendHook(setup: HumanSeekSetup) {
     // hook already created!
     if (hookId) return
 
-    xhr.seekGame(setup)
+    const seekPromise = gameId !== undefined ?
+      xhr.seekGameLike(gameId) : xhr.seekGame(setup)
+
+    seekPromise
     .then(data => {
       hookId = data.hook.id
     })
@@ -214,13 +208,35 @@ function enterPool(member: PoolMember) {
   socket.createLobby(SEEKING_SOCKET_NAME, () => {
     // socket on open handler
     // we do want to be sure we don't do anything in background here
-    if (isOpenAndSeeking) {
-      socket.send('poolIn', member)
-      clearInterval(poolInIntervalId)
-      poolInIntervalId = setInterval(() => {
+    if (!isOpenAndSeeking) return
+
+    session.refresh()
+    .then(() => {
+      // ensure session with a refresh
+      if (session.isConnected()) {
         socket.send('poolIn', member)
-      }, 10 * 1000)
-    }
+        clearInterval(poolInIntervalId)
+        poolInIntervalId = setInterval(() => {
+          socket.send('poolIn', member)
+        }, 10 * 1000)
+      }
+      // if anon. use a seek similar to the pool
+      else {
+        const pool = xhr.cachedPools.find(p => p.id  === member.id)
+        if (pool) {
+          sendHook({
+            mode: 0,
+            variant: 1,
+            timeMode: 1,
+            time: pool.lim,
+            increment: pool.inc,
+            days: 1,
+            color: 'random'
+          })
+        }
+      }
+    })
+
   }, socketHandlers)
 }
 

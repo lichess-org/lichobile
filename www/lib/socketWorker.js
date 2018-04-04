@@ -311,8 +311,8 @@ function doSend(payload) {
   var t = payload[0];
   var d = payload[1];
   var o = payload[2];
-  if (socketInstance) socketInstance.send(t, d, o);
-  else console.info('socket instance is null, could not send socket msg: ', payload);
+  if (socketInstance && socketInstance.ws) socketInstance.send(t, d, o);
+  // else console.info('socket instance is null, could not send socket msg: ', payload);
 }
 
 self.onmessage = function(msg) {

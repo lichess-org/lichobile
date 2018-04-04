@@ -33,12 +33,12 @@ interface InitPayload {
 
 export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public setupFen: string | undefined
-  public data: OfflineGameData
-  public actions: any
+  public data!: OfflineGameData
+  public actions: any // TODO
   public newGameMenu: NewOtbGameCtrl
   public importGamePopup: ImportGameController
-  public chessground: Chessground
-  public replay: Replay
+  public chessground!: Chessground
+  public replay!: Replay
   public vm: OtbVM
   public clock?: IChessClock
 
@@ -236,7 +236,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public apply(sit: chess.GameSituation) {
     if (sit) {
       if (this.clock && this.clock.activeSide() !== sit.player) {
-        this.clock.clockHit(oppositeColor(sit.player))
+        this.clock.toggleActiveSide()
       }
 
       const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null

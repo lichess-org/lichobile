@@ -5,11 +5,11 @@ export namespace Tree {
 
   export interface ClientEval {
     fen: string
-    maxDepth: number
+    maxDepth?: number
     depth: number
-    knps: number
+    knps?: number
     nodes: number
-    millis: number
+    millis?: number
     pvs: PvData[]
     cloud?: boolean
     cp?: number

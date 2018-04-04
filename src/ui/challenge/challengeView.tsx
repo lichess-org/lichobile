@@ -24,7 +24,7 @@ function gameInfos(challenge: Challenge) {
   )
 }
 
-export function joinPopup(ctrl: ChallengeState, challenge: Challenge): () => Mithril.Children {
+export function joinPopup(ctrl: ChallengeState, challenge: Challenge) {
   let joinDom: Mithril.BaseNode
   if (challenge.rated && !session.isConnected()) {
     joinDom = h('div.error', [
@@ -55,67 +55,63 @@ export function joinPopup(ctrl: ChallengeState, challenge: Challenge): () => Mit
     ])
   }
 
-  return function() {
-    const challenger = challenge.challenger ?
-      i18n('playerisInvitingYou', challengeUserFormat(challenge.challenger)) :
-      i18n('playerisInvitingYou', 'Anonymous')
+  const challenger = challenge.challenger ?
+    i18n('playerisInvitingYou', challengeUserFormat(challenge.challenger)) :
+    i18n('playerisInvitingYou', 'Anonymous')
 
-    return popupWidget(
-      'join_url_challenge',
-      undefined,
-      function() {
-        return h('div.infos', [
-          h('div.challenger', challenger),
-          h('br'),
-          gameInfos(challenge),
-          h('br'),
-          joinDom
-        ])
-      },
-      true
-    )
-  }
+  return popupWidget(
+    'join_url_challenge',
+    undefined,
+    function() {
+      return h('div.infos', [
+        h('div.challenger', challenger),
+        h('br'),
+        gameInfos(challenge),
+        h('br'),
+        joinDom
+      ])
+    },
+    true
+  )
 }
 
 export function awaitInvitePopup(ctrl: ChallengeState, challenge: Challenge) {
 
   const isPersistent = challengesApi.isPersistent(challenge)
 
-  return function() {
-    return popupWidget(
-      'await_url_challenge',
-      undefined,
-      function() {
-        return h('div.infos', [
-          gameInfos(challenge),
+  return popupWidget(
+    'await_url_challenge',
+    undefined,
+    function() {
+      return h('div.infos', [
+        gameInfos(challenge),
+        h('br'),
+        h('p.explanation', i18n('toInviteSomeoneToPlayGiveThisUrl')),
+        h('input.lichess_game_url', {
+          value: publicUrl(challenge),
+          readonly: true
+        }),
+        h('p.explanation.small', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
+        h('div.go_or_cancel.clearfix', [
+          h('button.binary_choice[data-icon=E].withIcon', {
+            oncreate: helper.ontap(function() {
+              window.plugins.socialsharing.share(null, null, null, publicUrl(challenge))
+            })
+          }, i18n('shareGameURL')),
+          h('button.binary_choice[data-icon=L].withIcon', {
+            oncreate: helper.ontap(ctrl.cancelChallenge)
+          }, i18n('cancel'))
+        ]),
+        isPersistent ? h('div', [
           h('br'),
-          h('p.explanation', i18n('toInviteSomeoneToPlayGiveThisUrl')),
-          h('input.lichess_game_url', {
-            value: publicUrl(challenge),
-            readonly: true
-          }),
-          h('p.explanation.small', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
-          h('div.go_or_cancel.clearfix', [
-            h('button.binary_choice[data-icon=E].withIcon', {
-              oncreate: helper.ontap(function() {
-                window.plugins.socialsharing.share(null, null, null, publicUrl(challenge))
-              })
-            }, i18n('shareGameURL')),
-            h('button.binary_choice[data-icon=L].withIcon', {
-              oncreate: helper.ontap(ctrl.cancelChallenge)
-            }, i18n('cancel'))
-          ]),
-          isPersistent ? h('div', [
-            h('br'),
-            h('button', {
-              oncreate: helper.ontap(() => router.set('/'))
-            }, [h('span.fa.fa-home'), i18n('returnToHome')])
-          ]) : null
-        ])
-      },
-      true
-    )
-  }
+          h('button', {
+            oncreate: helper.ontap(() => router.set('/'))
+          }, [h('span.fa.fa-home'), i18n('returnToHome')])
+        ]) : null
+      ])
+    },
+    true
+  )
 }
 
 function challengeUserFormat(user: ChallengeUser) {
@@ -145,7 +141,5 @@ export function awaitChallengePopup(ctrl: ChallengeState, challenge: Challenge) 
     )
   }
 
-  return function() {
-    return popupWidget('await_url_challenge', undefined, popupContent, true)
-  }
+  return popupWidget('await_url_challenge', undefined, popupContent, true)
 }

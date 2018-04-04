@@ -1,15 +1,16 @@
-import socket from '../../socket'
-import redraw from '../../utils/redraw'
-import router from '../../router'
-import * as utils from '../../utils'
-import * as helper from '../helper'
-import * as xhr from './playerXhr'
-import layout from '../layout'
-import { userStatus, dropShadowHeader } from '../shared/common'
-import i18n from '../../i18n'
-import { perfTitle } from '../../lichess/perfs'
 import * as stream from 'mithril/stream'
-import { RankingKey, RankingUser, Rankings } from '../../lichess/interfaces/user'
+
+import socket from '../socket'
+import redraw from '../utils/redraw'
+import router from '../router'
+import * as utils from '../utils'
+import i18n from '../i18n'
+import { perfTitle } from '../lichess/perfs'
+import { RankingKey, RankingUser, Rankings } from '../lichess/interfaces/user'
+import * as xhr from './players/playerXhr'
+import layout from './layout'
+import { userStatus, dropShadowHeader } from './shared/common'
+import * as helper from './helper'
 
 interface State {
   ranking: Mithril.Stream<Rankings | undefined>
@@ -17,47 +18,41 @@ interface State {
   toggleRankingCat(key: RankingKey): void
 }
 
-const RankingScreen: Mithril.Component<{}, State> = {
+export default {
   oncreate: helper.viewFadeIn,
 
-  oninit(vnode) {
+  oninit() {
 
     socket.createDefault()
 
-    const ranking: Mithril.Stream<Rankings | undefined> = stream(undefined)
-    const catOpenedMap = stream({} as Record<RankingKey, boolean>)
+    this.ranking = stream(undefined)
+    this.catOpenedMap = stream({} as Record<RankingKey, boolean>)
+
+    this.toggleRankingCat = (key: RankingKey) => {
+      this.catOpenedMap()[key] = !this.catOpenedMap()[key]
+    }
 
     xhr.ranking()
     .then(data => {
-      catOpenedMap(utils.mapObject(data, () => false))
-      ranking(data)
+      this.catOpenedMap(utils.mapObject(data, () => false))
+      this.ranking(data)
       redraw()
     })
     .catch(err => {
       utils.handleXhrError(err)
       router.set('/')
     })
-
-    vnode.state = {
-      ranking,
-      catOpenedMap,
-      toggleRankingCat(key: RankingKey) {
-        catOpenedMap()[key] = !catOpenedMap()[key]
-      }
-    }
   },
 
   view(vnode) {
     const ctrl = vnode.state
 
     return layout.free(
-      () => dropShadowHeader(i18n('leaderboard')),
-      renderBody.bind(undefined, ctrl)
+      dropShadowHeader(i18n('leaderboard')),
+      renderBody(ctrl)
     )
   }
-}
-
-export default RankingScreen
+} as Mithril.Component<{}, State>
 
 function renderBody(ctrl: State) {
   const ranking = ctrl.ranking()

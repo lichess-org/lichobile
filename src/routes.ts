@@ -10,11 +10,8 @@ import ai from './ui/ai'
 import settingsUi from './ui/settings'
 import settingsSoundNotifications from './ui/settings/soundNotifications'
 import settingsLang from './ui/settings/lang'
-import settingsKidMode from './ui/settings/kid'
-import settingsPreferences from './ui/settings/preferences'
 import settingsGameDisplay from './ui/settings/gameDisplay'
 import settingsGameBehavior from './ui/settings/gameBehavior'
-import settingsPrivacy from './ui/settings/privacy'
 import theme from './ui/settings/theme'
 import boardThemes from './ui/settings/boardThemes'
 import pieceThemes from './ui/settings/pieceThemes'
@@ -24,8 +21,11 @@ import userFollowers from './ui/user/followers'
 import userGames from './ui/user/games'
 import userPerfStats from './ui/user/perfStats'
 import userTV from './ui/user/tv'
+import accountPreferences from './ui/user/account/preferences'
+import accountPrivacy from './ui/user/account/privacy'
+import accountKidMode from './ui/user/account/kid'
 import players from './ui/players'
-import ranking from './ui/players/ranking'
+import ranking from './ui/ranking'
 import training from './ui/training'
 import tournamentsList from './ui/tournament'
 import tournamentDetail from './ui/tournament/detail'
@@ -68,6 +68,9 @@ export default {
       '@/:id/games/:filter': userGames,
       '@/:id/:perf/perf': userPerfStats,
       '@/:id/tv': userTV,
+      'account/preferences': accountPreferences,
+      'account/preferences/privacy': accountPrivacy,
+      'account/preferences/kidMode': accountKidMode,
       'clock': clock,
       'editor': editor,
       'editor/:fen': editor,
@@ -79,16 +82,13 @@ export default {
       'ranking': ranking,
       'search': search,
       'settings': settingsUi,
-      'settings/preferences': settingsPreferences,
       'settings/gameDisplay': settingsGameDisplay,
       'settings/gameBehavior': settingsGameBehavior,
       'settings/soundNotifications': settingsSoundNotifications,
-      'settings/privacy': settingsPrivacy,
       'settings/theme': theme,
       'settings/themes/board': boardThemes,
       'settings/themes/piece': pieceThemes,
       'settings/lang': settingsLang,
-      'settings/kidMode': settingsKidMode,
       'training': training,
       'training/:id': training,
       'tournament': tournamentsList,

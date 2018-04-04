@@ -5,11 +5,13 @@ import redraw from '../../../utils/redraw'
 import { saveOfflineGameData, removeOfflineGameData } from '../../../utils/offlineGames'
 import { hasNetwork, boardOrientation } from '../../../utils'
 import session from '../../../session'
+import settings from '../../../settings'
 import socket from '../../../socket'
 import router from '../../../router'
 import sound from '../../../sound'
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../../xhr'
 import vibrate from '../../../vibrate'
+import gameStatusApi from '../../../lichess/status'
 import * as gameApi from '../../../lichess/game'
 import { MiniUser } from '../../../lichess/interfaces'
 import { OnlineGameData, Player, ApiEnd } from '../../../lichess/interfaces/game'
@@ -41,28 +43,30 @@ interface VM {
   dropToSubmit: DropRequest | null
   tClockEl: HTMLElement | null
   offlineWatcher: boolean
+  clockPosition: 'right' | 'left'
 }
 
 export default class OnlineRound implements OnlineRoundInterface {
   public id: string
-  public data: OnlineGameData
+  public data!: OnlineGameData
   public chessground: Chessground
   public clock: ClockCtrl | null
-  public correspondenceClock: CorresClockCtrl
+  public correspondenceClock!: CorresClockCtrl
   public chat: Chat | null
   public notes: NotesCtrl | null
   public onFeatured?: () => void
   public onTVChannelChange?: () => void
   public onUserTVRedirect?: () => void
   public vm: VM
-  public title: Mithril.Children
-  public subTitle: string
-  public tv: string
+  public title!: Mithril.Children
+  public subTitle!: string
+  public tv!: string
 
+  private zenModeEnabled: boolean
   private lastMoveMillis?: number
-  private lastDrawOfferAtPly: number
-  private clockIntervId: number
-  private clockTimeoutId: number
+  private lastDrawOfferAtPly!: number
+  private clockIntervId!: number
+  private clockTimeoutId!: number
 
   public constructor(
     id: string,
@@ -80,6 +84,8 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.data.userTV = userTv
     this.onUserTVRedirect = onUserTVRedirect
 
+    this.zenModeEnabled = settings.game.zenMode()
+
     this.vm = {
       ply: this.lastPly(),
       flip: flipped,
@@ -93,6 +99,7 @@ export default class OnlineRound implements OnlineRoundInterface {
           data: null
         }
       },
+      clockPosition: settings.game.clockPosition() || 'right',
       showingActions: false,
       confirmResign: false,
       goneBerserk: {
@@ -148,6 +155,9 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     redraw()
   }
+
+  public isZen = () => this.zenModeEnabled && !this.data.player.spectator &&
+    !(gameStatusApi.finished(this.data) || gameStatusApi.aborted(this.data))
 
   public goToAnalysis = () => {
     const d = this.data

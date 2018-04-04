@@ -21,9 +21,9 @@ export default {
   },
 
   board(
-    header: () => Mithril.Children,
-    content: () => Mithril.Children,
-    overlay?: () => Mithril.Children,
+    header: Mithril.Children,
+    content: Mithril.Children,
+    overlay?: Mithril.Children,
     color?: string
   ) {
     background = background || settings.general.theme.background()
@@ -32,8 +32,8 @@ export default {
         className: color,
         oncreate: handleMenuOpen
       }, [
-        h('header.main_header.board', header()),
-        h('div.content_round', content()),
+        h('header.main_header.board', header),
+        h('div.content_round', content),
         h('div#menu-close-overlay', { oncreate: menu.backdropCloseHandler })
       ]),
       h(MenuView),
@@ -45,22 +45,22 @@ export default {
       challengeForm.view(),
       friendsPopup.view(),
       lobby.view(),
-      overlay ? overlay() : null
+      overlay
     ])
   },
 
   free(
-    header: () => Mithril.Children,
-    content: () => Mithril.Children,
-    footer?: () => Mithril.Children,
-    overlay?: () => Mithril.Children
+    header: Mithril.Children,
+    content: Mithril.Children,
+    footer?: Mithril.Children,
+    overlay?: Mithril.Children
   ) {
     background = background || settings.general.theme.background()
     return h('div.view-container', { className: bgClass(background) }, [
       h('main#page', { oncreate: handleMenuOpen }, [
-        h('header.main_header', header()),
-        h('div#free_content.content', content()),
-        footer ? h('footer.main_footer', footer()) : null,
+        h('header.main_header', header),
+        h('div#free_content.content', content),
+        footer ? h('footer.main_footer', footer) : null,
         h('div#menu-close-overlay', { oncreate: menu.backdropCloseHandler })
       ]),
       h(MenuView),
@@ -72,7 +72,7 @@ export default {
       challengeForm.view(),
       friendsPopup.view(),
       lobby.view(),
-      overlay ? overlay() : null
+      overlay
     ])
   },
 

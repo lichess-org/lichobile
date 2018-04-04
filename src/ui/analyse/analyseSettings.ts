@@ -144,7 +144,7 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
       key: 'showBestMove'
     }, [
       formWidgets.renderCheckbox(
-        i18n('showBestMove'), 'showBestMove', settings.analyse.showBestMove,
+        [i18n('showBestMove'), h('small', ' (pale blue arrow)')], 'showBestMove', settings.analyse.showBestMove,
         ctrl.settings.toggleBestMove
       )
     ]),

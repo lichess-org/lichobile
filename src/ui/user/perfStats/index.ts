@@ -22,14 +22,15 @@ export interface State {
   perfData: Mithril.Stream<PerfStats>
 }
 
-const VariantPerfScreen: Mithril.Component<Attrs, State> = {
+export default {
   oncreate: helper.viewSlideIn,
 
   oninit(vnode) {
     const userId = vnode.attrs.id
     const perf = vnode.attrs.perf
-    const user = stream() as Mithril.Stream<User>
-    const perfData = stream() as Mithril.Stream<PerfStats>
+
+    this.user = stream()
+    this.perfData = stream()
 
     socket.createDefault()
 
@@ -41,34 +42,26 @@ const VariantPerfScreen: Mithril.Component<Attrs, State> = {
     .then(results => {
       spinner.stop()
       const [userData, variantData] = results
-      user(userData)
-      perfData(variantData)
+      this.user(userData)
+      this.perfData(variantData)
       redraw()
     })
     .catch(err => {
       spinner.stop()
       handleXhrError(err)
     })
-
-    vnode.state = {
-      user,
-      perfData
-    }
   },
 
   view(vnode) {
-    const ctrl = vnode.state
     const userId = vnode.attrs.id
     const perf = vnode.attrs.perf
-    const header = () => headerWidget(null,
+    const header = headerWidget(null,
       backButton(h('div.main_header_title', [
         h('span.withIcon', { 'data-icon': gameIcon(perf) }),
         userId + ' ' + shortPerfTitle(perf as PerfKey) + ' stats'
       ]))
     )
 
-    return layout.free(header, () => renderBody(ctrl))
+    return layout.free(header, renderBody(this))
   }
-}
-
-export default VariantPerfScreen
+} as Mithril.Component<Attrs, State>

@@ -27,9 +27,9 @@ const ImporterScreen: Mithril.Component<{}, State> = {
   },
 
   view() {
-    const headerCtrl = () => dropShadowHeader(i18n('importGame'))
-    const bodyCtrl = () => renderBody(this.ctrl)
-    return layout.free(headerCtrl, bodyCtrl)
+    const header = dropShadowHeader(i18n('importGame'))
+    const body = renderBody(this.ctrl)
+    return layout.free(header, body)
   }
 
 }

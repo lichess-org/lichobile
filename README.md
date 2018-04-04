@@ -1,6 +1,8 @@
 [lichess.org/mobile](http://lichess.org/mobile)
 --------------------
 
+[![Build Status](https://travis-ci.org/veloce/lichobile.svg?branch=master)](https://travis-ci.org/veloce/lichobile)
+
 ![lichess mobile screenshots](res/3-screens.png)
 
 Lichess mobile is a [cordova](https://cordova.apache.org/) application that runs

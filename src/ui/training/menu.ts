@@ -8,7 +8,7 @@ import i18n from '../../i18n'
 import router from '../../router'
 import { hasNetwork } from '../../utils'
 import redraw from '../../utils/redraw'
-import { UserData as PuzzleUserData } from '../../lichess/interfaces/training'
+import { UserData as PuzzleUserData, getUserRatingFromHistory } from '../../lichess/interfaces/training'
 import loginModal from '../loginModal'
 import popupWidget from '../shared/popup'
 import * as helper from '../helper'
@@ -108,8 +108,10 @@ function renderSigninBox() {
 }
 
 function renderUserInfosOffline(user: OfflineUser, ctrl: IMenuCtrl) {
+  // TODO use user.rating only when fixed server side
+  const rating = getUserRatingFromHistory(user.data.recent) || user.data.rating
   return h('div.training-offlineInfos', [
-    h('p', ['You are currently offline. Your last recorded rating as ', h('strong', user.username), ' is ', h('strong', user.data.rating), '.']),
+    h('p', ['You are currently offline. Your last recorded rating as ', h('strong', user.username), ' is ', h('strong', rating), '.']),
     h('p', 'You still have ', h('strong', ctrl.root.nbUnsolved), ' saved puzzles to solve.'),
     h('p', 'Puzzles are automatically downloaded by batches so you can solve them seamlessly while having bad network conditions or when you are offline.'),
     h('p', 'Your puzzle history and rating will be updated as soon as you are back online.'),
@@ -127,8 +129,10 @@ function renderUserInfosOnline(user: PuzzleUserData) {
   else if (vw >= 500) width = vw * 0.6
   else width = vw * 0.85
   const height = 200
+  // TODO use user.rating only when fixed server side
+  const rating = getUserRatingFromHistory(user.recent) || user.rating
   return [
-    h('p.trainingRatingHeader', h.trust(i18n('yourPuzzleRatingX', `<strong>${user.rating}</strong>`))),
+    h('p.trainingRatingHeader', h.trust(i18n('yourPuzzleRatingX', `<strong>${rating}</strong>`))),
     user.recent ? h('svg#training-graph', {
       width,
       height,
@@ -158,7 +162,11 @@ function renderRecent(user: PuzzleUserData) {
 
 function drawChart(user: PuzzleUserData) {
   const history = Array.from(user.recent.map(x => x[2]))
-  history.push(user.rating)
+  // TODO use user.rating when fixed server side
+  const rating = getUserRatingFromHistory(user.recent)
+  if (rating !== undefined) {
+    history.push(rating)
+  }
   const data = history.map((x, i) => [i + 1, x])
   const graph = select('#training-graph')
   const margin = {top: 5, right: 20, bottom: 5, left: 35}

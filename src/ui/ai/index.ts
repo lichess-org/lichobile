@@ -42,22 +42,22 @@ export default {
     if (this.round) this.round.engine.exit()
   },
   view() {
-    let content: () => Mithril.Children, header: () => Mithril.Children
+    let content: Mithril.Children, header: Mithril.Children
 
     if (this.round.data && this.round.chessground) {
-      header = () => renderHeader(h(GameTitle, { data: this.round.data }))
-      content = () => renderContent(this.round)
+      header = renderHeader(h(GameTitle, { data: this.round.data }))
+      content = renderContent(this.round)
     } else {
       const fen = this.round.vm.setupFen || this.round.vm.savedFen || standardFen
       const color = playerFromFen(fen)
-      header = () => renderHeader(i18n('playOfflineComputer'))
-      content = () => viewOnlyBoardContent(fen, color, undefined)
+      header = renderHeader(i18n('playOfflineComputer'))
+      content = viewOnlyBoardContent(fen, color, undefined)
     }
 
     return layout.board(
       header,
       content,
-      () => overlay(this.round)
+      overlay(this.round)
     )
   }
 } as Mithril.Component<Attrs, State>

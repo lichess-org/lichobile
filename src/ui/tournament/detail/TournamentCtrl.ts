@@ -19,9 +19,9 @@ interface PagesCache {
 
 export default class TournamentCtrl {
   public id: string
-  public tournament: Tournament
+  public tournament!: Tournament
   public page: number = 1
-  public currentPageResults: ReadonlyArray<StandingPlayer>
+  public currentPageResults!: ReadonlyArray<StandingPlayer>
   public hasJoined: boolean = false
   public notFound: boolean = false
   public focusOnMe: boolean = false

@@ -20,7 +20,7 @@ export interface Round {
 export interface RoundData {
   readonly round: Round
   readonly user?: UserData
-  readonly voted: number | null
+  readonly voted: boolean | null
 }
 
 export interface Game {
@@ -61,10 +61,23 @@ export interface PuzzleOutcome {
   win: boolean
 }
 
+//                       [id, diff, rating]
+type RecentPuzzleStats = [number, number, number]
+
 export interface UserData {
-  // [id, diff, rating]
-  readonly recent: ReadonlyArray<[number, number, number]>
+  readonly recent: ReadonlyArray<RecentPuzzleStats>
   readonly rating: number
+}
+
+export function getUserRatingFromHistory(
+  puzzles: ReadonlyArray<RecentPuzzleStats>
+): number | undefined {
+  const last = puzzles[puzzles.length - 1]
+  if (last !== undefined) {
+    return last[2] + last[1]
+  }
+
+  return undefined
 }
 
 export type LineFeedback = 'win' | 'retry'

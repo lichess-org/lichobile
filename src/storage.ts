@@ -32,8 +32,13 @@ function remove(k: string): void {
 
 function set<T>(k: string, v: T): void {
   withStorage((s) => {
-    s.removeItem(k)
-    s.setItem(k, JSON.stringify(v))
+    try {
+      s.setItem(k, JSON.stringify(v))
+    } catch (_) {
+      // http://stackoverflow.com/questions/2603682/is-anyone-else-receiving-a-quota-exceeded-err-on-their-ipad-when-accessing-local
+      s.removeItem(k)
+      s.setItem(k, JSON.stringify(v))
+    }
   })
 }
 

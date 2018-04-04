@@ -64,13 +64,13 @@ export default function DelayClock(time: number, increment: number, onFlag: (col
 
     if (side === 'white') {
       if (state.activeSide === 'white') {
-        state.whiteDelay = state.increment
+        state.blackDelay = state.increment
       }
       blackTimestamp = performance.now()
       state.activeSide = 'black'
     } else if (side === 'black') {
       if (state.activeSide === 'black') {
-        state.blackDelay = state.increment
+        state.whiteDelay = state.increment
       }
       whiteTimestamp = performance.now()
       state.activeSide = 'white'
@@ -129,6 +129,18 @@ export default function DelayClock(time: number, increment: number, onFlag: (col
     return color === 'white' ? whiteTime() : blackTime()
   }
 
+  function toggleActiveSide(): void {
+    if (state.activeSide)
+      if (state.activeSide === 'white') {
+        blackTimestamp = performance.now()
+        state.activeSide = 'black'
+      }
+      else {
+        whiteTimestamp = performance.now()
+        state.activeSide = 'white'
+      }
+  }
+
   const clockType: ClockType = 'delay'
 
   return {
@@ -143,6 +155,7 @@ export default function DelayClock(time: number, increment: number, onFlag: (col
     whiteTime,
     blackTime,
     getTime,
+    toggleActiveSide,
     clear() {
       clearInterval(clockInterval)
     }

@@ -35,9 +35,9 @@ export default function view(ctrl: OnlineRound) {
   const isPortrait = helper.isPortrait()
 
   return layout.board(
-    () => renderHeader(ctrl),
-    () => renderContent(ctrl, isPortrait),
-    () => overlay(ctrl)
+    renderHeader(ctrl),
+    renderContent(ctrl, isPortrait),
+    overlay(ctrl)
   )
 }
 
@@ -54,11 +54,17 @@ function overlay(ctrl: OnlineRound) {
 }
 
 export function renderMaterial(material: Material) {
-  return Object.keys(material).map((role: Role) =>
-    h('div.tomb', { key: role }, range(material[role])
+  const tomb = Object.keys(material.pieces).map((role: Role) =>
+    h('div.tomb', { key: role }, range(material.pieces[role])
       .map(_ => h('piece', { className: role }))
     )
   )
+
+  if (material.score > 0) {
+    tomb.push(h('span', '+' + material.score))
+  }
+
+  return tomb
 }
 
 function renderTitle(ctrl: OnlineRound) {
@@ -78,15 +84,17 @@ function renderTitle(ctrl: OnlineRound) {
       return h('div.main_header_title.withSub', {
         key: 'user-tv'
       }, [
-        h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), ctrl.data.userTV]),
-        h('h2.header-subTitle', tournament ? [
-          h('span.fa.fa-trophy'),
-          h(CountdownTimer, { seconds: tournament.secondsToFinish || 0 }),
-          h('span', ' • ' + tournament.name)
-        ] : [
+        h('h1.header-gameTitle', [
           h(`span.withIcon[data-icon=${utils.gameIcon(ctrl.data.game.perf)}]`),
           gameApi.title(ctrl.data)
-        ])
+        ]),
+        h('h2.header-subTitle', [
+          h('span.withIcon[data-icon=1]'), ctrl.data.userTV,
+        ].concat(tournament ? [
+          ' • ',
+          h('span.fa.fa-trophy'),
+          h(CountdownTimer, { seconds: tournament.secondsToFinish || 0 }),
+        ] : [])),
       ])
     }
     else {
@@ -235,11 +243,8 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
   const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
     '#' + ctrl.data.tournament.ranks[player.color] + ' ' : null
 
-  const isZen = settings.game.zenMode() && !ctrl.data.player.spectator &&
-    !(gameStatusApi.finished(ctrl.data) || gameStatusApi.aborted(ctrl.data))
-
   return (
-    <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '') + (isZen ? ' zen' : '')} oncreate={vConf}>
+    <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '') + (ctrl.isZen() ? ' zen' : '')} oncreate={vConf}>
       <h2 className="antagonistUser">
         { user && user.patron ?
           <span className={'patron status ' + (player.onGame ? 'ongame' : 'offgame')} data-icon="" />
@@ -286,9 +291,11 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
   const isCrazy = !!step.crazy
   const playable = gameApi.playable(ctrl.data)
   const myTurn = gameApi.isPlayerTurn(ctrl.data)
+  const classN = 'playTable' + (isCrazy ? ' crazy' : '') +
+    (ctrl.vm.clockPosition === 'left' ? ' clockOnLeft' : '')
 
   return (
-    <section className={'playTable' + (isCrazy ? ' crazy' : '')}>
+    <section className={classN}>
       {renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy)}
       { !!step.crazy ?
         h(CrazyPocket, {
@@ -501,17 +508,19 @@ function renderGameActionsBar(ctrl: OnlineRound) {
     <button className={gmClass} data-icon={gmDataIcon} key="gameMenu" oncreate={helper.ontap(ctrl.showActions)} /> :
     <button className={gmClass} key="gameMenu" oncreate={helper.ontap(ctrl.showActions)} />
 
-  const chatClass = [
-    'action_bar_button',
-    ctrl.chat && ctrl.chat.unread ? 'glow' : ''
-  ].join(' ')
-
   return (
     <section className="actions_bar">
       {gmButton}
       {ctrl.chat ?
-      <button className={chatClass} data-icon="c" key="chat"
-        oncreate={helper.ontap(ctrl.chat.open)} /> : null
+        <button className="action_bar_button withChip" data-icon="c" key="chat"
+          oncreate={helper.ontap(ctrl.chat.open)}
+        >
+         { ctrl.chat.nbUnread > 0 ?
+          <span className="chip">
+            { ctrl.chat.nbUnread <= 99 ? ctrl.chat.nbUnread : 99 }
+          </span> : null
+         }
+        </button> : null
       }
       {ctrl.notes ? gameButton.notes(ctrl) : null}
       {gameButton.flipBoard(ctrl)}

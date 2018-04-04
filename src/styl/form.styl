@@ -4,6 +4,8 @@
   justify-content space-between
   align-items center
   min-height 30px
+  > label
+    width 100%
   > input[type='checkbox']
     margin-left 10px
   &.small
@@ -194,18 +196,33 @@ button.fat
   &.active
     background lighten(gold, 10%)
 
+.form-multipleChoiceContainer
+  > .form-multipleChoice
+    margin 0
+    margin-top 15px
+    max-width initial
+    border-radius 2px
+    span
+      &.selected
+        background gold
+
 .form-multipleChoice
   display: flex;
   max-width 300px
   margin 0 auto
+  &.wrap
+    flex-flow wrap
   span
+    display flex
+    justify-content center
+    align-items center
     flex-grow: 1;
-    padding: 5px 0;
+    font-size 0.9em
+    padding: 5px 10px
     text-align: center;
     transition: background 0.13s;
     border: 1px solid #3d3d3d;
     border-width: 1px 0 1px 1px;
-    text-transform: capitalize;
     &:first-child
       border-radius: 3px 0 0 3px;
     &:last-child
@@ -214,8 +231,7 @@ button.fat
     &.selected
       background blue
       color: #fff
-      text-shadow: 1px 0 0 rgba(0,0,0,0.5);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2) inset;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1) inset
 
 .view-container.light
   input[type='checkbox'], input[type='checkbox']:before
@@ -225,7 +241,12 @@ button.fat
 
   .form-multipleChoice
     span
-      border-color #eee
+      border-color #ccc
+
+.view-container.transp
+  .form-multipleChoice
+    span
+      border-color transpWhite015
 
 .no_arrow_after
   label:after

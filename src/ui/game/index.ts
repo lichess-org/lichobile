@@ -121,21 +121,21 @@ const GameScreen: Mithril.Component<Attrs, State> = {
     if (this.round) return roundView(this.round)
 
     const pov = gamesMenu.lastJoined()
-    let board: () => Mithril.Child
+    let board: Mithril.Child
 
     if (pov) {
-      board = () => viewOnlyBoardContent(pov.fen, pov.color, pov.lastMove,
+      board = viewOnlyBoardContent(pov.fen, pov.color, pov.lastMove,
         pov.variant.key)
     } else {
       const g = positionsCache.get(attrs.id)
       if (g)
-        board = () => viewOnlyBoardContent(g.fen, g.orientation)
+        board = viewOnlyBoardContent(g.fen, g.orientation)
       else
-        board = () => viewOnlyBoardContent(emptyFen, 'white')
+        board = viewOnlyBoardContent(emptyFen, 'white')
     }
 
     return layout.board(
-      attrs.goingBack ? loadingBackbutton : connectingHeader,
+      attrs.goingBack ? loadingBackbutton() : connectingHeader(),
       board
     )
   }

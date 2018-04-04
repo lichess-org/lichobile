@@ -142,16 +142,16 @@ export default {
       ])
 
       return layout.board(
-        () => header(title, backButton),
-        () => renderContent(this.ctrl!, isPortrait, bounds),
-        () => overlay(this.ctrl!)
+        header(title, backButton),
+        renderContent(this.ctrl!, isPortrait, bounds),
+        overlay(this.ctrl!)
       )
     } else {
       const isSmall = settings.analyse.smallBoard()
       const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, isSmall)
       return layout.board(
-        loadingBackbutton,
-        () => [
+        loadingBackbutton(),
+        [
           viewOnlyBoard(vnode.attrs.color || 'white', bounds, isSmall, vnode.attrs.curFen || emptyFen),
           h('div.analyse-tableWrapper', spinner.getVdom('monochrome'))
         ]

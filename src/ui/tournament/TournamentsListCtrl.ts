@@ -5,9 +5,9 @@ import * as xhr from './tournamentXhr'
 import { TournamentListItem, TournamentLists } from '../../lichess/interfaces/tournament'
 
 export default class TournamentsListCtrl {
-  tournaments: TournamentLists
+  tournaments: TournamentLists | undefined
   currentTab: number
-  startPositions: BoardPositionCategory[]
+  startPositions: BoardPositionCategory[] | undefined
 
   constructor(defaultTab?: number) {
     this.currentTab = defaultTab || 0

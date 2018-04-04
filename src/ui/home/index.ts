@@ -124,8 +124,8 @@ export default {
   },
 
   view() {
-    const header = () => dropShadowHeader('lichess.org')
+    const header = dropShadowHeader('lichess.org')
 
-    return layout.free(header, () => body(this.ctrl))
+    return layout.free(header, body(this.ctrl))
   }
 } as Mithril.Component<{}, { ctrl: Ctrl }>

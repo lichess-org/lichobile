@@ -1,12 +1,14 @@
-import { dropShadowHeader, backButton } from '../shared/common'
-import formWidgets from '../shared/form'
+import * as h from 'mithril/hyperscript'
 import layout from '../layout'
 import i18n from '../../i18n'
-import * as helper from '../helper'
+import { hasNetwork } from '../../utils'
+import settings from '../../settings'
 import session from '../../session'
 import { StoredProp } from '../../storage'
-import { LichessPropOption, Takeback, SubmitMove, AutoQueen, AutoThreefold, SubmitMoveChoices, TakebackChoices, AutoQueenChoices, AutoThreefoldChoices } from '../../lichess/prefs'
-import * as h from 'mithril/hyperscript'
+import { Takeback, SubmitMove, AutoQueen, AutoThreefold, SubmitMoveChoices, TakebackChoices, AutoQueenChoices, AutoThreefoldChoices } from '../../lichess/prefs'
+import * as helper from '../helper'
+import { dropShadowHeader, backButton } from '../shared/common'
+import formWidgets from '../shared/form'
 
 interface Ctrl {
   readonly premove: StoredProp<boolean>
@@ -35,32 +37,50 @@ export default {
 
   view() {
     const ctrl = this.ctrl
-    const header = () => dropShadowHeader(null, backButton(i18n('gameBehavior')))
-    return layout.free(header, () => renderBody(ctrl))
+    const header = dropShadowHeader(null, backButton(i18n('gameBehavior')))
+    return layout.free(header,
+      h('ul.native_scroller.page.settings_list.game',
+        renderAppPrefs().concat(hasNetwork() && session.isConnected() ?
+          renderLichessPrefs(ctrl) : []
+        )
+    ))
   }
 } as Mithril.Component<{}, State>
 
-function renderBody(ctrl: Ctrl) {
+function renderAppPrefs() {
   return [
-    h('ul.native_scroller.page.settings_list.game', [
-      h('li.list_item', formWidgets.renderCheckbox(i18n('premovesPlayingDuringOpponentTurn'),
-        'premove', ctrl.premove)),
-      h('li.list_item', [
-        h('div.label', i18n('takebacksWithOpponentApproval')),
-        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderLichessPropSelect('', 'takeback', <Array<LichessPropOption>>TakebackChoices, ctrl.takeback))
-      ]),
-      h('li.list_item', [
-        h('div.label', i18n('promoteToQueenAutomatically')),
-        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderLichessPropSelect('', 'autoQueen', <Array<LichessPropOption>>AutoQueenChoices, ctrl.autoQueen))
-      ]),
-      h('li.list_item', [
-        h('div.label', i18n('claimDrawOnThreefoldRepetitionAutomatically').replace(/\%s/g, '')),
-        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderLichessPropSelect('', 'autoThreefold', <Array<LichessPropOption>>AutoThreefoldChoices, ctrl.autoThreefold))
-      ]),
-      h('li.list_item', [
-        h('div.label', i18n('moveConfirmation')),
-        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderLichessPropSelect('', 'moveConfirmation', <Array<LichessPropOption>>SubmitMoveChoices, ctrl.submitMove))
-      ])
+    h('li.list_item',
+      formWidgets.renderMultipleChoiceButton(
+        'How do you move pieces?', [
+          { label: 'Tap two squares', value: 'tap' },
+          { label: 'Drag a piece', value: 'drag' },
+          { label: 'Either', value: 'both' },
+        ],
+        settings.game.pieceMove
+      )
+    ),
+  ]
+}
+
+function renderLichessPrefs(ctrl: Ctrl) {
+  return [
+    h('li.list_item', formWidgets.renderMultipleChoiceButton(
+      i18n('premovesPlayingDuringOpponentTurn'), [
+        { label: i18n('no'), value: false },
+        { label: i18n('yes'), value: true },
+      ], ctrl.premove)),
+    h('li.list_item', formWidgets.renderMultipleChoiceButton(
+      i18n('takebacksWithOpponentApproval'), TakebackChoices.map(formWidgets.lichessPropToOption), ctrl.takeback
+    )),
+    h('li.list_item', formWidgets.renderMultipleChoiceButton(
+      i18n('promoteToQueenAutomatically'), AutoQueenChoices.map(formWidgets.lichessPropToOption), ctrl.autoQueen
+    )),
+    h('li.list_item', formWidgets.renderMultipleChoiceButton(
+      i18n('claimDrawOnThreefoldRepetitionAutomatically').replace(/\%s/g, ''), AutoThreefoldChoices.map(formWidgets.lichessPropToOption), ctrl.autoThreefold
+    )),
+    h('li.list_item', [
+      h('div.label', i18n('moveConfirmation')),
+      h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderLichessPropSelect('', 'moveConfirmation', SubmitMoveChoices, ctrl.submitMove))
     ])
   ]
 }

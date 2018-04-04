@@ -20,6 +20,15 @@ function renderBody() {
         settings.game.pieceDestinations)),
       h('li.list_item', formWidgets.renderCheckbox('Use piece symbols in move list', 'pieceNotation',
         settings.game.pieceNotation)),
+      h('li.list_item',
+        formWidgets.renderMultipleChoiceButton(
+          'Clock position', [
+            { label: 'Left', value: 'left' },
+            { label: 'Right', value: 'right' },
+          ],
+          settings.game.clockPosition
+        )
+      ),
       h('li.list_item', [
         formWidgets.renderCheckbox('Zen Mode', 'zenMode', settings.game.zenMode),
         h('small', 'Players name and rating are hidden during game')
@@ -31,8 +40,8 @@ function renderBody() {
 export default {
   oncreate: helper.viewSlideIn,
 
-  view: function() {
-    const header = () => dropShadowHeader(null, backButton(i18n('gameDisplay')))
-    return layout.free(header, renderBody)
+  view() {
+    const header = dropShadowHeader(null, backButton(i18n('gameDisplay')))
+    return layout.free(header, renderBody())
   }
 }

@@ -22,9 +22,9 @@ export default {
   oncreate: helper.viewFadeIn,
 
   view() {
-    const header = () => headerWidget(i18n('correspondence'))
-    const body = () => renderBody(this.ctrl)
+    const header = headerWidget(i18n('correspondence'))
+    const body = renderBody(this.ctrl)
 
-    return layout.free(header, body, renderFooter)
+    return layout.free(header, body, renderFooter())
   }
 } as Mithril.Component<Attrs, State>

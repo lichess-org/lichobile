@@ -1,9 +1,7 @@
-import * as utils from '../../utils'
 import router from '../../router'
 import * as helper from '../helper'
 import { dropShadowHeader, backButton } from '../shared/common'
 import layout from '../layout'
-import session from '../../session'
 import i18n from '../../i18n'
 import socket from '../../socket'
 import * as h from 'mithril/hyperscript'
@@ -16,8 +14,8 @@ const SettingsScreen: Mithril.Component<{}, {}> = {
   },
 
   view() {
-    const header = () => dropShadowHeader(null, backButton(i18n('settings')))
-    return layout.free(header, renderBody)
+    const header = dropShadowHeader(null, backButton(i18n('settings')))
+    return layout.free(header, renderBody())
   }
 }
 
@@ -26,18 +24,17 @@ export default SettingsScreen
 function renderBody() {
   return [
     h('ul.settings_list.native_scroller.page', [
-      utils.hasNetwork() && session.isConnected() ? h('li.list_item.nav', {
-        key: 'preferences',
-        oncreate: helper.ontapY(() => router.set('/settings/preferences'))
-      }, i18n('preferences')) : null,
-      h('li.list_item.nav', {
-        key: 'lang',
-        oncreate: helper.ontapY(() => router.set('/settings/lang'))
-      }, i18n('language')),
       h('li.list_item.nav', {
         key: 'gameDisplay',
         oncreate: helper.ontapY(() => router.set('/settings/gameDisplay'))
       }, i18n('gameDisplay')),
+      h('li.list_item.nav', {
+        oncreate: helper.ontapY(() => router.set('/settings/gameBehavior'))
+      }, i18n('gameBehavior')),
+      h('li.list_item.nav', {
+        key: 'lang',
+        oncreate: helper.ontapY(() => router.set('/settings/lang'))
+      }, i18n('language')),
       h('li.list_item.nav', {
         key: 'theme',
         oncreate: helper.ontapY(() => router.set('/settings/theme'))

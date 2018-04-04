@@ -1,12 +1,13 @@
+import * as h from 'mithril/hyperscript'
+
 import i18n from '../../i18n'
 import redraw from '../../utils/redraw'
-import * as h from 'mithril/hyperscript'
 import { StoredProp } from '../../storage'
+import { LichessPropOption } from '../../lichess/prefs'
+import * as helper from '../helper'
 
 type SelectOption = string[]
 type SelectOptionGroup = Array<SelectOption>
-
-type LichessPropOption = [number, string, string | undefined]
 
 export default {
 
@@ -85,7 +86,7 @@ export default {
   },
 
   renderCheckbox(
-    label: string,
+    label: Mithril.Children,
     name: string,
     settingsProp: StoredProp<boolean>,
     callback?: (v: boolean) => void,
@@ -99,6 +100,7 @@ export default {
         'for': name
       }, label),
       h('input[type=checkbox]', {
+        id: name,
         name: name,
         disabled,
         checked: isOn,
@@ -136,6 +138,36 @@ export default {
         }
       }, options.map(e => renderOptionGroup(e[0] as string, e[1], prop, e[2] as string, e[3] as string)))
     ]
+  },
+
+  renderMultipleChoiceButton<T>(
+    label: string,
+    options: ReadonlyArray<{ label: string, value: T }>,
+    prop: StoredProp<T>,
+    wrap: boolean = false
+  ) {
+    const selected = prop()
+    return h('div.form-multipleChoiceContainer', [
+      h('label', label),
+      h('div.form-multipleChoice', {
+        className: wrap ? 'wrap' : ''
+      }, options.map(o => {
+        return h('span', {
+          className: o.value === selected ? 'selected' : '',
+          oncreate: helper.ontap(() => {
+            prop(o.value)
+          })
+        }, o.label)
+      }))
+    ])
+  },
+
+  lichessPropToOption([value, label, labelArg]: LichessPropOption) {
+    const l = labelArg !== undefined ? i18n(label, labelArg) : i18n(label)
+    return {
+      label: l,
+      value
+    }
   },
 
   renderSlider(

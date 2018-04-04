@@ -34,11 +34,11 @@ interface InitPayload {
 }
 
 export default class AiRound implements AiRoundInterface, PromotingInterface {
-  public data: OfflineGameData
+  public data!: OfflineGameData
+  public chessground!: Chessground
+  public replay!: Replay
   public actions: AiActionsCtrl
   public newGameMenu: NewAiGameCtrl
-  public chessground: Chessground
-  public replay: Replay
   public vm: AiVM
 
   public engine: EngineInterface

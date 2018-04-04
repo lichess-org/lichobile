@@ -57,7 +57,7 @@ export interface Session {
 let session: Session | undefined
 
 function isConnected(): boolean {
-  return !!session
+  return session !== undefined
 }
 
 function getSession(): Session | undefined {
@@ -106,13 +106,19 @@ function myTurnGames() {
   return nowPlaying().filter(e => e.isMyTurn)
 }
 
-function toggleKidMode() {
-  return fetchText('/account/kidConfirm', {
-    method: 'POST'
-  })
+function showSavedPrefToast(data: string): string {
+  window.plugins.toast.show('✓ Your preferences have been saved on lichess server.', 'short', 'center')
+  return data
 }
 
-function savePreferences() {
+function setKidMode(): Promise<string> {
+  return fetchText('/account/kid?v=' + isKidMode(), {
+    method: 'POST'
+  })
+  .then(showSavedPrefToast)
+}
+
+function savePreferences(): Promise<string> {
 
   function numValue(v: boolean | number): string {
     if (v === true) return '1'
@@ -156,6 +162,7 @@ function savePreferences() {
     },
     body: serializeQueryParameters(Object.assign(rest, display, behavior))
   }, true)
+  .then(showSavedPrefToast)
 }
 
 function lichessBackedProp<T extends string | number | boolean>(path: string, prefRequest: () => Promise<string>, defaultVal: T): StoredProp<T> {
@@ -244,8 +251,8 @@ function rememberLogin(): Promise<Session> {
   })
 }
 
-function refresh(): void {
-  fetchJSON<Session>('/account/info')
+function refresh(): Promise<void> {
+  return fetchJSON<Session>('/account/info')
   .then((data: Session) => {
     session = data
     storeSession(data)
@@ -262,7 +269,6 @@ function refresh(): void {
       redraw()
       window.plugins.toast.show(i18n('signedOut'), 'short', 'center')
     }
-    throw err
   })
 }
 
@@ -303,6 +309,6 @@ export default {
   nowPlaying,
   myTurnGames,
   lichessBackedProp,
-  toggleKidMode,
+  setKidMode,
   confirmEmail
 }

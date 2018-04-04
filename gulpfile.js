@@ -11,8 +11,7 @@ const tsify = require('tsify');
 const stylus = require('gulp-stylus');
 const autoprefixer = require('gulp-autoprefixer');
 const rename = require('gulp-rename');
-const uglify = require('gulp-uglify');
-const sourcemaps = require('gulp-sourcemaps');
+const uglify = require('gulp-uglify-es').default;
 const buffer = require('vinyl-buffer')
 
 const SRC = 'src'
@@ -36,6 +35,22 @@ const paths = {
   ]
 };
 
+const browsers = ['and_chr >= 53', 'ios_saf >= 10']
+
+const babelSettings = {
+  extensions: ['.tsx', '.ts', '.js', '.jsx'],
+  presets: [['env', {
+    targets: {
+      browsers
+    }
+  }]]
+}
+
+function logErrorAndExit(error) {
+  gutil.log(gutil.colors.red(error.message))
+  process.exit(1)
+}
+
 gulp.task('html', () => {
   const context = require('./' + options.env);
   context.TARGET = options.target;
@@ -44,6 +59,7 @@ gulp.task('html', () => {
   console.log(context);
   return gulp.src(path.join(SRC, 'index.html'))
     .pipe(preprocess({context: context}))
+    .on('error', logErrorAndExit)
     .pipe(gulp.dest(DEST));
 });
 
@@ -52,27 +68,24 @@ gulp.task('styl', () => {
   .pipe(stylus({
     compress: options.mode === 'release'
   }))
-  .pipe(autoprefixer({ browsers: ['and_chr >= 50', 'ios_saf >= 9']}))
+  .pipe(autoprefixer({ browsers }))
   .pipe(rename('app.css'))
+  .on('error', logErrorAndExit)
   .pipe(gulp.dest(DEST + '/css/compiled/'));
 });
 
 gulp.task('scripts', () => {
   return browserify(SRC + '/main.ts', { debug: true })
     .plugin(tsify)
-    .transform(babelify, {
-      extensions: ['.tsx', '.ts', '.js', '.jsx'],
-      presets: ['env']
-    })
+    .transform(babelify, babelSettings)
     .bundle()
     .pipe(source('app.js'))
     .pipe(buffer())
-    .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(uglify())
-    .on('error', error => gutil.log(gutil.colors.red(error.message)))
-    .pipe(sourcemaps.write('../'))
+    // work around Safari 10/11 bugs in loop scoping and await
+    // see https://www.npmjs.com/package/uglify-es
+    .pipe(uglify({ safari10: true }))
+    .on('error', logErrorAndExit)
     .pipe(gulp.dest(DEST));
-
 });
 
 gulp.task('watch-scripts', () => {
@@ -82,10 +95,7 @@ gulp.task('watch-scripts', () => {
   const bundleStream = watchify(
     browserify(SRC + '/main.ts', opts)
     .plugin(tsify)
-    .transform(babelify, {
-      extensions: ['.tsx', '.ts', '.js', '.jsx'],
-      presets: ['env']
-    })
+    .transform(babelify, babelSettings)
   );
 
   function rebundle() {

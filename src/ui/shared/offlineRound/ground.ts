@@ -11,6 +11,7 @@ import { GameSituation } from '../../../chess'
 
 function makeConfig(data: OfflineGameData, sit: GameSituation): cg.InitConfig {
   const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null
+  const pieceMoveConf = settings.game.pieceMove()
   return {
     batchRAF: batchRequestAnimationFrame,
     fen: sit.fen,
@@ -41,10 +42,14 @@ function makeConfig(data: OfflineGameData, sit: GameSituation): cg.InitConfig {
       enabled: false
     },
     draggable: {
+      enabled: pieceMoveConf === 'drag' || pieceMoveConf === 'both',
       centerPiece: data.pref.centerPiece,
       distance: 3,
       magnified: settings.game.magnified()
-    }
+    },
+    selectable: {
+      enabled: pieceMoveConf === 'tap' || pieceMoveConf === 'both'
+    },
   }
 }
 

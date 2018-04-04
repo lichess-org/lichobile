@@ -9,7 +9,6 @@
 /// <reference path="mithril.d.ts" />
 /// <reference path="jsx.d.ts" />
 /// <reference path="lodash.d.ts" />
-/// <reference path="sse.d.ts" />
 /// <reference path="lichess.d.ts" />
 /// <reference path="rlite.d.ts" />
 /// <reference path="stockfish.d.ts" />

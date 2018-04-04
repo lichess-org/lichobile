@@ -9,6 +9,8 @@
   flex 0 0 auto
   padding 10px
   font-size 0.9em
+  &.cloud
+    justify-content flex-start
   > div
     margin-right 0.5em
 
@@ -68,6 +70,14 @@
     will-change transform
     // 5s otherwise the phone would spend more cpu time to rotate than to analyse...
     animation fa-spin 5s infinite steps(8)
+
+.ceval-cloud
+  background: rgba(117, 153, 0, 0.7);
+  color: #fff;
+  padding: 0px 3px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-size: 9px;
 
 .view-container.light
   .ceval-pv.even

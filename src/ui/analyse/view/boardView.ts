@@ -41,7 +41,11 @@ export default function renderBoard(
   const badMoveShape: Shape[] = badNode && badNode.uci ?
     moveOrDropShape(badNode.uci, 'paleRed', player) : []
 
-  const shapes: Shape[] = flatten([nextMoveShape, pastBestShape, curBestShape, badMoveShape].filter(noNull))
+  // TODO clearable shapes
+  const shapes: Shape[] = [
+    ...flatten([nextMoveShape, pastBestShape, curBestShape, badMoveShape].filter(noNull)),
+    ...(ctrl.node.shapes || [])
+  ]
 
   return h(Board, {
     key: ctrl.settings.s.smallBoard ? 'board-small' : 'board-full',

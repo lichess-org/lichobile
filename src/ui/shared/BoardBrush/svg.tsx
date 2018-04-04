@@ -40,7 +40,7 @@ export function circle(brush: Brush, pos: BoardPos, current: boolean, bounds: Bo
       opacity={opacity(brush, current)}
       cx={o[0]}
       cy={o[1]}
-      r={radius - width / 2 - brush.circleMargin * width * 1.5}
+      r={radius - width / 2 * width * 1.5}
     />
   )
 }

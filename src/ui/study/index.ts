@@ -16,7 +16,6 @@ import RightSideMenu from './view/RightSideMenu'
 export interface Attrs {
   id: string
   chapterId?: string
-  color?: Color
   ply?: string
   tab?: string
   // fen used for placeholder board while loading
@@ -34,7 +33,6 @@ export default {
     const studyId = vnode.attrs.id
     const studyChapterId = vnode.attrs.chapterId
     const now = performance.now()
-    const orientation: Color = vnode.attrs.color || 'white'
     const ply = utils.safeStringToNum(vnode.attrs.ply)
     const tab = utils.safeStringToNum(vnode.attrs.tab)
 
@@ -46,7 +44,7 @@ export default {
           data.analysis,
           data.study,
           'online',
-          orientation,
+          data.study.chapter.setup.orientation,
           true,
           ply || 0,
           tab
@@ -98,7 +96,7 @@ export default {
         hammerHandlers
       )
     } else {
-      return loadingScreen(isPortrait, vnode.attrs.color, vnode.attrs.curFen)
+      return loadingScreen(isPortrait, undefined, vnode.attrs.curFen)
     }
   }
 

@@ -1,4 +1,5 @@
 import { Pockets } from '../../../lichess/interfaces/game'
+import { Shape } from '../BoardBrush'
 
 export namespace Tree {
   export type Path = string
@@ -51,7 +52,7 @@ export namespace Tree {
     glyphs?: Glyph[]
     clock?: Clock
     parentClock?: Clock
-    shapes?: Shape[]
+    shapes?: ReadonlyArray<Shape>
     comp?: boolean
     threefold?: boolean
     fail?: boolean
@@ -86,9 +87,6 @@ export namespace Tree {
   }
 
   export type Clock = number
-
-  export interface Shape {
-  }
 }
 
 export function isClientEval(ev: Tree.ServerEval | Tree.ClientEval): ev is Tree.ClientEval {

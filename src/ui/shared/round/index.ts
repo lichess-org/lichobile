@@ -34,6 +34,7 @@ export interface RoundInterface extends BoardInterface {
 
 export interface OnlineRoundInterface extends RoundInterface {
   data: OnlineGameData
+  score?: Score
 
   onReload(cfg: OnlineGameData): void
   reloadGameData(): void
@@ -75,4 +76,11 @@ export interface OtbVM {
 }
 export interface OtbRoundInterface extends OfflineRoundInterface {
   vm: OtbVM
+}
+
+export interface Score {
+  readonly nbGames: number
+  readonly users: {
+    [id: string]: number | undefined
+  }
 }

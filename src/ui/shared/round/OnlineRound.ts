@@ -28,7 +28,7 @@ import socketHandler from './socketHandler'
 import atomic from './atomic'
 import * as xhr from './roundXhr'
 import crazyValid from './crazy/crazyValid'
-import { OnlineRoundInterface } from './'
+import { OnlineRoundInterface, Score } from './'
 
 interface VM {
   ply: number
@@ -61,6 +61,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public title!: Mithril.Children
   public subTitle!: string
   public tv!: string
+  public score!: Score
 
   private zenModeEnabled: boolean
   private lastMoveMillis?: number
@@ -185,6 +186,22 @@ export default class OnlineRound implements OnlineRoundInterface {
   public showActions = () => {
     router.backbutton.stack.push(this.hideActions)
     this.vm.showingActions = true
+    const d = this.data
+    if (d && d.player.user && d.opponent.user) {
+      let player1, player2
+      if (d.player.color === 'white') {
+        player1 = d.player.user.id
+        player2 = d.opponent.user.id
+      }
+      else {
+        player1 = d.opponent.user.id
+        player2 = d.player.user.id
+      }
+      xhr.getCrosstable(player1, player2).then(s => {
+        this.score = s
+        redraw()
+      })
+    }
   }
 
   public hideActions = (fromBB?: string) => {

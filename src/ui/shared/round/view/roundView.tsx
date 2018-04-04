@@ -135,7 +135,6 @@ function renderHeader(ctrl: OnlineRound) {
 }
 
 function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
-  console.log(ctrl.data)
   const material = ctrl.chessground.getMaterialDiff()
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait)
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait)
@@ -453,6 +452,8 @@ function renderGameEndedActions(ctrl: OnlineRound) {
 
 function renderPopupTitle(ctrl: OnlineRound) {
   return [
+    renderScore(ctrl),
+    h('br'),
     h('span.withIcon', {
       'data-icon': utils.gameIcon(ctrl.data.game.perf)
     }),
@@ -465,16 +466,42 @@ function renderStatus(ctrl: OnlineRound) {
   const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner)
   const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
     (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
-  return (gameStatusApi.aborted(ctrl.data) ? [] : [
-    h('strong', result), h('br')
-  ]).concat([h('em.resultStatus', status)])
+  return [
+    renderScore(ctrl), 
+    h('br'),
+    (gameStatusApi.aborted(ctrl.data) ?
+       [] :
+       [h('strong', result), h('br')]
+    ).concat([
+      h('em.resultStatus',
+      status)
+      ])
+   ]
+}
+
+function renderScore (ctrl: OnlineRound) {
+  const score = ctrl.score
+  if (!score || !ctrl.data || !ctrl.data.player.user || !ctrl.data.opponent.user)
+    return null
+  let white, black
+  if (ctrl.data.player.color === white) {
+    white = ctrl.data.player.user
+    black = ctrl.data.opponent.user
+  }
+  else {
+    white = ctrl.data.opponent.user
+    black = ctrl.data.player.user
+  }
+  return (
+    <span> {white.username} ({score.users[white.id]}) - {black.username} ({score.users[black.id]}) </span>
+  );
 }
 
 function renderGamePopup(ctrl: OnlineRound) {
   const header = ctrl.data.tv ?
     () => renderPopupTitle(ctrl) :
     !gameApi.playable(ctrl.data) ?
-      () => renderStatus(ctrl) : undefined
+      () => renderStatus(ctrl) : () => renderScore(ctrl)
 
   return popupWidget(
     'player_controls',

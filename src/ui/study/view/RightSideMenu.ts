@@ -1,8 +1,10 @@
 import * as h from 'mithril/hyperscript'
 import router from '../../../router'
+import { StudyMemberMap, StudyMember } from '../../../lichess/interfaces/study'
 import * as helper from '../../helper'
 import CloseSlideHandler from '../../shared/sideMenu/CloseSlideHandler'
 import CloseSwipeHandler from '../../shared/sideMenu/CloseSwipeHandler'
+import { expandMore, expandLess } from '../../shared/icons'
 
 import StudyCtrl from '../../analyse/study/StudyCtrl'
 
@@ -10,19 +12,31 @@ export interface Attrs {
   studyCtrl: StudyCtrl
 }
 
+interface State {
+  showMembers: boolean
+}
+
 interface DataSet extends DOMStringMap {
   id: string
 }
 
 export default {
+  oninit({ attrs }) {
+    const { studyCtrl } = attrs
+    const nbMembers = Object.keys(studyCtrl.data.members).length
+    this.showMembers = nbMembers <= 5
+  },
+
   onbeforeupdate({ attrs }) {
     const sm = attrs.studyCtrl.sideMenu
     return sm.isOpen || sm.isSliding
   },
+
   view({ attrs }) {
     const { studyCtrl } = attrs
     const study = studyCtrl.data
-    const membersIds = Object.keys(study.members)
+    const members = sortMembers(study.members)
+    const membPluralSuffix = members.length > 1 ? 's' : ''
     return h('aside#studyMenu', {
       oncreate: ({ dom }: Mithril.DOMNode) => {
         if (window.cordova.platformId === 'ios') {
@@ -33,13 +47,22 @@ export default {
       }
     }, [
       h('div.native_scroller', [
-        h('h2.study-menu-title', `${membersIds.length} members`),
-        h('ul', membersIds.map(id =>
-          h('li.study-menu-link', [
-            h('span.fa.fa-user.bullet'),
-            h('span', study.members[id]!.user.name)
+        h('h2.study-menu-title', {
+          oncreate: helper.ontapXY(() => this.showMembers = !this.showMembers)
+        }, [
+          h('span', `${members.length} member${membPluralSuffix}`),
+          this.showMembers ? expandLess : expandMore
+        ]),
+        this.showMembers ? h('ul', members.map(memb =>
+          h('li.study-menu-link', {
+            className: memb.role === 'w' ? 'contrib' : 'viewer'
+          }, [
+            h('span.bullet.fa', {
+              className: memb.role === 'w' ? 'fa-user' : 'fa-eye'
+            }),
+            h('span', memb.user.name)
           ])
-        )),
+        )) : null,
         h('h2.study-menu-title', `${study.chapters.length} chapters`),
         h('ol', {
           oncreate: helper.ontapXY(e => {
@@ -62,4 +85,13 @@ export default {
       ])
     ])
   }
-} as Mithril.Component<Attrs, {}>
+} as Mithril.Component<Attrs, State>
+
+
+function sortMembers(members: StudyMemberMap): ReadonlyArray<StudyMember> {
+  return Object.keys(members).map(id => members[id]!).sort((a, b) => {
+    if (a.role === 'r' && b.role === 'w') return 1
+    if (a.role === 'w' && b.role === 'r') return -1
+    return a.addedAt > b.addedAt ? 1 : -1
+  })
+}

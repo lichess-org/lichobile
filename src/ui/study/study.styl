@@ -29,6 +29,8 @@
     margin 40px 0px 30px 0
 
 .study-menu-title
+  display flex
+  justify-content space-between
   font-size 1.1em
   text-transform uppercase
   color blue
@@ -40,6 +42,8 @@
   word-wrap break-word
   display flex
   flex-flow row nowrap
+  &.viewer
+    color rgba(textDarkGray, 0.85)
   &.current
     background palerBlue
   &.active
@@ -49,5 +53,8 @@
     color blue
     font-weight bold
     text-align center
+    flex 0 0 16px
     &.fa
       margin-top 3px
+      &.fa-eye
+        color rgba(blue, 0.6)

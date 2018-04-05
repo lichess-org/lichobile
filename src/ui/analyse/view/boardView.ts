@@ -1,5 +1,4 @@
 import * as h from 'mithril/hyperscript'
-import { flatten, noNull } from '../../../utils'
 import * as chessFormat from '../../../utils/chessFormat'
 import gameStatusApi from '../../../lichess/status'
 import { findTag, gameResult } from '../../../lichess/interfaces/study'
@@ -29,7 +28,7 @@ export default function renderBoard(
       ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
       []
   }
-  const pastBestShape = !ctrl.retro && rEval && rEval.best ?
+  const pastBestShape: Shape[] = !ctrl.retro && rEval && rEval.best ?
     moveOrDropShape(rEval.best, 'paleGreen', player) : []
 
   const nextUci = curTab.id === 'explorer' && ctrl.node && treeOps.withMainlineChild(ctrl.node, n => n.uci)
@@ -41,10 +40,8 @@ export default function renderBoard(
   const badMoveShape: Shape[] = badNode && badNode.uci ?
     moveOrDropShape(badNode.uci, 'paleRed', player) : []
 
-  // TODO clearable shapes
-  const shapes: Shape[] = [
-    ...flatten([nextMoveShape, pastBestShape, curBestShape, badMoveShape].filter(noNull)),
-    ...(ctrl.node.shapes || [])
+  const shapes = [
+    ...nextMoveShape, ...pastBestShape, ...curBestShape, ...badMoveShape
   ]
 
   return h(Board, {
@@ -53,6 +50,7 @@ export default function renderBoard(
     chessground: ctrl.chessground,
     bounds,
     shapes,
+    clearableShapes: ctrl.node.shapes,
     wrapperClasses: ctrl.settings.s.smallBoard ? 'halfsize' : ''
   })
 }

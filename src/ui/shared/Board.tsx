@@ -1,4 +1,5 @@
 import settings from '../../settings'
+import redraw from '../../utils/redraw'
 import Chessground from '../../chessground/Chessground'
 import BoardBrush, { Shape } from './BoardBrush'
 
@@ -13,21 +14,31 @@ export interface Attrs {
   bounds: Bounds
   wrapperClasses?: string
   customPieceTheme?: string
-  shapes?: Shape[]
+  shapes?: ReadonlyArray<Shape>
+  clearableShapes?: ReadonlyArray<Shape>
   alert?: Mithril.Children
 }
 
 interface State {
+  wrapperOnCreate(vnode: Mithril.DOMNode): void
   boardOnCreate(vnode: Mithril.DOMNode): void
   boardOnRemove(): void
   boardTheme: string
   pieceTheme: string
+  shapesCleared: boolean
 }
 
-const Board: Mithril.Component<Attrs, State> = {
+export default {
   oninit(vnode) {
 
     const { chessground } = vnode.attrs
+
+    this.wrapperOnCreate = ({ dom }) => {
+      dom.addEventListener('touchstart', () => {
+        this.shapesCleared = true
+        redraw()
+      })
+    }
 
     this.boardOnCreate = ({ dom }: Mithril.DOMNode) => {
       chessground.attach(dom as HTMLElement)
@@ -37,12 +48,22 @@ const Board: Mithril.Component<Attrs, State> = {
       chessground.detach()
     }
 
+    this.shapesCleared = false
     this.pieceTheme = settings.general.theme.piece()
     this.boardTheme = settings.general.theme.board()
   },
 
+  onbeforeupdate({ attrs }, { attrs: oldattrs }) {
+    // TODO: does not take into account same shapes put on 2 different nodes
+    // maybe add fen attr to fix that
+    if (attrs.clearableShapes !== oldattrs.clearableShapes) {
+      this.shapesCleared = false
+    }
+    return true
+  },
+
   view(vnode) {
-    const { variant, chessground, bounds, wrapperClasses, customPieceTheme, shapes, alert } = vnode.attrs
+    const { variant, chessground, bounds, wrapperClasses, customPieceTheme, shapes, clearableShapes, alert } = vnode.attrs
 
     const boardClass = [
       'display_board',
@@ -64,25 +85,28 @@ const Board: Mithril.Component<Attrs, State> = {
       width: bounds.width + 'px'
     } : {}
 
+    const allShapes = [
+      ...(shapes !== undefined ? shapes : []),
+      ...(clearableShapes !== undefined && !this.shapesCleared ? clearableShapes : [])
+    ]
+
     return (
-      <section className={wrapperClass} style={wrapperStyle}>
+      <section oncreate={this.wrapperOnCreate} className={wrapperClass} style={wrapperStyle}>
         <div className={boardClass}
           oncreate={this.boardOnCreate}
           onremove={this.boardOnRemove}
         />
         { alert ? <div className="board_alert">{alert}</div> : null }
         {
-          !!shapes ?
+          allShapes.length > 0 ?
             BoardBrush(
               bounds,
               chessground.state.orientation,
-              shapes,
+              allShapes,
               this.pieceTheme
             ) : null
         }
       </section>
     )
   }
-}
-
-export default Board
+} as Mithril.Component<Attrs, State>

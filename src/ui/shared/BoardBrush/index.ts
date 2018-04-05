@@ -12,7 +12,12 @@ export interface Shape {
 
 const usedBrushes = defs(Object.keys(brushes).map(name => brushes[name]))
 
-export default function BoardBrush(bounds: Bounds, orientation: Color, shapes: Shape[], pieceTheme: string) {
+export default function BoardBrush(
+  bounds: Bounds,
+  orientation: Color,
+  shapes: ReadonlyArray<Shape>,
+  pieceTheme: string
+) {
   if (!shapes) return null
   if (!bounds) return null
   if (bounds.width !== bounds.height) return null

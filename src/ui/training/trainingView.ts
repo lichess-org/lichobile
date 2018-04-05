@@ -85,10 +85,12 @@ function renderActionsBar(ctrl: TrainingCtrl) {
 function renderViewControls(ctrl: TrainingCtrl) {
   return [
     h('div.li-button.training-control.retry', {
-      oncreate: helper.ontap(ctrl.retry)
+      oncreate: helper.ontap(ctrl.retry),
+      className: ctrl.vm.loading ? 'disabled' : ''
     }, [h('span.fa.fa-refresh'), i18n('retryThisPuzzle')]),
     h('div.li-button.training-control.continue', {
-      oncreate: helper.ontap(ctrl.newPuzzle)
+      oncreate: helper.ontap(ctrl.newPuzzle),
+      className: ctrl.vm.loading ? 'disabled' : ''
     }, [h('span.fa.fa-play'), i18n('continueTraining')])
   ]
 }

@@ -51,7 +51,8 @@ export default function renderBoard(
     bounds,
     shapes,
     clearableShapes: ctrl.node.shapes,
-    wrapperClasses: ctrl.settings.s.smallBoard ? 'halfsize' : ''
+    wrapperClasses: ctrl.settings.s.smallBoard ? 'halfsize' : '',
+    canClearShapes: true,
   })
 }
 

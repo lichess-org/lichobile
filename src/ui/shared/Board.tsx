@@ -17,6 +17,7 @@ export interface Attrs {
   shapes?: ReadonlyArray<Shape>
   clearableShapes?: ReadonlyArray<Shape>
   alert?: Mithril.Children
+  canClearShapes?: boolean
 }
 
 interface State {
@@ -31,13 +32,17 @@ interface State {
 export default {
   oninit(vnode) {
 
-    const { chessground } = vnode.attrs
+    const { chessground, canClearShapes } = vnode.attrs
 
     this.wrapperOnCreate = ({ dom }) => {
-      dom.addEventListener('touchstart', () => {
-        this.shapesCleared = true
-        redraw()
-      })
+      if (canClearShapes) {
+        dom.addEventListener('touchstart', () => {
+          if (!this.shapesCleared) {
+            this.shapesCleared = true
+            redraw()
+          }
+        })
+      }
     }
 
     this.boardOnCreate = ({ dom }: Mithril.DOMNode) => {

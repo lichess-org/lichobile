@@ -111,8 +111,8 @@ function showSavedPrefToast(data: string): string {
   return data
 }
 
-function toggleKidMode(): Promise<string> {
-  return fetchText('/account/kidConfirm', {
+function setKidMode(): Promise<string> {
+  return fetchText('/account/kid?v=' + isKidMode(), {
     method: 'POST'
   })
   .then(showSavedPrefToast)
@@ -309,6 +309,6 @@ export default {
   nowPlaying,
   myTurnGames,
   lichessBackedProp,
-  toggleKidMode,
+  setKidMode,
   confirmEmail
 }

@@ -8,7 +8,7 @@ type BoardPos = [number, number]
 const key2pos: (key: Key) => BoardPos = cgUtil.key2pos
 
 function circleWidth(current: boolean, bounds: Bounds) {
-  return (current ? 2 : 4) / 512 * bounds.width
+  return (current ? 3 : 4) / 512 * bounds.width
 }
 
 function lineWidth(brush: Brush, current: boolean, bounds: Bounds) {
@@ -40,7 +40,7 @@ export function circle(brush: Brush, pos: BoardPos, current: boolean, bounds: Bo
       opacity={opacity(brush, current)}
       cx={o[0]}
       cy={o[1]}
-      r={radius - width / 2 * width * 1.5}
+      r={radius - width / 2}
     />
   )
 }

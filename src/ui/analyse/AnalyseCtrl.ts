@@ -213,8 +213,10 @@ export default class AnalyseCtrl {
 
     if (this.synthetic) val = val.filter(t => t.id !== 'infos')
     if (!this.retro && this.ceval.enabled()) val = [...val, tabs.ceval]
-    // TODO too short study chapters don't have analysis
-    if (this.study || (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data))) {
+    // TODO enable study analysis request when socket is implemented
+    if (this.study && this.data.analysis ||
+      (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data))
+    ) {
       val = [...val, tabs.charts]
     }
     if (hasNetwork() && this.explorer.allowed) val = [...val, tabs.explorer]

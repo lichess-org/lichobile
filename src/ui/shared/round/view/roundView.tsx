@@ -452,8 +452,6 @@ function renderGameEndedActions(ctrl: OnlineRound) {
 
 function renderPopupTitle(ctrl: OnlineRound) {
   return [
-    renderScore(ctrl),
-    h('br'),
     h('span.withIcon', {
       'data-icon': utils.gameIcon(ctrl.data.game.perf)
     }),
@@ -467,16 +465,12 @@ function renderStatus(ctrl: OnlineRound) {
   const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
     (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
   return [
-    renderScore(ctrl), 
-    h('br'),
-    (gameStatusApi.aborted(ctrl.data) ?
+    gameStatusApi.aborted(ctrl.data) ?
        [] :
        [h('strong', result), h('br')]
-    ).concat([
-      h('em.resultStatus',
-      status)
-      ])
-   ]
+    ,
+    h('em.resultStatus', status)
+  ]
 }
 
 function renderScore (ctrl: OnlineRound) {
@@ -493,7 +487,9 @@ function renderScore (ctrl: OnlineRound) {
     black = ctrl.data.player.user
   }
   return (
-    <span> {white.username} ({score.users[white.id]}) - {black.username} ({score.users[black.id]}) </span>
+    <div class="score">
+      <span> {white.username} ({score.users[white.id]}) - {black.username} ({score.users[black.id]}) </span>
+    </div>
   );
 }
 
@@ -501,16 +497,22 @@ function renderGamePopup(ctrl: OnlineRound) {
   const header = ctrl.data.tv ?
     () => renderPopupTitle(ctrl) :
     !gameApi.playable(ctrl.data) ?
-      () => renderStatus(ctrl) : () => renderScore(ctrl)
+      () => renderStatus(ctrl) : () => null
 
   return popupWidget(
     'player_controls',
     header,
-    gameApi.playable(ctrl.data) ?
-      () => renderGameRunningActions(ctrl) : () => renderGameEndedActions(ctrl),
+    () => renderButtonsAndScore(ctrl),
     ctrl.vm.showingActions,
     ctrl.hideActions
   )
+}
+
+function renderButtonsAndScore(ctrl: OnlineRound): Mithril.Children {
+  const buttons = gameApi.playable(ctrl.data) ?
+    () => renderGameRunningActions(ctrl) :
+    () => renderGameEndedActions(ctrl)
+  return [buttons(), renderScore(ctrl)]
 }
 
 function renderGameActionsBar(ctrl: OnlineRound) {

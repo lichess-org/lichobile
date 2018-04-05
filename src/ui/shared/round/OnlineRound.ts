@@ -14,7 +14,7 @@ import vibrate from '../../../vibrate'
 import gameStatusApi from '../../../lichess/status'
 import * as gameApi from '../../../lichess/game'
 import { MiniUser } from '../../../lichess/interfaces'
-import { OnlineGameData, Player, ApiEnd } from '../../../lichess/interfaces/game'
+import { OnlineGameData, Player, ApiEnd, Score } from '../../../lichess/interfaces/game'
 import { MoveRequest, DropRequest, MoveOrDrop, AfterMoveMeta, isMove, isDrop, isMoveRequest, isDropRequest } from '../../../lichess/interfaces/move'
 import * as chessFormat from '../../../utils/chessFormat'
 
@@ -28,7 +28,7 @@ import socketHandler from './socketHandler'
 import atomic from './atomic'
 import * as xhr from './roundXhr'
 import crazyValid from './crazy/crazyValid'
-import { OnlineRoundInterface, Score } from './'
+import { OnlineRoundInterface } from './'
 
 interface VM {
   ply: number
@@ -61,7 +61,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public title!: Mithril.Children
   public subTitle!: string
   public tv!: string
-  public score!: Score
+  public score: Score | null
 
   private zenModeEnabled: boolean
   private lastMoveMillis?: number
@@ -144,6 +144,8 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.makeCorrespondenceClock()
     if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick, 6000)
 
+    this.score = null
+
     socket.createGame(
       this.data.url.socket,
       this.data.player.version,
@@ -186,22 +188,14 @@ export default class OnlineRound implements OnlineRoundInterface {
   public showActions = () => {
     router.backbutton.stack.push(this.hideActions)
     this.vm.showingActions = true
+
     const d = this.data
-    if (d && d.player.user && d.opponent.user) {
-      let player1, player2
-      if (d.player.color === 'white') {
-        player1 = d.player.user.id
-        player2 = d.opponent.user.id
-      }
-      else {
-        player1 = d.opponent.user.id
-        player2 = d.player.user.id
-      }
-      xhr.getCrosstable(player1, player2).then(s => {
-        this.score = s
-        redraw()
-      })
-    }
+    if (!d || !d.player.user || !d.opponent.user)
+      return
+    xhr.getCrosstable(d.player.user.id, d.opponent.user.id).then(s => {
+      this.score = s
+      redraw()
+    })
   }
 
   public hideActions = (fromBB?: string) => {

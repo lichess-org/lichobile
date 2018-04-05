@@ -1,8 +1,7 @@
 import { fetchJSON, fetchText } from '../../../http'
 import { serializeQueryParameters } from '../../../utils'
 import i18n from '../../../i18n'
-import { OnlineGameData } from '../../../lichess/interfaces/game'
-import { Score } from './'
+import { OnlineGameData, Score } from '../../../lichess/interfaces/game'
 
 import { OnlineRoundInterface } from '.'
 

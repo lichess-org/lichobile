@@ -103,4 +103,3 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
     }, [h('span.fa.fa-pencil'), i18n('notes')]) : null
   ])
 }
-

@@ -29,7 +29,7 @@ import { ICevalCtrl } from './ceval/interfaces'
 import crazyValid from './crazy/crazyValid'
 import ExplorerCtrl from './explorer/ExplorerCtrl'
 import { IExplorerCtrl } from './explorer/interfaces'
-import menu, { IMainMenuCtrl } from './menu'
+import analyseMenu, { IMainMenuCtrl } from './menu'
 import analyseSettings, { ISettingsCtrl } from './analyseSettings'
 import ground from './ground'
 import socketHandler from './analyseSocketHandler'
@@ -113,12 +113,12 @@ export default class AnalyseCtrl {
       receive: this.onCevalMsg
     })
 
-    this.study = studyData !== undefined ? new StudyCtrl(studyData) : undefined
+    this.study = studyData !== undefined ? new StudyCtrl(studyData, this) : undefined
 
     this.tree = makeTree(treeOps.reconstruct(this.data.treeParts))
 
     this.settings = analyseSettings.controller(this)
-    this.menu = menu.controller(this)
+    this.menu = analyseMenu.controller(this)
     this.continuePopup = continuePopup.controller()
 
     this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null

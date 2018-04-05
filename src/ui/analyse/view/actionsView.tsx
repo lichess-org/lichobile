@@ -9,8 +9,8 @@ export default function renderActionsBar(ctrl: AnalyseCtrl) {
   return (
     <section className="actions_bar analyse_actions_bar">
       <button key="analyseMenu"
-        className={'action_bar_button fa ' + (ctrl.retroGlowing ? 'fa-play glow' : 'fa-ellipsis-h')}
-        oncreate={helper.ontap(ctrl.menu.open)}
+        className={'action_bar_button fa ' + (ctrl.retroGlowing ? 'fa-play glow' : 'fa-ellipsis-v')}
+        oncreate={helper.ontap(ctrl.study ? ctrl.study.actionMenu.open : ctrl.menu.open)}
       />
       {ctrl.ceval.allowed ?
         <button className="action_bar_button fa fa-gear" key="analyseSettings"

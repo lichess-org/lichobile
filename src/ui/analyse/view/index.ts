@@ -10,13 +10,14 @@ import { view as renderPromotion } from '../../shared/offlineRound/promotion'
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard'
 import { notesView } from '../../shared/round/notes'
 import { Bounds } from '../../shared/Board'
-import menu from '../menu'
-import analyseSettings from '../analyseSettings'
 import TabNavigation from '../../shared/TabNavigation'
 import { loadingBackbutton } from '../../shared/common'
 import * as helper from '../../helper'
 import layout from '../../layout'
 
+import menu from '../menu'
+import studyActionMenu from '../study/actionMenu'
+import analyseSettings from '../analyseSettings'
 import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
 import renderCeval, { EvalBox } from '../ceval/cevalView'
@@ -61,7 +62,7 @@ export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Bo
 export function overlay(ctrl: AnalyseCtrl) {
   return [
     renderPromotion(ctrl),
-    menu.view(ctrl.menu),
+    ctrl.study ? studyActionMenu.view(ctrl.study.actionMenu) : menu.view(ctrl.menu),
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notesView(ctrl.notes) : null,
     continuePopup.view(ctrl.continuePopup),

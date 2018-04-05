@@ -77,4 +77,3 @@ export interface OtbVM {
 export interface OtbRoundInterface extends OfflineRoundInterface {
   vm: OtbVM
 }
-

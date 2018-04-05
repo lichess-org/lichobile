@@ -226,6 +226,6 @@ export interface Opening {
 export interface Score {
   readonly nbGames: number
   readonly users: {
-    [id: string]: number | undefined
+    readonly [id: string]: number | undefined
   }
 }

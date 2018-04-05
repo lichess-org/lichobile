@@ -464,13 +464,9 @@ function renderStatus(ctrl: OnlineRound) {
   const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner)
   const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
     (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
-  return [
-    gameStatusApi.aborted(ctrl.data) ?
-       [] :
-       [h('strong', result), h('br')]
-    ,
-    h('em.resultStatus', status)
-  ]
+  return (gameStatusApi.aborted(ctrl.data) ? [] : [
+    h('strong', result), h('br')
+  ]).concat([h('em.resultStatus', status)])
 }
 
 function renderScore (ctrl: OnlineRound) {
@@ -497,7 +493,7 @@ function renderGamePopup(ctrl: OnlineRound) {
   const header = ctrl.data.tv ?
     () => renderPopupTitle(ctrl) :
     !gameApi.playable(ctrl.data) ?
-      () => renderStatus(ctrl) : () => null
+      () => renderStatus(ctrl) : undefined
 
   return popupWidget(
     'player_controls',

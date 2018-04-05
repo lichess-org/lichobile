@@ -486,7 +486,7 @@ function renderScore (ctrl: OnlineRound) {
     <div class="score">
       <span> {white.username} ({score.users[white.id]}) - {black.username} ({score.users[black.id]}) </span>
     </div>
-  );
+  )
 }
 
 function renderGamePopup(ctrl: OnlineRound) {

@@ -365,3 +365,15 @@ export function findElByClassName(e: Event, className: string) {
     target : findParentBySelector(target, '.' + className)
 }
 
+export function externalLink(text: string, url: string): Mithril.Children {
+  return h('span', { class: 'link' }, [
+    h('a', { href: '#', onClick: 'window.open("' + url + '")' }, text),
+    h('span', { class: 'fa fa-external-link' })
+    ])
+}
+
+export function internalLink(text: string, route: string): Mithril.Children {
+  return h('span', { class: 'link' }, [
+    h('span', { oncreate: ontap(() => { router.set(route) }) }, text),
+  ])
+}

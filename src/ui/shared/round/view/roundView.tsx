@@ -506,9 +506,9 @@ function renderGamePopup(ctrl: OnlineRound) {
 
 function renderButtonsAndScore(ctrl: OnlineRound): Mithril.Children {
   const buttons = gameApi.playable(ctrl.data) ?
-    () => renderGameRunningActions(ctrl) :
-    () => renderGameEndedActions(ctrl)
-  return [buttons(), renderScore(ctrl)]
+    renderGameRunningActions(ctrl) :
+    renderGameEndedActions(ctrl)
+  return [buttons, renderScore(ctrl)]
 }
 
 function renderGameActionsBar(ctrl: OnlineRound) {

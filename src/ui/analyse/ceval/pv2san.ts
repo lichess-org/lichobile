@@ -15,7 +15,13 @@ interface Board {
   K?: Square
 }
 
-export default function pv2san(variant: VariantKey, fen: string, threat: boolean, moves: string[], mate?: number): string {
+export default function pv2san(
+  variant: VariantKey,
+  fen: string,
+  threat: boolean,
+  moves: ReadonlyArray<string>,
+  mate?: number
+): string {
   const board = readFen(fen)
   if (threat) board.turn = !board.turn
   const turn = board.turn

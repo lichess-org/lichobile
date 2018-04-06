@@ -79,7 +79,7 @@ interface Crazy {
 }
 
 export function reconstruct(parts: Array<Partial<Tree.Node & Crazy>>): Tree.Node {
-  const proot = parts[0]
+  const proot: any = parts[0]
   // adapt to offline format which use crazyhouse field name
   if (proot.crazy !== undefined) {
     proot.crazyhouse = proot.crazy

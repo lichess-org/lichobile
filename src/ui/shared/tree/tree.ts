@@ -254,8 +254,8 @@ export function build(root: Tree.Node): TreeWrapper {
     },
     removeCeval() {
       ops.updateAll(root, (n) => {
-        delete n.ceval
-        delete n.threat
+        n.ceval = undefined
+        n.threat = undefined
       })
     },
     removeComputerVariations() {

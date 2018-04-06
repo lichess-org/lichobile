@@ -40,7 +40,7 @@ export namespace Tree {
     readonly uci?: Uci
     readonly san?: San
     children: Node[]
-    drops?: string | string[] | undefined | null
+    drops?: string | ReadonlyArray<string> | undefined | null
     comments?: Comment[]
     // TODO maybe don't keep both formats for dests & drops
     dests?: string | DestsMap
@@ -59,7 +59,7 @@ export namespace Tree {
     puzzle?: string
     // added dynamically during analysis from chess worker
     checkCount?: { white: number, black: number }
-    readonly pgnMoves?: string[]
+    readonly pgnMoves?: ReadonlyArray<string>
     player?: Color
     end?: boolean
     crazyhouse?: {

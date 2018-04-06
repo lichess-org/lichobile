@@ -98,8 +98,11 @@ export default class AnalyseCtrl {
     this.synthetic = util.isSynthetic(data)
     this.ongoing = !this.synthetic && gameApi.playable(data)
     this.initialPath = treePath.root
+
+    this.study = studyData !== undefined ? new StudyCtrl(studyData, this) : undefined
+
     this._currentTabIndex = tab !== undefined ? tab :
-      this.synthetic ? 0 : 1
+      (!this.study || this.study.data.chapter.tags.length === 0) && this.synthetic ? 0 : 1
 
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
       window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center')
@@ -113,7 +116,6 @@ export default class AnalyseCtrl {
       receive: this.onCevalMsg
     })
 
-    this.study = studyData !== undefined ? new StudyCtrl(studyData, this) : undefined
 
     this.tree = makeTree(treeOps.reconstruct(this.data.treeParts))
 
@@ -209,9 +211,10 @@ export default class AnalyseCtrl {
   }
 
   availableTabs = (): ReadonlyArray<tabs.Tab> => {
-    let val = tabs.defaults
+    let val: ReadonlyArray<tabs.Tab> = [tabs.moves]
 
-    if (this.synthetic) val = val.filter(t => t.id !== 'infos')
+    if (this.study && this.study.data.chapter.tags.length > 0) val = [tabs.pgnTags, ...val]
+    if (!this.synthetic) val = [tabs.gameInfos, ...val]
     if (!this.retro && this.ceval.enabled()) val = [...val, tabs.ceval]
     // TODO enable study analysis request when socket is implemented
     if (this.study && this.data.analysis ||

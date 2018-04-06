@@ -17,6 +17,7 @@ import layout from '../../layout'
 
 import menu from '../menu'
 import studyActionMenu from '../study/actionMenu'
+import renderPgnTags from '../study/pgnTagsView'
 import analyseSettings from '../analyseSettings'
 import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
@@ -131,17 +132,17 @@ function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
 }
 
 function renderTabTitle(ctrl: AnalyseCtrl, curTab: Tab) {
-  const curTitle = i18n(curTab.title)
+  const defaultTitle = i18n(curTab.title)
   let children: Mithril.Children
   let key: string
   if (curTab.id === 'moves') {
     const op = renderOpening(ctrl)
-    children = [op || curTitle]
+    children = [op || defaultTitle]
     key = op ? 'opening' : curTab.id
   }
   else if (curTab.id === 'ceval') {
     children = [
-      h('span', curTitle),
+      h('span', defaultTitle),
       ctrl.ceval.isSearching() ? h('div.ceval-spinner', 'analyzing ', h('span.fa.fa-spinner.fa-pulse')) : null
     ]
     key = ctrl.ceval.isSearching() ? 'searching-ceval' : curTab.id
@@ -151,7 +152,7 @@ function renderTabTitle(ctrl: AnalyseCtrl, curTab: Tab) {
     key = curTab.id
   }
   else {
-    children = [curTitle]
+    children = [defaultTitle]
     key = curTab.id
   }
 
@@ -169,7 +170,8 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Bas
   moves: renderReplay,
   explorer: renderExplorer,
   analysis: renderAnalysis,
-  ceval: renderCeval
+  ceval: renderCeval,
+  pgnTags: renderPgnTags,
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>, isPortrait: boolean) {

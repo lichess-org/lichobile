@@ -58,3 +58,32 @@
       margin-top 3px
       &.fa-eye
         color rgba(blue, 0.6)
+
+.study-tags
+  width 100%
+
+.study-tag
+  > th
+    padding 10px
+    text-transform uppercase
+    font-weight normal
+    color rgba(textDarkBg, 0.8)
+    width 1px
+  > th, td
+    text-align left
+  &:nth-child(even)
+    background-color lighten(bgdark, 10%)
+
+
+.view-container.light
+  .study-tag
+    > th
+      color rgba(textLightBg, 0.8)
+    &:nth-child(even)
+      background-color darken(#fff, 3%)
+
+
+.view-container.transp
+  .study-tag
+    &:nth-child(even)
+      background-color transpWhite01

@@ -4,18 +4,17 @@ export interface Tab {
   className: string
 }
 
-export const defaults: ReadonlyArray<Tab> = [
-  {
-    id: 'infos',
-    title: 'Game informations',
-    className: 'fa fa-info-circle'
-  },
-  {
-    id: 'moves',
-    title: 'Move list',
-    className: 'fa fa-list-alt'
-  }
-]
+export const gameInfos: Tab = {
+  id: 'infos',
+  title: 'Game informations',
+  className: 'fa fa-info-circle',
+}
+
+export const moves: Tab = {
+  id: 'moves',
+  title: 'Move list',
+  className: 'fa fa-list-alt'
+}
 
 export const ceval: Tab = {
   id: 'ceval',
@@ -33,4 +32,10 @@ export const charts: Tab = {
   id: 'analysis',
   title: 'gameAnalysis',
   className: 'fa fa-area-chart'
+}
+
+export const pgnTags: Tab = {
+  id: 'pgnTags',
+  title: 'PGN tags',
+  className: 'fa fa-tags'
 }

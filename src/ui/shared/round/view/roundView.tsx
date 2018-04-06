@@ -470,7 +470,6 @@ function renderStatus(ctrl: OnlineRound) {
 }
 
 function renderScore (ctrl: OnlineRound) {
-  console.log(ctrl)
   const score = ctrl.score
   if (!score || !ctrl.data || !ctrl.data.player.user || !ctrl.data.opponent.user)
     return null

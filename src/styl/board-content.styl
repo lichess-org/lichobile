@@ -55,7 +55,7 @@
   width 100%
   height 100%
 
-.player_bar
+.analyse-player_bar
   display flex
   flex-flow row nowrap
   justify-content space-between
@@ -82,6 +82,8 @@
   &.halfsize
     width 'calc((100vh - %s) / 2)' % headerHeight
     align-self center
+  @media only screen and (orientation landscape)
+    display none
 
 .table
   display flex

@@ -44,16 +44,21 @@ export default function renderBoard(
     ...nextMoveShape, ...pastBestShape, ...curBestShape, ...badMoveShape
   ]
 
-  return h(Board, {
+  return h('div.analyse-boardWrapper', {
     key: ctrl.settings.s.smallBoard ? 'board-small' : 'board-full',
-    variant: ctrl.data.game.variant.key,
-    chessground: ctrl.chessground,
-    bounds,
-    shapes,
-    clearableShapes: ctrl.node.shapes,
-    wrapperClasses: ctrl.settings.s.smallBoard ? 'halfsize' : '',
-    canClearShapes: true,
-  })
+  }, [
+    playerBar(ctrl, ctrl.topColor()),
+    h(Board, {
+      variant: ctrl.data.game.variant.key,
+      chessground: ctrl.chessground,
+      bounds,
+      shapes,
+      clearableShapes: ctrl.node.shapes,
+      wrapperClasses: ctrl.settings.s.smallBoard ? 'halfsize' : '',
+      canClearShapes: true,
+    }),
+    playerBar(ctrl, ctrl.bottomColor()),
+  ])
 }
 
 export function playerBar(ctrl: AnalyseCtrl, color: Color) {
@@ -72,7 +77,7 @@ export function playerBar(ctrl: AnalyseCtrl, color: Color) {
   }
   const checkCount = ctrl.node.checkCount
   const showRight = ctrl.node.clock || checkCount
-  return h(`div.player_bar.${color}`, {
+  return h('div.analyse-player_bar', {
     className: ctrl.settings.s.smallBoard ? 'halfsize' : ''
   }, [
     h('div.info', [

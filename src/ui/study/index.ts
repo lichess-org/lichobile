@@ -78,9 +78,8 @@ export default {
 
     const isPortrait = helper.isPortrait()
     const ctrl = this.ctrl
-    const hammerHandlers = this.hammerHandlers
 
-    if (ctrl && hammerHandlers) {
+    if (ctrl) {
       const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, ctrl.settings.s.smallBoard)
 
       return layout.board(
@@ -93,7 +92,7 @@ export default {
             oncreate: helper.ontap(() => ctrl.study!.sideMenu.close())
           })
         ],
-        hammerHandlers
+        this.hammerHandlers
       )
     } else {
       return loadingScreen(isPortrait, undefined, vnode.attrs.curFen)

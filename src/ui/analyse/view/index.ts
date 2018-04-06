@@ -28,7 +28,7 @@ import TabView from './TabView'
 import Replay from './Replay'
 import retroView from '../retrospect/retroView'
 import renderAnalysis from './analysisView'
-import renderBoard, { playerBar } from './boardView'
+import renderBoard from './boardView'
 import renderGameInfos from './gameInfosView'
 import renderActionsBar from './actionsView'
 
@@ -48,9 +48,7 @@ export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Bo
   const availTabs = ctrl.availableTabs()
 
   return h.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
-    playerBar(ctrl, ctrl.topColor()),
     renderBoard(ctrl, bounds, availTabs),
-    playerBar(ctrl, ctrl.bottomColor()),
     h('div.analyse-tableWrapper', [
       ctrl.data.game.variant.key === 'crazyhouse' ? renderCrazy(ctrl) : null,
       renderAnalyseTable(ctrl, availTabs, isPortrait),

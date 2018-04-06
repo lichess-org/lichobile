@@ -190,7 +190,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.vm.showingActions = true
 
     const d = this.data
-    if (!d || !d.player.user || !d.opponent.user)
+    if (this.score || !d || !d.player.user || !d.opponent.user)
       return
     xhr.getCrosstable(d.player.user.id, d.opponent.user.id).then(s => {
       this.score = s

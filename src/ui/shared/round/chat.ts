@@ -140,7 +140,7 @@ export function chatView(ctrl: Chat) {
         onupdate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement)
       }, [
         h('ul.chat_messages', ctrl.selectLines().map((msg: ChatMsg, i: number, all: ChatMsg[]) => {
-          if (ctrl.root.data.player.spectator) return spectatorChatRender(msg, i, all)
+          if (ctrl.root.data.player.spectator) return spectatorChatRender(msg)
           else return playerChatRender(player, msg, i, all)
         }))
       ]),
@@ -220,26 +220,18 @@ function playerChatRender(player: Player, msg: ChatMsg, i: number, all: ChatMsg[
   }, msg.t)
 }
 
-function spectatorChatRender(msg: ChatMsg, i: number, all: ChatMsg[]) {
+function spectatorChatRender(msg: ChatMsg) {
   const lichessTalking = msg.u === 'lichess'
-  const meTalking = msg.u && (msg.u === session.getUserId())
 
-  let closeBalloon = true
-  let next = all[i + 1]
-  let nextTalking
-  if (next) {
-    nextTalking = next.u && (next.u === session.getUserId())
-  }
-  if (nextTalking !== undefined) closeBalloon = nextTalking !== meTalking
-
-  return h('li.chat_msg.allow_select', {
+  return h('li.spectator_chat_msg.allow_select', {
     className: helper.classSet({
       system: lichessTalking,
-      player: !!meTalking,
-      opponent: !lichessTalking && !meTalking,
-      'close_balloon': closeBalloon
     })
-  }, (meTalking || lichessTalking) ? msg.t : (msg.u + ': ' + msg.t))
+  }, lichessTalking ? msg.t : [
+    h('strong', msg.u),
+    h.trust('&nbsp;'), h.trust('&nbsp;'),
+    h('span', msg.t)
+  ])
 }
 
 function scrollChatToBottom(el: HTMLElement) {

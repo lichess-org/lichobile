@@ -511,7 +511,7 @@ function renderGameActionsBar(ctrl: OnlineRound) {
     <section className="actions_bar">
       {gmButton}
       {ctrl.chat ?
-        <button className="action_bar_button withChip" data-icon="c" key="chat"
+        <button className="action_bar_button fa fa-comments withChip" key="chat"
           oncreate={helper.ontap(ctrl.chat.open)}
         >
          { ctrl.chat.nbUnread > 0 ?

@@ -9,6 +9,20 @@
   position relative
   padding 10px
 
+.spectator_chat_msg
+  line-height 1.2em
+  color textDarkGray
+  word-wrap break-word
+  padding .4em 0
+  > strong
+    color lighten(textDarkGray, 25%)
+    letter-spacing -1px
+  &.system
+    width 100%
+    text-align right
+    font-style italic
+    font-size 0.8em
+
 .chat_msg
   font-weight normal
   padding 15px

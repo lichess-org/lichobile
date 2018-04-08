@@ -22,6 +22,7 @@ export default {
   },
   onremove() {
     socket.destroy()
+    this.ctrl.unload()
   },
   view() {
     if (this.ctrl.notFound) {

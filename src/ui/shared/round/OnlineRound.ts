@@ -3,7 +3,7 @@ import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
 import { saveOfflineGameData, removeOfflineGameData } from '../../../utils/offlineGames'
-import { hasNetwork, boardOrientation } from '../../../utils'
+import { hasNetwork, boardOrientation, handleXhrError } from '../../../utils'
 import session from '../../../session'
 import settings from '../../../settings'
 import socket from '../../../socket'
@@ -557,7 +557,11 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public toggleBookmark = () => {
-    return toggleGameBookmark(this.data.game.id).then(this.reloadGameData)
+    return toggleGameBookmark(this.data.game.id).then(() => {
+      this.data.bookmarked = !this.data.bookmarked
+      redraw()
+    })
+    .catch(handleXhrError)
   }
 
   public unload() {

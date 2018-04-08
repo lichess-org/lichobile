@@ -1,14 +1,10 @@
 import * as throttle from 'lodash/throttle'
 import * as h from 'mithril/hyperscript'
 import * as utils from '../../../utils'
-import { positionsCache } from '../../../utils/gamePosition'
-import router from '../../../router'
 import * as helper from '../../helper'
 import i18n from '../../../i18n'
-import session from '../../../session'
 import spinner from '../../../spinner'
 import GameItem from '../../shared/GameItem'
-import gameStatus from '../../../lichess/status'
 
 import { IUserGamesCtrl, } from './UserGamesCtrl'
 
@@ -38,33 +34,19 @@ function getButton(e: Event): HTMLElement | undefined {
   return target.tagName === 'BUTTON' ? target : undefined
 }
 
-interface GameDataSet extends DOMStringMap {
-  id: string
-}
 function onTap(ctrl: IUserGamesCtrl, e: Event) {
   const starButton = getButton(e)
   const el = helper.getLI(e)
-  const id = el && (el.dataset as GameDataSet).id
-  if (starButton) {
+  const id = el && el.dataset.id
+  const playerId = el && el.dataset.pid
+  if (id && starButton) {
     ctrl.toggleBookmark(id)
   } else {
     if (id) {
-      const g = ctrl.scrollState.games.find(game => game.id === id)
-      const userId = ctrl.scrollState.userId
-      if (g) {
-        const userColor: Color = g.players.white.userId === userId ? 'white' : 'black'
-        positionsCache.set(g.id, { fen: g.fen, orientation: userColor })
-        const mePlaying = session.getUserId() === userId
-        if (mePlaying || (g.source !== 'import' && g.status.id < gameStatus.ids.aborted)) {
-          router.set(`/game/${id}/${userColor}?goingBack=1`)
-        } else {
-          router.set(`/analyse/online/${id}/${userColor}?curFen=${g.fen}`)
-        }
-      }
+      ctrl.goToGame(id, playerId)
     }
   }
 }
-
 
 function renderAllGames(ctrl: IUserGamesCtrl) {
   const { games  } = ctrl.scrollState

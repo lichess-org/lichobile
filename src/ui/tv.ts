@@ -35,7 +35,7 @@ const TV: Mithril.Component<TVAttrs, State> = {
     xhr.featured(settings.tv.channel(), vnode.attrs.flip)
     .then(d => {
       d.tv = settings.tv.channel()
-      this.round = new OnlineRound(vnode.attrs.id, d, vnode.attrs.flip, onFeatured, onChannelChange)
+      this.round = new OnlineRound(false, vnode.attrs.id, d, vnode.attrs.flip, onFeatured, onChannelChange)
     })
     .catch(handleXhrError)
   },

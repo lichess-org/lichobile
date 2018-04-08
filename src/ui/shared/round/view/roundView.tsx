@@ -117,7 +117,7 @@ function renderTitle(ctrl: OnlineRound) {
 function renderHeader(ctrl: OnlineRound) {
 
   let children
-  if (!ctrl.data.tv && !ctrl.data.userTV && ctrl.data.player.spectator) {
+  if (ctrl.goingBack || (!ctrl.data.tv && !ctrl.data.userTV && ctrl.data.player.spectator)) {
     children = [
       backButton(renderTitle(ctrl))
     ]

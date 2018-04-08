@@ -34,9 +34,10 @@ const GameItem: Mithril.Component<Attrs, {}> = {
     const evenOrOdd = index % 2 === 0 ? 'even' : 'odd'
     const star = g.bookmarked ? 't' : 's'
     const withStar = session.isConnected() ? ' withStar' : ''
+    const player = g.players[perspectiveColor]
 
     return (
-      <li data-id={g.id} className={`userGame ${evenOrOdd}${withStar}`}>
+      <li data-id={g.id} data-pid={player.id} className={`userGame ${evenOrOdd}${withStar}`}>
         {renderBoard(g.fen, perspectiveColor, boardTheme)}
         <div className="userGame-infos">
           <div className="userGame-versus">

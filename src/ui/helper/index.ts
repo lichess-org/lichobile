@@ -364,4 +364,3 @@ export function findElByClassName(e: Event, className: string) {
   return target.classList.contains(className) ?
     target : findParentBySelector(target, '.' + className)
 }
-

@@ -11,6 +11,7 @@ import { Player } from '../../../../lichess/interfaces/game'
 import { User } from '../../../../lichess/interfaces/user'
 import settings from '../../../../settings'
 import * as utils from '../../../../utils'
+import { getWhiteBlack } from '../util'
 import i18n from '../../../../i18n'
 import layout from '../../../layout'
 import * as helper from '../../../helper'
@@ -471,17 +472,12 @@ function renderStatus(ctrl: OnlineRound) {
 
 function renderScore (ctrl: OnlineRound) {
   const score = ctrl.score
-  if (!score || !ctrl.data || !ctrl.data.player.user || !ctrl.data.opponent.user)
+  if (!score || !ctrl.data)
     return null
-  let white, black
-  if (ctrl.data.player.color === 'white') {
-    white = ctrl.data.player.user
-    black = ctrl.data.opponent.user
-  }
-  else {
-    white = ctrl.data.opponent.user
-    black = ctrl.data.player.user
-  }
+  const [white, black] = getWhiteBlack(ctrl.data)
+  if (!white || !black)
+    return null
+  
   return (
     <div class="score">
       <span> {white.username} ({score.users[white.id]}) - {black.username} ({score.users[black.id]}) </span>

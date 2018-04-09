@@ -477,7 +477,7 @@ function renderScore (ctrl: OnlineRound) {
   const [white, black] = getWhiteBlack(ctrl.data)
   if (!white || !black)
     return null
-  
+
   return (
     <div class="score">
       <span> {white.username} ({score.users[white.id]}) - {black.username} ({score.users[black.id]}) </span>

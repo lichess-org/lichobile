@@ -18,6 +18,7 @@ import layout from '../../layout'
 import menu from '../menu'
 import studyActionMenu from '../study/actionMenu'
 import renderPgnTags from '../study/pgnTagsView'
+import renderComments from '../study/commentView'
 import analyseSettings from '../analyseSettings'
 import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
@@ -118,14 +119,26 @@ function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
 
   const curTab = ctrl.currentTab(availTabs)
 
+  const buttons = availTabs.map(b => {
+    if (b.id === 'comments' && ctrl.node.comments && ctrl.node.comments.length > 0) {
+      return {
+        ...b,
+        chip: ctrl.node.comments.length
+      }
+    }
+
+    return b
+  })
+
   return h('div.analyse-header', [
     curTab.id !== 'ceval' ? h(EvalBox, { ctrl }) : null,
     h('div.analyse-tabs', [
       h('div.tab-title', renderTabTitle(ctrl, curTab)),
       h(TabNavigation, {
-        buttons: availTabs,
+        buttons,
         selectedIndex: ctrl.currentTabIndex(availTabs),
-        onTabChange: ctrl.onTabChange
+        onTabChange: ctrl.onTabChange,
+        wrapperClass: 'analyse'
       })
     ])
   ])
@@ -172,6 +185,7 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Bas
   analysis: renderAnalysis,
   ceval: renderCeval,
   pgnTags: renderPgnTags,
+  comments: renderComments,
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>, isPortrait: boolean) {

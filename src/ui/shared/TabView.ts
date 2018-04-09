@@ -70,7 +70,8 @@ export default {
       className: attrs.className
     }, attrs.content.map((_: any, index: number) =>
       h('div.tab-content', {
-        'data-index': index
+        'data-index': index,
+        className: curIndex === index ? 'current' : '',
       }, h(Tab, { index, ...attrs }))
     ))
   }

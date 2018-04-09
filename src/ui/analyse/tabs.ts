@@ -39,3 +39,9 @@ export const pgnTags: Tab = {
   title: 'PGN tags',
   className: 'fa fa-tags'
 }
+
+export const comments: Tab = {
+  id: 'comments',
+  title: 'Comments',
+  className: 'fa fa-comment-o'
+}

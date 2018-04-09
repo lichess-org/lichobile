@@ -215,6 +215,7 @@ export default class AnalyseCtrl {
 
     if (this.study && this.study.data.chapter.tags.length > 0) val = [tabs.pgnTags, ...val]
     if (!this.synthetic) val = [tabs.gameInfos, ...val]
+    if (this.study) val = [...val, tabs.comments]
     if (!this.retro && this.ceval.enabled()) val = [...val, tabs.ceval]
     // TODO enable study analysis request when socket is implemented
     if (this.study && this.data.analysis ||

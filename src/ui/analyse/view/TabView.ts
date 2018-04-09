@@ -84,7 +84,8 @@ export default {
       className: attrs.className
     }, attrs.contentRenderers.map((_: any, index: number) =>
       h('div.tab-content', {
-        'data-index': index
+        'data-index': index,
+        className: attrs.selectedIndex === index ? 'current' : '',
       },  attrs.selectedIndex === index ? attrs.contentRenderers[index](attrs.ctrl) : null)
     ))
   }

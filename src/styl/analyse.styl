@@ -45,13 +45,27 @@
     > div
       overflow hidden
       text-overflow ellipsis
-  > .tabs-navigation
-    background inherit
-    flex 0 0 auto
+
+.tabs-navigation.analyse
+  background inherit
+  flex 0 0 auto
+  height 25px
+  > .tab-button
+    position relative
+    padding 0 0.5em
     height 25px
-    > .tab-button
-      padding 0 0.5em
-      height 25px
+    > .chip
+      height 11px
+      width 12px
+      font-size 10px
+      top 3px
+      right 0
+      line-height inherit
+      background blue
+      color #fff
+      border 0
+      border-radius 3px
+      // text-shadow 0 1px 0 #000
 
 .analyse-tableWrapper
   margin-top 2px
@@ -287,7 +301,7 @@ comment
     border-right 1px solid borderLightGray
 
   inline, comment
-    color rgba(textLightBg, 0.7)
+    color rgba(textLightBg, 0.8)
 
   index
     color rgba(textLightBg, 0.5)
@@ -324,9 +338,8 @@ comment
   .analyse-tabsContent
     background-color transpBlack05
 
-  .analyse-tabs
-    > .tabs-navigation
-      background-color initial
+  .tabs-navigation.analyse
+    background-color initial
 
   .analyse_variant_selector.select_input
     > label:after

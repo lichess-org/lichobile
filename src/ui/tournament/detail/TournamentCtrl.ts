@@ -63,6 +63,8 @@ export default class TournamentCtrl {
         utils.handleXhrError(err)
       }
     })
+
+    document.addEventListener('resume', this.reload)
   }
 
   join = throttle((password?: string) => {
@@ -137,6 +139,10 @@ export default class TournamentCtrl {
     return (this.tournament.me) ?
       Math.floor((this.tournament.me.rank - 1) / MAX_PER_PAGE) + 1 :
       undefined
+  }
+
+  unload = () => {
+    document.removeEventListener('resume', this.reload)
   }
 
   private scrollToMe = () => {

@@ -62,6 +62,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public subTitle!: string
   public tv!: string
   public score: Score | null
+  public readonly goingBack: boolean
 
   private zenModeEnabled: boolean
   private lastMoveMillis?: number
@@ -70,6 +71,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   private clockTimeoutId!: number
 
   public constructor(
+    goingBack: boolean,
     id: string,
     cfg: OnlineGameData,
     flipped: boolean = false,
@@ -78,6 +80,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     userTv?: string,
     onUserTVRedirect?: () => void
   ) {
+    this.goingBack = goingBack
     this.id = id
     this.setData(cfg)
     this.onTVChannelChange = onTVChannelChange

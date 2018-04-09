@@ -83,6 +83,7 @@ export type RankingKey = PerfKey | 'online'
 export type Rankings = Record<RankingKey, ReadonlyArray<RankingUser>>
 
 export interface UserGamePlayer {
+  readonly id?: string
   readonly user?: LightUser
   readonly userId: string
   readonly name?: string

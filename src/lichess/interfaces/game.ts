@@ -124,7 +124,7 @@ interface Tournament {
   }
 }
 
-export type PossibleDrops = string | Array<string>
+export type PossibleDrops = string | ReadonlyArray<string>
 
 export interface CorrespondenceClockData {
   readonly barTime: number

@@ -8,119 +8,119 @@ const worker = new Worker('vendor/scalachess.js')
 worker.postMessage({ topic: 'init', payload: { variant: 'standard'}})
 
 export interface GameSituation {
-  id: string
-  ply: number
-  variant: string
-  fen: string
-  player: Color
-  dests: DestsMap
-  drops?: Array<string>
-  end: boolean
-  playable: boolean
-  status?: GameStatus
-  winner?: Color
-  check: boolean
-  checkCount?: CheckCount
-  san?: San
-  uci?: Uci
-  pgnMoves: Array<string>
-  uciMoves: Array<string>
-  promotion?: string
-  crazyhouse?: {
-    pockets: Pockets
+  readonly id: string
+  readonly ply: number
+  readonly variant: string
+  readonly fen: string
+  readonly player: Color
+  readonly dests: DestsMap
+  readonly drops?: ReadonlyArray<string>
+  readonly end: boolean
+  readonly playable: boolean
+  readonly status?: GameStatus
+  readonly winner?: Color
+  readonly check: boolean
+  readonly checkCount?: CheckCount
+  readonly san?: San
+  readonly uci?: Uci
+  readonly pgnMoves: ReadonlyArray<string>
+  readonly uciMoves: ReadonlyArray<string>
+  readonly promotion?: string
+  readonly crazyhouse?: {
+    readonly pockets: Pockets
   }
 }
 
 export interface InitRequest {
-  variant: VariantKey
-  fen?: string
+  readonly variant: VariantKey
+  readonly fen?: string
 }
 
 export interface InitResponse {
-  variant: Variant
-  setup: GameSituation
+  readonly variant: Variant
+  readonly setup: GameSituation
 }
 
 export interface DestsRequest {
-  variant: VariantKey
-  fen: string
-  path?: string
+  readonly variant: VariantKey
+  readonly fen: string
+  readonly path?: string
 }
 
 export interface DestsResponse {
-  dests: DestsMap
-  path: string
+  readonly dests: DestsMap
+  readonly path: string
 }
 
 export interface SituationRequest {
-  variant: VariantKey
-  fen: string
-  path?: string
+  readonly variant: VariantKey
+  readonly fen: string
+  readonly path?: string
 }
 
 export interface SituationResponse {
-  situation: GameSituation
-  path: string
+  readonly situation: GameSituation
+  readonly path: string
 }
 
 export interface MoveRequest {
-  variant: VariantKey
-  fen: string
-  orig: Key
-  dest: Key
-  pgnMoves?: Array<string>
-  uciMoves?: Array<string>
+  readonly variant: VariantKey
+  readonly fen: string
+  readonly orig: Key
+  readonly dest: Key
+  readonly pgnMoves?: ReadonlyArray<string>
+  readonly uciMoves?: ReadonlyArray<string>
   promotion?: Role
-  path?: string
+  readonly path?: string
 }
 
 export interface MoveResponse {
-  situation: GameSituation
-  path?: string
+  readonly situation: GameSituation
+  readonly path?: string
 }
 
 export interface DropRequest {
-  variant: VariantKey
-  fen: string
-  pos: Key
-  role: Role
-  pgnMoves?: Array<string>
-  uciMoves?: Array<string>
-  path?: string
+  readonly variant: VariantKey
+  readonly fen: string
+  readonly pos: Key
+  readonly role: Role
+  readonly pgnMoves?: ReadonlyArray<string>
+  readonly uciMoves?: ReadonlyArray<string>
+  readonly path?: string
 }
 
 export interface ThreefoldTestRequest {
-  variant: VariantKey
-  initialFen: string
-  pgnMoves: Array<string>
+  readonly variant: VariantKey
+  readonly initialFen: string
+  readonly pgnMoves: ReadonlyArray<string>
 }
 
 export interface ThreefoldTestResponse {
-  threefoldRepetition: boolean
-  status: GameStatus
+  readonly threefoldRepetition: boolean
+  readonly status: GameStatus
 }
 
 export interface PgnDumpRequest {
-  variant: VariantKey
-  initialFen: string
-  pgnMoves: Array<string>
-  white?: string
-  black?: string
-  date?: string
+  readonly variant: VariantKey
+  readonly initialFen: string
+  readonly pgnMoves: ReadonlyArray<string>
+  readonly white?: string
+  readonly black?: string
+  readonly date?: string
 }
 
 export interface PgnDumpResponse {
-  pgn: string
+  readonly pgn: string
 }
 
 export interface PgnReadRequest {
-  pgn: string
+  readonly pgn: string
 }
 
 export interface PgnReadResponse {
-  variant: Variant
-  setup: GameSituation
-  replay: Array<GameSituation>
+  readonly variant: Variant
+  readonly setup: GameSituation
+  readonly replay: ReadonlyArray<GameSituation>
 }
 
 function uniqId() {

@@ -1,4 +1,5 @@
 import { Pockets } from '../../../lichess/interfaces/game'
+import { Shape as BrushShape } from '../BoardBrush'
 
 export namespace Tree {
   export type Path = string
@@ -27,23 +28,23 @@ export namespace Tree {
   }
 
   export interface PvData {
-    moves: string[]
+    readonly moves: ReadonlyArray<string>
     mate?: number
     cp?: number
   }
 
   export interface Node {
-    id: string
-    ply: Ply
-    fen: Fen
+    readonly id: string
+    readonly ply: Ply
+    readonly fen: Fen
+    readonly uci?: Uci
+    readonly san?: San
     children: Node[]
-    drops?: string | string[] | undefined | null
-    uci?: Uci
-    san?: San
+    drops?: string | ReadonlyArray<string> | undefined | null
     comments?: Comment[]
     // TODO maybe don't keep both formats for dests & drops
     dests?: string | DestsMap
-    check?: boolean
+    readonly check?: boolean
     threat?: ClientEval
     ceval?: ClientEval
     eval?: ServerEval
@@ -51,44 +52,43 @@ export namespace Tree {
     glyphs?: Glyph[]
     clock?: Clock
     parentClock?: Clock
-    shapes?: Shape[]
-    comp?: boolean
+    shapes?: ReadonlyArray<Shape>
+    readonly comp?: boolean
     threefold?: boolean
-    fail?: boolean
+    readonly fail?: boolean
     puzzle?: string
     // added dynamically during analysis from chess worker
     checkCount?: { white: number, black: number }
-    pgnMoves?: string[]
+    readonly pgnMoves?: ReadonlyArray<string>
     player?: Color
     end?: boolean
     crazyhouse?: {
-      pockets: Pockets
+      readonly pockets: Pockets
     }
   }
 
   export interface Comment {
-    id: string
-    by: string | {
-      id: string
-      name: string
+    readonly id: string
+    readonly by: string | {
+      readonly id: string
+      readonly name: string
     }
     text: string
   }
 
   export interface Opening {
-    name: string
-    eco: string
+    readonly name: string
+    readonly eco: string
   }
 
   export interface Glyph {
-    name: string
-    symbol: string
+    readonly name: string
+    readonly symbol: string
   }
 
   export type Clock = number
 
-  export interface Shape {
-  }
+  export type Shape = BrushShape
 }
 
 export function isClientEval(ev: Tree.ServerEval | Tree.ClientEval): ev is Tree.ClientEval {

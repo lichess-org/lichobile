@@ -188,9 +188,14 @@ export default class OnlineRound implements OnlineRoundInterface {
   public showActions = () => {
     router.backbutton.stack.push(this.hideActions)
     this.vm.showingActions = true
+    if (!this.score) {
+      this.updateCrosstable()
+    }
+  }
 
+  public updateCrosstable() {
     const d = this.data
-    if (this.score || !d || !d.player.user || !d.opponent.user)
+    if (!d || !d.player.user || !d.opponent.user)
       return
     xhr.getCrosstable(d.player.user.id, d.opponent.user.id).then(s => {
       this.score = s
@@ -553,6 +558,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.showActions()
       setTimeout(redraw, 1000)
     }
+    this.updateCrosstable()
   }
 
   public goBerserk() {

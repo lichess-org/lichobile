@@ -34,5 +34,5 @@ export function syncNote(gameId: string, notes: string) {
 }
 
 export function getCrosstable(uid1: string, uid2: string): Promise<Score> {
-  return fetchJSON('/api/crosstable/' + uid1 + '/' + uid2)
+  return fetchJSON('/api/crosstable/' + uid1 + '/' + uid2, { cache: 'reload' } )
 }

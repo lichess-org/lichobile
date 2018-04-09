@@ -3,7 +3,7 @@
 
 [![Build Status](https://travis-ci.org/veloce/lichobile.svg?branch=master)](https://travis-ci.org/veloce/lichobile)
 
-![lichess mobile screenshots](res/3-screens.png)
+![lichess mobile screenshots](res/portfolio.png)
 
 Lichess mobile is a [cordova](https://cordova.apache.org/) application that runs
 on the [crosswalk webview](https://crosswalk-project.org/). It is written

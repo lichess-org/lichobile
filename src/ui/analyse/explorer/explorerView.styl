@@ -202,11 +202,16 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
 // themes
 
 .view-container.light
+  .explorer-fixedTitle
+    background-color inherit
+    color inherit
+    border-bottom 1px solid borderLightGray
+
   .explorerTable
     background-color themeBgLight
-    th, thead > tr, .explorer-fixedTitle
-      color #ccc
-      background-color darkBlue
+    th, thead > tr
+      color #fff
+      background-color rgba(#3b93da, 0.9)
     tr
       &:nth-child(even)
         background-color #fafafa
@@ -219,7 +224,7 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
       background-color: #555;
       color: #ddd;
     .toconf
-      color #fff
+      color inherit
 
   .explorerBar
     border-color #ccc

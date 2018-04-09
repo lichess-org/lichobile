@@ -267,20 +267,27 @@ comment
     background-color bglight
 
   .analyse-header
-    background-color #444
+    background-color inherit
+    border-bottom 1px solid borderLightGray
+    .tabIndicator
+      background-color blue
+    .tab-button
+      color textGray
+      &.selected
+        color blue
+
+  .analyse_actions_bar
+    border-top 1px solid borderLightGray
 
   .analyse-tabsContent
     background #fff
 
   .ceval-curEval
-    background #3c3c3c
-    color headerBgDarkColor
-
-  .analyse-tabs
-    color darken(headerBgDarkColor, 5%)
+    background-color inherit
+    border-right 1px solid borderLightGray
 
   inline, comment
-    color rgba(textLightBg, 0.5)
+    color rgba(textLightBg, 0.7)
 
   index
     color rgba(textLightBg, 0.5)

@@ -1,6 +1,9 @@
 import { handleXhrError } from '../../../utils'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
+import { positionsCache } from '../../../utils/gamePosition'
 import settings from '../../../settings'
+import router from '../../../router'
+import session from '../../../session'
 import * as xhr from '../userXhr'
 import { toggleGameBookmark } from '../../../xhr'
 import redraw from '../../../utils/redraw'
@@ -15,6 +18,7 @@ export interface IUserGamesCtrl {
   onFilterChange(e: Event): void
   toggleBookmark(id: string): void
   boardTheme: string
+  goToGame(id: string, playerId?: string): void
 }
 
 export interface ScrollState {
@@ -163,6 +167,20 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
     .catch(handleXhrError)
   }
 
+  const goToGame = (id: string, playerId?: string) => {
+    const g = scrollState.games.find(game => game.id === id)
+    if (g) {
+      const userColor: Color = g.players.white.userId === userId ? 'white' : 'black'
+      positionsCache.set(g.id, { fen: g.fen, orientation: userColor })
+      const mePlaying = session.getUserId() === userId
+      if (mePlaying && playerId !== undefined) {
+        router.set(`/game/${id}${playerId}?goingBack=1`)
+      } else {
+        router.set(`/analyse/online/${id}/${userColor}?curFen=${g.fen}`)
+      }
+    }
+  }
+
   // load either from cache (restore previous search) or from server
   if (cacheAvailable) {
     setTimeout(() => {
@@ -198,6 +216,7 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
     onGamesLoaded,
     onFilterChange,
     toggleBookmark,
-    boardTheme
+    boardTheme,
+    goToGame,
   }
 }

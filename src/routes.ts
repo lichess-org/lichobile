@@ -49,7 +49,6 @@ export default {
       'ai': ai,
       'ai/variant/:variant/fen/:fen/color/:color': ai,
       'game/:id': game,
-      'game/:id/:color': game,
       'tournament/:tournamentId/game/:id': game,
       'analyse/:source/:id/:color': analyse,
       'analyse/:source/:id': analyse,

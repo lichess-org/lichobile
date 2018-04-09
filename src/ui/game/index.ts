@@ -22,7 +22,6 @@ import { connectingHeader, viewOnlyBoardContent, loadingBackbutton } from '../sh
 
 interface Attrs {
   id: string
-  color: Color
   goingBack?: string
 }
 
@@ -31,14 +30,14 @@ interface State {
 }
 
 const GameScreen: Mithril.Component<Attrs, State> = {
-  oninit(vnode) {
+  oninit({ attrs }) {
     let gameData: OnlineGameData
 
     sleepUtils.keepAwake()
 
     if (hasNetwork()) {
       const now = performance.now()
-      gameXhr(vnode.attrs.id, vnode.attrs.color)
+      gameXhr(attrs.id)
       .then(data => {
         gameData = data
 
@@ -64,7 +63,7 @@ const GameScreen: Mithril.Component<Attrs, State> = {
           const elapsed = performance.now() - now
 
           setTimeout(() => {
-            this.round = new OnlineRound(vnode.attrs.id, data)
+            this.round = new OnlineRound(!!attrs.goingBack, attrs.id, data)
           }, Math.max(400 - elapsed, 0))
 
           gamesMenu.resetLastJoined()
@@ -75,9 +74,9 @@ const GameScreen: Mithril.Component<Attrs, State> = {
 
           if (gameData.game.speed === 'correspondence') {
             if (!gameApi.playable(gameData)) {
-              removeOfflineGameData(vnode.attrs.id)
+              removeOfflineGameData(attrs.id)
             } else {
-              saveOfflineGameData(vnode.attrs.id, gameData)
+              saveOfflineGameData(attrs.id, gameData)
             }
           }
         }
@@ -87,13 +86,13 @@ const GameScreen: Mithril.Component<Attrs, State> = {
         router.set('/')
       })
     } else {
-      const savedData = getOfflineGameData(vnode.attrs.id)
+      const savedData = getOfflineGameData(attrs.id)
       if (savedData) {
         gameData = savedData
         if (!gameApi.playable(gameData)) {
-          removeOfflineGameData(vnode.attrs.id)
+          removeOfflineGameData(attrs.id)
         }
-        this.round = new OnlineRound(vnode.attrs.id, gameData)
+        this.round = new OnlineRound(!!attrs.goingBack, attrs.id, gameData)
       } else {
         window.plugins.toast.show('Could not find saved data for this game', 'short', 'center')
         router.set('/')
@@ -102,7 +101,7 @@ const GameScreen: Mithril.Component<Attrs, State> = {
   },
 
   oncreate(vnode) {
-    if (vnode.attrs.color) {
+    if (vnode.attrs.goingBack) {
       helper.pageSlideIn(vnode.dom as HTMLElement)
     } else {
       helper.elFadeIn(vnode.dom as HTMLElement)

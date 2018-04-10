@@ -16,7 +16,7 @@ export interface GameData {
   userTV?: string
   tv?: string
   readonly pref?: any
-  readonly bookmarked?: boolean
+  bookmarked?: boolean
   readonly takebackable?: boolean
 }
 

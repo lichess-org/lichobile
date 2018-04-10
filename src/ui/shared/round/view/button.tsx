@@ -26,7 +26,7 @@ export default {
   },
   bookmark: function(ctrl: OnlineRound) {
     return session.isConnected() ? h('button', {
-      key: 'shareGameLink',
+      key: 'bookmarkLink',
       oncreate: helper.ontap(ctrl.toggleBookmark),
       'data-icon': ctrl.data.bookmarked ? 't' : 's'
     }, [i18n('bookmarkThisGame')]) : null

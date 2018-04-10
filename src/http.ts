@@ -16,7 +16,7 @@ export interface RequestOpts {
   body?: any
   query?: Object
   headers?: StringMap
-  cache?: 'default' | 'no-store' | 'reload' | 'no-cache' | 'force-cache'
+  cache?: RequestCache
 }
 
 function addQuerystring(url: string, querystring: string): string {

@@ -82,6 +82,7 @@
     <preference name="xwalkMode" value="embedded" />
     <preference name="xwalkMultipleApk" value="true" />
     <preference name="AndroidLaunchMode" value="singleInstance" />
+    <preference name="DefaultVolumeStream" value="media" />
     <universal-links>
         <host name="lichess.org" scheme="https">
             <path event="analysis" url="/analysis" />

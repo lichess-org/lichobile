@@ -1,6 +1,6 @@
 import Chessground from '../../../chessground/Chessground'
 import Replay from '../offlineRound/Replay'
-import { OnlineGameData, OfflineGameData, GameData, GameStatus } from '../../../lichess/interfaces/game'
+import { OnlineGameData, OfflineGameData, GameData, GameStatus, Score } from '../../../lichess/interfaces/game'
 import { AnalyseData } from '../../../lichess/interfaces/analyse'
 import { GameSituation } from '../../../chess'
 import { Data as TrainingData } from '../../training/interfaces'
@@ -34,6 +34,7 @@ export interface RoundInterface extends BoardInterface {
 
 export interface OnlineRoundInterface extends RoundInterface {
   data: OnlineGameData
+  score: Score | null
 
   onReload(cfg: OnlineGameData): void
   reloadGameData(): void

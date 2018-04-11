@@ -469,6 +469,29 @@ function renderStatus(ctrl: OnlineRound) {
   ]).concat([h('em.resultStatus', status)])
 }
 
+function renderScore (ctrl: OnlineRound) {
+  const score = ctrl.score
+  if (!score || !ctrl.data)
+    return null
+
+  const white = gameApi.getPlayer(ctrl.data, 'white')
+  const black = gameApi.getPlayer(ctrl.data, 'black')
+  if (!white || !black || !white.user || !black.user)
+    return null
+
+  return (
+    <div class="score">
+        <span key="white">
+          {white.user.username} ({score.users[white.user.id]})
+        </span>
+        &nbsp; - &nbsp;
+        <span key="black">
+          {black.user.username} ({score.users[black.user.id]})
+        </span>
+    </div>
+  )
+}
+
 function renderGamePopup(ctrl: OnlineRound) {
   const header = ctrl.data.tv ?
     () => renderPopupTitle(ctrl) :
@@ -478,11 +501,17 @@ function renderGamePopup(ctrl: OnlineRound) {
   return popupWidget(
     'player_controls',
     header,
-    gameApi.playable(ctrl.data) ?
-      () => renderGameRunningActions(ctrl) : () => renderGameEndedActions(ctrl),
+    () => renderButtonsAndScore(ctrl),
     ctrl.vm.showingActions,
     ctrl.hideActions
   )
+}
+
+function renderButtonsAndScore(ctrl: OnlineRound): Mithril.Children {
+  const buttons = gameApi.playable(ctrl.data) ?
+    renderGameRunningActions(ctrl) :
+    renderGameEndedActions(ctrl)
+  return [buttons, renderScore(ctrl)]
 }
 
 function renderGameActionsBar(ctrl: OnlineRound) {

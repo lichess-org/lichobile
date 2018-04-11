@@ -14,7 +14,7 @@ import vibrate from '../../../vibrate'
 import gameStatusApi from '../../../lichess/status'
 import * as gameApi from '../../../lichess/game'
 import { MiniUser } from '../../../lichess/interfaces'
-import { OnlineGameData, Player, ApiEnd } from '../../../lichess/interfaces/game'
+import { OnlineGameData, Player, ApiEnd, Score } from '../../../lichess/interfaces/game'
 import { MoveRequest, DropRequest, MoveOrDrop, AfterMoveMeta, isMove, isDrop, isMoveRequest, isDropRequest } from '../../../lichess/interfaces/move'
 import * as chessFormat from '../../../utils/chessFormat'
 
@@ -61,6 +61,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public title!: Mithril.Children
   public subTitle!: string
   public tv!: string
+  public score: Score | null
   public readonly goingBack: boolean
 
   private zenModeEnabled: boolean
@@ -146,6 +147,8 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.makeCorrespondenceClock()
     if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick, 6000)
 
+    this.score = null
+
     socket.createGame(
       this.data.url.socket,
       this.data.player.version,
@@ -188,6 +191,19 @@ export default class OnlineRound implements OnlineRoundInterface {
   public showActions = () => {
     router.backbutton.stack.push(this.hideActions)
     this.vm.showingActions = true
+    if (!this.score) {
+      this.updateCrosstable()
+    }
+  }
+
+  public updateCrosstable() {
+    const d = this.data
+    if (!d || !d.player.user || !d.opponent.user)
+      return
+    xhr.getCrosstable(d.player.user.id, d.opponent.user.id).then(s => {
+      this.score = s
+      redraw()
+    })
   }
 
   public hideActions = (fromBB?: string) => {
@@ -545,6 +561,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.showActions()
       setTimeout(redraw, 1000)
     }
+    this.updateCrosstable()
   }
 
   public goBerserk() {

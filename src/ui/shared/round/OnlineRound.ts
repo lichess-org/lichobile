@@ -61,7 +61,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public title!: Mithril.Children
   public subTitle!: string
   public tv!: string
-  public score: Score | null
+  public score?: Score
   public readonly goingBack: boolean
 
   private zenModeEnabled: boolean
@@ -147,7 +147,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.makeCorrespondenceClock()
     if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick, 6000)
 
-    this.score = null
+    this.updateCrosstable()
 
     socket.createGame(
       this.data.url.socket,
@@ -191,9 +191,6 @@ export default class OnlineRound implements OnlineRoundInterface {
   public showActions = () => {
     router.backbutton.stack.push(this.hideActions)
     this.vm.showingActions = true
-    if (!this.score) {
-      this.updateCrosstable()
-    }
   }
 
   public updateCrosstable() {

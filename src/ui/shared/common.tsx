@@ -13,14 +13,10 @@ import session from '../../session'
 import challengesApi from '../../lichess/challenges'
 import friendsApi from '../../lichess/friends'
 import i18n from '../../i18n'
-import popupWidget from './popup'
-import { getLanguageNativeName } from '../../utils/langs'
 import friendsPopup from '../friendsPopup'
-import spinner from '../../spinner'
-import countries from '../../utils/countries'
 import ViewOnlyBoard from './ViewOnlyBoard'
 import { backArrow } from './icons'
-import { BaseUser, User } from '../../lichess/interfaces/user'
+import { BaseUser } from '../../lichess/interfaces/user'
 
 export const LoadingBoard = {
   view() {
@@ -228,70 +224,3 @@ export function userStatus(user: BaseUser) {
     </div>
   )
 }
-
-export function miniUser(user: User | undefined, mini: any, isOpen: boolean, close: () => void) {
-  if (user) {
-
-    const status = userStatus(user)
-
-    function content() {
-      if (!mini || !user) {
-        return (
-          <div key="loading" className="miniUser">
-            {spinner.getVdom()}
-          </div>
-        )
-      }
-      const curSess = session.get()
-      const sessionUserId = curSess && curSess.id
-      return (
-        <div key="loaded" className="miniUser">
-        <div className="title">
-        <div className="username" oncreate={helper.ontap(() => router.set(`/@/${user.username}`))}>
-        {status}
-        </div>
-        { user.profile && user.profile.country ?
-          <p className="country">
-          <img className="flag" src={utils.lichessAssetSrc('images/flags/' + user.profile.country + '.png')} />
-          {countries[user.profile.country]}
-          </p> : user.language ?
-          <p className="language">
-          <span className="fa fa-comment-o" />
-          {getLanguageNativeName(user.language)}
-          </p> : null
-        }
-        </div>
-        { mini.perfs ?
-          <div className="mini_perfs">
-          {Object.keys(mini.perfs).map((p: PerfKey) => {
-            const perf = mini.perfs[p]
-            return (
-              <div className="perf">
-              <span data-icon={utils.gameIcon(p)} />
-              {perf.games > 0 ? perf.rating + (perf.prov ? '?' : '') : '-'}
-              </div>
-            )
-          })}
-          </div> : null
-        }
-        { sessionUserId && mini.crosstable && mini.crosstable.nbGames > 0 ?
-          <div className="yourScore">
-          Your score: <span className="score">{`${mini.crosstable.users[sessionUserId]} - ${mini.crosstable.users[user.id]}`}</span>
-          </div> : null
-        }
-        </div>
-      )
-    }
-
-    return popupWidget(
-      'miniUserInfos',
-      undefined,
-      content,
-      isOpen,
-      close
-    )
-  }
-
-  return null
-}
-

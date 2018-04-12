@@ -14,7 +14,8 @@ import vibrate from '../../../vibrate'
 import gameStatusApi from '../../../lichess/status'
 import * as gameApi from '../../../lichess/game'
 import { MiniUser } from '../../../lichess/interfaces'
-import { OnlineGameData, Player, ApiEnd, Score } from '../../../lichess/interfaces/game'
+import { OnlineGameData, Player, ApiEnd } from '../../../lichess/interfaces/game'
+import { Score } from '../../../lichess/interfaces/user'
 import { MoveRequest, DropRequest, MoveOrDrop, AfterMoveMeta, isMove, isDrop, isMoveRequest, isDropRequest } from '../../../lichess/interfaces/move'
 import * as chessFormat from '../../../utils/chessFormat'
 
@@ -147,8 +148,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.makeCorrespondenceClock()
     if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick, 6000)
 
-    this.updateCrosstable()
-
     socket.createGame(
       this.data.url.socket,
       this.data.player.version,
@@ -171,6 +170,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public openUserPopup = (position: string, userId: string) => {
+    this.updateCrosstable()
     if (!this.vm.miniUser[position].data) {
       miniUserXhr(userId).then(data => {
         this.vm.miniUser[position].data = data

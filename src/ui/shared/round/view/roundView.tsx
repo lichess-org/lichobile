@@ -14,7 +14,8 @@ import * as utils from '../../../../utils'
 import i18n from '../../../../i18n'
 import layout from '../../../layout'
 import * as helper from '../../../helper'
-import { backButton, menuButton, loader, headerBtns, miniUser } from '../../../shared/common'
+import { backButton, menuButton, loader, headerBtns } from '../../../shared/common'
+import PlayerPopup from '../../../shared/PlayerPopup'
 import GameTitle from '../../../shared/GameTitle'
 import CountdownTimer from '../../../shared/CountdownTimer'
 import Board from '../../../shared/Board'
@@ -48,8 +49,22 @@ function overlay(ctrl: OnlineRound) {
     promotion.view(ctrl),
     renderGamePopup(ctrl),
     renderSubmitMovePopup(ctrl),
-    miniUser(ctrl.data.player.user, ctrl.vm.miniUser.player.data, ctrl.vm.miniUser.player.showing, () => ctrl.closeUserPopup('player')),
-    miniUser(ctrl.data.opponent.user, ctrl.vm.miniUser.opponent.data, ctrl.vm.miniUser.opponent.showing, () => ctrl.closeUserPopup('opponent'))
+    h(PlayerPopup, {
+      player: ctrl.data.player,
+      opponent: ctrl.data.opponent,
+      mini: ctrl.vm.miniUser.player.data,
+      score: ctrl.score,
+      isOpen: ctrl.vm.miniUser.player.showing,
+      close: () => ctrl.closeUserPopup('player'),
+    }),
+    h(PlayerPopup, {
+      player: ctrl.data.opponent,
+      opponent: ctrl.data.player,
+      mini: ctrl.vm.miniUser.opponent.data,
+      score: ctrl.score,
+      isOpen: ctrl.vm.miniUser.opponent.showing,
+      close: () => ctrl.closeUserPopup('opponent'),
+    })
   ]
 }
 
@@ -242,10 +257,6 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
   const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
     '#' + ctrl.data.tournament.ranks[player.color] + ' ' : null
 
-  const score = ctrl.score && user && ctrl.score.users[user.id]
-  const opp = gameApi.getPlayer(ctrl.data, utils.oppositeColor(player.color))
-  const oppScore = ctrl.score && opp && opp.user && ctrl.score.users[opp.user.id]
-
   return (
     <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '') + (ctrl.isZen() ? ' zen' : '')} oncreate={vConf}>
       <h2 className="antagonistUser">
@@ -263,11 +274,6 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
       <div className="ratingAndMaterial">
         { position === 'opponent' && user && (user.engine || user.booster) ?
           <span className="warning" data-icon="j"></span> : null
-        }
-        {score !== undefined && oppScore !== undefined ?
-          <h3 className={'score' + (score > oppScore ? ' up' : score < oppScore ? ' down' : '')}>
-            {score}
-          </h3> : null
         }
         {user && isPortrait ?
           <h3 className="rating">

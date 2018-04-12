@@ -222,10 +222,3 @@ export interface Opening {
   readonly fen?: string
   readonly wikiPath?: string
 }
-
-export interface Score {
-  readonly nbGames: number
-  readonly users: {
-    readonly [id: string]: number | undefined
-  }
-}

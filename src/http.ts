@@ -16,6 +16,7 @@ export interface RequestOpts {
   body?: any
   query?: Object
   headers?: StringMap
+  cache?: RequestCache
 }
 
 function addQuerystring(url: string, querystring: string): string {

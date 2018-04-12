@@ -14,7 +14,8 @@ import * as utils from '../../../../utils'
 import i18n from '../../../../i18n'
 import layout from '../../../layout'
 import * as helper from '../../../helper'
-import { backButton, menuButton, loader, headerBtns, miniUser } from '../../../shared/common'
+import { backButton, menuButton, loader, headerBtns } from '../../../shared/common'
+import PlayerPopup from '../../../shared/PlayerPopup'
 import GameTitle from '../../../shared/GameTitle'
 import CountdownTimer from '../../../shared/CountdownTimer'
 import Board from '../../../shared/Board'
@@ -48,8 +49,22 @@ function overlay(ctrl: OnlineRound) {
     promotion.view(ctrl),
     renderGamePopup(ctrl),
     renderSubmitMovePopup(ctrl),
-    miniUser(ctrl.data.player.user, ctrl.vm.miniUser.player.data, ctrl.vm.miniUser.player.showing, () => ctrl.closeUserPopup('player')),
-    miniUser(ctrl.data.opponent.user, ctrl.vm.miniUser.opponent.data, ctrl.vm.miniUser.opponent.showing, () => ctrl.closeUserPopup('opponent'))
+    h(PlayerPopup, {
+      player: ctrl.data.player,
+      opponent: ctrl.data.opponent,
+      mini: ctrl.vm.miniUser.player.data,
+      score: ctrl.score,
+      isOpen: ctrl.vm.miniUser.player.showing,
+      close: () => ctrl.closeUserPopup('player'),
+    }),
+    h(PlayerPopup, {
+      player: ctrl.data.opponent,
+      opponent: ctrl.data.player,
+      mini: ctrl.vm.miniUser.opponent.data,
+      score: ctrl.score,
+      isOpen: ctrl.vm.miniUser.opponent.showing,
+      close: () => ctrl.closeUserPopup('opponent'),
+    })
   ]
 }
 
@@ -478,8 +493,9 @@ function renderGamePopup(ctrl: OnlineRound) {
   return popupWidget(
     'player_controls',
     header,
-    gameApi.playable(ctrl.data) ?
-      () => renderGameRunningActions(ctrl) : () => renderGameEndedActions(ctrl),
+    () => gameApi.playable(ctrl.data) ?
+      renderGameRunningActions(ctrl) :
+      renderGameEndedActions(ctrl),
     ctrl.vm.showingActions,
     ctrl.hideActions
   )

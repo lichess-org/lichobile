@@ -125,6 +125,8 @@ export function chatView(ctrl: Chat) {
   const watchers = ctrl.root.data.watchers
   if (ctrl.root.data.player.spectator && watchers && watchers.nb >= 2) {
     header = i18n('spectators') + ' ' + watchers.nb
+  } else if (ctrl.root.data.player.spectator) {
+    header = i18n('spectatorRoom')
   }
 
   return h('div#chat.modal', { oncreate: helper.slidesInUp }, [

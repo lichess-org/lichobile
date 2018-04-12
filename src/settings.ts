@@ -80,12 +80,13 @@ export default {
         'alpha',
         'spatial',
         'reilly',
+        'companion',
         'fantasy',
         'shapes',
         'chessnut',
         'chess7',
         'riohacha',
-        'symmetric'
+        'symmetric',
       ],
       board: store.prop('settings.theme.board', 'brown'),
       piece: store.prop('settings.theme.piece', 'cburnett')

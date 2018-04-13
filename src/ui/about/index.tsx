@@ -37,7 +37,15 @@ export default {
 
         </ul>
 
-        <p> For additional information, including a press kit, social media profiles and API documentation, visit {helper.externalLink('lichess.org', 'https://lichess.org/about')} </p>
+        <h2>Links</h2>
+
+          <ul>
+            <li>{helper.externalLink('Github', 'https://github.com/veloce/lichobile')}</li>
+            <li>
+              {helper.externalLink('lichess.org/about', 'https://lichess.org/about')} for additional information.
+            </li>
+          </ul>
+
       </div>
     )
   }

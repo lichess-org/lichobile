@@ -36,4 +36,3 @@ function save(userId: UserId, userData: UserOfflineData): Promise<OfflineData> {
     return asyncStorage.setItem('trainingOfflinePuzzles', map)
   })
 }
-

@@ -38,7 +38,7 @@ export function loadNewPuzzle(database: Database, user: Session): Promise<Puzzle
         resolve(data.unsolved[0])
       }
       else {
-        reject(`No additional offline puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`)
+        reject(`No additional offline puzzle available. Go online to get another ${settings.training.puzzleBufferLen}`)
       }
     })
     .catch(reject)
@@ -80,8 +80,12 @@ export function syncPuzzleResult(
   })
 }
 
-export function puzzleLoadFailure(reason: string) {
-  window.plugins.toast.show(reason, 'short', 'center')
+export function puzzleLoadFailure(reason: any) {
+  if (typeof reason === 'string') {
+    window.plugins.toast.show(reason, 'long', 'center')
+  } else {
+    window.plugins.toast.show('Could not load puzzle', 'short', 'center')
+  }
   router.set('/')
 }
 

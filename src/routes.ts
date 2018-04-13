@@ -37,6 +37,7 @@ import inboxCompose from './ui/inbox/compose'
 import importer from './ui/importer'
 import search from './ui/search'
 import study from './ui/study'
+import about from './ui/about'
 import { defineRoutes } from './router'
 
 export default {
@@ -68,6 +69,7 @@ export default {
       '@/:id/games/:filter': userGames,
       '@/:id/:perf/perf': userPerfStats,
       '@/:id/tv': userTV,
+      'about': about,
       'account/preferences': accountPreferences,
       'account/preferences/privacy': accountPrivacy,
       'account/preferences/kidMode': accountKidMode,

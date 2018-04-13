@@ -3,7 +3,7 @@ import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
 import { saveOfflineGameData, removeOfflineGameData } from '../../../utils/offlineGames'
-import { hasNetwork, boardOrientation } from '../../../utils'
+import { hasNetwork, boardOrientation, handleXhrError } from '../../../utils'
 import session from '../../../session'
 import settings from '../../../settings'
 import socket from '../../../socket'
@@ -15,6 +15,7 @@ import gameStatusApi from '../../../lichess/status'
 import * as gameApi from '../../../lichess/game'
 import { MiniUser } from '../../../lichess/interfaces'
 import { OnlineGameData, Player, ApiEnd } from '../../../lichess/interfaces/game'
+import { Score } from '../../../lichess/interfaces/user'
 import { MoveRequest, DropRequest, MoveOrDrop, AfterMoveMeta, isMove, isDrop, isMoveRequest, isDropRequest } from '../../../lichess/interfaces/move'
 import * as chessFormat from '../../../utils/chessFormat'
 
@@ -61,6 +62,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public title!: Mithril.Children
   public subTitle!: string
   public tv!: string
+  public score?: Score
   public readonly goingBack: boolean
 
   private zenModeEnabled: boolean
@@ -168,6 +170,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public openUserPopup = (position: string, userId: string) => {
+    this.updateCrosstable()
     if (!this.vm.miniUser[position].data) {
       miniUserXhr(userId).then(data => {
         this.vm.miniUser[position].data = data
@@ -188,6 +191,16 @@ export default class OnlineRound implements OnlineRoundInterface {
   public showActions = () => {
     router.backbutton.stack.push(this.hideActions)
     this.vm.showingActions = true
+  }
+
+  public updateCrosstable() {
+    const d = this.data
+    if (!d || !d.player.user || !d.opponent.user)
+      return
+    xhr.getCrosstable(d.player.user.id, d.opponent.user.id).then(s => {
+      this.score = s
+      redraw()
+    })
   }
 
   public hideActions = (fromBB?: string) => {
@@ -545,6 +558,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.showActions()
       setTimeout(redraw, 1000)
     }
+    this.updateCrosstable()
   }
 
   public goBerserk() {
@@ -560,7 +574,11 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public toggleBookmark = () => {
-    return toggleGameBookmark(this.data.game.id).then(this.reloadGameData)
+    return toggleGameBookmark(this.data.game.id).then(() => {
+      this.data.bookmarked = !this.data.bookmarked
+      redraw()
+    })
+    .catch(handleXhrError)
   }
 
   public unload() {

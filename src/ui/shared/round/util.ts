@@ -1,6 +1,5 @@
 import { OnlineGameData, GameStep } from '../../../lichess/interfaces/game'
 
-
 export function firstPly(d: OnlineGameData): number {
   return d.steps[0].ply
 }

@@ -145,3 +145,15 @@ export interface Related {
   relation: Relation
   readonly title?: string
 }
+
+export interface Score {
+  readonly nbGames: number
+  readonly users: {
+    readonly [id: string]: number | undefined
+  }
+}
+
+export interface MiniUser {
+  crosstable: Score
+  perfs: any
+}

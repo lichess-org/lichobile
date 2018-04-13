@@ -238,6 +238,9 @@ function renderLinks(user?: Session) {
       <li className="side_link" key="settings" data-route="/settings">
         <span className="fa fa-cog"/>{i18n('settings')}
       </li>
+      <li className="side_link" key="about" data-route="/about">
+        <span className="fa fa-info-circle" />About
+      </li>
     </ul>
   )
 }

@@ -2,6 +2,7 @@ import { fetchJSON, fetchText } from '../../../http'
 import { serializeQueryParameters } from '../../../utils'
 import i18n from '../../../i18n'
 import { OnlineGameData } from '../../../lichess/interfaces/game'
+import { Score } from '../../../lichess/interfaces/user'
 
 import { OnlineRoundInterface } from '.'
 
@@ -31,4 +32,8 @@ export function syncNote(gameId: string, notes: string) {
     window.plugins.toast.show(i18n('notesSynchronizationHasFailed'), 'short', 'center')
     throw err
   })
+}
+
+export function getCrosstable(uid1: string, uid2: string): Promise<Score> {
+  return fetchJSON('/api/crosstable/' + uid1 + '/' + uid2, { cache: 'reload' } )
 }

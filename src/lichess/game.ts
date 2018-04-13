@@ -6,7 +6,7 @@ import getVariant from './variant'
 import { shortPerfTitle } from './perfs'
 import { MiniBoardGameObj } from './interfaces'
 import { UserGame } from './interfaces/user'
-import { GameData, OnlineGameData } from './interfaces/game'
+import { GameData, OnlineGameData, Player } from './interfaces/game'
 import { AnalyseData, OnlineAnalyseData } from './interfaces/analyse'
 
 export const analysableVariants = ['standard', 'crazyhouse', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'antichess', 'horde', 'racingKings']
@@ -101,10 +101,9 @@ export function analysable(data: OnlineGameData | OnlineAnalyseData) {
   return replayable(data) && playedTurns(data) > 4 && analysableVariants.indexOf(data.game.variant.key) !== -1
 }
 
-export function getPlayer(data: GameData | AnalyseData, color?: Color) {
+export function getPlayer(data: GameData | AnalyseData, color?: Color): Player | undefined {
   if (data.player.color === color) return data.player
   if (data.opponent.color === color) return data.opponent
-  return null
 }
 
 export function setIsGone(data: GameData, color: Color, isGone: boolean) {
@@ -171,7 +170,7 @@ export function title(data: GameData | AnalyseData): string {
 }
 
 export function publicUrl(data: GameData) {
-  return 'http://lichess.org/' + data.game.id
+  return 'https://lichess.org/' + data.game.id
 }
 
 export function isSupportedVariant(data: GameData) {

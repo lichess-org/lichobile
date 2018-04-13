@@ -124,8 +124,16 @@
 
 .antagonistInfos
   overflow hidden
+  .score
+    vertical-align top
+    margin-right 10px
+    &.up
+      font-weight bold
+      color green
+    &.down
+      font-weight bold
+      color red
   .rating
-    font-size 0.9em
     color gold
     display inline-block
     vertical-align top
@@ -183,7 +191,7 @@
   white-space nowrap
   color textLightGray
   > .status
-    font-size 18px
+    font-size 0.9em
     margin-right 5px
     &.ongame
       color green

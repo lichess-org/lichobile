@@ -170,7 +170,7 @@ export function title(data: GameData | AnalyseData): string {
 }
 
 export function publicUrl(data: GameData) {
-  return 'http://lichess.org/' + data.game.id
+  return 'https://lichess.org/' + data.game.id
 }
 
 export function isSupportedVariant(data: GameData) {

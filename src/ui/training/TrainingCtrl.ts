@@ -185,7 +185,7 @@ export default class TrainingCtrl implements PromotingInterface {
   }
 
   public share = () => {
-    window.plugins.socialsharing.share(null, null, null, `http://lichess.org/training/${this.data.puzzle.id}`)
+    window.plugins.socialsharing.share(null, null, null, `https://lichess.org/training/${this.data.puzzle.id}`)
   }
 
   public goToAnalysis = () => {

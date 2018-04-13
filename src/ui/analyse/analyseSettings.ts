@@ -148,7 +148,7 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
         ctrl.settings.toggleBestMove
       )
     ]),
-    ctrl.source === 'online' && isOnlineAnalyseData(ctrl.data) && gameApi.analysable(ctrl.data) ? h('div.action', {
+    ctrl.study || (ctrl.source === 'online' && isOnlineAnalyseData(ctrl.data) && gameApi.analysable(ctrl.data)) ? h('div.action', {
       key: 'showComments'
     }, [
       formWidgets.renderCheckbox(

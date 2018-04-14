@@ -42,6 +42,7 @@ Files | Author(s) | License
 --- | --- | ---
 www/images/pieces/alpha | Eric Bentzen | "free for personal non commercial use" (see [zip](http://www.enpassant.dk/chess/downl/alpha.zip))
 www/images/pieces/chess7 | [Style-7](http://www.styleseven.com/) | "freeware"
+www/images/pieces/companion | David L. Brown | ["freeware"](http://www.enpassant.dk/chess/fonteng.htm#GC)
 www/images/pieces/fantasy | [Maurizio Monge](http://poisson.phc.unipi.it/~monge/chess_art.php) | "give credit in a suitable way"
 www/images/pieces/spatial | [Maurizio Monge](http://poisson.phc.unipi.it/~monge/chess_art.php) | "give credit in a suitable way"
 www/images/pieces/reilly | [Reilly Craig](https://instagram.com/fader_) |

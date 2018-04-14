@@ -79,8 +79,7 @@ export default function ExplorerCtrl(
   }, 500, { leading: true, trailing: true })
 
   function fetch(fen: string) {
-    const hasTablebase = ['standard', 'chess960', 'atomic', 'antichess'].includes(effectiveVariant)
-    if (hasTablebase && withGames && tablebaseRelevant(fen)) return fetchTablebase(fen)
+    if (withGames && tablebaseRelevant(effectiveVariant, fen)) return fetchTablebase(fen)
     else return fetchOpening(fen)
   }
 
@@ -92,7 +91,7 @@ export default function ExplorerCtrl(
   function setStep() {
     if (root.currentTab(root.availableTabs()).id !== 'explorer') return
     const node = root.node
-    if (node.ply > 50 && !tablebaseRelevant(node.fen)) {
+    if (node.ply > 50 && !tablebaseRelevant(effectiveVariant, node.fen)) {
       setResult(node.fen, empty)
     }
     const fromCache = cache[node.fen]
@@ -129,8 +128,11 @@ export default function ExplorerCtrl(
   }
 }
 
-function tablebaseRelevant(fen: string) {
+function tablebaseRelevant(variant: VariantKey, fen: string) {
   const parts = fen.split(/\s/)
   const pieceCount = parts[0].split(/[nbrqkp]/i).length - 1
-  return pieceCount <= 7
+
+  if (variant === 'standard' || variant === 'chess960') return pieceCount <= 8
+  else if (variant === 'atomic' || variant === 'antichess') return pieceCount <= 7
+  else return false
 }

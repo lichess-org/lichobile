@@ -57,7 +57,7 @@ export namespace Tree {
     threefold?: boolean
     readonly fail?: boolean
     puzzle?: string
-    // added dynamically during analysis from chess worker
+    // added locally during analysis by chess worker
     checkCount?: { white: number, black: number }
     readonly pgnMoves?: ReadonlyArray<string>
     player?: Color
@@ -65,6 +65,14 @@ export namespace Tree {
     crazyhouse?: {
       readonly pockets: Pockets
     }
+    // added locally by study gamebook ctrl
+    gamebook?: Gamebook
+  }
+
+  export interface Gamebook {
+    deviation?: string
+    hint?: string
+    shapes?: Shape[]
   }
 
   export interface Comment {

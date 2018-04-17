@@ -1,7 +1,7 @@
 import * as h from 'mithril/hyperscript'
-import { Study } from '../../../lichess/interfaces/study'
-import { header, backButton } from '../../shared/common'
-import layout from '../../layout'
+import { Study } from '../../../../lichess/interfaces/study'
+import { header, backButton } from '../../../shared/common'
+import layout from '../../../layout'
 
 export function notFound() {
   return layout.free(

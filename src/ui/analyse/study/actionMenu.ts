@@ -7,7 +7,7 @@ import i18n from '../../../i18n'
 import popupWidget from '../../shared/popup'
 import spinner from '../../../spinner'
 import * as helper from '../../helper'
-import { studyPGN, studyChapterPGN } from './studyXhr'
+import { studyPGN, studyChapterPGN } from '../../study/studyXhr'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 

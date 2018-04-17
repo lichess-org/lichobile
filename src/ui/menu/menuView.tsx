@@ -175,10 +175,21 @@ function renderLinks(user?: Session) {
         <span className="fa fa-trophy"/>{i18n('tournament')}
       </li> : null
       }
+      <li className="sep_link" key="sep_link_online">{i18n('learn')}</li>
       {hasNetwork() ?
-      <li className="side_link" key="training" data-route="/training">
-        <span data-icon="-"/>{i18n('training')}
-      </li> : null
+        <li className="side_link" key="training" data-route="/training">
+          <span data-icon="-"/>{i18n('training')}
+        </li> : null
+      }
+      {!hasNetwork() && user ?
+        <li className="side_link" key="training" data-route="/training">
+          <span data-icon="-" />{i18n('training')}
+        </li> : null
+      }
+      {hasNetwork() ?
+        <li className="side_link" key="study" data-route="/study">
+          <span data-icon="4" />Study
+        </li> : null
       }
       {hasNetwork() ?
       <li className="sep_link" key="sep_link_community">
@@ -203,11 +214,6 @@ function renderLinks(user?: Session) {
       <li className="sep_link" key="sep_link_offline">
         {i18n('playOffline')}
       </li>
-      {!hasNetwork() && user ?
-        <li className="side_link" key="training" data-route="/training">
-          <span data-icon="-" />{i18n('training')}
-        </li> : null
-      }
       <li className="side_link" key="play_ai" data-route="/ai">
         <span className="fa fa-cogs"/>{i18n('playOfflineComputer')}
       </li>

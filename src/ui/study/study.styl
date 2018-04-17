@@ -80,6 +80,71 @@
     font-weight bold
 
 
+.study-pagerScroller
+  flex 1 1 auto
+  display flex
+  flex-flow column nowrap
+
+.study-pagerLoader
+  flex 1 1 auto
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+.study-pagerItem
+  display flex
+  flex-flow column nowrap
+  padding 10px
+  &.even
+    background-color lighten(bgdark, 2%)
+
+.study-pagerItemTitle
+  display flex
+  flex-flow row nowrap
+  align-items center
+  > i
+    flex 0 0 40px
+    display flex
+    align-items center
+    justify-content center
+    font-size 40px
+    height 40px
+    color blue
+    margin-right 10px
+  > div
+    flex 0 1 auto
+    display flex
+    flex-flow column nowrap
+    justify-content center
+    > h2
+      white-space nowrap
+      overflow hidden
+      text-overflow ellipsis
+      color blue
+      font-size 1.2em
+      line-height 1.1em
+    > h3
+      font-size 0.85em
+
+.study-pagerItemBody
+  display flex
+  flex-flow row nowrap
+  justify-content space-between
+  margin-top 1.2em
+  font-size 0.85em
+  > .chapters > li, > .members li
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+  > .chapters
+    flex 0 0 58%
+    max-width 58%
+  > .members
+    margin-left 2%
+    flex 0 0 40%
+    max-width 40%
+
+
 .view-container.light
   .study-tag
     > th

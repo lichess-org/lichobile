@@ -16,7 +16,7 @@ interface Attrs {
   userId?: string
 }
 
-const GameItem: Mithril.Component<Attrs, {}> = {
+export default {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
     return attrs.g !== oldattrs.g
   },
@@ -78,9 +78,7 @@ const GameItem: Mithril.Component<Attrs, {}> = {
       </li>
     )
   }
-}
-
-export default GameItem
+} as Mithril.Component<Attrs, {}>
 
 function renderBoard(fen: string, orientation: Color, boardTheme: string) {
 

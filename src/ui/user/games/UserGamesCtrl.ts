@@ -28,7 +28,7 @@ export interface ScrollState {
   currentFilter: string
   scrollPos: number
   userId: string
-  availableFilters: Array<AvailableFilter>
+  availableFilters: ReadonlyArray<AvailableFilter>
   isLoadingNextPage: boolean
 }
 

@@ -1,4 +1,5 @@
 import { AnalyseData } from './analyse'
+import { LightUser } from './user'
 import { Tree } from '../../ui/shared/tree'
 
 export interface Study {
@@ -118,4 +119,17 @@ export function gameResult(study: Study, isWhite: boolean): string | undefined {
     case '1/2-1/2': return '1/2'
     default: return undefined
   }
+}
+
+export type PagerOrder = 'hot' | 'newest' | 'oldest' | 'updated' | 'popular'
+
+export interface PagerData {
+  readonly id: string
+  readonly name: string
+  readonly updatedAt: Timestamp
+  readonly liked: boolean
+  readonly likes: number
+  readonly owner: LightUser
+  readonly chapters: ReadonlyArray<string>
+  readonly members: ReadonlyArray<StudyMember>
 }

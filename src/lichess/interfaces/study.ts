@@ -90,10 +90,7 @@ interface StudyChapterFeatures {
 export interface StudyMember {
   addedAt: number
   role: 'r' | 'w'
-  user: {
-    id: string
-    name: string
-  }
+  user: LightUser | null
 }
 
 export interface StudyMemberMap {
@@ -121,6 +118,7 @@ export function gameResult(study: Study, isWhite: boolean): string | undefined {
   }
 }
 
+export type PagerCategory = 'all' | 'mine' | 'member' | 'public' | 'private' | 'likes'
 export type PagerOrder = 'hot' | 'newest' | 'oldest' | 'updated' | 'popular'
 
 export interface PagerData {

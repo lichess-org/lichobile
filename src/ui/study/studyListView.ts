@@ -1,10 +1,60 @@
 import * as h from 'mithril/hyperscript'
 import spinner from '../../spinner'
+import { PagerCategory, PagerOrder } from '../../lichess/interfaces/study'
 import * as helper from '../helper'
 
 import StudyListCtrl, { PagerDataWithDate } from './StudyListCtrl'
 
 export default function studyListView(ctrl: StudyListCtrl) {
+  return h('div.study-pagerWrapper', [
+    h('div.study-pagerSubHeader', [
+      h('div.study-pagerSelectWrapper', [
+        h('div.categories',
+          h('select.study-pagerSelect', {
+            value: ctrl.cat,
+            onchange: ctrl.onCatChange,
+          }, categories.map(c =>
+            h('option', {
+              key: c[0],
+              value: c[0],
+            }, c[1])
+          ))
+        ),
+        h('div.orders',
+          h('select.study-pagerSelect', {
+            value: ctrl.order,
+            onchange: ctrl.onOrderChange,
+          }, orders.map(o =>
+            h('option', {
+              key: o[0],
+              value: o[0],
+            }, o[1])
+          ))
+        ),
+      ]),
+      h('div.main_header_drop_shadow')
+    ]),
+    studyList(ctrl)
+  ])
+}
+
+const categories: ReadonlyArray<[PagerCategory, string]> = [
+  ['all', 'All studies'],
+  ['mine', 'My studies'],
+  ['member', 'Studies I contribue to'],
+  ['public', 'My public studies'],
+  ['private', 'My private studies'],
+  ['likes', 'Favourite studies'],
+]
+
+const orders: ReadonlyArray<[PagerOrder, string]> = [
+  ['hot', 'Hot'],
+  ['newest', 'Date added (newest)'],
+  ['updated', 'Recently updated'],
+  ['popular', 'Most popular'],
+]
+
+function studyList(ctrl: StudyListCtrl) {
   const studies = ctrl.state ? ctrl.state.studies : []
 
   return h('div#scroller-wrapper.native_scroller.study-pagerScroller', {
@@ -52,10 +102,10 @@ const Item = {
         h('ul.chapters', study.chapters.map(c =>
           h('li', [h('span.fa.fa-circle-o'), c])
         )),
-        h('ul.members', study.members.map(m =>
+        h('ul.members', study.members.filter(m => m.user !== null).map(m =>
           h('li.withIcon', {
             'data-icon': m.role === 'w' ? '' : 'v'
-          }, m.user.name)
+          }, m.user!.name)
         )),
       ])
     ])

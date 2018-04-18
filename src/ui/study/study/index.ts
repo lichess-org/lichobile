@@ -64,7 +64,8 @@ export default {
   },
 
   oncreate(vnode) {
-    if (router.get().startsWith('/study')) {
+    // don't want to slide when changing chapter
+    if (router.getPreviousPath().startsWith('/study/')) {
       helper.elFadeIn(vnode.dom as HTMLElement)
     } else {
       helper.pageSlideIn(vnode.dom as HTMLElement)

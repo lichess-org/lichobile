@@ -80,6 +80,19 @@
     font-weight bold
 
 
+.study-pagerWrapper
+  flex 1 1 auto
+  display flex
+  flex-flow column nowrap
+
+.study-pagerSubHeader
+  flex 0 0 40px
+  margin 0
+  background headerBgDark
+  position relative
+  display flex
+  align-items center
+
 .study-pagerScroller
   flex 1 1 auto
   display flex
@@ -102,6 +115,7 @@
   display flex
   flex-flow row nowrap
   align-items center
+  overflow hidden
   > i
     flex 0 0 40px
     display flex
@@ -116,12 +130,14 @@
     display flex
     flex-flow column nowrap
     justify-content center
+    overflow hidden
+    text-overflow ellipsis
     > h2
       white-space nowrap
       overflow hidden
       text-overflow ellipsis
       color blue
-      font-size 1.2em
+      font-size 1.1em
       line-height 1.1em
     > h3
       font-size 0.85em
@@ -144,6 +160,24 @@
     flex 0 0 40%
     max-width 40%
 
+.study-pagerSelectWrapper
+  flex-grow 1
+  padding 0 15px 0 18px
+  display flex
+  flex-flow row nowrap
+  > .categories
+    flex 0 0 60%
+    margin-right 2%
+  > .orders
+    flex 0 0 38%
+
+.study-pagerSelect
+  width 100%
+  outline none
+  border 1px solid #323232
+  background transparent
+  height 36px
+  font-size 0.9em
 
 .view-container.light
   .study-tag

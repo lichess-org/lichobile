@@ -23,6 +23,8 @@ const router = new Rlite()
 let currentStateId: number = 0
 let viewSlideDirection = 'fwd'
 
+let previousPath: string = '/'
+
 export function defineRoutes(mountPoint: HTMLElement, routes: {[index: string]: Mithril.Component<any, any>}) {
   for (let route in routes) {
     const component = routes[route]
@@ -62,6 +64,7 @@ function processQuerystring(e?: PopStateEvent) {
     }
     currentStateId = e.state.id
   }
+  previousPath = get()
   const qs = window.location.search || '?='
   const matched = router.run(qs.slice(2))
   if (!matched) router.run('/')
@@ -89,9 +92,14 @@ function replacePath(path: string) {
   assignState(undefined, path)
 }
 
-function setQueryParams(params: StringMap) {
+function setQueryParams(params: StringMap, newState = false) {
   const path = get().replace(/\?.+$/, '')
-  replacePath(path + `?${serializeQueryParameters(params)}`)
+  const newPath = path + `?${serializeQueryParameters(params)}`
+  if (newState) {
+    set(newPath, true)
+  } else {
+    replacePath(newPath)
+  }
 }
 
 const backbutton = (() => {
@@ -130,6 +138,7 @@ const backbutton = (() => {
 function doSet(path: string, replace = false) {
   // reset backbutton stack when changing route
   backbutton.stack = []
+  previousPath = get()
   if (replace) {
     replacePath(path)
   } else {
@@ -178,5 +187,8 @@ export default {
   getViewSlideDirection(): string {
     return viewSlideDirection
   },
-  backbutton
+  backbutton,
+  getPreviousPath(): string {
+    return previousPath
+  },
 }

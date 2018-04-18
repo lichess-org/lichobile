@@ -1,7 +1,7 @@
 import redraw from '../../utils/redraw'
 import router from '../../router'
 import { Paginator } from '../../lichess/interfaces'
-import { PagerData } from '../../lichess/interfaces/study'
+import { PagerData, PagerCategory, PagerOrder } from '../../lichess/interfaces/study'
 import * as xhr from './studyXhr'
 
 export interface PagerDataWithDate extends PagerData {
@@ -16,8 +16,11 @@ interface State {
 export default class StudyListCtrl {
   public state: State | undefined
 
-  public constructor() {
-    xhr.all()
+  public constructor(
+    public readonly cat: PagerCategory = 'all',
+    public readonly order: PagerOrder = 'hot'
+  ) {
+    xhr.list(this.cat, this.order)
     .then(data => {
       this.state = {
         studies: data.paginator.currentPageResults.map(s => {
@@ -33,7 +36,17 @@ export default class StudyListCtrl {
     })
   }
 
-  public goToStudy(id: string) {
+  public goToStudy(id: string): void {
     router.set(`/study/${id}`)
+  }
+
+  public readonly onCatChange = (e: Event): void => {
+    const cat = (e.target as HTMLSelectElement).value
+    router.setQueryParams({ cat }, true)
+  }
+
+  public readonly onOrderChange = (e: Event): void => {
+    const order = (e.target as HTMLSelectElement).value
+    router.setQueryParams({ order }, true)
   }
 }

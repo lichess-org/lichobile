@@ -60,7 +60,7 @@ export default {
             h('span.bullet.fa', {
               className: memb.role === 'w' ? 'fa-user' : 'fa-eye'
             }),
-            h('span', memb.user.name)
+            h('span', memb.user ? memb.user.name : 'Anonymous')
           ])
         )) : null,
         h('h2.study-menu-title', `${study.chapters.length} chapters`),
@@ -70,7 +70,9 @@ export default {
             const id = el && (el.dataset as DataSet).id
             if (id) {
               studyCtrl.sideMenu.close()
-              .then(() => router.set(`/study/${study.id}/chapter/${id}`))
+              .then(() => {
+                router.set(`/study/${study.id}/chapter/${id}`, true)
+              })
             }
           }, undefined, helper.getLI)
         }, study.chapters.map((c, i) => {

@@ -1,5 +1,6 @@
 import * as h from 'mithril/hyperscript'
 import router from '../../../../router'
+import { lightPlayerName } from '../../../../lichess/player'
 import { StudyMemberMap, StudyMember } from '../../../../lichess/interfaces/study'
 import * as helper from '../../../helper'
 import CloseSlideHandler from '../../../shared/sideMenu/CloseSlideHandler'
@@ -60,7 +61,7 @@ export default {
             h('span.bullet.fa', {
               className: memb.role === 'w' ? 'fa-user' : 'fa-eye'
             }),
-            h('span', memb.user ? memb.user.name : 'Anonymous')
+            h('span', memb.user ? lightPlayerName(memb.user) : '?')
           ])
         )) : null,
         h('h2.study-menu-title', `${study.chapters.length} chapters`),

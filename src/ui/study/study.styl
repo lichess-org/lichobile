@@ -146,8 +146,9 @@
   display flex
   flex-flow row nowrap
   justify-content space-between
-  margin-top 1.2em
+  margin-top 1em
   font-size 0.85em
+  line-height 16px
   > .chapters > li, > .members li
     white-space: nowrap
     overflow: hidden
@@ -185,6 +186,10 @@
       color rgba(textLightBg, 0.8)
     &:nth-child(even)
       background-color darken(#fff, 3%)
+  .study-pagerItem.even
+    background-color bglightEven
+  .study-pagerSubHeader
+    color headerBgDarkColor
 
 
 .view-container.transp

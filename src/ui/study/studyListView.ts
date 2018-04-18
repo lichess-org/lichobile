@@ -1,5 +1,7 @@
 import * as h from 'mithril/hyperscript'
+import * as throttle from 'lodash/throttle'
 import spinner from '../../spinner'
+import * as playerApi from '../../lichess/player'
 import { PagerCategory, PagerOrder } from '../../lichess/interfaces/study'
 import * as helper from '../helper'
 
@@ -58,11 +60,14 @@ function studyList(ctrl: StudyListCtrl) {
   const studies = ctrl.state ? ctrl.state.studies : []
 
   return h('div#scroller-wrapper.native_scroller.study-pagerScroller', {
+    onscroll: throttle(ctrl.onScroll, 30),
     oncreate: helper.ontapY(e => onTap(ctrl, e!), undefined, helper.getLI)
   }, studies.length ?
-    h('ul', studies.map((study, index) =>
+    h('ul', {
+      oncreate: ctrl.afterLoad,
+    }, [...studies.map((study, index) =>
       h(Item, { study, index })
-    )) :
+    ), ctrl.state.isLoading ? h('li.study-pagerItem', 'loading...') : []]) :
     h('div.study-pagerLoader', spinner.getVdom('monochrome'))
   )
 }
@@ -81,6 +86,7 @@ const Item = {
   },
   view({ attrs }) {
     const { study, index } = attrs
+    const ownerName = study.owner ? playerApi.lightPlayerName(study.owner) : '?'
 
     return h('li.study-pagerItem', {
       className: index % 2 === 0 ? 'even' : 'odd',
@@ -94,7 +100,7 @@ const Item = {
             h('i.fa', {
               className: study.liked ? 'fa-heart' : 'fa-heart-o'
             }),
-            h('span', ` ${study.likes} • ${study.owner.name} • ${study.date}`)
+            h('span', ` ${study.likes} • ${ownerName} • ${study.date}`)
           ])
         ])
       ]),
@@ -105,7 +111,7 @@ const Item = {
         h('ul.members', study.members.filter(m => m.user !== null).map(m =>
           h('li.withIcon', {
             'data-icon': m.role === 'w' ? '' : 'v'
-          }, m.user!.name)
+          }, playerApi.lightPlayerName(m.user!))
         )),
       ])
     ])

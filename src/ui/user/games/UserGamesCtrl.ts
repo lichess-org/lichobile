@@ -1,3 +1,4 @@
+import * as debounce from 'lodash/debounce'
 import { handleXhrError } from '../../../utils'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import { positionsCache } from '../../../utils/gamePosition'
@@ -7,7 +8,6 @@ import session from '../../../session'
 import * as xhr from '../userXhr'
 import { toggleGameBookmark } from '../../../xhr'
 import redraw from '../../../utils/redraw'
-import * as debounce from 'lodash/debounce'
 import { Paginator } from '../../../lichess/interfaces'
 import { GameFilter, UserFullProfile, UserGameWithDate } from '../../../lichess/interfaces/user'
 

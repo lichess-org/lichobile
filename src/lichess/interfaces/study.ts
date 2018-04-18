@@ -127,7 +127,7 @@ export interface PagerData {
   readonly updatedAt: Timestamp
   readonly liked: boolean
   readonly likes: number
-  readonly owner: LightUser
+  readonly owner: LightUser | null
   readonly chapters: ReadonlyArray<string>
   readonly members: ReadonlyArray<StudyMember>
 }

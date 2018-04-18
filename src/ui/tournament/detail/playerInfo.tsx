@@ -64,7 +64,7 @@ export default {
     const avgOpRating = pairings.length ? (pairings.reduce((prev, x) => prev + x.op.rating, 0) / pairings.length).toFixed(0) : '0'
 
 
-    function renderPlayerGame (game: PlayerInfoPairing, index: number, gameArray: Array<PlayerInfoPairing>) {
+    function renderPlayerGame(game: PlayerInfoPairing, index: number, gameArray: Array<PlayerInfoPairing>) {
       let outcome: string | number
       let outcomeClass = 'oppOutcome'
       if (game.score === undefined || game.score === null) {
@@ -81,7 +81,7 @@ export default {
         outcome = game.score
       }
       return (
-        <tr className="list_item bglight" key={game.id} oncreate={helper.ontap(() => router.set('/game/' + game.id + '/' + game.color + '?goingBack=1'))}>
+        <tr className="list_item bglight" data-id={game.id} data-color={game.color} key={game.id}>
           <td className="oppRank"> {gameArray.length - index} </td>
           <td className="oppName"> {game.op.name} </td>
           <td className="oppRating"> {game.op.rating} </td>
@@ -157,7 +157,16 @@ export default {
             </table>
           </div>
           <div className="tournamentPlayerGames">
-            <table className="playerGames">
+            <table className="playerGames"
+              oncreate={helper.ontapY(e => {
+                const el = helper.getTR(e)
+                if (el) {
+                  const id = el.dataset.id
+                  const color = el.dataset.color
+                  router.set(`/game/${id}?color=${color}&goingBack=1`)
+                }
+              }, undefined, helper.getTR)}
+            >
               {pairings.map(renderPlayerGame)}
             </table>
           </div>

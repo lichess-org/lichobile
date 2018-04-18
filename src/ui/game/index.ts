@@ -22,6 +22,7 @@ import { connectingHeader, viewOnlyBoardContent, loadingBackbutton } from '../sh
 
 interface Attrs {
   id: string
+  color?: Color
   goingBack?: string
 }
 
@@ -37,7 +38,7 @@ const GameScreen: Mithril.Component<Attrs, State> = {
 
     if (hasNetwork()) {
       const now = performance.now()
-      gameXhr(attrs.id)
+      gameXhr(attrs.id, attrs.color)
       .then(data => {
         gameData = data
 

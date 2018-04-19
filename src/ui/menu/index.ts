@@ -18,7 +18,7 @@ function onMenuOpen() {
   if (hasNetwork()) {
     socket.send('moveLat', true)
   }
-  pingsTimeoutID = setTimeout(getServerLags, 1000)
+  pingsTimeoutID = setTimeout(getServerLags, 2000)
 }
 
 function onMenuClose() {
@@ -71,7 +71,7 @@ export function getServerLags() {
       mlat(socket.getCurrentMoveLatency())
       if (mainMenuCtrl.isOpen) {
         redraw()
-        setTimeout(getServerLags, 1000)
+        setTimeout(getServerLags, 2000)
       }
     })
   }

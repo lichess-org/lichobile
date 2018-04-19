@@ -28,10 +28,10 @@ export const LoadingBoard = {
 }
 
 export function menuButton() {
-  return (
-    <button key="main-menu" className="fa fa-navicon main_header_button menu_button" oncreate={helper.ontap(menu.mainMenuCtrl.toggle)}>
-    </button>
-  )
+  return h('button.fa.fa-navicon.main_header_button.menu_button', {
+    key: 'main-menu',
+    oncreate: helper.ontap(menu.mainMenuCtrl.toggle)
+  })
 }
 
 export function backButton(title?: Mithril.BaseNode | string): Mithril.Children {

@@ -6,7 +6,6 @@ export type Side = 'left' | 'right'
 
 export default class SideMenuCtrl {
   public isOpen: boolean = false
-  public isSliding: boolean = false
   public readonly side: Side
 
   private readonly menuID: string

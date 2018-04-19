@@ -43,7 +43,6 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): HammerHandlers {
           state.menuElement.style.visibility = 'visible'
           state.backDropElement.style.visibility = 'visible'
           state.canSlide = true
-          ctrl.isSliding = true
           redraw()
         }
       }
@@ -70,7 +69,6 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): HammerHandlers {
 
     'panend pancancel': (e: HammerInput) => {
       if (state.canSlide) {
-        ctrl.isSliding = false
         state.canSlide = false
         const velocity = e.velocityX
         const delta = e.deltaX

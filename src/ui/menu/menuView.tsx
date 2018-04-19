@@ -23,7 +23,7 @@ const pingHelp = 'PING: Network lag between you and lichess; SERVER: Time to pro
 
 export default {
   onbeforeupdate() {
-    return menu.mainMenuCtrl.isOpen || menu.mainMenuCtrl.isSliding
+    return menu.mainMenuCtrl.isOpen
   },
   view() {
     const user = session.get()
@@ -115,13 +115,9 @@ const popupActionMap: { [index: string]: () => void } = {
   machine: () => playMachineForm.open()
 }
 
-interface MenuLinkDataset extends DOMStringMap {
-  route?: string
-  popup?: string
-}
 function onLinkTap(e: Event) {
   const el = helper.getLI(e)
-  const ds = el.dataset as MenuLinkDataset
+  const ds = el.dataset
   if (el && ds.route) {
     menu.route(ds.route)()
   } else if (el && ds.popup) {

@@ -30,7 +30,7 @@ export default {
 
   onbeforeupdate({ attrs }) {
     const sm = attrs.studyCtrl.sideMenu
-    return sm.isOpen || sm.isSliding
+    return sm.isOpen
   },
 
   view({ attrs }) {

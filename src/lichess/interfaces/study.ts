@@ -12,9 +12,9 @@ export interface Study {
   readonly visibility: 'public' | 'private' | 'unlisted'
   readonly createdAt: number
   readonly from: string
-  readonly likes: number
+  likes: number
   readonly isNew?: boolean
-  readonly liked: boolean
+  liked: boolean
   readonly features: StudyFeatures
   readonly chapters: ReadonlyArray<StudyChapterMeta>
   readonly chapter: StudyChapter

@@ -156,7 +156,9 @@ export default class AnalyseCtrl {
     this.shouldGoBack = shouldGoBack
     this.formattedDate = gameMoment.format('L LT')
 
-    if (
+    if (this.study) {
+      this.study.createSocket()
+    } else if (
       !this.data.analysis && session.isConnected() &&
       isOnlineAnalyseData(this.data) && gameApi.analysable(this.data)
     ) {

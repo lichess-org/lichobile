@@ -87,6 +87,17 @@ function renderStudyMenu(ctrl: AnalyseCtrl) {
         ctrl.study!.actionMenu.s.showShareMenu = true
       })
     }, [h('span.fa.fa-share'), 'Share']),
+    h('button', {
+      key: 'like',
+      oncreate: helper.ontap(ctrl.study!.toggleLike)
+    }, [
+      h('span', ctrl.study!.data.likes),
+      h.trust('&nbsp;'),
+      h('span.fa', {
+        className: ctrl.study!.data.liked ? 'fa-heart' : 'fa-heart-o'
+      }),
+      'Like'
+    ]),
   ])
 }
 

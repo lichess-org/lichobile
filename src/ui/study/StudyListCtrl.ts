@@ -15,6 +15,8 @@ interface State {
   studies: ReadonlyArray<PagerDataWithDate>
   paginator?: Paginator<PagerData>
   scrollPos: number
+  showSearch: boolean
+  canCancelSearch: boolean
   isLoading: boolean
   readonly stateId: string
 }
@@ -28,15 +30,19 @@ export default class StudyListCtrl {
 
   public constructor(
     public readonly cat: PagerCategory = 'all',
-    public readonly order: PagerOrder = 'hot'
+    public readonly order: PagerOrder = 'hot',
+    public readonly q?: string
   ) {
 
     this.state = {
       studies: [],
       paginator: undefined,
       scrollPos: 0,
+      showSearch: !!this.q,
+      canCancelSearch: !!this.q,
       isLoading: false,
-      stateId: this.cat + this.order,
+      // a search query has precedence over cat and order
+      stateId: this.q || this.cat + this.order,
     }
 
     this.cacheAvailable = cachedState ?
@@ -49,8 +55,8 @@ export default class StudyListCtrl {
         redraw()
       }, 300)
     } else {
-      xhr.list(this.cat, this.order)
-      .then(data => {
+      const req = this.q ? xhr.search(this.q) : xhr.list(this.cat, this.order)
+      req.then(data => {
         this.state.studies = data.paginator.currentPageResults.map(addDate)
         this.state.paginator = data.paginator
 
@@ -62,6 +68,29 @@ export default class StudyListCtrl {
 
   public goToStudy(id: string): void {
     router.set(`/study/${id}`)
+  }
+
+  public readonly toggleSearch = (): void => {
+    this.state.showSearch = !this.state.showSearch
+  }
+
+  public readonly canCancelSearch = (enabled: boolean): void => {
+    this.state.canCancelSearch = enabled
+  }
+
+  public readonly cancelSearch = (): void => {
+    if (this.q) {
+      router.setQueryParams({ cat: this.cat, order: this.order }, true)
+    } else {
+      this.state.showSearch = false
+    }
+  }
+
+  public readonly onSearch = (e: Event): void => {
+    e.preventDefault()
+    e.stopPropagation()
+    const q = (e.target as HTMLFormElement)[0].value.trim()
+    router.setQueryParams({ q }, true)
   }
 
   public readonly onCatChange = (e: Event): void => {
@@ -102,8 +131,8 @@ export default class StudyListCtrl {
 
   private readonly loadNextPage = (page: number) => {
     this.state.isLoading = true
-    xhr.list(this.cat, this.order, page)
-    .then(data => {
+    const req = this.q ? xhr.search(this.q, page) : xhr.list(this.cat, this.order, page)
+    req.then(data => {
       this.state.paginator = data.paginator
       this.state.isLoading = false
       this.state.studies = this.state.studies.concat(data.paginator.currentPageResults.map(addDate))

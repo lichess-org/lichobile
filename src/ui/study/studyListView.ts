@@ -1,39 +1,68 @@
 import * as h from 'mithril/hyperscript'
 import * as throttle from 'lodash/throttle'
+import * as debounce from 'lodash/debounce'
+import redraw from '../../utils/redraw'
 import spinner from '../../spinner'
 import * as playerApi from '../../lichess/player'
 import { PagerCategory, PagerOrder } from '../../lichess/interfaces/study'
 import * as helper from '../helper'
+import { closeIcon } from '../shared/icons'
 
 import StudyListCtrl, { PagerDataWithDate } from './StudyListCtrl'
 
 export default function studyListView(ctrl: StudyListCtrl) {
   return h('div.study-pagerWrapper', [
     h('div.study-pagerSubHeader', [
-      h('div.study-pagerSelectWrapper', [
-        h('div.categories',
-          h('select.study-pagerSelect', {
-            value: ctrl.cat,
-            onchange: ctrl.onCatChange,
-          }, categories.map(c =>
-            h('option', {
-              key: c[0],
-              value: c[0],
-            }, c[1])
-          ))
-        ),
-        h('div.orders',
-          h('select.study-pagerSelect', {
-            value: ctrl.order,
-            onchange: ctrl.onOrderChange,
-          }, orders.map(o =>
-            h('option', {
-              key: o[0],
-              value: o[0],
-            }, o[1])
-          ))
-        ),
-      ]),
+      ctrl.state.showSearch ?
+        h('form.study-pagerSearchWrapper', {
+          onsubmit: ctrl.onSearch
+        }, [
+          h('div.inputWrapper', [
+            h('input#studySearch[type=search]', {
+              placeholder: 'Search studies',
+              autocapitalize: 'off',
+              autocomplete: 'off',
+              oncreate: helper.autofocus,
+              value: ctrl.q,
+              oninput: debounce((e: Event) => {
+                const val = (e.target as HTMLInputElement).value.trim()
+                ctrl.canCancelSearch(val.length > 0)
+                redraw()
+              }, 200, { leading: true, trailing: true })
+            }),
+            ctrl.state.canCancelSearch ? h('div.cancel', {
+              oncreate: helper.ontap(ctrl.cancelSearch)
+            }, closeIcon) : null,
+          ]),
+          h('button', 'Search'),
+        ]) :
+        h('div.study-pagerSelectWrapper', [
+          h('div.categories',
+            h('select.study-pagerSelect', {
+              value: ctrl.cat,
+              onchange: ctrl.onCatChange,
+            }, categories.map(c =>
+              h('option', {
+                key: c[0],
+                value: c[0],
+              }, c[1])
+            ))
+          ),
+          h('div.orders',
+            h('select.study-pagerSelect', {
+              value: ctrl.order,
+              onchange: ctrl.onOrderChange,
+            }, orders.map(o =>
+              h('option', {
+                key: o[0],
+                value: o[0],
+              }, o[1])
+            ))
+          ),
+        ]),
+      h('div.study-pagerToggleSearch.fa.fa-search', {
+        oncreate: helper.ontap(ctrl.toggleSearch)
+      }),
       h('div.main_header_drop_shadow')
     ]),
     studyList(ctrl)
@@ -62,12 +91,15 @@ function studyList(ctrl: StudyListCtrl) {
   return h('div#scroller-wrapper.native_scroller.study-pagerScroller', {
     onscroll: throttle(ctrl.onScroll, 30),
     oncreate: helper.ontapY(e => onTap(ctrl, e!), undefined, helper.getLI)
-  }, studies.length ?
-    h('ul', {
-      oncreate: ctrl.afterLoad,
-    }, [...studies.map((study, index) =>
-      h(Item, { study, index })
-    ), ctrl.state.isLoading ? h('li.study-pagerItem', 'loading...') : []]) :
+  },
+    ctrl.state.paginator ?
+      studies.length ?
+        h('ul', {
+          oncreate: ctrl.afterLoad,
+        }, [...studies.map((study, index) =>
+          h(Item, { study, index })
+        ), ctrl.state.isLoading ? h('li.study-pagerItem', 'loading...') : []]) :
+          h('div.study-pagerEmpty', 'None yet') :
     h('div.study-pagerLoader', spinner.getVdom('monochrome'))
   )
 }

@@ -88,9 +88,11 @@
 .study-pagerSubHeader
   flex 0 0 40px
   margin 0
+  padding-left 15px
   background headerBgDark
   position relative
   display flex
+  flex-flow row nowrap
   align-items center
 
 .study-pagerScroller
@@ -166,14 +168,23 @@
 
 .study-pagerSelectWrapper
   flex-grow 1
-  padding 0 15px 0 18px
   display flex
   flex-flow row nowrap
   > .categories
-    flex 0 0 60%
+    flex 1 1 auto
     margin-right 2%
   > .orders
     flex 0 0 38%
+
+.study-pagerToggleSearch
+  height 40px
+  display flex
+  justify-content center
+  align-items center
+  font-size 20px
+  flex 0 0 50px
+  &.active
+    background-color headerBgDarkActive
 
 .study-pagerSelect
   width 100%
@@ -182,6 +193,44 @@
   background transparent
   height 40px
   font-size 0.9em
+
+.study-pagerSearchWrapper
+  flex-grow 1
+  display flex
+  flex-flow row nowrap
+  align-items center
+  height 40px
+  > .inputWrapper
+    position relative
+    flex-grow 1
+    margin-right 5px
+    display flex
+    align-items center
+    > input
+      flex-grow 1
+      background-color lighten(bgdark, 3%)
+      outline none
+      border none
+      padding 0 34px 0 10px
+      height 40px
+    > .cancel
+      position absolute
+      right 4px
+      color lighten(textMediumGray, 10%)
+  > button
+    height 36px
+    flex 0 0 60px
+    padding-right 0
+    background linear-gradient(to bottom,rgba(40,40,40,1),rgba(34,34,34,1) 100%)
+    text-shadow 0 1px 0 #000
+    color #8a8a8a
+
+.study-pagerEmpty
+  flex-grow 1
+  display flex
+  justify-content center
+  align-items center
+
 
 .view-container.light
   .study-tag

@@ -10,6 +10,7 @@ import studyListView from './studyListView'
 interface Attrs {
   cat?: PagerCategory
   order?: PagerOrder
+  q?: string
 }
 
 interface State {
@@ -22,7 +23,7 @@ export default {
   oninit({ attrs }) {
     socket.createDefault()
 
-    this.ctrl = new StudyListCtrl(attrs.cat, attrs.order)
+    this.ctrl = new StudyListCtrl(attrs.cat, attrs.order, attrs.q)
   },
 
   view() {

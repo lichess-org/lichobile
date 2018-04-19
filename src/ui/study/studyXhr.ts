@@ -25,6 +25,20 @@ export function list(
   }, feedback)
 }
 
+export function search(
+  q: string,
+  page = 1,
+  feedback = false
+): Promise<StudyPager> {
+  return fetchJSON('/study/search', {
+    query: {
+      q,
+      page
+    }
+  }, feedback)
+}
+
+
 export function load(id: string, chapterId?: string): Promise<StudyXhrData> {
   return fetchJSON<StudyXhrData>(`/study/${id}` + (chapterId ? `/${chapterId}` : ''))
 }

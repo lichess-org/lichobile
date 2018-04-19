@@ -91,12 +91,11 @@ function renderStudyMenu(ctrl: AnalyseCtrl) {
       key: 'like',
       oncreate: helper.ontap(ctrl.study!.toggleLike)
     }, [
-      h('span', ctrl.study!.data.likes),
       h.trust('&nbsp;'),
       h('span.fa', {
         className: ctrl.study!.data.liked ? 'fa-heart' : 'fa-heart-o'
       }),
-      'Like'
+      `Like (${ctrl.study!.data.likes})`
     ]),
   ])
 }

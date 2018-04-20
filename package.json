@@ -17,7 +17,7 @@
         "ios"
     ],
     "author": "Vincent Velociter (https://github.com/veloce)",
-    "license": "MIT",
+    "license": "GPL-3.0-or-later",
     "bugs": {
         "url": "https://github.com/veloce/lichobile/issues"
     },

@@ -38,9 +38,8 @@ export default {
           }
         }}
       >
-        <div className="native_scroller">
-          {renderHeader(user)}
-          { hasNetwork() && user ? profileActionsToggle() : null }
+        {renderHeader(user)}
+        <div className="native_scroller side_menu_scroller">
           {user && menu.profileMenuOpen() ? renderProfileActions(user) : renderLinks(user)}
         </div>
       </aside>
@@ -68,6 +67,7 @@ function renderHeader(user?: Session) {
         </h2> : null
       }
       { networkStatus(user) }
+      { hasNetwork() && user ? profileActionsToggle() : null }
     </header>
   )
 }
@@ -263,31 +263,29 @@ function networkStatus(user?: Session) {
   const ping = menu.ping()
   const server = menu.mlat()
   return (
-    <div key="server-lag" className="pingServerLed"
+    <div key="server-lag" className="pingServer"
       oncreate={helper.ontapXY(() => window.plugins.toast.show(pingHelp, 'long', 'top'))}
     >
-      <div className="pingServer">
-        { signalBars(hasNetwork() ? ping : undefined)}
-        { hasNetwork() ? (
+      { signalBars(hasNetwork() ? ping : undefined)}
+      { hasNetwork() ? (
+          <div>
             <div>
+              <span className="pingKey">Ping&nbsp;&nbsp;&nbsp;</span>
+              <strong className="pingValue">{socket.isConnected() && ping ? ping : '?'}</strong> ms
+            </div>
+            { user ?
               <div>
-                <span className="pingKey">Ping&nbsp;&nbsp;&nbsp;</span>
-                <strong className="pingValue">{socket.isConnected() && ping ? ping : '?'}</strong> ms
-              </div>
-              { user ?
-                <div>
-                  <span className="pingKey">Server&nbsp;</span>
-                  <strong className="pingValue">{socket.isConnected() && server ? server : '?'}</strong> ms
-                </div> : null
-              }
-            </div>
-          ) : (
-            <div>
-              Offline
-            </div>
-          )
-        }
-      </div>
+                <span className="pingKey">Server&nbsp;</span>
+                <strong className="pingValue">{socket.isConnected() && server ? server : '?'}</strong> ms
+              </div> : null
+            }
+          </div>
+        ) : (
+          <div>
+            Offline
+          </div>
+        )
+      }
     </div>
   )
 }

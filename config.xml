@@ -132,6 +132,6 @@
     <plugin name="onesignal-cordova-plugin" spec="2.2.4" />
     <plugin name="cordova-plugin-network-information" spec="2.0.1" />
     <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#v1.6.0" />
-    <engine name="android" spec="7.0.0" />
+    <engine name="android" spec="6.2.2" />
     <engine name="ios" spec="4.5.4" />
 </widget>

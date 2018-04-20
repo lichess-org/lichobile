@@ -22,8 +22,8 @@ android:
 install:
     - npm install -g npm
     - npm install -g cordova
-    - cordova platform add android
     - npm install
+    - cordova platform add android
 script:
     - npm run lint
     - npm run test

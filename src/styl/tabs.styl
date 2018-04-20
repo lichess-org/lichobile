@@ -49,3 +49,16 @@
   visibility hidden
   &.current
     visibility visible
+
+
+.view-container.light
+  .tabs-navigation
+    background-color themeBgLight
+  .tab-button
+    color inherit
+    &.active
+      background-color darken(themeBgLight, 5%)
+    &.selected
+      color goldDark
+  .tabIndicator
+    background-color goldDark

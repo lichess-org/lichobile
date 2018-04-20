@@ -2,6 +2,33 @@
   main
     color textLightBg
 
+  .main_header
+    color textLightBg
+    background-color themeBgLight
+
+  .main_header_button
+    &.active
+      background themeBgLightActive
+
+  .back_button
+    > button.active
+      background themeBgLightActive
+
+  .main_footer
+    border-top 1px solid borderLightGray
+
+  .header-subTitle
+    color rgba(textLightBg, 0.8)
+
+  .chip, .main_header.board .chip
+    color themeBgLight
+    border-color themeBgLight
+    background-color goldDark
+
+  .main_header-selector
+    color lighten(textLightBg, 5%)
+
+
   #page
     background themeBgLight
 
@@ -41,14 +68,11 @@
         color #fff
 
   .list_item
-    border-bottom-color #ddd
+    border-bottom-color themeBgLightBorder
     &.even
       background-color bglightEven
     &.active
       background-color themeBgLightActive
-
-  .ranking
-    border-bottom-color borderLightGray
 
   .playTable
     color textDarkGray

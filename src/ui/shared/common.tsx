@@ -168,6 +168,22 @@ export function connectingHeader(title?: string) {
   )
 }
 
+export function connectingDropShadowHeader(title?: string) {
+  return [
+    h('nav', [
+      menuButton(),
+      h('div.main_header_title.reconnecting', {
+        className: title ? 'withTitle' : '',
+        key: 'connecting-title',
+      }),
+      title ? h('div.main_header_title', { key: 'title' }, title) : null,
+      headerBtns()
+    ]),
+    h('div.main_header_drop_shadow')
+  ]
+}
+
+
 export function loadingBackbutton(title?: string) {
   return (
     <nav>

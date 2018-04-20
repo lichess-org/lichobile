@@ -1,6 +1,6 @@
 import redraw from '../../../utils/redraw'
 import { viewportDim } from '../../helper'
-import { getMenuWidth, translateMenu, backdropOpacity, EDGE_SLIDE_THRESHOLD, OPEN_AFTER_SLIDE_RATIO } from '.'
+import { getMenuWidth, translateMenu, backdropOpacity, EDGE_SLIDE_THRESHOLD, OPEN_AFTER_SLIDE_RATIO, BACKDROP_OPACITY } from '.'
 
 import SideMenuCtrl, { Side } from './SideMenuCtrl'
 
@@ -56,12 +56,12 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): HammerHandlers {
         if (side === 'left') {
           if (delta <= menuWidth) {
             translateMenu(state.menuElement!, -menuWidth + delta)
-            backdropOpacity(state.backDropElement!, (delta / menuWidth * 100) / 100 / 2)
+            backdropOpacity(state.backDropElement!, (delta / menuWidth * 100) / 100 * BACKDROP_OPACITY)
           }
         } else {
           if (delta >= -menuWidth) {
             translateMenu(state.menuElement!, menuWidth + delta)
-            backdropOpacity(state.backDropElement!, (-delta / menuWidth * 100) / 100 / 2)
+            backdropOpacity(state.backDropElement!, (-delta / menuWidth * 100) / 100 * BACKDROP_OPACITY)
           }
         }
       }

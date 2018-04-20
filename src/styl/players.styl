@@ -54,7 +54,6 @@
 .ranking
   width 100%
   padding 15px
-  border-bottom 1px solid lighten(bgdark, 8%)
   @media only screen and (min-width 600px)
     flex 0 1 250px
 
@@ -105,13 +104,21 @@
 
 .view-container.light
   #searchPlayersModal
+    > header
+      background-color themeBgLight
+      color textLightBg
+      > button
+        color lighten(textLightBg, 25%)
     > .modal_content
       color textLightBg
       background-color themeBgLight
     .list_item
-      border-bottom-color borderLightGray
+      border-bottom-color themeBgLightBorder
       &.active
         background-color darken(bglight, 5%)
+
+  .search_input > input
+    color textMediumGray
 
 .view-container.transp
   .ranking

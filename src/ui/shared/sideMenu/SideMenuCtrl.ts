@@ -2,6 +2,8 @@ import * as Zanimo from 'zanimo'
 import redraw from '../../../utils/redraw'
 import router from '../../../router'
 
+import { BACKDROP_OPACITY } from '.'
+
 export type Side = 'left' | 'right'
 
 export default class SideMenuCtrl {
@@ -35,7 +37,7 @@ export default class SideMenuCtrl {
     if (this.onOpen) this.onOpen()
     return Promise.all([
       Zanimo(bd, 'visibility', 'visible', 0),
-      Zanimo(bd, 'opacity', 0.5, 250, 'linear'),
+      Zanimo(bd, 'opacity', BACKDROP_OPACITY, 250, 'linear'),
       Zanimo(el, 'visibility', 'visible', 0),
       Zanimo(
         el,

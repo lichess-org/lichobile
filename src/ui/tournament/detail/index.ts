@@ -1,7 +1,8 @@
 import * as h from 'mithril/hyperscript'
 import socket from '../../../socket'
 import i18n from '../../../i18n'
-import { header as headerWidget, backButton, connectingHeader } from '../../shared/common'
+import { dropShadowHeader as headerWidget, backButton, connectingDropShadowHeader } from '../../shared/common'
+import * as helper from '../../helper'
 import layout from '../../layout'
 import { tournamentBody, renderPlayerInfoOverlay, renderFAQOverlay, renderFooter, timeInfo } from './tournamentView'
 
@@ -20,10 +21,14 @@ export default {
   oninit({ attrs }) {
     this.ctrl = new TournamentCtrl(attrs.id)
   },
+
+  oncreate: helper.viewSlideIn,
+
   onremove() {
     socket.destroy()
     this.ctrl.unload()
   },
+
   view() {
     if (this.ctrl.notFound) {
       return layout.free(
@@ -53,7 +58,7 @@ export default {
         ]))
       )
     } else {
-      header = connectingHeader()
+      header = connectingDropShadowHeader()
     }
 
     const body = tournamentBody(this.ctrl)

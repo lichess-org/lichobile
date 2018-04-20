@@ -1,6 +1,6 @@
 import * as Hammer from 'hammerjs'
 
-import { getMenuWidth, translateMenu, backdropOpacity, OPEN_AFTER_SLIDE_RATIO } from '.'
+import { getMenuWidth, translateMenu, backdropOpacity, OPEN_AFTER_SLIDE_RATIO, BACKDROP_OPACITY } from '.'
 import SideMenuCtrl from './SideMenuCtrl'
 
 interface CloseSlideHandlerState {
@@ -50,12 +50,12 @@ export default function CloseSlideHandler(el: HTMLElement, ctrl: SideMenuCtrl) {
       if (side === 'left') {
         if (e.deltaX < 0 && e.deltaX >= -menuWidth) {
           translateMenu(el, e.deltaX)
-          backdropOpacity(state.backDropElement!, ((menuWidth + e.deltaX) / menuWidth * 100) / 100 / 2)
+          backdropOpacity(state.backDropElement!, ((menuWidth + e.deltaX) / menuWidth * 100) / 100 * BACKDROP_OPACITY)
         }
       } else {
         if (e.deltaX > 0 && e.deltaX <= menuWidth) {
           translateMenu(el, e.deltaX)
-          backdropOpacity(state.backDropElement!, ((menuWidth - e.deltaX) / menuWidth * 100) / 100 / 2)
+          backdropOpacity(state.backDropElement!, ((menuWidth - e.deltaX) / menuWidth * 100) / 100 * BACKDROP_OPACITY)
         }
       }
     }

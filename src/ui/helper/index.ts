@@ -359,6 +359,10 @@ export function getTR(e: Event) {
   return target.tagName === 'TR' ? target : findParentBySelector(target, 'tr')
 }
 
+export function getByClass(className: string): (e: Event) => HTMLElement {
+  return (e: Event) => findElByClassName(e, className)
+}
+
 export function findElByClassName(e: Event, className: string) {
   const target = (e.target as HTMLElement)
   return target.classList.contains(className) ?

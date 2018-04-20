@@ -132,7 +132,7 @@
 .analyse-replay
   flex 1 1 auto
   position relative
-  font-size 0.9rem
+  font-size 1rem
   white-space normal
   line-height 1.05em
   &.displayPieces
@@ -169,6 +169,7 @@ move
   overflow hidden
   white-space nowrap
   border-radius 3px
+  font-weight bold
   &.current
     color #fff
     background rgba(blue, 0.8)
@@ -229,8 +230,8 @@ inline
 
 comment
   display inline
-  font-size 0.8em
-  color rgba(textDarkBg, 0.8)
+  font-size 0.9em
+  color rgba(textDarkBg, 0.7)
   margin 0 0.2em 0 0.1em
   word-wrap break-word
   vertical-align 45%
@@ -305,8 +306,11 @@ comment
     background-color inherit
     border-right 1px solid borderLightGray
 
-  inline, comment
+  inline
     color rgba(textLightBg, 0.8)
+
+  comment
+    color rgba(textLightBg, 0.7)
 
   index
     color rgba(textLightBg, 0.5)

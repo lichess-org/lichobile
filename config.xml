@@ -109,7 +109,7 @@
     <plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" spec="https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface" />
     <plugin name="cordova-plugin-app-event" spec="git+https://github.com/katzer/cordova-plugin-app-event.git#1.2.1" />
     <plugin name="cordova-plugin-appversion" spec="1.0.0" />
-    <plugin name="cordova-plugin-crosswalk-webview" spec="2.3.0">
+    <plugin name="cordova-plugin-crosswalk-webview" spec="2.4.0">
         <variable name="XWALK_MODE" value="embedded" />
         <variable name="XWALK_MULTIPLEAPK" value="true" />
     </plugin>

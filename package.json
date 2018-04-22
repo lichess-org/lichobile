@@ -72,6 +72,7 @@
         "cordova-plugin-whitelist": "1.3.1",
         "cordova-plugin-x-socialsharing": "5.1.3",
         "cordova-plugin-x-toast": "2.5.2",
+        "cordova-universal-links-plugin": "git+https://github.com/veloce/cordova-universal-links-plugin.git#c494fe1",
         "d3-axis": "1.0.8",
         "d3-scale": "1.0.6",
         "d3-selection": "1.1.0",
@@ -142,7 +143,8 @@
             "cordova-plugin-stockfish": {},
             "cordova-plugin-ionic-keyboard": {},
             "cordova-plugin-file": {},
-            "onesignal-cordova-plugin": {}
+            "onesignal-cordova-plugin": {},
+            "cordova-universal-links-plugin": {}
         }
     },
     "jest": {

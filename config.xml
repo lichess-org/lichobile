@@ -125,6 +125,7 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="2.0.5" />
     <plugin name="cordova-plugin-file" spec="6.0.1" />
     <plugin name="onesignal-cordova-plugin" spec="2.3.3" />
+    <plugin name="cordova-universal-links-plugin" spec="https://github.com/veloce/cordova-universal-links-plugin.git#c494fe1" />
     <engine name="ios" spec="4.5.4" />
     <engine name="android" spec="7.1.0" />
 </widget>

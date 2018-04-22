@@ -107,31 +107,24 @@
         </host>
     </universal-links>
     <plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" spec="https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface" />
-    <plugin name="cordova-plugin-app-event" spec="git+https://github.com/katzer/cordova-plugin-app-event.git#1.2.1" />
     <plugin name="cordova-plugin-appversion" spec="1.0.0" />
-    <plugin name="cordova-plugin-crosswalk-webview" spec="2.4.0">
-        <variable name="XWALK_MODE" value="embedded" />
-        <variable name="XWALK_MULTIPLEAPK" value="true" />
-    </plugin>
     <plugin name="cordova-plugin-device" spec="1.1.4" />
     <plugin name="cordova-plugin-dialogs" spec="1.3.1" />
-    <plugin name="cordova-plugin-file-transfer" spec="1.6.1" />
     <plugin name="cordova-plugin-fullscreen" spec="1.1.0" />
     <plugin name="cordova-plugin-globalization" spec="1.0.5" />
     <plugin name="cordova-plugin-inappbrowser" spec="1.6.1" />
     <plugin name="cordova-plugin-insomnia" spec="4.2.0" />
-    <plugin name="cordova-plugin-splashscreen" spec="4.1.0" />
-    <plugin name="cordova-plugin-statusbar" spec="2.3.0" />
     <plugin name="cordova-plugin-vibration" spec="2.1.3" />
     <plugin name="cordova-plugin-whitelist" spec="1.3.1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="5.1.3" />
     <plugin name="cordova-plugin-x-toast" spec="2.5.2" />
-    <plugin name="cordova-universal-links-plugin" spec="git+https://github.com/flipflopapp/cordova-universal-links-plugin.git#be60a9b" />
-    <plugin name="de.appplant.cordova.plugin.local-notification" spec="git+https://github.com/katzer/cordova-plugin-local-notifications.git#0.8.5" />
-    <plugin name="ionic-plugin-keyboard" spec="2.2.1" />
-    <plugin name="onesignal-cordova-plugin" spec="2.2.4" />
+    <plugin name="cordova-plugin-statusbar" spec="2.3.0" />
+    <plugin name="cordova-plugin-splashscreen" spec="4.1.0" />
     <plugin name="cordova-plugin-network-information" spec="2.0.1" />
-    <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#v1.6.0" />
-    <engine name="android" spec="7.0.0" />
+    <plugin name="cordova-plugin-stockfish" spec="git+https://github.com/veloce/cordova-plugin-stockfish.git#v1.6.0" />
+    <plugin name="cordova-plugin-ionic-keyboard" spec="2.0.5" />
+    <plugin name="cordova-plugin-file" spec="6.0.1" />
+    <plugin name="onesignal-cordova-plugin" spec="2.3.3" />
     <engine name="ios" spec="4.5.4" />
+    <engine name="android" spec="7.1.0" />
 </widget>

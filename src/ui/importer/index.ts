@@ -22,8 +22,8 @@ const ImporterScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewFadeIn,
 
   onremove() {
-    window.removeEventListener('native.keyboardshow', helper.onKeyboardShow)
-    window.removeEventListener('native.keyboardhide', helper.onKeyboardHide)
+    window.removeEventListener('keyboardDidShow', helper.onKeyboardShow)
+    window.removeEventListener('keyboardDidHide', helper.onKeyboardHide)
   },
 
   view() {

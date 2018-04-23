@@ -24,8 +24,8 @@ export default {
   },
 
   onremove() {
-    window.removeEventListener('native.keyboardshow', this.ctrl.onKeyboardShow)
-    window.removeEventListener('native.keyboardhide', helper.onKeyboardHide)
+    window.removeEventListener('keyboardDidShow', this.ctrl.onKeyboardShow)
+    window.removeEventListener('keyboardDidHide', helper.onKeyboardHide)
   },
 
   view() {

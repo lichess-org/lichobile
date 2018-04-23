@@ -37,8 +37,8 @@ export class NotesCtrl {
       window.plugins.toast.show('Could not read notes from server.', 'short', 'center')
     })
 
-    window.addEventListener('native.keyboardhide', onKeyboardHide)
-    window.addEventListener('native.keyboardshow', onKeyboardShow)
+    window.addEventListener('keyboardDidHide', onKeyboardHide)
+    window.addEventListener('keyboardDidShow', onKeyboardShow)
   }
 
   public syncNotes = debounce((e: Event) => {
@@ -53,8 +53,8 @@ export class NotesCtrl {
   }, 1000)
 
   public unload = () => {
-    document.removeEventListener('native.keyboardhide', onKeyboardHide)
-    document.removeEventListener('native.keyboardshow', onKeyboardShow)
+    window.removeEventListener('keyboardDidHide', onKeyboardHide)
+    window.removeEventListener('keyboardDidShow', onKeyboardShow)
   }
 
   public open = () => {
@@ -63,7 +63,7 @@ export class NotesCtrl {
   }
 
   public close = (fromBB?: string) => {
-    window.cordova.plugins.Keyboard.close()
+    window.Keyboard.close()
     if (fromBB !== 'backbutton' && this.showing) {
       router.backbutton.stack.pop()
     }

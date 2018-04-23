@@ -56,7 +56,6 @@
         "cordova-ios": "4.5.4",
         "cordova-plugin-appversion": "1.0.0",
         "cordova-plugin-badge": "0.8.7",
-        "cordova-plugin-crosswalk-webview": "2.4.0",
         "cordova-plugin-device": "2.0.2",
         "cordova-plugin-dialogs": "2.0.1",
         "cordova-plugin-file": "6.0.1",
@@ -148,13 +147,7 @@
             "cordova-plugin-statusbar": {},
             "cordova-plugin-splashscreen": {},
             "cordova-plugin-fullscreen": {},
-            "cordova-plugin-globalization": {},
-            "cordova-plugin-crosswalk-webview": {
-                "XWALK_VERSION": "23+",
-                "XWALK_COMMANDLINE": "--disable-pull-to-refresh-effect",
-                "XWALK_MODE": "embedded",
-                "XWALK_MULTIPLEAPK": "false"
-            }
+            "cordova-plugin-globalization": {}
         }
     },
     "jest": {

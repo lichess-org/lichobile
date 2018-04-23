@@ -1,4 +1,3 @@
-
 export function getFiles(prefix: string): Promise<FileEntry[]> {
   return new Promise((resolve, reject) => {
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, (fs) => {
@@ -13,7 +12,15 @@ export function getLocalFileOrDowload(remoteFileUri: string, fileName: string, p
   return new Promise((resolve, reject) => {
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, (fs) => {
       fs.root.getFile(prefix + fileName, undefined, (fe) => {
-        resolve(fe)
+        fe.file(f => {
+          if (f.size > 0) {
+            resolve(fe)
+          } else {
+            syncRemoteFile(fs, remoteFileUri, fileName, prefix, onProgress)
+            .then(resolve)
+            .catch(reject)
+          }
+        }, reject)
       }, (err: FileError) => {
         if (err.code === FileError.NOT_FOUND_ERR) {
           syncRemoteFile(fs, remoteFileUri, fileName, prefix, onProgress)

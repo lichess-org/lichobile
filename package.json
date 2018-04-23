@@ -55,7 +55,6 @@
         "cordova-android": "7.1.0",
         "cordova-ios": "4.5.4",
         "cordova-plugin-appversion": "1.0.0",
-        "cordova-plugin-badge": "0.8.7",
         "cordova-plugin-crosswalk-data-migration": "git+https://github.com/veloce/cordova-plugin-crosswalk-data-migration.git#225408d",
         "cordova-plugin-device": "2.0.2",
         "cordova-plugin-dialogs": "2.0.1",
@@ -65,7 +64,6 @@
         "cordova-plugin-inappbrowser": "1.6.1",
         "cordova-plugin-insomnia": "4.2.0",
         "cordova-plugin-ionic-keyboard": "2.0.5",
-        "cordova-plugin-local-notification": "git+https://github.com/katzer/cordova-plugin-local-notifications.git#0.9.0-beta.3",
         "cordova-plugin-nativeaudio": "git+https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",
         "cordova-plugin-network-information": "2.0.1",
         "cordova-plugin-splashscreen": "5.0.2",
@@ -125,8 +123,8 @@
     },
     "cordova": {
         "platforms": [
-            "ios",
-            "android"
+            "android",
+            "ios"
         ],
         "plugins": {
             "com.rjfun.cordova.plugin.lowlatencyaudio": {},
@@ -142,7 +140,6 @@
             "cordova-plugin-file": {},
             "onesignal-cordova-plugin": {},
             "cordova-universal-links-plugin": {},
-            "cordova-plugin-local-notification": {},
             "cordova-plugin-dialogs": {},
             "cordova-plugin-whitelist": {},
             "cordova-plugin-vibration": {},

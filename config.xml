@@ -123,6 +123,7 @@
     <plugin name="cordova-plugin-fullscreen" spec="1.2.0" />
     <plugin name="cordova-plugin-globalization" spec="1.11.0" />
     <plugin name="cordova-plugin-local-notification" spec="https://github.com/katzer/cordova-plugin-local-notifications.git#0.9.0-beta.3" />
+    <plugin name="cordova-plugin-crosswalk-data-migration" spec="https://github.com/veloce/cordova-plugin-crosswalk-data-migration.git#225408d" />
     <engine name="ios" spec="4.5.4" />
     <engine name="android" spec="7.1.0" />
 </widget>

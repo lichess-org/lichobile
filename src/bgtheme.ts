@@ -17,12 +17,8 @@ export function loadCachedImages() {
   })
 }
 
-export function handleError(err: FileError | FileTransferError) {
-  if (filesystem.isFileTransfertError(err)) {
-    window.plugins.toast.show('Error while downloading file from server. Please try later.', 'long', 'center')
-  } else {
-    window.plugins.toast.show('Cannot load theme file', 'long', 'center')
-  }
+export function handleError() {
+  window.plugins.toast.show('Cannot load theme file', 'long', 'center')
 }
 
 function createStylesheetRule(entry: FileEntry) {

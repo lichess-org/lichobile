@@ -372,7 +372,7 @@ export function findElByClassName(e: Event, className: string) {
 export function externalLink(text: string, url: string): Mithril.Child {
   return h('a', {
     className: 'external_link',
-    onClick: `window.open('${url}')`,
+    onClick: `window.open('${url}', '_system')`,
   }, text)
 }
 

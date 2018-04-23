@@ -170,7 +170,9 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public openUserPopup = (position: string, userId: string) => {
-    this.updateCrosstable()
+    if (this.score === undefined) {
+      this.updateCrosstable()
+    }
     if (!this.vm.miniUser[position].data) {
       miniUserXhr(userId).then(data => {
         this.vm.miniUser[position].data = data
@@ -195,8 +197,9 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   public updateCrosstable() {
     const d = this.data
-    if (!d || !d.player.user || !d.opponent.user)
+    if (!d || !d.player.user || !d.opponent.user) {
       return
+    }
     xhr.getCrosstable(d.player.user.id, d.opponent.user.id).then(s => {
       this.score = s
       redraw()

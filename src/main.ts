@@ -55,15 +55,6 @@ function main() {
     session.restoreStoredSession()
   }
 
-  window.cordova.plugins.notification.local.on('click', (notification: LocalNotification) => {
-    try {
-      const data = JSON.parse(notification.data)
-      if (data && data.notifType === 'route') {
-        router.set(data.route)
-      }
-    } catch (_) {}
-  })
-
   document.addEventListener('online', onOnline, false)
   document.addEventListener('offline', onOffline, false)
   document.addEventListener('resume', onResume, false)
@@ -75,10 +66,7 @@ function main() {
   })
   window.addEventListener('resize', debounce(onResize), false)
 
-  // iOs keyboard hack
-  // TODO we may want to remove this and call only on purpose
-  window.cordova.plugins.Keyboard.disableScroll(true)
-  window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false)
+  window.Keyboard.hideKeyboardAccessoryBar(false)
 
   if (globalConfig.mode === 'release' && globalConfig.sentryDSN) {
     Raven.config(globalConfig.sentryDSN, {

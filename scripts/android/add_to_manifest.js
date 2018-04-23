@@ -9,7 +9,7 @@ module.exports = function() {
     }
   ];
 
-  const MANIFEST = 'platforms/android/AndroidManifest.xml';
+  const MANIFEST = 'platforms/android/app/src/main/AndroidManifest.xml';
 
   var manifestText = fs.readFileSync(MANIFEST).toString();
 

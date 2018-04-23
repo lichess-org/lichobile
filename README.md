@@ -5,8 +5,7 @@
 
 ![lichess mobile screenshots](res/portfolio.png)
 
-Lichess mobile is a [cordova](https://cordova.apache.org/) application that runs
-on the [crosswalk webview](https://crosswalk-project.org/). It is written
+Lichess mobile is a [cordova](https://cordova.apache.org/) application. It is written
 in [TypeScript](http://www.typescriptlang.org/) and JavaScript. The rendering
 library is [mithril.js](http://mithril.js.org/). It uses [babel](http://babeljs.io/),
 [browserify](http://browserify.org/) and [gulp](http://gulpjs.com/)

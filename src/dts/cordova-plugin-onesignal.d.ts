@@ -13,6 +13,8 @@ interface OneSignalStatic {
   enableVibrate: (v: boolean) => void
   OSInFocusDisplayOption: {
     None: number
+    InAppAlert: number
+    Notification: number
   }
 }
 

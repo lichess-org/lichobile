@@ -84,7 +84,7 @@ function submit(form: HTMLFormElement) {
   if (!login || !pass) return
   formError = null
   redraw()
-  window.cordova.plugins.Keyboard.close()
+  window.Keyboard.close()
   session.login(login, pass)
   .then(() => {
     close()
@@ -119,7 +119,7 @@ function open() {
 }
 
 function close(fromBB?: string) {
-  window.cordova.plugins.Keyboard.close()
+  window.Keyboard.close()
   if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
   isOpen = false
 }

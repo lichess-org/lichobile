@@ -19,8 +19,11 @@ function renderBody() {
       key: 'vibrate'
     }, formWidgets.renderCheckbox(i18n('vibrateOnGameEvents'), 'vibrate', settings.general.vibrateOnGameEvents, vibrate.onSettingChange)),
     h('li.list_item', formWidgets.renderCheckbox(i18n('notifications'), 'notifications', settings.general.notifications.allow, isOn => {
-      if (isOn) push.register()
-        else push.unregister()
+      if (isOn) {
+        push.register()
+      } else {
+        push.unregister()
+      }
     })),
     h('li.list_item', formWidgets.renderCheckbox(i18n('vibrationOnNotification'), 'vibrate', settings.general.notifications.vibrate, isOn => {
       window.plugins.OneSignal.enableVibrate(isOn)

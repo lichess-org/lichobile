@@ -30,7 +30,7 @@ export default {
       .startInit('2d12e964-92b6-444e-9327-5b2e9a419f4c')
       .handleNotificationOpened(notificationOpenedCallback)
       .handleNotificationReceived(notificationReceivedCallback)
-      .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.None)
+      .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.Notification)
       .endInit()
 
       window.plugins.OneSignal.getIds(({ userId }) => {
@@ -56,37 +56,15 @@ function notificationReceivedCallback(data: NotificationReceivedData) {
       switch (additionalData.userData.type) {
         case 'challengeAccept':
           session.refresh()
-          sendLocalNotif(
-            data.payload.title,
-            data.payload.body,
-            `/game/${additionalData.userData.challengeId}`
-          )
           break
         case 'corresAlarm':
         case 'gameTakebackOffer':
         case 'gameDrawOffer':
         case 'gameFinish':
           session.refresh()
-          sendLocalNotif(
-            data.payload.title,
-            data.payload.body,
-            `/game/${additionalData.userData.fullId}`
-          )
           break
         case 'gameMove':
           session.refresh()
-          sendLocalNotif(
-            data.payload.title,
-            data.payload.body,
-            `/game/${additionalData.userData.fullId}`
-          )
-          break
-        case 'newMessage':
-          sendLocalNotif(
-            data.payload.title,
-            data.payload.body,
-            `/inbox/${additionalData.userData.threadId}`
-          )
           break
       }
     }
@@ -117,24 +95,5 @@ function notificationOpenedCallback(data: NotificationOpenedData) {
           break
       }
     }
-  }
-}
-
-function sendLocalNotif(title: string, text: string, route: string) {
-  // for important pushs, we still want to display them as a notification
-  // push received on ios is always shown; on android it's only when app in
-  // background
-  if (cordova.platformId === 'android' && !router.get().startsWith(route)) {
-    window.cordova.plugins.notification.local.schedule({
-      title,
-      text,
-      at: Date.now(),
-      icon: 'res://icon',
-      smallIcon: 'res://ic_stat_onesignal_default',
-      data: {
-        notifType: 'route',
-        route
-      }
-    })
   }
 }

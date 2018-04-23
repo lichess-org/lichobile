@@ -14,7 +14,6 @@
 /// <reference path="plugins/DeviceOrientation.d.ts"/>
 /// <reference path="plugins/Dialogs.d.ts"/>
 /// <reference path="plugins/FileSystem.d.ts"/>
-/// <reference path="plugins/FileTransfer.d.ts"/>
 /// <reference path="plugins/Globalization.d.ts"/>
 /// <reference path="plugins/InAppBrowser.d.ts"/>
 /// <reference path="plugins/Media.d.ts"/>

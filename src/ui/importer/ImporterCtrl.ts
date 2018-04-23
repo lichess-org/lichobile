@@ -32,8 +32,8 @@ export default function ImporterCtrl(): IImporterCtrl {
     }, true)
   }
 
-  window.addEventListener('native.keyboardhide', helper.onKeyboardHide)
-  window.addEventListener('native.keyboardshow', helper.onKeyboardShow)
+  window.addEventListener('keyboardDidHide', helper.onKeyboardHide)
+  window.addEventListener('keyboardDidShow', helper.onKeyboardShow)
 
   return {
     importGame(pgn: string) {

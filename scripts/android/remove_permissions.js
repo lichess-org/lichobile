@@ -4,7 +4,7 @@ module.exports = function() {
 
   if (fs.existsSync('platforms/android')) {
     const PERMISSIONS_TO_REMOVE = ['ACCESS_WIFI_STATE', 'WRITE_EXTERNAL_STORAGE'],
-    MANIFEST = 'platforms/android/AndroidManifest.xml',
+    MANIFEST = 'platforms/android/app/src/main/AndroidManifest.xml',
     manifestLines = fs.readFileSync(MANIFEST).toString().split('\n'),
     newManifestLines = [];
 

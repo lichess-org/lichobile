@@ -80,7 +80,7 @@
     <preference name="xwalkCommandLine" value="--enable-viewport-meta --disable-pull-to-refresh-effect" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="xwalkMode" value="embedded" />
-    <preference name="xwalkMultipleApk" value="true" />
+    <preference name="xwalkMultipleApk" value="false" />
     <preference name="AndroidLaunchMode" value="singleInstance" />
     <preference name="DefaultVolumeStream" value="media" />
     <universal-links>
@@ -127,6 +127,12 @@
     <plugin name="cordova-plugin-fullscreen" spec="1.2.0" />
     <plugin name="cordova-plugin-globalization" spec="1.11.0" />
     <plugin name="cordova-plugin-local-notification" spec="https://github.com/katzer/cordova-plugin-local-notifications.git#0.9.0-beta.3" />
+    <plugin name="cordova-plugin-crosswalk-webview" spec="2.4.0">
+        <variable name="XWALK_VERSION" value="23+" />
+        <variable name="XWALK_COMMANDLINE" value="--disable-pull-to-refresh-effect" />
+        <variable name="XWALK_MODE" value="embedded" />
+        <variable name="XWALK_MULTIPLEAPK" value="false" />
+    </plugin>
     <engine name="ios" spec="4.5.4" />
     <engine name="android" spec="7.1.0" />
 </widget>

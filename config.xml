@@ -76,11 +76,7 @@
     <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarBackgroundColor" value="#111111" />
     <preference name="BackgroundColor" value="0xFF000000" />
-    <preference name="xwalkVersion" value="23" />
-    <preference name="xwalkCommandLine" value="--enable-viewport-meta --disable-pull-to-refresh-effect" />
-    <preference name="android-minSdkVersion" value="19" />
-    <preference name="xwalkMode" value="embedded" />
-    <preference name="xwalkMultipleApk" value="true" />
+    <preference name="android-minSdkVersion" value="21" />
     <preference name="AndroidLaunchMode" value="singleInstance" />
     <preference name="DefaultVolumeStream" value="media" />
     <universal-links>

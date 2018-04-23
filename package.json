@@ -119,6 +119,7 @@
         "prepare-ios-stage": "npm run build-cordova-stage && cordova prepare ios --browserify",
         "prepare-ios-prod": "npm run build-cordova-prod && cordova prepare ios --browserify",
         "release-android": "npm run build-cordova-release && cordova build android --release --browserify",
+        "release-android-4.4": "npm run build-cordova-release && cordova build android --release --browserify -- --minSdkVersion=19",
         "release-ios": "npm run build-cordova-release && cordova build ios --release --browserify"
     },
     "cordova": {

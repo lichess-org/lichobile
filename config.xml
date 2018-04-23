@@ -108,7 +108,6 @@
     </universal-links>
     <plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" spec="https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface" />
     <plugin name="cordova-plugin-appversion" spec="1.0.0" />
-    <plugin name="cordova-plugin-device" spec="1.1.4" />
     <plugin name="cordova-plugin-dialogs" spec="1.3.1" />
     <plugin name="cordova-plugin-fullscreen" spec="1.1.0" />
     <plugin name="cordova-plugin-globalization" spec="1.0.5" />
@@ -127,6 +126,7 @@
     <plugin name="onesignal-cordova-plugin" spec="2.3.3" />
     <plugin name="cordova-universal-links-plugin" spec="https://github.com/veloce/cordova-universal-links-plugin.git#c494fe1" />
     <plugin name="cordova-plugin-local-notification" spec="https://github.com/katzer/cordova-plugin-local-notifications.git#0.9.0-beta.3" />
+    <plugin name="cordova-plugin-device" spec="2.0.2" />
     <engine name="ios" spec="4.5.4" />
     <engine name="android" spec="7.1.0" />
 </widget>

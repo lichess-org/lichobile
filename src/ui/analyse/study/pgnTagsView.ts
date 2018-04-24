@@ -1,4 +1,5 @@
 import * as h from 'mithril/hyperscript'
+import { linkify } from '../../../utils/html'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 
@@ -12,7 +13,7 @@ export default function renderPgnTags(ctrl: AnalyseCtrl) {
       h('tbody', study.data.chapter.tags.map(([tagName, tagValue]) =>
         h('tr.study-tag', [
           h('th', tagName),
-          h('td', tagValue)
+          h('td', h.trust(linkify(tagValue)))
       ])))
     ])
   ])

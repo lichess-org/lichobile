@@ -74,7 +74,6 @@
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="KeepRunning" value="true" />
     <preference name="StatusBarOverlaysWebView" value="false" />
-    <preference name="StatusBarBackgroundColor" value="#111111" />
     <preference name="BackgroundColor" value="0xFF000000" />
     <preference name="android-minSdkVersion" value="21" />
     <preference name="AndroidLaunchMode" value="singleInstance" />

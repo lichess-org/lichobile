@@ -12,7 +12,7 @@ import StudyListCtrl, { PagerDataWithDate } from './StudyListCtrl'
 
 export default function studyListView(ctrl: StudyListCtrl) {
   return h('div.study-pagerWrapper', [
-    h('div.study-pagerSubHeader', [
+    h('div.study-pagerSubHeader.subHeader', [
       ctrl.state.showSearch ?
         h('form.study-pagerSearchWrapper', {
           onsubmit: ctrl.onSearch

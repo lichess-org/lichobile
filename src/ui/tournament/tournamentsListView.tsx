@@ -36,7 +36,7 @@ export function renderTournamentsList(ctrl: TournamentsListCtrl) {
   ]
 
   return [
-    h('div.tabs-nav-header',
+    h('div.tabs-nav-header.subHeader',
       h(TabNavigation, {
           buttons: TABS,
           selectedIndex: ctrl.currentTab,

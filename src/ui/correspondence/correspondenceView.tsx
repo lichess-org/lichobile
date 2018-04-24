@@ -50,7 +50,7 @@ export function renderBody(ctrl: CorrespondenceCtrl) {
   ]
 
   return [
-    h('div.tabs-nav-header', tabsBar, h('div.main_header_drop_shadow')),
+    h('div.tabs-nav-header.subHeader', tabsBar, h('div.main_header_drop_shadow')),
     h(TabView, {
       className: 'correspondence-tabs',
       selectedIndex: ctrl.currentTab,

@@ -4,10 +4,15 @@
 
   .main_header
     color textLightBg
-    background-color themeBgLight
+    background-color themeBgLightHeader
     border-bottom 1px solid borderLightGray
     &.board
       border-bottom none
+
+  .subHeader
+    margin-top -1px
+    background-color themeBgLightHeader
+    border-bottom 1px solid borderLightGray
 
   .main_header_button
     &.active
@@ -24,8 +29,8 @@
     color rgba(textLightBg, 0.8)
 
   .chip, .main_header.board .chip
-    color themeBgLight
-    border-color themeBgLight
+    color themeBgLightHeader
+    border-color themeBgLightHeader
     background-color goldDark
 
   .main_header-selector

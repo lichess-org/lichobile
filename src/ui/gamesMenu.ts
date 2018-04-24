@@ -1,5 +1,5 @@
 import * as h from 'mithril/hyperscript'
-import * as IScroll from 'iscroll'
+import * as Siema from 'siema'
 import * as utils from '../utils'
 import { positionsCache } from '../utils/gamePosition'
 import { getOfflineGames } from '../utils/offlineGames'
@@ -18,14 +18,7 @@ import * as helper from './helper'
 import newGameForm from './newGameForm'
 import ViewOnlyBoard from './shared/ViewOnlyBoard'
 
-interface CardDim {
-  w: number
-  h: number
-  innerW: number
-  margin: number
-}
-
-let scroller: IScroll | null = null
+let scroller: any | null = null
 
 let isOpen = false
 let lastJoined: NowPlayingGame | undefined
@@ -50,9 +43,6 @@ export default {
   view() {
     if (!isOpen) return null
 
-    const vh = helper.viewportDim().vh
-    const cDim = cardDims()
-    const wrapperStyle = helper.isWideScreen() ? {} : { top: ((vh - cDim.h) / 2) + 'px' }
     const wrapperClass = helper.isWideScreen() ? 'overlay_popup' : ''
 
     return h('div#games_menu.overlay_popup_wrapper', {
@@ -61,16 +51,12 @@ export default {
       h('div.wrapper_overlay_close', { oncreate: menuOnOverlayTap }),
       h('div#wrapper_games', {
         className: wrapperClass,
-        style: wrapperStyle,
-        oncreate: wrapperOnCreate,
-        onupdate: wrapperOnUpdate,
-        onremove: wrapperOnRemove
       }, [
         helper.isWideScreen() ? h('header',
           i18n('nbGamesInPlay', session.nowPlaying().length)
         ) : null,
         helper.isWideScreen() ? h('div.popup_content', renderAllGames()) :
-          renderAllGames(cDim)
+          renderAllGames()
       ])
     ])
   }
@@ -87,14 +73,13 @@ function menuOnBeforeRemove({ dom }: Mithril.DOMNode) {
 
 function wrapperOnCreate({ dom }: Mithril.DOMNode) {
   if (!helper.isWideScreen()) {
-    scroller = new IScroll(dom as HTMLElement, {
-      scrollX: true,
-      scrollY: false,
-      momentum: false,
-      snap: '.card',
-      preventDefaultException: {
-        tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
-      }
+    scroller = new Siema({
+      selector: dom as HTMLElement,
+      duration: 200,
+      easing: 'ease-out',
+      perPage: 1,
+      startIndex: 0,
+      draggable: true,
     })
   }
 }
@@ -106,20 +91,12 @@ function wrapperOnRemove() {
   }
 }
 
-function wrapperOnUpdate({ dom }: Mithril.DOMNode) {
-  // see https://github.com/cubiq/iscroll/issues/412
-  if (scroller) {
-    scroller.options.snap = (dom as HTMLElement).querySelectorAll('.card')
-    scroller.refresh()
-  }
-}
-
 function open() {
   router.backbutton.stack.push(close)
   session.refresh()
   isOpen = true
   setTimeout(() => {
-    if (scroller) scroller.goToPage(1, 0)
+    if (scroller) scroller.goTo(1)
   }, 400)
 }
 
@@ -152,36 +129,9 @@ function declineChallenge(id: string) {
   })
 }
 
-function cardDims(): CardDim {
-  const vp = helper.viewportDim()
-
-  // if we're here it's a phone
-  if (helper.isPortrait()) {
-    let width = vp.vw * 85 / 100
-    let margin = vp.vw * 2.5 / 100
-    return {
-      w: width + margin * 2,
-      h: width + 145,
-      innerW: width,
-      margin: margin
-    }
-  } else {
-    let width = 150
-    let margin = 10
-    return {
-      w: width + margin * 2,
-      h: width + 70,
-      innerW: width,
-      margin: margin
-    }
-  }
-}
-
-function renderViewOnlyBoard(fen: string, orientation: Color, cDim?: CardDim, lastMove?: string, variant?: VariantKey) {
-  const style = cDim ? { height: cDim.innerW + 'px' } : {}
-  const bounds = cDim ? { width: cDim.innerW, height: cDim.innerW } : undefined
-  return h('div.boardWrapper', { style },
-    h(ViewOnlyBoard, { bounds, fen, lastMove, orientation, variant })
+function renderViewOnlyBoard(fen: string, orientation: Color, lastMove?: string, variant?: VariantKey) {
+  return h('div.boardWrapper',
+    h(ViewOnlyBoard, { fen, lastMove, orientation, variant })
   )
 }
 
@@ -217,7 +167,7 @@ function savedGameDataToCardData(data: OnlineGameData): NowPlayingGame {
   }
 }
 
-function renderGame(g: NowPlayingGame, cDim: CardDim | undefined, cardStyle: Object) {
+function renderGame(g: NowPlayingGame) {
   const icon = g.opponent.ai ? 'n' : utils.gameIcon(g.perf)
   const playerName = liPlayerName(g.opponent, false)
   const cardClass = [
@@ -236,10 +186,9 @@ function renderGame(g: NowPlayingGame, cDim: CardDim | undefined, cardStyle: Obj
   return h('div', {
     className: cardClass,
     key: 'game.' + g.gameId,
-    style: cardStyle,
     oncreate
   }, [
-    renderViewOnlyBoard(g.fen, g.color, cDim, g.lastMove, g.variant.key),
+    renderViewOnlyBoard(g.fen, g.color, g.lastMove, g.variant.key),
     h('div.infos', [
       h('div.icon-game', { 'data-icon': icon || '' }),
       h('div.description', [
@@ -253,7 +202,7 @@ function renderGame(g: NowPlayingGame, cDim: CardDim | undefined, cardStyle: Obj
   ])
 }
 
-function renderIncomingChallenge(c: Challenge, cDim: CardDim | undefined, cardStyle: Object) {
+function renderIncomingChallenge(c: Challenge) {
   if (!c.challenger) {
     return null
   }
@@ -263,8 +212,8 @@ function renderIncomingChallenge(c: Challenge, cDim: CardDim | undefined, cardSt
   const mark = c.challenger.provisional ? '?' : ''
   const playerName = `${c.challenger.id} (${c.challenger.rating}${mark})`
 
-  return h('div.card.standard.challenge', { style: cardStyle }, [
-    renderViewOnlyBoard(c.initialFen || standardFen, 'white', cDim, undefined, c.variant.key),
+  return h('div.card.standard.challenge', [
+    renderViewOnlyBoard(c.initialFen || standardFen, 'white', undefined, c.variant.key),
     h('div.infos', [
       h('div.icon-game', { 'data-icon': c.perf.icon }),
       h('div.description', [
@@ -290,58 +239,31 @@ function renderIncomingChallenge(c: Challenge, cDim: CardDim | undefined, cardSt
   ])
 }
 
-function renderAllGames(cDim?: CardDim) {
+function renderAllGames() {
   const nowPlaying = session.nowPlaying()
   const challenges = challengesApi.incoming()
-  const cardStyle = cDim ? {
-    width: (cDim.w - cDim.margin * 2) + 'px',
-    height: cDim.h + 'px',
-    marginLeft: cDim.margin + 'px',
-    marginRight: cDim.margin + 'px'
-  } : {}
-  const nbCards = utils.hasNetwork() ?
-    challenges.length + nowPlaying.length + 1 :
-    getOfflineGames().length + 1
-
-  let wrapperStyle: Object, wrapperWidth: number
-  if (cDim) {
-    // scroller wrapper width
-    // calcul is:
-    // ((cardWidth + visible part of adjacent card) * nb of cards) +
-    //   wrapper's marginLeft
-    wrapperWidth = ((cDim.w + cDim.margin * 2) * nbCards) +
-      (cDim.margin * 2)
-    wrapperStyle = helper.isWideScreen() ? {} : {
-      width: wrapperWidth + 'px',
-      marginLeft: (cDim.margin * 3) + 'px'
-    }
-  } else {
-    wrapperStyle = {}
-  }
-
   const challengesDom = challenges.map(c => {
-    return renderIncomingChallenge(c, cDim, cardStyle)
+    return renderIncomingChallenge(c)
   })
 
-  let allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)))
+  let allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g)))
 
   if (!utils.hasNetwork()) {
     allCards = getOfflineGames().map(d => {
       const g = savedGameDataToCardData(d)
-      return renderGame(g, cDim, cardStyle)
+      return renderGame(g)
     })
   }
 
   if (!helper.isWideScreen()) {
     const newGameCard = h('div.card.standard', {
       key: 'game.new-game',
-      style: cardStyle,
       oncreate: helper.ontapX(() => {
         close()
         newGameForm.open()
       })
     }, [
-      renderViewOnlyBoard(standardFen, 'white', cDim),
+      renderViewOnlyBoard(standardFen, 'white'),
       h('div.infos', [
         h('div.description', [
           h('h2.title', i18n('createAGame')),
@@ -353,5 +275,8 @@ function renderAllGames(cDim?: CardDim) {
     allCards.unshift(newGameCard)
   }
 
-  return h('div#all_games', { style: wrapperStyle }, allCards)
+  return h('div.games_carousel', {
+    oncreate: wrapperOnCreate,
+    onremove: wrapperOnRemove,
+  }, allCards)
 }

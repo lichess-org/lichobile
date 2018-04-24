@@ -81,7 +81,6 @@
         "d3-time": "1.0.7",
         "d3-time-format": "2.0.5",
         "hammerjs": "2.0.8",
-        "iscroll": "5.1.3",
         "localforage": "1.5.5",
         "lodash": "4.17.4",
         "mithril": "1.1.6",
@@ -89,6 +88,7 @@
         "onesignal-cordova-plugin": "2.3.3",
         "raven-js": "3.17.0",
         "rlite-router": "1.1.3",
+        "siema": "1.5.1",
         "signals": "1.0.0",
         "whatwg-fetch": "2.0.3",
         "zanimo": "git+https://github.com/veloce/Zanimo.git"

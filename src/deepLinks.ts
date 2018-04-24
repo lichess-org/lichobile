@@ -12,6 +12,16 @@ export default {
 
     universalLinks.subscribe('analysis', () => router.set('/analyse'))
     universalLinks.subscribe('analysisPosition', handleAnalysisPosition)
+    universalLinks.subscribe('study', (e: UniversalLinks.EventData) => {
+      const path = e.path.split('/')
+      const id = path[2]
+      const chapterId = path[3]
+      if (chapterId) {
+        router.set(`/study/${id}/chapter/${chapterId}`)
+      } else {
+        router.set(`/study/${id}`)
+      }
+    })
     universalLinks.subscribe('challenge', (eventData: UniversalLinks.EventData) => router.set('/challenge/' + eventData.path.split('/').pop()))
     universalLinks.subscribe('editor', () => router.set('/editor'))
     universalLinks.subscribe('editorPosition', handleEditorPosition)

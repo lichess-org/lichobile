@@ -99,6 +99,7 @@
             <path event="userTV" url="/@/*/tv" />
             <path event="userProfile" url="/@/*" />
             <path event="signupConfirm" url="/signup/confirm/*" />
+            <path event="study" url="/study/*" />
             <path event="other" url="*" />
         </host>
     </universal-links>

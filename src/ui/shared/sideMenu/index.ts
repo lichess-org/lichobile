@@ -2,7 +2,7 @@ import { viewportDim } from '../../helper'
 
 export const OPEN_AFTER_SLIDE_RATIO = 0.6
 export const EDGE_SLIDE_THRESHOLD = 40
-export const BACKDROP_OPACITY = 0.6
+export const BACKDROP_OPACITY = 0.7
 
 export function getMenuWidth() {
   const vw = viewportDim().vw

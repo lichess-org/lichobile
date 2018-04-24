@@ -1,5 +1,6 @@
 import * as h from 'mithril/hyperscript'
 import { fixCrazySan } from '../../../utils/chessFormat'
+import { linkify } from '../../../utils/html'
 import * as gameApi from '../../../lichess/game'
 import { Glyph, CommentAuthor } from '../../../lichess/interfaces/analyse'
 import { ops as treeOps, path as treePath, Tree } from '../../shared/tree'
@@ -61,8 +62,8 @@ function renderInlineCommentsOf(ctx: Ctx, node: Tree.Node, rich?: boolean): Mayb
   if (!ctx.ctrl.settings.s.showComments || empty(node.comments)) return []
   return node.comments!.map(comment => {
     if (comment.by === 'lichess' && !ctx.showComputer) return null
-    const by = node.comments![1] ? h('span.by', commentAuthorText(comment.by)) : null
-    return rich ? h('comment', comment.text) : h('comment', [
+    const by = comment.by ? h('span.by', commentAuthorText(comment.by)) : null
+    return rich ? h('comment', h.trust(linkify(comment.text))) : h('comment', [
       by,
       truncateComment(comment.text, 300, ctx)
     ])

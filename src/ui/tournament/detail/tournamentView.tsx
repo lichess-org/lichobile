@@ -275,8 +275,9 @@ function tournamentFeaturedGame(ctrl: TournamentCtrl) {
           lastMove: featured.lastMove,
           orientation: 'white',
           link: () => router.set(`/tournament/${data.id}/game/${featured.id}?goingBack=1`),
-          gameObj: featured}
-        )}
+          gameObj: featured,
+          delay: 500,
+        })}
       </div>
     </div>
   )

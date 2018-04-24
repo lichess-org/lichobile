@@ -11,15 +11,16 @@ interface Bounds {
 }
 
 export interface Attrs {
-  fen: string
-  orientation: Color
-  link?: () => void
-  gameObj?: MiniBoardGameObj
-  lastMove?: string
-  bounds?: Bounds
-  customPieceTheme?: string
-  variant?: VariantKey
-  fixed?: boolean
+  readonly fen: string
+  readonly orientation: Color
+  readonly link?: () => void
+  readonly gameObj?: MiniBoardGameObj
+  readonly lastMove?: string
+  readonly bounds?: Bounds
+  readonly customPieceTheme?: string
+  readonly variant?: VariantKey
+  readonly fixed?: boolean
+  readonly delay?: Millis
 }
 
 interface State {

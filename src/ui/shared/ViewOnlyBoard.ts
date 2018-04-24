@@ -6,13 +6,14 @@ import settings from '../../settings'
 import { Bounds } from './Board'
 
 export interface Attrs {
-  fen: string
-  orientation: Color
-  lastMove?: string
-  bounds?: Bounds
-  customPieceTheme?: string
-  variant?: VariantKey
-  fixed?: boolean
+  readonly fen: string
+  readonly orientation: Color
+  readonly lastMove?: string
+  readonly bounds?: Bounds
+  readonly customPieceTheme?: string
+  readonly variant?: VariantKey
+  readonly fixed?: boolean
+  readonly delay?: Millis
 }
 
 interface Config {
@@ -39,8 +40,14 @@ const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
     this.ground = new Chessground(makeConfig(attrs))
   },
 
-  oncreate({ dom }) {
-    this.ground.attach(dom as HTMLElement)
+  oncreate({ attrs, dom }) {
+    if (attrs.delay !== undefined) {
+      setTimeout(() => {
+        this.ground.attach(dom as HTMLElement)
+      }, attrs.delay)
+    } else {
+      this.ground.attach(dom as HTMLElement)
+    }
   },
 
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {

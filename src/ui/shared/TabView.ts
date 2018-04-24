@@ -72,7 +72,7 @@ export default {
       h('div.tab-content', {
         'data-index': index,
         className: curIndex === index ? 'current' : '',
-      }, h(Tab, { index, ...attrs }))
+      }, curIndex === index ? h(Tab, { index, ...attrs }) : null)
     ))
   }
 } as Mithril.Component<Attrs, State>

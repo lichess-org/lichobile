@@ -47,30 +47,31 @@
     opacity 0.8
 
 .on-fire
-  line-height 10px
   &:before
     content: attr(data-icon)
     color: #d59120
 
 .off-fire
-  line-height 10px
   &:before
     content: ''
 
-td.tournamentPlayer
-  padding 10px
-  padding-left 0
-  text-align: left
-  text-overflow: ellipsis
-  white-space: nowrap;
-  overflow hidden
-  max-width 0
-  width 80%
-  &:first-child
-    padding-left 0
+.tournament-list-player
+  position initial
+  display flex
+  flex-flow row nowrap
+  justify-content space-between
+  padding 15px 0
+  > .tournamentPoints
+    flex 0 0 20%
+    text-align right
+  > .tournamentPlayer
+    flex 0 1 auto
+    text-overflow: ellipsis
+    white-space: nowrap;
+    overflow hidden
 
 .list_item.tournament-me
-  > td.tournamentPlayer
+  > .tournamentPlayer
     border-left 10px solid #d59120
     padding-left 5px
 
@@ -79,14 +80,6 @@ td.tournamentPlayer
     color green
   &.negative
     color red
-
-td.tournamentPoints
-  padding 10px
-  text-align: right
-  max-width 0
-  width 20%
-  &:last-child
-    padding-right 0
 
 .timeArrow
   font-weight: bold
@@ -102,24 +95,25 @@ td.tournamentPoints
   font-size 0.8em
 
 .tournamentConditions
-  position relative
-  padding-left 23px
+  display flex
   &.accepted
     color green
   &.rejected
     color red
-  > .condition
-    &.accepted
-      color green
-    &.rejected
-      color red
+  > .withIcon
+    align-self center
+    font-size 16px
+    line-height 1em
+  > .conditions_list
+    display flex
+    flex-flow column nowrap
+    > .condition
+      &.accepted
+        color green
+      &.rejected
+        color red
   &.anonymous
     color inherit
-  &:before
-    font-size 18px
-    position absolute
-    left 0
-    opacity 0.7
 
 .tournamentCreatorInfo, .tournamentPositionInfo, .tournamentConditions
   font-size 0.9em

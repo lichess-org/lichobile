@@ -4,7 +4,7 @@ import socket from '../../socket'
 import redraw from '../../utils/redraw'
 import { handleXhrError } from '../../utils'
 import i18n from '../../i18n'
-import { header } from '../shared/common'
+import { dropShadowHeader } from '../shared/common'
 import * as helper from '../helper'
 import layout from '../layout'
 
@@ -73,7 +73,7 @@ export default {
   },
 
   view() {
-    const headerEl = header(i18n('inbox'))
+    const headerEl = dropShadowHeader(i18n('inbox'))
     const body = inboxBody(this.ctrl)
     const footer = renderFooter(this.ctrl)
     return layout.free(headerEl, body, footer)

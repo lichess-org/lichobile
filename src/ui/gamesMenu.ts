@@ -75,7 +75,7 @@ function wrapperOnCreate({ dom }: Mithril.DOMNode) {
   if (!helper.isWideScreen()) {
     scroller = new Siema({
       selector: dom as HTMLElement,
-      duration: 200,
+      duration: 150,
       easing: 'ease-out',
       perPage: 1,
       startIndex: 0,

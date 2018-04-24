@@ -32,7 +32,7 @@ export function tournamentBody(ctrl: TournamentCtrl) {
   if (!data) return null
 
   return h('div.tournamentContainer.native_scroller.page', [
-    tournamentHeader(data),
+    tournamentHeader(data, ctrl),
     data.podium ? tournamentPodium(data.podium) : null,
     tournamentLeaderboard(ctrl),
     data.featured ? tournamentFeaturedGame(ctrl) : null
@@ -68,12 +68,12 @@ export function timeInfo(key: string, seconds?: number, preceedingText?: string)
   ]
 }
 
-function tournamentHeader(data: Tournament) {
+function tournamentHeader(data: Tournament, ctrl: TournamentCtrl) {
   return (
     <div key="header" className="tournamentHeader">
       {tournamentTimeInfo(data)}
       {data.spotlight ? tournamentSpotlightInfo(data.spotlight) : null}
-      {tournamentCreatorInfo(data)}
+      {tournamentCreatorInfo(data, ctrl.startsAt!)}
       {data.position ? tournamentPositionInfo(data.position) : null}
       {data.verdicts.list.length > 0 ? tournamentConditions(data.verdicts) : null}
    </div>
@@ -92,12 +92,11 @@ function tournamentTimeInfo(data: Tournament) {
   )
 }
 
-function tournamentCreatorInfo(data: Tournament) {
+function tournamentCreatorInfo(data: Tournament, startsAt: string) {
   return (
     <div className="tournamentCreatorInfo">
       {data.createdBy === 'lichess' ? i18n('tournamentOfficial') : i18n('by', data.createdBy)}
-      &nbsp;•&nbsp;
-          {window.moment(data.startsAt).calendar()}
+      &nbsp;•&nbsp;{startsAt}
     </div>
   )
 }
@@ -121,7 +120,9 @@ function tournamentConditions(verdicts: Verdicts) {
     verdicts.accepted ? 'accepted' : 'rejected'
   ].join(' ')
   return (
-    <div className={conditionsClass} data-icon="7">
+    <div className={conditionsClass}>
+      <span className="withIcon" data-icon="7" />
+      <div className="conditions_list">
       {verdicts.list.map(o => {
         return (
           <p className={'condition ' + (o.verdict === 'ok' ? 'accepted' : 'rejected')}>
@@ -129,6 +130,7 @@ function tournamentConditions(verdicts: Verdicts) {
           </p>
         )
       })}
+      </div>
     </div>
   )
 }
@@ -203,12 +205,12 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
         <p className="tournamentTitle"> {i18n('leaderboard')} ({i18n('nbConnectedPlayers', data.nbPlayers)})</p> : null
       }
 
-      <table
+      <ul
         className={'tournamentStandings' + (ctrl.isLoadingPage ? ' loading' : '')}
         oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e!), undefined, undefined, getLeaderboardItemEl)}
       >
         {players.map(p => renderPlayerEntry(userName, p))}
-      </table>
+      </ul>
       <div className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
         {renderNavButton('W', !ctrl.isLoadingPage && backEnabled, ctrl.first)}
         {renderNavButton('Y', !ctrl.isLoadingPage && backEnabled, ctrl.prev)}
@@ -239,17 +241,15 @@ function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
 function renderPlayerEntry(userName: string, player: StandingPlayer) {
   const isMe = player.name === userName
   return (
-    <tr key={player.name} data-player={player.name} className={'list_item' + (isMe ? ' tournament-me' : '')} >
-      <td className="tournamentPlayer">
+    <li key={player.name} data-player={player.name} className={'list_item tournament-list-player' + (isMe ? ' tournament-me' : '')} >
+      <div className="tournamentPlayer">
         <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '. ')} </span>
         <span> {player.name + ' (' + player.rating + ') '} </span>
-      </td>
-      <td className="tournamentPoints">
-        <span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon="Q">
-          {player.score}
-        </span>
-      </td>
-    </tr>
+      </div>
+      <span className={'tournamentPoints ' + player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon="Q">
+        {player.score}
+      </span>
+    </li>
   )
 }
 
@@ -276,7 +276,7 @@ function tournamentFeaturedGame(ctrl: TournamentCtrl) {
           orientation: 'white',
           link: () => router.set(`/tournament/${data.id}/game/${featured.id}?goingBack=1`),
           gameObj: featured,
-          delay: 500,
+          delay: 800,
         })}
       </div>
     </div>

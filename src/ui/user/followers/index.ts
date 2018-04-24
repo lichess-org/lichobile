@@ -1,6 +1,6 @@
 import * as helper from '../../helper'
 import layout from '../../layout'
-import { header } from '../../shared/common'
+import { dropShadowHeader } from '../../shared/common'
 
 import FollowersCtrl from './followersCtrl'
 import { IRelationCtrl } from '../interfaces'
@@ -22,7 +22,7 @@ export default {
   },
   view() {
     return layout.free(
-      header('Followers'),
+      dropShadowHeader('Followers'),
       renderBody(this.ctrl)
     )
   }

@@ -1,6 +1,6 @@
 import socket from '../../../socket'
 import * as helper from '../../helper'
-import { header as headerWidget, backButton } from '../../shared/common'
+import { dropShadowHeader as headerWidget, backButton } from '../../shared/common'
 import layout from '../../layout'
 
 import { threadBody } from './threadView'

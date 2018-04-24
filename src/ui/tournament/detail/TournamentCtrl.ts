@@ -26,6 +26,7 @@ export default class TournamentCtrl {
   public notFound: boolean = false
   public focusOnMe: boolean = false
   public isLoadingPage: boolean = false
+  public startsAt?: string
 
   public faqCtrl: FaqCtrl
   public playerInfoCtrl: PlayerInfoCtrl
@@ -41,6 +42,7 @@ export default class TournamentCtrl {
     xhr.tournament(id)
     .then(data => {
       this.tournament = data
+      this.startsAt = window.moment(data.startsAt).calendar()
       this.page = this.tournament.standing.page
       this.loadCurrentPage(this.tournament.standing)
       this.hasJoined = !!(data.me && !data.me.withdraw)

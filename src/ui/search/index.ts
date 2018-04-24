@@ -1,7 +1,7 @@
 import i18n from '../../i18n'
 import socket from '../../socket'
 import * as helper from '../helper'
-import { header as headerWidget } from '../shared/common'
+import { dropShadowHeader as headerWidget } from '../shared/common'
 import layout from '../layout'
 import SearchCtrl, { ISearchCtrl } from './SearchCtrl'
 

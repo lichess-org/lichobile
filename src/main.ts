@@ -75,7 +75,7 @@ function main() {
   }
 
   if (cordova.platformId === 'android') {
-      window.StatusBar.backgroundColorByHexString('#151A1E')
+      window.StatusBar.backgroundColorByHexString('#111')
   }
 
   setTimeout(() => {

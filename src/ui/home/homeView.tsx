@@ -4,7 +4,7 @@ import { emptyFen } from '../../utils/fen'
 import { hasNetwork } from '../../utils'
 import i18n from '../../i18n'
 import * as helper from '../helper'
-import { renderTourJoin, renderGameEnd, renderFollow } from '../timeline'
+import { renderTimelineEntry, timelineOnTap } from '../timeline'
 import MiniBoard from '../shared/miniBoard'
 import { renderQuickSetup } from '../newGameForm'
 import newGameForm from '../newGameForm'
@@ -101,17 +101,10 @@ function renderTimeline(ctrl: Ctrl) {
   return (
     <section id="timeline">
       <h2 className="homeTitle">{i18n('timeline')}</h2>
-      <ul className="items_list_block">
-        { timeline.map((e: any) => {
-          if (e.type === 'follow') {
-            return renderFollow(e)
-          } else if (e.type === 'game-end') {
-            return renderGameEnd(e)
-          } else if (e.type === 'tour-join') {
-            return renderTourJoin(e)
-          }
-          return null
-        })}
+      <ul className="items_list_block"
+        oncreate={helper.ontapY(timelineOnTap, undefined, helper.getLI)}
+      >
+        { timeline.map(renderTimelineEntry)}
       </ul>
       <div className="moreButton">
         <button oncreate={helper.ontapY(() => router.set('/timeline'))}>

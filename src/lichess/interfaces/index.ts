@@ -73,10 +73,14 @@ export interface PongMessage {
   readonly r: number
 }
 
+export type TimelineEntryType = 'follow' | 'game-end' | 'tour-join' | 'study-create' | 'study-like'
+
 export interface TimelineEntry {
   readonly data: any
   readonly date: number
-  readonly type: 'follow' | 'game-end' | 'tour-join' | 'study-create' | 'study-like'
+  // added dynamically
+  fromNow: string
+  readonly type: TimelineEntryType
 }
 
 export interface TimelineData {

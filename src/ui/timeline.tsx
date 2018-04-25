@@ -79,7 +79,7 @@ export function renderFollow(entry: TimelineEntry) {
   return (
     <li className="list_item timelineEntry" key={key}
       oncreate={helper.ontapY(() => {
-        router.set('/@/' + entry.data.u1)
+        router.set('/@/' + entry.data.u2)
       })}
     >
       <span className="fa fa-arrow-circle-right" />

@@ -11,6 +11,7 @@ import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils'
 import i18n from './i18n'
 import push from './push'
 import settings from './settings'
+import { TempBan } from './lichess/interfaces'
 import friendsApi from './lichess/friends'
 import challengesApi from './lichess/challenges'
 import { StoredProp } from './storage'
@@ -52,6 +53,7 @@ export interface Session {
   readonly nbChallenges: number
   readonly nbFollowers: number
   readonly nbFollowing: number
+  readonly playban?: TempBan
 }
 
 let session: Session | undefined
@@ -92,6 +94,11 @@ function nowPlaying(): NowPlayingGame[] {
   return np.filter(e =>
     settings.game.supportedVariants.indexOf(e.variant.key) !== -1
   )
+}
+
+function currentBan(): Date | undefined {
+  const playban = session && session.playban
+  return playban && new Date(playban.date + playban.mins * 60000)
 }
 
 function isKidMode(): boolean {
@@ -310,5 +317,9 @@ export default {
   myTurnGames,
   lichessBackedProp,
   setKidMode,
-  confirmEmail
+  confirmEmail,
+  currentBan,
+  hasCurrentBan(): boolean {
+    return currentBan() !== undefined
+  },
 }

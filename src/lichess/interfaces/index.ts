@@ -169,6 +169,11 @@ export interface ApiStatus {
   readonly mustUpgrade?: boolean
 }
 
+export interface TempBan {
+  date: Timestamp
+  mins: number
+}
+
 export function isPoolMember(conf: PoolMember | SeekSetup): conf is PoolMember {
   return (conf as PoolMember).id !== undefined
 }

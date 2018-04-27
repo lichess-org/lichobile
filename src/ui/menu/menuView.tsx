@@ -146,7 +146,7 @@ function renderLinks(user?: Session) {
         <span className="menu_icon_game" />{i18n('nbGamesInPlay', offlineGames.length)}
       </li> : null
       }
-      {hasNetwork() ?
+      {hasNetwork() && !session.hasCurrentBan() ?
       <li className="side_link" key="play_real_time" data-popup="createGame">
         <span className="fa fa-plus-circle"/>{i18n('createAGame')}
       </li> : null

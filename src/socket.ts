@@ -259,7 +259,7 @@ function createLobby(
 ) {
   const socketHandlers = {
     onOpen: () => {
-      session.backgroundRefresh()
+      session.refresh()
       onOpen()
     },
     events: Object.assign({}, defaultHandlers, handlers)

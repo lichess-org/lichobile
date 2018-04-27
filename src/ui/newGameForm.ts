@@ -1,5 +1,9 @@
+import * as h from 'mithril/hyperscript'
 import * as utils from '../utils'
+import i18n from '../i18n'
 import router from '../router'
+import { humanSetupFromSettings } from '../lichess/setup'
+import { Pool, PoolMember, HumanSeekSetup, isPoolMember, isSeekSetup } from '../lichess/interfaces'
 import * as xhr from '../xhr'
 import settings, { HumanSettings } from '../settings'
 import spinner from '../spinner'
@@ -8,11 +12,7 @@ import redraw from '../utils/redraw'
 import * as helper from './helper'
 import formWidgets from './shared/form'
 import popupWidget from './shared/popup'
-import i18n from '../i18n'
 import lobby from './lobby'
-import * as h from 'mithril/hyperscript'
-import { humanSetupFromSettings } from '../lichess/setup'
-import { Pool, PoolMember, HumanSeekSetup, isPoolMember, isSeekSetup } from '../lichess/interfaces'
 
 let isOpen = false
 
@@ -31,8 +31,9 @@ export default {
 
   openRealTime(tab?: string) {
     humanSetup.timeMode('1')
-    if (tab)
+    if (tab) {
       tabPreset = tab
+    }
     open()
   },
 
@@ -55,6 +56,9 @@ export default {
 }
 
 function open() {
+  if (session.hasCurrentBan() !== undefined) {
+    return
+  }
   if (xhr.cachedPools.length === 0) {
     xhr.lobby(false).then(redraw)
   }

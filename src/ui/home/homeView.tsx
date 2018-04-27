@@ -3,6 +3,7 @@ import router from '../../router'
 import { emptyFen } from '../../utils/fen'
 import { hasNetwork } from '../../utils'
 import i18n from '../../i18n'
+import session from '../../session'
 import * as helper from '../helper'
 import { renderTimelineEntry, timelineOnTap } from '../timeline'
 import MiniBoard from '../shared/miniBoard'
@@ -16,6 +17,8 @@ import { Ctrl } from '.'
 export function body(ctrl: Ctrl) {
   const nbPlayers = i18n('nbConnectedPlayers', ctrl.nbConnectedPlayers() || '?')
   const nbGames = i18n('nbGamesInPlay', ctrl.nbGamesInPlay() || '?')
+
+  const playbanEndsAt = session.currentBan()
 
   if (!hasNetwork()) {
     const puzzleData = ctrl.offlinePuzzle()
@@ -51,16 +54,22 @@ export function body(ctrl: Ctrl) {
           <div className="numPlayers">{nbPlayers}</div>
           <div className="numGames">{nbGames}</div>
         </div>
-        <div className="homeCreate">
-          <h2 className="homeTitle">Quick Game</h2>
-          {renderQuickSetup(() => newGameForm.openRealTime('custom'))}
-        </div>
+        {playbanEndsAt && ((playbanEndsAt.valueOf() - Date.now()) / 1000) > 1 ?
+          renderPlayban(playbanEndsAt) : renderQuickGame()
+        }
         {renderFeaturedTournaments(ctrl.featuredTournaments())}
         {renderDailyPuzzle(ctrl)}
         {renderTimeline(ctrl)}
       </div>
     </div>
   )
+}
+
+function renderQuickGame() {
+  return h('div.homeCreate', [
+    h('h2.homeTitle', 'Quick Game'),
+    renderQuickSetup(() => newGameForm.openRealTime('custom')),
+  ])
 }
 
 function renderFeaturedTournaments(tournaments: TournamentListItem[]) {
@@ -112,5 +121,36 @@ function renderTimeline(ctrl: Ctrl) {
         </button>
       </div>
     </section>
+  )
+}
+
+function renderPlayban(endsAt: Date) {
+  const seconds = (endsAt.valueOf() - Date.now()) / 1000
+  return (
+    <div className="home-playbanInfo">
+      <h2>Sorry :(</h2>
+      <p>We had to time you out for a {seconds < 3600 ? 'little ' : ''}while.</p>
+      <br />
+      <p>The timeout expires <strong>{window.moment(endsAt).fromNow()}</strong>.</p>
+      <h2>Why?</h2>
+      <p>
+        We aim to provide a pleasant chess experience for everyone.<br />
+        To that effect, we must ensure that all players follow good practices.<br />
+        When a potential problem is detected, we display this message.
+      </p>
+      <h2>How to avoid this?</h2>
+      <ul>
+        <li>Play every game you start</li>
+        <li>Try to win (or at least draw) every game you play</li>
+        <li>Resign lost games (don't let the clock run down)</li>
+      </ul>
+      <br />
+      <br />
+      <p>
+        We apologize for the temporary inconvenience,<br />
+        and wish you great games on lichess.org.<br />
+        Thank you for reading!
+      </p>
+    </div>
   )
 }

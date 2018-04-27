@@ -170,8 +170,8 @@ export interface ApiStatus {
 }
 
 export interface TempBan {
-  date: Timestamp
-  mins: number
+  readonly date: Timestamp
+  readonly mins: number
 }
 
 export function isPoolMember(conf: PoolMember | SeekSetup): conf is PoolMember {

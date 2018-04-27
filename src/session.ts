@@ -259,7 +259,7 @@ function rememberLogin(): Promise<Session> {
 }
 
 function refresh(): Promise<void> {
-  return fetchJSON<Session>('/account/info')
+  return fetchJSON<Session>('/account/info', { cache: 'reload' })
   .then((data: Session) => {
     session = data
     storeSession(data)

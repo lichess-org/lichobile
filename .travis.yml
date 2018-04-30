@@ -1,4 +1,30 @@
-language: node_js
-node_js:
-  - "lts/*"
-script: "npm run build-stage"
+language: android
+android:
+   components:
+      - tools
+      - platform-tools
+      - build-tools-27.0.2
+      - android-27
+      - extra-google-google_play_services
+      - extra-google-m2repository
+      - extra-android-m2repository
+sudo: false
+jdk:
+    - oraclejdk8
+env:
+    global:
+      - ANDROID_TOOLS=${ANDROID_HOME}/tools
+before_install:
+  - mkdir "$ANDROID_HOME/licenses" || true
+  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\n504667f4c0de7af1a06de9f4b1727b84351f2910" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+  - nvm install 8.10.0
+  - echo y | sdkmanager "ndk-bundle"
+install:
+  - npm install -g npm@5.8.0
+  - npm install -g cordova@8.0.0
+  - npm install
+  - cordova platform add android
+script:
+  - sh scripts/travis_build.sh
+  - test -e platforms/android/app/build/outputs/apk/debug/app-debug.apk 

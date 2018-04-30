@@ -134,8 +134,8 @@ function renderPlayban(endsAt: Date) {
       <p>The timeout expires <strong>{window.moment(endsAt).fromNow()}</strong>.</p>
       <h2>Why?</h2>
       <p>
-        We aim to provide a pleasant chess experience for everyone.<br />
-        To that effect, we must ensure that all players follow good practices.<br />
+        We aim to provide a pleasant chess experience for everyone.
+        To that effect, we must ensure that all players follow good practices.
         When a potential problem is detected, we display this message.
       </p>
       <h2>How to avoid this?</h2>

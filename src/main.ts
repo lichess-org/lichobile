@@ -4,10 +4,9 @@
 
 import 'whatwg-fetch'
 
-import * as Raven from 'raven-js'
-import * as moment from 'moment'
-window.moment = moment
+import './moment'
 
+import * as Raven from 'raven-js'
 import * as debounce from 'lodash/debounce'
 import globalConfig from './config'
 import { hasNetwork } from './utils'

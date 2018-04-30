@@ -56,7 +56,7 @@ export default {
 }
 
 function open() {
-  if (session.hasCurrentBan() !== undefined) {
+  if (session.hasCurrentBan()) {
     return
   }
   if (xhr.cachedPools.length === 0) {

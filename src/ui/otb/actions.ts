@@ -3,6 +3,7 @@ import i18n from '../../i18n'
 import redraw from '../../utils/redraw'
 import settings from '../../settings'
 import formWidgets from '../shared/form'
+import * as helper from '../helper'
 import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound/view'
 import ground from '../shared/offlineRound/ground'
 import popupWidget from '../shared/popup'
@@ -19,6 +20,11 @@ export interface OtbActionsCtrl {
 
 function renderAlways(ctrl: OtbRound) {
   return [
+    h('div', [
+      h('button[data-icon=A]', {
+        oncreate: helper.ontap(ctrl.goToAnalysis)
+      }, i18n('analysis'))
+    ]),
     h('div.action', formWidgets.renderCheckbox(
       i18n('Flip pieces and opponent info after move'), 'flipPieces', settings.otb.flipPieces,
         (v) => ground.changeOTBMode(ctrl.chessground, v)

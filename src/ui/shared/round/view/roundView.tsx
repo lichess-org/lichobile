@@ -512,7 +512,7 @@ function renderGameActionsBar(ctrl: OnlineRound) {
     'fa-mail-reply'
   ] : [
     'fa',
-    'fa-ellipsis-h'
+    'fa-ellipsis-v'
   ]).concat([
     'action_bar_button',
     answerRequired ? 'glow' : ''

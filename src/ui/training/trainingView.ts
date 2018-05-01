@@ -56,7 +56,7 @@ export function overlay(ctrl: TrainingCtrl) {
 
 function renderActionsBar(ctrl: TrainingCtrl) {
   return h('section#training_actions.actions_bar', [
-    h('button.action_bar_button.training_action.fa.fa-ellipsis-h', {
+    h('button.action_bar_button.training_action.fa.fa-area-chart', {
       key: 'puzzleMenu',
       oncreate: helper.ontap(ctrl.menu.open)
     }),

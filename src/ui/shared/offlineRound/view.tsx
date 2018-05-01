@@ -73,19 +73,13 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
 export function renderGameActionsBar(ctrl: OfflineRoundInterface) {
   return (
     <section key="actionsBar" className="actions_bar">
-      <button className="action_bar_button fa fa-ellipsis-h"
+      <button className="action_bar_button fa fa-ellipsis-v"
         oncreate={helper.ontap(ctrl.actions.open)}
       />
-      <button className="action_bar_button" data-icon="U"
+      <button className="action_bar_button fa fa-plus-circle"
         oncreate={helper.ontap(
           ctrl.newGameMenu.open,
           () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
-        )}
-      />
-      <button data-icon="A" className="action_bar_button"
-        oncreate={helper.ontap(
-          ctrl.goToAnalysis,
-          () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')
         )}
       />
       <button className="fa fa-share-alt action_bar_button"
@@ -105,9 +99,6 @@ export function renderGameActionsBarTablet(ctrl: OfflineRoundInterface) {
     <section className="actions_bar">
       <button className="action_bar_button" data-icon="U"
         oncreate={helper.ontap(ctrl.newGameMenu.open, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
-      />
-      <button data-icon="A" className="action_bar_button"
-        oncreate={helper.ontap(ctrl.goToAnalysis)}
       />
       <button className="fa fa-share-alt action_bar_button"
         oncreate={helper.ontap(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}

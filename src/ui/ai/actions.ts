@@ -27,8 +27,13 @@ export function opponentSelector() {
   )
 }
 
-function renderAlways() {
+function renderAlways(ctrl: AiRoundInterface) {
   return [
+    h('div', [
+      h('button[data-icon=A]', {
+        oncreate: helper.ontap(ctrl.goToAnalysis)
+      }, i18n('analysis'))
+    ]),
     h('div.action.opponentSelector', [
       opponentSelector()
     ])
@@ -83,7 +88,7 @@ export default {
         ].concat(
           renderClaimDrawButton(ctrl.root),
           resignButton(ctrl.root),
-          renderAlways()
+          renderAlways(ctrl.root)
         )
       },
       ctrl.isOpen(),

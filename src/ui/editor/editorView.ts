@@ -63,7 +63,7 @@ function sparePieces(color: Color, orientation: Color, position: 'top' | 'bottom
 
 function renderActionsBar(ctrl: Editor) {
   return h('section.actions_bar', [
-    h('button.action_bar_button.fa.fa-ellipsis-h', {
+    h('button.action_bar_button.fa.fa-gear', {
       key: 'editorMenu',
       oncreate: helper.ontap(ctrl.menu.open)
     }),

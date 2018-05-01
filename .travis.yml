@@ -28,3 +28,10 @@ install:
 script:
   - sh scripts/travis_build.sh
   - test -e platforms/android/app/build/outputs/apk/debug/app-debug.apk 
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+  directories:
+  - $HOME/.npm
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/

@@ -1,6 +1,6 @@
 import * as h from 'mithril/hyperscript'
 import * as debounce from 'lodash/debounce'
-import session from '../session'
+import session, { SignupData, EmailConfirm } from '../session'
 import redraw from '../utils/redraw'
 import { handleXhrError } from '../utils'
 import { fetchJSON, ErrorResponse } from '../http'
@@ -147,6 +147,10 @@ function scrollToTop(e: Event) {
   }, 300)
 }
 
+function isConfirmMailData(d: SignupData): d is EmailConfirm {
+  return (d as EmailConfirm).email_confirm !== undefined
+}
+
 function submit(form: HTMLFormElement) {
   const login = form[0].value.trim()
   const email = form[1].value.trim()
@@ -157,16 +161,17 @@ function submit(form: HTMLFormElement) {
   formError = null
   redraw()
   session.signup(login, email, pass)
-  .then((d: { email_confirm?: boolean }) => {
-    if (d && d.email_confirm) {
+  .then(d => {
+    if (d && isConfirmMailData(d)) {
       // should comfirm email
       loading = false
       checkEmail = true
       redraw()
     } else {
-      // user already authenticated
       window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center')
+      redraw()
       loginModal.close()
+      close()
     }
   })
   .catch((error: any) => {

@@ -35,14 +35,14 @@ export function newPuzzle(): Promise<PuzzleData> {
   })
 }
 
-export function newPuzzles(num: number): Promise<PuzzleSyncData> {
+export function newPuzzlesBatch(num: number): Promise<PuzzleSyncData> {
   return fetchJSON<PuzzleSyncData>('/training/batch', {
     method: 'GET',
     query: { nb: num }
   })
 }
 
-export function solvePuzzles(outcomes: PuzzleOutcome[]): Promise<void> {
+export function solvePuzzlesBatch(outcomes: PuzzleOutcome[]): Promise<void> {
   return fetchJSON(`/training/batch`, {
     method: 'POST',
     body: JSON.stringify({

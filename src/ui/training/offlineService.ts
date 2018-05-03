@@ -113,11 +113,11 @@ function syncPuzzles(database: Database, user: Session): Promise<UserOfflineData
       0
     )
 
-    const solvePromise = solved.length > 0 ? xhr.solvePuzzles(solved) : Promise.resolve()
+    const solvePromise = solved.length > 0 ? xhr.solvePuzzlesBatch(solved) : Promise.resolve()
 
     return solvePromise
     .then(() => data === null || puzzleDeficit > 0 ?
-      xhr.newPuzzles(puzzleDeficit) : Promise.resolve({
+      xhr.newPuzzlesBatch(puzzleDeficit) : Promise.resolve({
         puzzles: [],
         user: data.user,
       })

@@ -1,55 +1,47 @@
 import * as h from 'mithril/hyperscript'
-import * as helper from '../../helper'
-import redraw from '../../../utils/redraw'
-import i18n from '../../../i18n'
-import storage from '../../../storage'
-import session from '../../../session'
-import * as gameApi from '../../../lichess/game'
-import { OnlineGameData, Player } from '../../../lichess/interfaces/game'
-import { ChatMsg } from '../../../lichess/interfaces/chat'
-import router from '../../../router'
-import socket from '../../../socket'
-import { closeIcon } from '../../shared/icons'
-import { OnlineRoundInterface } from '.'
+import * as helper from '../helper'
+import redraw from '../../utils/redraw'
+import i18n from '../../i18n'
+import asyncStorage from '../../asyncStorage'
+import { ChatMsg } from '../../lichess/interfaces/chat'
+import router from '../../router'
+import socket from '../../socket'
+import { closeIcon } from '../shared/icons'
 
 let chatHeight: number
 
+interface ChatUnreadMap {
+  [id: string]: number
+}
+
 export class Chat {
-  public root: OnlineRoundInterface
-  public isShadowban: boolean
   public showing: boolean
-  public messages: ChatMsg[]
   public nbUnread: number
   public inputValue: string
-  private storageId: string
+  public lines: Array<ChatMsg>
 
-  constructor(root: OnlineRoundInterface, isShadowban: boolean) {
+  constructor(
+    readonly id: string,
+    lines: Array<ChatMsg>,
+    readonly writeable: boolean,
+    readonly isShadowban: boolean,
+  ) {
 
-    this.storageId = 'chat.' + root.data.game.id
-    this.root = root
-    this.isShadowban = isShadowban
     this.showing = false
-    this.messages = root.data.chat || []
+    this.lines = lines
     this.inputValue = ''
     this.nbUnread = 0
 
-    if (gameApi.playable(this.root.data)) {
-      this.checkUnreadFromStorage()
-    }
+    this.checkUnreadFromStorage()
 
     window.addEventListener('keyboardDidHide', onKeyboardHide)
     window.addEventListener('keyboardDidShow', onKeyboardShow)
-  }
-
-  public canTalk = (data: OnlineGameData) => {
-    return session.isConnected() || data.game.source === 'friend'
   }
 
   public open = () => {
     router.backbutton.stack.push(helper.slidesOutDown(this.close, 'chat'))
     this.showing = true
     this.nbUnread = 0
-    this.storeNbRead()
   }
 
   public close = (fromBB?: string) => {
@@ -57,19 +49,18 @@ export class Chat {
     if (fromBB !== 'backbutton' && this.showing) router.backbutton.stack.pop()
     this.showing = false
     this.nbUnread = 0
-    this.storeNbRead()
+    this.storeNbLinesRead()
   }
 
-  public onReload = (messages?: ChatMsg[]) => {
-    if (messages === undefined) {
-      return
+  public onReload = (lines?: ChatMsg[]) => {
+    if (lines !== undefined) {
+      this.lines = lines
+      this.checkUnreadFromStorage()
     }
-    this.messages = messages
-    this.checkUnreadFromStorage()
   }
 
   public append = (msg: ChatMsg) => {
-    this.messages.push(msg)
+    this.lines.push(msg)
     if (msg.u !== 'lichess') {
       this.nbUnread++
     }
@@ -79,7 +70,7 @@ export class Chat {
   public selectLines() {
     let prev: ChatMsg
     let ls: ChatMsg[] = []
-    this.messages.forEach((line: ChatMsg) => {
+    this.lines.forEach((line: ChatMsg) => {
       if (this.isLegitMsg(line) &&
         (!prev || !compactableDeletedLines(prev, line))
       ) {
@@ -91,7 +82,6 @@ export class Chat {
   }
 
   public unload = () => {
-    if (!gameApi.playable(this.root.data)) storage.remove(this.storageId)
     window.removeEventListener('keyboardDidHide', onKeyboardHide)
     window.removeEventListener('keyboardDidShow', onKeyboardShow)
   }
@@ -102,18 +92,29 @@ export class Chat {
     return !msg.d && (!msg.r || this.isShadowban) && !isSpam(msg.t)
   }
 
-  private checkUnreadFromStorage() {
-    const storedNb = storage.get<number>(this.storageId) || 0
-    const actualNb = this.messages.filter(this.isLegitMsg).length
-    if (this.messages !== undefined &&
-      storedNb < actualNb
-    ) {
-      this.nbUnread = this.nbUnread + (actualNb - storedNb)
-    }
+  private nbLines(): number {
+    return this.lines.filter(this.isLegitMsg).length
   }
 
-  private storeNbRead() {
-    storage.set<number>(this.storageId, this.messages.filter(this.isLegitMsg).length)
+  private checkUnreadFromStorage() {
+    asyncStorage.getItem<ChatUnreadMap>('chat')
+    .then(data => {
+      const storedNb = data && data[this.id] || 0
+      const actualNb = this.nbLines()
+      if (this.lines !== undefined && storedNb < actualNb) {
+        this.nbUnread = this.nbUnread + (actualNb - storedNb)
+        redraw()
+      }
+    })
+  }
+
+  private storeNbLinesRead() {
+    asyncStorage.getItem<ChatUnreadMap>('chat')
+    .then(data => {
+      const map: ChatUnreadMap = data || {}
+      map[this.id] = this.nbLines()
+      return asyncStorage.setItem('chat', map)
+    })
   }
 }
 
@@ -121,31 +122,19 @@ export function chatView(ctrl: Chat) {
 
   if (!ctrl.showing) return null
 
-  const player = ctrl.root.data.player
-  let header = (!ctrl.root.data.opponent.user || ctrl.root.data.player.spectator) ? i18n('chat') : ctrl.root.data.opponent.user.username
-  const watchers = ctrl.root.data.watchers
-  if (ctrl.root.data.player.spectator && watchers && watchers.nb >= 2) {
-    header = i18n('spectators') + ' ' + watchers.nb
-  } else if (ctrl.root.data.player.spectator) {
-    header = i18n('spectatorRoom')
-  }
-
   return h('div#chat.modal', { oncreate: helper.slidesInUp }, [
     h('header', [
       h('button.modal_close', {
         oncreate: helper.ontap(helper.slidesOutDown(ctrl.close, 'chat'))
       }, closeIcon),
-      h('h2', header)
+      h('h2', i18n('chatRoom'))
     ]),
     h('div#chat_content.modal_content.chat_content', [
       h('div.chat_scroller.native_scroller', {
         oncreate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement),
         onupdate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement)
       }, [
-        h('ul.chat_messages', ctrl.selectLines().map((msg: ChatMsg, i: number, all: ChatMsg[]) => {
-          if (ctrl.root.data.player.spectator) return spectatorChatRender(msg)
-          else return playerChatRender(player, msg, i, all)
-        }))
+        h('ul.chat_messages', ctrl.selectLines().map(renderMsg))
       ]),
       h('form.chat_form', {
         onsubmit: (e: Event) => {
@@ -166,8 +155,8 @@ export function chatView(ctrl: Chat) {
         }
       }, [
         h('textarea#chat_input.chat_input', {
-          placeholder: ctrl.canTalk(ctrl.root.data) ? i18n('talkInChat') : 'Login to chat',
-          disabled: !ctrl.canTalk(ctrl.root.data),
+          placeholder: ctrl.writeable ? i18n('talkInChat') : '',
+          disabled: !ctrl.writeable,
           rows: 1,
           maxlength: 140,
           value: ctrl.inputValue,
@@ -199,31 +188,7 @@ export function chatView(ctrl: Chat) {
   ])
 }
 
-function playerChatRender(player: Player, msg: ChatMsg, i: number, all: ChatMsg[]) {
-  const lichessTalking = msg.u === 'lichess'
-  const playerTalking = msg.c ? msg.c === player.color :
-  player.user && msg.u === player.user.username
-
-  let closeBalloon = true
-  let next = all[i + 1]
-  let nextTalking
-  if (next) {
-    nextTalking = next.c ? next.c === player.color :
-    player.user && next.u === player.user.username
-  }
-  if (nextTalking !== undefined) closeBalloon = nextTalking !== playerTalking
-
-  return h('li.chat_msg.allow_select', {
-    className: helper.classSet({
-      system: lichessTalking,
-      player: !!playerTalking,
-      opponent: !lichessTalking && !playerTalking,
-      'close_balloon': closeBalloon
-    })
-  }, msg.t)
-}
-
-function spectatorChatRender(msg: ChatMsg) {
+function renderMsg(msg: ChatMsg) {
   const lichessTalking = msg.u === 'lichess'
 
   return h('li.spectator_chat_msg.allow_select', {

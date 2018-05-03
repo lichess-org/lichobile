@@ -2,23 +2,32 @@ import { Study } from '../../../lichess/interfaces/study'
 import socket from '../../../socket'
 import session from '../../../session'
 
+import { Chat } from '../../shared/chat'
 import SideMenuCtrl from '../../shared/sideMenu/SideMenuCtrl'
 import AnalyseCtrl from '../AnalyseCtrl'
 import actionMenu, { IActionMenuCtrl } from './actionMenu'
 import socketHandler from './studySocketHandler'
 
 export default class StudyCtrl {
-  public readonly data: Study
   public readonly sideMenu: SideMenuCtrl
   public readonly actionMenu: IActionMenuCtrl
+  public readonly chat?: Chat
 
-  private rootCtrl: AnalyseCtrl
+  private readonly rootCtrl: AnalyseCtrl
 
-  constructor(data: Study, rootCtrl: AnalyseCtrl) {
-    this.data = data
+  constructor(readonly data: Study, rootCtrl: AnalyseCtrl) {
     this.rootCtrl = rootCtrl
     this.actionMenu = actionMenu.controller(this.rootCtrl)
     this.sideMenu = new SideMenuCtrl('right', 'studyMenu', 'studyMenu-backdrop')
+
+    if (data.features.chat && data.chat) {
+      this.chat = new Chat(
+        data.id,
+        data.chat.lines,
+        data.chat.writeable,
+        session.isShadowban()
+      )
+    }
   }
 
   public canContribute(): boolean {

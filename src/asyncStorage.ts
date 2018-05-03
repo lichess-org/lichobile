@@ -9,6 +9,7 @@ const appStore = localForage.createInstance({
 const keyRegistry = {
   session: 'session',
   trainingOfflinePuzzles: 'training.offlinePuzzles',
+  chat: 'chat',
 }
 
 type Key = keyof typeof keyRegistry

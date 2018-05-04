@@ -21,18 +21,10 @@ export function vote(id: number, v: boolean): Promise<[boolean, number]> {
 
 export function loadPuzzle(id: number): Promise<PuzzleData> {
   return fetchJSON<PuzzleData>(`/training/${id}/load`)
-  .then(cfg => {
-    cfg.online = true
-    return cfg
-  })
 }
 
 export function newPuzzle(): Promise<PuzzleData> {
   return fetchJSON<PuzzleData>('/training/new')
-  .then(cfg => {
-    cfg.online = true
-    return cfg
-  })
 }
 
 export function newPuzzlesBatch(num: number): Promise<PuzzleSyncData> {

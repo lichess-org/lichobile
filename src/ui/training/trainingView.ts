@@ -21,7 +21,7 @@ export function renderHeader(ctrl: TrainingCtrl) {
     h('h2.header-subTitle', ([
       i18n('rating'), ' ' + (ctrl.vm.mode === 'view' ? ctrl.data.puzzle.rating : '?'),
       ' • ', i18n('playedXTimes', ctrl.data.puzzle.attempts)
-    ] as Mithril.Child[]).concat(!ctrl.data.online && !hasNetwork() ? [
+    ] as Mithril.Child[]).concat(!hasNetwork() ? [
       ' • ',
       h('span.fa.fa-database'),
       `${ctrl.nbUnsolved}/${maxPuzzles}`

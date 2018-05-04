@@ -4,7 +4,6 @@ export interface PuzzleData {
   readonly puzzle: Puzzle
   game: Game
   user?: UserData
-  online?: boolean
 }
 
 export interface PuzzleSyncData {

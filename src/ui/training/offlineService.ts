@@ -104,22 +104,23 @@ export function puzzleLoadFailure(reason: any) {
  */
 function syncPuzzles(database: Database, user: Session): Promise<UserOfflineData | null> {
   return database.fetch(user.id)
-  .then(data => {
-    const unsolved = data ? data.unsolved : []
-    const solved = data ? data.solved : []
+  .then(stored => {
+    const unsolved = stored ? stored.unsolved : []
+    const solved = stored ? stored.solved : []
 
     const puzzleDeficit = Math.max(
       settings.training.puzzleBufferLen - unsolved.length,
       0
     )
 
-    const solvePromise = solved.length > 0 ? xhr.solvePuzzlesBatch(solved) : Promise.resolve()
+    const solvePromise =
+      solved.length > 0 ? xhr.solvePuzzlesBatch(solved) : Promise.resolve()
 
     return solvePromise
-    .then(() => data === null || puzzleDeficit > 0 ?
+    .then(() => !stored || puzzleDeficit > 0 ?
       xhr.newPuzzlesBatch(puzzleDeficit) : Promise.resolve({
         puzzles: [],
-        user: data.user,
+        user: stored.user,
       })
     )
     .then(newData => {
@@ -130,7 +131,7 @@ function syncPuzzles(database: Database, user: Session): Promise<UserOfflineData
       })
       .then(o => o[user.id]!)
     })
-    // when offline, sync cannot be done so we return same data
-    .catch(() => data)
+    // when offline, sync cannot be done so we return same stored data
+    .catch(() => stored)
   })
 }

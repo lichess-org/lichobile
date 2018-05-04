@@ -8,7 +8,7 @@ import i18n from '../../i18n'
 import router from '../../router'
 import { hasNetwork } from '../../utils'
 import redraw from '../../utils/redraw'
-import { UserData as PuzzleUserData, getUserRatingFromHistory } from '../../lichess/interfaces/training'
+import { UserData as PuzzleUserData } from '../../lichess/interfaces/training'
 import loginModal from '../loginModal'
 import popupWidget from '../shared/popup'
 import * as helper from '../helper'
@@ -108,8 +108,7 @@ function renderSigninBox() {
 }
 
 function renderUserInfosOffline(user: OfflineUser, ctrl: IMenuCtrl) {
-  // TODO use user.rating only when fixed server side
-  const rating = getUserRatingFromHistory(user.data.recent) || user.data.rating
+  const rating = user.data.rating
   return h('div.training-offlineInfos', [
     h('p', ['You are currently offline. Your last recorded rating as ', h('strong', user.username), ' is ', h('strong', rating), '.']),
     h('p', 'You still have ', h('strong', ctrl.root.nbUnsolved), ' saved puzzles to solve.'),
@@ -129,8 +128,7 @@ function renderUserInfosOnline(user: PuzzleUserData) {
   else if (vw >= 500) width = vw * 0.6
   else width = vw * 0.85
   const height = 200
-  // TODO use user.rating only when fixed server side
-  const rating = getUserRatingFromHistory(user.recent) || user.rating
+  const rating = user.rating
   return [
     h('p.trainingRatingHeader', h.trust(i18n('yourPuzzleRatingX', `<strong>${rating}</strong>`))),
     user.recent ? h('svg#training-graph', {
@@ -162,8 +160,7 @@ function renderRecent(user: PuzzleUserData) {
 
 function drawChart(user: PuzzleUserData) {
   const history = Array.from(user.recent.map(x => x[2]))
-  // TODO use user.rating when fixed server side
-  const rating = getUserRatingFromHistory(user.recent)
+  const rating = user.rating
   if (rating !== undefined) {
     history.push(rating)
   }

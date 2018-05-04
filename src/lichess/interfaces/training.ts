@@ -69,17 +69,6 @@ export interface UserData {
   readonly rating: number
 }
 
-export function getUserRatingFromHistory(
-  puzzles: ReadonlyArray<RecentPuzzleStats>
-): number | undefined {
-  const last = puzzles[puzzles.length - 1]
-  if (last !== undefined) {
-    return last[2] + last[1]
-  }
-
-  return undefined
-}
-
 export type LineFeedback = 'win' | 'retry'
 export type Line = Lines | LineFeedback
 export type Lines = { [uci: string]: Line }

@@ -22,7 +22,7 @@ import makeGround from './ground'
 import menu, { IMenuCtrl } from './menu'
 import * as xhr from './xhr'
 import { VM, Data, PimpedGame, Feedback } from './interfaces'
-import { syncPuzzleResult, syncAndLoadNewPuzzle, nbRemainingPuzzles, puzzleLoadFailure } from './offlineService'
+import { getUnsolved, syncPuzzleResult, syncAndLoadNewPuzzle, nbRemainingPuzzles, puzzleLoadFailure } from './offlineService'
 import { Database } from './database'
 
 export default class TrainingCtrl implements PromotingInterface {
@@ -431,17 +431,42 @@ export default class TrainingCtrl implements PromotingInterface {
     const user = session.get()
     const outcome = { id: this.data.puzzle.id, win }
 
-    if (user && !this.data.online) {
-      syncPuzzleResult(this.database, user, outcome)
-    }
-    else {
+    const roundReq = () => {
       xhr.round(outcome)
       .then((res) => {
         this.vm.voted = res.voted
         this.data.user = res.user
         redraw()
       })
+      .catch(err => {
+        handleXhrError(err)
+        this.vm.resultSent = false
+      })
     }
+
+    if (user) {
+      getUnsolved(this.database, user)
+      .then(puzzles => {
+        // if puzzle is in the unsolved queue let's sync it using batch endpoint
+        // a puzzle may have been loaded from database, or from xhr if it has
+        // been loaded by id
+        if (puzzles.find(p => p.puzzle.id === this.data.puzzle.id)) {
+          syncPuzzleResult(this.database, user, outcome)
+          .then(newData => {
+            console.log(newData)
+            if (newData) {
+              this.data.user = newData.user
+              redraw()
+            }
+          })
+        } else {
+          roundReq()
+        }
+      })
+    } else {
+      roundReq()
+    }
+
   }
 
   private onXhrError = (res: ErrorResponse) => {

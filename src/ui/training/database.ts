@@ -12,8 +12,8 @@ export type Database = typeof db
 
 export interface UserOfflineData {
   user: UserData
-  solved: PuzzleOutcome[]
-  unsolved: PuzzleData[]
+  solved: ReadonlyArray<PuzzleOutcome>
+  unsolved: ReadonlyArray<PuzzleData>
 }
 
 type UserId = string

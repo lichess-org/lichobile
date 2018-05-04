@@ -46,6 +46,14 @@ export function loadNewPuzzle(database: Database, user: Session): Promise<Puzzle
 }
 
 /*
+ * Get remaining puzzles in unsolved queue
+ */
+export function getUnsolved(database: Database, user: Session): Promise<ReadonlyArray<PuzzleData>> {
+  return database.fetch(user.id)
+  .then(data => data && data.unsolved || [])
+}
+
+/*
  * Get the number of remaining puzzles in unsolved queue
  */
 export function nbRemainingPuzzles(database: Database, user: Session): Promise<number> {
@@ -60,12 +68,12 @@ export function syncPuzzleResult(
   database: Database,
   user: Session,
   outcome: PuzzleOutcome
-): Promise<void> {
+): Promise<UserOfflineData | null> {
   return database.fetch(user.id)
   .then(data => {
     // if we reach here there must be data
     if (data) {
-      database.save(user.id, {
+      return database.save(user.id, {
         ...data,
         solved: data.solved.concat([{
           id: outcome.id,
@@ -74,9 +82,11 @@ export function syncPuzzleResult(
         unsolved: data.unsolved.filter(p => p.puzzle.id !== outcome.id)
       })
       .then(() => {
-        syncPuzzles(database, user)
+        return syncPuzzles(database, user)
       })
     }
+
+    return null
   })
 }
 

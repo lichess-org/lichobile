@@ -70,7 +70,7 @@ export default {
           i18n('forgotPassword') + ' ',
           h('br'),
           h('a', {
-            oncreate: helper.ontap(() => window.open(`https://en.lichess.org/password/reset`, '_blank', 'location=no'))
+            oncreate: helper.ontap(() => window.open(`https://lichess.org/password/reset`, '_blank', 'location=no'))
           }, [i18n('passwordReset')])
         ])
       ])

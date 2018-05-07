@@ -6,9 +6,9 @@ Only bug reports/feature request issues should be opened here.
 Before opening an issue, please check a similar issue is not already open (or closed). Duplicates or near-duplicates will be closed immediately.
 -->
 
-**I'm submitting a ...**  (check one with "x"):
-- [ ] bug report
-- [ ] feature request
+**I'm submitting a ...**  (keep the relevant one):
+- bug report
+- feature request
 
 
 <!-- Fill out the relevant sections below and delete irrelevant sections. -->

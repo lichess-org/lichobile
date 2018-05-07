@@ -36,9 +36,11 @@ export default {
             submit((e.target as HTMLFormElement))
           }
         }, [
-          formError ?  h('div.form-error', formError) : null,
+          formError && !isTotpError(formError) ?  h('div.form-error', formError) : null,
+          formError === 'InvalidTotpToken' ? h('div.form-error', i18n('invalidAuthenticationCode')) : null,
           h('div.field', [
-            h('input#pseudo[type=text]', {
+            h('input#username', {
+              type: isTotpError(formError) ? 'hidden' : 'text',
               className: formError ? 'form-error' : '',
               placeholder: i18n('username'),
               autocomplete: 'off',
@@ -49,12 +51,28 @@ export default {
             }),
           ]),
           h('div.field', [
-            h('input#password[type=password]', {
+            h('input#password', {
+              type: isTotpError(formError) ? 'hidden' : 'password',
               className: formError ? 'form-error' : '',
               placeholder: i18n('password'),
               required: true
             }),
           ]),
+          isTotpError(formError) ? [
+            h('div.field', [
+              h('input#token[type=text]', {
+                className: formError !== 'MissingTotpToken' ? 'form-error' : '',
+                placeholder: 'Authentication code',
+                autocomplete: 'off',
+                autocapitalize: 'off',
+                autocorrect: 'off',
+                spellcheck: false,
+                pattern: '[0-9]{6}',
+                required: true
+              }),
+            ]),
+            h('p.twofactorhelp[data-icon=""]', 'Open the two-factor authentication app on your device to view your authentication code and verify your identity.'),
+          ] : null,
           h('div.submit', [
             h('button.submitButton[data-icon=F]', i18n('signIn'))
           ])
@@ -79,13 +97,13 @@ export default {
 }
 
 function submit(form: HTMLFormElement) {
-  const login = form[0].value.trim()
-  const pass = form[1].value
-  if (!login || !pass) return
-  formError = null
+  const username = form['username'].value
+  const password = form['password'].value
+  const token = form['token'] ? form['token'].value : null
+  if (!username || !password) return
   redraw()
   window.Keyboard.close()
-  session.login(login, pass)
+  session.login(username, password, token)
   .then(() => {
     close()
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center')
@@ -110,6 +128,10 @@ function submit(form: HTMLFormElement) {
       }
     }
   })
+}
+
+function isTotpError(formError: string | null) {
+  return formError === 'MissingTotpToken' || formError === 'InvalidTotpToken'
 }
 
 function open() {

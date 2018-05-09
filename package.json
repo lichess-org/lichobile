@@ -63,7 +63,6 @@
         "cordova-plugin-globalization": "1.11.0",
         "cordova-plugin-inappbrowser": "1.6.1",
         "cordova-plugin-insomnia": "4.2.0",
-        "cordova-plugin-ionic-keyboard": "2.0.5",
         "cordova-plugin-nativeaudio": "git+https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",
         "cordova-plugin-network-information": "2.0.1",
         "cordova-plugin-splashscreen": "5.0.2",
@@ -81,6 +80,7 @@
         "d3-time": "1.0.7",
         "d3-time-format": "2.0.5",
         "hammerjs": "2.0.8",
+        "ionic-plugin-keyboard": "2.2.1",
         "localforage": "1.5.5",
         "lodash": "4.17.4",
         "mithril": "1.1.6",
@@ -136,7 +136,6 @@
             "cordova-plugin-x-toast": {},
             "cordova-plugin-network-information": {},
             "cordova-plugin-stockfish": {},
-            "cordova-plugin-ionic-keyboard": {},
             "cordova-plugin-file": {},
             "onesignal-cordova-plugin": {},
             "cordova-universal-links-plugin": {},
@@ -147,7 +146,8 @@
             "cordova-plugin-splashscreen": {},
             "cordova-plugin-fullscreen": {},
             "cordova-plugin-globalization": {},
-            "cordova-plugin-crosswalk-data-migration": {}
+            "cordova-plugin-crosswalk-data-migration": {},
+            "ionic-plugin-keyboard": {}
         }
     },
     "jest": {

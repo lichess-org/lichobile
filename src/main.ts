@@ -65,7 +65,10 @@ function main() {
   })
   window.addEventListener('resize', debounce(onResize), false)
 
-  window.Keyboard.hideKeyboardAccessoryBar(false)
+  // iOs keyboard hack
+  // TODO we may want to remove this and call only on purpose
+  window.cordova.plugins.Keyboard.disableScroll(true)
+  window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false)
 
   if (globalConfig.mode === 'release' && globalConfig.sentryDSN) {
     Raven.config(globalConfig.sentryDSN, {

@@ -156,7 +156,7 @@ function submit(form: HTMLFormElement) {
   const email = form[1].value.trim()
   const pass = form[2].value.trim()
   if (!login || !email || !pass) return
-  window.Keyboard.close()
+  window.cordova.plugins.Keyboard.close()
   loading = true
   formError = null
   redraw()
@@ -198,7 +198,7 @@ function open() {
 
 function close(fromBB?: string) {
   if (checkEmail === true) loginModal.close()
-  window.Keyboard.close()
+  window.cordova.plugins.Keyboard.close()
   if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
   isOpen = false
 }

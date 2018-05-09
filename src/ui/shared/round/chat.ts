@@ -36,8 +36,8 @@ export class Chat {
       this.checkUnreadFromStorage()
     }
 
-    window.addEventListener('keyboardDidHide', onKeyboardHide)
-    window.addEventListener('keyboardDidShow', onKeyboardShow)
+    window.addEventListener('native.keyboardhide', onKeyboardHide)
+    window.addEventListener('native.keyboardshow', onKeyboardShow)
   }
 
   public canTalk = (data: OnlineGameData) => {
@@ -52,7 +52,7 @@ export class Chat {
   }
 
   public close = (fromBB?: string) => {
-    window.Keyboard.close()
+    window.cordova.plugins.Keyboard.close()
     if (fromBB !== 'backbutton' && this.showing) router.backbutton.stack.pop()
     this.showing = false
     this.nbUnread = 0
@@ -91,8 +91,8 @@ export class Chat {
 
   public unload = () => {
     if (!gameApi.playable(this.root.data)) storage.remove(this.storageId)
-    window.removeEventListener('keyboardDidHide', onKeyboardHide)
-    window.removeEventListener('keyboardDidShow', onKeyboardShow)
+    document.removeEventListener('native.keyboardhide', onKeyboardHide)
+    document.removeEventListener('native.keyboardshow', onKeyboardShow)
   }
 
   // --

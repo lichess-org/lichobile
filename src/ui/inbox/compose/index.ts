@@ -26,8 +26,8 @@ export default {
   oncreate: helper.viewFadeIn,
 
   onremove() {
-    window.removeEventListener('keyboardDidShow', helper.onKeyboardShow)
-    window.removeEventListener('keyboardDidHide', helper.onKeyboardHide)
+    window.removeEventListener('native.keyboardshow', helper.onKeyboardShow)
+    window.removeEventListener('native.keyboardhide', helper.onKeyboardHide)
   },
 
   view() {

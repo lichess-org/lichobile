@@ -60,18 +60,17 @@ export default {
           ]),
           isTotpError(formError) ? [
             h('div.field', [
-              h('input#token[type=text]', {
+              h('input#token[type=number]', {
                 className: formError !== 'MissingTotpToken' ? 'form-error' : '',
                 placeholder: 'Authentication code',
-                autocomplete: 'off',
-                autocapitalize: 'off',
-                autocorrect: 'off',
-                spellcheck: false,
-                pattern: '[0-9]{6}',
+                pattern: '\d{6}',
                 required: true
               }),
             ]),
-            h('p.twofactorhelp[data-icon=""]', 'Open the two-factor authentication app on your device to view your authentication code and verify your identity.'),
+            h('p.twofactorhelp', [
+              h('i.fa.fa-mobile-phone'), h.trust('&nbsp'),
+              'Open the two-factor authentication app on your device to view your authentication code and verify your identity.'
+            ]),
           ] : null,
           h('div.submit', [
             h('button.submitButton[data-icon=F]', i18n('signIn'))

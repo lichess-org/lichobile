@@ -69,6 +69,10 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data)
 
   return h('div.analyseMenu', [
+     h('button[data-icon=B]', {
+      key: 'flipBoard',
+      oncreate: helper.ontap(ctrl.settings.flip)
+     }, i18n('flipBoard')),
      isOfflineOrNotPlayable ? h('button[data-icon=U]', {
       key: 'continueFromHere',
       oncreate: helper.ontap(() => {

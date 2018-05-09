@@ -14,6 +14,7 @@ import TabNavigation from '../../shared/TabNavigation'
 import { loadingBackbutton } from '../../shared/common'
 import * as helper from '../../helper'
 import layout from '../../layout'
+import { chatView } from '../../shared/chat'
 
 import menu from '../menu'
 import studyActionMenu from '../study/actionMenu'
@@ -63,6 +64,7 @@ export function overlay(ctrl: AnalyseCtrl) {
   return [
     renderPromotion(ctrl),
     ctrl.study ? studyActionMenu.view(ctrl.study.actionMenu) : menu.view(ctrl.menu),
+    ctrl.study && ctrl.study.chat ? chatView(ctrl.study.chat) : null,
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notesView(ctrl.notes) : null,
     continuePopup.view(ctrl.continuePopup),

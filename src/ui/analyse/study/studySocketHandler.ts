@@ -1,5 +1,6 @@
 import redraw from '../../../utils/redraw'
 import { currentSri } from '../../../utils'
+import { ChatMsg } from '../../../lichess/interfaces/chat'
 
 import StudyCtrl from './StudyCtrl'
 
@@ -9,6 +10,9 @@ export default function(ctrl: StudyCtrl) {
       ctrl.data.likes = d.l.likes
       if (d.w && d.w.s === currentSri()) ctrl.data.liked = d.l.me
       redraw()
+    },
+    message(msg: ChatMsg) {
+      if (ctrl.chat) ctrl.chat.append(msg)
     },
   }
 }

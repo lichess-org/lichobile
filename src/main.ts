@@ -73,6 +73,10 @@ function main() {
     }).install()
   }
 
+  if (cordova.platformId === 'android') {
+      window.StatusBar.backgroundColorByHexString('#111')
+  }
+
   setTimeout(() => {
     window.navigator.splashscreen.hide()
   }, 500)

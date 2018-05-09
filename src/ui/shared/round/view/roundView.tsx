@@ -24,7 +24,7 @@ import Clock from '../clock/clockView'
 import ClockCtrl from '../clock/ClockCtrl'
 import promotion from '../promotion'
 import gameButton from './button'
-import { chatView } from '../chat'
+import { chatView } from '../../chat'
 import { notesView } from '../notes'
 import CrazyPocket from '../crazy/CrazyPocket'
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView'
@@ -43,8 +43,15 @@ export default function view(ctrl: OnlineRound) {
 }
 
 function overlay(ctrl: OnlineRound) {
+  let chatHeader = (!ctrl.data.opponent.user || ctrl.data.player.spectator) ? i18n('chat') : ctrl.data.opponent.user.username
+  const watchers = ctrl.data.watchers
+  if (ctrl.data.player.spectator && watchers && watchers.nb >= 2) {
+    chatHeader = i18n('spectators') + ' ' + watchers.nb
+  } else if (ctrl.data.player.spectator) {
+    chatHeader = i18n('spectatorRoom')
+  }
   return [
-    ctrl.chat ? chatView(ctrl.chat) : null,
+    ctrl.chat ? chatView(ctrl.chat, chatHeader) : null,
     ctrl.notes ? notesView(ctrl.notes) : null,
     promotion.view(ctrl),
     renderGamePopup(ctrl),

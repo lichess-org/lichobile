@@ -24,6 +24,7 @@ export default class StudyCtrl {
       this.chat = new Chat(
         data.id,
         data.chat.lines,
+        undefined,
         data.chat.writeable,
         session.isShadowban()
       )

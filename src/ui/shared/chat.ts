@@ -3,6 +3,7 @@ import * as helper from '../helper'
 import redraw from '../../utils/redraw'
 import i18n from '../../i18n'
 import asyncStorage from '../../asyncStorage'
+import { Player } from '../../lichess/interfaces/game'
 import { ChatMsg } from '../../lichess/interfaces/chat'
 import router from '../../router'
 import socket from '../../socket'
@@ -23,6 +24,7 @@ export class Chat {
   constructor(
     readonly id: string,
     lines: Array<ChatMsg>,
+    readonly player: Player | undefined,
     readonly writeable: boolean,
     readonly isShadowban: boolean,
   ) {
@@ -118,7 +120,7 @@ export class Chat {
   }
 }
 
-export function chatView(ctrl: Chat) {
+export function chatView(ctrl: Chat, header?: string) {
 
   if (!ctrl.showing) return null
 
@@ -127,14 +129,17 @@ export function chatView(ctrl: Chat) {
       h('button.modal_close', {
         oncreate: helper.ontap(helper.slidesOutDown(ctrl.close, 'chat'))
       }, closeIcon),
-      h('h2', i18n('chatRoom'))
+      h('h2', header || i18n('chatRoom'))
     ]),
     h('div#chat_content.modal_content.chat_content', [
       h('div.chat_scroller.native_scroller', {
         oncreate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement),
         onupdate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement)
       }, [
-        h('ul.chat_messages', ctrl.selectLines().map(renderMsg))
+        h('ul.chat_messages', ctrl.selectLines().map((msg: ChatMsg, i: number, all: ChatMsg[]) => {
+          if (ctrl.player !== undefined) return renderPlayerMsg(ctrl.player, msg, i, all)
+          else renderSpectatorMsg(msg)
+        }))
       ]),
       h('form.chat_form', {
         onsubmit: (e: Event) => {
@@ -155,7 +160,7 @@ export function chatView(ctrl: Chat) {
         }
       }, [
         h('textarea#chat_input.chat_input', {
-          placeholder: ctrl.writeable ? i18n('talkInChat') : '',
+          placeholder: ctrl.writeable ? i18n('talkInChat') : 'Chat is disabled.',
           disabled: !ctrl.writeable,
           rows: 1,
           maxlength: 140,
@@ -188,7 +193,31 @@ export function chatView(ctrl: Chat) {
   ])
 }
 
-function renderMsg(msg: ChatMsg) {
+function renderPlayerMsg(player: Player, msg: ChatMsg, i: number, all: ChatMsg[]) {
+  const lichessTalking = msg.u === 'lichess'
+  const playerTalking = msg.c ? msg.c === player.color :
+    player.user && msg.u === player.user.username
+
+  let closeBalloon = true
+  let next = all[i + 1]
+  let nextTalking
+  if (next) {
+    nextTalking = next.c ? next.c === player.color :
+    player.user && next.u === player.user.username
+  }
+  if (nextTalking !== undefined) closeBalloon = nextTalking !== playerTalking
+
+  return h('li.chat_msg.allow_select', {
+    className: helper.classSet({
+      system: lichessTalking,
+      player: !!playerTalking,
+      opponent: !lichessTalking && !playerTalking,
+      'close_balloon': closeBalloon
+    })
+  }, msg.t)
+}
+
+function renderSpectatorMsg(msg: ChatMsg) {
   const lichessTalking = msg.u === 'lichess'
 
   return h('li.spectator_chat_msg.allow_select', {

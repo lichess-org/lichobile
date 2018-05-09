@@ -198,12 +198,13 @@ function isSession(data: Session | LobbyData | SignupData): data is Session {
   return (<Session>data).id !== undefined
 }
 
-function login(username: string, password: string): Promise<Session | LobbyData> {
+function login(username: string, password: string, token: string | null): Promise<Session | LobbyData> {
   return fetchJSON('/login', {
     method: 'POST',
     body: JSON.stringify({
       username,
-      password
+      password,
+      token,
     })
   }, true)
   .then((data: Session | LobbyData) => {

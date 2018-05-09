@@ -6,22 +6,14 @@ const appStore = localForage.createInstance({
   version: 1.0,
 })
 
-const keyRegistry = {
-  session: 'session',
-  trainingOfflinePuzzles: 'training.offlinePuzzles',
-  chat: 'chat',
-}
-
-type Key = keyof typeof keyRegistry
-
 export default {
-  getItem<T>(key: Key): Promise<T | null> {
-    return appStore.getItem(keyRegistry[key])
+  getItem<T>(key: string): Promise<T | null> {
+    return appStore.getItem(key)
   },
-  setItem<T>(key: Key, value: T): Promise<T> {
-    return appStore.setItem(keyRegistry[key], value)
+  setItem<T>(key: string, value: T): Promise<T> {
+    return appStore.setItem(key, value)
   },
-  removeItem(key: Key): Promise<void> {
-    return appStore.removeItem(keyRegistry[key])
+  removeItem(key: string): Promise<void> {
+    return appStore.removeItem(key)
   }
 }

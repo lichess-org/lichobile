@@ -11,15 +11,13 @@ import { closeIcon } from '../shared/icons'
 
 let chatHeight: number
 
-interface ChatUnreadMap {
-  [id: string]: number
-}
-
 export class Chat {
   public showing: boolean
   public nbUnread: number
   public inputValue: string
   public lines: Array<ChatMsg>
+
+  private storageId: string
 
   constructor(
     readonly id: string,
@@ -30,6 +28,7 @@ export class Chat {
   ) {
 
     this.showing = false
+    this.storageId = 'chat.' + id
     this.lines = lines
     this.inputValue = ''
     this.nbUnread = 0
@@ -99,9 +98,9 @@ export class Chat {
   }
 
   private checkUnreadFromStorage() {
-    asyncStorage.getItem<ChatUnreadMap>('chat')
+    asyncStorage.getItem<number>(this.storageId)
     .then(data => {
-      const storedNb = data && data[this.id] || 0
+      const storedNb = data || 0
       const actualNb = this.nbLines()
       if (this.lines !== undefined && storedNb < actualNb) {
         this.nbUnread = this.nbUnread + (actualNb - storedNb)
@@ -111,12 +110,10 @@ export class Chat {
   }
 
   private storeNbLinesRead() {
-    asyncStorage.getItem<ChatUnreadMap>('chat')
-    .then(data => {
-      const map: ChatUnreadMap = data || {}
-      map[this.id] = this.nbLines()
-      return asyncStorage.setItem('chat', map)
-    })
+    const linesRead = this.nbLines()
+    if (linesRead > 0) {
+      asyncStorage.setItem(this.storageId, linesRead)
+    }
   }
 }
 

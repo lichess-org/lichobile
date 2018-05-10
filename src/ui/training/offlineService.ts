@@ -139,7 +139,6 @@ function syncPuzzles(database: Database, user: Session): Promise<UserOfflineData
         unsolved: unsolved.concat(newData.puzzles),
         solved: []
       })
-      .then(o => o[user.id]!)
     })
     // when offline, sync cannot be done so we return same stored data
     .catch(() => stored)

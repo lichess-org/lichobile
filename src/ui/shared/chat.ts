@@ -135,7 +135,7 @@ export function chatView(ctrl: Chat, header?: string) {
       }, [
         h('ul.chat_messages', ctrl.selectLines().map((msg: ChatMsg, i: number, all: ChatMsg[]) => {
           if (ctrl.player !== undefined) return renderPlayerMsg(ctrl.player, msg, i, all)
-          else renderSpectatorMsg(msg)
+          else return renderSpectatorMsg(msg)
         }))
       ]),
       h('form.chat_form', {

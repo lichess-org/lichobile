@@ -4,6 +4,7 @@ import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
 import { saveOfflineGameData, removeOfflineGameData } from '../../../utils/offlineGames'
 import { hasNetwork, boardOrientation, handleXhrError } from '../../../utils'
+import * as sleepUtils from '../../../utils/sleep'
 import session from '../../../session'
 import settings from '../../../settings'
 import socket from '../../../socket'
@@ -559,6 +560,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         session.backgroundRefresh()
       }
 
+      sleepUtils.allowSleepAgain()
       this.showActions()
       setTimeout(redraw, 1000)
     }

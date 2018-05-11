@@ -26,7 +26,7 @@ function StrongSocket(clientId, socketEndPoint, url, version, settings) {
   this.ws = null;
   this.pingSchedule = null;
   this.connectSchedule = null;
-  this.ackableMessages = [];
+  this.ackable = makeAckable(function(t, d) { this.send(t, d) }.bind(this));
   this.lastPingTime = Date.now();
   this.pongCount = 0;
   this.currentLag = 0;
@@ -70,9 +70,7 @@ StrongSocket.prototype = {
       if (self.options.sendOnOpen) self.options.sendOnOpen.forEach(function(x) { self.send(x.t, x.d, x.o); });
       self.onSuccess();
       self.pingNow();
-      var resend = self.ackableMessages;
-      self.ackableMessages = [];
-      resend.forEach(function(x) { self.send(x.t, x.d); });
+      self.ackable.resend();
     };
     self.ws.onmessage = function(e) {
       var msg = JSON.parse(e.data);
@@ -99,33 +97,24 @@ StrongSocket.prototype = {
   send: function(t, d, o) {
     var self = this;
     var data = d || {},
-    options = o || {};
-    if (options.withLag) {
-      d.l = Math.round(self.averageLag);
+    o = o || {};
+    var msg = { t: t };
+    if (d !== undefined) {
+      if (o.withLag) d.l = Math.round(self.averageLag);
+      if (o.millis !== undefined) d.s = Math.floor(o.millis * 0.1).toString(36);
+      msg.d = d;
     }
-    if (options.millis !== undefined) {
-      d.s = Math.floor(options.millis * 0.1).toString(36);
+    if (o.ackable) {
+      msg.d = msg.d || {}; // can't ack message without data
+      self.ackable.register(t, msg.d); // adds d.a, the ack ID we expect to get back
     }
-    if (options.ackable) {
-      self.ackableMessages.push({
-        t: t,
-        d: d
-      });
-    }
-    var message = JSON.stringify({
-      t: t,
-      d: data
-    });
+    var message = JSON.stringify(msg);
     self.debug('send ' + message);
     try {
       self.ws.send(message);
     } catch (e) {
       self.debug(e);
     }
-  },
-
-  sendAckable: function(t, d) {
-    this.send(t, d, { ackable: true });
   },
 
   scheduleConnect: function(delay) {
@@ -200,7 +189,7 @@ StrongSocket.prototype = {
       case false:
         break;
       case 'ack':
-        self.ackableMessages = [];
+        self.ackable.gotAck(msg.d);
         break;
       default:
         if (self.options.registeredEvents.indexOf(msg.t) !== -1) {
@@ -416,4 +405,40 @@ function serializeQueryParameters(obj) {
     str += encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]);
   }
   return str;
+}
+
+var ackableInterval; // make sure only one is active!
+
+function makeAckable(send) {
+
+  var currentId = 1; // increment with each ackable message sent
+
+  var messages = [];
+
+  function resend() {
+    var resendCutoff = Date.now() - 2500;
+    messages.forEach(function(m) {
+      if (m.at < resendCutoff) send(m.t, m.d);
+    });
+  }
+
+  if (ackableInterval) clearInterval(ackableInterval);
+  ackableInterval = setInterval(resend, 1500);
+
+  return {
+    resend: resend,
+    register: function(t, d) {
+      d.a = currentId++;
+      messages.push({
+        t: t,
+        d: d,
+        at: Date.now()
+      });
+    },
+    gotAck: function(id) {
+      messages = messages.filter(function(m) {
+        return m.d.a !== id;
+      });
+    }
+  };
 }

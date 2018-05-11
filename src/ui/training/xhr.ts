@@ -21,28 +21,20 @@ export function vote(id: number, v: boolean): Promise<[boolean, number]> {
 
 export function loadPuzzle(id: number): Promise<PuzzleData> {
   return fetchJSON<PuzzleData>(`/training/${id}/load`)
-  .then(cfg => {
-    cfg.online = true
-    return cfg
-  })
 }
 
 export function newPuzzle(): Promise<PuzzleData> {
   return fetchJSON<PuzzleData>('/training/new')
-  .then(cfg => {
-    cfg.online = true
-    return cfg
-  })
 }
 
-export function newPuzzles(num: number): Promise<PuzzleSyncData> {
+export function newPuzzlesBatch(num: number): Promise<PuzzleSyncData> {
   return fetchJSON<PuzzleSyncData>('/training/batch', {
     method: 'GET',
     query: { nb: num }
   })
 }
 
-export function solvePuzzles(outcomes: PuzzleOutcome[]): Promise<void> {
+export function solvePuzzlesBatch(outcomes: ReadonlyArray<PuzzleOutcome>): Promise<void> {
   return fetchJSON(`/training/batch`, {
     method: 'POST',
     body: JSON.stringify({

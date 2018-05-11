@@ -64,7 +64,7 @@
   };
 
   // keyboard
-  window.Keyboard = {
+  window.cordova.plugins.Keyboard = {
     show: noop,
     close: noop,
     disableScroll: noop,

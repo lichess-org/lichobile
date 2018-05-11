@@ -19,7 +19,7 @@ export default {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
     // careful with that, mutability doesn't help, but it should be easy to know
     // what changes here
-    return attrs.subTitle === 'corres' || attrs.subTitle !== oldattrs.subTitle ||
+    return attrs.data !== oldattrs.data || attrs.subTitle === 'corres' || attrs.subTitle !== oldattrs.subTitle ||
       attrs.kidMode !== oldattrs.kidMode
   },
 

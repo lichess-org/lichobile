@@ -51,12 +51,12 @@ export default function PlayersCtrl(): IPlayersCtrl {
   }
 
   function unload() {
-    window.removeEventListener('keyboardDidShow', onKeyboardShow)
-    window.removeEventListener('keyboardDidHide', onKeyboardHide)
+    window.removeEventListener('native.keyboardshow', onKeyboardShow)
+    window.removeEventListener('native.keyboardhide', onKeyboardHide)
   }
 
-  window.addEventListener('keyboardDidShow', onKeyboardShow)
-  window.addEventListener('keyboardDidHide', onKeyboardHide)
+  window.addEventListener('native.keyboardshow', onKeyboardShow)
+  window.addEventListener('native.keyboardhide', onKeyboardHide)
 
   xhr.onlinePlayers()
   .then(data => {

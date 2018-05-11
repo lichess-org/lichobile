@@ -4,7 +4,6 @@ export interface PuzzleData {
   readonly puzzle: Puzzle
   game: Game
   user?: UserData
-  online?: boolean
 }
 
 export interface PuzzleSyncData {
@@ -67,17 +66,6 @@ type RecentPuzzleStats = [number, number, number]
 export interface UserData {
   readonly recent: ReadonlyArray<RecentPuzzleStats>
   readonly rating: number
-}
-
-export function getUserRatingFromHistory(
-  puzzles: ReadonlyArray<RecentPuzzleStats>
-): number | undefined {
-  const last = puzzles[puzzles.length - 1]
-  if (last !== undefined) {
-    return last[2] + last[1]
-  }
-
-  return undefined
 }
 
 export type LineFeedback = 'win' | 'retry'

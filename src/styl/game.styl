@@ -346,36 +346,34 @@
   .notice
     margin 5px 0
 
-.negotiationIcons
-  background-color #eee
-  height 70px
-  display flex
-  padding 0 10px
-  align-items center
+.negotiationButtonsWrapper
+  padding 10px
   border-radius 5px
   > p
-    flex: 1 1 auto;
-    margin-right: 10px;
-  > button
-    flex: 0 0 50px;
-    height: 50px;
-    line-height: 44px;
-    font-size: 25px;
-    background: #fff;
-    padding 0
-    &.accept
-      color: green
-      margin-right 10px
-      border-radius: 3px 0 0 3px;
-      &.active
-        background green
-        color #fff
-    &.decline
-      color: red
-      border-radius: 0 3px 3px 0;
-      &.active
-        background red
-        color #fff
+    margin-bottom: 10px;
+  > .negotiationButtons
+    height 50px
+    display flex
+    align-items center
+    justify-content space-around
+    > button
+      flex: 0 0 50px;
+      height: 50px;
+      line-height: 44px;
+      font-size: 25px;
+      background: #fff;
+      padding 0
+      &.accept
+        color: green
+        margin-right 10px
+        &.active
+          background green
+          color #fff
+      &.decline
+        color: red
+        &.active
+          background red
+          color #fff
 
 .player_controls, .offline_actions, .playersTable
   .result
@@ -410,11 +408,6 @@
     @media only screen and (orientation portrait) and (min-width 900px)
       left 30%
     border-radius 5px
-    button
-      &:first-child
-        border-radius 5px 0 0 5px
-      &:last-child
-        border-radius 0 5px 5px 0
 
 
 .player_controls

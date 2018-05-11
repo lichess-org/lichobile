@@ -24,6 +24,9 @@ interface Prefs {
   [key: string]: PrefValue
 }
 
+export type EmailConfirm = { email_confirm: boolean }
+export type SignupData = Session | EmailConfirm
+
 interface Profile {
   readonly country?: string
   readonly location?: string
@@ -191,16 +194,17 @@ function lichessBackedProp<T extends string | number | boolean>(path: string, pr
   }
 }
 
-function isSession(data: Session | LobbyData): data is Session {
+function isSession(data: Session | LobbyData | SignupData): data is Session {
   return (<Session>data).id !== undefined
 }
 
-function login(username: string, password: string): Promise<Session | LobbyData> {
+function login(username: string, password: string, token: string | null): Promise<Session | LobbyData> {
   return fetchJSON('/login', {
     method: 'POST',
     body: JSON.stringify({
       username,
-      password
+      password,
+      token,
     })
   }, true)
   .then((data: Session | LobbyData) => {
@@ -237,8 +241,12 @@ function confirmEmail(token: string): Promise<Session> {
   })
 }
 
-function signup(username: string, email: string, password: string): Promise<{}> {
-  return fetchJSON('/signup', {
+function signup(
+  username: string,
+  email: string,
+  password: string
+): Promise<SignupData> {
+  return fetchJSON<SignupData>('/signup', {
     method: 'POST',
     body: JSON.stringify({
       username,
@@ -247,6 +255,13 @@ function signup(username: string, email: string, password: string): Promise<{}> 
       'can-confirm': true
     })
   }, true)
+  .then(d => {
+    if (isSession(d)) {
+      session = d
+    }
+
+    return d
+  })
 }
 
 function rememberLogin(): Promise<Session> {

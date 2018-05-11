@@ -1,4 +1,3 @@
-import i18n from '../../../i18n'
 import * as helper from '../../helper'
 
 import AnalyseCtrl from '../AnalyseCtrl'
@@ -17,12 +16,17 @@ export default function renderActionsBar(ctrl: AnalyseCtrl) {
           oncreate={helper.ontap(ctrl.settings.open)}
         /> : null
       }
-      <button className="action_bar_button" data-icon="B" key="flipBoard"
-        oncreate={helper.ontap(
-          ctrl.settings.flip,
-          () => window.plugins.toast.show(i18n('flipBoard'), 'short', 'bottom')
-        )}
-      />
+      {ctrl.study && ctrl.study.chat ?
+        <button className="action_bar_button fa fa-comments withChip" key="chat"
+          oncreate={helper.ontap(ctrl.study.chat.open)}
+        >
+          { ctrl.study.chat.nbUnread > 0 ?
+          <span className="chip">
+            { ctrl.study.chat.nbUnread <= 99 ? ctrl.study.chat.nbUnread : 99 }
+          </span> : null
+          }
+        </button> : null
+      }
       <button className={'action_bar_button fa fa-' + (ctrl.settings.s.smallBoard ? 'compress' : 'expand')} key="expand-compress"
         oncreate={helper.ontap(
           ctrl.settings.toggleBoardSize,

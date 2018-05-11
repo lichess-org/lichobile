@@ -4,6 +4,7 @@ import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
 import { saveOfflineGameData, removeOfflineGameData } from '../../../utils/offlineGames'
 import { hasNetwork, boardOrientation, handleXhrError } from '../../../utils'
+import * as sleepUtils from '../../../utils/sleep'
 import session from '../../../session'
 import settings from '../../../settings'
 import socket from '../../../socket'
@@ -18,10 +19,10 @@ import { OnlineGameData, Player, ApiEnd } from '../../../lichess/interfaces/game
 import { Score } from '../../../lichess/interfaces/user'
 import { MoveRequest, DropRequest, MoveOrDrop, AfterMoveMeta, isMove, isDrop, isMoveRequest, isDropRequest } from '../../../lichess/interfaces/move'
 import * as chessFormat from '../../../utils/chessFormat'
+import { Chat } from '../../shared/chat'
 
 import ground from './ground'
 import promotion from './promotion'
-import { Chat } from './chat'
 import { NotesCtrl } from './notes'
 import ClockCtrl from './clock/ClockCtrl'
 import CorresClockCtrl from './correspondenceClock/corresClockCtrl'
@@ -118,8 +119,13 @@ export default class OnlineRound implements OnlineRoundInterface {
       offlineWatcher: !hasNetwork()
     }
 
-    this.chat = (session.isKidMode() || this.data.tv || (!this.data.player.spectator && (this.data.game.tournamentId || this.data.opponent.ai))) ?
-      null : new Chat(this, session.isShadowban())
+    this.chat = (session.isKidMode() || this.data.tv || (!this.data.player.spectator && (this.data.game.tournamentId || this.data.opponent.ai))) ? null : new Chat(
+      this.data.game.id,
+      this.data.chat || [],
+      this.data.player.spectator ? undefined : this.data.player,
+      session.isConnected() || this.data.game.source === 'friend',
+      session.isShadowban()
+    )
 
     this.notes = this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null
 
@@ -554,6 +560,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         session.backgroundRefresh()
       }
 
+      sleepUtils.allowSleepAgain()
       this.showActions()
       setTimeout(redraw, 1000)
     }

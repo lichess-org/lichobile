@@ -12,27 +12,26 @@ export type Database = typeof db
 
 export interface UserOfflineData {
   user: UserData
-  solved: PuzzleOutcome[]
-  unsolved: PuzzleData[]
+  solved: ReadonlyArray<PuzzleOutcome>
+  unsolved: ReadonlyArray<PuzzleData>
 }
 
 type UserId = string
-type OfflineData = {
-  [key: string]: UserOfflineData
-}
 
 function fetch(userId: UserId): Promise<UserOfflineData | null> {
-  return asyncStorage.getItem<OfflineData>('trainingOfflinePuzzles')
+  return asyncStorage.getItem<UserOfflineData>(`offlinePuzzles.${userId}`)
   .then(data => {
-    return data && data[userId] || null
+    if (!data) {
+      // compat layer for old storage key
+      // TODO remove in 2 versions (from 6.0.0)
+      return asyncStorage.getItem<{ [key: string]: UserOfflineData }>('training.offlinePuzzles')
+      .then(data => data && data[userId] || null)
+    } else {
+      return data
+    }
   })
 }
 
-function save(userId: UserId, userData: UserOfflineData): Promise<OfflineData> {
-  return asyncStorage.getItem<OfflineData>('trainingOfflinePuzzles')
-  .then(data => {
-    const map: OfflineData = data || {}
-    map[userId] = userData
-    return asyncStorage.setItem('trainingOfflinePuzzles', map)
-  })
+function save(userId: UserId, userData: UserOfflineData): Promise<UserOfflineData> {
+  return asyncStorage.setItem(`offlinePuzzles.${userId}`, userData)
 }

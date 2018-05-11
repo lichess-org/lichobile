@@ -414,7 +414,9 @@ export default class AnalyseCtrl {
     this.tree.merge(data.tree)
     this.data.analysis = data.analysis
     const anaMainline = treeOps.mainlineNodeList(data.tree)
-    const analysisComplete = anaMainline.every(n => n.eval !== undefined)
+    const analysisComplete = anaMainline.every(n =>
+      n.eval !== undefined || !!(n.san && n.san.includes('#'))
+    )
     if (analysisComplete) {
       this.data.treeParts = anaMainline
       this.analysisProgress = false

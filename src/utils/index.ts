@@ -66,6 +66,9 @@ export function handleXhrError(error: ErrorResponse): void {
   if (typeof data === 'string') {
     message += ` ${data}`
   }
+  else if (typeof data.error === 'string') {
+    message += ` ${data.error}`
+  }
   else if (data.global && data.global.constructor === Array) {
     message += ` ${i18n(data.global[0])}`
   }

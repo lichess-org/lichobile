@@ -21,7 +21,7 @@
   position relative
 
 .analyse-header
-  background-color headerBgDark
+  background-color bgdark
   flex 0 0 25px
   overflow hidden
   display flex
@@ -135,6 +135,8 @@
   font-size 0.93rem
   white-space normal
   line-height 1.05em
+  &.rta
+    border-right 2px solid rgba(green2, 0.75)
   &.displayPieces
     move
       font-family ChessSansPiratf
@@ -301,10 +303,6 @@ comment
 
   .analyse-tabsContent
     background #fff
-
-  .ceval-curEval
-    background-color inherit
-    border-right 1px solid borderLightGray
 
   inline
     color rgba(textLightBg, 0.8)

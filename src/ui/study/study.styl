@@ -73,6 +73,11 @@
   &:nth-child(even)
     background-color lighten(bgdark, 10%)
 
+.study-comments
+  flex 0 0 65%
+  &.selected
+    border-top 2px solid rgba(green2, 0.75)
+
 .study-comment
   padding 10px
   > .by
@@ -230,8 +235,41 @@
   justify-content center
   align-items center
 
+.study-replayActions
+  flex 0 0 40px
+  display flex
+  flex-flow column nowrap
+  background-color bgdark
+  &.selected
+    border-left-color rgba(green2, 0.75)
+  > button
+    padding 10px
+    position relative
+    &.selected
+      background-color rgba(green2, 0.75)
+      color #fff
+    > .chip
+      height 12px
+      width 12px
+      font-size 10px
+      top 3px
+      right 6px
+      line-height inherit
+      background lighten(green2, 5%)
+      color #fff
+      border 0
+      border-radius 3px
+
+.study-replayWrapper
+  display: flex
+  flex-flow row nowrap
+
 
 .view-container.light
+  .study-replayActions
+    background-color #eee
+    > button > .chip
+      background darken(green2, 8%)
   .study-tag
     > th
       color rgba(textLightBg, 0.8)
@@ -248,6 +286,11 @@
 
 
 .view-container.transp
+  .study-replayActions
+    background-color transpWhite015
+    > button > .chip
+      background lighten(green2, 8%)
+      color #fff
   .study-tag
     &:nth-child(even)
       background-color transpWhite01

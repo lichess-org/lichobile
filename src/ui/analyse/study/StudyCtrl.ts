@@ -8,15 +8,17 @@ import AnalyseCtrl from '../AnalyseCtrl'
 import actionMenu, { IActionMenuCtrl } from './actionMenu'
 import socketHandler from './studySocketHandler'
 
+interface StudyVM {
+  showComments: boolean
+}
+
 export default class StudyCtrl {
   public readonly sideMenu: SideMenuCtrl
   public readonly actionMenu: IActionMenuCtrl
   public readonly chat?: Chat
+  public readonly vm: StudyVM
 
-  private readonly rootCtrl: AnalyseCtrl
-
-  constructor(readonly data: Study, rootCtrl: AnalyseCtrl) {
-    this.rootCtrl = rootCtrl
+  constructor(readonly data: Study, readonly rootCtrl: AnalyseCtrl) {
     this.actionMenu = actionMenu.controller(this.rootCtrl)
     this.sideMenu = new SideMenuCtrl('right', 'studyMenu', 'studyMenu-backdrop')
 
@@ -28,6 +30,10 @@ export default class StudyCtrl {
         data.chat.writeable,
         session.isShadowban()
       )
+    }
+
+    this.vm = {
+      showComments: false,
     }
   }
 
@@ -41,6 +47,10 @@ export default class StudyCtrl {
     socket.send('like', {
       liked: !this.data.liked
     })
+  }
+
+  public toggleShowComments = (): void => {
+    this.vm.showComments = !this.vm.showComments
   }
 
   public createSocket(): void {

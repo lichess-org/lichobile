@@ -119,7 +119,6 @@ function renderGameAnalysisRequest(ctrl: AnalyseCtrl) {
 }
 
 function renderStudyAnalysisRequest(ctrl: AnalyseCtrl) {
-  // TODO enable request button when study socket implemented
   return h('div.analyse-computerAnalysis.request', {
     key: 'request-analysis'
   }, ctrl.mainline.length < 5 ? h('p', 'The study is too short to be analysed.') :
@@ -132,7 +131,7 @@ function renderStudyAnalysisRequest(ctrl: AnalyseCtrl) {
         ctrl.analysisProgress ? h('div.analyse-requestProgress', [
           h('span', 'Analysis in progress'),
           spinner.getVdom('monochrome')
-        ]) : h('button.fatButton[disabled]', {
+        ]) : h('button.fatButton', {
           oncreate: helper.ontapXY(() => {
             socket.send('requestAnalysis', ctrl.study!.data.chapter.id)
             ctrl.analysisProgress = true

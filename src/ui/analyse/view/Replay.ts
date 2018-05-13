@@ -10,17 +10,25 @@ interface ReplayDataSet extends DOMStringMap {
   path: string
 }
 
+interface Attrs {
+  ctrl: AnalyseCtrl
+  rightTabActive: boolean
+}
+
 let pieceNotation: boolean
 export default {
   onbeforeupdate({ attrs }) {
     return !attrs.ctrl.replaying
   },
   view({ attrs }) {
-    const { ctrl } = attrs
+    const { ctrl, rightTabActive } = attrs
     pieceNotation = pieceNotation || settings.game.pieceNotation()
-    const replayClass = 'analyse-replay native_scroller' + (pieceNotation ? ' displayPieces' : '')
+    const className = [
+      pieceNotation ? 'displayPieces' : '',
+      rightTabActive ? 'rta' : '',
+    ].join(' ')
     return h('div#replay.analyse-replay.native_scroller', {
-      className: replayClass,
+      className,
       oncreate: helper.ontapXY(e => onReplayTap(ctrl, e), (e: TouchEvent) => {
         const el = getMoveEl(e!)
         const ds = el.dataset as ReplayDataSet
@@ -31,7 +39,7 @@ export default {
       }, getMoveEl)
     }, renderTree(ctrl))
   }
-} as Mithril.Component<{ ctrl: AnalyseCtrl }, {}>
+} as Mithril.Component<Attrs, {}>
 
 function onReplayTap(ctrl: AnalyseCtrl, e: Event) {
   const el = getMoveEl(e)

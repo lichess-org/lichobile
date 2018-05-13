@@ -18,8 +18,7 @@ import { chatView } from '../../shared/chat'
 
 import menu from '../menu'
 import studyActionMenu from '../study/actionMenu'
-import renderPgnTags from '../study/pgnTagsView'
-import renderComments from '../study/commentView'
+import { renderReadonlyComments, renderPgnTags } from '../study/view'
 import analyseSettings from '../analyseSettings'
 import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
@@ -120,7 +119,6 @@ function renderOpening(ctrl: AnalyseCtrl) {
 function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
 
   const curTab = ctrl.currentTab(availTabs)
-
   const buttons = availTabs.map(b => {
     if (b.id === 'comments' && ctrl.node.comments && ctrl.node.comments.length > 0) {
       return {
@@ -128,7 +126,6 @@ function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
         chip: ctrl.node.comments.length
       }
     }
-
     return b
   })
 
@@ -175,8 +172,20 @@ function renderTabTitle(ctrl: AnalyseCtrl, curTab: Tab) {
 }
 
 function renderReplay(ctrl: AnalyseCtrl) {
+  // TODO enable when study has write support
+  // if (ctrl.study && ctrl.study.canContribute()) {
+  //   return h('div.study-replayWrapper', [
+  //     h('div.analyse-replayWrapper', [
+  //       h(Replay, { ctrl, rightTabActive: ctrl.study.vm.showComments }),
+  //       ctrl.study.vm.showComments ? renderComments(ctrl.study) : null
+  //     ]),
+  //     renderReplayActions(ctrl.study)
+  //   ])
+  // } else {
+  // }
+
   return h('div.analyse-replayWrapper', [
-    h(Replay, { ctrl })
+    h(Replay, { ctrl, rightTabActive: false }),
   ])
 }
 
@@ -187,15 +196,10 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Bas
   analysis: renderAnalysis,
   ceval: renderCeval,
   pgnTags: renderPgnTags,
-  comments: renderComments,
+  comments: renderReadonlyComments,
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>, isPortrait: boolean) {
-
-  const tabsContent = availTabs.map(t =>
-    TabsContentRendererMap[t.id]
-  )
-
   return h('div.analyse-table', {
     key: 'analyse'
   }, [
@@ -204,7 +208,7 @@ function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>, is
       ctrl,
       className: 'analyse-tabsContent',
       selectedIndex: ctrl.currentTabIndex(availTabs),
-      contentRenderers: tabsContent,
+      contentRenderers: availTabs.map(t => TabsContentRendererMap[t.id]),
       onTabChange: ctrl.onTabChange,
       isPortrait
     }),

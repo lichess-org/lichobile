@@ -5,8 +5,7 @@ export default function startTour() {
   .then(theme => {
     const tour = new window.Shepherd.Tour({
       defaults: {
-        classes: theme,
-        scrollTo: false,
+        classes: 'shepherd-element ' + theme,
         showCancelLink: true,
       }
     })

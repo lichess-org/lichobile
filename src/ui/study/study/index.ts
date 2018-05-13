@@ -12,7 +12,6 @@ import { renderContent, overlay, loadingScreen } from '../../analyse/view'
 import { load as loadStudy } from '../studyXhr'
 import { notFound, studyHeader } from './view/studyView'
 import RightSideMenu from './view/RightSideMenu'
-import startTour from './tour'
 
 export interface Attrs {
   id: string
@@ -51,7 +50,6 @@ export default {
           tab
         )
         this.hammerHandlers = EdgeOpenHandler(this.ctrl.study!.sideMenu)
-        startTour()
         redraw()
       }, Math.max(400 - elapsed, 0))
     })

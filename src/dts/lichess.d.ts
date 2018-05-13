@@ -54,6 +54,7 @@ interface Window {
   moment: any
   shouldRotateToOrientation: () => boolean
   AppVersion: { version: string }
+  Shepherd: TetherShepherd.ShepherdStatic
 }
 
 interface Piece {

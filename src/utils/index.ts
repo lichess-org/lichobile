@@ -68,15 +68,18 @@ export function loadScript(url: string): Promise<void> {
 }
 
 export function loadCss(url: string): Promise<void> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     if (!isCssLoaded(url)) {
       const link = document.createElement('link')
       link.rel = 'stylesheet'
       link.type = 'text/css'
       link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
       document.head.appendChild(link)
+    } else {
+      setTimeout(resolve, 0)
     }
-    setTimeout(resolve, 0)
   })
 }
 

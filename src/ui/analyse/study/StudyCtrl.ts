@@ -1,12 +1,14 @@
 import { Study } from '../../../lichess/interfaces/study'
 import socket from '../../../socket'
 import session from '../../../session'
+import settings from '../../../settings'
 
 import { Chat } from '../../shared/chat'
 import SideMenuCtrl from '../../shared/sideMenu/SideMenuCtrl'
 import AnalyseCtrl from '../AnalyseCtrl'
 import actionMenu, { IActionMenuCtrl } from './actionMenu'
 import socketHandler from './studySocketHandler'
+import startTour from './tour'
 
 interface StudyVM {
   showComments: boolean
@@ -34,6 +36,11 @@ export default class StudyCtrl {
 
     this.vm = {
       showComments: false,
+    }
+
+    if (settings.study.tour() === null) {
+      startTour(this)
+      settings.study.tour(window.AppVersion ? window.AppVersion.version : 'dev-snapshot')
     }
   }
 

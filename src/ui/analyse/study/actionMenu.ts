@@ -8,7 +8,7 @@ import popupWidget from '../../shared/popup'
 import spinner from '../../../spinner'
 import * as helper from '../../helper'
 import { studyPGN, studyChapterPGN } from '../../study/studyXhr'
-import startTour from '../../study/study/tour'
+import startTour from './tour'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 
@@ -102,7 +102,7 @@ function renderStudyMenu(ctrl: AnalyseCtrl) {
       key: 'help',
       oncreate: helper.ontap(() => {
         ctrl.study!.actionMenu.close()
-        startTour()
+        startTour(ctrl.study!)
       }),
     }, [
     h('span.fa.fa-question-circle'),

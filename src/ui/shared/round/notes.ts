@@ -87,8 +87,9 @@ export function notesView(ctrl: NotesCtrl) {
       h('div.notesTextarea.loading', spinner.getVdom()) :
       h('textarea#notesTextarea.native_scroller', {
         placeholder: i18n('typePrivateNotesHere'),
-        oninput: ctrl.syncNotes
-      }, ctrl.data.note)
+        oninput: ctrl.syncNotes,
+        value: ctrl.data.note,
+      })
     ])
   ])
 }

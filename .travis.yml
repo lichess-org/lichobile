@@ -28,7 +28,8 @@ install:
 script:
   - sh scripts/travis_build.sh
   - test -e platforms/android/app/build/outputs/apk/debug/app-debug.apk
-  - echo "<a href='app-debug.apk'>APK for latest commit</a>" > platforms/android/app/build/outputs/apk/debug/index.html
+  - echo "<a href='app-debug.apk'>APK for commit XXX</a>" > platforms/android/app/build/outputs/apk/debug/index.html
+  - sed "s/XXX/$(git log --pretty=format:'%h' -n 1)/" file
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:

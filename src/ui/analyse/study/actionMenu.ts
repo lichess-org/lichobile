@@ -8,6 +8,7 @@ import popupWidget from '../../shared/popup'
 import spinner from '../../../spinner'
 import * as helper from '../../helper'
 import { studyPGN, studyChapterPGN } from '../../study/studyXhr'
+import startTour from './tour'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 
@@ -96,6 +97,16 @@ function renderStudyMenu(ctrl: AnalyseCtrl) {
         className: ctrl.study!.data.liked ? 'fa-heart' : 'fa-heart-o'
       }),
       `Like (${ctrl.study!.data.likes})`
+    ]),
+    h('button', {
+      key: 'help',
+      oncreate: helper.ontap(() => {
+        ctrl.study!.actionMenu.close()
+        startTour(ctrl.study!)
+      }),
+    }, [
+    h('span.fa.fa-question-circle'),
+    'Help'
     ]),
   ])
 }

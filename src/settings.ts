@@ -423,5 +423,9 @@ export default {
   training: {
     puzzleBufferLen: 50,
     ratingDiffThreshold: 100
-  }
+  },
+
+  study: {
+    tour: store.prop<string | null>('study.tour', null)
+  },
 }

@@ -90,6 +90,7 @@
         "rlite-router": "1.1.3",
         "siema": "1.5.1",
         "signals": "1.0.0",
+        "tether-shepherd": "1.8.1",
         "whatwg-fetch": "2.0.3",
         "zanimo": "git+https://github.com/veloce/Zanimo.git"
     },

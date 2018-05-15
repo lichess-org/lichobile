@@ -194,7 +194,7 @@ export function fadesOut(callback: () => void, selector?: string, time = 150): (
 type TapHandler = (e: TouchEvent) => void
 type RepeatHandler = () => boolean
 
-function createTapHandler(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: RepeatHandler, scrollX?: boolean, scrollY?: boolean, getElement?: (e: TouchEvent) => HTMLElement) {
+function createTapHandler(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: RepeatHandler, scrollX?: boolean, scrollY?: boolean, getElement?: (e: TouchEvent) => HTMLElement, preventEndDefault?: boolean) {
   return function(vnode: Mithril.DOMNode) {
     ButtonHandler(vnode.dom as HTMLElement,
       (e: TouchEvent) => {
@@ -205,7 +205,8 @@ function createTapHandler(tapHandler: TapHandler, holdHandler?: TapHandler, repe
       repeatHandler,
       scrollX,
       scrollY,
-      getElement
+      getElement,
+      preventEndDefault,
     )
   }
 }
@@ -224,12 +225,12 @@ export function ontapX(tapHandler: TapHandler, holdHandler?: TapHandler) {
   return createTapHandler(tapHandler, holdHandler, undefined, true, false)
 }
 
-export function ontapY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement) {
-  return createTapHandler(tapHandler, holdHandler, undefined, false, true, getElement)
+export function ontapY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement, preventEndDefault = true) {
+  return createTapHandler(tapHandler, holdHandler, undefined, false, true, getElement, preventEndDefault)
 }
 
-export function ontapXY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement) {
-  return createTapHandler(tapHandler, holdHandler, undefined, true, true, getElement)
+export function ontapXY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement, preventEndDefault = true) {
+  return createTapHandler(tapHandler, holdHandler, undefined, true, true, getElement, preventEndDefault)
 }
 
 export function progress(p: number): Mithril.Children {

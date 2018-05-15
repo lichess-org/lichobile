@@ -6,10 +6,6 @@ import * as helper from '../../helper'
 import AnalyseCtrl from '../AnalyseCtrl'
 import renderTree from './treeView'
 
-interface ReplayDataSet extends DOMStringMap {
-  path: string
-}
-
 interface Attrs {
   ctrl: AnalyseCtrl
   rightTabActive: boolean
@@ -31,20 +27,20 @@ export default {
       className,
       oncreate: helper.ontapXY(e => onReplayTap(ctrl, e), (e: TouchEvent) => {
         const el = getMoveEl(e!)
-        const ds = el.dataset as ReplayDataSet
+        const ds = el.dataset
         if (el && ds.path) {
           ctrl.contextMenu = ds.path
           redraw()
         }
-      }, getMoveEl)
+      }, getMoveEl, false)
     }, renderTree(ctrl))
   }
 } as Mithril.Component<Attrs, {}>
 
 function onReplayTap(ctrl: AnalyseCtrl, e: Event) {
   const el = getMoveEl(e)
-  if (el && (el.dataset as ReplayDataSet).path) {
-    ctrl.jump((el.dataset as ReplayDataSet).path)
+  if (el && el.dataset.path) {
+    ctrl.jump(el.dataset.path)
   }
 }
 

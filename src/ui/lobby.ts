@@ -75,7 +75,7 @@ export default {
         storage.get<HumanSeekSetup>(SETUP_STORAGE_KEY) ||
         humanSetupFromSettings(settings.gameSetup.human)
 
-      doStartSeeking(setup, data.game.id)
+      doStartSeeking(setup)
     }
   },
 
@@ -157,14 +157,14 @@ function renderPoolSetup(member: PoolMember) {
  * @conf either Pool or Seek
  * @gameId? if provided this argument will trigger a seek like xhr
  */
-function doStartSeeking(conf: PoolMember | HumanSeekSetup, gameId?: string) {
+function doStartSeeking(conf: PoolMember | HumanSeekSetup) {
   router.backbutton.stack.push(userCancelSeeking)
 
   isOpenAndSeeking = true
   sleepUtils.keepAwake()
 
   if (isPoolMember(conf)) enterPool(conf)
-  else sendHook(conf, gameId)
+  else sendHook(conf)
 }
 
 function stopAndClose(fromBB?: string) {
@@ -179,7 +179,7 @@ function userCancelSeeking(fromBB?: string) {
   sleepUtils.allowSleepAgain()
 }
 
-function sendHook(setup: HumanSeekSetup, gameId?: string) {
+function sendHook(setup: HumanSeekSetup) {
   currentSetup = setup
   if (hookId) {
     // normally can't create hook if already have a hook
@@ -192,10 +192,7 @@ function sendHook(setup: HumanSeekSetup, gameId?: string) {
     // hook already created!
     if (hookId) return
 
-    const seekPromise = gameId !== undefined ?
-      xhr.seekGameLike(gameId) : xhr.seekGame(setup)
-
-    seekPromise
+    xhr.seekGame(setup)
     .then(data => {
       hookId = data.hook.id
     })

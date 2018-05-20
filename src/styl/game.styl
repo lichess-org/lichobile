@@ -86,34 +86,18 @@
   width 100%
   background lighten(bgdark, 3%)
   >.moves
-    border-collapse collapse
-    border-spacing 0px
-    width 100%
+    .replayMove
+      font-weight normal
+      transition: background-color 0.13s ease 0s;
+      &.current
+        color inherit
+        font-weight bold
+        background-color transparent
+      &.active
+        background-color lighten(bgdark, 8%)
     &.displayPieces
       .replayMove
         font-family ChessSansPiratf
-
-.replayMoveIndex, .replayMove
-  vertical-align middle
-  padding 0
-  height 30px
-  @media only screen and (orientation: landscape) and (max-height 400px)
-    height 20px
-  @media only screen and (orientation: landscape) and (max-height 500px)
-    height 25px
-
-.replayMoveIndex
-  width: 15%;
-  text-align: center;
-
-.replayMove
-  transition: background-color 0.13s ease 0s;
-  width 42.5%
-  &.current
-    color orangeDark
-    font-weight bold
-  &.active
-    background-color lighten(bgdark, 8%)
 
 .rp.null
   color textGray

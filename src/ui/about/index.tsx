@@ -41,9 +41,13 @@ export default {
 
           <ul>
             <li>{helper.externalLink('Github', 'https://github.com/veloce/lichobile')}</li>
-            <li>
-              {helper.externalLink('lichess.org/about', 'https://lichess.org/about')} for additional information.
-            </li>
+            <li>{helper.externalLink('Contribute', 'https://lichess.org/help/contribute')}</li>
+            <li>{helper.externalLink('Donate', 'https://lichess.org/patron')}</li>
+            <li>{helper.externalLink('Contact', 'https://lichess.org/contact')}</li>
+            <li>{helper.externalLink('Terms of Service', 'https://lichess.org/terms-of-service')}</li>
+            <li>{helper.externalLink('Privacy Policy', 'https://lichess.org/privacy')}</li>
+            <li>{helper.externalLink('Database', 'https://database.lichess.org/')}</li>
+            <li>{helper.externalLink('lichess.org/about', 'https://lichess.org/about')}</li>
           </ul>
 
       </div>

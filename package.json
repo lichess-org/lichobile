@@ -83,7 +83,7 @@
         "ionic-plugin-keyboard": "2.2.1",
         "localforage": "1.5.5",
         "lodash": "4.17.4",
-        "mithril": "git+https://github.com/MithrilJS/mithril.js.git#43053c6",
+        "mithril": "github:MithrilJS/mithril.js#277f35f",
         "moment": "2.21.0",
         "onesignal-cordova-plugin": "2.3.3",
         "raven-js": "3.17.0",

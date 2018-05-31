@@ -55,7 +55,7 @@
         "cordova-android": "7.1.0",
         "cordova-ios": "4.5.4",
         "cordova-plugin-appversion": "1.0.0",
-        "cordova-plugin-crosswalk-data-migration": "git+https://github.com/veloce/cordova-plugin-crosswalk-data-migration.git#225408d",
+        "cordova-plugin-crosswalk-webview": "2.4.0",
         "cordova-plugin-device": "2.0.2",
         "cordova-plugin-dialogs": "2.0.1",
         "cordova-plugin-file": "6.0.1",
@@ -147,7 +147,8 @@
             "cordova-plugin-fullscreen": {},
             "cordova-plugin-globalization": {},
             "cordova-plugin-crosswalk-data-migration": {},
-            "ionic-plugin-keyboard": {}
+            "ionic-plugin-keyboard": {},
+            "cordova-plugin-crosswalk-webview": {}
         }
     },
     "jest": {

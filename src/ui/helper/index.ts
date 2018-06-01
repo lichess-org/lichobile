@@ -369,16 +369,3 @@ export function findElByClassName(e: Event, className: string) {
   return target.classList.contains(className) ?
     target : findParentBySelector(target, '.' + className)
 }
-
-export function externalLink(text: string, url: string): Mithril.Child {
-  return h('a', {
-    className: 'external_link',
-    onClick: `window.open('${url}', '_system')`,
-  }, text)
-}
-
-export function internalLink(text: string, route: string): Mithril.Child {
-  return h('a', {
-    oncreate: ontap(() => { router.set(route) })
-  }, text)
-}

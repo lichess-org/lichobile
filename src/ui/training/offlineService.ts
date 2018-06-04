@@ -127,7 +127,7 @@ function syncPuzzles(database: Database, user: Session): Promise<UserOfflineData
       solved.length > 0 ? xhr.solvePuzzlesBatch(solved) : Promise.resolve()
 
     const allIds = unsolved.map(p => p.puzzle.id)
-    const lastId = allIds.length > 0 ? Math.max.apply(Math, allIds) : undefined
+    const lastId = allIds.length > 0 ? Math.max(...allIds) : undefined
 
     return solvePromise
     .then(() => !stored || puzzleDeficit > 0 ?

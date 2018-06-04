@@ -453,7 +453,7 @@ export default class TrainingCtrl implements PromotingInterface {
         if (puzzles.find(p => p.puzzle.id === this.data.puzzle.id)) {
           syncPuzzleResult(this.database, user, outcome)
           .then(newData => {
-            if (newData) {
+            if (newData && newData.user) {
               this.data.user = newData.user
               redraw()
             }

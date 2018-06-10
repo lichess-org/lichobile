@@ -4,23 +4,9 @@
 #wrapper_games
   width 100%
   z-index 12
-  @media only screen and (min-width 600px)
-    width 540px
-    left calc((100% - 540px) / 2)
-    right calc((100% - 540px) / 2)
-    top 15%
-    height 70%
-    > .popup_content
-      overflow hidden
-      height calc(100% - 45px)
-      position relative
-  @media only screen and (max-height 400px)
+  @media only screen and (orientation landscape)
     top 10%
     height 80%
-  @media only screen and (min-width 960px)
-    width 720px
-    left calc((100% - 720px) / 2)
-    right calc((100% - 720px) / 2)
 
 .wrapper_overlay_close
   position absolute
@@ -29,16 +15,18 @@
   z-index 10
 
 .games_carousel
-  margin-left 5vw
+  @media only screen and (orientation landscape)
+    display flex
+    flex-flow row nowrap
+    overflow-x auto
 
 .card
   background #2a2a2a
-  position relative
-  float left
   border-radius 5px
   box-shadow 0 2px 3px 0 rgba(0,0,0,0.5)
   width 90vw
   height calc(90vw + 145px)
+  margin-left 5vw
   > .boardWrapper
     height 90vw
   .infos
@@ -81,33 +69,31 @@
       display block
       margin-top 5px
   @media only screen and (min-width 600px)
-    float none
-    box-shadow none
-    margin 0.5rem
-    border none
-    border-radius 0
-    width 160px
-    height 230px
+    width 47.5vw
+    height calc(47.5vw + 145px)
+    margin-left 1.25vw
     > .boardWrapper
-      width 160px
-      height 160px
-    > .infos
-      height 70px
+      height 47.5vw
+  @media only screen and (orientation landscape)
+    width calc(80vh - 80px)
+    height 80vh
+    max-width 350px
+    max-height 500px
+    margin-left 0
+    margin-right 1em
     .description
-      padding 10px
       height initial
-    .icon-game
-      display none
-    h2
-      font-size 1rem
-      margin-top 0
-    p
-      margin-top 5px
-      text-transform none
-      > .variant
-        display none
-  @media only screen and (max-width 600px) and (orientation landscape)
-    font-size 0.7em
+    > .boardWrapper
+      width calc(80vh - 80px)
+      height calc(80vh - 80px)
+      max-width 350px
+      max-height 350px
+    &:first-child
+      margin-left 2vw
+    &:last-child
+      margin-right 2vw
+  @media only screen and (max-height 450px) and (orientation landscape)
+    font-size 0.8em
     .icon-game
       display none
     .description
@@ -118,6 +104,8 @@
     h2
       font-size 1em
       margin-top 10px
+  @media only screen and (max-height 320px) and (orientation landscape)
+    font-size 0.7em
 
 .card.challenge
   background gold
@@ -156,27 +144,3 @@
       width 50%
       &:first-child
         border-right 1px solid #9b814d
-  @media only screen and (min-width 600px)
-    width 250px
-    margin 1em calc((100% - 250px) / 2)
-    height initial
-    background transparent
-    > .boardWrapper
-      margin 0 auto
-      width 250px
-      height 250px
-    > .infos
-      height initial
-      background gold
-    .description
-      padding 1em
-      > .variant
-        > span
-          display block
-    .actions
-      button
-        border none
-        border-radius 0
-        &:first-child
-          border-right 0
-

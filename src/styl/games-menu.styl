@@ -1,5 +1,9 @@
 #games_menu
   background rgba(21,26,30,0.8)
+  display flex
+  flex-flow column nowrap
+  aligns-items center
+  justify-content center
 
 #wrapper_games
   width 100%
@@ -19,6 +23,19 @@
     display flex
     flex-flow row nowrap
     overflow-x auto
+
+.carouselIndicators
+  display flex
+  flex-flow row nowrap
+  margin-bottom 1em
+  .indicator
+    width 10px
+    height 10px
+    border 1px solid #fff
+    border-radius 50%
+    margin-right 5px
+    &.current
+      background #fff
 
 .card
   background #2a2a2a

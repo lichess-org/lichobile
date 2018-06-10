@@ -1,6 +1,8 @@
 import * as h from 'mithril/hyperscript'
+import * as range from 'lodash/range'
 import * as Siema from 'siema'
 import * as utils from '../utils'
+import redraw from '../utils/redraw'
 import { positionsCache } from '../utils/gamePosition'
 import { getOfflineGames } from '../utils/offlineGames'
 import { playerName as liPlayerName } from '../lichess/player'
@@ -47,6 +49,7 @@ export default {
       onbeforeremove: menuOnBeforeRemove
     }, [
       h('div.wrapper_overlay_close', { oncreate: menuOnOverlayTap }),
+      renderCarouselIndicators(),
       h('div#wrapper_games', renderAllGames()),
     ])
   }
@@ -70,7 +73,9 @@ function wrapperOnCreate({ dom }: Mithril.DOMNode) {
       perPage: helper.isWideScreen() ? 2 : 1,
       startIndex: 0,
       draggable: true,
+      onChange: () => redraw(),
     })
+    redraw()
   }
 }
 
@@ -224,6 +229,20 @@ function renderIncomingChallenge(c: Challenge) {
       ])
     ])
   ])
+}
+
+function renderCarouselIndicators() {
+  if (helper.isPortrait() && scroller) {
+    return h('div.carouselIndicators',
+      range(0, scroller.innerElements.length).map(i =>
+        h('i.indicator', {
+          className: i === scroller.currentSlide ? 'current' : ''
+        })
+      )
+    )
+  }
+
+  return null
 }
 
 function renderAllGames() {

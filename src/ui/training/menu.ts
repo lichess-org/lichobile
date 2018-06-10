@@ -81,7 +81,7 @@ export default {
 function renderTrainingMenu(ctrl: IMenuCtrl) {
   const puzzleUser = ctrl.user()
 
-  if (ctrl.root.data && ctrl.root.data.user) {
+  if (ctrl.root.data && ctrl.root.data.user && hasNetwork()) {
     return renderUserInfosOnline(ctrl.root.data.user)
   }
   else if (puzzleUser !== null && hasNetwork()) {

@@ -20,17 +20,18 @@ export function vote(id: number, v: boolean): Promise<[boolean, number]> {
 }
 
 export function loadPuzzle(id: number): Promise<PuzzleData> {
-  return fetchJSON<PuzzleData>(`/training/${id}/load`)
+  return fetchJSON<PuzzleData>(`/training/${id}/load`, { cache: 'reload' })
 }
 
 export function newPuzzle(): Promise<PuzzleData> {
   return fetchJSON<PuzzleData>('/training/new')
 }
 
-export function newPuzzlesBatch(num: number): Promise<PuzzleSyncData> {
+export function newPuzzlesBatch(num: number, after?: number): Promise<PuzzleSyncData> {
   return fetchJSON<PuzzleSyncData>('/training/batch', {
     method: 'GET',
-    query: { nb: num }
+    query: { nb: num, after },
+    cache: 'reload',
   })
 }
 

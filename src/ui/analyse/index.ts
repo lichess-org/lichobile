@@ -28,6 +28,7 @@ export interface Attrs {
   tab?: string
   // fen used for placeholder board while loading
   curFen?: string
+  goBack?: string
 }
 
 export interface State {
@@ -44,7 +45,7 @@ export default {
     const ply = safeStringToNum(vnode.attrs.ply)
     const tab = safeStringToNum(vnode.attrs.tab)
 
-    const shouldGoBack = gameId !== undefined
+    const shouldGoBack = gameId !== undefined || vnode.attrs.goBack === '1'
 
     sleepUtils.keepAwake()
 
@@ -128,8 +129,15 @@ export default {
 
     if (this.ctrl) {
       const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, this.ctrl.settings.s.smallBoard)
-      const backButton = this.ctrl.shouldGoBack ?
-      renderBackbutton(h(GameTitle, { data: this.ctrl.data, subTitle: 'date' })) : null
+
+      let backButton: Mithril.Children | null = null
+      if (this.ctrl.shouldGoBack) {
+        if (this.ctrl.data.game.id === 'synthetic') {
+          backButton = renderBackbutton(h('div.main_header_title', i18n('analysis')))
+        } else {
+          backButton = renderBackbutton(h(GameTitle, { data: this.ctrl.data, subTitle: 'date' }))
+        }
+      }
 
       const title = this.ctrl.shouldGoBack ? null : h('div.main_header_title.withSub', {
         key: 'title-selector'

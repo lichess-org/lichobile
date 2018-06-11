@@ -1,6 +1,8 @@
 import * as h from 'mithril/hyperscript'
+import * as range from 'lodash/range'
 import * as Siema from 'siema'
 import * as utils from '../utils'
+import redraw from '../utils/redraw'
 import { positionsCache } from '../utils/gamePosition'
 import { getOfflineGames } from '../utils/offlineGames'
 import { playerName as liPlayerName } from '../lichess/player'
@@ -43,21 +45,12 @@ export default {
   view() {
     if (!isOpen) return null
 
-    const wrapperClass = helper.isWideScreen() ? 'overlay_popup' : ''
-
     return h('div#games_menu.overlay_popup_wrapper', {
       onbeforeremove: menuOnBeforeRemove
     }, [
       h('div.wrapper_overlay_close', { oncreate: menuOnOverlayTap }),
-      h('div#wrapper_games', {
-        className: wrapperClass,
-      }, [
-        helper.isWideScreen() ? h('header',
-          i18n('nbGamesInPlay', session.nowPlaying().length)
-        ) : null,
-        helper.isWideScreen() ? h('div.popup_content', renderAllGames()) :
-          renderAllGames()
-      ])
+      renderCarouselIndicators(),
+      h('div#wrapper_games', renderAllGames()),
     ])
   }
 }
@@ -72,15 +65,17 @@ function menuOnBeforeRemove({ dom }: Mithril.DOMNode) {
 }
 
 function wrapperOnCreate({ dom }: Mithril.DOMNode) {
-  if (!helper.isWideScreen()) {
+  if (helper.isPortrait()) {
     scroller = new Siema({
       selector: dom as HTMLElement,
       duration: 150,
       easing: 'ease-out',
-      perPage: 1,
+      perPage: helper.isWideScreen() ? 2 : 1,
       startIndex: 0,
       draggable: true,
+      onChange: () => redraw(),
     })
+    redraw()
   }
 }
 
@@ -96,7 +91,7 @@ function open() {
   session.refresh()
   isOpen = true
   setTimeout(() => {
-    if (scroller) scroller.goTo(1)
+    if (scroller && !helper.isWideScreen()) scroller.goTo(1)
   }, 400)
 }
 
@@ -179,14 +174,11 @@ function renderGame(g: NowPlayingGame) {
     'timeIndication',
     g.isMyTurn ? 'myTurn' : 'opponentTurn'
   ].join(' ')
-  const oncreate = helper.isWideScreen() ?
-    helper.ontapY(() => joinGame(g)) :
-    helper.ontapX(() => joinGame(g))
 
   return h('div', {
     className: cardClass,
     key: 'game.' + g.gameId,
-    oncreate
+    oncreate: helper.ontapXY(() => joinGame(g)),
   }, [
     renderViewOnlyBoard(g.fen, g.color, g.lastMove, g.variant.key),
     h('div.infos', [
@@ -239,6 +231,20 @@ function renderIncomingChallenge(c: Challenge) {
   ])
 }
 
+function renderCarouselIndicators() {
+  if (helper.isPortrait() && scroller) {
+    return h('div.carouselIndicators',
+      range(0, scroller.innerElements.length).map(i =>
+        h('i.indicator', {
+          className: i === scroller.currentSlide ? 'current' : ''
+        })
+      )
+    )
+  }
+
+  return null
+}
+
 function renderAllGames() {
   const nowPlaying = session.nowPlaying()
   const challenges = challengesApi.incoming()
@@ -255,27 +261,26 @@ function renderAllGames() {
     })
   }
 
-  if (!helper.isWideScreen()) {
-    const newGameCard = h('div.card.standard', {
-      key: 'game.new-game',
-      oncreate: helper.ontapX(() => {
-        close()
-        newGameForm.open()
-      })
-    }, [
-      renderViewOnlyBoard(standardFen, 'white'),
-      h('div.infos', [
-        h('div.description', [
-          h('h2.title', i18n('createAGame')),
-          h('p', i18n('newOpponent'))
-        ])
+  const newGameCard = h('div.card.standard', {
+    key: 'game.new-game',
+    oncreate: helper.ontapX(() => {
+      close()
+      newGameForm.open()
+    })
+  }, [
+    renderViewOnlyBoard(standardFen, 'white'),
+    h('div.infos', [
+      h('div.description', [
+        h('h2.title', i18n('createAGame')),
+        h('p', i18n('newOpponent'))
       ])
     ])
+  ])
 
-    allCards.unshift(newGameCard)
-  }
+  allCards.unshift(newGameCard)
 
   return h('div.games_carousel', {
+    key: helper.isPortrait() ? 'o-portrait' : 'o-landscape',
     oncreate: wrapperOnCreate,
     onremove: wrapperOnRemove,
   }, allCards)

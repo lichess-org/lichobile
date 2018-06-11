@@ -18,6 +18,7 @@ interface Attrs {
   onTabChange: (i: number) => void
   className?: string
   isPortrait: boolean
+  is43Aspect: boolean
 }
 
 interface State {
@@ -70,9 +71,14 @@ export default {
   view({ attrs }) {
     const vd = viewportDim()
     const curIndex = attrs.selectedIndex
-    const totWidth = attrs.isPortrait ? vd.vw : vd.vw - vd.vh + headerHeight
-    const width = attrs.contentRenderers.length * totWidth
-    const shift = -(curIndex * totWidth)
+    const tabWidth = attrs.isPortrait ?
+      vd.vw :
+        attrs.is43Aspect ?
+          vd.vw - (vd.vh * 0.88) + headerHeight :
+          vd.vw - vd.vh + headerHeight
+
+    const width = attrs.contentRenderers.length * tabWidth
+    const shift = -(curIndex * tabWidth)
 
     const style = {
       width: `${width}px`,
@@ -84,6 +90,9 @@ export default {
       className: attrs.className
     }, attrs.contentRenderers.map((_: any, index: number) =>
       h('div.tab-content', {
+        style: {
+          width: `${tabWidth}px`,
+        },
         'data-index': index,
         className: attrs.selectedIndex === index ? 'current' : '',
       },  attrs.selectedIndex === index ? attrs.contentRenderers[index](attrs.ctrl) : null)

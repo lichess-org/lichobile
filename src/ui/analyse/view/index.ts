@@ -210,7 +210,8 @@ function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>, is
       selectedIndex: ctrl.currentTabIndex(availTabs),
       contentRenderers: availTabs.map(t => TabsContentRendererMap[t.id]),
       onTabChange: ctrl.onTabChange,
-      isPortrait
+      isPortrait,
+      is43Aspect: helper.is43Aspect(),
     }),
     ctrl.retro ? retroView(ctrl) : null
   ])

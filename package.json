@@ -52,7 +52,7 @@
         "@types/d3": "4.5.0",
         "@types/hammerjs": "2.0.35",
         "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",
-        "cordova-android": "7.1.0",
+        "cordova-android": "6.4.0",
         "cordova-ios": "4.5.4",
         "cordova-plugin-appversion": "1.0.0",
         "cordova-plugin-crosswalk-webview": "2.4.0",
@@ -67,12 +67,12 @@
         "cordova-plugin-network-information": "2.0.1",
         "cordova-plugin-splashscreen": "5.0.2",
         "cordova-plugin-statusbar": "2.4.2",
-        "cordova-plugin-stockfish": "git+https://github.com/veloce/cordova-plugin-stockfish.git#v1.7.0",
+        "cordova-plugin-stockfish": "git+https://github.com/veloce/cordova-plugin-stockfish.git#v1.6.0",
         "cordova-plugin-vibration": "3.1.0",
         "cordova-plugin-whitelist": "1.3.3",
         "cordova-plugin-x-socialsharing": "5.1.3",
         "cordova-plugin-x-toast": "2.5.2",
-        "cordova-universal-links-plugin": "git+https://github.com/veloce/cordova-universal-links-plugin.git#c494fe1",
+        "cordova-universal-links-plugin": "git+https://github.com/flipflopapp/cordova-universal-links-plugin.git#be60a9b",
         "d3-axis": "1.0.8",
         "d3-scale": "1.0.6",
         "d3-selection": "1.1.0",
@@ -122,8 +122,8 @@
     },
     "cordova": {
         "platforms": [
-            "android",
-            "ios"
+            "ios",
+            "android"
         ],
         "plugins": {
             "com.rjfun.cordova.plugin.lowlatencyaudio": {},
@@ -134,10 +134,8 @@
             "cordova-plugin-x-socialsharing": {},
             "cordova-plugin-x-toast": {},
             "cordova-plugin-network-information": {},
-            "cordova-plugin-stockfish": {},
             "cordova-plugin-file": {},
             "onesignal-cordova-plugin": {},
-            "cordova-universal-links-plugin": {},
             "cordova-plugin-dialogs": {},
             "cordova-plugin-whitelist": {},
             "cordova-plugin-vibration": {},
@@ -145,9 +143,10 @@
             "cordova-plugin-splashscreen": {},
             "cordova-plugin-fullscreen": {},
             "cordova-plugin-globalization": {},
-            "cordova-plugin-crosswalk-data-migration": {},
             "ionic-plugin-keyboard": {},
-            "cordova-plugin-crosswalk-webview": {}
+            "cordova-plugin-crosswalk-webview": {},
+            "cordova-plugin-stockfish": {},
+            "cordova-universal-links-plugin": {}
         }
     },
     "jest": {

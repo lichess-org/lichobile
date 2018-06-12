@@ -1,6 +1,6 @@
 const ncp = require('ncp').ncp;
 const source = 'res/android/onesignal';
-const destination = 'platforms/android/app/src/main/res';
+const destination = 'platforms/android/res';
 
 module.exports = function() {
 

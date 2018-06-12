@@ -233,8 +233,11 @@ function renderIncomingChallenge(c: Challenge) {
 
 function renderCarouselIndicators() {
   if (helper.isPortrait() && scroller) {
+    const elsNb = helper.isWideScreen() ?
+      Math.ceil(scroller.innerElements.length / 2) :
+      scroller.innerElements.length
     return h('div.carouselIndicators',
-      range(0, scroller.innerElements.length).map(i =>
+      range(0, elsNb).map(i =>
         h('i.indicator', {
           className: i === scroller.currentSlide ? 'current' : ''
         })

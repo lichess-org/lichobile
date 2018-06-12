@@ -6,9 +6,7 @@ import 'whatwg-fetch'
 
 import './moment'
 
-import * as Raven from 'raven-js'
 import * as debounce from 'lodash/debounce'
-import globalConfig from './config'
 import { hasNetwork } from './utils'
 import { syncWithNowPlayingGames } from './utils/offlineGames'
 import redraw from './utils/redraw'
@@ -65,12 +63,13 @@ function main() {
   })
   window.addEventListener('resize', debounce(onResize), false)
 
-  window.Keyboard.hideKeyboardAccessoryBar(false)
+  // iOs keyboard hack
+  // TODO we may want to remove this and call only on purpose
+  window.cordova.plugins.Keyboard.disableScroll(true)
+  window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false)
 
-  if (globalConfig.mode === 'release' && globalConfig.sentryDSN) {
-    Raven.config(globalConfig.sentryDSN, {
-      release: window.AppVersion ? window.AppVersion.version : 'snapshot-dev'
-    }).install()
+  if (cordova.platformId === 'android') {
+      window.StatusBar.backgroundColorByHexString('#111')
   }
 
   setTimeout(() => {

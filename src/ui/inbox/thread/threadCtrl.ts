@@ -24,8 +24,8 @@ export default function ThreadCtrl(threadId: string): IThreadCtrl {
     helper.onKeyboardShow(e);
     (document.activeElement as HTMLElement).scrollIntoView(true)
   }
-  window.addEventListener('keyboardDidShow', onKeyboardShow)
-  window.addEventListener('keyboardDidHide', helper.onKeyboardHide)
+  window.addEventListener('native.keyboardshow', onKeyboardShow)
+  window.addEventListener('native.keyboardhide', helper.onKeyboardHide)
 
   xhr.thread(id())
   .then(data => {

@@ -11,6 +11,7 @@
 /// <reference path="lichess.d.ts" />
 /// <reference path="rlite.d.ts" />
 /// <reference path="siema.d.ts" />
+/// <reference path="shepherd.d.ts" />
 /// <reference path="stockfish.d.ts" />
 /// <reference path="zanimo.d.ts" />
 /// <reference path="signals.d.ts" />

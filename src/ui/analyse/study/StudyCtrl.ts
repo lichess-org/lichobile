@@ -1,24 +1,47 @@
 import { Study } from '../../../lichess/interfaces/study'
 import socket from '../../../socket'
 import session from '../../../session'
+import settings from '../../../settings'
 
+import { Chat } from '../../shared/chat'
 import SideMenuCtrl from '../../shared/sideMenu/SideMenuCtrl'
 import AnalyseCtrl from '../AnalyseCtrl'
 import actionMenu, { IActionMenuCtrl } from './actionMenu'
 import socketHandler from './studySocketHandler'
+import startTour from './tour'
+
+interface StudyVM {
+  showComments: boolean
+}
 
 export default class StudyCtrl {
-  public readonly data: Study
   public readonly sideMenu: SideMenuCtrl
   public readonly actionMenu: IActionMenuCtrl
+  public readonly chat?: Chat
+  public readonly vm: StudyVM
 
-  private rootCtrl: AnalyseCtrl
-
-  constructor(data: Study, rootCtrl: AnalyseCtrl) {
-    this.data = data
-    this.rootCtrl = rootCtrl
+  constructor(readonly data: Study, readonly rootCtrl: AnalyseCtrl) {
     this.actionMenu = actionMenu.controller(this.rootCtrl)
     this.sideMenu = new SideMenuCtrl('right', 'studyMenu', 'studyMenu-backdrop')
+
+    if (data.features.chat && data.chat) {
+      this.chat = new Chat(
+        data.id,
+        data.chat.lines,
+        undefined,
+        data.chat.writeable,
+        session.isShadowban()
+      )
+    }
+
+    this.vm = {
+      showComments: false,
+    }
+
+    if (settings.study.tour() === null) {
+      startTour(this)
+      settings.study.tour(window.AppVersion ? window.AppVersion.version : 'dev-snapshot')
+    }
   }
 
   public canContribute(): boolean {
@@ -31,6 +54,10 @@ export default class StudyCtrl {
     socket.send('like', {
       liked: !this.data.liked
     })
+  }
+
+  public toggleShowComments = (): void => {
+    this.vm.showComments = !this.vm.showComments
   }
 
   public createSocket(): void {

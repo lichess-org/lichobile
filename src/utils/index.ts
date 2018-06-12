@@ -33,6 +33,56 @@ export function loadLocalJsonFile<T>(url: string): Promise<T> {
   })
 }
 
+function isScriptLoaded(url: string) {
+  const scripts = document.head.getElementsByTagName('script')
+  for (let i = 0, len = scripts.length; i < len; i++) {
+    if (scripts[i].getAttribute('src') === url) {
+      return true
+    }
+  }
+  return false
+}
+
+function isCssLoaded(url: string) {
+  const links = document.head.getElementsByTagName('link')
+  for (let i = 0, len = links.length; i < len; i++) {
+    if (links[i].getAttribute('href') === url) {
+      return true
+    }
+  }
+  return false
+}
+
+export function loadScript(url: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (!isScriptLoaded(url)) {
+      const script = document.createElement('script')
+      script.src = url
+      script.onload = () => resolve()
+      script.onerror = () => reject()
+      document.head.appendChild(script)
+    } else {
+      setTimeout(resolve, 0)
+    }
+  })
+}
+
+export function loadCss(url: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (!isCssLoaded(url)) {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.type = 'text/css'
+      link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
+      document.head.appendChild(link)
+    } else {
+      setTimeout(resolve, 0)
+    }
+  })
+}
+
 export function autoredraw(action: () => void): void {
   const res = action()
   redraw()
@@ -65,6 +115,9 @@ export function handleXhrError(error: ErrorResponse): void {
 
   if (typeof data === 'string') {
     message += ` ${data}`
+  }
+  else if (typeof data.error === 'string') {
+    message += ` ${data.error}`
   }
   else if (data.global && data.global.constructor === Array) {
     message += ` ${i18n(data.global[0])}`

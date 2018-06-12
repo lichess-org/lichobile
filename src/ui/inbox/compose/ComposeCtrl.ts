@@ -48,8 +48,8 @@ export default function ComposeCtrl(userId: string): IComposeCtrl {
     .catch(handleSendError)
   }
 
-  window.addEventListener('keyboardDidHide', helper.onKeyboardHide)
-  window.addEventListener('keyboardDidShow', helper.onKeyboardShow)
+  window.addEventListener('native.keyboardhide', helper.onKeyboardHide)
+  window.addEventListener('native.keyboardshow', helper.onKeyboardShow)
 
   function handleSendError(error: SendErrorResponse) {
     if (error.body && (error.body.username || error.body.subject || error.body.text)) {

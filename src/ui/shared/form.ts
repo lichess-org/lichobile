@@ -6,8 +6,7 @@ import { StoredProp } from '../../storage'
 import { LichessPropOption } from '../../lichess/prefs'
 import * as helper from '../helper'
 
-type SelectOption = string[]
-type SelectOptionGroup = Array<SelectOption>
+type SelectOption = ReadonlyArray<string>
 
 export default {
 
@@ -39,7 +38,7 @@ export default {
   renderSelect(
     label: string,
     name: string,
-    options: Array<SelectOption>,
+    options: ReadonlyArray<SelectOption>,
     settingsProp: StoredProp<string>,
     isDisabled?: boolean,
     onChangeCallback?: (v: string) => void
@@ -65,7 +64,7 @@ export default {
   renderLichessPropSelect(
     label: string,
     name: string,
-    options: Array<LichessPropOption>,
+    options: ReadonlyArray<LichessPropOption>,
     settingsProp: StoredProp<number>,
     isDisabled?: boolean
   ) {
@@ -112,32 +111,6 @@ export default {
         }
       })
     ])
-  },
-
-  renderSelectWithGroup(
-    label: string,
-    name: string,
-    options: Array<Array<string | SelectOptionGroup>>,
-    settingsProp: StoredProp<string>,
-    isDisabled?: boolean,
-    onChangeCallback?: (v: string) => void
-  ) {
-    const prop = settingsProp()
-    return [
-      h('label', {
-        'for': 'select_' + name
-      }, i18n(label)),
-      h('select', {
-        id: 'select_' + name,
-        disabled: isDisabled,
-        onchange(e: Event) {
-          const val = (e.target as HTMLSelectElement).value
-          settingsProp(val)
-          if (onChangeCallback) onChangeCallback(val)
-          setTimeout(() => redraw(), 10)
-        }
-      }, options.map(e => renderOptionGroup(e[0] as string, e[1], prop, e[2] as string, e[3] as string)))
-    ]
   },
 
   renderMultipleChoiceButton<T>(
@@ -218,17 +191,4 @@ function renderLichessPropOption(label: string, value: number, prop: number, lab
     value,
     selected: prop === value
   }, l)
-}
-
-
-function renderOptionGroup(label: string, value: string | SelectOptionGroup, prop: string, labelArg: string, labelArg2: string): Mithril.Children {
-  if (typeof value === 'string') {
-    return renderOption(label, value, prop, labelArg, labelArg2)
-  }
-  else {
-    return h('optgroup', {
-      key: label,
-      label
-    }, value.map(e => renderOption(e[0], e[1], prop, e[2], e[3])))
-  }
 }

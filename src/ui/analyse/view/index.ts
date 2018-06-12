@@ -14,11 +14,11 @@ import TabNavigation from '../../shared/TabNavigation'
 import { loadingBackbutton } from '../../shared/common'
 import * as helper from '../../helper'
 import layout from '../../layout'
+import { chatView } from '../../shared/chat'
 
 import menu from '../menu'
 import studyActionMenu from '../study/actionMenu'
-import renderPgnTags from '../study/pgnTagsView'
-import renderComments from '../study/commentView'
+import { renderReadonlyComments, renderPgnTags } from '../study/view'
 import analyseSettings from '../analyseSettings'
 import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
@@ -63,6 +63,7 @@ export function overlay(ctrl: AnalyseCtrl) {
   return [
     renderPromotion(ctrl),
     ctrl.study ? studyActionMenu.view(ctrl.study.actionMenu) : menu.view(ctrl.menu),
+    ctrl.study && ctrl.study.chat ? chatView(ctrl.study.chat) : null,
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notesView(ctrl.notes) : null,
     continuePopup.view(ctrl.continuePopup),
@@ -118,7 +119,6 @@ function renderOpening(ctrl: AnalyseCtrl) {
 function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
 
   const curTab = ctrl.currentTab(availTabs)
-
   const buttons = availTabs.map(b => {
     if (b.id === 'comments' && ctrl.node.comments && ctrl.node.comments.length > 0) {
       return {
@@ -126,7 +126,6 @@ function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
         chip: ctrl.node.comments.length
       }
     }
-
     return b
   })
 
@@ -173,8 +172,20 @@ function renderTabTitle(ctrl: AnalyseCtrl, curTab: Tab) {
 }
 
 function renderReplay(ctrl: AnalyseCtrl) {
+  // TODO enable when study has write support
+  // if (ctrl.study && ctrl.study.canContribute()) {
+  //   return h('div.study-replayWrapper', [
+  //     h('div.analyse-replayWrapper', [
+  //       h(Replay, { ctrl, rightTabActive: ctrl.study.vm.showComments }),
+  //       ctrl.study.vm.showComments ? renderComments(ctrl.study) : null
+  //     ]),
+  //     renderReplayActions(ctrl.study)
+  //   ])
+  // } else {
+  // }
+
   return h('div.analyse-replayWrapper', [
-    h(Replay, { ctrl })
+    h(Replay, { ctrl, rightTabActive: false }),
   ])
 }
 
@@ -185,15 +196,10 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Bas
   analysis: renderAnalysis,
   ceval: renderCeval,
   pgnTags: renderPgnTags,
-  comments: renderComments,
+  comments: renderReadonlyComments,
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>, isPortrait: boolean) {
-
-  const tabsContent = availTabs.map(t =>
-    TabsContentRendererMap[t.id]
-  )
-
   return h('div.analyse-table', {
     key: 'analyse'
   }, [
@@ -202,9 +208,10 @@ function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>, is
       ctrl,
       className: 'analyse-tabsContent',
       selectedIndex: ctrl.currentTabIndex(availTabs),
-      contentRenderers: tabsContent,
+      contentRenderers: availTabs.map(t => TabsContentRendererMap[t.id]),
       onTabChange: ctrl.onTabChange,
-      isPortrait
+      isPortrait,
+      is43Aspect: helper.is43Aspect(),
     }),
     ctrl.retro ? retroView(ctrl) : null
   ])

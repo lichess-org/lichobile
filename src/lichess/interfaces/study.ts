@@ -1,5 +1,6 @@
 import { AnalyseData } from './analyse'
 import { LightUser } from './user'
+import { ChatData } from './chat'
 import { Tree } from '../../ui/shared/tree'
 
 export interface Study {
@@ -19,6 +20,7 @@ export interface Study {
   readonly chapters: ReadonlyArray<StudyChapterMeta>
   readonly chapter: StudyChapter
   readonly secondsSinceUpdate: number
+  readonly chat?: ChatData
 }
 
 type UserSelection = 'nobody' | 'owner' | 'contributor' | 'member' | 'everyone'

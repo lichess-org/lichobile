@@ -48,7 +48,7 @@ export default {
       }
     }, [
       h('div.native_scroller', [
-        h('h2.study-menu-title', {
+        h('h2.study-menu-title.study-members', {
           oncreate: helper.ontapXY(() => this.showMembers = !this.showMembers)
         }, [
           h('span', `${members.length} member${membPluralSuffix}`),
@@ -64,7 +64,7 @@ export default {
             h('span', memb.user ? lightPlayerName(memb.user) : '?')
           ])
         )) : null,
-        h('h2.study-menu-title', `${study.chapters.length} chapters`),
+        h('h2.study-menu-title.study-chapters', `${study.chapters.length} chapters`),
         h('ol', {
           oncreate: helper.ontapXY(e => {
             const el = helper.getLI(e)

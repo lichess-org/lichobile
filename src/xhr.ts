@@ -57,12 +57,6 @@ export function seekGame(setup: HumanSeekSetup): Promise<HookData> {
   }, true)
 }
 
-export function seekGameLike(gameId: string): Promise<HookData> {
-  return fetchJSON(`/setup/hook/${currentSri()}/like/${gameId}`, {
-    method: 'POST',
-  }, true)
-}
-
 export function challenge(userId: string, fen?: string): Promise<{ challenge: Challenge }> {
   const config = settings.gameSetup.challenge
   const url = userId ? `/setup/friend?user=${userId}` : '/setup/friend'

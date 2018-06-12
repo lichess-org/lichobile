@@ -24,14 +24,14 @@ export default {
       oncreate: helper.ontap(onTap ? onTap : () => { socket.send(socketMsg) })
     }, i18n(hint)) : null
   },
-  bookmark: function(ctrl: OnlineRound) {
+  bookmark(ctrl: OnlineRound) {
     return session.isConnected() ? h('button', {
       key: 'bookmarkLink',
       oncreate: helper.ontap(ctrl.toggleBookmark),
       'data-icon': ctrl.data.bookmarked ? 't' : 's'
     }, [i18n('bookmarkThisGame')]) : null
   },
-  shareLink: function(ctrl: OnlineRound) {
+  shareLink(ctrl: OnlineRound) {
     return h('button', {
       key: 'shareGameLink',
       oncreate: helper.ontap(() => {
@@ -39,7 +39,7 @@ export default {
       })
     }, [h('span.fa.fa-link'), i18n('shareGameURL')])
   },
-  userTVLink: function(user: User) {
+  userTVLink(user: User) {
     return h('button.withIcon', {
       key: `userTV_${user.username}`,
       'data-icon': '1',
@@ -48,7 +48,7 @@ export default {
       })
     }, user.username + '\'s TV')
   },
-  sharePGN: function(ctrl: OnlineRound) {
+  sharePGN(ctrl: OnlineRound) {
     function handler() {
       getPGN(ctrl.data.game.id)
       .then((PGN: string) => window.plugins.socialsharing.share(PGN))
@@ -61,16 +61,18 @@ export default {
       </button>
     )
   },
-  submitMove: function(ctrl: OnlineRound) {
+  submitMove(ctrl: OnlineRound) {
     return (
-      <div className="negotiationIcons">
+      <div className="negotiationButtonsWrapper">
         <p>{i18n('moveConfirmation')}</p>
-        <button className="accept" data-icon="E"
-          oncreate={helper.ontap(ctrl.submitMove.bind(undefined, true))}
-        />
-        <button className="decline" data-icon="L"
-          oncreate={helper.ontap(ctrl.submitMove.bind(undefined, false))}
-        />
+        <div className="negotiationButtons">
+          <button className="accept" data-icon="E"
+            oncreate={helper.ontap(() => ctrl.submitMove(true))}
+          />
+          <button className="decline" data-icon="L"
+            oncreate={helper.ontap(() => ctrl.submitMove(false))}
+          />
+        </div>
       </div>
     )
   },
@@ -82,7 +84,7 @@ export default {
       oncreate: helper.ontap(() => { ctrl.vm.confirmResign = true })
     }, i18n('resign')) : null
   },
-  resignConfirmation: function(ctrl: OnlineRound) {
+  resignConfirmation(ctrl: OnlineRound) {
     return gameApi.resignable(ctrl.data) && ctrl.vm.confirmResign ? (
       <div className="negotiation">
         <div className="binary_choice_wrapper" key="resignConfirm">
@@ -100,7 +102,7 @@ export default {
       </div>
     ) : null
   },
-  forceResign: function(ctrl: OnlineRound) {
+  forceResign(ctrl: OnlineRound) {
     return gameApi.forceResignable(ctrl.data) ?
       h('div.force_resign_zone.clearfix', {
         key: 'forceResignZone'
@@ -116,7 +118,7 @@ export default {
         ])
       ]) : null
   },
-  threefoldClaimDraw: function(ctrl: OnlineRound) {
+  threefoldClaimDraw(ctrl: OnlineRound) {
     return (ctrl.data.game.threefold) ? h('div.claim_draw_zone', {
       key: 'claimDrawZone'
     }, [
@@ -127,7 +129,7 @@ export default {
       }, i18n('claimADraw'))
     ]) : null
   },
-  cancelDrawOffer: function(ctrl: OnlineRound) {
+  cancelDrawOffer(ctrl: OnlineRound) {
     if (ctrl.data.player.offeringDraw) return h('div.negotiation', {
       key: 'cancelDrawOfferZone'
     }, [
@@ -135,7 +137,7 @@ export default {
     ])
     return null
   },
-  answerOpponentDrawOffer: function(ctrl: OnlineRound) {
+  answerOpponentDrawOffer(ctrl: OnlineRound) {
     if (ctrl.data.opponent.offeringDraw) return h('div.negotiation.clearfix', {
       key: 'answerDrawOfferZone'
     }, [
@@ -151,7 +153,7 @@ export default {
     ])
     return null
   },
-  cancelTakebackProposition: function(ctrl: OnlineRound) {
+  cancelTakebackProposition(ctrl: OnlineRound) {
     if (ctrl.data.player.proposingTakeback) return h('div.negotiation', {
       key: 'cancelTakebackPropositionZone'
     }, [
@@ -162,7 +164,7 @@ export default {
     ])
     return null
   },
-  answerOpponentTakebackProposition: function(ctrl: OnlineRound) {
+  answerOpponentTakebackProposition(ctrl: OnlineRound) {
     if (ctrl.data.opponent.proposingTakeback) return h('div.negotiation.clearfix', {
       key: 'answerTakebackPropositionZone'
     }, [
@@ -178,7 +180,7 @@ export default {
     ])
     return null
   },
-  analysisBoard: function(ctrl: OnlineRound) {
+  analysisBoard(ctrl: OnlineRound) {
     const d = ctrl.data
     if (gameApi.userAnalysable(d) || gameApi.replayable(d)) {
       return h('button', {
@@ -187,7 +189,7 @@ export default {
     }
     return null
   },
-  analysisBoardIconOnly: function(ctrl: OnlineRound) {
+  analysisBoardIconOnly(ctrl: OnlineRound) {
     const d = ctrl.data
     if (gameApi.userAnalysable(d) || gameApi.replayable(d)) {
       return h('button.action_bar_button[data-icon=A]', {
@@ -196,7 +198,7 @@ export default {
     }
     return null
   },
-  newOpponent: function(ctrl: OnlineRound) {
+  newOpponent(ctrl: OnlineRound) {
     const d = ctrl.data
     const newable = (gameStatus.finished(d) || gameStatus.aborted(d)) && (d.game.source === 'lobby' || d.game.source === 'pool')
     if (!ctrl.data.opponent.ai && newable) {
@@ -209,7 +211,7 @@ export default {
     }
     return null
   },
-  rematch: function(ctrl: OnlineRound) {
+  rematch(ctrl: OnlineRound) {
     const d = ctrl.data
     const rematchable = !d.game.rematch && (gameStatus.finished(d) || gameStatus.aborted(d)) && !d.game.tournamentId && !d.game.boosted && (d.opponent.onGame || (!d.clock && d.player.user && d.opponent.user))
     if (!ctrl.data.opponent.offeringRematch && !ctrl.data.player.offeringRematch && rematchable) {
@@ -221,7 +223,7 @@ export default {
       return null
     }
   },
-  answerOpponentRematch: function(ctrl: OnlineRound) {
+  answerOpponentRematch(ctrl: OnlineRound) {
     if (ctrl.data.opponent.offeringRematch) return h('div.negotiation.clearfix', {
       key: 'answerOpponentRematchZone'
     }, [
@@ -237,7 +239,7 @@ export default {
     ])
     return null
   },
-  cancelRematch: function(ctrl: OnlineRound) {
+  cancelRematch(ctrl: OnlineRound) {
     if (ctrl.data.player.offeringRematch) return h('div.negotiation', {
       key: 'cancelRematchZone'
     }, [
@@ -249,14 +251,14 @@ export default {
     ])
     return null
   },
-  moretime: function(ctrl: OnlineRound) {
+  moretime(ctrl: OnlineRound) {
     if (gameApi.moretimeable(ctrl.data)) return h('button[data-icon=O]', {
       key: 'moretime',
       oncreate: helper.ontap(throttle(() => { socket.send('moretime') }, 600))
     }, i18n('giveNbSeconds', 15))
     return null
   },
-  flipBoard: function(ctrl: OnlineRound) {
+  flipBoard(ctrl: OnlineRound) {
     const className = helper.classSet({
       'action_bar_button': true,
       highlight: ctrl.vm.flip
@@ -266,7 +268,7 @@ export default {
         oncreate={helper.ontap(ctrl.flip)} />
     )
   },
-  first: function(ctrl: OnlineRound) {
+  first(ctrl: OnlineRound) {
     const prevPly = ctrl.vm.ply - 1
     const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly()
     const className = helper.classSet({
@@ -280,7 +282,7 @@ export default {
         oncreate={helper.ontap(ctrl.jumpFirst)} />
     )
   },
-  backward: function(ctrl: OnlineRound) {
+  backward(ctrl: OnlineRound) {
     const prevPly = ctrl.vm.ply - 1
     const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly()
     const className = helper.classSet({
@@ -294,7 +296,7 @@ export default {
         oncreate={helper.ontap(ctrl.jumpPrev, undefined, ctrl.jumpPrev)} />
     )
   },
-  forward: function(ctrl: OnlineRound) {
+  forward(ctrl: OnlineRound) {
     const nextPly = ctrl.vm.ply + 1
     const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly()
     const className = helper.classSet({
@@ -308,7 +310,7 @@ export default {
         oncreate={helper.ontap(ctrl.jumpNext, undefined, ctrl.jumpNext)} />
     )
   },
-  last: function(ctrl: OnlineRound) {
+  last(ctrl: OnlineRound) {
     const nextPly = ctrl.vm.ply + 1
     const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly()
     const className = helper.classSet({
@@ -322,7 +324,7 @@ export default {
         oncreate={helper.ontap(ctrl.jumpLast)} />
     )
   },
-  notes: function(ctrl: OnlineRound) {
+  notes(ctrl: OnlineRound) {
     return (
       <button className="action_bar_button fa fa-pencil" key="notes"
         oncreate={helper.ontap(
@@ -331,7 +333,7 @@ export default {
         )} />
     )
   },
-  returnToTournament: function(ctrl: OnlineRound) {
+  returnToTournament(ctrl: OnlineRound) {
     function handler() {
       ctrl.hideActions()
       const url = `/tournament/${ctrl.data.game.tournamentId}`
@@ -348,7 +350,7 @@ export default {
       </button>
     )
   },
-  withdrawFromTournament: function(ctrl: OnlineRound, tournamentId: string) {
+  withdrawFromTournament(ctrl: OnlineRound, tournamentId: string) {
     function handler() {
       ctrl.hideActions()
       tournamentXhr.withdraw(tournamentId)
@@ -361,7 +363,7 @@ export default {
       </button>
     )
   },
-  goBerserk: function(ctrl: OnlineRound) {
+  goBerserk(ctrl: OnlineRound) {
     if (!gameApi.berserkableBy(ctrl.data)) return null
     if (ctrl.vm.goneBerserk[ctrl.data.player.color]) return null
     function handler() {

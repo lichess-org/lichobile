@@ -3,7 +3,7 @@ import * as utils from '../../../utils'
 import i18n from '../../../i18n'
 import * as gameApi from '../../../lichess/game'
 import gameStatusApi from '../../../lichess/status'
-import { GameSituation } from '../../../chess'
+import { fixCrazySan } from '../../../utils/chessFormat'
 import { renderMaterial } from '../../shared/round/view/roundView'
 import * as helper from '../../helper'
 import CrazyPocket from '../../shared/round/crazy/CrazyPocket'
@@ -177,44 +177,39 @@ export function renderForwardButton(ctrl: OfflineRoundInterface) {
   })
 }
 
-// TODO replace by sit.san in version 5.4.0
-function renderTd(sit: GameSituation, curPly: number) {
-  if (sit && sit.pgnMoves.length) {
-    const san = sit.pgnMoves[sit.pgnMoves.length - 1]
-    return (
-      <td className={'replayMove' + (sit.ply === curPly ? ' current' : '')}>
-        {san}
-      </td>
-    )
-  }
-  return null
-}
-
 function renderTable(ctrl: Replay, curPly: number) {
   const steps = ctrl.situations
-  const pairs: Array<[GameSituation, GameSituation]> = []
-  for (let i = 1; i < steps.length; i += 2) pairs.push([steps[i], steps[i + 1]])
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
   return (
-    <table className={'moves' + (pieceNotation ? ' displayPieces' : '')}>
-      <tbody>
-        {pairs.map((pair, i) => {
-          return (
-            <tr>
-              <td className="replayMoveIndex">{ (i + 1) + '.' }</td>
-              {renderTd(pair[0], curPly)}
-              {renderTd(pair[1], curPly)}
-            </tr>
-          )
-        })}
-      </tbody>
-    </table>
+    <div className={'moves' + (pieceNotation ? ' displayPieces' : '')}>
+      {
+        steps.filter(s => s.san !== undefined).map(s => h('move.replayMove', {
+          className: s.ply === curPly ? 'current' : '',
+          'data-ply': s.ply,
+        }, [
+          s.ply & 1 ? h('index', renderIndex(s.ply, true)) : null,
+          fixCrazySan(s.san!)
+        ]))
+      }
+    </div>
   )
+}
+
+function renderIndexText(ply: Ply, withDots?: boolean): string {
+  return plyToTurn(ply) + (withDots ? (ply % 2 === 1 ? '.' : '...') : '')
+}
+
+function renderIndex(ply: Ply, withDots?: boolean): Mithril.Children {
+  return h('index', renderIndexText(ply, withDots))
+}
+
+function plyToTurn(ply: number): number {
+  return Math.floor((ply - 1) / 2) + 1
 }
 
 function autoScroll(movelist: HTMLElement) {
   if (!movelist) return
-  const plyEl = (movelist.querySelector('.current') || movelist.querySelector('tr:first-child')) as HTMLElement
+  const plyEl = movelist.querySelector('.current') as HTMLElement
   if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2
 }
 

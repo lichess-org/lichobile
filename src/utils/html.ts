@@ -32,7 +32,7 @@ function linkReplace(match: string, before: string, url: string) {
   if (url.indexOf('&quot;') !== -1) return match
   const fullUrl = url.indexOf('http') === 0 ? url : 'https://' + url
   const minUrl = url.replace(/^(?:https:\/\/)?(.+)$/, '$1')
-  return before + `<a href="#" class="external_link" onClick="window.open('${fullUrl}', '_system')">${minUrl}</a>`
+  return before + `<a href="${fullUrl}" class="external_link" onClick="window.open('${fullUrl}', '_blank')">${minUrl}</a>`
 }
 
 const userPattern = /(^|[^\w@#/])@([\w-]{2,})/g

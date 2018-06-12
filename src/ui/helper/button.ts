@@ -20,7 +20,9 @@ export default function ButtonHandler(
   repeatHandler?: () => boolean,
   scrollX?: boolean,
   scrollY?: boolean,
-  getElement?: (e: TouchEvent) => HTMLElement) {
+  getElement?: (e: TouchEvent) => HTMLElement,
+  preventEndDefault = true,
+) {
 
   let activeElement = el
 
@@ -87,7 +89,7 @@ export default function ButtonHandler(
   }
 
   function onTouchEnd(e: TouchEvent) {
-    if (e.cancelable) e.preventDefault()
+    if (e.cancelable && preventEndDefault) e.preventDefault()
     clearTimeout(repeatTimeoutId)
     removeFromBatchAnimationFrame(onRepeat)
     if (active && activeElement) {

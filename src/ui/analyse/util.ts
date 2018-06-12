@@ -47,7 +47,7 @@ export function isSynthetic(data: AnalyseData) {
 export function autoScroll(movelist: HTMLElement | null) {
   if (!movelist) return
   requestAnimationFrame(() => {
-    const plyEl = (movelist.querySelector('.current') || movelist.querySelector('turn:first-child')) as HTMLElement
+    const plyEl = movelist.querySelector('.current') as HTMLElement
     if (plyEl) {
       movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2
     } else {

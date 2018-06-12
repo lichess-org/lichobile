@@ -91,9 +91,11 @@
     &.active
       background-color activeBgLight
 
-  .replayMove
-    &.active
-      background-color darken(themeBgLight, 12%)
+  .gameMovesList
+    > .moves
+      .replayMove
+        &.active
+          background-color darken(themeBgLight, 12%)
 
   .clock
     color #707070

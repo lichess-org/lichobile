@@ -217,12 +217,10 @@ export default class AnalyseCtrl {
 
     if (this.study && this.study.data.chapter.tags.length > 0) val = [tabs.pgnTags, ...val]
     if (!this.synthetic) val = [tabs.gameInfos, ...val]
+    // TODO enable only when study.canContribute() is false with write support
     if (this.study) val = [...val, tabs.comments]
     if (!this.retro && this.ceval.enabled()) val = [...val, tabs.ceval]
-    // TODO enable study analysis request when socket is implemented
-    if (this.study && this.data.analysis ||
-      (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data))
-    ) {
+    if (this.study || (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data))) {
       val = [...val, tabs.charts]
     }
     if (hasNetwork() && this.explorer.allowed) val = [...val, tabs.explorer]
@@ -414,7 +412,9 @@ export default class AnalyseCtrl {
     this.tree.merge(data.tree)
     this.data.analysis = data.analysis
     const anaMainline = treeOps.mainlineNodeList(data.tree)
-    const analysisComplete = anaMainline.every(n => n.eval !== undefined)
+    const analysisComplete = anaMainline.every(n =>
+      n.eval !== undefined || !!(n.san && n.san.includes('#'))
+    )
     if (analysisComplete) {
       this.data.treeParts = anaMainline
       this.analysisProgress = false

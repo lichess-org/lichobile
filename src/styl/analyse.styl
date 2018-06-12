@@ -21,7 +21,7 @@
   position relative
 
 .analyse-header
-  background-color headerBgDark
+  background-color bgdark
   flex 0 0 25px
   overflow hidden
   display flex
@@ -56,11 +56,12 @@
     height 25px
     > .chip
       height 11px
-      width 12px
-      font-size 10px
+      width 11px
+      line-height 11px
+      font-size 9px
+      text-align center
       top 3px
       right 1px
-      line-height inherit
       background darken(gold, 25%)
       color #fff
       border 0
@@ -90,6 +91,8 @@
       width 100%
     @media only screen and (orientation: landscape)
       width 'calc(100vw - 100vh + %s)' % headerHeight
+    @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
+      width 'calc(100vw - 88vh + %s)' % headerHeight
 
 .analyse_actions_bar
   flex 0 0 40px
@@ -135,6 +138,8 @@
   font-size 0.93rem
   white-space normal
   line-height 1.05em
+  &.rta
+    border-right 2px solid rgba(green2, 0.75)
   &.displayPieces
     move
       font-family ChessSansPiratf
@@ -301,10 +306,6 @@ comment
 
   .analyse-tabsContent
     background #fff
-
-  .ceval-curEval
-    background-color inherit
-    border-right 1px solid borderLightGray
 
   inline
     color rgba(textLightBg, 0.8)

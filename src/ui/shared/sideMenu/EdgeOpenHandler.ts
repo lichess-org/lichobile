@@ -16,7 +16,6 @@ export interface HammerHandlers {
 
 export default function EdgeOpenHandler(ctrl: SideMenuCtrl): HammerHandlers {
   const side = ctrl.side
-  const vw = viewportDim().vw
   const menuWidth = getMenuWidth()
 
   const state: State = {
@@ -25,7 +24,6 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): HammerHandlers {
     canSlide: false
   }
 
-
   return {
     panstart: (e: HammerInput) => {
       if (
@@ -33,7 +31,7 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): HammerHandlers {
         e.target.nodeName === 'SQUARE' ||
         // svg element className is not a string
         (e.target.className.startsWith && e.target.className.startsWith('cg-board manipulable')) ||
-        !inEdgeArea(e.center.x, side, vw)
+        !inEdgeArea(e.center.x, side, viewportDim().vw)
       ) {
         state.canSlide = false
       } else {

@@ -13,7 +13,9 @@ export default function CloseSwipeHandler(el: HTMLElement, ctrl: SideMenuCtrl) {
     velocity: 0.4
   }))
 
-  mc.on('swipeleft', () => {
+  const swipeDirection = ctrl.side === 'left' ? 'swipeleft' : 'swiperight'
+
+  mc.on(swipeDirection, () => {
     ctrl.close()
   })
 }

@@ -30,7 +30,7 @@ interface State {
   round?: OnlineRound
 }
 
-const GameScreen: Mithril.Component<Attrs, State> = {
+export default {
   oninit({ attrs }) {
     let gameData: OnlineGameData
 
@@ -139,10 +139,8 @@ const GameScreen: Mithril.Component<Attrs, State> = {
       board
     )
   }
-}
+} as Mithril.Component<Attrs, State>
 
 function variantStorageKey(variant: string) {
   return 'game.variant.prompt.' + variant
 }
-
-export default GameScreen

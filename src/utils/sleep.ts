@@ -27,7 +27,12 @@ export function allowSleepAgain() {
     cancelTimer()
     cancelTimer = undefined
   }
-  window.plugins.insomnia.allowSleepAgain()
+  // workaround for nasty bug (Uncaught RangeError: Maximum call stack size exceeded)
+  // on older webviews
+  // TODO investigate this
+  setTimeout(() => {
+    window.plugins.insomnia.allowSleepAgain()
+  })
 }
 
 function idleTimer(delay: number, onIdle: () => void, onWakeUp: () => void): () => void {

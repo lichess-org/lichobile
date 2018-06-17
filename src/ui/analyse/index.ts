@@ -1,6 +1,5 @@
 import * as h from 'mithril/hyperscript'
 import i18n from '../../i18n'
-import socket from '../../socket'
 import settings from '../../settings'
 import router from '../../router'
 import redraw from '../../utils/redraw'
@@ -113,11 +112,14 @@ export default {
   },
 
   onremove() {
-    socket.destroy()
-    if (this.ctrl) {
-      this.ctrl.unload()
-      this.ctrl = undefined
-    }
+    // workaround for nasty bug (Uncaught RangeError: Maximum call stack size exceeded)
+    // on older webviews
+    // TODO investigate this
+    setTimeout(() => {
+      if (this.ctrl) {
+        this.ctrl.unload()
+      }
+    })
   },
 
   view(vnode) {

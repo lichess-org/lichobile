@@ -167,11 +167,7 @@ function get(): string {
 }
 
 function backHistory(): void {
-  if (window.navigator.app && window.navigator.app.backHistory) {
-    window.navigator.app.backHistory()
-  } else {
-    window.history.go(-1)
-  }
+  window.history.go(-1)
 }
 
 export default {

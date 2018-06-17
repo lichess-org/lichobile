@@ -111,17 +111,6 @@ export default {
     }
   },
 
-  onremove() {
-    // workaround for nasty bug (Uncaught RangeError: Maximum call stack size exceeded)
-    // on older webviews
-    // TODO investigate this
-    setTimeout(() => {
-      if (this.ctrl) {
-        this.ctrl.unload()
-      }
-    })
-  },
-
   view(vnode) {
     const isPortrait = helper.isPortrait()
 

@@ -45,9 +45,6 @@ export default function renderBoard(
   ]
 
   return h('div.analyse-boardWrapper', {
-    style: {
-      flexBasis: bounds.height + 'px'
-    },
     key: ctrl.settings.s.smallBoard ? 'board-small' : 'board-full',
   }, [
     playerBar(ctrl, ctrl.topColor()),

@@ -56,8 +56,7 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
   // used to restore scroll position only once from cached state
   let initialized = false
 
-  const scrollStateId = window.history.state.scrollStateId
-  const cacheAvailable = cachedScrollState && scrollStateId === cachedScrollState.userId
+  const cacheAvailable = cachedScrollState && userId === cachedScrollState.userId
 
   const boardTheme = settings.general.theme.board()
 
@@ -202,13 +201,6 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
       handleXhrError(err)
     })
   }
-
-  // assign userId to history state to be able to retrieve cached scroll state
-  // later...
-  try {
-    const newState = Object.assign({}, window.history.state, { scrollStateId: scrollState.userId })
-    window.history.replaceState(newState, '')
-  } catch (e) { console.error(e) }
 
   return {
     scrollState,

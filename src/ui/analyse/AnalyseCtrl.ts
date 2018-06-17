@@ -467,10 +467,6 @@ export default class AnalyseCtrl {
     return Object.keys(this.mainline[0].eval || {}).length > 0
   }
 
-  unload = () => {
-    if (this.ceval) this.ceval.destroy()
-  }
-
   // ---
 
   private _deleteNode = (path: Tree.Path) => {

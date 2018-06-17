@@ -16,3 +16,4 @@
 /// <reference path="zanimo.d.ts" />
 /// <reference path="signals.d.ts" />
 /// <reference path="misc.d.ts" />
+/// <reference path="any.d.ts" />

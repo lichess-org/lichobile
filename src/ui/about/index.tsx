@@ -12,8 +12,6 @@ export default {
     socket.createDefault()
   },
 
-  onremove() {},
-
   view() {
     const header = dropShadowHeader(null, backButton('About'))
     return layout.free(

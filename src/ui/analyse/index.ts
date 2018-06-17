@@ -4,7 +4,6 @@ import socket from '../../socket'
 import settings from '../../settings'
 import router from '../../router'
 import redraw from '../../utils/redraw'
-import * as sleepUtils from '../../utils/sleep'
 import { handleXhrError, safeStringToNum } from '../../utils'
 import { specialFenVariants } from '../../lichess/variant'
 import { getAnalyseData, getCurrentAIGame, getCurrentOTBGame } from '../../utils/offlineGames'
@@ -46,8 +45,6 @@ export default {
     const tab = safeStringToNum(vnode.attrs.tab)
 
     const shouldGoBack = gameId !== undefined || vnode.attrs.goBack === '1'
-
-    sleepUtils.keepAwake()
 
     if (source === 'online' && gameId) {
       const now = performance.now()
@@ -116,7 +113,6 @@ export default {
   },
 
   onremove() {
-    sleepUtils.allowSleepAgain()
     socket.destroy()
     if (this.ctrl) {
       this.ctrl.unload()

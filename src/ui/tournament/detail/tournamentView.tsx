@@ -246,7 +246,7 @@ function renderPlayerEntry(userName: string, player: StandingPlayer) {
         <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '. ')} </span>
         <span> {player.name + ' (' + player.rating + ') '} </span>
       </div>
-      <span className={'tournamentPoints ' + player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon="Q">
+      <span className={'tournamentPoints ' + (player.sheet.fire ? 'on-fire' : 'off-fire')} data-icon="Q">
         {player.score}
       </span>
     </li>

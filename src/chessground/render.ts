@@ -2,6 +2,26 @@ import * as cg from './interfaces'
 import { State } from './state'
 import * as util from './util'
 
+/**
+ * Board diffing and rendering logic. It runs in 3 main steps:
+ *   1. Iterate over all DOM elements under board (pieces and squares).
+ *     For each element, flag it either as 'same' if current state objet holds the
+ *     same element at this DOM position (using board key as position ID) or as
+ *     'moved' otherwise. Flagged elements are kept in sets for next steps.
+ *     Apply animation and capture changes if necessary.
+ *
+ *   2. Iterate over all pieces and square objects from State. For each element,
+ *   if it was flagged as 'same', do nothing. Otherwise 2 possibilities:
+ *     - an equivalent piece or square is found in the corresponding 'moved' set:
+ *     reuse it and apply translation change;
+ *     - no dom element found in the 'moved' set: create it and append it to the
+ *     board element
+ *
+ *   3. Delete from the DOM all remaining element in the 'moved' sets.
+ *
+ * These steps ensure that, for each re-rendering, the smallest number of DOM
+ * operations are made.
+ */
 export function renderBoard(d: State, dom: cg.DOM) {
   const boardElement = dom.board
   const asWhite = d.orientation === 'white'
@@ -71,7 +91,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
           el.classList.remove('anim')
           el.cgAnimating = false
         }
-        // same piece: flag as same
+        // same piece, no change: flag as same
         if (el.cgPiece === pieceAtKeyName && !allChange && !otbChange && (!captured || !el.cgCaptured)) {
           samePieces.add(k)
         }
@@ -104,8 +124,8 @@ export function renderBoard(d: State, dom: cg.DOM) {
     el = el.nextSibling as cg.KeyedNode
   }
 
-  // walk over all squares in current set, apply dom changes to moved squares
-  // or append new squares
+  // walk over all squares in current state object, apply dom changes to moved
+  // squares or append new squares
   squares.forEach((squareClass: string, k: Key) => {
     if (!sameSquares.has(k)) {
       mvdset = movedSquares.get(squareClass)
@@ -126,8 +146,8 @@ export function renderBoard(d: State, dom: cg.DOM) {
     }
   })
 
-  // walk over all pieces in current set, apply dom changes to moved pieces
-  // or append new pieces
+  // walk over all pieces in current state object, apply dom changes to moved
+  // pieces or append new pieces
   for (let j = 0, jlen = piecesKeys.length; j < jlen; j++) {
     let k = piecesKeys[j] as Key
     let p = pieces[k]
@@ -136,7 +156,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
     if (!samePieces.has(k)) {
       mvdset = movedPieces.get(pieceClass)
       mvd = mvdset && mvdset.pop()
-      // a same piece was moved
+      // a equivalent piece was moved
       if (mvd) {
         // apply dom changes
         mvd.cgKey = k
@@ -148,7 +168,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
         }
         positionPiece(d, mvd, mvd.cgColor, translate)
       }
-      // no piece in moved obj: insert the new piece
+      // no piece in moved set: insert the new piece
       else {
         const pe = document.createElement('piece') as cg.PieceNode
         const pName = pieceNameOf(p)
@@ -168,7 +188,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
     }
   }
 
-  // remove any dom el that remains in the moved sets
+  // remove from the board any DOM element that remains in the moved sets
   const rmEl = (e: HTMLElement) => boardElement.removeChild(e)
   movedPieces.forEach(els => els.forEach(rmEl))
   movedSquares.forEach(els => els.forEach(rmEl))

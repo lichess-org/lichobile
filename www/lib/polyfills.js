@@ -278,7 +278,7 @@ if (!String.prototype.includes) {
 }
 
 if (!String.prototype.startsWith) {
-    String.prototype.startsWith = function(searchString, position){
-      return this.substr(position || 0, searchString.length) === searchString;
-  };
+	String.prototype.startsWith = function(search, pos) {
+		return this.substr(!pos || pos < 0 ? 0 : +pos, search.length) === search;
+	};
 }

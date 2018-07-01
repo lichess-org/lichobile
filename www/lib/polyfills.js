@@ -1,34 +1,31 @@
-if (!Object.assign) {
-  Object.defineProperty(Object, 'assign', {
-    enumerable: false,
-    configurable: true,
-    writable: true,
-    value: function(target) {
-      'use strict'
-      if (target === undefined || target === null) {
-        throw new TypeError('Cannot convert first argument to object')
+if (typeof Object.assign != 'function') {
+  // Must be writable: true, enumerable: false, configurable: true
+  Object.defineProperty(Object, "assign", {
+    value: function assign(target, varArgs) { // .length of function is 2
+      'use strict';
+      if (target == null) { // TypeError if undefined or null
+        throw new TypeError('Cannot convert undefined or null to object');
       }
 
-      var to = Object(target)
-      for (var i = 1; i < arguments.length; i++) {
-        var nextSource = arguments[i]
-        if (nextSource === undefined || nextSource === null) {
-          continue
-        }
-        nextSource = Object(nextSource)
+      var to = Object(target);
 
-        var keysArray = Object.keys(Object(nextSource))
-        for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
-          var nextKey = keysArray[nextIndex]
-          var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey)
-          if (desc !== undefined && desc.enumerable) {
-            to[nextKey] = nextSource[nextKey]
+      for (var index = 1; index < arguments.length; index++) {
+        var nextSource = arguments[index];
+
+        if (nextSource != null) { // Skip over if undefined or null
+          for (var nextKey in nextSource) {
+            // Avoid bugs when hasOwnProperty is shadowed
+            if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+              to[nextKey] = nextSource[nextKey];
+            }
           }
         }
       }
-      return to
-    }
-  })
+      return to;
+    },
+    writable: true,
+    configurable: true
+  });
 }
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find

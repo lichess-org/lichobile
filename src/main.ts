@@ -167,6 +167,8 @@ function getPools() {
 
 document.addEventListener('deviceready',
   // i18n must be loaded before any rendering happens
-  () => loadPreferredLanguage().then(main),
+  () => Raven.context(() => {
+    loadPreferredLanguage().then(main)
+  }),
   false
 )

@@ -26,9 +26,11 @@ export function contains(p1: Tree.Path, p2: Tree.Path): boolean {
   return p1.indexOf(p2) === 0
 }
 
-export function fromNodeList(nodes: Tree.Node[]): Tree.Path {
+export function fromNodeList(nodes: ReadonlyArray<Tree.Node>): Tree.Path {
   let path = ''
-  for (let i in nodes) path += nodes[i].id
+  for (let i in nodes) {
+    path += nodes[i].id
+  }
   return path
 }
 

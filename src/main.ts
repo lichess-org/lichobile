@@ -140,6 +140,7 @@ function onOffline() {
 
 function onResume() {
   setForeground()
+  session.refresh()
   socket.connect()
 }
 

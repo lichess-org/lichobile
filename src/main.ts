@@ -141,7 +141,9 @@ function onOffline() {
 function onResume() {
   setForeground()
   session.refresh()
+  getPools().then(() => redraw())
   socket.connect()
+  redraw()
 }
 
 function onPause() {
@@ -154,7 +156,7 @@ function onPause() {
 // retry 5 times
 let nbRetries = 1
 function getPools() {
-  xhr.lobby()
+  return xhr.lobby()
   .then(() => {
     if (nbRetries > 1) redraw()
   })

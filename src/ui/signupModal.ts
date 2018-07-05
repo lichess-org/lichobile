@@ -1,6 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import * as debounce from 'lodash/debounce'
 import session, { SignupData, EmailConfirm } from '../session'
+import socket from '../socket'
 import redraw from '../utils/redraw'
 import { handleXhrError } from '../utils'
 import { fetchJSON, ErrorResponse } from '../http'
@@ -169,6 +170,7 @@ function submit(form: HTMLFormElement) {
       redraw()
     } else {
       window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center')
+      socket.reconnectCurrent()
       redraw()
       loginModal.close()
       close()

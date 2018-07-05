@@ -1,7 +1,10 @@
 import * as merge from 'lodash/merge'
+import storage from './storage'
 import spinner from './spinner'
 import globalConfig from './config'
 import { buildQueryString } from './utils/querystring'
+
+export const SESSION_ID_KEY = 'sessionId'
 
 const baseUrl = globalConfig.apiEndPoint
 
@@ -70,6 +73,11 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
     if (!init.body) {
       init.body = '{}'
     }
+  }
+
+  const sid = storage.get<string>(SESSION_ID_KEY)
+  if (sid !== null) {
+    (<Headers>init.headers).append(SESSION_ID_KEY, sid)
   }
 
   const fullUrl = url.indexOf('http') > -1 ? url : baseUrl + url

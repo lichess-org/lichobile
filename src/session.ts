@@ -6,7 +6,7 @@ import * as mapKeys from 'lodash/mapKeys'
 import * as throttle from 'lodash/throttle'
 import redraw from './utils/redraw'
 import signals from './signals'
-import { fetchJSON, fetchText, ErrorResponse } from './http'
+import { SESSION_ID_KEY, fetchJSON, fetchText, ErrorResponse } from './http'
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils'
 import i18n from './i18n'
 import push from './push'
@@ -14,7 +14,7 @@ import settings from './settings'
 import { TempBan } from './lichess/interfaces'
 import friendsApi from './lichess/friends'
 import challengesApi from './lichess/challenges'
-import { StoredProp } from './storage'
+import storage, { StoredProp } from './storage'
 import asyncStorage from './asyncStorage'
 
 import { LobbyData, NowPlayingGame } from './lichess/interfaces'
@@ -57,6 +57,8 @@ export interface Session {
   readonly nbFollowers: number
   readonly nbFollowing: number
   readonly playban?: TempBan
+  // sent on login/signup only
+  readonly sessionId?: string
 }
 
 let session: Session | undefined
@@ -69,12 +71,16 @@ function getSession(): Session | undefined {
   return session
 }
 
+// store session data for offline usage
 function storeSession(d: Session): void {
   asyncStorage.setItem('session', d)
 }
 
-function clearStoredSession(): void {
+// clear session data stored in async storage and sessionId
+function onLogout(): void {
   asyncStorage.removeItem('session')
+  storage.remove(SESSION_ID_KEY)
+  signals.afterLogout.dispatch()
 }
 
 function restoreStoredSession(): void {
@@ -210,6 +216,9 @@ function login(username: string, password: string, token: string | null): Promis
   .then((data: Session | LobbyData) => {
     if (isSession(data)) {
       session = <Session>data
+      if (session.sessionId) {
+        storage.set(SESSION_ID_KEY, session.sessionId)
+      }
       storeSession(data)
       return session
     } else {
@@ -224,7 +233,7 @@ function logout() {
     fetchJSON('/logout', { method: 'POST' }, true)
     .then(() => {
       session = undefined
-      clearStoredSession()
+      onLogout()
       friendsApi.clear()
       redraw()
     })
@@ -258,6 +267,9 @@ function signup(
   .then(d => {
     if (isSession(d)) {
       session = d
+      if (session.sessionId) {
+        storage.set(SESSION_ID_KEY, session.sessionId)
+      }
     }
 
     return d
@@ -287,7 +299,7 @@ function refresh(): Promise<void> {
   .catch((err: ErrorResponse) => {
     if (session !== undefined && err.status === 401) {
       session = undefined
-      clearStoredSession()
+      onLogout()
       redraw()
       window.plugins.toast.show(i18n('signedOut'), 'short', 'center')
     }

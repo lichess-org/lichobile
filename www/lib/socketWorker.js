@@ -200,7 +200,7 @@ StrongSocket.prototype = {
 
   debug: function(msg, always) {
     if ((always || this.options.debug) && console && console.debug) {
-      console.debug('[' + this.options.name + ' ' + this.settings.params.sri + ']', msg);
+      console.debug('[' + this.options.name + ' ' + this.settings.params.sri + '] ' + msg);
     }
   },
 

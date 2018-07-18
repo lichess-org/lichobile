@@ -104,7 +104,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
    */
   function processOutput(text: string, work: Work, rdyResolve: () => void) {
     if (text.indexOf('bestmove') === 0) {
-      console.debug('[stockfish >>]', text)
+      console.debug('[stockfish >>] ' + text)
       finished = true
       rdyResolve()
       work.emit()

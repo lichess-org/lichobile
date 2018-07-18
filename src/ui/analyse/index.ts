@@ -111,6 +111,13 @@ export default {
     }
   },
 
+  onremove() {
+    if (this.ctrl) {
+      this.ctrl.unload()
+      this.ctrl = undefined
+    }
+  },
+
   view(vnode) {
     const isPortrait = helper.isPortrait()
 

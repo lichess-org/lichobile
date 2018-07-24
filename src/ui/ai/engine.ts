@@ -29,15 +29,6 @@ export interface EngineInterface {
 export default function(ctrl: AiRoundInterface): EngineInterface {
   let level = 1
 
-  Stockfish.output((msg: string) => {
-    console.debug('[stockfish >>] ' + msg)
-    const match = msg.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/)
-    if (match) {
-      if (match[1]) ctrl.onEngineMove(match[1])
-      else if (match[2]) ctrl.onEngineDrop(match[2])
-    }
-  })
-
   return {
     init() {
       return Stockfish.init()
@@ -46,6 +37,15 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
     },
 
     search(initialFen: string, moves: string) {
+      Stockfish.output((msg: string) => {
+        console.debug('[stockfish >>] ' + msg)
+        const match = msg.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/)
+        if (match) {
+          if (match[1]) ctrl.onEngineMove(match[1])
+          else if (match[2]) ctrl.onEngineDrop(match[2])
+        }
+      })
+
       // console.info('engine search pos: ', `position fen ${initialFen} moves ${moves}`)
       setOption('Threads', getNbCores())
       .then(() => send(`position fen ${initialFen} moves ${moves}`))

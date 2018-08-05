@@ -27,7 +27,7 @@ export default function renderActionsBar(ctrl: AnalyseCtrl) {
           }
         </button> : null
       }
-      <button className={'action_bar_button fa fa-' + (ctrl.settings.s.smallBoard ? 'compress' : 'expand')} key="expand-compress"
+      <button className={'action_bar_button fa fa-' + (ctrl.settings.s.smallBoard ? 'expand' : 'compress')} key="expand-compress"
         oncreate={helper.ontap(
           ctrl.settings.toggleBoardSize,
           () => window.plugins.toast.show('Expand/compress board', 'short', 'bottom')

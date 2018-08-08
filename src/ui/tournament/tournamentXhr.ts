@@ -37,10 +37,11 @@ export function playerInfo(tournamentId: string, playerId: string): Promise<Play
   return fetchJSON('/tournament/' + tournamentId + '/player/' + playerId, {}, true)
 }
 
-export function create(variant: string, position: string, mode: string, clockTime: string, clockIncrement: string, minutes: string, waitMinutes: string, isPrivate: string, password: string): Promise<TournamentCreateResponse> {
+export function create(name: string, variant: string, position: string, mode: string, clockTime: string, clockIncrement: string, minutes: string, waitMinutes: string, isPrivate: string, password: string): Promise<TournamentCreateResponse> {
   return fetchJSON('/tournament/new', {
     method: 'POST',
     body: JSON.stringify({
+      name,
       variant,
       position,
       mode,

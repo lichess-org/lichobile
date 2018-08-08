@@ -44,6 +44,24 @@ function renderForm(ctrl: TournamentsListCtrl) {
       return create(e.target as HTMLFormElement)
     }}>
       <fieldset>
+        <div className="select_input no_arrow_after">
+          <div className="text_input_container">
+            <label>Name </label>
+            <input type="text"
+              id="name"
+              className="textField"
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck={false}
+            />
+            Arena
+          </div>
+        </div>
+        <div className="tournament_name_warning">
+        Pick a very safe name for the tournament. Anything even slightly inappropriate could get your account closed.
+        Leave empty to name the tournament after a random Grandmaster.
+        </div>
         <div className="select_input">
           {formWidgets.renderSelect('Variant', 'variant', settings.tournament.availableVariants, settings.tournament.variant, false)}
         </div>
@@ -86,10 +104,10 @@ function renderForm(ctrl: TournamentsListCtrl) {
         </div>
         <div className={'select_input no_arrow_after' + (settings.tournament.private() ? '' : ' notVisible')}>
           <div className="text_input_container">
-            <label>Password: </label>
+            <label>Password </label>
             <input type="text"
               id="password"
-              className="passwordField"
+              className="textField"
               autocomplete="off"
               autocapitalize="off"
               autocorrect="off"
@@ -110,17 +128,18 @@ function renderForm(ctrl: TournamentsListCtrl) {
 
 function create(form: HTMLFormElement) {
   const elements: HTMLCollection = form[0].elements as HTMLCollection
-  const variant = (elements[0] as HTMLInputElement).value
-  const position = settings.tournament.variant() === '1' ? (elements[1] as HTMLInputElement).value : '---'
-  const mode = (elements[2] as HTMLInputElement).value
-  const time = (elements[3] as HTMLTextAreaElement).value
-  const increment = (elements[4] as HTMLTextAreaElement).value
-  const duration = (elements[5] as HTMLTextAreaElement).value
-  const timeToStart = (elements[6] as HTMLTextAreaElement).value
-  const isPrivate = (elements[7] as HTMLInputElement).checked ? (elements[7] as HTMLInputElement).value : ''
-  const password = isPrivate ? (elements[8] as HTMLInputElement).value : ''
+  const name = (elements[0] as HTMLInputElement).value
+  const variant = (elements[1] as HTMLInputElement).value
+  const position = settings.tournament.variant() === '1' ? (elements[2] as HTMLInputElement).value : '---'
+  const mode = (elements[3] as HTMLInputElement).value
+  const time = (elements[4] as HTMLTextAreaElement).value
+  const increment = (elements[5] as HTMLTextAreaElement).value
+  const duration = (elements[6] as HTMLTextAreaElement).value
+  const timeToStart = (elements[7] as HTMLTextAreaElement).value
+  const isPrivate = (elements[8] as HTMLInputElement).checked ? (elements[8] as HTMLInputElement).value : ''
+  const password = isPrivate ? (elements[9] as HTMLInputElement).value : ''
 
-  xhr.create(variant, position, mode, time, increment, duration, timeToStart, isPrivate, password)
+  xhr.create(name, variant, position, mode, time, increment, duration, timeToStart, isPrivate, password)
   .then((data: TournamentCreateResponse) => {
     close()
     router.set('/tournament/' + data.id)

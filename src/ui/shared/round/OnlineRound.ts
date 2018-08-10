@@ -414,11 +414,6 @@ export default class OnlineRound implements OnlineRoundInterface {
       if (o.enpassant) {
         const p = o.enpassant
         enpassantPieces[p.key] = null
-        if (d.game.variant.key === 'atomic') {
-          atomic.enpassant(this.chessground, p.key, p.color)
-        } else {
-          sound.capture()
-        }
       }
 
       const castlePieces: {[index: string]: Piece | null} = {}
@@ -464,6 +459,15 @@ export default class OnlineRound implements OnlineRoundInterface {
 
       if (o.promotion) {
         ground.promote(this.chessground, o.promotion.key, o.promotion.pieceClass)
+      }
+
+      if (o.enpassant) {
+        const p = o.enpassant
+        if (d.game.variant.key === 'atomic') {
+          atomic.enpassant(this.chessground, p.key, p.color)
+        } else {
+          sound.capture()
+        }
       }
     }
 

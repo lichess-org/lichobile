@@ -18,6 +18,7 @@ export interface Attrs {
   chapterId?: string
   ply?: string
   tab?: string
+  tabId?: string
   // fen used for placeholder board while loading
   curFen?: string
 }
@@ -35,6 +36,7 @@ export default {
     const now = performance.now()
     const ply = utils.safeStringToNum(vnode.attrs.ply)
     const tab = utils.safeStringToNum(vnode.attrs.tab)
+    const tabId = vnode.attrs.tabId
 
     loadStudy(studyId, studyChapterId)
     .then(data => {
@@ -47,7 +49,8 @@ export default {
           data.study.chapter.setup.orientation,
           true,
           ply || 0,
-          tab
+          tab,
+          tabId
         )
         this.hammerHandlers = EdgeOpenHandler(this.ctrl.study!.sideMenu)
         redraw()

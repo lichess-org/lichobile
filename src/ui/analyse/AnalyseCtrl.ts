@@ -90,7 +90,8 @@ export default class AnalyseCtrl {
     orientation: Color,
     shouldGoBack: boolean,
     ply?: number,
-    tab?: number
+    tab?: number,
+    tabId?: string
   ) {
     this.data = data
     this.orientation = orientation
@@ -168,6 +169,14 @@ export default class AnalyseCtrl {
     }
 
     this.updateBoard()
+
+    if (tabId) {
+      const curTabIndex = this.currentTabIndex(this.availableTabs())
+      const newTabIndex = this.availableTabs().map((tab: tabs.Tab) => tab.id === tabId).reduce((acc: number, match: boolean, index: number) => match ? index : acc, curTabIndex)
+      if (newTabIndex) {
+        this.onTabChange(newTabIndex)
+      }
+    }
 
     if (this.currentTab(this.availableTabs()).id === 'explorer') {
       this.debouncedExplorerSetStep()

@@ -90,7 +90,6 @@ export default class AnalyseCtrl {
     orientation: Color,
     shouldGoBack: boolean,
     ply?: number,
-    tab?: number,
     tabId?: string
   ) {
     this.data = data
@@ -102,8 +101,7 @@ export default class AnalyseCtrl {
 
     this.study = studyData !== undefined ? new StudyCtrl(studyData, this) : undefined
 
-    this._currentTabIndex = tab !== undefined ? tab :
-      (!this.study || this.study.data.chapter.tags.length === 0) && this.synthetic ? 0 : 1
+    this._currentTabIndex = (!this.study || this.study.data.chapter.tags.length === 0) && this.synthetic ? 0 : 1
 
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
       window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center')

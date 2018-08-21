@@ -19,10 +19,12 @@ export default class StudyCtrl {
   public readonly actionMenu: IActionMenuCtrl
   public readonly chat?: Chat
   public readonly vm: StudyVM
+  public readonly analyseCtrl: AnalyseCtrl
 
   constructor(readonly data: Study, readonly rootCtrl: AnalyseCtrl) {
     this.actionMenu = actionMenu.controller(this.rootCtrl)
     this.sideMenu = new SideMenuCtrl('right', 'studyMenu', 'studyMenu-backdrop')
+    this.analyseCtrl = rootCtrl
 
     if (data.features.chat && data.chat) {
       this.chat = new Chat(

@@ -1,6 +1,6 @@
 {
     "name": "lichobile",
-    "version": "0.0.0",
+    "version": "6.0.4",
     "description": "lichess.org mobile application",
     "main": "app.js",
     "repository": {
@@ -95,6 +95,7 @@
         "zanimo": "git+https://github.com/veloce/Zanimo.git"
     },
     "scripts": {
+        "version": "node scripts/bump_version.js",
         "lint": "tslint --project tsconfig.json -e '**/dts/**' -e '**/*.js'",
         "build": "gulp",
         "test": "jest",

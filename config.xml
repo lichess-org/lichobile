@@ -122,8 +122,8 @@
     <plugin name="cordova-plugin-fullscreen" spec="1.2.0" />
     <plugin name="cordova-plugin-globalization" spec="1.11.0" />
     <plugin name="cordova-plugin-crosswalk-data-migration" spec="git+https://github.com/veloce/cordova-plugin-crosswalk-data-migration.git#225408d" />
-    <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#v1.7.0" />
     <plugin name="ionic-plugin-keyboard" spec="2.2.1" />
     <engine name="android" spec="7.1.0" />
     <engine name="ios" spec="4.5.4" />
+    <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#v1.8.0" />
 </widget>

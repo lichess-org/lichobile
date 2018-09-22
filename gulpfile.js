@@ -35,7 +35,7 @@ const paths = {
   ]
 };
 
-const browsers = ['and_chr >= 37', 'ios_saf >= 10']
+const browsers = ['and_chr >= 53', 'ios_saf >= 10']
 
 const babelSettings = {
   extensions: ['.tsx', '.ts', '.js', '.jsx'],

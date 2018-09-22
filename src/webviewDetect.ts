@@ -1,19 +1,21 @@
-import * as UAParser from 'ua-parser-js'
 import { safeStringToNum } from './utils'
 import ButtonHandler from './ui/helper/button'
 import { getButton, getAnchor } from './ui/helper'
 
-export default function detectWebview() {
-  const parser = new UAParser(navigator.userAgent)
-  const os = parser.getOS()
-  // if version not found, then we do nothing (assume 4.4)
-  const osVersion: number = os.version ?
-    (safeStringToNum(os.version.split('.')[0]) || 4) : 4
-  const browser = parser.getBrowser()
-  const webviewVersion = browser.version ?
-    safeStringToNum(browser.version.split('.')[0]) : undefined
+const osPattern = /Android ([.0-9]+)/
+const webviewPattern = /Chrome\/([.0-9]+)/
 
-  if (os.name === 'Android' && osVersion > 4 && webviewVersion && webviewVersion < 58) {
+export default function detectWebview() {
+  // if version not found, then we do nothing (assume 4.4)
+  const osMatch = osPattern.exec(navigator.userAgent)
+  const osVersion: number =
+    osMatch ? (safeStringToNum(osMatch[1].split('.')[0]) || 4) : 4
+
+  const webviewMatch = webviewPattern.exec(navigator.userAgent)
+  const webviewVersion = webviewMatch ?
+    safeStringToNum(webviewMatch[1].split('.')[0]) : undefined
+
+  if (cordova.platformId === 'android' && osVersion > 4 && webviewVersion && webviewVersion < 58) {
     setTimeout(showPrompt, 2000)
   }
 
@@ -51,14 +53,13 @@ export default function detectWebview() {
     }
   }
 
-  const browserString = ' (' + browser.version + ')' || ''
   const chromeUpgradeMsg =
     '<p>Lichess relies heavily on Chrome application.</p>' +
-    `<p>We detected the Chrome version you are using${browserString} is too old: lichess might not work properly.</p>` +
+    `<p>We detected the Chrome version you are using (${webviewVersion}) is too old: lichess might not work properly.</p>` +
     `<p>To fix this, please <a href="#" data-id="com.android.chrome">upgrade Chrome application</a>.</p>`
 
   const webviewUpgradeMsg =
     '<p>Lichess relies heavily on System WebView application.</p>' +
-    `<p>We detected the System WebView version you are using${browserString} is too old: lichess will not work properly.</p>` +
+    `<p>We detected the System WebView version you are using (${webviewVersion}) is too old: lichess will not work properly.</p>` +
     `<p>To fix this, please <a href="#" data-id="com.google.android.webview">upgrade System WebView application</a>.</p>`
 }

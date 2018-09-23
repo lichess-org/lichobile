@@ -5,12 +5,12 @@ interface XNavigator extends Navigator {
 }
 
 export function send(text: string) {
-  console.debug('[stockfish <<]', text)
+  console.debug('[stockfish <<] ' + text)
   return Stockfish.cmd(text)
 }
 
 export function setOption(name: string, value: string | number | boolean) {
-  return Stockfish.cmd(`setoption name ${name} value ${value}`)
+  return send(`setoption name ${name} value ${value}`)
 }
 
 export function getNbCores(): number {

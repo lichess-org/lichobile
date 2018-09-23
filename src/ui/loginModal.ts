@@ -109,7 +109,7 @@ function submit(form: HTMLFormElement) {
     signals.afterLogin.dispatch()
     redraw()
     // reconnect socket to refresh friends...
-    socket.connect()
+    socket.reconnectCurrent()
     push.register()
     challengesApi.refresh()
     session.refresh()

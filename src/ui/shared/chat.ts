@@ -139,7 +139,7 @@ export function chatView(ctrl: Chat, header?: string) {
         }))
       ]),
       h('form.chat_form', {
-        onsubmit: (e: Event) => {
+        onsubmit(e: Event) {
           e.preventDefault()
           const target = (e.target as HTMLFormElement)
           const ta = target[0]
@@ -154,6 +154,7 @@ export function chatView(ctrl: Chat, header?: string) {
           if (sendButton) {
             sendButton.classList.add('disabled')
           }
+          return false
         }
       }, [
         h('textarea#chat_input.chat_input', {

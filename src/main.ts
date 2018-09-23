@@ -9,9 +9,8 @@ import 'whatwg-fetch'
 
 import './moment'
 
-import * as Raven from 'raven-js'
 import * as debounce from 'lodash/debounce'
-import globalConfig from './config'
+import detectWebview from './webviewDetect'
 import { hasNetwork } from './utils'
 import { syncWithNowPlayingGames } from './utils/offlineGames'
 import redraw from './utils/redraw'
@@ -73,18 +72,15 @@ function main() {
   window.cordova.plugins.Keyboard.disableScroll(true)
   window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false)
 
-  if (globalConfig.mode === 'release' && globalConfig.sentryDSN) {
-    Raven.config(globalConfig.sentryDSN, {
-      release: window.AppVersion ? window.AppVersion.version : 'snapshot-dev'
-    }).install()
-  }
-
   if (cordova.platformId === 'android') {
       window.StatusBar.backgroundColorByHexString('#111')
   }
 
   setTimeout(() => {
     window.navigator.splashscreen.hide()
+
+    // detect webview version and prompt to upgrade if too old
+    detectWebview()
   }, 500)
 }
 
@@ -140,7 +136,10 @@ function onOffline() {
 
 function onResume() {
   setForeground()
+  session.refresh()
+  getPools().then(() => redraw())
   socket.connect()
+  redraw()
 }
 
 function onPause() {
@@ -153,7 +152,7 @@ function onPause() {
 // retry 5 times
 let nbRetries = 1
 function getPools() {
-  xhr.lobby()
+  return xhr.lobby()
   .then(() => {
     if (nbRetries > 1) redraw()
   })
@@ -167,8 +166,8 @@ function getPools() {
 
 document.addEventListener('deviceready',
   // i18n must be loaded before any rendering happens
-  () => Raven.context(() => {
+  () => {
     loadPreferredLanguage().then(main)
-  }),
+  },
   false
 )

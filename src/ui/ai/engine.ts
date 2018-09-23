@@ -1,5 +1,5 @@
 import { AiRoundInterface } from '../shared/round'
-import { getNbCores, setOption, setVariant } from '../../utils/stockfish'
+import { send, getNbCores, setOption, setVariant } from '../../utils/stockfish'
 
 interface LevelToDepth {
   [index: number]: number
@@ -38,6 +38,7 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
 
     search(initialFen: string, moves: string) {
       Stockfish.output((msg: string) => {
+        console.debug('[stockfish >>] ' + msg)
         const match = msg.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/)
         if (match) {
           if (match[1]) ctrl.onEngineMove(match[1])
@@ -46,10 +47,9 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
       })
 
       // console.info('engine search pos: ', `position fen ${initialFen} moves ${moves}`)
-
       setOption('Threads', getNbCores())
-      .then(() => cmd(`position fen ${initialFen} moves ${moves}`))
-      .then(() => cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`))
+      .then(() => send(`position fen ${initialFen} moves ${moves}`))
+      .then(() => send(`go movetime ${moveTime(level)} depth ${depth(level)}`))
     },
 
     setLevel(l: number) {
@@ -68,12 +68,8 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
 }
 
 function onInit() {
-  return cmd('uci')
+  return send('uci')
   .then(() => setOption('Ponder', 'false'))
-}
-
-function cmd(text: string) {
-  return Stockfish.cmd(text)
 }
 
 function moveTime(level: number) {

@@ -1,7 +1,9 @@
 import router from './router'
 import globalConfig from './config'
 import redraw from './utils/redraw'
-import { ErrorResponse } from './http'
+import signals from './signals'
+import storage from './storage'
+import { SESSION_ID_KEY, ErrorResponse } from './http'
 import * as xorWith from 'lodash/xorWith'
 import * as isEqual from 'lodash/isEqual'
 import * as cloneDeep from 'lodash/cloneDeep'
@@ -115,6 +117,18 @@ function handleFollowingOnline(data: Array<string>, payload: FollowingOnlinePayl
 }
 
 function setupConnection(setup: SocketSetup, socketHandlers: SocketHandlers) {
+  const sid = storage.get<string>(SESSION_ID_KEY)
+  if (sid !== null) {
+    if (setup.opts.params) {
+      setup.opts.params[SESSION_ID_KEY] = sid
+    } else {
+      setup.opts.params = {
+        [SESSION_ID_KEY]: sid
+      }
+    }
+  } else if (setup.opts.params) {
+    delete setup.opts.params.sessionId
+  }
   worker.onmessage = (msg: MessageEvent) => {
     switch (msg.data.topic) {
       case 'onOpen':
@@ -399,6 +413,18 @@ function onDisconnected() {
   }
 }
 
+// reconnect current socket giving a chance to refresh sessionId
+function reconnectCurrent() {
+  if (rememberedSetups.length >= 1) {
+    const s = rememberedSetups[rememberedSetups.length - 1]
+    setupConnection(s.setup, s.handlers)
+  } else {
+    tellWorker(worker, 'connect')
+  }
+}
+
+signals.afterLogout.add(reconnectCurrent)
+
 export default {
   createGame,
   createChallenge,
@@ -435,6 +461,7 @@ export default {
   connect() {
     tellWorker(worker, 'connect')
   },
+  reconnectCurrent,
   // used only when user cancels a seek from lobby popup
   // if by chance we don't have a previous connection, just close
   restorePrevious() {

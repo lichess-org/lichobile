@@ -35,6 +35,7 @@ function main() {
 
   routes.init()
   deepLinks.init()
+  push.init()
 
   // cached background images
   loadCachedImages()

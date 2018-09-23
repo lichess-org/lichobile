@@ -23,6 +23,7 @@ function renderBody() {
         push.register()
       } else {
         push.unregister()
+        push.provideUserConsent(false)
       }
     })),
     h('li.list_item', formWidgets.renderCheckbox(i18n('vibrationOnNotification'), 'vibrate', settings.general.notifications.vibrate, isOn => {

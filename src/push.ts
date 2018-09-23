@@ -1,8 +1,12 @@
+import * as h from 'mithril/hyperscript'
 import settings from './settings'
 import session from './session'
 import router from './router'
 import challengesApi from './lichess/challenges'
+import { noop } from './utils'
+import promptDialog from './prompt'
 import { fetchText } from './http'
+import * as helper from './ui/helper'
 
 interface Payload {
   title: string
@@ -23,9 +27,69 @@ interface NotificationOpenedData {
 }
 
 export default {
-  register() {
+  init() {
+    // will delay initialization of the SDK until the user provides consent
+    window.plugins.OneSignal.setRequiresUserPrivacyConsent(true)
+  },
 
-    if (settings.general.notifications.allow()) {
+  showConsentDialog,
+  provideUserConsent,
+
+  register,
+
+  unregister(): Promise<string> {
+    return fetchText('/mobile/unregister', { method: 'POST' })
+  }
+}
+
+function provideUserConsent(consent: boolean): void {
+  window.plugins.OneSignal.provideUserConsent(consent)
+}
+
+function showConsentDialog(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const content = h('div', [
+      h('p', 'Push notifications are provided to you by a third party service that, when enabled, automatically collect application usage data.'),
+      h('p', [
+        'Learn more about this service and what data is collected on the ',
+        h('a[href=#]', {
+          oncreate: helper.ontap(() => {
+            window.open('https://lichess.org/privacy', '_system')
+          })
+        }, 'privacy policy.')
+      ]),
+      h('p', 'Would you like to use push notifications and allow to share these informations with this third-party service?'),
+      h('p', 'You can change this choice any time on the settings screen.'),
+      h('br'),
+      h('div.buttons', [
+        h('button', {
+          oncreate: helper.ontap(() => {
+            settings.general.notifications.allow(true)
+            provideUserConsent(true)
+            promptDialog.hide()
+            resolve()
+          })
+        }, 'Yes'),
+        h('button', {
+          oncreate: helper.ontap(() => {
+            settings.general.notifications.allow(false)
+            provideUserConsent(false)
+            promptDialog.hide()
+            reject()
+          })
+        }, 'No'),
+      ])
+    ])
+    promptDialog.show(content, 'Consent required')
+  })
+}
+
+function register() {
+  window.plugins.OneSignal.userProvidedPrivacyConsent((providedConsent: boolean) => {
+    // if providedConsent == true, it means the SDK has been initialized and can be used
+    // both SDK consent and app setting are required
+    // changing setting also change consent
+    if (providedConsent && settings.general.notifications.allow()) {
       window.plugins.OneSignal
       .startInit('2d12e964-92b6-444e-9327-5b2e9a419f4c')
       .handleNotificationOpened(notificationOpenedCallback)
@@ -41,12 +105,10 @@ export default {
 
       window.plugins.OneSignal.enableVibrate(settings.general.notifications.vibrate())
       window.plugins.OneSignal.enableSound(settings.general.notifications.sound())
+    } else if (!providedConsent && settings.general.notifications.allow()) {
+      showConsentDialog().then(register).catch(noop)
     }
-  },
-
-  unregister(): Promise<string> {
-    return fetchText('/mobile/unregister', { method: 'POST' })
-  }
+  })
 }
 
 function notificationReceivedCallback(data: NotificationReceivedData) {

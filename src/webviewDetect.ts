@@ -41,14 +41,14 @@ export default function detectWebview() {
     const appName = osVersion >= 7 ? 'Chrome' : 'System WebView'
     const appPackage = osVersion >= 7 ? 'com.android.chrome' : 'com.google.android.webview'
     return [
-      h('p', `Lichess relies heavily on ${appName} application.`),
-      h('p', `We detected the ${appName} version you have currently installed (${webviewVersion}) is too old: lichess might not work properly.`),
+      h('p', `Lichess needs a recent version of the rendering engine which is provided by the ${appName} application. In order to get it updated you must not disable it.` ),
+      h('p', `We detected the ${appName} version you have (${webviewVersion}) is too old: lichess might not work.`),
       h('p', [
         'To fix this, please ',
         h('a', {
           href: '#',
           'data-id': appPackage,
-        }, `upgrade ${appName} application.`)
+        }, `update ${appName} application.`)
       ])
     ]
   }

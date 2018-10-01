@@ -125,7 +125,7 @@ export default {
         h('i[data-icon=C]'),
         h('p', 'Two million OTB games'),
         h('p', 'of 2200+ FIDE rated players'),
-        h('p', 'from 1952 to 2016')
+        h('p', 'from 1952 to 2018')
       ]) : h('div', [
         h('section.rating', [
           h('label', 'Players Average rating'),

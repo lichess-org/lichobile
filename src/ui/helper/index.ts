@@ -350,6 +350,11 @@ export function getButton(e: Event): HTMLElement {
   return target.tagName === 'BUTTON' ? target : findParentBySelector(target, 'button')
 }
 
+export function getAnchor(e: Event): HTMLElement {
+  const target = (e.target as HTMLElement)
+  return target.tagName === 'A' ? target : findParentBySelector(target, 'a')
+}
+
 export function getLI(e: Event) {
   const target = (e.target as HTMLElement)
   return target.tagName === 'LI' ? target : findParentBySelector(target, 'li')

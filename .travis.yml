@@ -19,7 +19,7 @@ before_install:
   - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
   - echo -e "\n504667f4c0de7af1a06de9f4b1727b84351f2910" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
   - nvm install 8.10.0
-  - echo y | sdkmanager "ndk-bundle"
+  - echo y | sdkmanager "ndk-bundle;16.1.4479499"
 install:
   - npm install -g npm@5.8.0
   - npm install -g cordova@8.0.0
@@ -30,6 +30,7 @@ script:
   - test -e platforms/android/app/build/outputs/apk/debug/app-debug.apk 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
   - $HOME/.npm

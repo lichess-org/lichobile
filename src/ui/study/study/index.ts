@@ -1,5 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import redraw from '../../../utils/redraw'
+import socket from '../../../socket'
+import * as sleepUtils from '../../../utils/sleep'
 import router from '../../../router'
 import * as utils from '../../../utils'
 import * as helper from '../../helper'
@@ -17,7 +19,7 @@ export interface Attrs {
   id: string
   chapterId?: string
   ply?: string
-  tab?: string
+  tabId?: string
   // fen used for placeholder board while loading
   curFen?: string
 }
@@ -34,7 +36,9 @@ export default {
     const studyChapterId = vnode.attrs.chapterId
     const now = performance.now()
     const ply = utils.safeStringToNum(vnode.attrs.ply)
-    const tab = utils.safeStringToNum(vnode.attrs.tab)
+    const tabId = vnode.attrs.tabId
+
+    sleepUtils.keepAwake()
 
     loadStudy(studyId, studyChapterId)
     .then(data => {
@@ -47,7 +51,7 @@ export default {
           data.study.chapter.setup.orientation,
           true,
           ply || 0,
-          tab
+          tabId
         )
         this.hammerHandlers = EdgeOpenHandler(this.ctrl.study!.sideMenu)
         redraw()
@@ -73,6 +77,8 @@ export default {
   },
 
   onremove() {
+    sleepUtils.allowSleepAgain()
+    socket.destroy()
     if (this.ctrl) {
       this.ctrl.unload()
       this.ctrl = undefined

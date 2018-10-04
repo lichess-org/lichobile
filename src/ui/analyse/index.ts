@@ -1,5 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import i18n from '../../i18n'
+import * as sleepUtils from '../../utils/sleep'
+import socket from '../../socket'
 import settings from '../../settings'
 import router from '../../router'
 import redraw from '../../utils/redraw'
@@ -23,7 +25,7 @@ export interface Attrs {
   fen?: string
   variant?: VariantKey
   ply?: string
-  tab?: string
+  tabId?: string
   // fen used for placeholder board while loading
   curFen?: string
   goBack?: string
@@ -41,9 +43,11 @@ export default {
     const fenArg = vnode.attrs.fen
     const variant = vnode.attrs.variant
     const ply = safeStringToNum(vnode.attrs.ply)
-    const tab = safeStringToNum(vnode.attrs.tab)
+    const tabId = vnode.attrs.tabId
 
     const shouldGoBack = gameId !== undefined || vnode.attrs.goBack === '1'
+
+    sleepUtils.keepAwake()
 
     if (source === 'online' && gameId) {
       const now = performance.now()
@@ -51,7 +55,7 @@ export default {
       .then(cfg => {
         const elapsed = performance.now() - now
         setTimeout(() => {
-          this.ctrl = new AnalyseCtrl(cfg, undefined, source, orientation, shouldGoBack, ply, tab)
+          this.ctrl = new AnalyseCtrl(cfg, undefined, source, orientation, shouldGoBack, ply, tabId)
           redraw()
         }, Math.max(400 - elapsed, 0))
       })
@@ -68,7 +72,7 @@ export default {
           router.set('/analyse', true)
         } else {
           otbData.player.spectator = true
-          this.ctrl = new AnalyseCtrl(otbData, undefined, source, orientation, shouldGoBack, ply, tab)
+          this.ctrl = new AnalyseCtrl(otbData, undefined, source, orientation, shouldGoBack, ply, tabId)
           redraw()
         }
       }, 400)
@@ -80,7 +84,7 @@ export default {
           router.set('/analyse', true)
         } else {
           aiData.player.spectator = true
-          this.ctrl = new AnalyseCtrl(aiData, undefined, source, orientation, shouldGoBack, ply, tab)
+          this.ctrl = new AnalyseCtrl(aiData, undefined, source, orientation, shouldGoBack, ply, tabId)
           redraw()
         }
       }, 400)
@@ -97,7 +101,7 @@ export default {
         router.set(url, true)
         redraw()
       } else {
-        this.ctrl = new AnalyseCtrl(makeDefaultData(variant, fenArg), undefined, source, orientation, shouldGoBack, ply, tab)
+        this.ctrl = new AnalyseCtrl(makeDefaultData(variant, fenArg), undefined, source, orientation, shouldGoBack, ply, tabId)
         redraw()
       }
     }
@@ -112,6 +116,8 @@ export default {
   },
 
   onremove() {
+    sleepUtils.allowSleepAgain()
+    socket.destroy()
     if (this.ctrl) {
       this.ctrl.unload()
       this.ctrl = undefined

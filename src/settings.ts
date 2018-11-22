@@ -81,6 +81,7 @@ export default {
         'spatial',
         'reilly',
         'companion',
+        'leipzig',
         'fantasy',
         'shapes',
         'chessnut',

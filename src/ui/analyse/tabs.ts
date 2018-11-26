@@ -6,7 +6,7 @@ export interface Tab {
 
 export const gameInfos: Tab = {
   id: 'infos',
-  title: 'Game informations',
+  title: 'Game information',
   className: 'fa fa-info-circle',
 }
 

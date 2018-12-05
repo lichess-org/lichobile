@@ -7,7 +7,6 @@ export interface Tournament {
   readonly fullName: string
   readonly id: string
   readonly isFinished: boolean
-  readonly isRecentlyFinished?: boolean
   readonly isStarted: boolean
   readonly me?: TournamentMe
   readonly minutes: number

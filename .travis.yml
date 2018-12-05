@@ -27,7 +27,7 @@ install:
   - cordova platform add android
 script:
   - sh scripts/travis_build.sh
-  - test -e platforms/android/app/build/outputs/apk/debug/app-debug.apk 
+  # - test -e platforms/android/app/build/outputs/apk/debug/app-debug.apk 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/

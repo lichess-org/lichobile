@@ -50,7 +50,9 @@ StrongSocket.prototype = {
     if (self.ws) self.ws.close();
 
     self.autoReconnect = true;
-    var fullUrl = self.socketEndPoint + self.url + '?' + serializeQueryParameters(self.settings.params);
+    var params = serializeQueryParameters(self.settings.params);
+    if (self.version !== false && self.version !== undefined) params += (params ? '&' : '') + 'v=' + self.version;
+    var fullUrl = self.socketEndPoint + self.url + '?' + params;
     self.debug('connection attempt to ' + fullUrl, true);
 
     self.ws = new WebSocket(fullUrl);

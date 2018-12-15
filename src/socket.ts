@@ -317,7 +317,7 @@ function createAnalysis(
     const setup = {
       clientId: newSri(),
       socketEndPoint: globalConfig.socketEndPoint,
-      url: '/analysis/socket',
+      url: `/analysis/socket/v${globalConfig.apiVersion}`,
       opts
     }
     setupConnection(setup, socketHandlers)
@@ -343,7 +343,7 @@ function createStudy(
     const setup = {
       clientId: newSri(),
       socketEndPoint: globalConfig.socketEndPoint,
-      url: `/study/${studyId}/socket/v2`,
+      url: `/study/${studyId}/socket/v${globalConfig.apiVersion}`,
       opts
     }
     setupConnection(setup, socketHandlers)
@@ -367,7 +367,7 @@ function createDefault() {
     const setup = {
       clientId: newSri(),
       socketEndPoint: globalConfig.socketEndPoint,
-      url: '/socket',
+      url: `/socket/v${globalConfig.apiVersion}`,
       opts
     }
     setupConnection(setup, socketHandlers)

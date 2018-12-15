@@ -247,7 +247,7 @@ function createChallenge(
     },
     events: Object.assign({}, defaultHandlers, handlers)
   }
-  const url = `/challenge/${id}/socket/v${version}`
+  const url = `/challenge/${id}/socket/v${globalConfig.apiVersion}`
   const opts = {
     options: {
       name: 'challenge',

@@ -11,19 +11,15 @@ import { AnalyseData, OnlineAnalyseData } from './interfaces/analyse'
 
 export const analysableVariants = ['standard', 'crazyhouse', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'antichess', 'horde', 'racingKings']
 
-export function parsePossibleMoves(possibleMoves?: StringMap): DestsMap {
-  if (!possibleMoves) return {}
-  const r: DestsMap = {}
-  const keys = Object.keys(possibleMoves)
-  for (let i = 0, ilen = keys.length; i < ilen; i++) {
-    const mvs = possibleMoves[keys[i]]!
-    const a: Array<Key> = []
-    for (let j = 0, jlen = mvs.length; j < jlen; j += 2) {
-      a.push(<Key>mvs.substr(j, 2))
-    }
-    r[keys[i]] = a
-  }
-  return r
+export function parsePossibleMoves(dests?: StringMap | string): DestsMap {
+  if (!dests) return {}
+  const dec: DestsMap = {}
+  if (typeof dests == 'string')
+    dests.split(' ').forEach(ds => {
+      dec[ds.slice(0,2)] = ds.slice(2).match(/.{2}/g) as Key[];
+    });
+    else for (let k in dests) dec[k] = dests[k]!.match(/.{2}/g) as Key[];
+  return dec
 }
 
 export function playable(data: GameData | AnalyseData): boolean {

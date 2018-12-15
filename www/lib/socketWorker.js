@@ -74,6 +74,7 @@ StrongSocket.prototype = {
       self.ackable.resend();
     };
     self.ws.onmessage = function(e) {
+      if (e.data == 0) return self.pong();
       var msg = JSON.parse(e.data);
       var mData = msg.d || [];
 

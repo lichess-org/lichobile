@@ -12,7 +12,8 @@ var strongSocketDefaults = {
     autoReconnectDelay: 3500,
     ignoreUnknownMessages: true,
     sendOnOpen: null, // message to send on socket open
-    registeredEvents: []
+    registeredEvents: [],
+    isAuth: false
   }
 };
 
@@ -141,8 +142,12 @@ StrongSocket.prototype = {
     var self = this;
     clearTimeout(self.pingSchedule);
     clearTimeout(self.connectSchedule);
+    var pingData = (self.options.isAuth && self.pongCount % 8 == 2) ? JSON.stringify({
+      t: 'p',
+      l: Math.round(0.1 * self.averageLag)
+    }) : null;
     try {
-      self.ws.send(self.pingData());
+      self.ws.send(pingData);
       self.lastPingTime = Date.now();
     } catch (e) {
       self.debug(e, true);
@@ -161,16 +166,6 @@ StrongSocket.prototype = {
     // Average first 4 pings, then switch to decaying average.
     var mix = self.pongCount > 4 ? 0.1 : (1 / self.pongCount);
     self.averageLag += mix * (self.currentLag - self.averageLag);
-  },
-
-  pingData: function() {
-    var self = this;
-    var data = {
-      t: 'p'
-    };
-    if (self.version !== undefined) data.v = self.version
-    if (self.pongCount % 8 === 2) data.l = Math.round(0.1 * self.averageLag);
-    return JSON.stringify(data);
   },
 
   handle: function(msg) {

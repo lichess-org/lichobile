@@ -5,8 +5,12 @@ export function inbox(feedback = true): Promise<PagedThreads> {
   return fetchJSON('/inbox', {}, feedback)
 }
 
+export function unreadCount(): Promise<number> {
+  return fetchJSON('/inbox/unread-count', {}, false)
+}
+
 export function reload(page: number): Promise<PagedThreads> {
-  return fetchJSON('/inbox/',
+  return fetchJSON('/inbox',
   {
     method: 'GET',
     query: page ? { page } : {}

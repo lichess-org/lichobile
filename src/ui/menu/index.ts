@@ -53,11 +53,9 @@ export function popup(action: () => void) {
 }
 
 export function toggleHeader() {
-  inboxXhr.inbox(false)
-  .then(data => {
-    inboxUnreadCount(data.currentPageResults.reduce((acc, x) =>
-      (acc + (x.isUnread ? 1 : 0)), 0)
-    )
+  inboxXhr.unreadCount()
+  .then(nb => {
+    inboxUnreadCount(nb)
     redraw()
   })
   return profileMenuOpen() ? profileMenuOpen(false) : profileMenuOpen(true)

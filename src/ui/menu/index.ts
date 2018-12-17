@@ -53,12 +53,13 @@ export function popup(action: () => void) {
 }
 
 export function toggleHeader() {
-  inboxXhr.unreadCount()
+  const open = !profileMenuOpen();
+  if (open) inboxXhr.unreadCount()
   .then(nb => {
     inboxUnreadCount(nb)
     redraw()
   })
-  return profileMenuOpen() ? profileMenuOpen(false) : profileMenuOpen(true)
+  return profileMenuOpen(open);
 }
 
 export function getServerLags() {

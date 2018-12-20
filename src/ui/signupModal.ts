@@ -54,7 +54,7 @@ function renderCheckEmail() {
     h('h1.signup-emailCheck.withIcon[data-icon=E]', i18n('checkYourEmail')),
     h('p', i18n('weHaveSentYouAnEmailClickTheLink')),
     h('p', i18n('ifYouDoNotSeeTheEmailCheckOtherPlaces')),
-    h('p', 'Not receiving it? Ask <contact@lichess.org> and we\'ll confirm your email for you. Don\'t forget to mention your username.')
+    h('p', 'Not receiving it? Visit https://lichess.org/contact to request a manual confirmation.')
   ]
 }
 

@@ -315,13 +315,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (prom) {
       move.u += (prom === 'knight' ? 'n' : prom[0])
     }
-    let blur = false
-    if (window.lichess.resumedNoMove) {
-      if(this.vm.ply > 1) {
-        blur = true
-      }
-      window.lichess.resumedNoMove = false
-    }
+    const blur = this.getBlurAndResetFlag()
     if (this.data.pref.submitMove && !isPremove) {
       setTimeout(() => {
         router.backbutton.stack.push(this.cancelMove)
@@ -341,13 +335,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       role: role,
       pos: key
     }
-    let blur = false
-    if (window.lichess.resumedNoMove) {
-      if(this.vm.ply > 1) {
-        blur = true
-      }
-      window.lichess.resumedNoMove = false
-    }
+    const blur = this.getBlurAndResetFlag()
     if (this.data.pref.submitMove && !isPredrop) {
       setTimeout(() => {
         router.backbutton.stack.push(this.cancelMove)
@@ -357,6 +345,17 @@ export default class OnlineRound implements OnlineRoundInterface {
     } else {
       this.socketSendMoveOrDrop(drop, isPredrop, blur)
     }
+  }
+
+  private getBlurAndResetFlag (): boolean {
+    let blur = false
+    if (window.lichess.resumedNoMove) {
+      if (this.vm.ply > 1) {
+        blur = true
+      }
+      window.lichess.resumedNoMove = false
+    }
+    return blur
   }
 
   public cancelMove = (fromBB?: string) => {

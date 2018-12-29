@@ -352,9 +352,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   private getBlurAndReset (): boolean {
     if (this.blur) {
       this.blur = false
-      if (this.vm.ply > 1) {
-        return true
-      }
+      return true
     }
     return false
   }

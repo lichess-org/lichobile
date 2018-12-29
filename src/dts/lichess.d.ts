@@ -47,7 +47,6 @@ interface LichessOptions {
   socketEndPoint: string
   mode: string
   sentryDSN?: string
-  resumedNoMove: boolean
 }
 
 interface Window {

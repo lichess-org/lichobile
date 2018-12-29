@@ -135,6 +135,9 @@ function onOffline() {
 }
 
 function onResume() {
+  // Global variable denoting when the app has been resumed and the user has not yet moved
+  window.lichess.resumedNoMove = true
+
   setForeground()
   session.refresh()
   getPools().then(() => redraw())

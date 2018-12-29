@@ -315,7 +315,13 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (prom) {
       move.u += (prom === 'knight' ? 'n' : prom[0])
     }
-
+    let blur = false
+    if (window.lichess.resumedNoMove) {
+      if(this.vm.ply > 1) {
+        blur = true
+      }
+      window.lichess.resumedNoMove = false
+    }
     if (this.data.pref.submitMove && !isPremove) {
       setTimeout(() => {
         router.backbutton.stack.push(this.cancelMove)
@@ -323,7 +329,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         redraw()
       }, this.data.pref.animationDuration || 0)
     } else {
-      this.socketSendMoveOrDrop(move, isPremove)
+      this.socketSendMoveOrDrop(move, isPremove, blur)
       if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
         window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center')
       }
@@ -335,6 +341,13 @@ export default class OnlineRound implements OnlineRoundInterface {
       role: role,
       pos: key
     }
+    let blur = false
+    if (window.lichess.resumedNoMove) {
+      if(this.vm.ply > 1) {
+        blur = true
+      }
+      window.lichess.resumedNoMove = false
+    }
     if (this.data.pref.submitMove && !isPredrop) {
       setTimeout(() => {
         router.backbutton.stack.push(this.cancelMove)
@@ -342,7 +355,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         redraw()
       }, this.data.pref.animationDuration || 0)
     } else {
-      this.socketSendMoveOrDrop(drop, isPredrop)
+      this.socketSendMoveOrDrop(drop, isPredrop, blur)
     }
   }
 
@@ -615,14 +628,15 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.correspondenceClock.tick(this.data.game.player)
   }
 
-  private socketSendMoveOrDrop(moveOrDropReq: MoveRequest | DropRequest, premove = false) {
+  private socketSendMoveOrDrop(moveOrDropReq: MoveRequest | DropRequest, premove = false, blur = false) {
     const millis = premove ? 0 : this.lastMoveMillis !== undefined ?
       performance.now() - this.lastMoveMillis : undefined
 
     const opts = {
       ackable: true,
       withLag: !!this.clock && (millis === undefined || !this.isClockRunning()),
-      millis
+      millis,
+      blur
     }
 
     if (isMoveRequest(moveOrDropReq)) {

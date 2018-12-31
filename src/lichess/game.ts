@@ -14,11 +14,11 @@ export const analysableVariants = ['standard', 'crazyhouse', 'chess960', 'fromPo
 export function parsePossibleMoves(dests?: StringMap | string): DestsMap {
   if (!dests) return {}
   const dec: DestsMap = {}
-  if (typeof dests == 'string')
+  if (typeof dests === 'string')
     dests.split(' ').forEach(ds => {
-      dec[ds.slice(0,2)] = ds.slice(2).match(/.{2}/g) as Key[];
-    });
-    else for (let k in dests) dec[k] = dests[k]!.match(/.{2}/g) as Key[];
+      dec[ds.slice(0, 2)] = ds.slice(2).match(/.{2}/g) as Key[]
+    })
+    else for (let k in dests) dec[k] = dests[k]!.match(/.{2}/g) as Key[]
   return dec
 }
 

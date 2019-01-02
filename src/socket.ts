@@ -130,7 +130,7 @@ function setupConnection(setup: SocketSetup, socketHandlers: SocketHandlers) {
   } else if (setup.opts.params) {
     delete setup.opts.params.sessionId
   }
-  setup.opts.options.isAuth = !!sid;
+  setup.opts.options.isAuth = !!sid
   worker.onmessage = (msg: MessageEvent) => {
     switch (msg.data.topic) {
       case 'onOpen':

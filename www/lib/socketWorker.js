@@ -106,6 +106,7 @@ StrongSocket.prototype = {
     if (d !== undefined) {
       if (o.withLag) d.l = Math.round(self.averageLag);
       if (o.millis !== undefined) d.s = Math.floor(o.millis * 0.1).toString(36);
+      if (o.blur) d.b = 1;
       msg.d = d;
     }
     if (o.ackable) {

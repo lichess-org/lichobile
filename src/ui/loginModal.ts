@@ -118,7 +118,7 @@ function submit(form: HTMLFormElement) {
     if (err.body.ipban) {
       close()
     } else {
-      if (err.status !== 401) handleXhrError(err)
+      if (err.status !== 400 && err.status !== 401) handleXhrError(err)
       else {
         if (err.body.global) {
           formError = err.body.global[0]

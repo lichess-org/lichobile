@@ -93,7 +93,7 @@ export default class TournamentCtrl {
     xhr.reload(this.id, this.focusOnMe ? this.page : undefined)
     .then(this.onReload)
     .catch(this.onXhrError)
-  }, 2000)
+  }, 5000)
 
   loadPage = throttle((page: number) => {
     xhr.loadPage(this.id, page)

@@ -71,6 +71,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   private lastDrawOfferAtPly!: number
   private clockIntervId!: number
   private clockTimeoutId!: number
+  private blur: boolean
 
   public constructor(
     goingBack: boolean,
@@ -91,6 +92,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.onUserTVRedirect = onUserTVRedirect
 
     this.zenModeEnabled = settings.game.zenMode()
+    this.blur = false
 
     this.vm = {
       ply: this.lastPly(),
@@ -315,7 +317,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (prom) {
       move.u += (prom === 'knight' ? 'n' : prom[0])
     }
-
+    const sendBlur = this.getBlurAndReset()
     if (this.data.pref.submitMove && !isPremove) {
       setTimeout(() => {
         router.backbutton.stack.push(this.cancelMove)
@@ -323,7 +325,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         redraw()
       }, this.data.pref.animationDuration || 0)
     } else {
-      this.socketSendMoveOrDrop(move, isPremove)
+      this.socketSendMoveOrDrop(move, isPremove, sendBlur)
       if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
         window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center')
       }
@@ -335,6 +337,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       role: role,
       pos: key
     }
+    const sendBlur = this.getBlurAndReset()
     if (this.data.pref.submitMove && !isPredrop) {
       setTimeout(() => {
         router.backbutton.stack.push(this.cancelMove)
@@ -342,8 +345,16 @@ export default class OnlineRound implements OnlineRoundInterface {
         redraw()
       }, this.data.pref.animationDuration || 0)
     } else {
-      this.socketSendMoveOrDrop(drop, isPredrop)
+      this.socketSendMoveOrDrop(drop, isPredrop, sendBlur)
     }
+  }
+
+  private getBlurAndReset (): boolean {
+    if (this.blur) {
+      this.blur = false
+      return true
+    }
+    return false
   }
 
   public cancelMove = (fromBB?: string) => {
@@ -615,14 +626,15 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.correspondenceClock.tick(this.data.game.player)
   }
 
-  private socketSendMoveOrDrop(moveOrDropReq: MoveRequest | DropRequest, premove = false) {
+  private socketSendMoveOrDrop(moveOrDropReq: MoveRequest | DropRequest, premove = false, blur = false) {
     const millis = premove ? 0 : this.lastMoveMillis !== undefined ?
       performance.now() - this.lastMoveMillis : undefined
 
     const opts = {
       ackable: true,
       withLag: !!this.clock && (millis === undefined || !this.isClockRunning()),
-      millis
+      millis,
+      blur
     }
 
     if (isMoveRequest(moveOrDropReq)) {
@@ -678,6 +690,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   private onResume = () => {
+    this.blur = true
     // hack to avoid nasty race condition on resume: socket will reconnect with
     // an old version and server will send move event that will be processed after
     // a reload by xhr triggered by same resume event

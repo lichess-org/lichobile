@@ -23,7 +23,7 @@
     },
     "homepage": "https://github.com/veloce/lichobile",
     "devDependencies": {
-        "@types/jest": "21.1.5",
+        "@types/jest": "23.3.2",
         "babel-plugin-transform-react-jsx": "6.24.1",
         "babel-plugin-transform-react-require": "1.0.1",
         "babel-plugin-transform-remove-console": "6.8.0",
@@ -39,7 +39,7 @@
         "gulp-stylus": "2.6.0",
         "gulp-uglify-es": "1.0.1",
         "gulp-util": "3.0.7",
-        "jest": "21.2.1",
+        "jest": "23.6.0",
         "minimist": "1.2.0",
         "ncp": "2.0.0",
         "tsify": "3.0.4",

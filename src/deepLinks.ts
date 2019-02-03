@@ -98,7 +98,7 @@ function handleOther (eventData: UniversalLinks.EventData) {
     .catch(() => router.set('/game/' + pieces[1]))
   }
   else if (eventData.path.search('^\/([a-zA-Z0-9]{8})+\/+(white|black)$') !== -1) {
-    router.set('/game/' + pieces[1] + '/' + pieces[2])
+    router.set('/game/' + pieces[1] + `?color=${pieces[2]}`)
   }
   else if (eventData.path.search('^\/([a-zA-Z0-9]{12})$') !== -1) {
     router.set('/game/' + pieces[1])

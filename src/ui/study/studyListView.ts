@@ -72,7 +72,7 @@ export default function studyListView(ctrl: StudyListCtrl) {
 const categories: ReadonlyArray<[PagerCategory, string]> = [
   ['all', 'All studies'],
   ['mine', 'My studies'],
-  ['member', 'Studies I contribue to'],
+  ['member', 'Studies I contribute to'],
   ['public', 'My public studies'],
   ['private', 'My private studies'],
   ['likes', 'Favourite studies'],

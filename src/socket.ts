@@ -29,6 +29,7 @@ interface Options {
   pingDelay?: number
   sendOnOpen?: ReadonlyArray<LichessMessageAny>
   registeredEvents: string[]
+  isAuth?: boolean
 }
 
 interface SocketConfig {
@@ -129,6 +130,7 @@ function setupConnection(setup: SocketSetup, socketHandlers: SocketHandlers) {
   } else if (setup.opts.params) {
     delete setup.opts.params.sessionId
   }
+  setup.opts.options.isAuth = !!sid
   worker.onmessage = (msg: MessageEvent) => {
     switch (msg.data.topic) {
       case 'onOpen':
@@ -245,7 +247,7 @@ function createChallenge(
     },
     events: Object.assign({}, defaultHandlers, handlers)
   }
-  const url = `/challenge/${id}/socket/v${version}`
+  const url = `/challenge/${id}/socket/v${globalConfig.apiVersion}`
   const opts = {
     options: {
       name: 'challenge',
@@ -315,7 +317,7 @@ function createAnalysis(
     const setup = {
       clientId: newSri(),
       socketEndPoint: globalConfig.socketEndPoint,
-      url: '/analysis/socket',
+      url: `/analysis/socket/v${globalConfig.apiVersion}`,
       opts
     }
     setupConnection(setup, socketHandlers)
@@ -341,7 +343,7 @@ function createStudy(
     const setup = {
       clientId: newSri(),
       socketEndPoint: globalConfig.socketEndPoint,
-      url: `/study/${studyId}/socket/v2`,
+      url: `/study/${studyId}/socket/v${globalConfig.apiVersion}`,
       opts
     }
     setupConnection(setup, socketHandlers)
@@ -365,7 +367,7 @@ function createDefault() {
     const setup = {
       clientId: newSri(),
       socketEndPoint: globalConfig.socketEndPoint,
-      url: '/socket',
+      url: `/socket/v${globalConfig.apiVersion}`,
       opts
     }
     setupConnection(setup, socketHandlers)

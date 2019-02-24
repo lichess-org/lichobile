@@ -167,14 +167,16 @@ function variantPerfAvailable(key: PerfKey, perf: Perf) {
 function renderPerf(key: PerfKey, name: string, perf: Perf, user: ProfileUser) {
 
   const avail = variantPerfAvailable(key, perf)
-
-  return h('div', {
+  
+  const props = {
     className: 'profilePerf' + (avail ? ' nav' : ''),
     'data-icon': gameIcon(key),
-    oncreate: helper.ontapY(() => {
-      if (hasNetwork() && avail) router.set(`/@/${user.id}/${key}/perf`)
-    })
-  }, [
+    oncreate: avail ? helper.ontapY(() => {
+      if (hasNetwork()) router.set(`/@/${user.id}/${key}/perf`)
+    }) : null
+  }
+
+  return h('div', props, [
     h('span.name', name),
     h('div.rating', [
       perf.rating,

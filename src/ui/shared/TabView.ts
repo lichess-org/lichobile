@@ -23,31 +23,34 @@ interface State {
 export default {
   oncreate({ attrs, dom }) {
     const nbTabs = attrs.content.length
+    const target = dom.querySelector('.tabs-view')
 
-    this.mc = new Hammer.Manager(dom, {
-      inputClass: Hammer.TouchInput
-    })
-    this.mc.add(new Hammer.Swipe({
-      direction: Hammer.DIRECTION_HORIZONTAL,
-      threshold: 10,
-      velocity: 0.4
-    }))
+    if (target !== null) {
+      this.mc = new Hammer.Manager(target, {
+        inputClass: Hammer.TouchInput
+      })
+      this.mc.add(new Hammer.Swipe({
+        direction: Hammer.DIRECTION_HORIZONTAL,
+        threshold: 10,
+        velocity: 0.4
+      }))
 
-    this.mc.on('swiperight swipeleft', (e: HammerInput) => {
-      if (e.center.x - e.deltaX > EDGE_SLIDE_THRESHOLD) {
-        const tab = findParentBySelector(e.target, '.tab-content')
-        const ds = tab.dataset as DOMStringMap
-        const index = Number(ds.index)
-        if (index !== undefined) {
-          if (e.direction === Hammer.DIRECTION_LEFT && index < nbTabs - 1) {
-            attrs.onTabChange(index + 1)
-          }
-          else if (e.direction === Hammer.DIRECTION_RIGHT && index > 0) {
-            attrs.onTabChange(index - 1)
+      this.mc.on('swiperight swipeleft', (e: HammerInput) => {
+        if (e.center.x - e.deltaX > EDGE_SLIDE_THRESHOLD) {
+          const tab = findParentBySelector(e.target, '.tab-content')
+          const ds = tab.dataset as DOMStringMap
+          const index = Number(ds.index)
+          if (index !== undefined) {
+            if (e.direction === Hammer.DIRECTION_LEFT && index < nbTabs - 1) {
+              attrs.onTabChange(index + 1)
+            }
+            else if (e.direction === Hammer.DIRECTION_RIGHT && index > 0) {
+              attrs.onTabChange(index - 1)
+            }
           }
         }
-      }
-    })
+      })
+    }
   },
 
   onremove() {
@@ -65,15 +68,17 @@ export default {
       transform: `translateX(${shift}px)`
     }
 
-    return h('div.tabs-view', {
-      style,
-      className: attrs.className
-    }, attrs.content.map((_: any, index: number) =>
-      h('div.tab-content', {
-        'data-index': index,
-        className: curIndex === index ? 'current' : '',
-      }, curIndex === index ? h(Tab, { index, ...attrs }) : null)
-    ))
+    return h('div.tabs-view-wrapper',
+      h('div.tabs-view', {
+        style,
+        className: attrs.className
+      }, attrs.content.map((_: any, index: number) =>
+        h('div.tab-content', {
+          'data-index': index,
+          className: curIndex === index ? 'current' : '',
+        }, curIndex === index ? h(Tab, { index, ...attrs }) : null)
+      ))
+    )
   }
 } as Mithril.Component<Attrs, State>
 

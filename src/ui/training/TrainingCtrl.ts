@@ -121,6 +121,26 @@ export default class TrainingCtrl implements PromotingInterface {
     return true
   }
 
+  public resync = () => {
+    const user = session.get()
+    if (user) {
+      const onSuccess = (cfg: PuzzleData) => {
+        this.vm.loading = false
+        this.init(cfg)
+        redraw()
+      }
+      this.database.clean(user.id).then(() => {
+        syncAndLoadNewPuzzle(this.database, user)
+        .then(onSuccess)
+        .catch(error => {
+          this.vm.loading = false
+          redraw()
+          puzzleLoadFailure(error)
+        })
+      })
+    }
+  }
+
   public rewind = () => {
     if (this.canGoBackward()) {
       this.userJump(treePath.init(this.path), false)

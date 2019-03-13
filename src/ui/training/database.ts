@@ -4,6 +4,7 @@ import { PuzzleOutcome, PuzzleData, UserData } from '../../lichess/interfaces/tr
 const db = {
   fetch,
   save,
+  clean,
 }
 
 export default db
@@ -34,4 +35,8 @@ function fetch(userId: UserId): Promise<UserOfflineData | null> {
 
 function save(userId: UserId, userData: UserOfflineData): Promise<UserOfflineData> {
   return asyncStorage.setItem(`offlinePuzzles.${userId}`, userData)
+}
+
+function clean(userId: UserId) {
+  return asyncStorage.removeItem(`offlinePuzzles.${userId}`)
 }

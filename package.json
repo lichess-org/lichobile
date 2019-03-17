@@ -53,7 +53,7 @@
         "@types/d3": "4.5.0",
         "@types/hammerjs": "2.0.35",
         "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",
-        "cordova-android": "7.1.0",
+        "cordova-android": "8.0.0",
         "cordova-ios": "4.5.4",
         "cordova-plugin-appversion": "1.0.0",
         "cordova-plugin-crosswalk-data-migration": "git+https://github.com/veloce/cordova-plugin-crosswalk-data-migration.git#225408d",

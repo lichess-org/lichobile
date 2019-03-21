@@ -67,7 +67,7 @@ function handleVariantProfile (eventData: UniversalLinks.EventData) {
 // https://www.en.lichess.org/analysis/2b1rrk1/p4Np1/6Pp/q2p3Q/n1pP4/b1P1B3/P1BK1P2/1R4R1_w_-_-_0_1
 function handleAnalysisPosition (eventData: UniversalLinks.EventData) {
   let pathSuffix = eventData.path.replace('/analysis', '')
-  
+
   let variant = 'standard'
   const pieces = pathSuffix.split('/')
   if (analysableVariants.includes(pieces[1])) {

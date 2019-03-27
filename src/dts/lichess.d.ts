@@ -46,7 +46,6 @@ interface LichessOptions {
   apiEndPoint: string
   socketEndPoint: string
   mode: string
-  sentryDSN?: string
 }
 
 interface Window {

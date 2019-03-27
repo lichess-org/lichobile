@@ -5,6 +5,7 @@ import signupModal from './ui/signupModal'
 import { handleXhrError } from './utils'
 import { cleanFenUri } from './utils/fen'
 import { getChallenge } from './xhr'
+import { analysableVariants } from './lichess/game'
 
 export default {
   init() {
@@ -66,8 +67,16 @@ function handleVariantProfile (eventData: UniversalLinks.EventData) {
 // https://www.en.lichess.org/analysis/2b1rrk1/p4Np1/6Pp/q2p3Q/n1pP4/b1P1B3/P1BK1P2/1R4R1_w_-_-_0_1
 function handleAnalysisPosition (eventData: UniversalLinks.EventData) {
   let pathSuffix = eventData.path.replace('/analysis', '')
+
+  let variant = 'standard'
+  const pieces = pathSuffix.split('/')
+  if (analysableVariants.includes(pieces[1])) {
+    variant = pieces[1]
+    pathSuffix = pathSuffix.substring(pathSuffix.indexOf('/', 1))
+  }
+
   pathSuffix = cleanFenUri(pathSuffix)
-  router.set(`/analyse/fen/${encodeURIComponent(pathSuffix)}`)
+  router.set(`/analyse/variant/${variant}/fen/${encodeURIComponent(pathSuffix)}`)
 }
 
 // handle links like https://lichess.org/editor/1k6/1r6/2K5/Q7/8/8/8/8_w_-_-

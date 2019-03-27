@@ -69,10 +69,10 @@ function renderActionsBar(ctrl: TrainingCtrl) {
       oncreate: helper.ontap(ctrl.goToAnalysis, () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')),
       disabled: ctrl.vm.mode !== 'view'
     }),
-    h('button.action_bar_button.training_action.fa.fa-refresh', {
+    hasNetwork() && session.isConnected() ? h('button.action_bar_button.training_action.fa.fa-refresh', {
       key: 'puzzleRefresh',
-      oncreate: helper.ontap(ctrl.resync)
-    }),
+      oncreate: helper.ontap(ctrl.resync, () => window.plugins.toast.show('Refresh saved puzzles', 'short', 'bottom'))
+    }) : null,
     h('button.action_bar_button.training_action.fa.fa-backward', {
       oncreate: helper.ontap(ctrl.rewind, undefined, ctrl.rewind),
       key: 'historyPrev',

@@ -76,6 +76,7 @@
   display flex
   flex-flow column nowrap
   min-width 0 // fix width bug on landscape
+  min-height 0 // fix chrome bug
   @media only screen and (orientation: landscape)
     margin-top 0
 
@@ -87,6 +88,7 @@
 .analyse-tabsContent
   background lighten(bgdark, 5%)
   flex 1 1 auto
+  min-height 0 // fix chrome bug
   > .tab-content
     > div
       flex-grow 1
@@ -121,6 +123,7 @@
 .analyse-replayWrapper
   display: flex
   flex-flow column nowrap
+  min-height 0 // fix chrome bug
   > .native_scroller
     // flex height
     height initial

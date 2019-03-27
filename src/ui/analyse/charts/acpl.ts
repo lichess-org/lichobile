@@ -35,10 +35,11 @@ export default function drawAcplChart(element: SVGElement, aData: AnalyseData, c
     .text(name)
   }
 
+  const firstPly = aData.treeParts[0].ply || 0
   function setCurrentPly(ply: number | null) {
     g.selectAll('.dot').remove()
     if (ply !== null) {
-      const xply = ply - 1
+      const xply = ply - 1 - firstPly
       const p = graphData[xply]
       if (p) {
         g.append('circle')

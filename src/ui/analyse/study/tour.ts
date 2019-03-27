@@ -24,7 +24,7 @@ export default function startTour(ctrl: StudyCtrl) {
       title: 'Study members',
       text: `<i data-icon='v'></i> Spectators can view the study and talk in the chat.<br>` +
         `<br><i class='fa fa-user'></i> Contributors can make moves and update the study.` +
-        `<br><br>Studies are for now read-only in the application, so you must go to lichess.org to contribue to them. More features will come later in lichess app.`,
+        `<br><br>Studies are for now read-only in the application, so you must go to lichess.org to contribute to them. More features will come later in lichess app.`,
       when: {
         'before-show': () => {
           ctrl.sideMenu.open()

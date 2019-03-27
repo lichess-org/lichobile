@@ -4,7 +4,6 @@ export interface Config {
   socketEndPoint: string
   apiVersion: number
   fetchTimeoutMs: Millis
-  sentryDSN?: string
 }
 
 const defaults = {

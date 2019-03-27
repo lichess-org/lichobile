@@ -65,7 +65,7 @@ export default {
       transform: `translateX(${shift}px)`
     }
 
-    return h('div.tabs-view', {
+    return h('div.tabs-view-wrapper', h('div.tabs-view', {
       style,
       className: attrs.className
     }, attrs.content.map((_: any, index: number) =>
@@ -73,7 +73,7 @@ export default {
         'data-index': index,
         className: curIndex === index ? 'current' : '',
       }, curIndex === index ? h(Tab, { index, ...attrs }) : null)
-    ))
+    )))
   }
 } as Mithril.Component<Attrs, State>
 

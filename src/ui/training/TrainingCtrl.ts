@@ -124,6 +124,11 @@ export default class TrainingCtrl implements PromotingInterface {
   public resync = () => {
     const user = session.get()
     if (user) {
+      if (this.vm.loading) {
+        return
+      }
+      this.vm.loading = true
+      redraw()
       const onSuccess = (cfg: PuzzleData) => {
         this.vm.loading = false
         this.init(cfg)

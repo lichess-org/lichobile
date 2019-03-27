@@ -167,7 +167,7 @@ function variantPerfAvailable(key: PerfKey, perf: Perf) {
 function renderPerf(key: PerfKey, name: string, perf: Perf, user: ProfileUser) {
 
   const avail = variantPerfAvailable(key, perf)
-  
+
   const props = {
     className: 'profilePerf' + (avail ? ' nav' : ''),
     'data-icon': gameIcon(key),

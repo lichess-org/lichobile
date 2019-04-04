@@ -141,7 +141,7 @@ function position2option(fen: string, pos: BoardPosition): Mithril.BaseNode {
   return h('option', {
     value: pos.fen,
     selected: fen === pos.fen
-  }, pos.name)
+  }, pos.eco + ' ' + pos.name)
 }
 
 function optgroup(name: string, opts: Mithril.Children) {

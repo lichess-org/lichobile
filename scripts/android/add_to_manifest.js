@@ -6,6 +6,10 @@ module.exports = function() {
     {
       text: ' android:installLocation="auto"',
       after: '<manifest'
+    },
+    {
+      text: ' android:hapticFeedbackEnabled="false"',
+      after: '<manifest'
     }
   ];
 

@@ -72,7 +72,7 @@
         "cordova-plugin-vibration": "3.1.0",
         "cordova-plugin-whitelist": "1.3.3",
         "cordova-plugin-x-socialsharing": "5.1.3",
-        "cordova-plugin-x-toast": "2.5.2",
+        "cordova-plugin-x-toast": "2.7.2",
         "cordova-universal-links-plugin": "git+https://github.com/veloce/cordova-universal-links-plugin.git#c494fe1",
         "core-js": "2.5.7",
         "d3-axis": "1.0.8",

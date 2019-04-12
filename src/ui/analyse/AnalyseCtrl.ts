@@ -344,7 +344,7 @@ export default class AnalyseCtrl {
     this.updateHref()
     promotion.cancel(this.chessground, this.cgConfig)
     if (pathChanged) {
-      if (this.retro) this.retro.onJump()
+      if (this.retro) setTimeout(this.retro.onJump(), this.data.pref.animationDuration)
       else {
         this.debouncedStartCeval()
       }

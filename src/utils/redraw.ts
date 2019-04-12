@@ -3,6 +3,7 @@ import { batchRequestAnimationFrame } from './batchRAF'
 
 export const redrawSync = signals.redraw.dispatch
 
-export default function() {
+export default function redraw() {
+  console.trace()
   batchRequestAnimationFrame(redrawSync)
 }

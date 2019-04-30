@@ -90,6 +90,18 @@ export function syncPuzzleResult(
   })
 }
 
+/*
+ * Sync current data then clear puzzle cache to force get new puzzles
+ */
+export function syncAndClearCache(database: Database, user: Session): Promise<PuzzleData> {
+  return syncPuzzles(database, user)
+  .then(() =>
+    database.clean(user.id).then(() =>
+      syncAndLoadNewPuzzle(database, user)
+    )
+  )
+}
+
 export function puzzleLoadFailure(reason: any) {
   if (typeof reason === 'string') {
     window.plugins.toast.show(reason, 'long', 'center')

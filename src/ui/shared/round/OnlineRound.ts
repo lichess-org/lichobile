@@ -568,13 +568,12 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (this.data.game.speed === 'correspondence') {
       removeOfflineGameData(this.data.url.round.substr(1))
     }
+    if (d.game.turns > 1) {
+      sound.dong()
+      vibrate.quick()
+    }
     if (!this.data.player.spectator) {
-      if (d.game.turns > 1) {
-        sound.dong()
-        vibrate.quick()
-        session.backgroundRefresh()
-      }
-
+      session.backgroundRefresh()
       sleepUtils.allowSleepAgain()
       this.showActions()
       setTimeout(redraw, 1000)

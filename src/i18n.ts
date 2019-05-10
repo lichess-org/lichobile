@@ -7,6 +7,7 @@ let lang = defaultCode
 let messages = {} as StringMap
 
 export default function i18n(key: string, ...args: Array<string | number>): string {
+  console.log(key, args, isLocaleLoaded('es'));
   let str: string = messages[key] || untranslated[key] || key
   args.forEach(a => { str = str.replace('%s', String(a)) })
   return str
@@ -150,5 +151,7 @@ const untranslated: StringMap = {
   usernameStartNoNumber: 'The username must not start with a number',
   usernameUnacceptable: 'This username is not acceptable',
   usernameInvalid: 'The username contains invalid characters',
-  offline: 'Offline'
+  offline: 'Offline',
+  study: 'Study',
+  studies: 'Studies'
 }

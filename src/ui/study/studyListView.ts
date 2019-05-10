@@ -9,6 +9,7 @@ import * as helper from '../helper'
 import { closeIcon } from '../shared/icons'
 
 import StudyListCtrl, { PagerDataWithDate } from './StudyListCtrl'
+import i18n from '../../i18n';
 
 export default function studyListView(ctrl: StudyListCtrl) {
   return h('div.study-pagerWrapper', [
@@ -19,7 +20,7 @@ export default function studyListView(ctrl: StudyListCtrl) {
         }, [
           h('div.inputWrapper', [
             h('input#studySearch[type=search]', {
-              placeholder: 'Search studies',
+              placeholder: i18n('studySearchPlaceholder'),
               autocapitalize: 'off',
               autocomplete: 'off',
               oncreate: helper.autofocus,
@@ -34,7 +35,7 @@ export default function studyListView(ctrl: StudyListCtrl) {
               oncreate: helper.ontap(ctrl.cancelSearch)
             }, closeIcon) : null,
           ]),
-          h('button', 'Search'),
+          h('button', i18n('studySearch')),
         ]) :
         h('div.study-pagerSelectWrapper', [
           h('div.categories',
@@ -152,4 +153,3 @@ const Item = {
   study: PagerDataWithDate
   index: number
 }, {}>
-

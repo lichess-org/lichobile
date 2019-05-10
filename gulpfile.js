@@ -111,9 +111,9 @@ gulp.task('watch-scripts', () => {
 
 // Watch Files For Changes
 gulp.task('launch-watch', () => {
-  gulp.watch(paths.styles, ['styl']);
-  gulp.watch(['src/index.html', 'env.json'], ['html']);
+  gulp.watch(paths.styles, gulp.parallel(['styl']));
+  gulp.watch(['src/index.html', 'env.json'], gulp.parallel(['html']));
 });
 
-gulp.task('default', ['html', 'styl', 'scripts']);
-gulp.task('watch', ['html', 'styl', 'watch-scripts', 'launch-watch']);
+gulp.task('default', gulp.parallel(['html', 'styl', 'scripts']));
+gulp.task('watch', gulp.series(['html', 'styl', 'watch-scripts', 'launch-watch']));

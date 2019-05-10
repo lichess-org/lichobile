@@ -47,7 +47,7 @@
         "typescript": "2.8.1",
         "vinyl-buffer": "1.0.1",
         "vinyl-source-stream": "1.1.0",
-        "watchify": "3.9.0"
+        "watchify": "3.11.1"
     },
     "dependencies": {
         "@types/d3": "4.5.0",

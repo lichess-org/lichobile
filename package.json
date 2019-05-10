@@ -52,7 +52,6 @@
     "dependencies": {
         "@types/d3": "4.5.0",
         "@types/hammerjs": "2.0.35",
-        "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",
         "cordova-android": "8.0.0",
         "cordova-ios": "4.5.4",
         "cordova-plugin-appversion": "1.0.0",
@@ -64,7 +63,7 @@
         "cordova-plugin-globalization": "1.11.0",
         "cordova-plugin-inappbrowser": "1.6.1",
         "cordova-plugin-insomnia": "4.2.0",
-        "cordova-plugin-nativeaudio": "git+https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",
+        "cordova-plugin-nativeaudio": "github:veloce/cordova-plugin-nativeaudio#old_interface",
         "cordova-plugin-network-information": "2.0.1",
         "cordova-plugin-splashscreen": "5.0.2",
         "cordova-plugin-statusbar": "2.4.2",
@@ -129,7 +128,6 @@
             "android"
         ],
         "plugins": {
-            "com.rjfun.cordova.plugin.lowlatencyaudio": {},
             "cordova-plugin-appversion": {},
             "cordova-plugin-device": {},
             "cordova-plugin-inappbrowser": {},

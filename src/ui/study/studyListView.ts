@@ -9,7 +9,7 @@ import * as helper from '../helper'
 import { closeIcon } from '../shared/icons'
 
 import StudyListCtrl, { PagerDataWithDate } from './StudyListCtrl'
-import i18n from '../../i18n';
+import i18n from '../../i18n'
 
 export default function studyListView(ctrl: StudyListCtrl) {
   return h('div.study-pagerWrapper', [

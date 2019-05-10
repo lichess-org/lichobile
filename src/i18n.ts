@@ -153,5 +153,11 @@ const untranslated: StringMap = {
   usernameInvalid: 'The username contains invalid characters',
   offline: 'Offline',
   study: 'Study',
-  studies: 'Studies'
+  studies: 'Studies',
+  studiesCategoryAll: 'All studies',
+  studiesCategoryMine: 'My studies',
+  studiesCategoryContributor: 'Studies I contribute to',
+  studiesCategoryMinePublic: 'My public studies',
+  studiesCategoryMinePrivate: 'My private studies',
+  studiesCategoryFavorite: 'Favorite studies'
 }

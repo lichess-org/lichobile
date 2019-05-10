@@ -46,7 +46,7 @@ export default function studyListView(ctrl: StudyListCtrl) {
               h('option', {
                 key: c[0],
                 value: c[0],
-              }, c[1])
+              }, i18n(c[1]))
             ))
           ),
           h('div.orders',
@@ -70,13 +70,14 @@ export default function studyListView(ctrl: StudyListCtrl) {
   ])
 }
 
+// NB: mapping from pager category to i18n key
 const categories: ReadonlyArray<[PagerCategory, string]> = [
-  ['all', 'All studies'],
-  ['mine', 'My studies'],
-  ['member', 'Studies I contribute to'],
-  ['public', 'My public studies'],
-  ['private', 'My private studies'],
-  ['likes', 'Favourite studies'],
+  ['all', 'studiesCategoryAll'],
+  ['mine', 'studiesCategoryMine'],
+  ['member', 'studiesCategoryContributor'],
+  ['public', 'studiesCategoryMinePublic'],
+  ['private', 'studiesCategoryMinePrivate'],
+  ['likes', 'studiesCategoryFavorite'],
 ]
 
 const orders: ReadonlyArray<[PagerOrder, string]> = [

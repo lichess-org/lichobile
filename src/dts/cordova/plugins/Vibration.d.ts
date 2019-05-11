@@ -6,27 +6,7 @@
 // Copyright (c) Microsoft Open Technologies, Inc.
 // Licensed under the MIT license.
 
-interface Navigator {
-	/**
-	 * Vibrates the device for the specified amount of time.
-	 * @param time Milliseconds to vibrate the device. 0 cancels the vibration. Ignored on iOS.
-	 */
-    vibrate(time: number): void;
-
-    /**
-	 * Vibrates the device with a given pattern.
-	 * @param time Sequence of durations (in milliseconds) for which to turn on or off the vibrator. Ignored on iOS.
-	 */
-    vibrate(time: number[]): void;
-}
-
 interface Notification {
-	/**
-	 * Vibrates the device for the specified amount of time.
-	 * @param time Milliseconds to vibrate the device. Ignored on iOS.
-     * @deprecated
-	 */
-    vibrate(time: number): void;
     /**
      * Vibrates the device with a given pattern.
      * @param number[] pattern Pattern with which to vibrate the device.

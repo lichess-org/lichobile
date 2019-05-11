@@ -142,7 +142,7 @@ export function chatView(ctrl: Chat, header?: string) {
         onsubmit(e: Event) {
           e.preventDefault()
           const target = (e.target as HTMLFormElement)
-          const ta = target[0]
+          const ta = target[0] as HTMLTextAreaElement
           ta.focus()
           const msg = ta.value.trim()
           if (!validateMsg(msg)) return

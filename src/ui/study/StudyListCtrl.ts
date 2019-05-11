@@ -89,7 +89,7 @@ export default class StudyListCtrl {
   public readonly onSearch = (e: Event): void => {
     e.preventDefault()
     e.stopPropagation()
-    const q = (e.target as HTMLFormElement)[0].value.trim()
+    const q = ((e.target as HTMLFormElement)[0] as HTMLInputElement).value.trim()
     router.setQueryParams({ q }, true)
   }
 

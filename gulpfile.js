@@ -2,7 +2,8 @@ const path = require('path');
 const source = require('vinyl-source-stream');
 const minimist = require('minimist');
 const gulp = require('gulp');
-const gutil = require('gulp-util');
+const chalk = require('chalk');
+const log = require('fancy-log');
 const preprocess = require('gulp-preprocess');
 const watchify = require('watchify');
 const browserify = require('browserify');
@@ -43,7 +44,7 @@ const babelSettings = {
 }
 
 function logErrorAndExit(error) {
-  gutil.log(gutil.colors.red(error.message))
+  log.error(chalk.red(error.message))
   process.exit(1)
 }
 
@@ -97,22 +98,22 @@ gulp.task('watch-scripts', () => {
   function rebundle() {
     return bundleStream
       .bundle()
-      .on('error', error => gutil.log(gutil.colors.red(error.message)))
+      .on('error', error => log.error(chalk.red(error.message)))
       .pipe(source('app.js'))
       .pipe(gulp.dest('./www'));
   }
 
   bundleStream.on('update', rebundle);
-  bundleStream.on('log', gutil.log);
+  bundleStream.on('log', log);
 
   return rebundle();
 });
 
 // Watch Files For Changes
 gulp.task('launch-watch', () => {
-  gulp.watch(paths.styles, ['styl']);
-  gulp.watch(['src/index.html', 'env.json'], ['html']);
+  gulp.watch(paths.styles, gulp.parallel(['styl']));
+  gulp.watch(['src/index.html', 'env.json'], gulp.parallel(['html']));
 });
 
-gulp.task('default', ['html', 'styl', 'scripts']);
-gulp.task('watch', ['html', 'styl', 'watch-scripts', 'launch-watch']);
+gulp.task('default', gulp.parallel(['html', 'styl', 'scripts']));
+gulp.task('watch', gulp.series(['html', 'styl', 'watch-scripts', 'launch-watch']));

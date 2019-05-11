@@ -125,7 +125,7 @@ export function clockSettingsView (clockSettings: ClockSettings, onChange: () =>
     stage() {
       return (
         <div key="hourglassSettings" className="clockSettingParameters">
-          { clockSettings.stage.stages().map(renderStage.bind(undefined, clockSettings, onChange)) }
+          { clockSettings.stage.stages().map((_, index) => renderStage(clockSettings, onChange, index)) }
           <div className="select_input">
             {formWidgets.renderSelect('Increment', 'increment', clockSettings.availableIncrements.map(utils.tupleOf), clockSettings.stage.increment, false, onChange)}
           </div>
@@ -137,16 +137,16 @@ export function clockSettingsView (clockSettings: ClockSettings, onChange: () =>
   return clockTypes[clockSettings.clockType()]()
 }
 
-function renderStage(clockSettings: ClockSettings, onChange: () => void, _: number, index: number) {
-  const time = updateTime.bind(undefined, clockSettings, index)
-  const moves = updateMoves.bind(undefined, clockSettings, index)
+function renderStage(clockSettings: ClockSettings, onChange: () => void, index: number) {
+  const timeProp = updateTime.bind(undefined, clockSettings, index) as StoredProp<string>
+  const moves = updateMoves.bind(undefined, clockSettings, index) as StoredProp<string>
   const hidePlus = clockSettings.stage.stages().length >= 5
   const hideMinus = clockSettings.stage.stages().length <= 2
   return (
     <div className="stageRow">
       <div className="stageRowTitle">{index + 1}</div>
       <div className="select_input inline stage stageRowMember">
-        {formWidgets.renderSelect('Time', 'time', clockSettings.availableTimes, time, false, onChange)}
+        {formWidgets.renderSelect('Time', 'time', clockSettings.availableTimes, timeProp, false, onChange)}
       </div>
       <div className={'select_input inline stage stageRowMember' + ((index === clockSettings.stage.stages().length - 1 ) ? ' lastStage' : '')}>
         {formWidgets.renderSelect('Moves', 'moves', clockSettings.availableMoves.map(utils.tupleOf), moves, false, onChange)}

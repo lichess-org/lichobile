@@ -43,7 +43,7 @@ export function setPremove(state: State, orig: Key, dest: Key): void {
 export function unsetPremove(state: State): void {
   if (state.premovable.current) {
     state.premovable.current = null
-    setTimeout(state.premovable.events.unset)
+    setTimeout(state.premovable.events.unset || util.noop)
   }
 }
 
@@ -271,7 +271,7 @@ function baseMove(state: State, orig: Key, dest: Key): boolean {
   state.lastMove = [orig, dest]
   state.check = null
   tryAutoCastle(state, orig, dest)
-  setTimeout(state.events.change)
+  setTimeout(state.events.change || util.noop)
   return true
 }
 
@@ -286,7 +286,7 @@ function baseNewPiece(state: State, piece: Piece, key: Key, force = false): bool
   state.pieces[key] = piece
   state.lastMove = [key, key]
   state.check = null
-  setTimeout(state.events.change)
+  setTimeout(state.events.change || util.noop)
   state.movable.dests = {}
   state.turnColor = util.opposite(state.turnColor)
   return true

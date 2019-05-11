@@ -195,7 +195,7 @@ export default class Chessground {
   playPremove = (): boolean => {
 
     if (this.state.premovable.current) {
-      if (anim(board.playPremove, this)) return true
+      if (Boolean(anim(board.playPremove, this))) return true
       // if the premove couldn't be played, redraw to clear it up
       this.redraw()
     }

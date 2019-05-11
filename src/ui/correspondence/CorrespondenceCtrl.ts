@@ -67,8 +67,8 @@ export default class CorrespondenceCtrl {
     return challengesApi.sending().filter(challengesApi.isPersistent)
   }
 
-  private reload = (feedback?: boolean) => {
-    xhr.seeks(feedback = false)
+  private reload = () => {
+    xhr.seeks(false)
     .then(d => {
       this.pool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1)
       redraw()

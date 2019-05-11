@@ -41,7 +41,7 @@ function renderBody(ctrl: IImporterCtrl) {
       onsubmit: (e: Event) => {
         e.preventDefault()
         const target = e.target as HTMLFormElement
-        const pgn: string = target[0].value
+        const pgn: string = (target[0] as HTMLInputElement).value
         if (pgn) ctrl.importGame(pgn)
       }
     }, [

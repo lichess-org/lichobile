@@ -153,9 +153,9 @@ function isConfirmMailData(d: SignupData): d is EmailConfirm {
 }
 
 function submit(form: HTMLFormElement) {
-  const login = form[0].value.trim()
-  const email = form[1].value.trim()
-  const pass = form[2].value.trim()
+  const login = (form[0] as HTMLInputElement).value.trim()
+  const email = (form[1] as HTMLInputElement).value.trim()
+  const pass = (form[2] as HTMLInputElement).value.trim()
   if (!login || !email || !pass) return
   window.cordova.plugins.Keyboard.close()
   loading = true

@@ -104,7 +104,7 @@ export default {
   },
   forceResign(ctrl: OnlineRound) {
     return gameApi.forceResignable(ctrl.data) ?
-      h('div.force_resign_zone.clearfix', {
+      h('div.force_resign_zone', {
         key: 'forceResignZone'
       }, [
         h('div.notice', i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim')),
@@ -138,7 +138,7 @@ export default {
     return null
   },
   answerOpponentDrawOffer(ctrl: OnlineRound) {
-    if (ctrl.data.opponent.offeringDraw) return h('div.negotiation.clearfix', {
+    if (ctrl.data.opponent.offeringDraw) return h('div.negotiation', {
       key: 'answerDrawOfferZone'
     }, [
       h('div.notice', i18n('yourOpponentOffersADraw')),
@@ -165,7 +165,7 @@ export default {
     return null
   },
   answerOpponentTakebackProposition(ctrl: OnlineRound) {
-    if (ctrl.data.opponent.proposingTakeback) return h('div.negotiation.clearfix', {
+    if (ctrl.data.opponent.proposingTakeback) return h('div.negotiation', {
       key: 'answerTakebackPropositionZone'
     }, [
       h('div.notice', i18n('yourOpponentProposesATakeback')),
@@ -214,42 +214,37 @@ export default {
   rematch(ctrl: OnlineRound) {
     const d = ctrl.data
     const rematchable = !d.game.rematch && (gameStatus.finished(d) || gameStatus.aborted(d)) && !d.game.tournamentId && !d.game.boosted && (d.opponent.onGame || (!d.clock && d.player.user && d.opponent.user))
-    if (!ctrl.data.opponent.offeringRematch && !ctrl.data.player.offeringRematch && rematchable) {
+    if (ctrl.data.opponent.offeringRematch) {
+      return h('div.negotiation', {
+        key: 'answerOpponentRematchZone'
+      }, [
+        h('div.notice', i18n('yourOpponentWantsToPlayANewGameWithYou')),
+        h('div.binary_choice_wrapper', [
+          h('button.binary_choice[data-icon=E]', {
+            oncreate: helper.ontap(() => { socket.send('rematch-yes') })
+          }, i18n('joinTheGame')),
+          h('button.binary_choice[data-icon=L]', {
+            oncreate: helper.ontap(() => { socket.send('rematch-no') })
+          }, i18n('declineInvitation'))
+        ])
+      ])
+    } else if (ctrl.data.player.offeringRematch) {
+      return h('div.negotiation', {
+        key: 'cancelRematchZone'
+      }, [
+        h('div.notice', i18n('rematchOfferSent')),
+        h('div.notice', i18n('waitingForOpponent')),
+        h('button[data-icon=L]', {
+          oncreate: helper.ontap(() => { socket.send('rematch-no') })
+        }, i18n('cancelRematchOffer'))
+      ])
+    } else {
       return h('button', {
         key: 'rematch',
-        oncreate: helper.ontap(() => { socket.send('rematch-yes') })
+        oncreate: helper.ontap(() => { socket.send('rematch-yes') }),
+        disabled: !rematchable,
       }, [h('span.fa.fa-refresh'), i18n('rematch')])
-    } else {
-      return null
     }
-  },
-  answerOpponentRematch(ctrl: OnlineRound) {
-    if (ctrl.data.opponent.offeringRematch) return h('div.negotiation.clearfix', {
-      key: 'answerOpponentRematchZone'
-    }, [
-      h('div.notice', i18n('yourOpponentWantsToPlayANewGameWithYou')),
-      h('div.binary_choice_wrapper', [
-        h('button.binary_choice[data-icon=E]', {
-          oncreate: helper.ontap(() => { socket.send('rematch-yes') })
-        }, i18n('joinTheGame')),
-        h('button.binary_choice[data-icon=L]', {
-          oncreate: helper.ontap(() => { socket.send('rematch-no') })
-        }, i18n('declineInvitation'))
-      ])
-    ])
-    return null
-  },
-  cancelRematch(ctrl: OnlineRound) {
-    if (ctrl.data.player.offeringRematch) return h('div.negotiation', {
-      key: 'cancelRematchZone'
-    }, [
-      h('div.notice', i18n('rematchOfferSent')),
-      h('div.notice', i18n('waitingForOpponent')),
-      h('button[data-icon=L]', {
-        oncreate: helper.ontap(() => { socket.send('rematch-no') })
-      }, i18n('cancelRematchOffer'))
-    ])
-    return null
   },
   moretime(ctrl: OnlineRound) {
     if (gameApi.moretimeable(ctrl.data)) return h('button[data-icon=O]', {

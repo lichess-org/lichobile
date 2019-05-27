@@ -8,6 +8,7 @@ import * as sleepUtils from '../../../utils/sleep'
 import session from '../../../session'
 import settings from '../../../settings'
 import socket from '../../../socket'
+import i18n from '../../../i18n'
 import router from '../../../router'
 import sound from '../../../sound'
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../../xhr'
@@ -575,10 +576,15 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (!this.data.player.spectator) {
       session.backgroundRefresh()
       sleepUtils.allowSleepAgain()
-      this.showActions()
-      setTimeout(redraw, 1000)
+      window.plugins.toast.show(this.gameStatus(), 'short', 'center')
     }
     this.score === undefined
+  }
+
+  public gameStatus(): string {
+    const winner = gameApi.getPlayer(this.data, this.data.game.winner)
+    return gameStatusApi.toLabel(this.data.game.status.name, this.data.game.winner, this.data.game.variant.key) +
+      (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
   }
 
   public goBerserk() {

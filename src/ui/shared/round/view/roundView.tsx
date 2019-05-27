@@ -411,13 +411,10 @@ function renderGameRunningActions(ctrl: OnlineRound) {
 
 function renderGameEndedActions(ctrl: OnlineRound) {
   const result = gameApi.result(ctrl.data)
-  const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner)
-  const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
-    (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
   const resultDom = gameStatusApi.aborted(ctrl.data) ? [] : [
     h('strong', result), h('br')
   ]
-  resultDom.push(h('em.resultStatus', status))
+  resultDom.push(h('em.resultStatus', ctrl.gameStatus()))
   let buttons: Mithril.Children
   const tournamentId = ctrl.data.game.tournamentId
   if (tournamentId) {
@@ -457,11 +454,9 @@ function renderGameEndedActions(ctrl: OnlineRound) {
         gameButton.bookmark(ctrl),
         gameButton.shareLink(ctrl),
         gameButton.sharePGN(ctrl),
+        gameButton.analysisBoard(ctrl),
         gameButton.newOpponent(ctrl),
-        gameButton.answerOpponentRematch(ctrl),
-        gameButton.cancelRematch(ctrl),
         gameButton.rematch(ctrl),
-        gameButton.analysisBoard(ctrl)
       ]
     }
   }

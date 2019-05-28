@@ -64,12 +64,13 @@ export function renderSelectColorPosition(ctrl: Editor) {
         optgroup('Set the board', [
           position2option(fen, {
             name: '-- Position --',
-            fen: ''
+            fen: '',
+            eco: '',
           }),
           ctrl.extraPositions.map((pos: BoardPosition) => position2option(fen, pos))
         ]),
         optgroup('Popular openings',
-          ctrl.positions().map((pos: BoardPosition) => position2option(fen, pos))
+          ctrl.positions().map((pos: BoardPosition) => position2option(fen, pos, true))
         )
       ])
     ]),
@@ -86,7 +87,8 @@ export function renderSelectColorPosition(ctrl: Editor) {
         optgroup('Set the board', [
           position2option(fen, {
             name: '-- Position --',
-            fen: ''
+            fen: '',
+            eco: '',
           }),
           ctrl.extraPositions.slice(1).map((pos: BoardPosition) => position2option(fen, pos))
         ]),
@@ -138,11 +140,11 @@ function castlingButton(ctrl: Editor, c: string[]) {
   }, c[1])
 }
 
-function position2option(fen: string, pos: BoardPosition): Mithril.BaseNode {
+function position2option(fen: string, pos: BoardPosition, showEco = false): Mithril.BaseNode {
   return h('option', {
     value: pos.fen,
     selected: fen === pos.fen
-  }, pos.eco + ' ' + pos.name)
+  }, (showEco ? pos.eco + ' ' : '') + pos.name)
 }
 
 function optgroup(name: string, opts: Mithril.Children) {

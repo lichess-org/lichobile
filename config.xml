@@ -123,7 +123,7 @@
     <plugin name="cordova-plugin-crosswalk-data-migration" spec="git+https://github.com/veloce/cordova-plugin-crosswalk-data-migration.git#225408d" />
     <plugin name="ionic-plugin-keyboard" spec="2.2.1" />
     <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#v1.8.0" />
+    <plugin name="cordova-plugin-x-toast" spec="2.7.2" />
     <engine name="ios" spec="4.5.4" />
     <engine name="android" spec="8.0.0" />
-    <plugin name="cordova-plugin-x-toast" spec="2.7.2" />
 </widget>

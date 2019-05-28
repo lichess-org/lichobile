@@ -3,7 +3,6 @@ import popupWidget from '../shared/popup'
 import router from '../../router'
 import * as helper from '../helper'
 import * as h from 'mithril/hyperscript'
-import * as withAttr from 'mithril/util/withAttr'
 import Editor, { MenuInterface } from './Editor'
 
 export default {
@@ -103,7 +102,9 @@ export function renderSelectColorPosition(ctrl: Editor) {
       h('select', {
         id: 'select_editor_color',
         value: ctrl.data.editor.color(),
-        onchange: withAttr('value', ctrl.data.editor.color)
+        onchange(e: Event) {
+          ctrl.data.editor.color((e.target as HTMLInputElement).value as Color)
+        },
       }, [
         h('option[value=w]', i18n('whitePlays')),
         h('option[value=b]', i18n('blackPlays'))

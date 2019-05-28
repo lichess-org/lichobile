@@ -42,7 +42,6 @@ declare namespace Mithril {
   }
 
   interface Static extends Hyperscript {
-    withAttr: WithAttr
     render: Render
     version: string
   }
@@ -145,11 +144,6 @@ declare module 'mithril/hyperscript' {
 declare module 'mithril/render' {
   const r: Mithril.RenderService
   export = r
-}
-
-declare module 'mithril/util/withAttr' {
-  const withAttr: Mithril.WithAttr
-  export = withAttr
 }
 
 declare module 'mithril/stream' {

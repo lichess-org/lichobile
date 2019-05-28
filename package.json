@@ -135,7 +135,6 @@
             "cordova-plugin-inappbrowser": {},
             "cordova-plugin-insomnia": {},
             "cordova-plugin-x-socialsharing": {},
-            "cordova-plugin-x-toast": {},
             "cordova-plugin-network-information": {},
             "cordova-plugin-file": {},
             "onesignal-cordova-plugin": {},
@@ -149,7 +148,8 @@
             "cordova-plugin-globalization": {},
             "cordova-plugin-crosswalk-data-migration": {},
             "ionic-plugin-keyboard": {},
-            "cordova-plugin-stockfish": {}
+            "cordova-plugin-stockfish": {},
+            "cordova-plugin-x-toast": {}
         }
     },
     "jest": {

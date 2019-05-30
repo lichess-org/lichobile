@@ -10,6 +10,10 @@ module.exports = function() {
     {
       text: ' android:hapticFeedbackEnabled="false"',
       after: '<manifest'
+    },
+    {
+      text: ' android:resizeableActivity="false"',
+      after: '<application'
     }
   ];
 

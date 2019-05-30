@@ -22,6 +22,12 @@
         <icon density="xhdpi" src="res/android/icons/icon-96.png" />
         <icon density="xxhdpi" src="res/android/icons/icon-144.png" />
         <icon density="xxxhdpi" src="res/android/icons/icon-192.png" />
+        <splash density="ldpi" src="res/android/screens/drawable-ldpi/screen.png" />
+        <splash density="mdpi" src="res/android/screens/drawable-mdpi/screen.png" />
+        <splash density="hdpi" src="res/android/screens/drawable-hdpi/screen.png" />
+        <splash density="xhdpi" src="res/android/screens/drawable-xhdpi/screen.png" />
+        <splash density="xxhdpi" src="res/android/screens/drawable-xxhdpi/screen.png" />
+        <splash density="xxxhdpi" src="res/android/screens/drawable-xxxhdpi/screen.png" />
         <splash density="land-ldpi" src="res/android/screens/drawable-land-ldpi/screen.png" />
         <splash density="land-mdpi" src="res/android/screens/drawable-land-mdpi/screen.png" />
         <splash density="land-hdpi" src="res/android/screens/drawable-land-hdpi/screen.png" />

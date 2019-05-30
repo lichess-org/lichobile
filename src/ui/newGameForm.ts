@@ -170,6 +170,11 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
   const timeMode = settingsObj.timeMode()
   const hasClock = timeMode === '1'
   const hasDays = timeMode === '2' && session.isConnected()
+  const variant = settingsObj.variant()
+  if (variant !== '1') {
+    settingsObj.mode('0')
+  }
+  const mode = settingsObj.mode()
 
   // be sure to set real time clock if disconnected
   if (!session.isConnected()) {
@@ -179,9 +184,20 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
     humanSetup.mode('0')
   }
 
+  const modes = (
+    session.isConnected() &&
+    timeMode !== '0' &&
+    variant === '1'
+  ) ? [
+    ['casual', '0'],
+    ['rated', '1']
+  ] : [
+    ['casual', '0']
+  ]
+
   // if mode is rated only allow random color
   let colors: string[][]
-  if (settingsObj.mode() === '1') {
+  if (mode === '1') {
     settingsObj.color('random')
     colors = [
       ['randomColor', 'random']
@@ -193,13 +209,6 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
       ['black', 'black']
     ]
   }
-
-  const modes = (session.isConnected() && timeMode !== '0') ? [
-    ['casual', '0'],
-    ['rated', '1']
-  ] : [
-    ['casual', '0']
-  ]
 
   const generalFieldset = [
     h('div.select_input', {

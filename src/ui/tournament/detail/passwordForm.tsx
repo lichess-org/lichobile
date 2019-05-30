@@ -58,7 +58,7 @@ function renderForm() {
 }
 
 function join(form: HTMLFormElement) {
-  const elements: HTMLCollection = form[0].elements as HTMLCollection
+  const elements: HTMLCollection = (form[0] as HTMLFieldSetElement).elements as HTMLCollection
   const password = (elements[0] as HTMLInputElement).value
   tournamentCtrl.join(password)
   close()

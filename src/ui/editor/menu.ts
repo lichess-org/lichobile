@@ -3,7 +3,6 @@ import popupWidget from '../shared/popup'
 import router from '../../router'
 import * as helper from '../helper'
 import * as h from 'mithril/hyperscript'
-import * as withAttr from 'mithril/util/withAttr'
 import Editor, { MenuInterface } from './Editor'
 
 export default {
@@ -65,12 +64,13 @@ export function renderSelectColorPosition(ctrl: Editor) {
         optgroup('Set the board', [
           position2option(fen, {
             name: '-- Position --',
-            fen: ''
+            fen: '',
+            eco: '',
           }),
           ctrl.extraPositions.map((pos: BoardPosition) => position2option(fen, pos))
         ]),
         optgroup('Popular openings',
-          ctrl.positions().map((pos: BoardPosition) => position2option(fen, pos))
+          ctrl.positions().map((pos: BoardPosition) => position2option(fen, pos, true))
         )
       ])
     ]),
@@ -87,7 +87,8 @@ export function renderSelectColorPosition(ctrl: Editor) {
         optgroup('Set the board', [
           position2option(fen, {
             name: '-- Position --',
-            fen: ''
+            fen: '',
+            eco: '',
           }),
           ctrl.extraPositions.slice(1).map((pos: BoardPosition) => position2option(fen, pos))
         ]),
@@ -103,7 +104,9 @@ export function renderSelectColorPosition(ctrl: Editor) {
       h('select', {
         id: 'select_editor_color',
         value: ctrl.data.editor.color(),
-        onchange: withAttr('value', ctrl.data.editor.color)
+        onchange(e: Event) {
+          ctrl.data.editor.color((e.target as HTMLInputElement).value as Color)
+        },
       }, [
         h('option[value=w]', i18n('whitePlays')),
         h('option[value=b]', i18n('blackPlays'))
@@ -137,11 +140,11 @@ function castlingButton(ctrl: Editor, c: string[]) {
   }, c[1])
 }
 
-function position2option(fen: string, pos: BoardPosition): Mithril.BaseNode {
+function position2option(fen: string, pos: BoardPosition, showEco = false): Mithril.BaseNode {
   return h('option', {
     value: pos.fen,
     selected: fen === pos.fen
-  }, pos.name)
+  }, (showEco ? pos.eco + ' ' : '') + pos.name)
 }
 
 function optgroup(name: string, opts: Mithril.Children) {

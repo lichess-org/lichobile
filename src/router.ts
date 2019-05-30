@@ -103,9 +103,11 @@ function setQueryParams(params: StringMap, newState = false) {
 }
 
 const backbutton = (() => {
+  type BBHandler = (fromBB?: string) => void
+
   interface X {
     (): void
-    stack?: Array<(fromBB?: string) => void>
+    stack?: Array<BBHandler>
   }
 
   const x: X = () => {
@@ -129,7 +131,7 @@ const backbutton = (() => {
     }
   }
 
-  x.stack = []
+  x.stack = [] as Array<BBHandler>
 
   return <Backbutton>x
 

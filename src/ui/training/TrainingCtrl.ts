@@ -22,7 +22,7 @@ import makeGround from './ground'
 import menu, { IMenuCtrl } from './menu'
 import * as xhr from './xhr'
 import { VM, Data, PimpedGame, Feedback } from './interfaces'
-import { getUnsolved, syncPuzzleResult, syncAndLoadNewPuzzle, nbRemainingPuzzles, puzzleLoadFailure } from './offlineService'
+import { getUnsolved, syncPuzzleResult, syncAndLoadNewPuzzle, syncAndClearCache, nbRemainingPuzzles, puzzleLoadFailure } from './offlineService'
 import { Database } from './database'
 
 export default class TrainingCtrl implements PromotingInterface {
@@ -123,7 +123,7 @@ export default class TrainingCtrl implements PromotingInterface {
 
   public resync = () => {
     const user = session.get()
-    if (user) {
+    if (hasNetwork() && user) {
       if (this.vm.loading) {
         return
       }
@@ -134,14 +134,12 @@ export default class TrainingCtrl implements PromotingInterface {
         this.init(cfg)
         redraw()
       }
-      this.database.clean(user.id).then(() => {
-        syncAndLoadNewPuzzle(this.database, user)
-        .then(onSuccess)
-        .catch(error => {
-          this.vm.loading = false
-          redraw()
-          puzzleLoadFailure(error)
-        })
+      syncAndClearCache(this.database, user)
+      .then(onSuccess)
+      .catch(error => {
+        this.vm.loading = false
+        redraw()
+        puzzleLoadFailure(error)
       })
     }
   }

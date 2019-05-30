@@ -86,10 +86,10 @@ function renderBody(ctrl: State) {
                   layout.onBackgroundChange(val)
                   ctrl.stopLoading()
                 })
-                .catch(() => {
+                .catch((err) => {
                   settings.general.theme.background(prevTheme)
                   ctrl.stopLoading()
-                  handleError()
+                  handleError(err)
                 })
                 redraw()
               }

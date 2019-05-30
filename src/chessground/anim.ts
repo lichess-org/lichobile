@@ -160,7 +160,7 @@ function step(ctrl: Chessground, now: number) {
   }
 }
 
-function animate<A>(mutation: Mutation<A>, ctrl: Chessground) {
+function animate<A>(mutation: Mutation<A>, ctrl: Chessground): A {
   const state = ctrl.state
   const prevPieces: cg.Pieces = {...state.pieces}
   const result = mutation(state)

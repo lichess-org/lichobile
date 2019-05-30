@@ -1,6 +1,8 @@
 import * as cg from './interfaces'
 import { State } from './state'
 
+export function noop() {}
+
 export const files: cg.File[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 export const invFiles: cg.File[] = files.slice().reverse()
 export const ranks: cg.Rank[] = [1, 2, 3, 4, 5, 6, 7, 8]

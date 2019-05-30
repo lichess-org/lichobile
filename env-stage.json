@@ -1,4 +1,4 @@
 {
-  "API_END_POINT": "https://listage.ovh",
-  "SOCKET_END_POINT": "wss://socket.listage.ovh"
+  "API_END_POINT": "https://lichess.dev",
+  "SOCKET_END_POINT": "wss://socket.lichess.dev"
 }

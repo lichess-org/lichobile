@@ -57,9 +57,9 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
 
   function findNextNode(): Tree.Node | undefined {
     const colorModulo = root.bottomColor() === 'white' ? 1 : 0
-    candidateNodes = evalSwings(root.mainline, function(n) {
-      return n.ply % 2 === colorModulo && !explorerCancelPlies.includes(n.ply)
-    })
+    candidateNodes = evalSwings(root.mainline, n =>
+      n.ply % 2 === colorModulo && !explorerCancelPlies.includes(n.ply)
+    )
     return candidateNodes.find(n => !isPlySolved(n.ply))
   }
 
@@ -120,9 +120,7 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
       return
     }
     if (isSolving() && cur.fault.node.ply === node.ply) {
-      if (cur.openingUcis.find((uci: Uci) => {
-        return node.uci === uci
-      })) onWin() // found in opening explorer
+      if (cur.openingUcis.some((uci: Uci) => node.uci === uci)) onWin() // found in opening explorer
       else if (node.comp) onWin() // the computer solution line
       else if (node.eval) onFail() // the move that was played in the game
       else {

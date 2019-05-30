@@ -78,10 +78,12 @@ export default class Editor {
 
     this.extraPositions = [{
       fen: startingFen,
-      name: i18n('startPosition')
+      name: i18n('startPosition'),
+      eco: '',
     }, {
       fen: '8/8/8/8/8/8/8/8 w - - 0 1',
-      name: i18n('clearBoard')
+      name: i18n('clearBoard'),
+      eco: '',
     }]
 
     Promise.all([

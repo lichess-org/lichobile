@@ -1,6 +1,6 @@
 // from https://github.com/Gozala/querystring
 
-function stringifyPrimitive (v: any) {
+function stringifyPrimitive (v: any): string {
   switch (typeof v) {
     case 'string':
       return v
@@ -9,7 +9,7 @@ function stringifyPrimitive (v: any) {
       return v ? 'true' : 'false'
 
     case 'number':
-      return isFinite(v) ? v : ''
+      return isFinite(v) ? v.toString() : ''
 
     default:
       return ''

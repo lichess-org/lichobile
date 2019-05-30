@@ -127,7 +127,7 @@ function renderForm(ctrl: TournamentsListCtrl) {
 }
 
 function create(form: HTMLFormElement) {
-  const elements: HTMLCollection = form[0].elements as HTMLCollection
+  const elements: HTMLCollection = (form[0] as HTMLFieldSetElement).elements as HTMLCollection
   const name = (elements[0] as HTMLInputElement).value
   const variant = (elements[1] as HTMLInputElement).value
   const position = settings.tournament.variant() === '1' ? (elements[2] as HTMLInputElement).value : '---'

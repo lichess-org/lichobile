@@ -9,11 +9,12 @@ import * as h from 'mithril/hyperscript'
 function renderBody() {
   return [
     h('div.native_scroller.page.settings_list.radio_list', [
-      h('ul#pieceThemes', {}, settings.general.theme.availablePieceThemes.map(function(t) {
+      h('ul#pieceThemes', {}, settings.general.theme.availablePieceThemes.map(t => {
+        const [key, label] = t
         return h('li.list_item.piece_theme', {
-          className: t
-        }, formWidgets.renderRadio(t, 'piece_theme', t,
-          settings.general.theme.piece() === t,
+          className: key
+        }, formWidgets.renderRadio(label || key, 'piece_theme', key,
+          settings.general.theme.piece() === key,
           e => {
             settings.general.theme.piece((e.target as HTMLInputElement).value)
           }

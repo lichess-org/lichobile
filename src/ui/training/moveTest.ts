@@ -23,21 +23,23 @@ export default function moveTest(
   if (mode === 'view') return null
   if (!treePath.contains(path, initialPath)) return null
 
+  type ProgressStep = { uci: Uci, castle: boolean }
+
   // puzzle moves so far
-  const progress: Uci[] = nodeList
+  const progress: ReadonlyArray<ProgressStep> = nodeList
   .slice(treePath.size(initialPath) + 1)
-  // at this point we know node has uci (every node except first has uci)
-  .map(node => node.uci!)
+  // at this point we know node has uci and san (every node except first has)
+  .map(node => ({ uci: node.uci!, castle: (node.san!).startsWith('O-O') }))
 
   // search in puzzle lines with current progress
-  const curLine = progress.reduce((acc: Line, uci: Uci) => {
+  const curLine = progress.reduce((acc: Line, step: ProgressStep) => {
     if (!acc) return undefined
     if (isLineFeedback(acc)) return acc
-    // trick typescript into thinking altCastles[uci] is defined to avoid
+    // trick typescript into thinking altCastles[step.uci] is defined to avoid
     // Error TS2538: Type 'undefined' cannot be used as an index type
     // actually we don't care if it's undefined since acc[undefined] don't
     // throw and return undefined
-    return acc[uci] || acc[altCastles[uci]!]
+    return acc[step.uci] || (step.castle && acc[altCastles[step.uci]!])
   }, puzzle.lines)
 
   if (!curLine) {

@@ -61,6 +61,7 @@
         "cordova-plugin-device": "2.0.2",
         "cordova-plugin-dialogs": "2.0.1",
         "cordova-plugin-file": "6.0.1",
+        "cordova-plugin-file-transfer": "1.7.1",
         "cordova-plugin-fullscreen": "1.2.0",
         "cordova-plugin-globalization": "1.11.0",
         "cordova-plugin-inappbrowser": "1.6.1",
@@ -149,7 +150,8 @@
             "cordova-plugin-crosswalk-data-migration": {},
             "ionic-plugin-keyboard": {},
             "cordova-plugin-stockfish": {},
-            "cordova-plugin-x-toast": {}
+            "cordova-plugin-x-toast": {},
+            "cordova-plugin-file-transfer": {}
         }
     },
     "jest": {

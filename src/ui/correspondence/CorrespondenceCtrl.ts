@@ -9,15 +9,18 @@ import socket from '../../socket'
 import { CorrespondenceSeek } from '../../lichess/interfaces'
 import { Challenge } from '../../lichess/interfaces/challenge'
 
+export type PublicPool = ReadonlyArray<CorrespondenceSeek> | null
+export type Challenges = ReadonlyArray<Challenge> | null
+
 export default class CorrespondenceCtrl {
   currentTab: number
-  pool: CorrespondenceSeek[]
-  sendingChallenges: Challenge[]
+  pool: PublicPool
+  sendingChallenges: Challenges
 
   constructor(defaultTab?: number) {
     this.currentTab = defaultTab || 0
-    this.pool = []
-    this.sendingChallenges = []
+    this.pool = null
+    this.sendingChallenges = null
 
     socket.createLobby('corresLobby', this.reload, {
       redirect: socket.redirectToGame,

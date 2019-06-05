@@ -171,7 +171,7 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
   const hasClock = timeMode === '1'
   const hasDays = timeMode === '2' && session.isConnected()
   const variant = settingsObj.variant()
-  if (variant !== '1') {
+  if (timeMode === '2' && variant !== '1') {
     settingsObj.mode('0')
   }
   const mode = settingsObj.mode()
@@ -187,7 +187,7 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
   const modes = (
     session.isConnected() &&
     timeMode !== '0' &&
-    variant === '1'
+    (timeMode !== '2' || variant === '1')
   ) ? [
     ['casual', '0'],
     ['rated', '1']

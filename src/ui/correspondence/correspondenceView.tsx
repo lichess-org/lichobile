@@ -6,12 +6,13 @@ import { Challenge } from '../../lichess/interfaces/challenge'
 import * as helper from '../helper'
 import i18n from '../../i18n'
 import session from '../../session'
+import spinner from '../../spinner'
 import loginModal from '../loginModal'
 import newGameForm from '../newGameForm'
 import TabNavigation from '../shared/TabNavigation'
 import TabView from '../shared/TabView'
 
-import CorrespondenceCtrl from './CorrespondenceCtrl'
+import CorrespondenceCtrl, { PublicPool, Challenges } from './CorrespondenceCtrl'
 
 const tabButtons = [
   {
@@ -21,6 +22,8 @@ const tabButtons = [
     label: 'Challenges'
   }
 ]
+
+type TabContent = PublicPool | Challenges
 
 export function renderBody(ctrl: CorrespondenceCtrl) {
   if (!session.isConnected()) {
@@ -55,7 +58,7 @@ export function renderBody(ctrl: CorrespondenceCtrl) {
       className: 'correspondence-tabs',
       selectedIndex: ctrl.currentTab,
       content: tabsContent,
-      renderer: (tab: any, i: number) => renderTabContent(ctrl, tab, i),
+      renderer: (tab: TabContent, i: number) => renderTabContent(ctrl, tab, i),
       onTabChange: ctrl.onTabChange
     })
   ]
@@ -67,24 +70,34 @@ export function renderFooter() {
   }, [h('span.fa.fa-plus-circle'), i18n('createAGame')]))
 }
 
-function renderTabContent(ctrl: CorrespondenceCtrl, tab: any, index: number) {
+function renderTabContent(ctrl: CorrespondenceCtrl, tab: TabContent, index: number) {
   if (index === 0) {
-    return renderPool(tab, ctrl)
+    return renderPool(tab as PublicPool, ctrl)
   } else {
-    return renderChallenges(tab, ctrl)
+    return renderChallenges(tab as Challenges, ctrl)
   }
 }
 
-function renderChallenges(challenges: Challenge[], ctrl: CorrespondenceCtrl) {
-  return challenges.length ?
-    h('ul.native_scroller.seeks_scroller', challenges.map(c => renderChallenge(ctrl, c))) :
-    h('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.')
+function renderChallenges(
+  challenges: Challenges,
+  ctrl: CorrespondenceCtrl
+) {
+  return challenges ?
+    challenges.length ?
+      h('ul.native_scroller.seeks_scroller', challenges.map(c => renderChallenge(ctrl, c))) :
+      h('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.') :
+    h('div.vertical_align.empty_seeks_list', spinner.getVdom('monochrome'))
 }
 
-function renderPool(pool: CorrespondenceSeek[], ctrl: CorrespondenceCtrl) {
-  return pool.length ?
-    h('ul.native_scroller.seeks_scroller', pool.map(s => renderSeek(ctrl, s))) :
-    h('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.')
+function renderPool(
+  pool: PublicPool,
+  ctrl: CorrespondenceCtrl
+) {
+  return pool ?
+    pool.length ?
+      h('ul.native_scroller.seeks_scroller', pool.map(s => renderSeek(ctrl, s))) :
+      h('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.') :
+    h('div.vertical_align.empty_seeks_list', spinner.getVdom('monochrome'))
 }
 
 function renderChallenge(ctrl: CorrespondenceCtrl, c: Challenge) {

@@ -8,6 +8,7 @@ import * as treeOps from '../../shared/tree/ops'
 
 import Clock from './Clock'
 import { Tab } from '../tabs'
+import { povDiff } from '../ceval/winningChances'
 import AnalyseCtrl from '../AnalyseCtrl'
 
 export default function renderBoard(
@@ -21,12 +22,21 @@ export default function renderBoard(
   const rEval = ctrl.node && ctrl.node.eval
 
   let nextBest: string | undefined
-  let curBestShape: Shape[] = []
+  let curBestShapes: Shape[] = []
   if (!ctrl.retro && ctrl.settings.s.showBestMove) {
-    nextBest = ctrl.nextNodeBest()
-    curBestShape = nextBest ? moveOrDropShape(nextBest, 'paleBlue', player) :
-      ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
-      []
+    nextBest = ctrl.nextNodeBest() || (ceval && ceval.best)
+    if (nextBest) {
+      curBestShapes = moveOrDropShape(nextBest, 'paleBlue', player)
+    }
+    if (ceval && ceval.pvs.length > 1) {
+      ceval.pvs.slice(1).forEach(pv => {
+        const shift = povDiff(player, ceval.pvs[0], pv)
+        if (shift >= 0 && shift < 0.2) {
+          const linewidth = Math.round(12 - shift * 50) // 12 to 2
+          curBestShapes = curBestShapes.concat(moveOrDropShape(pv.moves[0], 'paleBlue' + linewidth, player))
+        }
+      })
+    }
   }
   const pastBestShape: Shape[] = !ctrl.retro && rEval && rEval.best ?
     moveOrDropShape(rEval.best, 'paleGreen', player) : []
@@ -41,7 +51,7 @@ export default function renderBoard(
     moveOrDropShape(badNode.uci, 'paleRed', player) : []
 
   const shapes = [
-    ...nextMoveShape, ...pastBestShape, ...curBestShape, ...badMoveShape
+    ...nextMoveShape, ...pastBestShape, ...curBestShapes, ...badMoveShape
   ]
 
   return h('div.analyse-boardWrapper', {

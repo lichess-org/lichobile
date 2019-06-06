@@ -126,13 +126,14 @@ export function renderShape(
       orient(key2pos(shape.orig), orientation),
       shape.piece,
       bounds)
-    if (shape.orig && shape.dest) return arrow(
-      brushes[shape.brush],
+    const brush = brushes[shape.brush]
+    if (brush && shape.orig && shape.dest) return arrow(
+      brush,
       orient(key2pos(shape.orig), orientation),
       orient(key2pos(shape.dest), orientation),
       current, bounds)
-    else if (shape.orig) return circle(
-      brushes[shape.brush],
+    else if (brush && shape.orig) return circle(
+      brush,
       orient(key2pos(shape.orig), orientation),
       current, bounds)
     else return null

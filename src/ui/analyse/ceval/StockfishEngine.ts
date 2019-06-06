@@ -6,7 +6,7 @@ const EVAL_REGEX = new RegExp(''
   + /^info depth (\d+) seldepth \d+ multipv (\d+) /.source
   + /score (cp|mate) ([-\d]+) /.source
   + /(?:(upper|lower)bound )?nodes (\d+) nps \S+ /.source
-  + /(?:hashfull \d+ )?tbhits \d+ time (\S+) /.source
+  + /(?:hashfull \d+ )?(?:tbhits \d+ )?time (\S+) /.source
   + /pv (.+)/.source)
 
 export default function StockfishEngine(variant: VariantKey): IEngine {
@@ -110,7 +110,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
       work.emit()
     }
     if (finished || stopped) return
-    // console.log(text)
+    // console.debug(text)
 
     const matches = text.match(EVAL_REGEX)
     if (!matches) return
@@ -123,13 +123,13 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
       elapsedMs: number = parseInt(matches[7]),
       moves = matches[8].split(' ')
 
-
     let ev = parseInt(matches[4])
+
+    // Sometimes we get #0. Let's just skip it.
+    if (isMate && !ev) return
 
     // Track max pv index to determine when pv prints are done.
     if (expectedPvs < multiPv) expectedPvs = multiPv
-
-    // if (depth < opts.minDepth) return
 
     let pivot = work.threatMode ? 0 : 1
     if (work.ply % 2 === pivot) ev = -ev
@@ -164,7 +164,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
       curEval.depth = Math.min(curEval.depth, depth)
     }
 
-    if ((multiPv === 1 || multiPv === expectedPvs) && curEval) {
+    if (multiPv === expectedPvs && curEval) {
       work.emit(curEval)
     }
   }

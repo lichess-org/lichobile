@@ -10,7 +10,6 @@ function autoScroll(movelist?: HTMLElement) {
   if (!movelist) return
   requestAnimationFrame(() => {
     const plyEl = movelist.querySelector('.current') as HTMLElement
-    console.log(plyEl)
     if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2
   })
 }

@@ -169,7 +169,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   })
 
   const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
-  const flip = ctrl.vm.flip
+  const flip = !ctrl.data.tv && ctrl.vm.flip
 
   if (isPortrait) {
     return h.fragment({ key: orientationKey }, [

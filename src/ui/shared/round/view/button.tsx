@@ -37,7 +37,7 @@ export default {
       oncreate: helper.ontap(() => {
         window.plugins.socialsharing.share(null, null, null, gameApi.publicUrl(ctrl.data))
       })
-    }, [h('span.fa.fa-link'), i18n('shareGameURL')])
+    }, [i18n('shareGameURL')])
   },
   userTVLink(user: User) {
     return h('button.withIcon', {
@@ -56,7 +56,6 @@ export default {
     }
     return (
       <button key="sharePGN" oncreate={helper.ontap(handler)}>
-        <span className="fa fa-share-alt" />
         {i18n('sharePGN')}
       </button>
     )

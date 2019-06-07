@@ -5,9 +5,13 @@ import { header as headerWidget, backButton } from '../../shared/common'
 import { renderBody } from './gamesView'
 import { GameFilter } from '../../../lichess/interfaces/user'
 import UserGamesCtrl, { IUserGamesCtrl } from './UserGamesCtrl'
+import { userTitle } from '../userView'
 
 interface Attrs {
   id: string
+  title?: string
+  username?: string
+  patron?: string
   filter?: GameFilter
 }
 
@@ -25,9 +29,14 @@ const UserGames: Mithril.Component<Attrs, State> = {
   },
 
   view(vnode) {
-    const username = vnode.attrs.id
+    const { id, username, title, patron } = vnode.attrs
 
-    const header = headerWidget(null, backButton(username + ' games'))
+    const user = this.ctrl.scrollState.user
+    const displayedTitle = user ?
+      userTitle(user.online!!, user.patron!!, user.username, user.title) :
+      userTitle(false, Boolean(patron), username || id, title)
+
+    const header = headerWidget(null, backButton(displayedTitle))
 
     return layout.free(header, renderBody(this.ctrl))
   }

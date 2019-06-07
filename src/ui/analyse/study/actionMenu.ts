@@ -71,17 +71,6 @@ const baseUrl = 'https://lichess.org/'
 function renderStudyMenu(ctrl: AnalyseCtrl) {
 
   return h('div.analyseMenu', [
-     h('button[data-icon=U]', {
-      key: 'continueFromHere',
-      oncreate: helper.ontap(() => {
-        ctrl.menu.close()
-        ctrl.continuePopup.open(ctrl.node.fen, ctrl.data.game.variant.key, ctrl.data.player.color)
-      })
-    }, i18n('continueFromHere')),
-    h('button', {
-      key: 'boardEditor',
-      oncreate: helper.ontap(() => router.set(`/editor/${encodeURIComponent(ctrl.node.fen)}`))
-    }, [h('span.fa.fa-pencil'), i18n('boardEditor')]),
     h('button', {
       key: 'share',
       oncreate: helper.ontap(() => {
@@ -98,6 +87,17 @@ function renderStudyMenu(ctrl: AnalyseCtrl) {
       }),
       `Like (${ctrl.study!.data.likes})`
     ]),
+     h('button[data-icon=U]', {
+      key: 'continueFromHere',
+      oncreate: helper.ontap(() => {
+        ctrl.menu.close()
+        ctrl.continuePopup.open(ctrl.node.fen, ctrl.data.game.variant.key, ctrl.data.player.color)
+      })
+    }, i18n('continueFromHere')),
+    h('button', {
+      key: 'boardEditor',
+      oncreate: helper.ontap(() => router.set(`/editor/${encodeURIComponent(ctrl.node.fen)}`))
+    }, [h('span.fa.fa-pencil'), i18n('boardEditor')]),
     h('button', {
       key: 'help',
       oncreate: helper.ontap(() => {
@@ -133,13 +133,13 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
         const url = baseUrl + `study/${ctrl.study!.data.id}`
         window.plugins.socialsharing.share(null, null, null, url)
       })
-    }, [h('span.fa.fa-link'), i18n('Study URL')]),
+    }, [i18n('Study URL')]),
     h('button', {
       oncreate: helper.ontap(() => {
         const url = baseUrl + `study/${ctrl.study!.data.id}/${ctrl.study!.data.chapter.id}`
         window.plugins.socialsharing.share(null, null, null, url)
       })
-    }, [h('span.fa.fa-link'), i18n('Current chapter URL')]),
+    }, [i18n('Current chapter URL')]),
     h('button', {
       oncreate: helper.ontap(() => {
         ctrl.study!.actionMenu.s.loadingStudyPGN = true
@@ -147,7 +147,7 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
         .then(onPgnSuccess)
         .catch(onPgnError)
       })
-    }, ctrl.study!.actionMenu.s.loadingStudyPGN ? spinner.getVdom('monochrome') : [h('span.fa.fa-download'), i18n('Study PGN')]),
+    }, ctrl.study!.actionMenu.s.loadingStudyPGN ? spinner.getVdom('monochrome') : [i18n('Study PGN')]),
     h('button', {
       oncreate: helper.ontap(() => {
         ctrl.study!.actionMenu.s.loadingChapterPGN = true
@@ -155,6 +155,6 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
         .then(onPgnSuccess)
         .catch(onPgnError)
       })
-    }, ctrl.study!.actionMenu.s.loadingChapterPGN ? spinner.getVdom('monochrome') : [h('span.fa.fa-download'), i18n('Chapter PGN')]),
+    }, ctrl.study!.actionMenu.s.loadingChapterPGN ? spinner.getVdom('monochrome') : [i18n('Chapter PGN')]),
   ])
 }

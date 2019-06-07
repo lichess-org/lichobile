@@ -43,6 +43,7 @@ export default function pgnExport(ctrl: AnalyseCtrl) {
       })
       .catch(e => {
         ctrl.menu.s.computingPGN = false
+        ctrl.menu.close()
         redraw()
         console.error(e)
       })

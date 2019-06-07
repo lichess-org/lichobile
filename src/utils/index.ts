@@ -132,7 +132,10 @@ export function serializeQueryParameters(obj: StringMap): string {
     if (str !== '') {
       str += '&'
     }
-    str += encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]!)
+    const val = obj[key]
+    if (val !== null && val !== undefined) {
+      str += encodeURIComponent(key) + '=' + encodeURIComponent(val)
+    }
   })
   return str
 }

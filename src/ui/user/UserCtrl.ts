@@ -63,7 +63,12 @@ export default function UserCtrl(userId: string): IUserCtrl {
     goToGames() {
       const u = user()
       if (u) {
-        router.set(`/@/${u.id}/games`)
+        const params: StringMap = {
+          username: u.username,
+          title: u.title,
+        }
+        if (u.patron) params.patron = '1'
+        router.set(`/@/${u.id}/games?${utils.serializeQueryParameters(params)}`)
       }
     },
     goToUserTV() {

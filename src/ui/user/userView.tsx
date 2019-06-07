@@ -13,21 +13,30 @@ import session from '../../session'
 import { IUserCtrl, ProfileUser, isSessionUser, isFullUser } from './UserCtrl'
 
 export function header(user: ProfileUser, ctrl: IUserCtrl) {
-  const status = hasNetwork() && user.online ? 'online' : 'offline'
-  const icon = user.patron ?
-    <span className={'userStatus patron ' + status} data-icon="" /> :
-    <span className={'fa fa-circle userStatus ' + status} />
-
-  const title = h('div.title', [
-    icon,
-    h('span', [
-      ...(user.title ? [h('span.userTitle', user.title), ' '] : []),
-      user.username
-    ])
-  ])
+  const title = userTitle(user.online!!, user.patron!!, user.username, user.title)
 
   const backButton = !ctrl.isMe() ? renderBackbutton(title) : null
   return dropShadowHeader(backButton ? null : title, backButton)
+}
+
+export function userTitle(
+  online: boolean,
+  patron: boolean,
+  username: string,
+  title?: string
+): Mithril.Children {
+  const status = hasNetwork() && online ? 'online' : 'offline'
+  const icon = patron ?
+    <span className={'userStatus patron ' + status} data-icon="" /> :
+    <span className={'fa fa-circle userStatus ' + status} />
+
+  return h('div.title', [
+    icon,
+    h('span', [
+      ...(title ? [h('span.userTitle', title), ' '] : []),
+      username
+    ])
+  ])
 }
 
 export function profile(user: ProfileUser, ctrl: IUserCtrl) {
@@ -213,18 +222,18 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
           {i18n('viewAllNbGames', user.count.all)}
         </div> : null
       }
-      { session.isConnected() && !ctrl.isMe() ?
-      <div className="list_item" key="challenge_to_play" data-icon="U"
-        oncreate={helper.ontapY(ctrl.challenge)}
-      >
-        {i18n('challengeToPlay')}
-      </div> : null
-      }
       { !ctrl.isMe() ? <div className="list_item nav" data-icon="1"
         oncreate={helper.ontapY(ctrl.goToUserTV)}
         key="user_tv"
       >
         {i18n('watchGames')}
+      </div> : null
+      }
+      { session.isConnected() && !ctrl.isMe() ?
+      <div className="list_item" key="challenge_to_play" data-icon="U"
+        oncreate={helper.ontapY(ctrl.challenge)}
+      >
+        {i18n('challengeToPlay')}
       </div> : null
       }
       { session.isConnected() && !ctrl.isMe() ?

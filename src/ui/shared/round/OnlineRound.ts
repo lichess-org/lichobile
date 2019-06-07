@@ -38,6 +38,7 @@ interface VM {
   flip: boolean
   miniUser: MiniUser
   showingActions: boolean
+  showingShareActions: boolean
   confirmResign: boolean
   goneBerserk: {
     [index: string]: boolean
@@ -110,6 +111,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       },
       clockPosition: settings.game.clockPosition() || 'right',
       showingActions: false,
+      showingShareActions: false,
       confirmResign: false,
       goneBerserk: {
         [this.data.player.color]: !!this.data.player.berserk,
@@ -209,11 +211,17 @@ export default class OnlineRound implements OnlineRoundInterface {
   public showActions = () => {
     router.backbutton.stack.push(this.hideActions)
     this.vm.showingActions = true
+    this.vm.showingShareActions = false
+  }
+
+  public showShareActions = () => {
+    this.vm.showingShareActions = true
   }
 
   public hideActions = (fromBB?: string) => {
     if (fromBB !== 'backbutton' && this.vm.showingActions) router.backbutton.stack.pop()
     this.vm.showingActions = false
+    this.vm.showingShareActions = false
   }
 
   public flip = () => {

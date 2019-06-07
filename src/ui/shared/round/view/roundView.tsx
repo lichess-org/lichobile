@@ -14,7 +14,7 @@ import * as utils from '../../../../utils'
 import i18n from '../../../../i18n'
 import layout from '../../../layout'
 import * as helper from '../../../helper'
-import { backButton, menuButton, loader, headerBtns } from '../../../shared/common'
+import { backButton, menuButton, loader, headerBtns, bookmarkButton } from '../../../shared/common'
 import PlayerPopup from '../../../shared/PlayerPopup'
 import GameTitle from '../../../shared/GameTitle'
 import CountdownTimer from '../../../shared/CountdownTimer'
@@ -141,12 +141,15 @@ function renderHeader(ctrl: OnlineRound) {
   let children
   if (ctrl.goingBack || (!ctrl.data.tv && !ctrl.data.userTV && ctrl.data.player.spectator)) {
     children = [
-      backButton(renderTitle(ctrl))
+      backButton([
+        renderTitle(ctrl),
+        bookmarkButton(ctrl.toggleBookmark, ctrl.data.bookmarked!!),
+      ])
     ]
   } else {
     children = [
       menuButton(),
-      renderTitle(ctrl)
+      renderTitle(ctrl),
     ]
   }
   children.push(headerBtns())
@@ -373,10 +376,7 @@ function tvChannelSelector(ctrl: OnlineRound) {
 function renderGameRunningActions(ctrl: OnlineRound) {
   if (ctrl.data.player.spectator) {
     let controls = [
-      gameButton.bookmark(ctrl),
       gameButton.shareLink(ctrl),
-      ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
-      ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null
     ]
 
     return <div className="game_controls">{controls}</div>
@@ -401,7 +401,6 @@ function renderGameRunningActions(ctrl: OnlineRound) {
   return (
     <div className="game_controls">
       {gameButton.analysisBoard(ctrl)}
-      {gameButton.shareLink(ctrl)}
       {gameButton.moretime(ctrl)}
       {gameButton.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort')}
       {gameControls}
@@ -418,43 +417,47 @@ function renderGameEndedActions(ctrl: OnlineRound) {
   resultDom.push(h('em.resultStatus', ctrl.gameStatus()))
   let buttons: Mithril.Children
   const tournamentId = ctrl.data.game.tournamentId
-  if (tournamentId) {
+
+  const shareActions = h('button', {
+    key: 'showShareActions',
+    oncreate: helper.ontap(ctrl.showShareActions),
+  }, [h('span.fa.fa-share'), 'Share'])
+
+  if (ctrl.vm.showingShareActions) {
+    buttons = [
+      gameButton.shareLink(ctrl),
+      gameButton.sharePGN(ctrl),
+    ]
+  }
+  else if (tournamentId) {
     if (ctrl.data.player.spectator) {
       buttons = [
+        shareActions,
+        gameButton.analysisBoard(ctrl),
         gameButton.returnToTournament(ctrl),
-        gameButton.bookmark(ctrl),
-        gameButton.shareLink(ctrl),
-        gameButton.sharePGN(ctrl),
-        gameButton.analysisBoard(ctrl)
       ]
     }
     else {
       buttons = [
-        gameButton.returnToTournament(ctrl),
+        shareActions,
+        gameButton.analysisBoard(ctrl),
         gameButton.withdrawFromTournament(ctrl, tournamentId),
-        gameButton.bookmark(ctrl),
-        gameButton.shareLink(ctrl),
-        gameButton.sharePGN(ctrl),
-        gameButton.analysisBoard(ctrl)
+        gameButton.returnToTournament(ctrl),
       ]
     }
   }
   else {
     if (ctrl.data.player.spectator) {
       buttons = [
-        gameButton.bookmark(ctrl),
-        gameButton.shareLink(ctrl),
+        shareActions,
         ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
         ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
-        gameButton.sharePGN(ctrl),
         gameButton.analysisBoard(ctrl)
       ]
     }
     else {
       buttons = [
-        gameButton.bookmark(ctrl),
-        gameButton.shareLink(ctrl),
-        gameButton.sharePGN(ctrl),
+        shareActions,
         gameButton.analysisBoard(ctrl),
         gameButton.newOpponent(ctrl),
         gameButton.rematch(ctrl),
@@ -495,7 +498,7 @@ function renderGamePopup(ctrl: OnlineRound) {
 
   return popupWidget(
     'player_controls',
-    header,
+    ctrl.vm.showingShareActions ? undefined : header,
     () => gameApi.playable(ctrl.data) ?
       renderGameRunningActions(ctrl) :
       renderGameEndedActions(ctrl),

@@ -34,11 +34,23 @@ export function menuButton() {
   })
 }
 
-export function backButton(title?: Mithril.BaseNode | string): Mithril.Children {
+export function backButton(title?: Mithril.Children): Mithril.Children {
   return h('div.back_button', { key: 'default-history-backbutton' }, [
     h('button', { oncreate: helper.ontap(router.backHistory) }, backArrow),
     title !== undefined ? typeof title === 'string' ? h('div.main_header_title', title) : title : null
   ])
+}
+
+export function bookmarkButton(action: () => void, flag: boolean): Mithril.Children {
+  return session.isConnected() ? h('button.main_header_button.bookmarkButton', {
+    oncreate: helper.ontap(
+      action,
+      () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'top')
+    ),
+    key: 'bookmark',
+  }, h('span', {
+    'data-icon': flag ? 't' : 's'
+  })) : null
 }
 
 export function friendsButton() {
@@ -138,7 +150,7 @@ export function header(title: Mithril.BaseNode | string | null, leftButton?: Mit
   ])
 }
 
-export function dropShadowHeader(title: Mithril.BaseNode | string | null, leftButton?: Mithril.Children): Mithril.Children {
+export function dropShadowHeader(title: Mithril.Children, leftButton?: Mithril.Children): Mithril.Children {
   return [
     h('nav', [
       leftButton ? leftButton : menuButton(),
@@ -187,11 +199,12 @@ export function connectingDropShadowHeader(title?: string) {
 export function loadingBackbutton(title?: string) {
   return (
     <nav>
-      {backButton()}
-      <div key="connecting-backbutton" className={'main_header_title reconnecting' + (title ? 'withTitle' : '')}>
-        {title ? <span>{title}</span> : null}
-        {loader}
-      </div>
+      {backButton(
+        <div key="connecting-backbutton" className={'main_header_title reconnecting' + (title ? 'withTitle' : '')}>
+          {title ? <span>{title}</span> : null}
+          {loader}
+        </div>
+      )}
       {headerBtns()}
     </nav>
   )

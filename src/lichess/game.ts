@@ -165,7 +165,7 @@ export function title(data: GameData | AnalyseData): string {
     `${t} • ${name} • ${mode}`
 }
 
-export function publicUrl(data: GameData) {
+export function publicUrl(data: GameData | AnalyseData) {
   return 'https://lichess.org/' + data.game.id
 }
 

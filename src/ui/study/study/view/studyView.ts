@@ -1,6 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import { Study } from '../../../../lichess/interfaces/study'
 import { header, backButton } from '../../../shared/common'
+import * as helper from '../../../helper'
 import layout from '../../../layout'
 
 export function notFound() {
@@ -14,8 +15,13 @@ export function studyHeader(study: Study) {
   const title = study.name
   const subTitle = study.chapters.find(c => c.id === study.chapter.id)!.name
   return header(null, backButton(
-    h('div.main_header_title.withSub', [
-      h('h1.header-gameTitle', title),
+    h('div.main_header_title.withSub', {
+    }, [
+      h('h1.header-gameTitle', {
+        oncreate: helper.ontap(() => {
+          window.plugins.toast.show(`${title}: ${subTitle}`, 'long', 'top')
+        })
+      }, title),
       h('h2.header-subTitle', subTitle)
     ])
   ))

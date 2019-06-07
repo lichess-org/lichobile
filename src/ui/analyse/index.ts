@@ -9,7 +9,7 @@ import { handleXhrError, safeStringToNum } from '../../utils'
 import { specialFenVariants } from '../../lichess/variant'
 import { getAnalyseData, getCurrentAIGame, getCurrentOTBGame } from '../../utils/offlineGames'
 import * as helper from '../helper'
-import { header, backButton as renderBackbutton } from '../shared/common'
+import { header, backButton as renderBackbutton, bookmarkButton } from '../shared/common'
 import GameTitle from '../shared/GameTitle'
 import layout from '../layout'
 import { makeDefaultData } from './data'
@@ -130,12 +130,15 @@ export default {
     if (this.ctrl) {
       const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, this.ctrl.settings.s.smallBoard)
 
-      let backButton: Mithril.Children | null = null
+      let backButton: Mithril.Children = null
       if (this.ctrl.shouldGoBack) {
         if (this.ctrl.data.game.id === 'synthetic') {
           backButton = renderBackbutton(h('div.main_header_title', i18n('analysis')))
         } else {
-          backButton = renderBackbutton(h(GameTitle, { data: this.ctrl.data, subTitle: 'date' }))
+          backButton = renderBackbutton([
+            h(GameTitle, { data: this.ctrl.data, subTitle: 'date' }),
+            bookmarkButton(this.ctrl.toggleBookmark, this.ctrl.data.bookmarked!!),
+          ])
         }
       }
 

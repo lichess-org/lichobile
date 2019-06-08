@@ -165,8 +165,12 @@ export function title(data: GameData | AnalyseData): string {
     `${t} • ${name} • ${mode}`
 }
 
-export function publicUrl(data: GameData | AnalyseData) {
+export function publicUrl(data: GameData) {
   return 'https://lichess.org/' + data.game.id
+}
+
+export function publicAnalyseUrl(data: AnalyseData) {
+  return 'https://lichess.org/' + data.game.id + '/' + data.orientation
 }
 
 export function isSupportedVariant(data: GameData) {

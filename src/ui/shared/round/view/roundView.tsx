@@ -450,8 +450,6 @@ function renderGameEndedActions(ctrl: OnlineRound) {
     if (ctrl.data.player.spectator) {
       buttons = [
         shareActions,
-        ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
-        ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
         gameButton.analysisBoard(ctrl)
       ]
     }

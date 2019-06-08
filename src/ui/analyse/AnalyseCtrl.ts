@@ -40,9 +40,6 @@ import * as tabs from './tabs'
 import StudyCtrl from './study/StudyCtrl'
 
 export default class AnalyseCtrl {
-  data: AnalyseData
-  orientation: Color
-  source: Source
 
   settings: ISettingsCtrl
   menu: IMainMenuCtrl
@@ -75,7 +72,6 @@ export default class AnalyseCtrl {
   // various view state flags
   replaying: boolean = false
   cgConfig?: cg.SetConfig
-  shouldGoBack: boolean
   analysisProgress: boolean = false
   retroGlowing: boolean = false
   formattedDate: string
@@ -85,17 +81,14 @@ export default class AnalyseCtrl {
   private debouncedExplorerSetStep: () => void
 
   constructor(
-    data: AnalyseData,
+    readonly data: AnalyseData,
     studyData: Study | undefined,
-    source: Source,
-    orientation: Color,
-    shouldGoBack: boolean,
+    readonly source: Source,
+    readonly orientation: Color,
+    readonly shouldGoBack: boolean,
     ply?: number,
     tabId?: string
   ) {
-    this.data = data
-    this.orientation = orientation
-    this.source = source
     this.synthetic = util.isSynthetic(data)
     this.ongoing = !this.synthetic && gameApi.playable(data)
     this.initialPath = treePath.root
@@ -153,7 +146,6 @@ export default class AnalyseCtrl {
 
     const gameMoment = window.moment(this.data.game.createdAt)
 
-    this.shouldGoBack = shouldGoBack
     this.formattedDate = gameMoment.format('L LT')
 
     if (this.study) {

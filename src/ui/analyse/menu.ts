@@ -1,13 +1,17 @@
 import * as h from 'mithril/hyperscript'
 import router from '../../router'
 import i18n from '../../i18n'
+import session from '../../session'
+import * as chess from '../../chess'
+import redraw from '../../utils/redraw'
+import { handleXhrError  } from '../../utils'
 import popupWidget from '../shared/popup'
 import spinner from '../../spinner'
 import * as gameApi from '../../lichess/game'
 import { isOnlineAnalyseData } from '../../lichess/interfaces/analyse'
+import { getPGN } from '../shared/round/roundXhr'
 import * as helper from '../helper'
 
-import pgnExport from './pgnExport'
 import AnalyseCtrl from './AnalyseCtrl'
 
 export interface IMainMenuCtrl {
@@ -110,14 +114,83 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
   return h('div.analyseMenu', [
     isOnlineAnalyseData(ctrl.data) ? h('button', {
       oncreate: helper.ontap(() => {
-        window.plugins.socialsharing.share(null, null, null, gameApi.publicUrl(ctrl.data))
+        ctrl.menu.close()
+        window.plugins.socialsharing.share(null, null, null, gameApi.publicAnalyseUrl(ctrl.data))
       })
     }, [i18n('shareGameURL')]) : null,
-    ctrl.isOfflineOrNotPlayable() ? h('button', {
+    ctrl.source === 'offline' ? h('button', {
       key: 'sharePGN',
       oncreate: helper.ontap(() => {
-        pgnExport(ctrl)
+        offlinePgnExport(ctrl)
       }),
     }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : [i18n('sharePGN')]) : null,
+    ctrl.source === 'online' && !gameApi.playable(ctrl.data) ? h('button', {
+      key: 'shareAnnotatedPGN',
+      oncreate: helper.ontap(() => {
+        onlinePGNExport(ctrl, false)
+      }),
+    }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : 'Share annotated PGN') : null,
+    ctrl.source === 'online' && !gameApi.playable(ctrl.data) ? h('button', {
+      key: 'shareRawPGN',
+      oncreate: helper.ontap(() => {
+        onlinePGNExport(ctrl, true)
+      }),
+    }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : 'Share raw PGN') : null,
+    ctrl.isOfflineOrNotPlayable() ? h('button', {
+      key: 'shareFEN',
+      oncreate: helper.ontap(() => {
+        ctrl.menu.close()
+        window.plugins.socialsharing.share(null, null, null, ctrl.node.fen)
+      }),
+    }, 'Share current FEN') : null,
   ])
+}
+
+function onlinePGNExport(ctrl: AnalyseCtrl, raw: boolean) {
+  if (!ctrl.menu.s.computingPGN) {
+    ctrl.menu.s.computingPGN = true
+    getPGN(ctrl.data.game.id, raw)
+    .then((pgn: string) => {
+      ctrl.menu.s.computingPGN = false
+      ctrl.menu.close()
+      redraw()
+      window.plugins.socialsharing.share(pgn)
+    })
+    .catch(e => {
+      ctrl.menu.s.computingPGN = false
+      redraw()
+      handleXhrError(e)
+    })
+  }
+}
+
+function offlinePgnExport(ctrl: AnalyseCtrl) {
+  if (!ctrl.menu.s.computingPGN) {
+    ctrl.menu.s.computingPGN = true
+    const endSituation = ctrl.tree.lastNode()
+    const white = ctrl.data.player.color === 'white' ?
+    (ctrl.data.game.id === 'offline_ai' ? session.appUser('Anonymous') : 'Anonymous') :
+    (ctrl.data.game.id === 'offline_ai' ? ctrl.data.opponent.username : 'Anonymous')
+    const black = ctrl.data.player.color === 'black' ?
+    (ctrl.data.game.id === 'offline_ai' ? session.appUser('Anonymous') : 'Anonymous') :
+    (ctrl.data.game.id === 'offline_ai' ? ctrl.data.opponent.username : 'Anonymous')
+    chess.pgnDump({
+      variant: ctrl.data.game.variant.key,
+      initialFen: ctrl.data.game.initialFen,
+      pgnMoves: endSituation.pgnMoves || [],
+      white,
+      black
+    })
+    .then((res: chess.PgnDumpResponse) => {
+      ctrl.menu.s.computingPGN = false
+      ctrl.menu.close()
+      redraw()
+      window.plugins.socialsharing.share(res.pgn)
+    })
+    .catch(e => {
+      ctrl.menu.s.computingPGN = false
+      redraw()
+      console.error(e)
+    })
+  }
 }

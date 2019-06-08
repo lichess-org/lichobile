@@ -6,7 +6,6 @@ import session from '../../../../session'
 import router from '../../../../router'
 import gameStatus from '../../../../lichess/status'
 import { OnlineGameData } from '../../../../lichess/interfaces/game'
-import { User } from '../../../../lichess/interfaces/user'
 import i18n from '../../../../i18n'
 import socket from '../../../../socket'
 import lobby from '../../../lobby'
@@ -38,15 +37,6 @@ export default {
         window.plugins.socialsharing.share(null, null, null, gameApi.publicUrl(ctrl.data))
       })
     }, [i18n('shareGameURL')])
-  },
-  userTVLink(user: User) {
-    return h('button.withIcon', {
-      key: `userTV_${user.username}`,
-      'data-icon': '1',
-      oncreate: helper.ontap(() => {
-        router.set(`/@/${user.username}/tv`)
-      })
-    }, user.username + '\'s TV')
   },
   sharePGN(ctrl: OnlineRound) {
     function handler() {

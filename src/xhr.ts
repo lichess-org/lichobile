@@ -226,12 +226,21 @@ export function status() {
   })
 }
 
-export function createToken() {
+function createToken() {
   return fetchJSON('/auth/token', {method: 'POST'}, true)
 }
 
-export function openWebsitePatronPage() {
-  createToken().then((data: {url: string, userId: string}) => {
-    window.open(data.url + '?referrer=/patron', '_blank', 'location=no')
-  })
+export function openWebsiteAuthPage(path: string) {
+  const openAnon = () => {
+    window.open(`https://lichess.org${path}`, '_blank', 'location=yes')
+  }
+  if (session.isConnected()) {
+    createToken()
+    .then((data: {url: string}) => {
+      window.open(data.url + `?referrer=${encodeURIComponent(path)}`, '_blank', 'location=yes,zoom=no')
+    })
+    .catch(openAnon)
+  } else {
+    openAnon()
+  }
 }

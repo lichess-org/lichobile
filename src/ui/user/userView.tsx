@@ -3,6 +3,7 @@ import router from '../../router'
 import { dropShadowHeader, backButton as renderBackbutton } from '../shared/common'
 import { getLanguageNativeName } from '../../utils/langs'
 import { hasNetwork, lichessAssetSrc, gameIcon } from '../../utils'
+import { linkify } from '../../utils/html'
 import { perfTypes, provisionalDeviation } from '../../lichess/perfs'
 import { Perf } from '../../lichess/interfaces/user'
 import * as xhr from '../../xhr'
@@ -45,7 +46,7 @@ export function profile(user: ProfileUser, ctrl: IUserCtrl) {
       {renderWarnings(user)}
       {renderProfile(user)}
       {renderStats(user)}
-      {renderPatron(user)}
+      {renderWebsiteLinks(ctrl, user)}
       {renderRatings(user)}
       {renderActions(ctrl, user)}
     </div>
@@ -75,16 +76,19 @@ function renderProfile(user: ProfileUser) {
     const country = countries[user.profile.country]
     const location = user.profile.location
     const memberSince = i18n('memberSince') + ' ' + window.moment(user.createdAt).format('LL')
-    const seenAt = user.seenAt ? 'Last login ' + window.moment(user.seenAt).calendar() : null
+
     return (
-      <section className="profile">
+      <section className="profileSection">
         {fullname ?
         <h3 className="fullname">{fullname}</h3> : null
         }
         {user.profile.bio ?
-        <p className="profileBio">{user.profile.bio}</p> : null
+        <p className="profileBio">{h.trust(linkify(user.profile.bio))}</p> : null
         }
-        <div className="userInfos">
+        <div>
+          { user.profile.fideRating ?
+            <p>FIDE rating: <strong>{user.profile.fideRating}</strong></p> : null
+          }
           {
             user.language ?
               <p className="language withIcon">
@@ -101,9 +105,9 @@ function renderProfile(user: ProfileUser) {
             </span> : null
             }
           </p>
-          <p className="memberSince">{memberSince}</p>
-          {seenAt ?
-          <p className="lastSeen">{seenAt}</p> : null
+          <p>{memberSince}</p>
+          {user.seenAt ?
+          <p>Active <small>{window.moment(user.seenAt).fromNow()}</small></p> : null
           }
         </div>
       </section>
@@ -112,19 +116,36 @@ function renderProfile(user: ProfileUser) {
     return null
 }
 
-function renderPatron(user: ProfileUser) {
-  if (user.patron)
-    return (
-      <p className="user-patron"
-        oncreate={helper.ontapY(xhr.openWebsitePatronPage)}
-      >
-        <span className="userStatus patron" data-icon="" />
-        Lichess Patron
-        <span className="fa fa-external-link" />
-      </p>
-    )
-  else
-    return null
+function renderWebsiteLinks(ctrl: IUserCtrl, user: ProfileUser) {
+  return (
+    <section className="profileSection websiteLinks">
+      { ctrl.isMe() ?
+        <p>
+          <a className="external_link"
+            oncreate={helper.ontapY(() => xhr.openWebsiteAuthPage(`/account/profile`))}
+          >
+            Edit profile
+          </a>
+        </p> :
+        <p>
+          <a className="external_link"
+            oncreate={helper.ontapY(() => xhr.openWebsiteAuthPage(`/@/${user.id}`))}
+          >
+            More on website
+          </a>
+        </p>
+      }
+      { user.patron ?
+      <p>
+        <a className="external_link"
+          oncreate={helper.ontapY(() => xhr.openWebsiteAuthPage('/patron'))}
+        >
+          Lichess Patron
+        </a>
+      </p> : null
+      }
+    </section>
+  )
 }
 
 function renderStats(user: ProfileUser) {
@@ -139,12 +160,15 @@ function renderStats(user: ProfileUser) {
   }
 
   return (
-    <section className="userStats">
+    <section className="profileSection">
+      {isFullUser(user) && user.completionRate ?
+      <p>Game completion rate: <strong>{user.completionRate}%</strong></p> : null
+      }
       {totalPlayTime ?
-      <p className="playTime">{totalPlayTime}</p> : null
+      <p>{totalPlayTime}</p> : null
       }
       {tvTime ?
-      <p className="onTv">{tvTime}</p> : null
+      <p>{tvTime}</p> : null
       }
     </section>
   )

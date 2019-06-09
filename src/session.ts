@@ -33,6 +33,8 @@ interface Profile {
   readonly bio?: string
   readonly firstName?: string
   readonly lastName?: string
+  readonly fideRating?: number
+  readonly links?: string
 }
 
 export interface Session {

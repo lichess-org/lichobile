@@ -20,6 +20,7 @@ export interface UserGamesCount {
 }
 
 export interface UserFullProfile extends User {
+  readonly completionRate?: number
   readonly nbFollowers: number
   readonly nbFollowing: number
   readonly playing: string
@@ -28,6 +29,7 @@ export interface UserFullProfile extends User {
   readonly followable?: boolean
   readonly following?: boolean
   readonly followsYou?: boolean
+  readonly url: string
 }
 
 export interface Perf {

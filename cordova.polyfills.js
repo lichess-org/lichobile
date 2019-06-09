@@ -63,6 +63,11 @@
     document.dispatchEvent(new window.Event('backbutton'));
   };
 
+  // InAppBrowser
+  window.cordova.InAppBrowser = {
+    open: window.open
+  }
+
   // keyboard
   window.cordova.plugins.Keyboard = {
     show: noop,

@@ -55,7 +55,7 @@ export function body(ctrl: Ctrl) {
           <div className="numGames">{nbGames}</div>
         </div>
         {playbanEndsAt && ((playbanEndsAt.valueOf() - Date.now()) / 1000) > 1 ?
-          renderPlayban(playbanEndsAt) : renderQuickGame()
+          renderPlayban(playbanEndsAt) : renderLobby()
         }
         {renderFeaturedTournaments(ctrl.featuredTournaments())}
         {renderDailyPuzzle(ctrl)}
@@ -65,7 +65,7 @@ export function body(ctrl: Ctrl) {
   )
 }
 
-function renderQuickGame() {
+function renderLobby() {
   return h('div.homeCreate', [
     h('h2.homeTitle', 'Quick Game'),
     renderQuickSetup(() => newGameForm.openRealTime('custom')),

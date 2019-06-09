@@ -11,6 +11,7 @@ import ViewOnlyBoard from '../../shared/ViewOnlyBoard'
 import { notesView } from '../../shared/round/notes'
 import { Bounds } from '../../shared/Board'
 import TabNavigation from '../../shared/TabNavigation'
+import TabView from '../../shared/TabView'
 import { loadingBackbutton } from '../../shared/common'
 import * as helper from '../../helper'
 import layout from '../../layout'
@@ -26,7 +27,6 @@ import renderCeval, { EvalBox } from '../ceval/cevalView'
 import renderExplorer, { getTitle as getExplorerTitle } from '../explorer/explorerView'
 import renderCrazy from '../crazy/crazyView'
 import { view as renderContextMenu } from '../contextMenu'
-import TabView from './TabView'
 import Replay from './Replay'
 import retroView from '../retrospect/retroView'
 import renderAnalysis from './analysisView'
@@ -53,7 +53,7 @@ export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Bo
     renderBoard(ctrl, bounds, availTabs),
     h('div.analyse-tableWrapper', [
       ctrl.data.game.variant.key === 'crazyhouse' ? renderCrazy(ctrl) : null,
-      renderAnalyseTable(ctrl, availTabs, isPortrait),
+      renderAnalyseTable(ctrl, availTabs),
       renderActionsBar(ctrl)
     ])
   ])
@@ -199,19 +199,17 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Bas
   comments: renderReadonlyComments,
 }
 
-function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>, isPortrait: boolean) {
+function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
   return h('div.analyse-table', {
     key: 'analyse'
   }, [
     renderAnalyseTabs(ctrl, availTabs),
     h(TabView, {
-      ctrl,
       className: 'analyse-tabsContent',
       selectedIndex: ctrl.currentTabIndex(availTabs),
-      contentRenderers: availTabs.map(t => TabsContentRendererMap[t.id]),
+      contentRenderers: availTabs.map(t => () => TabsContentRendererMap[t.id](ctrl)),
       onTabChange: ctrl.onTabChange,
-      isPortrait,
-      is43Aspect: helper.is43Aspect(),
+      boardView: true,
     }),
     ctrl.retro ? retroView(ctrl) : null
   ])

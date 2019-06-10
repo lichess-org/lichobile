@@ -11,8 +11,8 @@ interface Attrs {
   readonly buttons: ReadonlyArray<TabButton>
   readonly selectedIndex: number
   readonly onTabChange: (i: number) => void
-  readonly noIndicator?: boolean
   readonly wrapperClass?: string
+  readonly withBottomBorder?: boolean
 }
 
 interface State {
@@ -39,8 +39,8 @@ export default {
     const {
       buttons,
       selectedIndex,
-      noIndicator,
       wrapperClass,
+      withBottomBorder = false
     } = vnode.attrs
 
     const iWidth = 100 / buttons.length
@@ -72,13 +72,14 @@ export default {
     }
 
     return (
-      <div className={'tabs-navigation' + (wrapperClass ? ' ' + wrapperClass : '')}
+      <div className={
+        'tabs-navigation' + (wrapperClass ? ' ' + wrapperClass : '') +
+          (withBottomBorder ? ' withBorder' : '')
+        }
         oncreate={helper.ontap(this.onTap)}
       >
         { buttons.map(renderTab) }
-        { noIndicator ? null :
-          <div className="tabIndicator" style={indicatorStyle} />
-        }
+        <div className="tabIndicator" style={indicatorStyle} />
       </div>
     )
   }

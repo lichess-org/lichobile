@@ -61,7 +61,8 @@ export interface CorrespondenceSeek {
   readonly variant: Variant
   readonly mode: ModeId
   readonly days: number
-  readonly color: Color
+  readonly color: Color | ''
+  readonly provisional?: boolean
   readonly perf: {
     readonly icon: string
     readonly name: PerfKey

@@ -4,24 +4,27 @@ import { emptyFen } from '../../utils/fen'
 import { hasNetwork } from '../../utils'
 import i18n from '../../i18n'
 import session from '../../session'
+import spinner from '../../spinner'
+import { CorrespondenceSeek } from '../../lichess/interfaces'
 import * as helper from '../helper'
 import { renderTimelineEntry, timelineOnTap } from '../timeline'
 import MiniBoard from '../shared/miniBoard'
+import TabNavigation from '../shared/TabNavigation'
+import TabView from '../shared/TabView'
 import { renderQuickSetup } from '../newGameForm'
 import newGameForm from '../newGameForm'
-import { TournamentListItem } from '../../lichess/interfaces/tournament'
 import { renderTournamentList } from '../tournament/tournamentsListView'
 
-import { Ctrl } from '.'
+import HomeCtrl from './HomeCtrl'
 
-export function body(ctrl: Ctrl) {
-  const nbPlayers = i18n('nbConnectedPlayers', ctrl.nbConnectedPlayers() || '?')
-  const nbGames = i18n('nbGamesInPlay', ctrl.nbGamesInPlay() || '?')
+export function body(ctrl: HomeCtrl) {
+  const nbPlayers = i18n('nbConnectedPlayers', ctrl.nbConnectedPlayers || '?')
+  const nbGames = i18n('nbGamesInPlay', ctrl.nbGamesInPlay || '?')
 
   const playbanEndsAt = session.currentBan()
 
   if (!hasNetwork()) {
-    const puzzleData = ctrl.offlinePuzzle()
+    const puzzleData = ctrl.offlinePuzzle
     const boardConf = puzzleData ? {
       fen: puzzleData.puzzle.fen,
       orientation: puzzleData.puzzle.color,
@@ -50,14 +53,14 @@ export function body(ctrl: Ctrl) {
   return (
     <div className="native_scroller page">
       <div className="home">
+        {playbanEndsAt && ((playbanEndsAt.valueOf() - Date.now()) / 1000) > 1 ?
+          renderPlayban(playbanEndsAt) : renderLobby(ctrl)
+        }
         <div className="stats">
           <div className="numPlayers">{nbPlayers}</div>
           <div className="numGames">{nbGames}</div>
         </div>
-        {playbanEndsAt && ((playbanEndsAt.valueOf() - Date.now()) / 1000) > 1 ?
-          renderPlayban(playbanEndsAt) : renderLobby()
-        }
-        {renderFeaturedTournaments(ctrl.featuredTournaments())}
+        {renderFeaturedTournaments(ctrl)}
         {renderDailyPuzzle(ctrl)}
         {renderTimeline(ctrl)}
       </div>
@@ -65,27 +68,92 @@ export function body(ctrl: Ctrl) {
   )
 }
 
-function renderLobby() {
+function renderLobby(ctrl: HomeCtrl) {
+  const tabsContent = [
+    () => renderQuickSetup(() => newGameForm.openRealTime('custom')),
+    () => renderCorresPool(ctrl),
+  ]
+
   return h('div.homeCreate', [
-    h('h2.homeTitle', 'Quick Game'),
-    renderQuickSetup(() => newGameForm.openRealTime('custom')),
+    h(TabNavigation, {
+      buttons: [
+        {
+          label: 'Quick setup'
+        },
+        {
+          label: i18n('correspondence')
+        }
+      ],
+      selectedIndex: ctrl.selectedTab,
+      onTabChange: ctrl.onTabChange,
+      wrapperClass: 'homeSetup',
+      withBottomBorder: true,
+    }),
+    h(TabView, {
+      selectedIndex: ctrl.selectedTab,
+      contentRenderers: tabsContent,
+      onTabChange: ctrl.onTabChange,
+      className: 'setupTabView',
+      withWrapper: true,
+    }),
   ])
 }
 
-function renderFeaturedTournaments(tournaments: TournamentListItem[]) {
-  if (tournaments.length)
+function renderCorresPool(ctrl: HomeCtrl) {
+  return h('div.corresPoolWrapper.native_scroller', ctrl.corresPool ?
+    ctrl.corresPool.length ?
+      h('table.corres_seeks', [
+        h('thead', [
+          h('tr', [
+            h('th', ''),
+            h('th', 'Player'),
+            h('th', 'Rating'),
+            h('th', 'Time'),
+            h('th', 'Mode'),
+          ]),
+        ]),
+        h('tbody', ctrl.corresPool.map(s => renderSeek(ctrl, s)))
+      ]) :
+      h('div.corres_empty_seeks_list', 'Oops! Nothing here.') :
+    h('div.corres_empty_seeks_list', spinner.getVdom('monochrome')))
+}
+
+function renderSeek(ctrl: HomeCtrl, seek: CorrespondenceSeek) {
+  console.log(seek)
+  const action = seek.username.toLowerCase() === session.getUserId() ?
+    'cancelCorresSeek' :
+    'joinCorresSeek'
+
+  const icon = seek.color === '' ? 'random' :
+      seek.color === 'white' ? 'white' : 'black'
+
+  return h('tr', {
+    key: 'seek' + seek.id,
+    'id': seek.id,
+    className: 'corres_seek ' + action,
+    oncreate: helper.ontapY(() => ctrl[action](seek.id))
+  }, [
+    h('td', h('span.color-icon.' + icon)),
+    h('td', seek.username),
+    h('td', seek.rating + (seek.provisional ? '?' : '')),
+    h('td', seek.days ? i18n(seek.days === 1 ? 'oneDay' : 'nbDays', seek.days) : '∞'),
+    h('td', [h(`span[data-icon=${seek.perf.icon}]`), i18n(seek.mode === 1 ? 'rated' : 'casual')]),
+  ])
+}
+
+function renderFeaturedTournaments(ctrl: HomeCtrl) {
+  if (ctrl.featuredTournaments && ctrl.featuredTournaments.length)
     return (
       <div className="homeTournament">
-        <h2 className="homeTitle">Featured Tournaments</h2>
-        {renderTournamentList(tournaments)}
+        {renderTournamentList(ctrl.featuredTournaments)}
       </div>
     )
   else
     return null
 }
 
-function renderDailyPuzzle(ctrl: Ctrl) {
-  const puzzle = ctrl.dailyPuzzle()
+function renderDailyPuzzle(ctrl: HomeCtrl) {
+  const puzzle = ctrl.dailyPuzzle
   const boardConf = puzzle ? {
     fen: puzzle.fen,
     orientation: puzzle.color,
@@ -103,9 +171,9 @@ function renderDailyPuzzle(ctrl: Ctrl) {
   )
 }
 
-function renderTimeline(ctrl: Ctrl) {
-  const timeline = ctrl.timeline()
-  if (timeline.length === 0) return null
+function renderTimeline(ctrl: HomeCtrl) {
+  const timeline = ctrl.timeline
+  if (!timeline || timeline.length === 0) return null
 
   return (
     <section id="timeline">

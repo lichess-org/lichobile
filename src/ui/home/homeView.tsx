@@ -4,15 +4,13 @@ import { emptyFen } from '../../utils/fen'
 import { hasNetwork } from '../../utils'
 import i18n from '../../i18n'
 import session from '../../session'
-import spinner from '../../spinner'
 import { CorrespondenceSeek } from '../../lichess/interfaces'
 import * as helper from '../helper'
 import { renderTimelineEntry, timelineOnTap } from '../timeline'
 import MiniBoard from '../shared/miniBoard'
 import TabNavigation from '../shared/TabNavigation'
 import TabView from '../shared/TabView'
-import { renderQuickSetup } from '../newGameForm'
-import newGameForm from '../newGameForm'
+import newGameForm, { renderQuickSetup } from '../newGameForm'
 import { renderTournamentList } from '../tournament/tournamentsListView'
 
 import HomeCtrl from './HomeCtrl'
@@ -100,26 +98,28 @@ function renderLobby(ctrl: HomeCtrl) {
 }
 
 function renderCorresPool(ctrl: HomeCtrl) {
-  return h('div.corresPoolWrapper.native_scroller', ctrl.corresPool ?
-    ctrl.corresPool.length ?
-      h('table.corres_seeks', [
-        h('thead', [
-          h('tr', [
-            h('th', ''),
-            h('th', 'Player'),
-            h('th', 'Rating'),
-            h('th', 'Time'),
-            h('th', 'Mode'),
-          ]),
+  return h('div.corresPoolWrapper.native_scroller', [
+    h('table.corres_seeks', [
+      h('thead', [
+        h('tr', [
+          h('th', ''),
+          h('th', 'Player'),
+          h('th', 'Rating'),
+          h('th', 'Time'),
+          h('th', 'Mode'),
         ]),
-        h('tbody', ctrl.corresPool.map(s => renderSeek(ctrl, s)))
-      ]) :
-      h('div.corres_empty_seeks_list', 'Oops! Nothing here.') :
-    h('div.corres_empty_seeks_list', spinner.getVdom('monochrome')))
+      ]),
+      h('tbody', ctrl.corresPool.map(s => renderSeek(ctrl, s)))
+    ]),
+    h('div.corres_create', [
+      h('button.defaultButton', {
+        oncreate: helper.ontap(newGameForm.openCorrespondence)
+      }, i18n('createAGame')),
+    ]),
+  ])
 }
 
 function renderSeek(ctrl: HomeCtrl, seek: CorrespondenceSeek) {
-  console.log(seek)
   const action = seek.username.toLowerCase() === session.getUserId() ?
     'cancelCorresSeek' :
     'joinCorresSeek'

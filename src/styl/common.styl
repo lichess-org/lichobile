@@ -41,20 +41,6 @@ a
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
 
-button, .li-button
-  border none
-  outline none
-  -webkit-tap-highlight-color rgba(0,0,0,0)
-  user-select none
-  background-color transparent
-  transition opacity 50ms
-  &.active
-    opacity 0.8
-  &.disabled
-    opacity 1
-    &::before
-      opacity 0.4
-
 .svg_icon
   position relative
   width 24px
@@ -199,20 +185,6 @@ span.fa
   color gold
   margin 15px 0 5px
 
-.fatButton
-  display block
-  width 70%
-  padding 1em 0.25em
-  margin 20px auto
-  background linear-gradient(to bottom,rgba(40,40,40,1),rgba(34,34,34,1) 100%);
-  text-shadow 0 1px 0 #000
-  border 1px solid #323232
-  color #8a8a8a
-  font-weight bold
-  border-radius 2px
-  &.active,&:active
-    background linear-gradient(to bottom,rgba(44,44,44,1),rgba(40,40,40,1) 100%);
-
 .globalSpinner
   position absolute
   left calc(50% - 22.5px)
@@ -267,52 +239,6 @@ span.fa
       &:before
         content: "J"
 
-
-.navigationButtons
-  display flex
-  flex-flow row wrap
-  align-items center
-  align-self center
-  margin 10px 0
-  height 30px
-  &.invisible
-    display none
-
-.navigationButton
-  border-radius 4px
-  text-align center
-  border-style solid
-  border-color #323232
-  border-width 1px
-  height 30px
-  line-height 20px
-  margin 0 5px
-  padding 0
-  width 40px
-  &:before
-    font-family "lichess"!important
-    font-size 1.2em
-    content attr(data-icon)
-    vertical-align middle
-  &:disabled
-    opacity 0.5
-  &.invisible
-    display none
-  @media only screen and (max-width 380px)
-    margin 0 1px
-    width 35px
-    line-height 16px
-    &:before
-      font-size 1em
-
-.moreButton
-  font-size 0.9em
-  > button
-    width 100%
-    text-align center
-    padding 10px 0
-    background lighten(bgdark, 5%)
-
 .actions_bar
   display flex
   flex-flow row nowrap
@@ -323,46 +249,6 @@ span.fa
   // iphone X support
   margin-bottom: constant(safe-area-inset-bottom);
   margin-bottom: env(safe-area-inset-bottom);
-
-.action_bar_button
-  flex 1 1 25%
-  text-align center
-  background transparent
-  padding 0
-  outline none
-  border none
-  color: buttonGray
-  width 25%
-  &:only-child
-    text-align: right;
-    padding-right: 15px;
-  &:last-child
-    border-right none
-  &.withChip
-    position relative
-  &.disabled, &:disabled
-    opacity 0.5
-  &.active
-    background darkBlue
-    color #ccc
-  &.empty::before
-    visibility hidden
-  &.glow
-    animation answer_glow 5s infinite
-  &.highlight
-    color #fff
-    background blue
-  &:before
-    font-size 18px
-  @media only screen and (max-height 400px) and (orientation landscape)
-    &:before
-      font-size 16px
-  > .chip
-    line-height 15px
-    height 21px
-    width 21px
-    border-color bgdark
-    right 6px
 
 .chip
   font-family 'Noto Sans', sans-serif
@@ -379,10 +265,6 @@ span.fa
   top 5px
   right 5px
   background gold
-
-.action_create_button
-  flex 1 1 25%
-  text-align right
 
 signal
   display: flex
@@ -421,11 +303,6 @@ signal > i.off
   > piece
     width 100%
     height 100%
-
-.window-button
-  font-size 1.1em
-  .fa
-    margin-right 0
 
 .system_prompt
   .popup_content

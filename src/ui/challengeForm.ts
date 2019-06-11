@@ -54,6 +54,7 @@ function doChallenge() {
           storage.set('donotshowpersistentchallengeexplanation', true)
         })
       }
+      // TODO put in game menu
       router.set('/correspondence?tab=1')
     }
     if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {

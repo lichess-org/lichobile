@@ -20,7 +20,7 @@ import { dailyPuzzle as dailyPuzzleXhr, featuredTournaments as featuredTournamen
 export default class HomeCtrl {
   public selectedTab: number
 
-  public corresPool?: ReadonlyArray<CorrespondenceSeek>
+  public corresPool: ReadonlyArray<CorrespondenceSeek>
   public nbConnectedPlayers?: number
   public nbGamesInPlay?: number
   public dailyPuzzle?: DailyPuzzle
@@ -29,6 +29,7 @@ export default class HomeCtrl {
   public offlinePuzzle?: PuzzleData | undefined
 
   constructor(defaultTab?: number) {
+    this.corresPool = []
     this.selectedTab = defaultTab || 0
 
     if (hasNetwork()) {
@@ -126,7 +127,6 @@ function seekUserId(seek: CorrespondenceSeek) {
 }
 
 function fixSeeks(seeks: CorrespondenceSeek[]): CorrespondenceSeek[] {
-  console.log(seeks)
   const userId = session.getUserId()
   if (userId) seeks.sort((a, b) => {
     if (seekUserId(a) === userId) return -1

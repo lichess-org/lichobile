@@ -148,6 +148,12 @@
 .corresPoolWrapper
   flex-grow 1
   display flex
+  flex-flow column nowrap
+  > .corres_create
+    flex 0 1 auto
+    margin-top 20px
+    display flex
+    justify-content center
 
 .corres_seeks
   flex 1 1 auto
@@ -170,8 +176,8 @@
 
 .corres_seek
   overflow hidden
-  &.cancel
-    color gold
+  &.cancelCorresSeek
+    background rgba(gold, 15%)
   > td
     &:first-child
       width 16px

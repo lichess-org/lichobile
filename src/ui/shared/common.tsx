@@ -101,7 +101,7 @@ function gamesButton() {
         <span className="chip nb_playing">{myTurns}</span> : null
       }
       {nbIncomingChallenges ?
-        <span className="chip nb_challenges">{nbChallenges}</span> : null
+        <span className="chip nb_challenges">{nbIncomingChallenges}</span> : null
       }
     </button>
   )
@@ -157,7 +157,6 @@ export function dropShadowHeader(title: Mithril.Children, leftButton?: Mithril.C
       title ? <div className="main_header_title" key="title">{title}</div> : null,
       headerBtns()
     ]),
-    h('div.main_header_drop_shadow')
   ]
 }
 
@@ -191,7 +190,6 @@ export function connectingDropShadowHeader(title?: string) {
       title ? h('div.main_header_title', { key: 'title' }, title) : null,
       headerBtns()
     ]),
-    h('div.main_header_drop_shadow')
   ]
 }
 

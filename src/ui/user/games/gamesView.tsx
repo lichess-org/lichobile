@@ -22,7 +22,6 @@ export function renderBody(ctrl: IUserGamesCtrl) {
             )
           })}
         </select>
-        <div className="main_header_drop_shadow" />
       </div>
       {renderAllGames(ctrl)}
     </div>

@@ -201,7 +201,7 @@ function renderForm() {
     h('fieldset', generalFieldset),
     h('fieldset#clock', timeFieldset),
     h('div.popupActionWrapper', [
-      h('button[data-icon=E][type=submit].popupAction', actionName)
+      h('button[type=submit].defaultButton', actionName)
     ])
   ])
 }

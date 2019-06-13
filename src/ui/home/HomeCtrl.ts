@@ -2,6 +2,7 @@ import * as uniqBy from 'lodash/uniqBy'
 import * as Zanimo from 'zanimo'
 import socket from '../../socket'
 import redraw from '../../utils/redraw'
+import signals from '../../signals'
 import settings from '../../settings'
 import { timeline as timelineXhr, seeks as corresSeeksXhr, lobby as lobbyXhr } from '../../xhr'
 import { hasNetwork, noop } from '../../utils'
@@ -21,8 +22,6 @@ export default class HomeCtrl {
   public selectedTab: number
 
   public corresPool: ReadonlyArray<CorrespondenceSeek>
-  public nbConnectedPlayers?: number
-  public nbGamesInPlay?: number
   public dailyPuzzle?: DailyPuzzle
   public featuredTournaments?: ReadonlyArray<TournamentListItem>
   public timeline?: ReadonlyArray<TimelineEntry>
@@ -48,10 +47,7 @@ export default class HomeCtrl {
           socket.setVersion(d.lobby.version)
         }),
         n: (_: never, d: PongMessage) => {
-          this.nbConnectedPlayers = d.d
-          this.nbGamesInPlay = d.r
-          // TODO self redrawing component
-          // redraw()
+          signals.homePong.dispatch(d)
         }
       })
 
@@ -117,7 +113,9 @@ export default class HomeCtrl {
     corresSeeksXhr(false)
     .then(d => {
       this.corresPool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1)
-      redraw()
+      if (this.selectedTab === 1) {
+        redraw()
+      }
     })
   }
 }

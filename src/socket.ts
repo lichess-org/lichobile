@@ -79,6 +79,7 @@ export const SEEKING_SOCKET_NAME = 'seekLobby'
 // is working normally
 let connectedWS = false
 let currentMoveLatency: number = 0
+let currentPingInterval: number = 2000
 let rememberedSetups: Array<ConnectionSetup> = []
 
 const worker = new Worker('lib/socketWorker.js')
@@ -148,6 +149,9 @@ function setupConnection(setup: SocketSetup, socketHandlers: SocketHandlers) {
       case 'handle':
         let h = socketHandlers.events[msg.data.payload.t]
         if (h) h(msg.data.payload.d, msg.data.payload)
+        break
+      case 'pingInterval':
+        currentPingInterval = msg.data.payload
         break
     }
   }
@@ -494,6 +498,9 @@ export default {
   },
   getCurrentMoveLatency() {
     return currentMoveLatency
+  },
+  getCurrentPingInterval(): number {
+    return currentPingInterval
   },
   terminate() {
     if (worker) worker.terminate()

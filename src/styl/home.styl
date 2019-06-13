@@ -8,13 +8,10 @@
     display flex
     flex-flow row nowrap
     justify-content space-between
-    >.numPlayers
-      flex 0 1 auto
-    >.numGames
+    > div
       flex 0 1 auto
   .tabs-view-wrapper
     height calc(((100vw * 0.85 - 40px) * 0.28) * 3 + 40px)
-    background-color transparent
     background-image url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMy41MjkgMzMuNTA0Ij48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNS4yNS02LjI0NikiIG9wYWNpdHk9Ii4xIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIxLjUiPjxnIGZpbGw9IiMwMDAiPjxwYXRoIGQ9Im0yMiAxMGMxMC41IDEgMTYuNSA4IDE2IDI5aC0yM2MwLTkgMTAtNi41IDgtMjEiLz48cGF0aCBkPSJtMjQgMThjLjM4IDIuOTEtNS41NSA3LjM3LTggOS0zIDItMi44MiA0LjM0LTUgNC0xLjA0Mi0uOTQgMS40MS0zLjA0IDAtMy0xIDAgLjE5IDEuMjMtMSAyLTEgMC00IDEtNC00IDAtMiA2LTEyIDYtMTIgMCAwIDEuODktMS45IDItMy41LS43My0uOTk0LS41LTItLjUtMyAxLTEgMyAyLjUgMyAyLjVoMmMwIDAgLjc4LTEuOTkyIDIuNS0zIDEgMCAxIDMgMSAzIi8+PC9nPjxnIGZpbGw9IiNmZmYiPjxwYXRoIGQ9Im05LjUgMjUuNWEuNSAuNSAwIDEgMSAtMSAwIC41IC41IDAgMSAxIDEgMHoiLz48cGF0aCBkPSJtMTUgMTUuNWEuNSAxLjUgMCAxIDEgLTEgMCAuNSAxLjUgMCAxIDEgMSAweiIgdHJhbnNmb3JtPSJtYXRyaXgoLjg2Ni41LS41Ljg2NiA5LjY5My01LjE3MykiLz48L2c+PC9nPjwvc3ZnPg==")
     background-repeat no-repeat
     background-size 100% 100%
@@ -29,7 +26,7 @@
       &:nth-child(7), &:nth-child(8), &:nth-child(9)
         margin-bottom 0
       &.active
-        background-color lighten(bgdark, 8%)
+        background-color rgba(gold, 0.4)
 
 .tabs-navigation.homeSetup
   height 35px
@@ -37,14 +34,21 @@
     text-transform initial
     font-size 0.9rem
 
+.homeCreate
+  margin-bottom 0.5em
+
 .homeTournament
-  margin-top 0.5em
+  margin-top 1em
   padding 0px
-  >.homeTitle
-    margin 5px 0 5px
   >.tournamentList
     >.tournament_item
       padding 10px
+
+.home_start
+  display flex
+  flex-flow column nowrap
+  justify-content stretch
+  margin 0 1em
 
 .homeTitle
   font-weight bold
@@ -158,6 +162,7 @@
 .corres_seeks
   flex 1 1 auto
   text-align left
+  font-size 0.8em
   .must_signin
     text-align center
   th, td
@@ -177,7 +182,9 @@
 .corres_seek
   overflow hidden
   &.cancelCorresSeek
-    background rgba(gold, 15%)
+    background rgba(green, 0.15)
+  &.active
+    background rgba(gold, 0.3)
   > td
     &:first-child
       width 16px
@@ -191,7 +198,9 @@
     background-color inherit
 
   .home
+    background themeBgLightHeader
     .tabs-view-wrapper
+      background-color bglight
       background-image url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMy41MjkgMzMuNTA0Ij48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNS4yNS02LjI0NikiIG9wYWNpdHk9Ii4xIiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIxLjUiPjxnIGZpbGw9IiNmZmYiPjxwYXRoIGQ9Im0yMiAxMGMxMC41IDEgMTYuNSA4IDE2IDI5aC0yM2MwLTkgMTAtNi41IDgtMjEiLz48cGF0aCBkPSJtMjQgMThjLjM4IDIuOTEtNS41NSA3LjM3LTggOS0zIDItMi44MiA0LjM0LTUgNC0xLjA0Mi0uOTQgMS40MS0zLjA0IDAtMy0xIDAgLjE5IDEuMjMtMSAyLTEgMC00IDEtNC00IDAtMiA2LTEyIDYtMTIgMCAwIDEuODktMS45IDItMy41LS43My0uOTk0LS41LTItLjUtMyAxLTEgMyAyLjUgMyAyLjVoMmMwIDAgLjc4LTEuOTkyIDIuNS0zIDEgMCAxIDMgMSAzIi8+PC9nPjxnIGZpbGw9IiMwMDAiPjxwYXRoIGQ9Im05LjUgMjUuNWEuNSAuNSAwIDEgMSAtMSAwIC41IC41IDAgMSAxIDEgMHoiLz48cGF0aCBkPSJtMTUgMTUuNWEuNSAxLjUgMCAxIDEgLTEgMCAuNSAxLjUgMCAxIDEgMSAweiIgdHJhbnNmb3JtPSJtYXRyaXgoLjg2Ni41LS41Ljg2NiA5LjY5My01LjE3MykiLz48L2c+PC9nPjwvc3ZnPg==")
 
     .newGame-pool
@@ -199,7 +208,11 @@
       border-color borderLightGray
       color inherit
       &.active
-        background-color themeBgLightActive
+        background-color rgba(gold, 0.3)
+
+  .corres_seek
+    > td
+      border-color borderLightGray
 
 
 .view-container.transp
@@ -210,5 +223,3 @@
     .newGame-pool
       border-color transpWhite02
       background-color transpWhite005
-      &.active
-        background-color transpWhite01

@@ -11,8 +11,6 @@ import loginModal from '../loginModal'
 import newGameForm from '../newGameForm'
 import gamesMenu from '../gamesMenu'
 import friendsPopup from '../friendsPopup'
-import challengeForm from '../challengeForm'
-import playMachineForm from '../playMachineForm'
 import * as helper from '../helper'
 import CloseSlideHandler from '../shared/sideMenu/CloseSlideHandler'
 import CloseSwipeHandler from '../shared/sideMenu/CloseSwipeHandler'
@@ -111,8 +109,6 @@ function renderProfileActions(user: Session) {
 const popupActionMap: { [index: string]: () => void } = {
   gamesMenu: () => gamesMenu.open(),
   createGame: () => newGameForm.openRealTime(),
-  challenge: () => challengeForm.open(),
-  machine: () => playMachineForm.open()
 }
 
 function onLinkTap(e: Event) {
@@ -127,83 +123,89 @@ function onLinkTap(e: Event) {
 
 function renderLinks(user?: Session) {
   const offlineGames = getOfflineGames()
+  const online = hasNetwork()
 
   return (
     <ul
-      key={hasNetwork() ? 'online-links' : 'offline-links'}
+      key={online ? 'online-links' : 'offline-links'}
       className="side_links"
       oncreate={helper.ontapXY(onLinkTap, undefined, helper.getLI)}
     >
       <li className="side_link" data-route="/">
         <span className="fa fa-home" />Home
       </li>
-      {hasNetwork() ?
+      {online ?
       <li className="sep_link">{i18n('playOnline')}</li> : null
       }
-      {hasNetwork() && session.nowPlaying().length ?
-      <li className="side_link" data-popup="gamesMenu">
-        <span className="menu_icon_game" />{i18n('nbGamesInPlay', session.nowPlaying().length)}
-      </li> : null
-      }
-      {!hasNetwork() && offlineGames.length ?
+      {!online && offlineGames.length ?
       <li className="side_link" data-popup="gamesMenu">
         <span className="menu_icon_game" />{i18n('nbGamesInPlay', offlineGames.length)}
       </li> : null
       }
-      {hasNetwork() && !session.hasCurrentBan() ?
+      {online && !session.hasCurrentBan() ?
       <li className="side_link" data-popup="createGame">
         <span className="fa fa-plus-circle"/>{i18n('createAGame')}
       </li> : null
       }
-      {hasNetwork() ?
-      <li className="side_link" data-popup="challenge">
-        <span className="fa fa-share-alt"/>{i18n('playWithAFriend')}
-      </li> : null
-      }
-      {hasNetwork() ?
-      <li className="side_link" data-popup="machine">
-        <span className="fa fa-cogs"/>{i18n('playWithTheMachine')}
-      </li> : null
-      }
-      {hasNetwork() ?
+      {online ?
       <li className="side_link" data-route="/tournament">
         <span className="fa fa-trophy"/>{i18n('tournament')}
       </li> : null
       }
       <li className="sep_link">{i18n('learn')}</li>
-      {hasNetwork() ?
+      {online ?
         <li className="side_link" data-route="/training">
           <span data-icon="-"/>{i18n('training')}
         </li> : null
       }
-      {!hasNetwork() && user ?
+      {!online && user ?
         <li className="side_link" data-route="/training">
           <span data-icon="-" />{i18n('training')}
         </li> : null
       }
-      {hasNetwork() ?
+      {online ?
         <li className="side_link" data-route="/study">
           <span data-icon="4" />Study
         </li> : null
       }
-      {hasNetwork() ?
+      {online ?
       <li className="sep_link">
         {i18n('community')}
       </li> : null
       }
-      {hasNetwork() ?
+      {online ?
       <li className="side_link" data-route="/tv">
         <span data-icon="1"/>{i18n('watchLichessTV')}
       </li> : null
       }
-      {hasNetwork() ?
+      {online ?
       <li className="side_link" data-route="/players">
         <span className="fa fa-at"/>{i18n('players')}
       </li> : null
       }
-      {hasNetwork() ?
+      {online ?
       <li className="side_link" data-route="/ranking">
         <span className="fa fa-cubes"/>{i18n('leaderboard')}
+      </li> : null
+      }
+      <li className="sep_link">{i18n('tools')}</li>
+      <li className="side_link" data-route="/analyse">
+        <span data-icon="A" />{i18n('analysis')}
+      </li>
+      <li className="side_link" data-route="/editor">
+        <span className="fa fa-pencil" />{i18n('boardEditor')}
+      </li>
+      <li className="side_link" data-route="/clock">
+        <span className="fa fa-clock-o"/>{i18n('clock')}
+      </li>
+      {online ?
+      <li className="side_link" data-route="/importer">
+        <span className="fa fa-cloud-upload" />{i18n('importGame')}
+      </li> : null
+      }
+      {online ?
+      <li className="side_link" data-route="/search">
+        <span className="fa fa-search" />{i18n('advancedSearch')}
       </li> : null
       }
       <li className="sep_link">
@@ -215,26 +217,6 @@ function renderLinks(user?: Session) {
       <li className="side_link" data-route="/otb">
         <span className="fa fa-beer"/>{i18n('playOnTheBoardOffline')}
       </li>
-      <li className="side_link" data-route="/clock">
-        <span className="fa fa-clock-o"/>{i18n('clock')}
-      </li>
-      <li className="sep_link">{i18n('tools')}</li>
-      <li className="side_link" data-route="/analyse">
-        <span data-icon="A" />{i18n('analysis')}
-      </li>
-      <li className="side_link" data-route="/editor">
-        <span className="fa fa-pencil" />{i18n('boardEditor')}
-      </li>
-      {hasNetwork() ?
-      <li className="side_link" data-route="/importer">
-        <span className="fa fa-cloud-upload" />{i18n('importGame')}
-      </li> : null
-      }
-      {hasNetwork() ?
-      <li className="side_link" data-route="/search">
-        <span className="fa fa-search" />{i18n('advancedSearch')}
-      </li> : null
-      }
       <li className="hr"></li>
       <li className="side_link" data-route="/settings">
         <span className="fa fa-cog"/>{i18n('settings')}

@@ -43,7 +43,6 @@ export function renderTournamentsList(ctrl: TournamentsListCtrl) {
           selectedIndex: ctrl.currentTab,
           onTabChange: ctrl.onTabChange
       }),
-      h('div.main_header_drop_shadow')
     ),
     h(TabView, {
       className: 'tournamentTabsWrapper',

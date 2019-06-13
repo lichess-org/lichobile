@@ -55,10 +55,8 @@
   justify-content center
   background #2e2e2e
   color darken(#fff, 8%)
-  padding-top 15px
-  min-height 65px
   > div:last-child
-    padding-bottom 15px
+    padding-bottom 1em
   > .kiddo
     display flex
     justify-content center
@@ -75,6 +73,7 @@
     width 100%
     justify-content flex-start
     padding-left 15px
+    margin-top 0.2em
 
 .side_menu_scroller
   flex 0 1 auto
@@ -95,6 +94,8 @@
   align-items center
   color darken(#fff, 40%)
   font-size 0.75em
+  &:first-child
+    margin-top 1em
   > signal
     margin-right 1em
   .pingKey
@@ -110,7 +111,7 @@
 
 .side_link
   color #bbb
-  padding 15px 0 15px 15px
+  padding 10px 0 10px 15px
   line-height 19px
   letter-spacing -0.5px
   > span
@@ -132,7 +133,31 @@
 
 .sep_link
   color #8a8a8a
-  padding 15px 15px 10px
+  padding 10px 15px 10px
+
+.view-container.light
+  #side_menu
+    color darken(themeBgLightText, 30%)
+    background #fff
+
+  .signInButton
+    border-color #ddd
+    background: #fff
+
+  .side_menu_header, .pingServer, .side_link
+    color darken(themeBgLightText, 30%)
+
+  .side_menu_header, .menu-toggleButton
+    background darken(#fff, 3%)
+
+  .side_links > .hr
+    border-color borderLightGray
+
+  .side_link
+    &.active
+      background darken(#fff, 5%)
+    > span
+      color darken(themeBgLightText, 20%)
 
 .view-container.transp
   #side_menu

@@ -13,4 +13,6 @@ export default {
 
   // signal sent after successful restored session from offline database
   sessionRestored: new Signal(),
+
+  homePong: new Signal(),
 }

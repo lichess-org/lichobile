@@ -126,9 +126,6 @@ main
   &.fa-bell
     position relative
     top -2px
-  &.active
-    background headerBgDarkActive
-    opacity initial
 
 .header-subTitle
   width 100%
@@ -212,9 +209,6 @@ main
     background url('../../images/icons/game_icon_canvas.svg') no-repeat
   &.metal::before
     background url('../../images/icons/game_icon_metal.svg') no-repeat
-  > .nb_challenges
-    left 7px
-    background orange
   &.new_challenge:before
     background transparent
     font-family: "lichess" !important;
@@ -226,7 +220,6 @@ main
     speak: none;
     line-height: 1;
     -webkit-font-smoothing: antialiased;
-    animation: neon 1.5s ease-in-out infinite alternate
 
 @media only screen and (min-width 600px)
   .friends_button

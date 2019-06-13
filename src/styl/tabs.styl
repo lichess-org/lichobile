@@ -10,7 +10,7 @@
   height 48px
   position relative
   &.withBorder
-    border-bottom 2px solid #3d3d3d
+    border-bottom 2px solid borderColor
     .tabIndicator
       bottom -2px
 
@@ -67,5 +67,8 @@
       background-color darken(themeBgLight, 5%)
     &.selected
       color goldDark
+  .tabs-navigation
+    &.withBorder
+      border-color darken(themeBgLight, 15%)
   .tabIndicator
     background-color goldDark

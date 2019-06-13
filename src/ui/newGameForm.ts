@@ -147,7 +147,7 @@ export function renderQuickSetup(onCustom: () => void) {
           key: 'pool-custom',
           oncreate: helper.ontap(onCustom)
         }, h('div.newGame-custom', 'Custom'))
-      ) : spinner.getVdom()
+      ) : spinner.getVdom('monochrome')
   )
 }
 
@@ -294,7 +294,7 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
     h('fieldset', generalFieldset),
     h('fieldset', timeFieldset),
     h('div.popupActionWrapper', [
-      h('button[data-icon=E][type=submit].popupAction', i18n('createAGame'))
+      h('button[type=submit].defaultButton', i18n('createAGame'))
     ])
   ])
 }

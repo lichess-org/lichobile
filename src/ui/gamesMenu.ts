@@ -117,6 +117,13 @@ function acceptChallenge(id: string) {
   .then(() => close())
 }
 
+function cancelChallenge(id: string) {
+  return xhr.cancelChallenge(id)
+  .then(() => {
+    challengesApi.remove(id)
+  })
+}
+
 function declineChallenge(id: string) {
   return xhr.declineChallenge(id)
   .then(() => {
@@ -221,10 +228,47 @@ function renderIncomingChallenge(c: Challenge) {
         ),
         h('button', {
           oncreate: helper.ontapX(
-            helper.fadesOut(() => declineChallenge(c.id), '.card', 250)
+            (e: Event) => declineChallenge(c.id).then(() => {
+              helper.fadesOut(e, () => close(), '.card', 250)
+            })
           )
         },
           i18n('decline')
+        )
+      ])
+    ])
+  ])
+}
+
+function renderSendingChallenge(c: Challenge) {
+
+  if (!c.destUser) return null
+
+  const mode = c.rated ? i18n('rated') : i18n('casual')
+  const timeAndMode = challengesApi.challengeTime(c) + ', ' + mode
+  const mark = c.destUser.provisional ? '?' : ''
+  const playerName = `${c.destUser.id} (${c.destUser.rating}${mark})`
+
+  return h('div.card.standard.challenge.sending', [
+    renderViewOnlyBoard(c.initialFen || standardFen, 'white', undefined, c.variant.key),
+    h('div.infos', [
+      h('div.icon-game', { 'data-icon': c.perf.icon }),
+      h('div.description', [
+        h('h2.title', playerName),
+        h('p.variant', [
+          h('span.variantName', i18n('toATypeGame', c.variant.name)),
+          h('span.time-indication[data-icon=p]', timeAndMode)
+        ]),
+      ]),
+      h('div.actions', [
+        h('button', {
+          oncreate: helper.ontapX(
+            (e: Event) => cancelChallenge(c.id).then(() => {
+              helper.fadesOut(e, () => close(), '.card', 250)
+            })
+          )
+        },
+          i18n('cancel')
         )
       ])
     ])
@@ -251,11 +295,19 @@ function renderCarouselIndicators() {
 function renderAllGames() {
   const nowPlaying = session.nowPlaying()
   const challenges = challengesApi.incoming()
-  const challengesDom = challenges.map(c => {
-    return renderIncomingChallenge(c)
-  })
+  const sendingChallenges = challengesApi.sending().filter(challengesApi.isPersistent)
+  const challengesDom = challenges.map(c =>
+    renderIncomingChallenge(c)
+  )
+  const sendingChallengesDom = sendingChallenges.map(c =>
+    renderSendingChallenge(c)
+  )
 
-  let allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g)))
+  let allCards = [
+    ...challengesDom,
+    ...sendingChallengesDom,
+    ...(nowPlaying.map(g => renderGame(g)))
+  ]
 
   if (!utils.hasNetwork()) {
     allCards = getOfflineGames().map(d => {

@@ -181,13 +181,16 @@ export function slidesOutRight(callback: (fromBB?: string) => void, elID: string
   }
 }
 
-export function fadesOut(callback: () => void, selector?: string, time = 150): (e: Event) => Promise<HTMLElement> {
-  return function(e: Event) {
-    e.stopPropagation()
-    const el = selector ? findParentBySelector((e.target as HTMLElement), selector) : e.target
-    return Zanimo(el, 'opacity', 0, time)
+export function fadesOut(e: Event, callback: () => void, selector?: string, time = 150) {
+  e.stopPropagation()
+  const el = selector ? findParentBySelector((e.target as HTMLElement), selector) : e.target
+  if (el) {
+    Zanimo(el, 'opacity', 0, time)
     .then(() => utils.autoredraw(callback))
     .catch(console.log.bind(console))
+  } else {
+    callback()
+    redraw()
   }
 }
 

@@ -19,8 +19,7 @@ export function header(ctrl: IPlayersCtrl) {
         <button className="main_header_button" key="searchPlayers" data-icon="y"
           oncreate={helper.ontap(ctrl.goSearch)}/>
       </div>
-    </nav>,
-    <div className="main_header_drop_shadow" />
+    </nav>
   ]
 }
 
@@ -58,7 +57,6 @@ export function searchModal(ctrl: IPlayersCtrl) {
           oncreate={helper.autofocus}
           />
         </div>
-        <div className="main_header_drop_shadow" />
       </header>
       <ul id="playersSearchResults" className="modal_content native_scroller">
       {ctrl.searchResults().map(u => {

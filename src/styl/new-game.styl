@@ -4,8 +4,6 @@
     padding 0
   .select_input
     margin-top 10px
-  .popupActionWrapper
-    margin 10px 0
 
 .new_game_form_popup
   align-self flex-start
@@ -47,16 +45,18 @@
         content none
 
 .newGame-pools
+  flex-grow 1
   display flex
   flex-flow row wrap
   justify-content space-between
+  align-items center
   padding 20px
 
 .newGame-pool
   height calc((100vw * 0.85 - 40px) * 0.31)
   flex 0 0 31%
   background rgba(255,255,255,0.7)
-  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.2);
   display flex
   flex-flow column
   justify-content center

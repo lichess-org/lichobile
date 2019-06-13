@@ -12,9 +12,9 @@ export function featured(feedback: boolean): Promise<OnlineGameData> {
 }
 
 export function dailyPuzzle(): Promise<{ puzzle: DailyPuzzle }> {
-  return fetchJSON('/training/daily', undefined, true)
+  return fetchJSON('/training/daily', undefined)
 }
 
 export function featuredTournaments(): Promise<FeaturedTournamentData> {
-  return fetchJSON('/tournament/featured', undefined, false)
+  return fetchJSON('/tournament/featured', undefined)
 }

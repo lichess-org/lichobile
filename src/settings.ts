@@ -85,6 +85,7 @@ export default {
         ['leipzig' ],
         ['fantasy' ],
         ['shapes' ],
+        ['letter' ],
         ['chessnut' ],
         ['chess7' ],
         ['riohacha' ],

@@ -33,6 +33,7 @@ Fontawesome in www/fonts | [davegandy](https://fontawesome.com) | [SIL OFL 1.1](
 www/images/pieces/mono | Thibault Duplessis and [Colin M.L. Burnett](https://en.wikipedia.org/wiki/User:Cburnett) | [GPLv2+](https://www.gnu.org/licenses/gpl-2.0.txt)
 www/images/pieces/cburnett | [Colin M.L. Burnett](https://en.wikipedia.org/wiki/User:Cburnett) | [GPLv2+](https://www.gnu.org/licenses/gpl-2.0.txt)
 www/images/pieces/chessnut | [Alexis Luengas](https://github.com/LexLuengas) | [Apache 2.0](https://github.com/LexLuengas/chessnut-pieces/blob/master/LICENSE.txt)
+www/images/pieces/letter | [usolando](https://lichess.org/@/usolando) | AGPLv3+
 www/images/pieces/kosal | [Philatype](https://www.philatype.com/) | [Creative Commons Attribution 4.0 International Public License](https://creativecommons.org/licenses/by/4.0/legalcode)
 www/images/pieces/merida | Armando Hernandez Marroquin | [GPLv2+](https://www.gnu.org/licenses/gpl-2.0.txt)
 

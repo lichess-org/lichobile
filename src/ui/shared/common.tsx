@@ -80,10 +80,10 @@ function gamesButton() {
   boardTheme = boardTheme || settings.general.theme.board()
   if (session.nowPlaying().length || nbChallenges || withOfflineGames) {
     key = 'games-menu'
-    action = gamesMenu.open
+    action = () => gamesMenu.open()
   } else {
     key = 'new-game-form'
-    action = newGameForm.open
+    action = () => newGameForm.open()
   }
   const myTurns = session.myTurnGames().length
   const className = [

@@ -170,7 +170,7 @@ function renderLinks(user?: Session) {
       }
       {online ?
       <li className="sep_link">
-        {i18n('community')}
+        {i18n('watch')}
       </li> : null
       }
       {online ?
@@ -179,13 +179,13 @@ function renderLinks(user?: Session) {
       </li> : null
       }
       {online ?
-      <li className="side_link" data-route="/players">
-        <span className="fa fa-at"/>{i18n('players')}
+      <li className="sep_link">
+        {i18n('community')}
       </li> : null
       }
       {online ?
-      <li className="side_link" data-route="/ranking">
-        <span className="fa fa-cubes"/>{i18n('leaderboard')}
+      <li className="side_link" data-route="/players">
+        <span className="fa fa-at"/>{i18n('players')}
       </li> : null
       }
       <li className="sep_link">{i18n('tools')}</li>

@@ -138,7 +138,6 @@ const untranslated: StringMap = {
   language: 'Language',
   notesSynchronizationHasFailed: 'Notes synchronization with lichess has failed, please try later.',
   challengeDeclined: 'Challenge declined',
-  persistentChallengeCreated: 'Correspondence challenge created. It will remain active for two weeks. You will get notified when your friend accepts it.',
   youAreChallenging: 'You are challenging %s',
   submitMove: 'Submit move',
   returnToHome: 'Return to home',

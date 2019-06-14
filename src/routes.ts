@@ -24,7 +24,6 @@ import accountPreferences from './ui/user/account/preferences'
 import accountPrivacy from './ui/user/account/privacy'
 import accountKidMode from './ui/user/account/kid'
 import players from './ui/players'
-import ranking from './ui/ranking'
 import training from './ui/training'
 import tournamentsList from './ui/tournament'
 import tournamentDetail from './ui/tournament/detail'
@@ -80,7 +79,6 @@ export default {
       'inbox/new': inboxCompose,
       'inbox/new/:userId': inboxCompose,
       'players': players,
-      'ranking': ranking,
       'search': search,
       'settings': settingsUi,
       'settings/gameDisplay': settingsGameDisplay,

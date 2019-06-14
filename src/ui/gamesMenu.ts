@@ -17,7 +17,6 @@ import session from '../session'
 import i18n from '../i18n'
 import * as xhr from '../xhr'
 import * as helper from './helper'
-import newGameForm from './newGameForm'
 import ViewOnlyBoard from './shared/ViewOnlyBoard'
 
 let scroller: any | null = null
@@ -86,12 +85,14 @@ function wrapperOnRemove() {
   }
 }
 
-function open() {
+function open(page?: number) {
   router.backbutton.stack.push(close)
   session.refresh()
   isOpen = true
   setTimeout(() => {
-    if (scroller && !helper.isWideScreen()) scroller.goTo(1)
+    if (scroller && !helper.isWideScreen()) {
+      scroller.goTo(page !== undefined ? page : 0)
+    }
   }, 400)
 }
 
@@ -315,24 +316,6 @@ function renderAllGames() {
       return renderGame(g)
     })
   }
-
-  const newGameCard = h('div.card.standard', {
-    key: 'game.new-game',
-    oncreate: helper.ontapX(() => {
-      close()
-      newGameForm.open()
-    })
-  }, [
-    renderViewOnlyBoard(standardFen, 'white'),
-    h('div.infos', [
-      h('div.description', [
-        h('h2.title', i18n('createAGame')),
-        h('p', i18n('newOpponent'))
-      ])
-    ])
-  ])
-
-  allCards.unshift(newGameCard)
 
   return h('div.games_carousel', {
     key: helper.isPortrait() ? 'o-portrait' : 'o-landscape',

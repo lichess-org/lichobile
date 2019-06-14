@@ -70,7 +70,7 @@ function renderAllGames(ctrl: IUserGamesCtrl) {
           <li className="list_item loadingNext">loading...</li> : null
           }
         </ul> :
-        <div className="userGame-loader">
+        <div className="loader_container">
           {spinner.getVdom('monochrome')}
         </div>
       }

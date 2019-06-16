@@ -70,7 +70,7 @@
         "cordova-plugin-network-information": "2.0.1",
         "cordova-plugin-splashscreen": "5.0.2",
         "cordova-plugin-statusbar": "2.4.2",
-        "cordova-plugin-stockfish": "git+https://github.com/veloce/cordova-plugin-stockfish.git#v1.8.0",
+        "cordova-plugin-stockfish": "git+https://github.com/veloce/cordova-plugin-stockfish.git#7cc6722",
         "cordova-plugin-vibration": "3.1.0",
         "cordova-plugin-whitelist": "1.3.3",
         "cordova-plugin-x-socialsharing": "5.1.3",

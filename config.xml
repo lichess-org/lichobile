@@ -126,7 +126,7 @@
     <plugin name="cordova-plugin-globalization" spec="1.11.0" />
     <plugin name="cordova-plugin-crosswalk-data-migration" spec="git+https://github.com/veloce/cordova-plugin-crosswalk-data-migration.git#225408d" />
     <plugin name="ionic-plugin-keyboard" spec="2.2.1" />
-    <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#v1.8.0" />
+    <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#7cc6722" />
     <plugin name="cordova-plugin-x-toast" spec="2.7.2" />
     <plugin name="cordova-plugin-file-transfer" spec="1.7.1" />
     <plugin name="onesignal-cordova-plugin" spec="2.4.7" />

@@ -204,14 +204,18 @@ function renderDailyPuzzle(ctrl: HomeCtrl) {
     fen: puzzle.fen,
     orientation: puzzle.color,
     link: () => router.set(`/training/${puzzle.id}?initFen=${puzzle.fen}&initColor=${puzzle.color}`),
+    boardTitle: [
+      h('span', i18n('puzzleOfTheDay')),
+      h('br'),
+      h('span', puzzle.color === 'white' ? i18n('whitePlays') : i18n('blackPlays')),
+    ]
   } : {
     orientation: 'white' as Color,
-    fen: emptyFen
+    fen: emptyFen,
   }
 
   return (
     <section className="miniPuzzle" key={puzzle ? puzzle.id : 'empty'}>
-      <h2 className="homeTitle">{i18n('puzzleOfTheDay')}</h2>
       {h(MiniBoard, boardConf)}
     </section>
   )
@@ -223,7 +227,6 @@ function renderTimeline(ctrl: HomeCtrl) {
 
   return (
     <section id="timeline">
-      <h2 className="homeTitle">{i18n('timeline')}</h2>
       <ul className="items_list_block"
         oncreate={helper.ontapY(timelineOnTap, undefined, helper.getLI)}
       >

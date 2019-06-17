@@ -26,7 +26,7 @@
       &:nth-child(7), &:nth-child(8), &:nth-child(9)
         margin-bottom 0
       &.active
-        background-color rgba(gold, 0.4)
+        background-color rgba(gold, 0.3)
 
 .tabs-navigation.homeSetup
   height 35px
@@ -89,51 +89,13 @@
   flex-flow column nowrap
   justify-content flex-start
   align-items center
-
-.miniPuzzle
-  margin-bottom 15px
-  .homeTitle
-    margin-top 15px
+  margin 1em 0
 
 #timeline
   padding 0px
   .timelineEntry
     padding 10px
     font-size 0.9em
-
-.mini_board
-  @media only screen and (orientation: portrait)
-    width 66vw
-  @media only screen and (orientation: landscape)
-    width 66vh
-  > .board_wrapper
-    width 100%
-    @media only screen and (orientation: portrait)
-      height 66vw
-    @media only screen and (orientation: landscape)
-      height 66vh
-  > .vsbloc
-    font-size 0.8em
-    background: linear-gradient(to bottom,rgba(40,40,40,1),rgba(34,34,34,1) 100%);
-    border 1px solid #323232
-    padding 5px
-    overflow hidden
-    > .antagonists
-      display flex
-      flex-flow row nowrap
-      justify-content space-between
-      > .player, > .opponent
-        max-width 49%
-        overflow hidden
-        text-overflow ellipsis
-    > .ratingAndTime
-      display flex
-      flex-flow row nowrap
-      justify-content space-between
-      > .time
-        display flex
-        justify-content center
-        align-items center
 
 .home-playbanInfo
   padding 1em
@@ -163,15 +125,23 @@
   flex 1 1 auto
   text-align left
   font-size 0.8em
+  width 100%
   .must_signin
     text-align center
   th, td
     vertical-align middle
+    overflow hidden
+    white-space nowrap
+    text-overflow ellipsis
+    &:first-child
+      text-align center
+      width 30px
   th
     font-weight normal
     padding 1em
-    &:first-child
-      width 16px
+  td
+    padding 0.5em
+    border-bottom 1px solid lighten(#3d3d3d, 10%)
 
 .corres_empty_seeks_list
   flex 1 1 auto
@@ -180,18 +150,10 @@
   align-items center
 
 .corres_seek
-  overflow hidden
   &.cancelCorresSeek
     background rgba(green, 0.15)
   &.active
     background rgba(gold, 0.3)
-  > td
-    &:first-child
-      width 16px
-      text-align center
-    overflow hidden
-    padding 0.5em
-    border-bottom 1px solid lighten(#3d3d3d, 10%)
 
 .view-container.light
   .tabs-navigation.homeSetup
@@ -219,7 +181,12 @@
   .tabs-navigation.homeSetup
     background-color inherit
 
+  .corres_seek > td
+    border-color transpWhite01
+
   .home
     .newGame-pool
       border-color transpWhite02
       background-color transpWhite005
+      &.active
+        background-color rgba(gold, 0.2)

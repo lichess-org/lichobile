@@ -232,7 +232,7 @@ function createToken() {
 
 export function openWebsiteAuthPage(path: string) {
   const openAnon = () => {
-    window.open(`https://lichess.org${path}`, '_blank', 'location=yes')
+    window.open(`${globalConfig.apiEndPoint}${path}`, '_blank', 'location=yes')
   }
   if (session.isConnected()) {
     createToken()

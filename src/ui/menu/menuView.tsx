@@ -1,5 +1,7 @@
 import * as h from 'mithril/hyperscript'
 
+import router from '../../router'
+import * as utils from '../../utils'
 import socket from '../../socket'
 import session, { Session } from '../../session'
 import i18n from '../../i18n'
@@ -75,6 +77,18 @@ function renderProfileActions(user: Session) {
     <ul className="side_links profileActions">
       <li className="side_link" oncreate={helper.ontapXY(menu.route('/@/' + user.id))}>
         <span className="fa fa-user" />{i18n('profile')}
+      </li>
+      <li className="side_link" oncreate={helper.ontapXY(() => {
+        menu.mainMenuCtrl.close().then(() => {
+          const params: StringMap = {
+            username: user.username,
+            title: user.title,
+          }
+          if (user.patron) params.patron = '1'
+          router.set(`/@/${user.id}/games?${utils.serializeQueryParameters(params)}`)
+        })
+      })}>
+        <span className="menu_icon_game" />{i18n('games')}
       </li>
       <li className="side_link" oncreate={helper.ontapXY(menu.route('/inbox'))}>
         <span className="fa fa-envelope"/>{i18n('inbox') + ((menu.inboxUnreadCount() !== null && menu.inboxUnreadCount() > 0) ? (' (' + menu.inboxUnreadCount() + ')') : '')}

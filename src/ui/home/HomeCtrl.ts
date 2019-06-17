@@ -68,6 +68,10 @@ export default class HomeCtrl {
         this.timeline = data.entries
           .filter((o: TimelineEntry) => supportedTimelineTypes.indexOf(o.type) !== -1)
           .slice(0, 10)
+          .map(o => {
+            o.fromNow = window.moment(o.date).fromNow()
+            return o
+          })
         redraw()
       })
       .catch(noop)

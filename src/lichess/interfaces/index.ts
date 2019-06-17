@@ -74,7 +74,7 @@ export interface PongMessage {
   readonly r: number
 }
 
-export type TimelineEntryType = 'follow' | 'game-end' | 'tour-join' | 'study-create' | 'study-like'
+export type TimelineEntryType = 'follow' | 'game-end' | 'tour-join' | 'study-create' | 'study-like' | 'forum-post' | 'blog-post'
 
 export interface TimelineEntry {
   readonly data: any
@@ -126,23 +126,28 @@ export interface MiniUser {
   readonly [index: string]: MiniUserPlayer
 }
 
-export interface MiniBoardGameObjPlayer {
-  readonly rating: number
-  readonly user: {
-    readonly username: string
-  }
+export interface FeaturedGame {
+  black: FeaturedPlayer
+  clock: FeaturedClock
+  color: Color
+  fen: string
+  id: string
+  lastMove: string
+  white: FeaturedPlayer
 }
 
-export interface MiniBoardGameObj {
-  readonly player: MiniBoardGameObjPlayer
-  readonly opponent: MiniBoardGameObjPlayer
-  readonly clock?: {
-    readonly initial: number
-    readonly increment: number
-  }
-  readonly correspondence?: {
-    readonly daysPerTurn: number
-  }
+interface FeaturedPlayer {
+  readonly name: string
+  readonly rating: number
+  readonly ratingDiff: number
+  readonly rank?: number
+  readonly berserk?: boolean
+  readonly title?: string
+}
+
+interface FeaturedClock {
+  readonly increment: number
+  readonly initial: number
 }
 
 export interface Paginator<T> {

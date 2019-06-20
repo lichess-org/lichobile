@@ -46,9 +46,13 @@
     vertical-align bottom
     margin-right 1px
 
-.ranking
+.leaderboard_wrapper
+  display flex
+  flex-flow row wrap
+
+.leaderboard_section
   width 100%
-  padding 15px
+  padding 0 1em
   @media only screen and (min-width 600px)
     flex 0 1 250px
 
@@ -56,18 +60,16 @@
   text-transform uppercase
   font-size 1.2em
   font-weight 600
+  margin 1em 0 .5em 0
+  display flex
   > .perfIcon
-    color gold
-    margin-right 10px
-    position relative
-    top 3px
+    font-size 1.2em
+    margin-right .5em
 
 .leaderboard_player
   padding 10px 0
   display flex
   justify-content space-between
-  &.active
-    background lighten(bgdark, 8%)
   @media only screen and (min-width 600px)
     font-size 0.9rem
     border-bottom-style none

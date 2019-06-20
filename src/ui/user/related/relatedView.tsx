@@ -1,33 +1,66 @@
-import router from '../../router'
-import { gameIcon } from '../../utils'
-import i18n from '../../i18n'
-import spinner from '../../spinner'
-import { Related } from '../../lichess/interfaces/user'
-import * as helper from '../helper'
-import { IRelationCtrl } from './interfaces'
+import * as h from 'mithril/hyperscript'
+import router from '../../../router'
+import { gameIcon } from '../../../utils'
+import i18n from '../../../i18n'
+import spinner from '../../../spinner'
+import { Related } from '../../../lichess/interfaces/user'
+import { Paginator } from '../../../lichess/interfaces'
+import * as helper from '../../helper'
+import TabNavigation from '../../shared/TabNavigation'
+import TabView from '../../shared/TabView'
 
-export function renderBody(ctrl: IRelationCtrl) {
-  const rel = ctrl.related()
+import RelatedCtrl from './RelatedCtrl'
 
-  if (!rel) {
+export function renderBody(ctrl: RelatedCtrl) {
+  const tabsContent = [
+    () => renderContent(ctrl, ctrl.followers, ctrl.followersPaginator),
+    () => renderContent(ctrl, ctrl.following, ctrl.followingPaginator),
+  ]
+
+  return [
+    h('div.tabs-nav-header.subHeader',
+      h(TabNavigation, {
+        buttons: [
+          { label: i18n('nbFollowers', ctrl.followersPaginator ? ctrl.followersPaginator.nbResults : '') },
+          { label: i18n('nbFollowing', ctrl.followingPaginator ? ctrl.followingPaginator.nbResults : '') },
+        ],
+        selectedIndex: ctrl.currentTab,
+        onTabChange: ctrl.onTabChange
+      }),
+    ),
+    h(TabView, {
+      selectedIndex: ctrl.currentTab,
+      contentRenderers: tabsContent,
+      onTabChange: ctrl.onTabChange,
+      withWrapper: true,
+    })
+  ]
+}
+
+function renderContent(
+  ctrl: RelatedCtrl,
+  content?: readonly Related[],
+  paginator?: Paginator<Related>
+) {
+
+  if (!content) {
     return (
       <div className="followingListEmpty">
         {spinner.getVdom('monochrome')}
       </div>
     )
   }
-  else if (rel.length) {
-    const paginator = ctrl.paginator()
+  else if (content.length) {
     const nextPage = paginator && paginator.nextPage
     return (
       <ul className="native_scroller page">
-        {rel.map((p, i) => renderPlayer(ctrl, p, i))}
+        {content.map((p, i) => renderPlayer(ctrl, p, i))}
         {nextPage ?
           <li
             className="list_item followingList moreFollow"
             oncreate={helper.ontapY(() => ctrl.loadNextPage(nextPage))}
           >
-          {ctrl.isLoadingNextPage() ? spinner.getVdom('monochrome') : '...'}
+          {ctrl.isLoadingNextPage ? spinner.getVdom('monochrome') : '...'}
           </li> : null
         }
       </ul>
@@ -41,7 +74,7 @@ export function renderBody(ctrl: IRelationCtrl) {
   }
 }
 
-function renderPlayer(ctrl: IRelationCtrl, obj: Related, i: number) {
+function renderPlayer(ctrl: RelatedCtrl, obj: Related, i: number) {
   const status = obj.online ? 'online' : 'offline'
   const perfKey = obj.perfs && Object.keys(obj.perfs)[0] as PerfKey
   const perf = obj.perfs && obj.perfs[perfKey]

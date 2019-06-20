@@ -27,20 +27,20 @@ export function games(userId: string, filter = 'all', page = 1, feedback = false
   }, feedback)
 }
 
-export function following(userId: string, page = 1, feedback = false): Promise<RelatedResult> {
+export function following(userId: string, page = 1): Promise<RelatedResult> {
   return fetchJSON(`/@/${userId}/following`, {
     query: {
       page
     }
-  }, feedback)
+  })
 }
 
-export function followers(userId: string, page = 1, feedback = false): Promise<RelatedResult> {
+export function followers(userId: string, page = 1): Promise<RelatedResult> {
   return fetchJSON(`/@/${userId}/followers`, {
     query: {
       page
     }
-  }, feedback)
+  })
 }
 
 export function follow(userId: string): Promise<RelationActionResult> {

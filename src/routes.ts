@@ -15,8 +15,7 @@ import theme from './ui/settings/theme'
 import boardThemes from './ui/settings/boardThemes'
 import pieceThemes from './ui/settings/pieceThemes'
 import user from './ui/user'
-import userFollowing from './ui/user/following'
-import userFollowers from './ui/user/followers'
+import userRelated from './ui/user/related'
 import userGames from './ui/user/games'
 import userPerfStats from './ui/user/perfStats'
 import userTV from './ui/user/tv'
@@ -61,8 +60,7 @@ export default {
       'tv': tv,
       'tv/:channel': tv,
       '@/:id': user,
-      '@/:id/following': userFollowing,
-      '@/:id/followers': userFollowers,
+      '@/:id/related': userRelated,
       '@/:id/games': userGames,
       '@/:id/games/:filter': userGames,
       '@/:id/:perf/perf': userPerfStats,

@@ -246,6 +246,11 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
           {i18n('viewAllNbGames', user.count.all)}
         </div> : null
       }
+      <div className="list_item nav" key="followers"
+        oncreate={helper.ontapY(ctrl.followers)}
+      >
+        {i18n('nbFollowers', user.nbFollowers || '')}
+      </div>
       { !ctrl.isMe() ? <div className="list_item nav" data-icon="1"
         oncreate={helper.ontapY(ctrl.goToUserTV)}
         key="user_tv"
@@ -261,7 +266,7 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
       </div> : null
       }
       { session.isConnected() && !ctrl.isMe() ?
-      <div className="list_item nav" key="compose_message" data-icon="m"
+      <div className="list_item nav" key="compose_message" data-icon="c"
         oncreate={helper.ontapY(ctrl.composeMessage)}
       >
         {i18n('composeMessage')}

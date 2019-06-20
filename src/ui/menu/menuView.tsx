@@ -101,14 +101,6 @@ function renderProfileActions(user: Session) {
         <span data-icon="f" />
         {i18n('onlineFriends') + ` (${friendsApi.count()})`}
       </li>
-      <li className="side_link" oncreate={helper.ontapXY(menu.route(`/@/${user.id}/following`))}>
-        <span className="fa fa-arrow-circle-right" />
-        {i18n('nbFollowing', user.nbFollowing || 0)}
-      </li>
-      <li className="side_link" oncreate={helper.ontapXY(menu.route(`/@/${user.id}/followers`))}>
-        <span className="fa fa-arrow-circle-left" />
-        {i18n('nbFollowers', user.nbFollowers || 0)}
-      </li>
       <li className="side_link" oncreate={helper.ontapXY(() => {
         session.logout()
         menu.profileMenuOpen(false)

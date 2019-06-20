@@ -144,7 +144,7 @@ function renderLeaderboard(ctrl: PlayersCtrl) {
     .filter(k => k !== 'online')
     .map((k: PerfKey) => renderRankingCategory(leaderboard, k))
   return (
-    <div className="native_scroller page">
+    <div className="native_scroller page leaderboard_wrapper">
       {categories}
     </div>
   )
@@ -152,7 +152,7 @@ function renderLeaderboard(ctrl: PlayersCtrl) {
 
 function renderRankingCategory(ranking: Rankings, key: PerfKey) {
   return (
-    <section className={'ranking ' + key}>
+    <section className={'leaderboard_section ' + key}>
       <h3 className="leaderboard_title">
       <span className="perfIcon" data-icon={utils.gameIcon(key)} />
         {perfTitle(key)}
@@ -166,7 +166,7 @@ function renderRankingCategory(ranking: Rankings, key: PerfKey) {
 
 function renderRankingPlayer(user: RankingUser, key: RankingKey) {
   return (
-    <li className="leaderboard_player" oncreate={helper.ontapY(() => router.set('/@/' + user.id))}>
+    <li className="list_item leaderboard_player" oncreate={helper.ontapY(() => router.set('/@/' + user.id))}>
       {userStatus(user)}
       <span className="rating">
         {user.perfs[key].rating}

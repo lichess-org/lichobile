@@ -78,6 +78,11 @@ function renderFriend(user: Friend) {
         <span>{user.name}</span>
       </div>
       <div className="onlineFriends_actions">
+        { user.playing ?
+          <span className="friend_tv" data-icon="1" oncreate={helper.ontapY(onTapTv)}> </span>
+          :
+          null
+        }
         <span data-icon="U" oncreate={helper.ontapY((e: Event) => {
           e.stopPropagation()
           close()
@@ -88,11 +93,6 @@ function renderFriend(user: Friend) {
           close()
           router.set(`/inbox/new/${userId}`)
         })} />
-        { user.playing ?
-          <span className="friend_tv" data-icon="1" oncreate={helper.ontapY(onTapTv)}> </span>
-          :
-          null
-        }
       </div>
     </li>
   )

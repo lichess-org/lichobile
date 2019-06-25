@@ -1,3 +1,13 @@
+html
+  font-family 'Noto Sans', sans-serif
+
+body
+  fluid-type(14px, 18px)
+  background-color #000
+  overflow hidden
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
+
 .view-container
   position absolute
   display block
@@ -89,7 +99,7 @@ main
   flex-flow row nowrap
   align-items center
   padding-left 10px
-  font-size 1.1rem
+  font-size 1.2em
   line-height headerHeight
   flex 1 1 auto
   overflow hidden
@@ -102,7 +112,7 @@ main
     line-height initial
     justify-content center
     align-items flex-start
-    font-size 1rem
+    font-size 1.1em
   &.reconnecting
     white-space nowrap
     justify-content center
@@ -113,7 +123,6 @@ main
   @media only screen and (max-width 320px)
     &.playing
       padding-left 0
-      font-size 1rem
 
 .main_header_button
   flex 0 0 auto
@@ -154,12 +163,12 @@ main
       background headerBgDarkActive
   > .title, .main_header_title
     &.withSub
-      font-size 1rem
+      font-size 1.1em
       display flex
       flex-flow column nowrap
       justify-content center
       line-height initial
-    font-size 1.1rem
+    font-size 1.2em
     padding-right 2px
     padding-left 2px
     overflow hidden

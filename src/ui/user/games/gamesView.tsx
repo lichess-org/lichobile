@@ -48,13 +48,13 @@ function onTap(ctrl: IUserGamesCtrl, e: Event) {
 }
 
 function renderAllGames(ctrl: IUserGamesCtrl) {
-  const { games  } = ctrl.scrollState
+  const { games, paginator } = ctrl.scrollState
   return (
     <div id="scroller-wrapper" className="native_scroller userGame-scroller"
       oncreate={helper.ontapY(e => onTap(ctrl, e!), undefined, helper.getLI)}
       onscroll={throttle(ctrl.onScroll, 30)}
     >
-      { games.length ?
+      { paginator ?
         <ul className="userGames" oncreate={ctrl.onGamesLoaded}>
           { games.map((g, i) =>
               h(GameItem, {

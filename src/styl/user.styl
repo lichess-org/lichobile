@@ -141,22 +141,14 @@ h3.fullname
   align-items center
   background-color bgdark
   min-height 60px
-  &.withStar
-    > .userGame-infos
-      padding-right 0
   &.even
     background-color lighten(bgdark, 2%)
-  > .iconStar
-    flex 0 0 30px
-    align-self flex-start
-    padding 0
-    color textGray
-    &:before
-      font-size 18px
-  .display_board
+  > .display_board
     margin-left 10px
     flex 0 0 30%
     height calc(100vw * 0.3)
+    > .cg-board
+      position initial
   @media only screen and (orientation portrait) and (max-width 320px)
     .userGame-infos
       font-size 0.9em
@@ -164,21 +156,17 @@ h3.fullname
       > .variant-icon
         font-size 1.3em
   @media only screen and (orientation landscape)
-    .display_board
+    > .display_board
       flex 0 0 110px
       height 110px
   @media only screen and (orientation landscape) and (min-height 450px)
-    .display_board
+    > .display_board
       flex 0 0 150px
       height 150px
   @media only screen and (orientation landscape) and (min-height 700px), only screen and (orientation portrait) and (min-width 600px)
-    .display_board
+    > .display_board
       flex 0 0 210px
       height 210px
-    .iconStar
-      right 12px
-      &:before
-        font-size 26px
     .userGame-infos
       font-size 1.1em
       line-height 2em
@@ -204,17 +192,50 @@ h3.fullname
   display flex
   flex-flow column nowrap
   justify-content space-around
-  padding 0 10px
+  margin-left 10px
+  overflow hidden
+
+.userGame-header
+  display flex
+  justify-content space-between
+  margin-bottom 0.5em
+  > .iconStar
+    font-size 1.2em
+
+.userGame-iconWrapper
+  flex 1 1 auto
+  display flex
+  flex-flow row nowrap
+  white-space nowrap
+  overflow hidden
+  > .variant-icon
+    flex 0 0 26px
+    display flex
+    align-items center
+    font-size 2em
+    margin-right 0.2em
+
+.userGame-titleWrapper
+  white-space nowrap
+  overflow hidden
+  text-overflow ellipsis
+
+.userGame-title
+  white-space nowrap
+  overflow hidden
+  text-overflow ellipsis
+  @media only screen and (min-width 600px)
+    text-transform uppercase
+
+.userGame-date
+  font-size 0.8em
+  line-height 1.5em
 
 .userGame-versus
   display flex
   flex-flow row nowrap
   align-items flex-start
-  > .variant-icon
-    font-size 1.5em
-    margin-top 2px
   > .game-result
-    padding 0 5px
     line-height 1.1em
     flex 1 1 auto
     display flex
@@ -228,7 +249,7 @@ h3.fullname
   > .swords
     width 24px
     font-size 18px
-    opacity 0.7
+    color rgba(textDarkBg, 0.7)
     text-align center
   > .player
     width calc((100% - 24px) / 2)
@@ -254,11 +275,15 @@ h3.fullname
     color red
 
 .userGame-meta
-  font-size 0.65em
+  font-size 0.75em
   line-height 1.5em
-  opacity 0.7
+  color rgba(textDarkBg, 0.7)
+  > .opening
+    font-size 0.9em
   > .analysis
     font-size 0.8em
+  > .tournament
+    color blue
 
 .variantPerfBody
   width 100%
@@ -355,13 +380,19 @@ td.variantPerfMemo
     > select
       color textLightBg
 
+  .userGame-meta, .userGame-players > .swords
+    color rgba(textLightBg, 0.7)
+
 .view-container.transp
   .userGame
     background transpBlack02
     &.even
       background transpWhite01
 
-  .iconStar, .profilePerf > .rating
+  .userGame-meta, .userGame-players > .swords
+    color rgba(textTransp, 0.7)
+
+  .profilePerf > .rating
     color textTransp
 
   #userProfileRatings

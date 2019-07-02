@@ -1,5 +1,6 @@
 import * as throttle from 'lodash/throttle'
 import * as h from 'mithril/hyperscript'
+import router from '../../../router'
 import * as utils from '../../../utils'
 import * as helper from '../../helper'
 import i18n from '../../../i18n'
@@ -35,11 +36,17 @@ function getButton(e: Event): HTMLElement | undefined {
 
 function onTap(ctrl: IUserGamesCtrl, e: Event) {
   const starButton = getButton(e)
+  const tournamentLink = helper.findElByClassName(e, 'tournament')
   const el = helper.getLI(e)
   const id = el && el.dataset.id
   const playerId = el && el.dataset.pid
   if (id && starButton) {
     ctrl.toggleBookmark(id)
+  } else if (tournamentLink) {
+    const tid = tournamentLink.dataset.id
+    if (tid) {
+      router.set(`/tournament/${tid}`)
+    }
   } else {
     if (id) {
       ctrl.goToGame(id, playerId)

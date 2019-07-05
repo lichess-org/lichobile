@@ -37,6 +37,7 @@ import renderActionsBar from './actionsView'
 export function loadingScreen(isPortrait: boolean, color?: Color, curFen?: string) {
   const isSmall = settings.analyse.smallBoard()
   const boardPos = settings.analyse.boardPosition()
+  console.log(isSmall, boardPos)
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, isSmall)
   return layout.board(
     loadingBackbutton(),
@@ -105,7 +106,7 @@ export function renderVariantSelector(ctrl: AnalyseCtrl) {
 
 function viewOnlyBoard(color: Color, bounds: Bounds, isSmall: boolean, fen: string, pos: '1' | '2') {
   return h('section.board_wrapper.analyse-boardWrapper', {
-    className: (isSmall ? 'halfsize' : '') + 'pos' + pos
+    className: (isSmall ? 'halfsize ' : '') + 'pos' + pos
   }, h(ViewOnlyBoard, { orientation: color, bounds, fen }))
 }
 

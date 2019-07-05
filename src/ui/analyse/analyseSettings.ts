@@ -14,6 +14,7 @@ export interface ISettingsCtrl {
   root: AnalyseCtrl
   s: {
     smallBoard: boolean
+    boardPosition: '1' | '2'
     showBestMove: boolean
     showComments: boolean
     flip: boolean
@@ -25,6 +26,7 @@ export interface ISettingsCtrl {
   close(fBB?: string): void
   isOpen(): boolean
   toggleBoardSize(): void
+  setBoardPosition(pos: '1' | '2'): void
   toggleBestMove(): void
   toggleComments(): void
   cevalSetMultiPv(pv: number): void
@@ -50,6 +52,7 @@ export default {
 
     const s = {
       smallBoard: settings.analyse.smallBoard(),
+      boardPosition: settings.analyse.boardPosition(),
       showBestMove: settings.analyse.showBestMove(),
       showComments: settings.analyse.showComments(),
       flip: false,
@@ -68,6 +71,9 @@ export default {
         const newVal = !s.smallBoard
         settings.analyse.smallBoard(newVal)
         s.smallBoard = newVal
+      },
+      setBoardPosition(pos: '1' | '2') {
+        s.boardPosition = pos
       },
       toggleBestMove() {
         const newVal = !s.showBestMove
@@ -119,6 +125,19 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
   const cores = getNbCores()
 
   return h('div.analyseSettings', [
+    h('div.action', {
+      key: 'boardPosition',
+    }, [
+      formWidgets.renderMultipleChoiceButton(
+        'Board position', [
+          { label: 'First', value: '1' },
+          { label: 'Second', value: '2' },
+        ],
+        settings.analyse.boardPosition,
+        false,
+        ctrl.settings.setBoardPosition
+      )
+    ]),
     ctrl.ceval.allowed ? h('div.action', {
       key: 'enableCeval'
     }, [
@@ -140,14 +159,14 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
       ),
       h('small.caution', i18n('localEvalCaution'))
     ]) : null,
-    h('div.action', {
+    ctrl.study || ctrl.ceval.allowed ? h('div.action', {
       key: 'showBestMove'
     }, [
       formWidgets.renderCheckbox(
-        [i18n('showBestMove'), h('small', ' (pale blue arrow)')], 'showBestMove', settings.analyse.showBestMove,
+        i18n('showBestMove'), 'showBestMove', settings.analyse.showBestMove,
         ctrl.settings.toggleBestMove
       )
-    ]),
+    ]) : null,
     ctrl.study || (ctrl.source === 'online' && isOnlineAnalyseData(ctrl.data) && gameApi.analysable(ctrl.data)) ? h('div.action', {
       key: 'showComments'
     }, [

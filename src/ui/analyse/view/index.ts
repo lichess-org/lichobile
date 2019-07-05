@@ -36,12 +36,14 @@ import renderActionsBar from './actionsView'
 
 export function loadingScreen(isPortrait: boolean, color?: Color, curFen?: string) {
   const isSmall = settings.analyse.smallBoard()
+  const boardPos = settings.analyse.boardPosition()
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, isSmall)
   return layout.board(
     loadingBackbutton(),
     [
-      viewOnlyBoard(color || 'white', bounds, isSmall, curFen || emptyFen),
-      h('div.analyse-tableWrapper', spinner.getVdom('monochrome'))
+      viewOnlyBoard(color || 'white', bounds, isSmall, curFen || emptyFen, boardPos),
+      h('div.analyse-tableWrapper', spinner.getVdom('monochrome')),
+      isPortrait && boardPos === '2' ? h('section.analyse_actions_bar') : null,
     ]
   )
 }
@@ -54,8 +56,9 @@ export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Bo
     h('div.analyse-tableWrapper', [
       ctrl.data.game.variant.key === 'crazyhouse' ? renderCrazy(ctrl) : null,
       renderAnalyseTable(ctrl, availTabs),
-      renderActionsBar(ctrl)
-    ])
+      !isPortrait ? renderActionsBar(ctrl) : null,
+    ]),
+    isPortrait ? renderActionsBar(ctrl) : null,
   ])
 }
 
@@ -100,9 +103,9 @@ export function renderVariantSelector(ctrl: AnalyseCtrl) {
   )
 }
 
-function viewOnlyBoard(color: Color, bounds: Bounds, isSmall: boolean, fen: string) {
-  return h('section.board_wrapper', {
-    className: isSmall ? 'halfsize' : ''
+function viewOnlyBoard(color: Color, bounds: Bounds, isSmall: boolean, fen: string, pos: '1' | '2') {
+  return h('section.board_wrapper.analyse-boardWrapper', {
+    className: (isSmall ? 'halfsize' : '') + 'pos' + pos
   }, h(ViewOnlyBoard, { orientation: color, bounds, fen }))
 }
 

@@ -18,6 +18,8 @@
   flex-grow 0
   flex-shrink 0
   align-self center
+  &.pos2
+    order 2
 
 .analyse-table
   position relative
@@ -53,6 +55,7 @@
   flex 0 0 auto
   height 25px
   > .tab-button
+    font-size inherit
     position relative
     padding 0 0.5em
     height 25px
@@ -71,14 +74,11 @@
       // text-shadow 0 1px 0 #000
 
 .analyse-tableWrapper
-  margin-top 2px
   flex 1 1 auto
   display flex
   flex-flow column nowrap
   min-width 0 // fix width bug on landscape
   min-height 0 // fix chrome 73 regression
-  @media only screen and (orientation: landscape)
-    margin-top 0
 
 .analyse-table
   flex-flow column nowrap
@@ -99,6 +99,7 @@
       width 'calc(100vw - 88vh + %s)' % headerHeight
 
 .analyse_actions_bar
+  order 3
   flex 0 0 40px
   padding 0
   width 100%
@@ -290,10 +291,8 @@ comment
     .tab-button
       color textGray
 
-  .analyse_actions_bar
-    border-top 1px solid borderLightGray
-
   .analyse-tabsContent
+    border-bottom 1px solid borderLightGray
     background #fff
 
   inline

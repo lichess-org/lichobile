@@ -129,7 +129,8 @@ export default {
     cevalInfinite: store.prop<boolean>('settings.ceval.infinite', false),
     showBestMove: store.prop('settings.analyse.showBestMove', true),
     showComments: store.prop('settings.analyse.showComments', true),
-    smallBoard: store.prop('settings.analyse.smallBoard', true),
+    smallBoard: store.prop<boolean>('settings.analyse.smallBoard', true),
+    boardPosition: store.prop<'1' | '2'>('settings.analyse.boardPosition', '1'),
     explorer: {
       db: store.prop('settings.analyse.explorer.db', 'lichess'),
       availableRatings: [1600, 1800, 2000, 2200, 2500],

@@ -87,6 +87,7 @@
     display none
 
 .table
+  overflow hidden
   display flex
   flex-flow column nowrap
   > header
@@ -109,15 +110,13 @@
   @media only screen and (orientation: landscape) and (min-width 801px)
     .clock
       font-size 25px
-      max-width 120px
-    .antagonistInfos
-      max-width calc(100% - 120px)
+      max-width initial
+  @media only screen and (orientation: landscape) and (min-width 801px) and (aspect-ratio 4/3), only screen and (orientation: landscape) and (min-width 801px) and (device-aspect-ratio 4/3)
+    .clock
+      max-width 180px
   @media only screen and (orientation: landscape) and (min-width 1025px)
     .clock
       font-size 35px
-      max-width 160px
-    .antagonistInfos
-      max-width calc(100% - 160px)
 
 .board_alert
   position: absolute;

@@ -37,7 +37,6 @@ import renderActionsBar from './actionsView'
 export function loadingScreen(isPortrait: boolean, color?: Color, curFen?: string) {
   const isSmall = settings.analyse.smallBoard()
   const boardPos = settings.analyse.boardPosition()
-  console.log(isSmall, boardPos)
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, isSmall)
   return layout.board(
     loadingBackbutton(),

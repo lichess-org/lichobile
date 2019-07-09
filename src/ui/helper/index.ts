@@ -224,8 +224,8 @@ export function ontap(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHa
   return createTapHandler(tapHandler, holdHandler, repeatHandler, false, false, getElement)
 }
 
-export function ontapX(tapHandler: TapHandler, holdHandler?: TapHandler) {
-  return createTapHandler(tapHandler, holdHandler, undefined, true, false)
+export function ontapX(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement) {
+  return createTapHandler(tapHandler, holdHandler, undefined, true, false, getElement)
 }
 
 export function ontapY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement, preventEndDefault = true) {

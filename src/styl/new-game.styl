@@ -50,10 +50,12 @@
   flex-flow row wrap
   justify-content space-between
   align-items center
-  padding 20px
+  padding 1em
 
 .newGame-pool
-  fluid-type(14px, 35px)
+  font-family 'Roboto'
+  font-weight 300
+  fluid-type(14px, 30px)
   height calc((100vw * 0.85 - 40px) * 0.31)
   flex 0 0 31%
   background rgba(255,255,255,0.7)
@@ -63,8 +65,7 @@
   justify-content center
   align-items center
   margin-bottom 10px
-  padding 5px 0
-  color textLightBg
+  color themeBgLightText
   opacity 1
   transition opacity 0.5s
   &.active
@@ -73,19 +74,16 @@
   &.transp
     opacity 0.6
   @media only screen and (min-width 500px)
-    height calc((100vw * 0.6 - 40px) * 0.31)
+    height calc((60vw - 40px) * 0.31)
   @media only screen and (min-width 600px)
-    height calc((100vw * 0.55 - 40px) * 0.31)
+    height calc((55vw - 40px) * 0.31)
   @media only screen and (min-width 700px)
-    height calc((100vw * 0.5 - 40px) * 0.31)
-  @media only screen and (min-width 800px)
-    height calc((100vw * 0.45 - 40px) * 0.31)
-  @media only screen and (min-width 900px)
-    height calc((100vw * 0.4 - 40px) * 0.31)
+    height calc((50vw - 40px) * 0.31)
 
 .newGame-clock
   font-size 1.5em
-  letter-spacing 3px
+  line-height 1.6em
+  letter-spacing .1em
 
 .newGame-perf
   text-transform capitalize

@@ -21,14 +21,13 @@ import CountdownTimer from '../../../shared/CountdownTimer'
 import Board from '../../../shared/Board'
 import popupWidget from '../../../shared/popup'
 import Clock from '../clock/clockView'
-import ClockCtrl from '../clock/ClockCtrl'
 import promotion from '../promotion'
 import gameButton from './button'
 import { chatView } from '../../chat'
 import { notesView } from '../notes'
 import CrazyPocket from '../crazy/CrazyPocket'
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView'
-import { renderTable as renderReplayTable } from './replay'
+import { renderInlineReplay, renderReplay } from './replay'
 import OnlineRound from '../OnlineRound'
 import { Position, Material } from '../'
 
@@ -40,6 +39,20 @@ export default function view(ctrl: OnlineRound) {
     renderContent(ctrl, isPortrait),
     overlay(ctrl)
   )
+}
+
+export function renderMaterial(material: Material) {
+  const tomb = Object.keys(material.pieces).map((role: Role) =>
+    h('div.tomb', { key: role }, range(material.pieces[role])
+      .map(_ => h('piece', { className: role }))
+    )
+  )
+
+  if (material.score > 0) {
+    tomb.push(h('span', '+' + material.score))
+  }
+
+  return tomb
 }
 
 function overlay(ctrl: OnlineRound) {
@@ -73,20 +86,6 @@ function overlay(ctrl: OnlineRound) {
       close: () => ctrl.closeUserPopup('opponent'),
     })
   ]
-}
-
-export function renderMaterial(material: Material) {
-  const tomb = Object.keys(material.pieces).map((role: Role) =>
-    h('div.tomb', { key: role }, range(material.pieces[role])
-      .map(_ => h('piece', { className: role }))
-    )
-  )
-
-  if (material.score > 0) {
-    tomb.push(h('span', '+' + material.score))
-  }
-
-  return tomb
 }
 
 function renderTitle(ctrl: OnlineRound) {
@@ -176,6 +175,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
 
   if (isPortrait) {
     return h.fragment({ key: orientationKey }, [
+      renderInlineReplay(ctrl),
       flip ? player : opponent,
       board,
       flip ? opponent : player,
@@ -187,7 +187,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
       h('section.table',
         h('section.playersTable', [
           flip ? player : opponent,
-          renderReplayTable(ctrl),
+          renderReplay(ctrl),
           flip ? opponent : player,
         ]),
         renderGameActionsBar(ctrl),
@@ -218,12 +218,12 @@ function getChecksCount(ctrl: OnlineRound, color: Color) {
 }
 
 function renderSubmitMovePopup(ctrl: OnlineRound) {
-  if (ctrl.vm.moveToSubmit || ctrl.vm.dropToSubmit) {
+  if (ctrl.vm.moveToSubmit || ctrl.vm.dropToSubmit || ctrl.vm.submitFeedback) {
     return (
       <div className="overlay_popup_wrapper submitMovePopup">
-      <div className="overlay_popup">
-      {gameButton.submitMove(ctrl)}
-      </div>
+        <div className="overlay_popup">
+          {gameButton.submitMove(ctrl)}
+        </div>
       </div>
     )
   }
@@ -242,15 +242,6 @@ function userInfos(user: User, player: Player, playerName: string, position: Pos
   } else
     title = playerName
   window.plugins.toast.show(title, 'short', 'center')
-}
-
-function renderClock(ctrl: ClockCtrl, color: Color, isBerserk: boolean, runningColor?: Color) {
-  return h(Clock, {
-    ctrl,
-    color,
-    runningColor,
-    isBerserk
-  })
 }
 
 function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Material, position: Position, isPortrait: boolean, isCrazy: boolean) {
@@ -300,7 +291,12 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
       </div> : null
       }
       {isCrazy && ctrl.clock ?
-        renderClock(ctrl.clock, player.color, ctrl.vm.goneBerserk[player.color], runningColor) :
+        h(Clock, {
+          ctrl: ctrl.clock,
+          color: player.color,
+          isBerserk: ctrl.vm.goneBerserk[player.color],
+          runningColor
+        }) :
         isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
@@ -332,7 +328,12 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
         }) : null
       }
       { !isCrazy && ctrl.clock ?
-        renderClock(ctrl.clock, player.color, ctrl.vm.goneBerserk[player.color], runningColor) :
+        h(Clock, {
+          ctrl: ctrl.clock,
+          color: player.color,
+          isBerserk: ctrl.vm.goneBerserk[player.color],
+          runningColor
+        }) :
         !isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player

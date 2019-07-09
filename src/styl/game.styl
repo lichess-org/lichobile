@@ -71,14 +71,23 @@
     width 100%
     background: rgba(#b3b3b3, 0.8)
     > strong
-      font-family Cousine
+      font-family 'Roboto'
     &.emerg
       background: rgba(#dc322f, 0.8)
+
+.replay_inline
+  flex 0 0 30px
+  overflow hidden
+  overflow-x scroll
+  white-space nowrap
 
 .replay
   flex 0 0 auto
   height 250px
   overflow hidden
+  background lighten(bgdark, 3%)
+  overflow-y auto
+  -webkit-overflow-scrolling touch
   @media only screen and (orientation: landscape)
     padding 0
   @media only screen and (orientation: landscape) and (max-height 450px)
@@ -92,23 +101,19 @@
   @media only screen and (orientation: landscape) and (min-height 800px)
     height 400px
 
-.gameMovesList
-  height 100%
-  width 100%
-  background lighten(bgdark, 3%)
-  >.moves
-    .replayMove
-      font-weight normal
-      transition: background-color 0.13s ease 0s;
-      &.current
-        color inherit
-        font-weight bold
-        background-color transparent
-      &.active
-        background-color lighten(bgdark, 8%)
-    &.displayPieces
-      .replayMove
-        font-family ChessSansPiratf
+.replay, .replay_inline
+  > .replayMove
+    color darken(textDarkBg, 10%)
+    font-weight normal
+    transition: background-color 0.13s ease 0s;
+    &.current
+      color lighten(textDarkBg, 60%)
+      background-color transparent
+    &.active
+      background-color lighten(bgdark, 8%)
+  &.displayPieces
+    > .replayMove
+      font-family ChessSansPiratf
 
 .rp.null
   color textGray
@@ -203,9 +208,9 @@
 
 .clock
   transform translateZ(0)
-  font-family Cousine
+  font-family 'Roboto'
   text-align right
-  fluid-type(30px, 40px)
+  fluid-type(32px, 48px)
   padding 0 2vmin
   line-height 55px
   color textDarkBg
@@ -354,6 +359,8 @@
     display flex
     align-items center
     justify-content space-around
+    &.loading
+      opacity 0.6
     > button
       flex: 0 0 80px;
       height: 50px;
@@ -517,7 +524,7 @@
       color #d0d0d0
       &.running
         color #fff
-  .gameMovesList
+  .replay
     background transpBlack04
 
 .action_bar_button

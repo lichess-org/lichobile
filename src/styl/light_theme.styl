@@ -90,11 +90,19 @@
     &.active
       background-color activeBgLight
 
-  .gameMovesList
-    > .moves
-      .replayMove
-        &.active
-          background-color darken(themeBgLight, 12%)
+  .replay, .replay_inline
+    > .replayMove
+      color lighten(textLightBg, 10%)
+      &.current
+        background-color transparent
+        color black
+        > index
+          color inherit
+      &.active
+        background-color darken(themeBgLight, 12%)
+        color black
+        > index
+          color black
 
   .action_bar_button
     color textGray
@@ -109,7 +117,7 @@
       color #fff
       border-color themeBgLightHeader
 
-  .gameMovesList
+  .replay
     background darken(themeBgLight, 4%)
     color textLightBg
 

@@ -45,6 +45,7 @@ interface VM {
   },
   moveToSubmit: MoveRequest | null
   dropToSubmit: DropRequest | null
+  submitFeedback?: [number, number] // [ply, timestamp]
   tClockEl: HTMLElement | null
   offlineWatcher: boolean
   clockPosition: 'right' | 'left'
@@ -374,7 +375,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public submitMove = (v: boolean) => {
-    if (v && (this.vm.moveToSubmit || this.vm.dropToSubmit)) {
+    if (v && (this.vm.moveToSubmit || this.vm.dropToSubmit) && !this.vm.submitFeedback) {
       if (this.vm.moveToSubmit) {
         this.socketSendMoveOrDrop(this.vm.moveToSubmit)
       } else if (this.vm.dropToSubmit) {
@@ -385,6 +386,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       }
       this.vm.moveToSubmit = null
       this.vm.dropToSubmit = null
+      this.vm.submitFeedback = [this.data.game.turns, performance.now()]
     } else {
       this.cancelMove()
     }
@@ -396,6 +398,17 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     if (playing) this.lastMoveMillis = performance.now()
 
+    if (this.vm.submitFeedback && this.vm.submitFeedback[0] + 1 === o.ply) {
+      const duration = this.vm.submitFeedback[1] - performance.now()
+      setTimeout(() => {
+        this.vm.submitFeedback = undefined
+        if (playing) {
+          sound.confirmation()
+          vibrate.quick()
+        }
+        redraw()
+      }, Math.max(500 - duration, 0))
+    }
     d.game.turns = o.ply
     d.game.player = o.ply % 2 === 0 ? 'white' : 'black'
     const playedColor: Color = o.ply % 2 === 0 ? 'black' : 'white'

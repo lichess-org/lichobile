@@ -131,7 +131,7 @@ function renderWebsiteLinks(ctrl: IUserCtrl, user: ProfileUser) {
           <a className="external_link"
             oncreate={helper.ontapY(() => xhr.openWebsiteAuthPage(`/@/${user.id}`))}
           >
-            More on website
+            More on lichess.org
           </a>
         </p>
       }
@@ -290,6 +290,13 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
             disabled={user.following}
             onchange={ctrl.toggleBlocking} />
         </div>
+      </div> : null
+      }
+      { session.isConnected() && !ctrl.isMe() ?
+      <div className="list_item" key="report" data-icon="!"
+        oncreate={helper.ontapY(() => xhr.openWebsiteAuthPage(`/report?username=${user.username}`))}
+      >
+        {i18n('reportXToModerators', user.username)}
       </div> : null
       }
     </section>

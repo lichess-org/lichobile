@@ -27,7 +27,7 @@ Exceptions (free)
 Files | Author(s) | License
 --- | --- | ---
 ChessSansPiratf in www/fonts | the [pgn4web](http://pgn4web.casaschi.net/home.html) authors | [GPLv2+](https://www.gnu.org/licenses/gpl-2.0.txt)
-Cousine in www/fonts | [Steve Matteson](https://twitter.com/@SteveMatteson1) | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+Roboto in www/fonts | [Christian Robertson](http://christianrobertson.com/) | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 Noto in www/fonts | [Google](https://fonts.google.com/specimen/Noto+Sans) | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 Fontawesome in www/fonts | [davegandy](https://fontawesome.com) | [SIL OFL 1.1](https://opensource.org/licenses/OFL-1.1)
 www/images/pieces/mono | Thibault Duplessis and [Colin M.L. Burnett](https://en.wikipedia.org/wiki/User:Cburnett) | [GPLv2+](https://www.gnu.org/licenses/gpl-2.0.txt)

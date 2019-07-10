@@ -2,10 +2,8 @@ import * as h from 'mithril/hyperscript'
 import * as menu from '../menu'
 import router from '../../router'
 import * as utils from '../../utils'
-import { emptyFen } from '../../utils/fen'
 import { hasOfflineGames } from '../../utils/offlineGames'
 import settings from '../../settings'
-import layout from '../layout'
 import * as helper from '../helper'
 import gamesMenu from '../gamesMenu'
 import newGameForm from '../newGameForm'
@@ -14,18 +12,8 @@ import challengesApi from '../../lichess/challenges'
 import friendsApi from '../../lichess/friends'
 import i18n from '../../i18n'
 import friendsPopup from '../friendsPopup'
-import ViewOnlyBoard from './ViewOnlyBoard'
 import { backArrow } from './icons'
 import { BaseUser } from '../../lichess/interfaces/user'
-
-export const LoadingBoard = {
-  view() {
-    return layout.board(
-      connectingHeader(),
-      viewOnlyBoardContent(emptyFen, 'white')
-    )
-  }
-}
 
 export function menuButton() {
   return h('button.fa.fa-navicon.main_header_button.menu_button', {
@@ -206,32 +194,6 @@ export function loadingBackbutton(title?: string) {
       {headerBtns()}
     </nav>
   )
-}
-
-export function viewOnlyBoardContent(fen: string, orientation: Color, lastMove?: string, variant?: VariantKey, wrapperClass?: string, customPieceTheme?: string) {
-  const isPortrait = helper.isPortrait()
-  const { vw, vh } = helper.viewportDim()
-  const orientKey = 'viewonlyboard' + (isPortrait ? 'portrait' : 'landscape')
-  const bounds = isPortrait ? { width: vw, height: vw } : { width: vh - 50, height: vh - 50 }
-  const className = 'board_wrapper' + (wrapperClass ? ' ' + wrapperClass : '')
-  const board = (
-    <section className={className}>
-      {h(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
-    </section>
-  )
-  if (isPortrait) {
-    return h.fragment({ key: orientKey }, [
-      <section className="playTable">&nbsp;</section>,
-      board,
-      <section className="playTable">&nbsp;</section>,
-      <section className="actions_bar">&nbsp;</section>
-    ])
-  } else {
-    return h.fragment({ key: orientKey}, [
-      board,
-      <section className="table" />
-    ])
-  }
 }
 
 export function empty(): Mithril.Children {

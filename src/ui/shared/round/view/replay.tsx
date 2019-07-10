@@ -2,6 +2,7 @@ import * as h from 'mithril/hyperscript'
 import { fixCrazySan } from '../../../../utils/chessFormat'
 import * as helper from '../../../helper'
 import settings from '../../../../settings'
+import { autoScroll, autoScrollInline, onReplayTap, getMoveEl } from '../util'
 import OnlineRound from '../OnlineRound'
 
 let pieceNotation: boolean
@@ -38,35 +39,6 @@ function renderMoves(ctrl: OnlineRound) {
     s.ply & 1 ? renderIndex(s.ply, true) : null,
     fixCrazySan(s.san!)
   ]))
-}
-
-function autoScroll(movelist?: HTMLElement) {
-  if (!movelist) return
-  requestAnimationFrame(() => {
-    const plyEl = movelist.querySelector('.current') as HTMLElement
-    if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2
-  })
-}
-
-function autoScrollInline(movelist?: HTMLElement) {
-  if (!movelist) return
-  requestAnimationFrame(() => {
-    const plyEl = movelist.querySelector('.current') as HTMLElement
-    if (plyEl) movelist.scrollLeft = plyEl.offsetLeft - movelist.offsetWidth / 2 + plyEl.offsetWidth / 2
-  })
-}
-
-function getMoveEl(e: Event) {
-  const target = (e.target as HTMLElement)
-  return target.tagName === 'MOVE' ? target :
-    helper.findParentBySelector(target, 'move')
-}
-
-function onReplayTap(ctrl: OnlineRound, e: Event) {
-  const el = getMoveEl(e)
-  if (el && el.dataset.ply) {
-    ctrl.jump(Number(el.dataset.ply))
-  }
 }
 
 function renderIndexText(ply: Ply, withDots?: boolean): string {

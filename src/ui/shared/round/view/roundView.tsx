@@ -11,13 +11,15 @@ import { Player } from '../../../../lichess/interfaces/game'
 import { User } from '../../../../lichess/interfaces/user'
 import settings from '../../../../settings'
 import * as utils from '../../../../utils'
+import { emptyFen } from '../../../../utils/fen'
 import i18n from '../../../../i18n'
 import layout from '../../../layout'
 import * as helper from '../../../helper'
-import { backButton, menuButton, loader, headerBtns, bookmarkButton } from '../../../shared/common'
+import { connectingHeader, backButton, menuButton, loader, headerBtns, bookmarkButton } from '../../../shared/common'
 import PlayerPopup from '../../../shared/PlayerPopup'
 import GameTitle from '../../../shared/GameTitle'
 import CountdownTimer from '../../../shared/CountdownTimer'
+import ViewOnlyBoard from '../../../shared/ViewOnlyBoard'
 import Board from '../../../shared/Board'
 import popupWidget from '../../../shared/popup'
 import Clock from '../clock/clockView'
@@ -29,6 +31,7 @@ import CrazyPocket from '../crazy/CrazyPocket'
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView'
 import { renderInlineReplay, renderReplay } from './replay'
 import OnlineRound from '../OnlineRound'
+import { hasSpaceForReplay } from '../util'
 import { Position, Material } from '../'
 
 export default function view(ctrl: OnlineRound) {
@@ -53,6 +56,42 @@ export function renderMaterial(material: Material) {
   }
 
   return tomb
+}
+
+export function viewOnlyBoardContent(fen: string, orientation: Color, lastMove?: string, variant?: VariantKey, wrapperClass?: string, customPieceTheme?: string) {
+  const isPortrait = helper.isPortrait()
+  const vd = helper.viewportDim()
+  const orientKey = 'viewonlyboard' + (isPortrait ? 'portrait' : 'landscape')
+  const bounds = helper.getBoardBounds(vd, isPortrait)
+  const className = 'board_wrapper' + (wrapperClass ? ' ' + wrapperClass : '')
+  const board = (
+    <section className={className}>
+      {h(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
+    </section>
+  )
+  if (isPortrait) {
+    return h.fragment({ key: orientKey }, [
+      hasSpaceForReplay(vd, bounds) ? h('div.replay') : h('div.replay_inline'),
+      h('section.playTable'),
+      board,
+      h('section.playTable'),
+      h('section.actions_bar'),
+    ])
+  } else {
+    return h.fragment({ key: orientKey}, [
+      board,
+      h('section.table'),
+    ])
+  }
+}
+
+export const LoadingBoard = {
+  view() {
+    return layout.board(
+      connectingHeader(),
+      viewOnlyBoardContent(emptyFen, 'white')
+    )
+  }
 }
 
 function overlay(ctrl: OnlineRound) {
@@ -162,7 +201,8 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const material = ctrl.chessground.getMaterialDiff()
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait)
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait)
-  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait)
+  const vd = helper.viewportDim()
+  const bounds = helper.getBoardBounds(vd, isPortrait)
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
@@ -175,7 +215,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
 
   if (isPortrait) {
     return h.fragment({ key: orientationKey }, [
-      renderInlineReplay(ctrl),
+      hasSpaceForReplay(vd, bounds) ? renderReplay(ctrl) : renderInlineReplay(ctrl),
       flip ? player : opponent,
       board,
       flip ? opponent : player,
@@ -317,7 +357,6 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
 
   return (
     <section className={classN}>
-      <div className="playTable-inner">
       {renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy)}
       { !!step.crazy ?
         h(CrazyPocket, {
@@ -342,7 +381,6 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
       { playable && (myTurn && position === 'player' || !myTurn && position === 'opponent') ?
         renderExpiration(ctrl, position, myTurn) : null
       }
-      </div>
     </section>
   )
 }

@@ -19,36 +19,32 @@
     font-size 0.8em
 
 .playTable
-  flex 1 1 auto
+  flex 0 0 55px
   display flex
-  align-items flex-end
   overflow hidden
-  > .playTable-inner
-    overflow hidden
-    display flex
-    justify-content space-between
-    align-items center
-    flex-grow 1
+  justify-content space-between
+  align-items stretch
   &.clockOnLeft
     > .antagonistInfos
       order 2
   &.crazy
+    flex 0 0 calc(100vw / 8 + 10px)
     padding 0
   @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
     width 98vw
     margin 0 auto
-  @media only screen and (orientation: landscape)
-    flex 1 0 auto
-    padding 0
-    height initial
     &.crazy
-      > .playTable-inner > .antagonistInfos
+      flex 0 0 "calc((100vh - 100vw - 25px - %s - %s) / 2)" % (headerHeight footerHeight)
+  @media only screen and (orientation: landscape)
+    padding 0
+    &.crazy
+      flex 0 0 'calc((100vh - %s) / 8)' % headerHeight
+      max-height 60px
+      > .antagonistInfos
         order 2
-      > .playTable-inner > .pocket
+      > .pocket
+        flex 0 0 auto
         order 1
-
-.game_board_wrapper + .playTable, .replay + .playTable
-  align-items flex-start
 
 .round-expiration
   position: absolute;
@@ -76,33 +72,26 @@
       background: rgba(#dc322f, 0.8)
 
 .replay_inline
-  flex 0 0 30px
+  flex 1 1 auto
   overflow hidden
-  overflow-x scroll
+  overflow-x auto
   white-space nowrap
+  display flex
+  align-items center
 
 .replay
-  flex 0 0 auto
-  height 250px
+  flex 1 1 auto
   overflow hidden
   background lighten(bgdark, 3%)
   overflow-y auto
   -webkit-overflow-scrolling touch
-  @media only screen and (orientation: landscape)
-    padding 0
-  @media only screen and (orientation: landscape) and (max-height 450px)
-    height 100px
-  @media only screen and (orientation: landscape) and (min-height 450px)
-    height 150px
-  @media only screen and (orientation: landscape) and (min-height 550px)
-    height 200px
-  @media only screen and (orientation: landscape) and (min-height 700px)
-    height 300px
-  @media only screen and (orientation: landscape) and (min-height 800px)
-    height 400px
+  padding .2em
+  @media only screen and (orientation: portrait)
+    margin 0.5em
 
 .replay, .replay_inline
   > .replayMove
+    overflow initial
     color darken(textDarkBg, 10%)
     font-weight normal
     transition: background-color 0.13s ease 0s;
@@ -123,6 +112,9 @@
   color red
 
 .antagonistInfos
+  display flex
+  flex-flow column nowrap
+  justify-content center
   overflow hidden
   padding 0 2vmin
   .score
@@ -152,7 +144,7 @@
   &.active
     background-color lighten(bgdark, 8%)
   &.crazy
-    padding 0 10px
+    padding 0 .5em
     .ratingAndMaterial
       height inherit
     > .antagonistUser
@@ -194,6 +186,9 @@
   font-size 1.2em
   white-space nowrap
   color textLightGray
+  > h2
+    overflow hidden
+    text-overflow ellipsis
   > .status
     font-size 0.9em
     margin-right 5px
@@ -430,8 +425,6 @@
     align-items center
 
 .pocket
-  height calc(100vw / 8 + 10px)
-  max-height "calc((100vh - 100vw - %s - %s) / 2)" % (headerHeight footerHeight)
   background #cdcdcd
   white-space nowrap
   overflow hidden
@@ -439,11 +432,6 @@
   flex-flow row nowrap
   align-items center
   justify-content space-around
-  @media only screen and (orientation: landscape)
-    height 'calc((100vh - %s) / 8 + 10px)' % headerHeight
-    max-height 55px
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
-    height 'calc((100vh - %s - 12vh) / 8 + 10px)' % headerHeight
 
 .pocket > piece
   width calc(100vw / 8)
@@ -481,8 +469,11 @@
   @media only screen and (orientation: landscape)
     width 'calc((100vh - %s) / 8)' % headerHeight
     height 'calc((100vh - %s) / 8)' % headerHeight
-    max-width 50px
-    max-height 50px
+    max-width 60px
+    max-height 60px
+  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
+    width "calc((100vh - 100vw - 25px - %s - %s) / 2)" % (headerHeight footerHeight)
+    height "calc((100vh - 100vw - 25px - %s - %s) / 2)" % (headerHeight footerHeight)
 
 .pocket > piece[data-nb='0']
   opacity: 0.1;
@@ -490,8 +481,6 @@
     content none
 
 .view-container.light
-  .pocket
-    background #aaa
   .antagonistUser
     color textDarkGray
   .clock

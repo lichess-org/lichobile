@@ -80,6 +80,7 @@
   align-items center
 
 .replay
+  min-height 0 // fix chrome 73 regression
   flex 1 1 auto
   overflow hidden
   background lighten(bgdark, 3%)
@@ -133,7 +134,6 @@
     margin-right 10px
   .ratingAndMaterial
     display flex
-    height 18px
     margin-top 2px
   &.zen
     > .antagonistUser
@@ -145,8 +145,6 @@
     background-color lighten(bgdark, 8%)
   &.crazy
     padding 0 .5em
-    .ratingAndMaterial
-      height inherit
     > .antagonistUser
       font-size 1em
     > .clock
@@ -158,27 +156,19 @@
       &.correspondence
         font-size 13px
   @media only screen and (min-width 600px)
-    .ratingAndMaterial
-      height 25px
-  @media only screen and (min-width 600px)
     &.crazy
       > .antagonistUser
         font-size 1em
   @media only screen and (orientation landscape)
-    .ratingAndMaterial
-      height 16px
-  @media only screen and (orientation landscape) and (min-width 600px)
-    .ratingAndMaterial
-      height 18px
-  @media only screen and (orientation landscape) and (min-width 801px)
-    .ratingAndMaterial
-      height 20px
+    &.crazy
+      > .antagonistUser
+        font-size 0.7em
+      > .clock
+        line-height 20px
+        fluid-type(16px, 26px)
     .rating
       display block
       margin 0.2rem 0 0.5rem
-  @media only screen and (min-width 1025px) and (orientation landscape)
-    .ratingAndMaterial
-      height 22px
 
 .antagonistUser
   overflow hidden

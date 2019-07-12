@@ -46,7 +46,7 @@ export default {
 
   view() {
     return popupWidget(
-      'new_game_form_popup game_form_popup',
+      'game_form_popup',
       undefined,
       renderContent,
       isOpen,

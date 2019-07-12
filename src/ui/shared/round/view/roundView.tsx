@@ -271,14 +271,12 @@ function renderSubmitMovePopup(ctrl: OnlineRound) {
   return null
 }
 
-function userInfos(user: User, player: Player, playerName: string, position: Position) {
+function userInfos(user: User, player: Player, playerName: string) {
   let title: string
   if (user) {
     let onlineStatus = user.online ? 'connected to lichess' : 'offline'
     let onGameStatus = player.onGame ? 'currently on this game' : 'currently not on this game'
-    let engine = position === 'opponent' && user.engine ? i18n('thisPlayerUsesChessComputerAssistance') + '; ' : ''
-    let booster = position === 'opponent' && user.booster ? i18n('thisPlayerArtificiallyIncreasesTheirRating') + '; ' : ''
-    title = `${playerName}: ${engine}${booster}${onlineStatus}; ${onGameStatus}`
+    title = `${playerName}: ${onlineStatus}; ${onGameStatus}`
   } else
     title = playerName
   window.plugins.toast.show(title, 'short', 'center')
@@ -289,7 +287,7 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
   const playerName = playerApi.playerName(player, !isPortrait)
   const togglePopup = user ? () => ctrl.openUserPopup(position, user.id) : utils.noop
   const vConf = user ?
-    helper.ontap(togglePopup, () => userInfos(user, player, playerName, position)) :
+    helper.ontap(togglePopup, () => userInfos(user, player, playerName)) :
     helper.ontap(utils.noop, () => window.plugins.toast.show(playerName, 'short', 'center'))
 
   const checksNb = getChecksCount(ctrl, player.color)

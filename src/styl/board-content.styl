@@ -9,8 +9,6 @@
 
 .table
   flex 1 1 auto
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
-    margin auto 0
 
 .game_board_wrapper, .board_wrapper
   @media only screen and (orientation: portrait)
@@ -93,6 +91,7 @@
   > header
     flex 0 0 auto
   > .playersTable
+    min-height 0 // fix chrome 73 regression
     padding 0 10px
     flex 1 1 auto
     display flex

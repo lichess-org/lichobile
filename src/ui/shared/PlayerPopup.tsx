@@ -105,7 +105,7 @@ function content(mini: any, player: Player, opponent: Player, score?: Score) {
         <div className="mini_user_actions_wrapper">
           <button data-icon="1" key="tv"
             oncreate={helper.ontap(() => {
-              router.set(`/@/${user.username}/tv`)
+              router.set(`/@/${user.id}/tv`)
             })}
           >
             {i18n('watchGames')}

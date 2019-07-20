@@ -59,6 +59,7 @@ export interface AiVM {
   setupFen?: string
   savedFen?: string
 }
+
 export interface AiRoundInterface extends OfflineRoundInterface {
   onEngineMove(bm: string): void
   onEngineDrop(bd: string): void

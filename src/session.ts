@@ -160,7 +160,8 @@ function savePreferences(): Promise<string> {
     'autoQueen',
     'autoThreefold',
     'submitMove',
-    'confirmResign'
+    'confirmResign',
+    'moretime'
   ]), numValue), (_, k) => 'behavior.' + k) as StringMap
   const rest = mapValues(pick(prefs, [
     'clockTenths',

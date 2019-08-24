@@ -16,7 +16,7 @@ Multi-variant chess library is brought by [a JavaScript version of scalachess](h
 ## Requirements
 
 * [node](http://nodejs.org) latest LTS version
-* [cordova](https://cordova.apache.org/) v7.x
+* [cordova](https://cordova.apache.org/) latest version
 
 **Android:**
 

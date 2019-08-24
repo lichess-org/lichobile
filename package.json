@@ -67,7 +67,7 @@
         "cordova-plugin-inappbrowser": "3.0.0",
         "cordova-plugin-insomnia": "4.2.0",
         "cordova-plugin-nativeaudio": "github:veloce/cordova-plugin-nativeaudio#old_interface",
-        "cordova-plugin-network-information": "2.0.1",
+        "cordova-plugin-network-information": "2.0.2",
         "cordova-plugin-splashscreen": "5.0.2",
         "cordova-plugin-statusbar": "2.4.2",
         "cordova-plugin-stockfish": "git+https://github.com/veloce/cordova-plugin-stockfish.git#7cc6722",
@@ -135,7 +135,6 @@
             "cordova-plugin-device": {},
             "cordova-plugin-insomnia": {},
             "cordova-plugin-x-socialsharing": {},
-            "cordova-plugin-network-information": {},
             "cordova-plugin-file": {},
             "cordova-universal-links-plugin": {},
             "cordova-plugin-dialogs": {},
@@ -151,7 +150,8 @@
             "cordova-plugin-x-toast": {},
             "cordova-plugin-file-transfer": {},
             "onesignal-cordova-plugin": {},
-            "cordova-plugin-inappbrowser": {}
+            "cordova-plugin-inappbrowser": {},
+            "cordova-plugin-network-information": {}
         }
     },
     "jest": {

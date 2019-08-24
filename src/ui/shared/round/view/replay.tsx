@@ -10,7 +10,10 @@ let pieceNotation: boolean
 export function renderReplay(ctrl: OnlineRound) {
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
   return h('div.replay', {
-    className: pieceNotation ? ' displayPieces' : '',
+    className: helper.classSet({
+      displayPieces: !!pieceNotation,
+      zen: ctrl.isZen(),
+    }),
     oncreate: (vnode: Mithril.DOMNode) => {
       setTimeout(() => autoScroll(vnode.dom as HTMLElement), 100)
       helper.ontapY((e: Event) => onReplayTap(ctrl, e), undefined, getMoveEl)(vnode)
@@ -22,7 +25,10 @@ export function renderReplay(ctrl: OnlineRound) {
 export function renderInlineReplay(ctrl: OnlineRound) {
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
   return h('div.replay_inline', {
-    className: pieceNotation ? ' displayPieces' : '',
+    className: helper.classSet({
+      displayPieces: !!pieceNotation,
+      zen: ctrl.isZen(),
+    }),
     oncreate: (vnode: Mithril.DOMNode) => {
       setTimeout(() => autoScrollInline(vnode.dom as HTMLElement), 100)
       helper.ontapX((e: Event) => onReplayTap(ctrl, e), undefined, getMoveEl)(vnode)

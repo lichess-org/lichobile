@@ -69,9 +69,11 @@ export function viewOnlyBoardContent(fen: string, orientation: Color, lastMove?:
       {h(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
     </section>
   )
+  const zenClass = settings.game.zenMode() ? ' zen' : ''
   if (isPortrait) {
     return h.fragment({ key: orientKey }, [
-      hasSpaceForReplay(vd, bounds) ? h('div.replay') : h('div.replay_inline'),
+      hasSpaceForReplay(vd, bounds) ?
+        h('div.replay' + zenClass) : h('div.replay_inline' + zenClass),
       h('section.playTable'),
       board,
       h('section.playTable'),

@@ -14,5 +14,6 @@ export default {
   // signal sent after successful restored session from offline database
   sessionRestored: new Signal(),
 
+  // signal fired on websocket pong in homepage
   homePong: new Signal(),
 }

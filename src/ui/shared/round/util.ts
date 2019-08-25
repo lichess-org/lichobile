@@ -46,5 +46,5 @@ export function onReplayTap(ctrl: RoundInterface, e: Event) {
 
 export function hasSpaceForReplay(vd: helper.ViewportDim, bounds: Bounds): boolean {
   // vh - headerHeight - boardHeight - footerHeight - playTablesHeight
-  return (vd.vh - bounds.height - 56 - 45 - 110) > 80
+  return (vd.vh - bounds.height - 56 - 45 - 110) > 90
 }

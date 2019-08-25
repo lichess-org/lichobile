@@ -86,6 +86,7 @@ export default {
     }
 
     const wrapperStyle = bounds ? {
+      'flex-basis': bounds.height + 'px',
       height: bounds.height + 'px',
       width: bounds.width + 'px'
     } : {}

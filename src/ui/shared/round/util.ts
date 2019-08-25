@@ -44,7 +44,15 @@ export function onReplayTap(ctrl: RoundInterface, e: Event) {
   }
 }
 
-export function hasSpaceForReplay(vd: helper.ViewportDim, bounds: Bounds): boolean {
+export function remainingSpace(vd: helper.ViewportDim, bounds: Bounds): number {
   // vh - headerHeight - boardHeight - footerHeight - playTablesHeight
-  return (vd.vh - bounds.height - 56 - 45 - 110) > 90
+  return vd.vh - bounds.height - 56 - 45 - 110
+}
+
+export function hasSpaceForReplay(vd: helper.ViewportDim, bounds: Bounds): boolean {
+  return remainingSpace(vd, bounds) > 90
+}
+
+export function hasSpaceForInlineReplay(vd: helper.ViewportDim, bounds: Bounds): boolean {
+  return remainingSpace(vd, bounds) >= 25
 }

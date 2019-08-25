@@ -131,7 +131,7 @@
     <plugin name="onesignal-cordova-plugin" spec="2.4.7" />
     <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
     <plugin name="cordova-plugin-network-information" spec="2.0.2" />
-    <plugin name="cordova-plugin-splashscreen" spec="5.0.3" />
+    <plugin name="cordova-plugin-splashscreen" spec="https://github.com/prageeth/cordova-plugin-splashscreen.git#05d8f9" />
     <engine name="ios" spec="5.0.1" />
     <engine name="android" spec="8.0.0" />
 </widget>

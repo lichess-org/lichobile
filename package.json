@@ -86,7 +86,7 @@
         "hammerjs": "2.0.8",
         "ionic-plugin-keyboard": "2.2.1",
         "localforage": "1.5.5",
-        "lodash": "4.17.11",
+        "lodash": "4.17.15",
         "mithril": "github:MithrilJS/mithril.js#v2.0.0-rc.4",
         "moment": "2.21.0",
         "onesignal-cordova-plugin": "2.4.7",

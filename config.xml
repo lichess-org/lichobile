@@ -129,7 +129,6 @@
     <plugin name="cordova-plugin-globalization" spec="1.11.0" />
     <plugin name="ionic-plugin-keyboard" spec="2.2.1" />
     <plugin name="cordova-plugin-crosswalk-webview" spec="2.4.0" />
-    <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#7cc6722" />
     <plugin name="cordova-universal-links-plugin" spec="https://github.com/flipflopapp/cordova-universal-links-plugin.git#be60a9b" />
     <plugin name="cordova-plugin-x-toast" spec="2.7.2" />
     <plugin name="cordova-plugin-file-transfer" spec="1.7.1" />
@@ -137,6 +136,7 @@
     <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
     <plugin name="cordova-plugin-network-information" spec="2.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="https://github.com/prageeth/cordova-plugin-splashscreen.git#05d8f9" />
+    <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#v1.6.0" />
     <engine name="ios" spec="5.0.1" />
-    <engine name="android" spec="8.0.0" />
+    <engine name="android" spec="6.4.0" />
 </widget>

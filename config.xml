@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="6001049" id="org.lichess.mobileapp" version="6.1.4" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="6002009" id="org.lichess.mobileapp" version="6.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>lichess</name>
     <description>lichess.org mobile application</description>
     <author email="vincent.velociter@gmail.com" href="https://github.com/veloce/lichobile">Vincent Velociter</author>
@@ -85,6 +85,7 @@
     <preference name="android-minSdkVersion" value="21" />
     <preference name="AndroidLaunchMode" value="singleInstance" />
     <preference name="DefaultVolumeStream" value="media" />
+    <preference name="AppendUserAgent" value="v6.2.0" />
     <universal-links>
         <host name="lichess.org" scheme="https">
             <path event="analysis" url="/analysis" />
@@ -114,14 +115,12 @@
     <plugin name="cordova-plugin-device" spec="2.0.2" />
     <plugin name="cordova-plugin-insomnia" spec="4.2.0" />
     <plugin name="cordova-plugin-x-socialsharing" spec="5.1.3" />
-    <plugin name="cordova-plugin-network-information" spec="2.0.1" />
     <plugin name="cordova-plugin-file" spec="6.0.1" />
     <plugin name="cordova-universal-links-plugin" spec="git+https://github.com/veloce/cordova-universal-links-plugin.git#c494fe1" />
     <plugin name="cordova-plugin-dialogs" spec="2.0.1" />
     <plugin name="cordova-plugin-whitelist" spec="1.3.3" />
     <plugin name="cordova-plugin-vibration" spec="3.1.0" />
     <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
-    <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <plugin name="cordova-plugin-fullscreen" spec="1.2.0" />
     <plugin name="cordova-plugin-globalization" spec="1.11.0" />
     <plugin name="cordova-plugin-crosswalk-data-migration" spec="git+https://github.com/veloce/cordova-plugin-crosswalk-data-migration.git#225408d" />
@@ -133,4 +132,6 @@
     <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
     <engine name="ios" spec="5.0.1" />
     <engine name="android" spec="8.0.0" />
+    <plugin name="cordova-plugin-network-information" spec="2.0.2" />
+    <plugin name="cordova-plugin-splashscreen" spec="5.0.3" />
 </widget>

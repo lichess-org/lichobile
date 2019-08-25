@@ -21,7 +21,7 @@ export function renderBody(ctrl: IRelationCtrl) {
     const nextPage = paginator && paginator.nextPage
     return (
       <ul className="native_scroller page">
-        {rel.map(p => renderPlayer(ctrl, p))}
+        {rel.map((p, i) => renderPlayer(ctrl, p, i))}
         {nextPage ?
           <li
             className="list_item followingList moreFollow"
@@ -41,18 +41,19 @@ export function renderBody(ctrl: IRelationCtrl) {
   }
 }
 
-function renderPlayer(ctrl: IRelationCtrl, obj: Related) {
+function renderPlayer(ctrl: IRelationCtrl, obj: Related, i: number) {
   const status = obj.online ? 'online' : 'offline'
   const perfKey = obj.perfs && Object.keys(obj.perfs)[0] as PerfKey
   const perf = obj.perfs && obj.perfs[perfKey]
   const userLink = helper.ontapY(() => router.set(`/@/${obj.user}`))
+  const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
   return (
-    <li className="list_item followingList">
+    <li className={`list_item followingList ${evenOrOdd}`}>
       <div className="followingPlayerTitle" oncreate={userLink}>
         <div className="user">
           {obj.patron ?
             <span className={'patron userStatus ' + status} data-icon="" /> :
-            <span className={'userStatus ' + status} data-icon="r" />
+            <span className={'fa fa-circle userStatus ' + status} />
           }
           {obj.title ? <span className="userTitle">{obj.title}&nbsp;</span> : null}
           {obj.user}
@@ -66,17 +67,12 @@ function renderPlayer(ctrl: IRelationCtrl, obj: Related) {
       {obj.followable ?
         <div className="followingPlayerItem">
           <div className="check_container">
-            <label htmlFor="user_following">{i18n('follow')}</label>
-            <input id="user_following" type="checkbox" checked={obj.relation}
+            <label>{i18n('follow')}</label>
+            <input type="checkbox" checked={obj.relation}
               onchange={() => ctrl.toggleFollowing(obj)} />
           </div>
         </div> : null
       }
-      <button className="followingPlayerItem followingPlayerAction withIcon" data-icon="U"
-        oncreate={helper.ontapY(() => ctrl.challenge(obj.user))}
-      >
-        {i18n('challengeToPlay')}
-      </button>
     </li>
   )
 

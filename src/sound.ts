@@ -9,6 +9,7 @@ interface Media {
   dong: string
   berserk: string
   clock: string
+  confirmation: string
 }
 
 let shouldPlay: boolean
@@ -23,7 +24,8 @@ if (window.cordova.platformId === 'ios') {
     lowtime: 'sounds/lowtime.aifc',
     dong: 'sounds/dong.aifc',
     berserk: 'sounds/berserk.aifc',
-    clock: 'sounds/clock.aifc'
+    clock: 'sounds/clock.aifc',
+    confirmation: 'sounds/confirmation.aifc',
   }
 }
 else {
@@ -34,7 +36,8 @@ else {
     lowtime: 'sounds/lowtime.mp3',
     dong: 'sounds/dong.mp3',
     berserk: 'sounds/berserk.mp3',
-    clock: 'sounds/clock.mp3'
+    clock: 'sounds/clock.mp3',
+    confirmation: 'sounds/confirmation.mp3',
   }
 }
 
@@ -56,6 +59,7 @@ document.addEventListener('deviceready', () => {
   lla.preloadFX('dong', media.dong)
   lla.preloadFX('berserk', media.berserk)
   lla.preloadFX('clock', media.clock)
+  lla.preloadFX('confirmation', media.confirmation)
 }, false)
 
 
@@ -89,6 +93,9 @@ export default {
   },
   clock() {
     if (shouldPlay) lla.play('clock')
+  },
+  confirmation() {
+    if (shouldPlay) lla.play('confirmation')
   },
   onSettingChange(v: boolean) {
     shouldPlay = v

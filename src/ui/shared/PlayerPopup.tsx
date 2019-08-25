@@ -70,6 +70,12 @@ function content(mini: any, player: Player, opponent: Player, score?: Score) {
           </p> : null
         }
       </div>
+      { user.engine || user.booster ?
+        <div className="warning">
+          {user.engine ? i18n('thisPlayerUsesChessComputerAssistance') : ''}
+          {user.booster ? i18n('thisPlayerArtificiallyIncreasesTheirRating') : ''}
+        </div> : null
+      }
       { mini.perfs ?
         <div className="mini_perfs">
         {Object.keys(mini.perfs).map((p: PerfKey) => {
@@ -99,7 +105,7 @@ function content(mini: any, player: Player, opponent: Player, score?: Score) {
         <div className="mini_user_actions_wrapper">
           <button data-icon="1" key="tv"
             oncreate={helper.ontap(() => {
-              router.set(`/@/${user.username}/tv`)
+              router.set(`/@/${user.id}/tv`)
             })}
           >
             {i18n('watchGames')}

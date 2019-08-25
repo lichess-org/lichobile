@@ -17,7 +17,6 @@ import session from '../session'
 import i18n from '../i18n'
 import * as xhr from '../xhr'
 import * as helper from './helper'
-import newGameForm from './newGameForm'
 import ViewOnlyBoard from './shared/ViewOnlyBoard'
 
 let scroller: any | null = null
@@ -86,12 +85,14 @@ function wrapperOnRemove() {
   }
 }
 
-function open() {
+function open(page?: number) {
   router.backbutton.stack.push(close)
   session.refresh()
   isOpen = true
   setTimeout(() => {
-    if (scroller && !helper.isWideScreen()) scroller.goTo(1)
+    if (scroller && !helper.isWideScreen()) {
+      scroller.goTo(page !== undefined ? page : 0)
+    }
   }, 400)
 }
 
@@ -115,6 +116,13 @@ function acceptChallenge(id: string) {
   })
   .then(() => challengesApi.remove(id))
   .then(() => close())
+}
+
+function cancelChallenge(id: string) {
+  return xhr.cancelChallenge(id)
+  .then(() => {
+    challengesApi.remove(id)
+  })
 }
 
 function declineChallenge(id: string) {
@@ -221,10 +229,47 @@ function renderIncomingChallenge(c: Challenge) {
         ),
         h('button', {
           oncreate: helper.ontapX(
-            helper.fadesOut(() => declineChallenge(c.id), '.card', 250)
+            (e: Event) => declineChallenge(c.id).then(() => {
+              helper.fadesOut(e, () => close(), '.card', 250)
+            })
           )
         },
           i18n('decline')
+        )
+      ])
+    ])
+  ])
+}
+
+function renderSendingChallenge(c: Challenge) {
+
+  if (!c.destUser) return null
+
+  const mode = c.rated ? i18n('rated') : i18n('casual')
+  const timeAndMode = challengesApi.challengeTime(c) + ', ' + mode
+  const mark = c.destUser.provisional ? '?' : ''
+  const playerName = `${c.destUser.id} (${c.destUser.rating}${mark})`
+
+  return h('div.card.standard.challenge.sending', [
+    renderViewOnlyBoard(c.initialFen || standardFen, 'white', undefined, c.variant.key),
+    h('div.infos', [
+      h('div.icon-game', { 'data-icon': c.perf.icon }),
+      h('div.description', [
+        h('h2.title', playerName),
+        h('p.variant', [
+          h('span.variantName', i18n('toATypeGame', c.variant.name)),
+          h('span.time-indication[data-icon=p]', timeAndMode)
+        ]),
+      ]),
+      h('div.actions', [
+        h('button', {
+          oncreate: helper.ontapX(
+            (e: Event) => cancelChallenge(c.id).then(() => {
+              helper.fadesOut(e, () => close(), '.card', 250)
+            })
+          )
+        },
+          i18n('cancel')
         )
       ])
     ])
@@ -251,11 +296,19 @@ function renderCarouselIndicators() {
 function renderAllGames() {
   const nowPlaying = session.nowPlaying()
   const challenges = challengesApi.incoming()
-  const challengesDom = challenges.map(c => {
-    return renderIncomingChallenge(c)
-  })
+  const sendingChallenges = challengesApi.sending().filter(challengesApi.isPersistent)
+  const challengesDom = challenges.map(c =>
+    renderIncomingChallenge(c)
+  )
+  const sendingChallengesDom = sendingChallenges.map(c =>
+    renderSendingChallenge(c)
+  )
 
-  let allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g)))
+  let allCards = [
+    ...challengesDom,
+    ...sendingChallengesDom,
+    ...(nowPlaying.map(g => renderGame(g)))
+  ]
 
   if (!utils.hasNetwork()) {
     allCards = getOfflineGames().map(d => {
@@ -263,24 +316,6 @@ function renderAllGames() {
       return renderGame(g)
     })
   }
-
-  const newGameCard = h('div.card.standard', {
-    key: 'game.new-game',
-    oncreate: helper.ontapX(() => {
-      close()
-      newGameForm.open()
-    })
-  }, [
-    renderViewOnlyBoard(standardFen, 'white'),
-    h('div.infos', [
-      h('div.description', [
-        h('h2.title', i18n('createAGame')),
-        h('p', i18n('newOpponent'))
-      ])
-    ])
-  ])
-
-  allCards.unshift(newGameCard)
 
   return h('div.games_carousel', {
     key: helper.isPortrait() ? 'o-portrait' : 'o-landscape',

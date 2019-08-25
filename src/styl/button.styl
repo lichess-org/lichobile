@@ -1,0 +1,155 @@
+button, .li-button
+  border none
+  outline none
+  -webkit-tap-highlight-color rgba(0,0,0,0)
+  user-select none
+  background-color transparent
+  transition opacity 50ms
+  &.active
+    opacity 0.8
+  &.disabled
+    opacity 1
+    &::before
+      opacity 0.4
+
+.defaultButton
+  background: #3692e7
+  color #fff
+  text-transform: uppercase
+  font-size 0.9em
+  padding .8em 1em
+  border none
+  text-align center
+  transition opacity 150ms
+  white-space nowrap
+  border-radius 3px
+  box-shadow 0 4px 10px 0px rgba(0,0,0,0.225)
+
+.fatButton
+  display block
+  width 70%
+  padding 1em 0.25em
+  margin 20px auto
+  background linear-gradient(to bottom,rgba(40,40,40,1),rgba(34,34,34,1) 100%);
+  text-shadow 0 1px 0 #000
+  border 1px solid #323232
+  color #8a8a8a
+  font-weight bold
+  border-radius 2px
+  &.active,&:active
+    background linear-gradient(to bottom,rgba(44,44,44,1),rgba(40,40,40,1) 100%);
+
+.buttonMetal
+  padding .5em
+  margin .2em 0
+  text-align center
+  text-transform uppercase
+  background linear-gradient(to bottom,rgba(40,40,40,1),rgba(34,34,34,1) 100%);
+  text-shadow 0 1px 0 #000
+  border-radius 3px
+  box-shadow 0 2px 5px 0 rgba(0,0,0,0.225)
+  &.active,&:active
+    background linear-gradient(to bottom,rgba(44,44,44,1),rgba(40,40,40,1) 100%);
+
+.navigationButtons
+  display flex
+  flex-flow row wrap
+  align-items center
+  align-self center
+  margin 10px 0
+  height 30px
+  &.invisible
+    display none
+
+.navigationButton
+  border-radius 4px
+  text-align center
+  border-style solid
+  border-color #323232
+  border-width 1px
+  height 30px
+  line-height 20px
+  margin 0 5px
+  padding 0
+  width 40px
+  &:before
+    font-family "lichess"!important
+    font-size 1.2em
+    content attr(data-icon)
+    vertical-align middle
+  &:disabled
+    opacity 0.5
+  &.invisible
+    display none
+  @media only screen and (max-width 380px)
+    margin 0 1px
+    width 35px
+    line-height 16px
+    &:before
+      font-size 1em
+
+.moreButton
+  font-size 0.9em
+  > button
+    width 100%
+    text-align center
+    padding 10px 0
+    background lighten(bgdark, 5%)
+
+.action_bar_button
+  flex 1 1 25%
+  text-align center
+  background transparent
+  padding 0
+  outline none
+  border none
+  color: buttonGray
+  width 25%
+  &:only-child
+    text-align: right;
+    padding-right: 15px;
+  &:last-child
+    border-right none
+  &.withChip
+    position relative
+  &.disabled, &:disabled
+    opacity 0.5
+  &.active
+    background darkBlue
+    color #ccc
+  &.empty::before
+    visibility hidden
+  &.glow
+    animation answer_glow 5s infinite
+  &.highlight
+    color #fff
+    background blue
+  &:before
+    font-size 18px
+  @media only screen and (max-height 400px) and (orientation landscape)
+    &:before
+      font-size 16px
+  > .chip
+    line-height 15px
+    height 21px
+    width 21px
+    border-color bgdark
+    right 6px
+
+.action_create_button
+  flex 1 1 25%
+  text-align right
+
+.window-button
+  font-size 1.1em
+  .fa
+    margin-right 0
+
+
+.view-container.light
+  .buttonMetal
+    color textLightBg
+    text-shadow 0 1px 0 #fff
+    background: linear-gradient(to bottom, #f5f5f5 0%, #ededed 100%)
+  .defaultButton
+    background #3b94e8

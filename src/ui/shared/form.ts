@@ -117,7 +117,8 @@ export default {
     label: string,
     options: ReadonlyArray<{ label: string, value: T }>,
     prop: StoredProp<T>,
-    wrap: boolean = false
+    wrap: boolean = false,
+    callback?: (v: T) => void,
   ) {
     const selected = prop()
     return h('div.form-multipleChoiceContainer', [
@@ -129,6 +130,7 @@ export default {
           className: o.value === selected ? 'selected' : '',
           oncreate: helper.ontap(() => {
             prop(o.value)
+            if (callback) callback(o.value)
           })
         }, o.label)
       }))

@@ -4,9 +4,8 @@ import socket from '../../socket'
 import * as helper from '../helper'
 import * as sleepUtils from '../../utils/sleep'
 import { handleXhrError } from '../../utils'
-import { LoadingBoard } from '../shared/common'
 import OnlineRound from '../shared/round/OnlineRound'
-import roundView from '../shared/round/view/roundView'
+import roundView, { LoadingBoard } from '../shared/round/view/roundView'
 import { tv } from './userXhr'
 
 interface Attrs {

@@ -11,13 +11,11 @@
       border-bottom 0
       display flex
       justify-content space-between
-      > .friends-name
+      > .friend_name
         overflow hidden
         white-space nowrap
         text-overflow ellipsis
-    .friend_tv
-      font-size 20px
-      color green
+        padding-right .5em
     > .nofriend
       width 100%
       height 100%
@@ -26,3 +24,13 @@
       justify-content center
   @media only screen and (min-height 700px)
     height 40%
+
+.onlineFriends_actions
+  display flex
+  span
+    font-size 20px
+    margin-right 0.5em
+    &:last-child
+      margin-right 0
+  .friend_tv
+    color green

@@ -1,3 +1,4 @@
+import { FeaturedGame } from '.'
 import { Opening } from './game'
 
 export interface Tournament {
@@ -41,43 +42,10 @@ export interface TournamentClock {
   readonly limit: number
 }
 
-interface FeaturedGame {
-  black: FeaturedColorPlayer
-  clock: FeaturedClock
-  color: string
-  fen: string
-  id: string
-  lastMove: string
-  opponent: FeaturedPlayer
-  player: FeaturedPlayer
-  white: FeaturedColorPlayer
-}
-
 interface TournamentMe {
   rank: number
   readonly username: string
   readonly withdraw: boolean
-}
-
-interface FeaturedColorPlayer {
-  readonly name: string
-  readonly rank: number
-  readonly rating: number
-  readonly ratingDiff: number
-}
-
-interface FeaturedPlayer {
-  readonly rating: number
-  readonly user: FeaturedPlayerUser
-}
-
-interface FeaturedPlayerUser {
-  readonly username: string
-}
-
-interface FeaturedClock {
-  readonly increment: number
-  readonly initial: number
 }
 
 interface TournamentPairing {

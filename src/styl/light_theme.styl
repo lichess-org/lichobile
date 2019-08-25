@@ -1,11 +1,13 @@
 .view-container.light
+  #page
+    background themeBgLight
+
   main
-    color textLightBg
+    color themeBgLightText
 
   .main_header
-    color textLightBg
-    background-color themeBgLightHeader
-    border-bottom 1px solid darken(themeBgLightHeader, 5%)
+    color themeBgLightText
+    background themeBgLightHeader
     &.board
       border-bottom none
 
@@ -14,13 +16,12 @@
     background-color themeBgLightHeader
     border-bottom 1px solid darken(themeBgLightHeader, 5%)
 
-  .main_header_button
-    &.active
-      background themeBgLightActive
-
   .back_button
     > button.active
       background themeBgLightActive
+
+  .content_round
+    background themeBgLightHeader
 
   .main_footer
     border-top 1px solid borderLightGray
@@ -36,10 +37,6 @@
   .main_header-selector
     color lighten(textLightBg, 5%)
 
-
-  #page
-    background themeBgLight
-
   #games_menu
     background rgba(0,0,0,0.6)
 
@@ -54,7 +51,6 @@
   .mini_board
     .vsbloc
       background: linear-gradient(to bottom,rgba(245,245,245,1) 0%,rgba(240,240,240,1) 100%);
-      border-color #e2e2e2
 
   .overlay
     background-color rgba(0,0,0,0.6)
@@ -69,9 +65,12 @@
     &.challenge
       background gold
       &.sending
-        background lighten(textLightBg, 25%)
+        background #fff
+        color textDarkGray
+        h2, p
+          color textDarkGray
         .actions
-          background lighten(textLightBg, 10%)
+          background #ddd
       h2
         color #fff
 
@@ -91,28 +90,19 @@
     &.active
       background-color activeBgLight
 
-  .gameMovesList
-    > .moves
-      .replayMove
-        &.active
-          background-color darken(themeBgLight, 12%)
-
-  .clock
-    color #707070
-    background-color themeBgLight
-    border-color #ccc
-    &.running
-      background-color #fff077
-      color textDarkGray
-    &.berserk
-      border-color #dc322f
-    &.emerg
-      background-color #efaaaa
-      color textDarkGray
-    &.correspondence
-      &.offline
-        background-color themeBgLight
-        color #707070
+  .replay, .replay_inline
+    > .replayMove
+      color lighten(textLightBg, 10%)
+      &.current
+        background-color transparent
+        color black
+        > index
+          color inherit
+      &.active
+        background-color darken(themeBgLight, 12%)
+        color black
+        > index
+          color black
 
   .action_bar_button
     color textGray
@@ -125,15 +115,15 @@
       background-color themeBgLightActive
     > .chip
       color #fff
-      border-color themeBgLight
+      border-color themeBgLightHeader
 
-  .gameMovesList
+  .replay
     background darken(themeBgLight, 4%)
     color textLightBg
 
   .radio_list
     input.radio:checked + label
-      background-color darken(bglight, 10%)
+      background-color darken(themeBgLight, 5%)
 
   .profilePerf
     &.active
@@ -187,11 +177,10 @@
       background-color themeBgLight
 
   .analyse-player_bar
-    color rgba(textLightBg, 0.7)
+    color rgba(textLightBg, 0.9)
     > .info
       > .result
         border 0
-        // border-color borderLightGray
 
   .color-icon
     &.white

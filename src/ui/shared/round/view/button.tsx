@@ -7,6 +7,7 @@ import router from '../../../../router'
 import gameStatus from '../../../../lichess/status'
 import { OnlineGameData } from '../../../../lichess/interfaces/game'
 import i18n from '../../../../i18n'
+import spinner from '../../../../spinner'
 import socket from '../../../../socket'
 import lobby from '../../../lobby'
 import * as helper from '../../../helper'
@@ -51,19 +52,21 @@ export default {
     )
   },
   submitMove(ctrl: OnlineRound) {
-    return (
-      <div className="negotiationButtonsWrapper">
-        <p>{i18n('moveConfirmation')}</p>
-        <div className="negotiationButtons">
-          <button className="accept" data-icon="E"
-            oncreate={helper.ontap(() => ctrl.submitMove(true))}
-          />
-          <button className="decline" data-icon="L"
-            oncreate={helper.ontap(() => ctrl.submitMove(false))}
-          />
-        </div>
-      </div>
-    )
+    return h('div.negotiationButtonsWrapper', [
+      h('p', i18n('moveConfirmation')),
+      h('div.negotiationButtons', {
+        className: ctrl.vm.submitFeedback ? 'loading' : ''
+      }, [
+        h('button.accept', {
+          'data-icon': ctrl.vm.submitFeedback ? null : 'E',
+          oncreate: helper.ontap(() => ctrl.submitMove(true)),
+        }, ctrl.vm.submitFeedback ? spinner.getVdom('monochrome white') : null),
+        h('button.decline', {
+          'data-icon': 'L',
+          oncreate: helper.ontap(() => ctrl.submitMove(false)),
+        }),
+      ])
+    ])
   },
   resign: function(ctrl: OnlineRound) {
     return gameApi.resignable(ctrl.data) && !ctrl.vm.confirmResign ? h('button', {

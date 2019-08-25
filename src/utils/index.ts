@@ -129,11 +129,11 @@ export function serializeQueryParameters(obj: StringMap): string {
   let str = ''
   const keys = Object.keys(obj)
   keys.forEach(key => {
-    if (str !== '') {
-      str += '&'
-    }
     const val = obj[key]
     if (val !== null && val !== undefined) {
+      if (str !== '') {
+        str += '&'
+      }
       str += encodeURIComponent(key) + '=' + encodeURIComponent(val)
     }
   })

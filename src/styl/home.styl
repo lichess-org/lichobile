@@ -1,34 +1,58 @@
 .home
   padding-top 5px
   >.stats
+    margin-top 1em
     padding 0px 10px
     font-size 1em
     width 100%
     display flex
     flex-flow row nowrap
     justify-content space-between
-    >.numPlayers
+    > div
       flex 0 1 auto
-    >.numGames
-      flex 0 1 auto
-  >.homeCreate
-    padding 0px 10px
-    >.newGame-pools
-      padding 0px
-      >.newGame-pool
-        box-shadow none
-        background-color lighten(bgdark, 2%)
-        border 1px solid #3d3d3d
-        color inherit
-        &.active
-          background-color lighten(bgdark, 8%)
-  >.homeTournament
-    padding 0px
-    >.homeTitle
-      margin 5px 0 5px
-    >.tournamentList
-      >.tournament_item
-        padding 10px
+  .tabs-view-wrapper
+    height calc(((100vw - 40px) * 0.28) * 3 + 40px)
+    @media only screen and (min-width 600px)
+      height calc(((100vw - 40px) * 0.2) * 3 + 40px)
+    background-image url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMy41MjkgMzMuNTA0Ij48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNS4yNS02LjI0NikiIG9wYWNpdHk9Ii4xIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIxLjUiPjxnIGZpbGw9IiMwMDAiPjxwYXRoIGQ9Im0yMiAxMGMxMC41IDEgMTYuNSA4IDE2IDI5aC0yM2MwLTkgMTAtNi41IDgtMjEiLz48cGF0aCBkPSJtMjQgMThjLjM4IDIuOTEtNS41NSA3LjM3LTggOS0zIDItMi44MiA0LjM0LTUgNC0xLjA0Mi0uOTQgMS40MS0zLjA0IDAtMy0xIDAgLjE5IDEuMjMtMSAyLTEgMC00IDEtNC00IDAtMiA2LTEyIDYtMTIgMCAwIDEuODktMS45IDItMy41LS43My0uOTk0LS41LTItLjUtMyAxLTEgMyAyLjUgMyAyLjVoMmMwIDAgLjc4LTEuOTkyIDIuNS0zIDEgMCAxIDMgMSAzIi8+PC9nPjxnIGZpbGw9IiNmZmYiPjxwYXRoIGQ9Im05LjUgMjUuNWEuNSAuNSAwIDEgMSAtMSAwIC41IC41IDAgMSAxIDEgMHoiLz48cGF0aCBkPSJtMTUgMTUuNWEuNSAxLjUgMCAxIDEgLTEgMCAuNSAxLjUgMCAxIDEgMSAweiIgdHJhbnNmb3JtPSJtYXRyaXgoLjg2Ni41LS41Ljg2NiA5LjY5My01LjE3MykiLz48L2c+PC9nPjwvc3ZnPg==")
+    background-repeat no-repeat
+    background-size 100% 100%
+  .newGame-pools
+    padding 10px
+    > .newGame-pool
+      fluid-type(16px, 35px)
+      box-shadow none
+      height calc((100vw - 40px) * 0.28)
+      @media only screen and (min-width 600px)
+        height calc((100vw - 40px) * 0.2)
+      background-color transpWhite01
+      border 1px solid lighten(#3d3d3d, 20%)
+      color inherit
+      &:nth-child(7), &:nth-child(8), &:nth-child(9)
+        margin-bottom 0
+      &.active
+        background-color rgba(gold, 0.3)
+
+.tabs-navigation.homeSetup
+  height 35px
+  > .tab-button
+    text-transform initial
+
+.homeCreate
+  margin-bottom 0.5em
+
+.homeTournament
+  margin-top 1em
+  padding 0px
+  >.tournamentList
+    >.tournament_item
+      padding 10px
+
+.home_start
+  display flex
+  flex-flow column nowrap
+  justify-content stretch
+  margin 0 1em
 
 .homeTitle
   font-weight bold
@@ -69,51 +93,13 @@
   flex-flow column nowrap
   justify-content flex-start
   align-items center
-
-.miniPuzzle
-  margin-bottom 15px
-  .homeTitle
-    margin-top 15px
+  margin 1em 0
 
 #timeline
   padding 0px
   .timelineEntry
     padding 10px
     font-size 0.9em
-
-.mini_board
-  @media only screen and (orientation: portrait)
-    width 66vw
-  @media only screen and (orientation: landscape)
-    width 66vh
-  > .board_wrapper
-    width 100%
-    @media only screen and (orientation: portrait)
-      height 66vw
-    @media only screen and (orientation: landscape)
-      height 66vh
-  > .vsbloc
-    font-size 0.8em
-    background: linear-gradient(to bottom,rgba(40,40,40,1),rgba(34,34,34,1) 100%);
-    border 1px solid #323232
-    padding 5px
-    overflow hidden
-    > .antagonists
-      display flex
-      flex-flow row nowrap
-      justify-content space-between
-      > .player, > .opponent
-        max-width 49%
-        overflow hidden
-        text-overflow ellipsis
-    > .ratingAndTime
-      display flex
-      flex-flow row nowrap
-      justify-content space-between
-      > .time
-        display flex
-        justify-content center
-        align-items center
 
 .home-playbanInfo
   padding 1em
@@ -129,24 +115,82 @@
     margin-left 2em
     text-align left
 
+.corresPoolWrapper
+  flex-grow 1
+  display flex
+  flex-flow column nowrap
+  > .corres_create
+    flex 0 1 auto
+    margin-top 20px
+    display flex
+    justify-content center
+
+.corres_seeks
+  flex 1 1 auto
+  text-align left
+  font-size 0.8em
+  width 100%
+  .must_signin
+    text-align center
+  th, td
+    vertical-align middle
+    overflow hidden
+    white-space nowrap
+    text-overflow ellipsis
+    &:first-child
+      text-align center
+      width 30px
+  th
+    font-weight normal
+    padding 1em
+  td
+    padding 0.5em
+    border-bottom 1px solid lighten(#3d3d3d, 10%)
+
+.corres_empty_seeks_list
+  flex 1 1 auto
+  display flex
+  justify-content center
+  align-items center
+
+.corres_seek
+  &.cancelCorresSeek
+    background rgba(green, 0.15)
+  &.active
+    background rgba(gold, 0.3)
 
 .view-container.light
-  .homeCreate
-    >.newGame-pools
-      >.newGame-pool
-        background-color darken(bglight, 2%)
-        border-color borderLightGray
-        color inherit
-        &.active
-          background-color themeBgLightActive
+  .tabs-navigation.homeSetup
+    background-color inherit
+
+  .home
+    background themeBgLightHeader
+    .tabs-view-wrapper
+      background-color bglight
+      background-image url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMy41MjkgMzMuNTA0Ij48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNS4yNS02LjI0NikiIG9wYWNpdHk9Ii4xIiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIxLjUiPjxnIGZpbGw9IiNmZmYiPjxwYXRoIGQ9Im0yMiAxMGMxMC41IDEgMTYuNSA4IDE2IDI5aC0yM2MwLTkgMTAtNi41IDgtMjEiLz48cGF0aCBkPSJtMjQgMThjLjM4IDIuOTEtNS41NSA3LjM3LTggOS0zIDItMi44MiA0LjM0LTUgNC0xLjA0Mi0uOTQgMS40MS0zLjA0IDAtMy0xIDAgLjE5IDEuMjMtMSAyLTEgMC00IDEtNC00IDAtMiA2LTEyIDYtMTIgMCAwIDEuODktMS45IDItMy41LS43My0uOTk0LS41LTItLjUtMyAxLTEgMyAyLjUgMyAyLjVoMmMwIDAgLjc4LTEuOTkyIDIuNS0zIDEgMCAxIDMgMSAzIi8+PC9nPjxnIGZpbGw9IiMwMDAiPjxwYXRoIGQ9Im05LjUgMjUuNWEuNSAuNSAwIDEgMSAtMSAwIC41IC41IDAgMSAxIDEgMHoiLz48cGF0aCBkPSJtMTUgMTUuNWEuNSAxLjUgMCAxIDEgLTEgMCAuNSAxLjUgMCAxIDEgMSAweiIgdHJhbnNmb3JtPSJtYXRyaXgoLjg2Ni41LS41Ljg2NiA5LjY5My01LjE3MykiLz48L2c+PC9nPjwvc3ZnPg==")
+
+    .newGame-pool
+      background-color transpWhite04
+      border-color borderLightGray
+      color inherit
+      &.active
+        background-color rgba(gold, 0.3)
+
+  .corres_seek
+    > td
+      border-color borderLightGray
 
 
 .view-container.transp
-  .homeCreate
-    >.newGame-pools
-      >.newGame-pool
-        border-color transpWhite02
-        background-color transpWhite005
-        &.active
-          background-color transpWhite01
+  .tabs-navigation.homeSetup
+    background-color inherit
 
+  .corres_seek > td
+    border-color transpWhite01
+
+  .home
+    .newGame-pool
+      border-color transpWhite02
+      background-color transpWhite005
+      &.active
+        background-color rgba(gold, 0.2)

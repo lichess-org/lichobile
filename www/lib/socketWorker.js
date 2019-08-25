@@ -170,6 +170,7 @@ StrongSocket.prototype = {
     // Average first 4 pings, then switch to decaying average.
     var mix = self.pongCount > 4 ? 0.1 : (1 / self.pongCount);
     self.averageLag += mix * (self.currentLag - self.averageLag);
+    postMessage({ topic: 'pingInterval', payload: self.pingInterval()})
   },
 
   handle: function(msg) {

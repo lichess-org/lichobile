@@ -9,13 +9,17 @@
   flex-flow row nowrap
   height 48px
   position relative
+  &.withBorder
+    border-bottom 2px solid borderColor
+    .tabIndicator
+      bottom -2px
 
 .tab-button
   flex 0 1 auto
   text-transform uppercase
   text-align center
-  padding 0 10px
-  font-size 14px
+  padding 0 .8em
+  font-size .9em
   overflow hidden
   height calc(100% - 2px)
   color darken(headerBgDarkColor, 10%)
@@ -63,5 +67,8 @@
       background-color darken(themeBgLight, 5%)
     &.selected
       color goldDark
+  .tabs-navigation
+    &.withBorder
+      border-color darken(themeBgLight, 15%)
   .tabIndicator
     background-color goldDark

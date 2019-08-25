@@ -1,6 +1,6 @@
 #studyMenu
-  background white
-  color textDarkGray
+  background #373737
+  color #DFDFDF
   position absolute
   visibility hidden
   right 0
@@ -44,9 +44,9 @@
   &.viewer
     color rgba(textDarkGray, 0.85)
   &.current
-    background palerBlue
+    background lighten(#373737, 5%)
   &.active
-    background veryPaleBlue
+    background lighten(#373737, 3%)
   > .bullet
     margin-right 1em
     color blue
@@ -267,6 +267,14 @@
 
 
 .view-container.light
+  #studyMenu
+    background white
+    color textDarkGray
+  .study-menu-link
+    &.current
+      background palerBlue
+    &.active
+      background veryPaleBlue
   .study-replayActions
     background-color #eee
     > button > .chip
@@ -289,6 +297,13 @@
 
 
 .view-container.transp
+  #studyMenu
+    background #111
+  .study-menu-link
+    &.current
+      background lighten(#111, 7%)
+    &.active
+      background lighten(#111, 5%)
   .study-replayActions
     background-color transpWhite015
     > button > .chip

@@ -9,8 +9,6 @@
 
 .table
   flex 1 1 auto
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
-    margin auto 0
 
 .game_board_wrapper, .board_wrapper
   @media only screen and (orientation: portrait)
@@ -61,7 +59,7 @@
   flex-flow row nowrap
   justify-content space-between
   flex 0 0 auto
-  font-size 0.9em
+  font-size 0.95em
   color rgba(textDarkBg, 0.7)
   > .info
     display: flex;
@@ -87,25 +85,19 @@
     display none
 
 .table
+  overflow hidden
   display flex
   flex-flow column nowrap
   > header
     flex 0 0 auto
   > .playersTable
+    min-height 0 // fix chrome 73 regression
     padding 0 10px
     flex 1 1 auto
     display flex
     flex-flow column nowrap
     justify-content space-around
   @media only screen and (max-height 400px) and (orientation landscape)
-    font-size 0.7rem
-    > .tableHeader
-      > .icon-game
-        font-size 20px
-        vertical-align bottom
-      > .game-title
-        font-size 0.6rem
-        line-height 14px
     > .playersTable
       justify-content space-around
     .playTable
@@ -117,17 +109,13 @@
   @media only screen and (orientation: landscape) and (min-width 801px)
     .clock
       font-size 25px
-      max-width 120px
-    .antagonistInfos
-      max-width calc(100% - 120px)
-      > .antagonistUser
-        font-size 1rem
+      max-width initial
+  @media only screen and (orientation: landscape) and (min-width 801px) and (aspect-ratio 4/3), only screen and (orientation: landscape) and (min-width 801px) and (device-aspect-ratio 4/3)
+    .clock
+      max-width 180px
   @media only screen and (orientation: landscape) and (min-width 1025px)
     .clock
       font-size 35px
-      max-width 160px
-    .antagonistInfos
-      max-width calc(100% - 160px)
 
 .board_alert
   position: absolute;

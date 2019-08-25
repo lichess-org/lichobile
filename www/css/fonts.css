@@ -1,15 +1,22 @@
 @font-face {
-  font-family: 'Cousine';
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
-  src: url('../fonts/Cousine.ttf') format('truetype');
+  src: url('../fonts/Roboto-Regular.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'Cousine';
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 700;
-  src: url('../fonts/Cousine-Bold.ttf') format('truetype');
+  src: url('../fonts/Roboto-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: url('../fonts/Roboto-Light.ttf') format('truetype');
 }
 
 @font-face {

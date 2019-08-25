@@ -1,18 +1,20 @@
+import * as h from 'mithril/hyperscript'
+import * as stream from 'mithril/stream'
 import * as utils from '../utils'
 import router from '../router'
 import redraw from '../utils/redraw'
+import i18n from '../i18n'
+import challengesApi from '../lichess/challenges'
 import { challenge as challengeXhr } from '../xhr'
 import { validateFen } from '../utils/fen'
 import settings from '../settings'
 import session from '../session'
 import formWidgets from './shared/form'
 import popupWidget from './shared/popup'
-import i18n from '../i18n'
-import storage from '../storage'
 import ViewOnlyBoard from './shared/ViewOnlyBoard'
+import gamesMenu from './gamesMenu'
 import * as helper from './helper'
-import * as h from 'mithril/hyperscript'
-import * as stream from 'mithril/stream'
+
 
 let actionName = ''
 let userId: string | undefined
@@ -49,12 +51,8 @@ function doChallenge() {
       data.challenge.timeControl.type === 'correspondence' ||
       data.challenge.timeControl.type === 'unlimited')) {
 
-      if (!storage.get('donotshowpersistentchallengeexplanation')) {
-        window.navigator.notification.alert(i18n('persistentChallengeCreated'), function() {
-          storage.set('donotshowpersistentchallengeexplanation', true)
-        })
-      }
-      router.set('/correspondence?tab=1')
+      // see gamesMenu.ts, sending challenges are right after incoming challenges
+      gamesMenu.open(challengesApi.incoming().length + 2)
     }
     if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {
       router.set(`/challenge/${data.challenge.id}`)
@@ -200,7 +198,7 @@ function renderForm() {
     h('fieldset', generalFieldset),
     h('fieldset#clock', timeFieldset),
     h('div.popupActionWrapper', [
-      h('button[data-icon=E][type=submit].popupAction', actionName)
+      h('button[type=submit].defaultButton', actionName)
     ])
   ])
 }

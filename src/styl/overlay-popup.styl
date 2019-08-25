@@ -19,7 +19,7 @@
 .overlay_popup
   margin 0 auto
   border-radius 4px
-  width 85%
+  width 90%
   max-height 80%
   z-index 12
   background-color #fff
@@ -30,6 +30,8 @@
   button
     min-height 45px
     color textDarkGray
+  .defaultButton
+    color #fff
   > header
     text-align center
     position relative
@@ -59,10 +61,6 @@
     width 55%
   @media only screen and (min-width 700px)
     width 50%
-  @media only screen and (min-width 800px)
-    width 45%
-  @media only screen and (min-width 900px)
-    width 40%
   @media only screen and (max-height 400px)
     max-height 85%
 
@@ -105,7 +103,7 @@
     > select
       color textDarkGray
   .action
-    padding 5px 10px
+    padding 0.5em 1em
   @media only screen and (min-width 700px)
     .action
       padding 15px 20px
@@ -113,13 +111,13 @@
 .popupActionWrapper
   width 100%
   text-align center
-  margin 10px 0
+  margin 1em 0
   > button.popupAction
     background transparent
     width initial
     display initial
     border-radius 0
-    font-size 0.90em
+    font-size 0.9em
     text-transform uppercase
     &:active
       background transparent

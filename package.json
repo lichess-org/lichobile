@@ -1,6 +1,6 @@
 {
     "name": "lichobile",
-    "version": "6.1.4",
+    "version": "6.2.0",
     "description": "lichess.org mobile application",
     "main": "app.js",
     "repository": {
@@ -67,8 +67,8 @@
         "cordova-plugin-inappbrowser": "3.0.0",
         "cordova-plugin-insomnia": "4.2.0",
         "cordova-plugin-nativeaudio": "github:veloce/cordova-plugin-nativeaudio#old_interface",
-        "cordova-plugin-network-information": "2.0.1",
-        "cordova-plugin-splashscreen": "5.0.2",
+        "cordova-plugin-network-information": "2.0.2",
+        "cordova-plugin-splashscreen": "5.0.3",
         "cordova-plugin-statusbar": "2.4.2",
         "cordova-plugin-stockfish": "git+https://github.com/veloce/cordova-plugin-stockfish.git#7cc6722",
         "cordova-plugin-vibration": "3.1.0",
@@ -135,14 +135,12 @@
             "cordova-plugin-device": {},
             "cordova-plugin-insomnia": {},
             "cordova-plugin-x-socialsharing": {},
-            "cordova-plugin-network-information": {},
             "cordova-plugin-file": {},
             "cordova-universal-links-plugin": {},
             "cordova-plugin-dialogs": {},
             "cordova-plugin-whitelist": {},
             "cordova-plugin-vibration": {},
             "cordova-plugin-statusbar": {},
-            "cordova-plugin-splashscreen": {},
             "cordova-plugin-fullscreen": {},
             "cordova-plugin-globalization": {},
             "cordova-plugin-crosswalk-data-migration": {},
@@ -151,7 +149,9 @@
             "cordova-plugin-x-toast": {},
             "cordova-plugin-file-transfer": {},
             "onesignal-cordova-plugin": {},
-            "cordova-plugin-inappbrowser": {}
+            "cordova-plugin-inappbrowser": {},
+            "cordova-plugin-network-information": {},
+            "cordova-plugin-splashscreen": {}
         }
     },
     "jest": {

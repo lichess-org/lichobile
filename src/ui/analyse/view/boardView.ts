@@ -4,19 +4,15 @@ import gameStatusApi from '../../../lichess/status'
 import { findTag, gameResult } from '../../../lichess/interfaces/study'
 import Board, { Bounds } from '../../shared/Board'
 import { Shape } from '../../shared/BoardBrush'
-import * as treeOps from '../../shared/tree/ops'
 
 import Clock from './Clock'
-import { Tab } from '../tabs'
 import { povDiff } from '../ceval/winningChances'
 import AnalyseCtrl from '../AnalyseCtrl'
 
 export default function renderBoard(
   ctrl: AnalyseCtrl,
   bounds: Bounds,
-  availTabs: ReadonlyArray<Tab>
 ) {
-  const curTab = ctrl.currentTab(availTabs)
   const player = ctrl.data.game.player
   const ceval = ctrl.node && ctrl.node.ceval
   const rEval = ctrl.node && ctrl.node.eval
@@ -41,21 +37,21 @@ export default function renderBoard(
   const pastBestShape: Shape[] = !ctrl.retro && rEval && rEval.best ?
     moveOrDropShape(rEval.best, 'paleGreen', player) : []
 
-  const nextUci = curTab.id === 'explorer' && ctrl.node && treeOps.withMainlineChild(ctrl.node, n => n.uci)
-
-  const nextMoveShape: Shape[] = nextUci ?
-    moveOrDropShape(nextUci, 'palePurple', player) : []
-
   const badNode = ctrl.retro && ctrl.retro.showBadNode()
   const badMoveShape: Shape[] = badNode && badNode.uci ?
     moveOrDropShape(badNode.uci, 'paleRed', player) : []
 
   const shapes = [
-    ...nextMoveShape, ...pastBestShape, ...curBestShapes, ...badMoveShape
+    ...pastBestShape, ...curBestShapes, ...badMoveShape
   ]
 
+  const key =
+    (ctrl.settings.s.smallBoard ? 'board-small' : 'board-full') +
+    '-' + ctrl.settings.s.boardPosition
+
   return h('div.analyse-boardWrapper', {
-    key: ctrl.settings.s.smallBoard ? 'board-small' : 'board-full',
+    className: 'pos' + ctrl.settings.s.boardPosition,
+    key
   }, [
     playerBar(ctrl, ctrl.topColor()),
     h(Board, {

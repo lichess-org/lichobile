@@ -258,40 +258,21 @@ function tournamentFeaturedGame(ctrl: TournamentCtrl) {
   const featured = data.featured
   if (!featured) return null
 
-  const isPortrait = helper.isPortrait()
-
-  featured.player = {user: {username: featured.white.name}, rating: featured.white.rating}
-  featured.opponent = {user: {username: featured.black.name}, rating: featured.black.rating}
-  featured.clock = {initial: data.clock.limit, increment: data.clock.increment}
-
   return (
     <div className="tournamentGames">
-      <p className="tournamentTitle tournamentFeatured">Featured Game</p>
       <div key={featured.id} className="tournamentMiniBoard">
         {h(miniBoard, {
-          bounds: miniBoardSize(isPortrait),
           fixed: false,
           fen: featured.fen,
           lastMove: featured.lastMove,
-          orientation: 'white',
-          link: () => router.set(`/tournament/${data.id}/game/${featured.id}?goingBack=1`),
+          orientation: featured.color,
+          link: () => router.set(`/tournament/${data.id}/game/${featured.id}?color=${featured.color}&goingBack=1`),
           gameObj: featured,
           delay: 800,
         })}
       </div>
     </div>
   )
-}
-
-
-function miniBoardSize(isPortrait: boolean) {
-  const { vh, vw } = helper.viewportDim()
-  const side = isPortrait ? vw * 0.66 : vh * 0.66
-  const bounds = {
-    height: side,
-    width: side
-  }
-  return bounds
 }
 
 function tournamentPodium(podium: ReadonlyArray<PodiumPlace>) {

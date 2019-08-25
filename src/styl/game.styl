@@ -1,3 +1,6 @@
+.zen
+  visibility hidden
+
 .header-gameTitle
   width 100%
   overflow hidden
@@ -19,29 +22,31 @@
     font-size 0.8em
 
 .playTable
-  flex 1 1 auto
-  position relative
-  padding 0 10px
+  flex 0 0 55px
   display flex
-  justify-content space-between
-  align-items center
   overflow hidden
+  justify-content space-between
+  align-items stretch
   &.clockOnLeft
     > .antagonistInfos
       order 2
   &.crazy
+    flex 0 0 calc(100vw / 8 + 10px)
     padding 0
   @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
     width 98vw
     margin 0 auto
-  @media only screen and (orientation: landscape)
-    flex 1 0 auto
-    padding 0
-    height initial
     &.crazy
+      flex 0 0 "calc((100vh - 100vw - 25px - %s - %s) / 2)" % (headerHeight footerHeight)
+  @media only screen and (orientation: landscape)
+    padding 0
+    &.crazy
+      flex 0 0 'calc((100vh - %s) / 8)' % headerHeight
+      max-height 60px
       > .antagonistInfos
         order 2
       > .pocket
+        flex 0 0 auto
         order 1
 
 .round-expiration
@@ -65,44 +70,42 @@
     width 100%
     background: rgba(#b3b3b3, 0.8)
     > strong
-      font-family Cousine
+      font-family 'Roboto'
     &.emerg
       background: rgba(#dc322f, 0.8)
 
-.replay
-  flex 0 0 auto
-  height 250px
+.replay_inline
+  flex 1 1 auto
   overflow hidden
-  @media only screen and (orientation: landscape)
-    padding 0
-  @media only screen and (orientation: landscape) and (max-height 450px)
-    height 100px
-  @media only screen and (orientation: landscape) and (min-height 450px)
-    height 150px
-  @media only screen and (orientation: landscape) and (min-height 550px)
-    height 200px
-  @media only screen and (orientation: landscape) and (min-height 700px)
-    height 300px
-  @media only screen and (orientation: landscape) and (min-height 800px)
-    height 400px
+  overflow-x auto
+  white-space nowrap
+  display flex
+  align-items center
 
-.gameMovesList
-  height 100%
-  width 100%
+.replay
+  min-height 0 // fix chrome 73 regression
+  flex 1 1 auto
+  overflow hidden
   background lighten(bgdark, 3%)
-  >.moves
-    .replayMove
-      font-weight normal
-      transition: background-color 0.13s ease 0s;
-      &.current
-        color inherit
-        font-weight bold
-        background-color transparent
-      &.active
-        background-color lighten(bgdark, 8%)
-    &.displayPieces
-      .replayMove
-        font-family ChessSansPiratf
+  overflow-y auto
+  -webkit-overflow-scrolling touch
+  @media only screen and (orientation: portrait)
+    margin .5em
+
+.replay, .replay_inline
+  > .replayMove
+    overflow initial
+    color darken(textDarkBg, 10%)
+    font-weight normal
+    transition: background-color 0.13s ease 0s;
+    &.current
+      color lighten(textDarkBg, 60%)
+      background-color transparent
+    &.active
+      background-color lighten(bgdark, 8%)
+  &.displayPieces
+    > .replayMove
+      font-family ChessSansPiratf
 
 .rp.null
   color textGray
@@ -112,7 +115,11 @@
   color red
 
 .antagonistInfos
+  display flex
+  flex-flow column nowrap
+  justify-content center
   overflow hidden
+  padding 0 2vmin
   .score
     vertical-align top
     margin-right 10px
@@ -129,56 +136,51 @@
     margin-right 10px
   .ratingAndMaterial
     display flex
-    height 18px
     margin-top 2px
   &.zen
     > .antagonistUser
-      visibility hidden
+      display none
     > .ratingAndMaterial
       > .rating
-        visibility hidden
+        display none
   &.active
     background-color lighten(bgdark, 8%)
   &.crazy
-    padding 0 10px
-    .ratingAndMaterial
-      height inherit
+    padding 0 .5em
+    > .antagonistUser
+      font-size 1em
     > .clock
+      line-height 30px
       display inline-block
-      font-size 22px
+      fluid-type(20px, 30px)
       text-align left
-      margin-top 2px
+      margin-top 0.1em
       &.correspondence
         font-size 13px
-  @media only screen and (min-width 600px)
-    .ratingAndMaterial
-      height 25px
   @media only screen and (min-width 600px)
     &.crazy
       > .antagonistUser
         font-size 1em
   @media only screen and (orientation landscape)
-    .ratingAndMaterial
-      height 16px
-  @media only screen and (orientation landscape) and (min-width 600px)
-    .ratingAndMaterial
-      height 18px
-  @media only screen and (orientation landscape) and (min-width 801px)
-    .ratingAndMaterial
-      height 20px
+    &.crazy
+      > .antagonistUser
+        font-size 0.7em
+      > .clock
+        line-height 20px
+        fluid-type(16px, 26px)
     .rating
       display block
       margin 0.2rem 0 0.5rem
-  @media only screen and (min-width 1025px) and (orientation landscape)
-    .ratingAndMaterial
-      height 22px
 
 .antagonistUser
   overflow hidden
   text-overflow ellipsis
-  font-size 1.1em
+  font-size 1.2em
   white-space nowrap
   color textLightGray
+  > h2
+    overflow hidden
+    text-overflow ellipsis
   > .status
     font-size 0.9em
     margin-right 5px
@@ -193,13 +195,12 @@
 
 .clock
   transform translateZ(0)
-  max-width 120px
-  font-family Cousine
+  font-family 'Roboto'
   text-align right
-  font-size 30px
-  padding 4px 5px 2px
-  line-height 1
-  color #8c8c8c
+  fluid-type(32px, 48px)
+  padding 0 2vmin
+  line-height 55px
+  color textDarkBg
   background-color #262626
   > seph
     opacity 0.7
@@ -208,7 +209,7 @@
   > tens
     font-size 0.8em
   &.running
-    background-color #505a60
+    background-color darkGreen
     color #fff
   &.berserk
     color #e35d5b
@@ -218,13 +219,14 @@
     &.running
       color #fff
   &.correspondence
-    font-size 18px
+    font-family inherit
+    fluid-type(18px, 30px)
+    white-space nowrap
+    letter-spacing -0.05em
     &.offline
       color #8c8c8c
   @media only screen and (min-width: 600px)
     font-size 35px
-    padding 8px 10px 4px
-    max-width 160px
 
 .checkCount
   font-size 0.8em
@@ -344,6 +346,8 @@
     display flex
     align-items center
     justify-content space-around
+    &.loading
+      opacity 0.6
     > button
       flex: 0 0 80px;
       height: 50px;
@@ -413,8 +417,6 @@
     align-items center
 
 .pocket
-  height calc(100vw / 8 + 10px)
-  max-height "calc((100vh - 100vw - %s - %s) / 2)" % (headerHeight footerHeight)
   background #cdcdcd
   white-space nowrap
   overflow hidden
@@ -422,11 +424,6 @@
   flex-flow row nowrap
   align-items center
   justify-content space-around
-  @media only screen and (orientation: landscape)
-    height 'calc((100vh - %s) / 8 + 10px)' % headerHeight
-    max-height 55px
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
-    height 'calc((100vh - %s - 12vh) / 8 + 10px)' % headerHeight
 
 .pocket > piece
   width calc(100vw / 8)
@@ -435,6 +432,7 @@
   max-height "calc((100vh - 100vw - %s - %s) / 2)" % (headerHeight footerHeight)
   background-position center
   background-size contain
+  background-repeat no-repeat
   position relative
   &:after
     content: attr(data-nb);
@@ -463,8 +461,11 @@
   @media only screen and (orientation: landscape)
     width 'calc((100vh - %s) / 8)' % headerHeight
     height 'calc((100vh - %s) / 8)' % headerHeight
-    max-width 50px
-    max-height 50px
+    max-width 60px
+    max-height 60px
+  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
+    width "calc((100vh - 100vw - 25px - %s - %s) / 2)" % (headerHeight footerHeight)
+    height "calc((100vh - 100vw - 25px - %s - %s) / 2)" % (headerHeight footerHeight)
 
 .pocket > piece[data-nb='0']
   opacity: 0.1;
@@ -472,10 +473,25 @@
     content none
 
 .view-container.light
-  .pocket
-    background #aaa
   .antagonistUser
     color textDarkGray
+  .clock
+    color #707070
+    background-color themeBgLight
+    border-color #ccc
+    &.running
+      background-color palerGreen
+      color #000
+    &.berserk
+      border-color #dc322f
+    &.emerg
+      background-color #efaaaa
+      color textDarkGray
+    &.correspondence
+      &.offline
+        background-color themeBgLight
+        color #707070
+
 
 .view-container.transp
   .pocket
@@ -489,7 +505,7 @@
       color #d0d0d0
       &.running
         color #fff
-  .gameMovesList
+  .replay
     background transpBlack04
 
 .action_bar_button

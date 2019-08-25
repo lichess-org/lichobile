@@ -5,11 +5,16 @@ const defaultCode = 'en'
 
 let lang = defaultCode
 let messages = {} as StringMap
+let numberFormat: Intl.NumberFormat = new Intl.NumberFormat()
 
 export default function i18n(key: string, ...args: Array<string | number>): string {
   let str: string = messages[key] || untranslated[key] || key
   args.forEach(a => { str = str.replace('%s', String(a)) })
   return str
+}
+
+export function formatNumber(n: number): string {
+  return numberFormat.format(n)
 }
 
 export function getLang(): string {
@@ -67,6 +72,7 @@ function loadFile(code: string): Promise<string> {
   .then(data => {
     lang = code
     messages = data
+    numberFormat = new Intl.NumberFormat(code)
     return code
   })
   .catch(error => {
@@ -132,7 +138,6 @@ const untranslated: StringMap = {
   language: 'Language',
   notesSynchronizationHasFailed: 'Notes synchronization with lichess has failed, please try later.',
   challengeDeclined: 'Challenge declined',
-  persistentChallengeCreated: 'Correspondence challenge created. It will remain active for two weeks. You will get notified when your friend accepts it. You can cancel it from the "Correspondence" page.',
   youAreChallenging: 'You are challenging %s',
   submitMove: 'Submit move',
   returnToHome: 'Return to home',

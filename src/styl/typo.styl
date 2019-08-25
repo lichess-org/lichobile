@@ -1,0 +1,15 @@
+fluid-min-vw = 360px
+fluid-max-vw = 1200px
+
+fluid-type($min-font-size, $max-font-size, $min-vw = fluid-min-vw, $max-vw = fluid-max-vw)
+  $u1 = unit($min-vw)
+  $u2 = unit($max-vw)
+  $u3 = unit($min-font-size)
+  $u4 = unit($max-font-size)
+
+  if $u1 == $u2 and $u1 == $u3 and $u1 == $u4
+    font-size: $min-font-size
+    @media screen and (min-width: $min-vw) and (min-height: $min-vw)
+      font-size: 'calc(%s + %s * ((100vw - %s) / %s))' % ($min-font-size unit($max-font-size - $min-font-size, '') $min-vw unit($max-vw - $min-vw, ''))
+    @media screen and (min-width: $max-vw)
+      font-size: $max-font-size

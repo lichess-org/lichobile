@@ -1,18 +1,23 @@
 import socket from '../../socket'
 import * as helper from '../helper'
 import layout from '../layout'
-import PlayersCtrl, { IPlayersCtrl } from './PlayersCtrl'
+import { safeStringToNum } from '../../utils'
+import PlayersCtrl from './PlayersCtrl'
 import { header, body, searchModal } from './playersView'
 
+interface Attrs {
+  tab?: string
+}
+
 interface State {
-  ctrl: IPlayersCtrl
+  ctrl: PlayersCtrl
 }
 
 export default {
-  oninit() {
+  oninit({ attrs }) {
     socket.createDefault()
 
-    this.ctrl = PlayersCtrl()
+    this.ctrl = new PlayersCtrl(safeStringToNum(attrs.tab))
   },
 
   oncreate: helper.viewFadeIn,
@@ -29,4 +34,4 @@ export default {
 
     return layout.free(headerCtrl, bodyCtrl, undefined, searchModalCtrl)
   }
-} as Mithril.Component<{}, State>
+} as Mithril.Component<Attrs, State>

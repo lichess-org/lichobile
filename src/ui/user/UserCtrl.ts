@@ -16,6 +16,7 @@ export interface IUserCtrl {
   goToUserTV: () => void
   challenge: () => void
   composeMessage: () => void
+  followers: () => void
 }
 
 export type ProfileUser = Session | UserFullProfile
@@ -88,7 +89,17 @@ export default function UserCtrl(userId: string): IUserCtrl {
       if (u) {
         router.set(`/inbox/new/${u.id}`)
       }
-    }
+    },
+    followers() {
+      const u = user()
+      if (u) {
+        const params: StringMap = {
+          username: u.username,
+          title: u.title,
+        }
+        router.set(`/@/${u.id}/related?${utils.serializeQueryParameters(params)}`)
+      }
+    },
   }
 }
 

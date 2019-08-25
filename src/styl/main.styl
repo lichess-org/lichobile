@@ -1,3 +1,13 @@
+html
+  font-family 'Noto Sans', sans-serif
+
+body
+  fluid-type(14px, 18px)
+  background-color #000
+  overflow hidden
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
+
 .view-container
   position absolute
   display block
@@ -89,19 +99,20 @@ main
   flex-flow row nowrap
   align-items center
   padding-left 10px
-  font-size 1.1rem
+  font-size 1.2em
   line-height headerHeight
   flex 1 1 auto
   overflow hidden
   text-overflow ellipsis
   white-space nowrap
+  letter-spacing -0.5px
   &.withSub
     display flex
     flex-flow column nowrap
     line-height initial
     justify-content center
     align-items flex-start
-    font-size 1rem
+    font-size 1.1em
   &.reconnecting
     white-space nowrap
     justify-content center
@@ -112,7 +123,6 @@ main
   @media only screen and (max-width 320px)
     &.playing
       padding-left 0
-      font-size 1rem
 
 .main_header_button
   flex 0 0 auto
@@ -125,9 +135,6 @@ main
   &.fa-bell
     position relative
     top -2px
-  &.active
-    background headerBgDarkActive
-    opacity initial
 
 .header-subTitle
   width 100%
@@ -137,7 +144,7 @@ main
   text-overflow ellipsis
 
 .back_button
-  flex 0 1 auto
+  flex 1 1 auto
   display flex
   flex-flow row nowrap
   height headerHeight
@@ -148,7 +155,7 @@ main
   > button
     margin 0
     height headerHeight
-    padding 0 16px
+    padding 0 12px
     > .svg-icon-wrapper
       width 24px
       height 24px
@@ -156,13 +163,13 @@ main
       background headerBgDarkActive
   > .title, .main_header_title
     &.withSub
-      font-size 1rem
+      font-size 1.1em
       display flex
       flex-flow column nowrap
       justify-content center
       line-height initial
-    font-size 1.1rem
-    padding-right 10px
+    font-size 1.2em
+    padding-right 2px
     padding-left 2px
     overflow hidden
     text-overflow ellipsis
@@ -211,9 +218,6 @@ main
     background url('../../images/icons/game_icon_canvas.svg') no-repeat
   &.metal::before
     background url('../../images/icons/game_icon_metal.svg') no-repeat
-  > .nb_challenges
-    left 7px
-    background orange
   &.new_challenge:before
     background transparent
     font-family: "lichess" !important;
@@ -225,7 +229,6 @@ main
     speak: none;
     line-height: 1;
     -webkit-font-smoothing: antialiased;
-    animation: neon 1.5s ease-in-out infinite alternate
 
 @media only screen and (min-width 600px)
   .friends_button

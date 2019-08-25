@@ -9,6 +9,7 @@ import redraw from '../../utils/redraw'
 import session from '../../session'
 import vibrate from '../../vibrate'
 import sound from '../../sound'
+import { toggleGameBookmark } from '../../xhr'
 import socket from '../../socket'
 import { openingSensibleVariants } from '../../lichess/variant'
 import { playerName as gamePlayerName } from '../../lichess/player'
@@ -17,7 +18,7 @@ import { AnalyseData, AnalyseDataWithTree, isOnlineAnalyseData } from '../../lic
 import { Study, findTag } from '../../lichess/interfaces/study'
 import { Opening } from '../../lichess/interfaces/game'
 import settings from '../../settings'
-import { oppositeColor, hasNetwork, noop } from '../../utils'
+import { handleXhrError, oppositeColor, hasNetwork, noop } from '../../utils'
 import promotion from '../shared/offlineRound/promotion'
 import continuePopup, { Controller as ContinuePopupController } from '../shared/continuePopup'
 import { NotesCtrl } from '../shared/round/notes'
@@ -39,9 +40,6 @@ import * as tabs from './tabs'
 import StudyCtrl from './study/StudyCtrl'
 
 export default class AnalyseCtrl {
-  data: AnalyseData
-  orientation: Color
-  source: Source
 
   settings: ISettingsCtrl
   menu: IMainMenuCtrl
@@ -74,7 +72,6 @@ export default class AnalyseCtrl {
   // various view state flags
   replaying: boolean = false
   cgConfig?: cg.SetConfig
-  shouldGoBack: boolean
   analysisProgress: boolean = false
   retroGlowing: boolean = false
   formattedDate: string
@@ -84,17 +81,14 @@ export default class AnalyseCtrl {
   private debouncedExplorerSetStep: () => void
 
   constructor(
-    data: AnalyseData,
+    readonly data: AnalyseData,
     studyData: Study | undefined,
-    source: Source,
-    orientation: Color,
-    shouldGoBack: boolean,
+    readonly source: Source,
+    readonly orientation: Color,
+    readonly shouldGoBack: boolean,
     ply?: number,
     tabId?: string
   ) {
-    this.data = data
-    this.orientation = orientation
-    this.source = source
     this.synthetic = util.isSynthetic(data)
     this.ongoing = !this.synthetic && gameApi.playable(data)
     this.initialPath = treePath.root
@@ -152,7 +146,6 @@ export default class AnalyseCtrl {
 
     const gameMoment = window.moment(this.data.game.createdAt)
 
-    this.shouldGoBack = shouldGoBack
     this.formattedDate = gameMoment.format('L LT')
 
     if (this.study) {
@@ -395,6 +388,14 @@ export default class AnalyseCtrl {
     this.debouncedScroll()
   }
 
+  toggleBookmark = () => {
+    return toggleGameBookmark(this.data.game.id).then(() => {
+      this.data.bookmarked = !this.data.bookmarked
+      redraw()
+    })
+    .catch(handleXhrError)
+  }
+
   uciMove = (uci: string) => {
     const move = chessFormat.decomposeUci(uci)
     if (uci[1] === '@') {
@@ -472,6 +473,10 @@ export default class AnalyseCtrl {
 
   hasFullComputerAnalysis = (): boolean => {
     return Object.keys(this.mainline[0].eval || {}).length > 0
+  }
+
+  isOfflineOrNotPlayable = (): boolean => {
+    return this.source === 'offline' || !gameApi.playable(this.data)
   }
 
   unload = () => {
@@ -588,7 +593,7 @@ export default class AnalyseCtrl {
     redraw()
   }
 
-  private isCevalAllowed() {
+  private isCevalAllowed(): boolean {
     const study = this.study && this.study.data
 
     if (!gameApi.analysableVariants.includes(this.data.game.variant.key)) {
@@ -599,7 +604,7 @@ export default class AnalyseCtrl {
       return false
     }
 
-    return this.source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)
+    return this.isOfflineOrNotPlayable()
   }
 
   private onCevalMsg = (path: string, ceval?: Tree.ClientEval) => {

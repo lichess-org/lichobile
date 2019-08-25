@@ -33,6 +33,8 @@ interface Profile {
   readonly bio?: string
   readonly firstName?: string
   readonly lastName?: string
+  readonly fideRating?: number
+  readonly links?: string
 }
 
 export interface Session {
@@ -158,7 +160,8 @@ function savePreferences(): Promise<string> {
     'autoQueen',
     'autoThreefold',
     'submitMove',
-    'confirmResign'
+    'confirmResign',
+    'moretime'
   ]), numValue), (_, k) => 'behavior.' + k) as StringMap
   const rest = mapValues(pick(prefs, [
     'clockTenths',

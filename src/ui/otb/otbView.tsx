@@ -2,8 +2,15 @@ import * as h from 'mithril/hyperscript'
 import * as utils from '../../utils'
 import i18n from '../../i18n'
 import Board from '../shared/Board'
-import { renderAntagonist, renderReplayTable, renderBackwardButton, renderForwardButton } from '../shared/offlineRound/view'
+import {
+  renderAntagonist,
+  renderReplay,
+  renderInlineReplay,
+  renderBackwardButton,
+  renderForwardButton,
+} from '../shared/offlineRound/view'
 import { view as renderPromotion } from '../shared/offlineRound/promotion'
+import { hasSpaceForReplay } from '../shared/round/util'
 import * as helper from '../helper'
 import actions from './actions'
 import newGameMenu from './newOtbGame'
@@ -32,9 +39,10 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
   const material = ctrl.chessground.getMaterialDiff()
   const playerName = i18n(ctrl.data.player.color)
   const opponentName = i18n(ctrl.data.opponent.color)
-  const replayTable = renderReplayTable(ctrl.replay)
+  const replayTable = renderReplay(ctrl)
   const isPortrait = helper.isPortrait()
-  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait)
+  const vd = helper.viewportDim()
+  const bounds = helper.getBoardBounds(vd, isPortrait)
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
@@ -50,6 +58,7 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
 
   if (isPortrait)
     return h.fragment({ key: orientationKey }, [
+      hasSpaceForReplay(vd, bounds) ? renderReplay(ctrl) : renderInlineReplay(ctrl),
       renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, clock),
       board,
       renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, clock),

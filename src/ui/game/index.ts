@@ -15,10 +15,10 @@ import vibrate from '../../vibrate'
 import i18n from '../../i18n'
 import socket from '../../socket'
 import { emptyFen } from '../../utils/fen'
-import roundView from '../shared/round/view/roundView'
+import roundView, { viewOnlyBoardContent } from '../shared/round/view/roundView'
 import gamesMenu from '../gamesMenu'
 import layout from '../layout'
-import { connectingHeader, viewOnlyBoardContent, loadingBackbutton } from '../shared/common'
+import { connectingHeader, loadingBackbutton } from '../shared/common'
 
 interface Attrs {
   id: string

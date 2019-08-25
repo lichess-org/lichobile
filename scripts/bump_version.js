@@ -24,4 +24,9 @@ newConfigText = newConfigText.replace(
   '$1' + newVersionCode + '$3'
 )
 
+newConfigText = newConfigText.replace(
+  /("AppendUserAgent"\svalue="v)([^"]+)(")/,
+  '$1' + newVersion + '$3'
+)
+
 fs.writeFileSync(configXmlFile, newConfigText);

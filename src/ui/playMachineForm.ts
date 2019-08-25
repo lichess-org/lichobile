@@ -160,7 +160,7 @@ function renderForm(formName: string, settingsObj: AiSettings, variants: string[
     h('fieldset', generalFieldset),
     h('fieldset', timeFieldset),
     h('div.popupActionWrapper', [
-      h('button[data-icon=E][type=submit].popupAction', i18n('playWithTheMachine'))
+      h('button.defaultButton[type=submit]', i18n('playWithTheMachine'))
     ])
   ])
 }

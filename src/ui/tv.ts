@@ -5,10 +5,9 @@ import * as helper from './helper'
 import * as sleepUtils from '../utils/sleep'
 import { handleXhrError } from '../utils'
 import * as xhr from '../xhr'
-import { LoadingBoard } from './shared/common'
 import settings from '../settings'
 import OnlineRound from './shared/round/OnlineRound'
-import roundView from './shared/round/view/roundView'
+import roundView, { LoadingBoard } from './shared/round/view/roundView'
 
 interface TVAttrs {
   id: string

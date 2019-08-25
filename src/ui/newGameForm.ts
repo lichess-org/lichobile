@@ -46,7 +46,7 @@ export default {
 
   view() {
     return popupWidget(
-      'new_game_form_popup game_form_popup',
+      'game_form_popup',
       undefined,
       renderContent,
       isOpen,
@@ -89,7 +89,7 @@ function goSeek(conf: PoolMember | HumanSeekSetup) {
   // correspondence or unlimited seek
   else {
     xhr.seekGame(conf)
-    .then(() => router.set('/correspondence'))
+    .then(() => router.set('/?tab=1'))
     .catch(utils.handleXhrError)
   }
 }
@@ -147,7 +147,7 @@ export function renderQuickSetup(onCustom: () => void) {
           key: 'pool-custom',
           oncreate: helper.ontap(onCustom)
         }, h('div.newGame-custom', 'Custom'))
-      ) : spinner.getVdom()
+      ) : spinner.getVdom('monochrome')
   )
 }
 
@@ -294,7 +294,7 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
     h('fieldset', generalFieldset),
     h('fieldset', timeFieldset),
     h('div.popupActionWrapper', [
-      h('button[data-icon=E][type=submit].popupAction', i18n('createAGame'))
+      h('button[type=submit].defaultButton', i18n('createAGame'))
     ])
   ])
 }

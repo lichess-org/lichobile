@@ -2,6 +2,7 @@ import { Game, Player, ClockData, CorrespondenceClockData } from './game'
 import { Tree } from '../../ui/shared/tree'
 
 export interface AnalyseData {
+  bookmarked?: boolean
   readonly game: Game
   readonly player: Player
   readonly opponent: Player

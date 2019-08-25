@@ -10,18 +10,18 @@ interface Attrs {
 }
 
 interface State {
-  user: IUserCtrl
+  ctrl: IUserCtrl
 }
 
 const UserScreen: Mithril.Component<Attrs, State> = {
   oninit({ attrs }) {
     socket.createDefault()
 
-    this.user = UserCtrl(attrs.id)
+    this.ctrl = UserCtrl(attrs.id)
   },
 
   oncreate(vnode: Mithril.DOMNode) {
-    if (this.user.isMe()) {
+    if (this.ctrl.isMe()) {
       helper.elFadeIn(vnode.dom as HTMLElement)
     } else {
       helper.pageSlideIn(vnode.dom as HTMLElement)
@@ -29,12 +29,12 @@ const UserScreen: Mithril.Component<Attrs, State> = {
   },
 
   view() {
-    const user = this.user.user()
+    const user = this.ctrl.user()
 
     if (user) {
       return layout.free(
-        view.header(user, this.user),
-        view.profile(user, this.user)
+        view.header(user, this.ctrl),
+        view.profile(user, this.ctrl)
       )
     } else {
       return layout.free(

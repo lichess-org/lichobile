@@ -18,7 +18,6 @@ export namespace Tree {
     retried?: boolean
     // maybe not keep here
     best?: Uci
-    bestSan?: San
   }
 
   export interface ServerEval {

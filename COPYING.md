@@ -27,12 +27,13 @@ Exceptions (free)
 Files | Author(s) | License
 --- | --- | ---
 ChessSansPiratf in www/fonts | the [pgn4web](http://pgn4web.casaschi.net/home.html) authors | [GPLv2+](https://www.gnu.org/licenses/gpl-2.0.txt)
-Cousine in www/fonts | [Steve Matteson](https://twitter.com/@SteveMatteson1) | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+Roboto in www/fonts | [Christian Robertson](http://christianrobertson.com/) | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 Noto in www/fonts | [Google](https://fonts.google.com/specimen/Noto+Sans) | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 Fontawesome in www/fonts | [davegandy](https://fontawesome.com) | [SIL OFL 1.1](https://opensource.org/licenses/OFL-1.1)
 www/images/pieces/mono | Thibault Duplessis and [Colin M.L. Burnett](https://en.wikipedia.org/wiki/User:Cburnett) | [GPLv2+](https://www.gnu.org/licenses/gpl-2.0.txt)
 www/images/pieces/cburnett | [Colin M.L. Burnett](https://en.wikipedia.org/wiki/User:Cburnett) | [GPLv2+](https://www.gnu.org/licenses/gpl-2.0.txt)
 www/images/pieces/chessnut | [Alexis Luengas](https://github.com/LexLuengas) | [Apache 2.0](https://github.com/LexLuengas/chessnut-pieces/blob/master/LICENSE.txt)
+www/images/pieces/letter | [usolando](https://lichess.org/@/usolando) | AGPLv3+
 www/images/pieces/kosal | [Philatype](https://www.philatype.com/) | [Creative Commons Attribution 4.0 International Public License](https://creativecommons.org/licenses/by/4.0/legalcode)
 www/images/pieces/merida | Armando Hernandez Marroquin | [GPLv2+](https://www.gnu.org/licenses/gpl-2.0.txt)
 

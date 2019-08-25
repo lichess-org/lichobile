@@ -1,29 +1,28 @@
-import * as Hammer from 'hammerjs'
 import * as h from 'mithril/hyperscript'
-
+import * as Hammer from 'hammerjs'
 import { EDGE_SLIDE_THRESHOLD } from './sideMenu'
-import { viewportDim, findParentBySelector } from '../helper'
-
-
-type TabsContent = Array<any>
-type Renderer = (c: any, index: number) => Mithril.Children
+import { viewportDim, findParentBySelector, headerHeight, isPortrait, is43Aspect } from '../helper'
 
 interface Attrs {
   selectedIndex: number
-  content: TabsContent
-  renderer: Renderer
+  contentRenderers: ReadonlyArray<() => Mithril.Children>
   onTabChange: (i: number) => void
   className?: string
+  boardView?: boolean
+  withWrapper?: boolean
 }
 
 interface State {
+  nbTabs: number
   mc: HammerManager
 }
 
 export default {
-  oncreate({ attrs, dom }) {
-    const nbTabs = attrs.content.length
+  oninit({ attrs }) {
+    this.nbTabs = attrs.contentRenderers.length
+  },
 
+  oncreate({ attrs, dom }) {
     this.mc = new Hammer.Manager(dom, {
       inputClass: Hammer.TouchInput
     })
@@ -36,18 +35,24 @@ export default {
     this.mc.on('swiperight swipeleft', (e: HammerInput) => {
       if (e.center.x - e.deltaX > EDGE_SLIDE_THRESHOLD) {
         const tab = findParentBySelector(e.target, '.tab-content')
-        const ds = tab.dataset as DOMStringMap
-        const index = Number(ds.index)
-        if (index !== undefined) {
-          if (e.direction === Hammer.DIRECTION_LEFT && index < nbTabs - 1) {
-            attrs.onTabChange(index + 1)
-          }
-          else if (e.direction === Hammer.DIRECTION_RIGHT && index > 0) {
-            attrs.onTabChange(index - 1)
+        if (tab) {
+          const ds = tab.dataset as DOMStringMap
+          const index = Number(ds.index)
+          if (index !== undefined) {
+            if (e.direction === Hammer.DIRECTION_LEFT && index < this.nbTabs - 1) {
+              attrs.onTabChange(index + 1)
+            }
+            else if (e.direction === Hammer.DIRECTION_RIGHT && index > 0) {
+              attrs.onTabChange(index - 1)
+            }
           }
         }
       }
     })
+  },
+
+  onupdate({ attrs }) {
+    this.nbTabs = attrs.contentRenderers.length
   },
 
   onremove() {
@@ -55,40 +60,41 @@ export default {
   },
 
   view({ attrs }) {
-    const curIndex = attrs.selectedIndex
-    const vw = viewportDim().vw
-    const width = attrs.content.length * 100
-    const shift = -(curIndex * vw)
+    const {
+      contentRenderers,
+      selectedIndex,
+      boardView = false,
+      withWrapper = false
+    } = attrs
+    const vd = viewportDim()
+    const curIndex = selectedIndex
+    const tabWidth = isPortrait() || !boardView ?
+      vd.vw :
+        is43Aspect() ?
+          vd.vw - (vd.vh * 0.88) + headerHeight :
+          vd.vw - vd.vh + headerHeight
+
+    const width = contentRenderers.length * tabWidth
+    const shift = -(curIndex * tabWidth)
 
     const style = {
-      width: `${width}vw`,
+      width: `${width}px`,
       transform: `translateX(${shift}px)`
     }
 
-    return h('div.tabs-view-wrapper', h('div.tabs-view', {
+    const view = h('div.tabs-view', {
       style,
       className: attrs.className
-    }, attrs.content.map((_: any, index: number) =>
+    }, contentRenderers.map((_: any, index: number) =>
       h('div.tab-content', {
+        style: {
+          width: `${tabWidth}px`,
+        },
         'data-index': index,
-        className: curIndex === index ? 'current' : '',
-      }, curIndex === index ? h(Tab, { index, ...attrs }) : null)
-    )))
+        className: selectedIndex === index ? 'current' : '',
+      },  selectedIndex === index ? contentRenderers[index]() : null)
+    ))
+
+    return withWrapper ? h('div.tabs-view-wrapper', view) : view
   }
 } as Mithril.Component<Attrs, State>
-
-
-// --
-
-interface TabAttrs extends Attrs {
-  index: number
-}
-const Tab: Mithril.Component<TabAttrs, {}> = {
-  onbeforeupdate({ attrs }, { attrs: oldattrs }) {
-    return attrs.content[attrs.index] !== oldattrs.content[oldattrs.index]
-  },
-
-  view({ attrs }) {
-    return attrs.renderer(attrs.content[attrs.index], attrs.index)
-  }
-}

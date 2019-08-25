@@ -5,6 +5,7 @@ import popupWidget from './shared/popup'
 import i18n from '../i18n'
 import friendsApi, { Friend } from '../lichess/friends'
 import * as utils from '../utils'
+import challengeForm from './challengeForm'
 
 let isOpen = false
 
@@ -15,8 +16,7 @@ export default {
 
     function header() {
       return [
-        h('span.nbFriends', friendsApi.count()),
-        ' ' + i18n('onlineFriends')
+        h('span', i18n('onlineFriends'))
       ]
     }
 
@@ -69,7 +69,7 @@ function renderFriend(user: Friend) {
 
   return (
     <li className="list_item" key={userId} oncreate={helper.ontapY(action)}>
-      <div className="friends-name">
+      <div className="friend_name">
         { user.patron ?
           <span className="patron is-green" data-icon="" />
           :
@@ -77,11 +77,23 @@ function renderFriend(user: Friend) {
         }
         <span>{user.name}</span>
       </div>
-      { user.playing ?
-        <span className="friend_tv" data-icon="1" oncreate={helper.ontapY(onTapTv)}> </span>
-        :
-        null
-      }
+      <div className="onlineFriends_actions">
+        { user.playing ?
+          <span className="friend_tv" data-icon="1" oncreate={helper.ontapY(onTapTv)}> </span>
+          :
+          null
+        }
+        <span data-icon="U" oncreate={helper.ontapY((e: Event) => {
+          e.stopPropagation()
+          close()
+          challengeForm.open(userId)
+        })} />
+        <span data-icon="c" oncreate={helper.ontapY((e: Event) => {
+          e.stopPropagation()
+          close()
+          router.set(`/inbox/new/${userId}`)
+        })} />
+      </div>
     </li>
   )
 }

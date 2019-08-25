@@ -74,17 +74,6 @@
   display flex
   flex-flow row wrap
   justify-content space-between
-  .nice-radio
-    label
-      height 30px
-    input.radio:empty + label
-      line-height 30px
-      &:after
-        bottom 9px
-    input.radio.light:empty + label
-      border-radius 0 15px 15px 0
-    input.radio.dark:empty + label
-      border-radius 15px 0 0 15px
 
 .settingsChoicesBlock
   background-color selectBg
@@ -183,6 +172,11 @@
       background-image url('../../images/pieces/shapes/wN.svg')
       @media only screen and (min-width 600px)
         background-image url('../../images/pieces/shapes/wP.svg'),url('../../images/pieces/shapes/wN.svg'),url('../../images/pieces/shapes/wB.svg'),url('../../images/pieces/shapes/wR.svg'),url('../../images/pieces/shapes/wQ.svg'),url('../../images/pieces/shapes/wK.svg')
+  &.letter
+    > label
+      background-image url('../../images/pieces/letter/wN.svg')
+      @media only screen and (min-width 600px)
+        background-image url('../../images/pieces/letter/wP.svg'),url('../../images/pieces/letter/wN.svg'),url('../../images/pieces/letter/wB.svg'),url('../../images/pieces/letter/wR.svg'),url('../../images/pieces/letter/wQ.svg'),url('../../images/pieces/letter/wK.svg')
   &.chessnut
     > label
       background-image url('../../images/pieces/chessnut/wN.svg')

@@ -32,10 +32,11 @@
 
 .game_search_select
   font-size 0.9em
-  background #fff
+  background transparent
+  border 1px solid #444
   position relative
   flex 0 0 49.5%
-  height 20px
+  height 25px
   &.full
     flex 0 0 100%
   select
@@ -72,6 +73,8 @@
   .game_search_input
     input[type=text]
       border-color borderLightGray
+  .game_search_select
+    border-color borderLightGray
 
 .view-container.transp
   .game_search_input

@@ -1,5 +1,6 @@
 import * as throttle from 'lodash/throttle'
 import * as h from 'mithril/hyperscript'
+import router from '../../../router'
 import * as utils from '../../../utils'
 import * as helper from '../../helper'
 import i18n from '../../../i18n'
@@ -22,7 +23,6 @@ export function renderBody(ctrl: IUserGamesCtrl) {
             )
           })}
         </select>
-        <div className="main_header_drop_shadow" />
       </div>
       {renderAllGames(ctrl)}
     </div>
@@ -36,11 +36,17 @@ function getButton(e: Event): HTMLElement | undefined {
 
 function onTap(ctrl: IUserGamesCtrl, e: Event) {
   const starButton = getButton(e)
+  const tournamentLink = helper.findElByClassName(e, 'tournament')
   const el = helper.getLI(e)
   const id = el && el.dataset.id
   const playerId = el && el.dataset.pid
   if (id && starButton) {
     ctrl.toggleBookmark(id)
+  } else if (tournamentLink) {
+    const tid = tournamentLink.dataset.id
+    if (tid) {
+      router.set(`/tournament/${tid}`)
+    }
   } else {
     if (id) {
       ctrl.goToGame(id, playerId)
@@ -49,13 +55,13 @@ function onTap(ctrl: IUserGamesCtrl, e: Event) {
 }
 
 function renderAllGames(ctrl: IUserGamesCtrl) {
-  const { games  } = ctrl.scrollState
+  const { games, paginator } = ctrl.scrollState
   return (
     <div id="scroller-wrapper" className="native_scroller userGame-scroller"
       oncreate={helper.ontapY(e => onTap(ctrl, e!), undefined, helper.getLI)}
       onscroll={throttle(ctrl.onScroll, 30)}
     >
-      { games.length ?
+      { paginator ?
         <ul className="userGames" oncreate={ctrl.onGamesLoaded}>
           { games.map((g, i) =>
               h(GameItem, {
@@ -71,7 +77,7 @@ function renderAllGames(ctrl: IUserGamesCtrl) {
           <li className="list_item loadingNext">loading...</li> : null
           }
         </ul> :
-        <div className="userGame-loader">
+        <div className="loader_container">
           {spinner.getVdom('monochrome')}
         </div>
       }

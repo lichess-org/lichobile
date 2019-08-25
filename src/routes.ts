@@ -4,7 +4,6 @@ import game from './ui/game'
 import analyse from './ui/analyse'
 import challenge from './ui/challenge'
 import tv from './ui/tv'
-import correspondence from './ui/correspondence'
 import otb from './ui/otb'
 import ai from './ui/ai'
 import settingsUi from './ui/settings'
@@ -16,8 +15,7 @@ import theme from './ui/settings/theme'
 import boardThemes from './ui/settings/boardThemes'
 import pieceThemes from './ui/settings/pieceThemes'
 import user from './ui/user'
-import userFollowing from './ui/user/following'
-import userFollowers from './ui/user/followers'
+import userRelated from './ui/user/related'
 import userGames from './ui/user/games'
 import userPerfStats from './ui/user/perfStats'
 import userTV from './ui/user/tv'
@@ -25,7 +23,6 @@ import accountPreferences from './ui/user/account/preferences'
 import accountPrivacy from './ui/user/account/privacy'
 import accountKidMode from './ui/user/account/kid'
 import players from './ui/players'
-import ranking from './ui/ranking'
 import training from './ui/training'
 import tournamentsList from './ui/tournament'
 import tournamentDetail from './ui/tournament/detail'
@@ -62,10 +59,8 @@ export default {
       'challenge/:id': challenge,
       'tv': tv,
       'tv/:channel': tv,
-      'correspondence': correspondence,
       '@/:id': user,
-      '@/:id/following': userFollowing,
-      '@/:id/followers': userFollowers,
+      '@/:id/related': userRelated,
       '@/:id/games': userGames,
       '@/:id/games/:filter': userGames,
       '@/:id/:perf/perf': userPerfStats,
@@ -82,7 +77,6 @@ export default {
       'inbox/new': inboxCompose,
       'inbox/new/:userId': inboxCompose,
       'players': players,
-      'ranking': ranking,
       'search': search,
       'settings': settingsUi,
       'settings/gameDisplay': settingsGameDisplay,

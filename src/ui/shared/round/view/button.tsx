@@ -6,8 +6,8 @@ import session from '../../../../session'
 import router from '../../../../router'
 import gameStatus from '../../../../lichess/status'
 import { OnlineGameData } from '../../../../lichess/interfaces/game'
-import { User } from '../../../../lichess/interfaces/user'
 import i18n from '../../../../i18n'
+import spinner from '../../../../spinner'
 import socket from '../../../../socket'
 import lobby from '../../../lobby'
 import * as helper from '../../../helper'
@@ -37,16 +37,7 @@ export default {
       oncreate: helper.ontap(() => {
         window.plugins.socialsharing.share(null, null, null, gameApi.publicUrl(ctrl.data))
       })
-    }, [h('span.fa.fa-link'), i18n('shareGameURL')])
-  },
-  userTVLink(user: User) {
-    return h('button.withIcon', {
-      key: `userTV_${user.username}`,
-      'data-icon': '1',
-      oncreate: helper.ontap(() => {
-        router.set(`/@/${user.username}/tv`)
-      })
-    }, user.username + '\'s TV')
+    }, [i18n('shareGameURL')])
   },
   sharePGN(ctrl: OnlineRound) {
     function handler() {
@@ -56,25 +47,26 @@ export default {
     }
     return (
       <button key="sharePGN" oncreate={helper.ontap(handler)}>
-        <span className="fa fa-share-alt" />
         {i18n('sharePGN')}
       </button>
     )
   },
   submitMove(ctrl: OnlineRound) {
-    return (
-      <div className="negotiationButtonsWrapper">
-        <p>{i18n('moveConfirmation')}</p>
-        <div className="negotiationButtons">
-          <button className="accept" data-icon="E"
-            oncreate={helper.ontap(() => ctrl.submitMove(true))}
-          />
-          <button className="decline" data-icon="L"
-            oncreate={helper.ontap(() => ctrl.submitMove(false))}
-          />
-        </div>
-      </div>
-    )
+    return h('div.negotiationButtonsWrapper', [
+      h('p', i18n('moveConfirmation')),
+      h('div.negotiationButtons', {
+        className: ctrl.vm.submitFeedback ? 'loading' : ''
+      }, [
+        h('button.accept', {
+          'data-icon': ctrl.vm.submitFeedback ? null : 'E',
+          oncreate: helper.ontap(() => ctrl.submitMove(true)),
+        }, ctrl.vm.submitFeedback ? spinner.getVdom('monochrome white') : null),
+        h('button.decline', {
+          'data-icon': 'L',
+          oncreate: helper.ontap(() => ctrl.submitMove(false)),
+        }),
+      ])
+    ])
   },
   resign: function(ctrl: OnlineRound) {
     return gameApi.resignable(ctrl.data) && !ctrl.vm.confirmResign ? h('button', {

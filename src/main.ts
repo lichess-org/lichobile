@@ -33,6 +33,9 @@ let firstConnection = true
 
 function main() {
 
+  // cf https://github.com/apache/cordova-plugin-inappbrowser#readme
+  window.open = cordova.InAppBrowser.open
+
   routes.init()
   deepLinks.init()
 

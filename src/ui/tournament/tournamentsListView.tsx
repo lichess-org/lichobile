@@ -26,13 +26,14 @@ function onTournamentTap(e: Event) {
   }
 }
 
+
 export function renderTournamentsList(ctrl: TournamentsListCtrl) {
   if (!ctrl.tournaments) return null
 
   const tabsContent = [
-    ctrl.tournaments['started'],
-    ctrl.tournaments['created'],
-    ctrl.tournaments['finished']
+    () => ctrl.tournaments ? renderTournamentList(ctrl.tournaments['started']) : null,
+    () => ctrl.tournaments ? renderTournamentList(ctrl.tournaments['created']) : null,
+    () => ctrl.tournaments ? renderTournamentList(ctrl.tournaments['finished']) : null
   ]
 
   return [
@@ -42,14 +43,13 @@ export function renderTournamentsList(ctrl: TournamentsListCtrl) {
           selectedIndex: ctrl.currentTab,
           onTabChange: ctrl.onTabChange
       }),
-      h('div.main_header_drop_shadow')
     ),
     h(TabView, {
       className: 'tournamentTabsWrapper',
       selectedIndex: ctrl.currentTab,
-      content: tabsContent,
-      renderer: renderTournamentList,
-      onTabChange: ctrl.onTabChange
+      contentRenderers: tabsContent,
+      onTabChange: ctrl.onTabChange,
+      withWrapper: true,
     })
   ]
 }
@@ -65,7 +65,7 @@ export function renderFooter() {
   )
 }
 
-export function renderTournamentList(list: Array<TournamentListItem>) {
+export function renderTournamentList(list: ReadonlyArray<TournamentListItem>) {
   return h('ul.native_scroller.tournamentList', {
     oncreate: helper.ontapXY(onTournamentTap, undefined, helper.getLI)
   }, list.map(renderTournamentListItem))

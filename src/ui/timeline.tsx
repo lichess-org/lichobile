@@ -2,7 +2,7 @@ import * as h from 'mithril/hyperscript'
 import * as stream from 'mithril/stream'
 import router from '../router'
 import redraw from '../utils/redraw'
-import { timeline as timelineXhr } from '../xhr'
+import { timeline as timelineXhr, openWebsiteAuthPage } from '../xhr'
 import { gameIcon, handleXhrError } from '../utils'
 import { dropShadowHeader as headerWidget, backButton } from './shared/common'
 import * as helper from './helper'
@@ -10,7 +10,7 @@ import layout from './layout'
 import i18n from '../i18n'
 import { TimelineEntry } from '../lichess/interfaces'
 
-export const supportedTypes = ['follow', 'game-end', 'tour-join', 'study-create', 'study-like']
+export const supportedTypes = ['follow', 'game-end', 'tour-join', 'study-create', 'study-like', 'forum-post', 'blog-post']
 
 interface State {
   timeline: Mithril.Stream<ReadonlyArray<TimelineEntry>>
@@ -50,8 +50,12 @@ export default {
 export function timelineOnTap(e: Event) {
   const el = helper.getLI(e)
   const path = el && el.dataset.path
+  const external = el && el.dataset.external
   if (path) {
     router.set(path)
+  }
+  if (external) {
+    openWebsiteAuthPage(external)
   }
 }
 
@@ -66,9 +70,38 @@ export function renderTimelineEntry(e: TimelineEntry) {
     case 'study-create':
     case 'study-like':
       return renderStudy(e)
+    case 'forum-post':
+      return renderForum(e)
+    case 'blog-post':
+      return renderBlog(e)
     default:
       return null
   }
+}
+
+function renderBlog(entry: TimelineEntry) {
+  const data = entry.data
+  return h('li.list_item.timelineEntry', {
+    key: 'blog-post' + data.id,
+    'data-external': `/blog/${data.id}/${data.slug}`,
+  }, [
+    h('span[data-icon=6].withIcon'),
+    h('span', data.title),
+    ' ',
+    h('small', h('em', entry.fromNow)),
+  ])
+}
+
+function renderForum(entry: TimelineEntry) {
+  const data = entry.data
+  return h('li.list_item.timelineEntry', {
+    key: 'forum-post' + data.postId,
+    'data-external': `/forum/redirect/post/${data.postId}`,
+  }, [
+    h.trust(i18n('xPostedInForumY', `<strong>${data.userId}</strong>`, data.topicName)),
+    ' ',
+    h('small', h('em', entry.fromNow)),
+  ])
 }
 
 function renderStudy(entry: TimelineEntry) {
@@ -86,7 +119,6 @@ function renderStudy(entry: TimelineEntry) {
 }
 
 function renderTourJoin(entry: TimelineEntry) {
-  const fromNow = window.moment(entry.date).fromNow()
   const entryText = i18n('xCompetesInY', entry.data.userId, entry.data.tourName)
   const key = 'tour' + entry.date
 
@@ -96,13 +128,12 @@ function renderTourJoin(entry: TimelineEntry) {
     >
       <span className="fa fa-trophy" />
       {h.trust(entryText.replace(/^(\w+)\s/, '<strong>$1&nbsp;</strong>'))}
-      <small><em>&nbsp;{fromNow}</em></small>
+      <small><em> {entry.fromNow}</em></small>
     </li>
   )
 }
 
 function renderFollow(entry: TimelineEntry) {
-  const fromNow = window.moment(entry.date).fromNow()
   const entryText = i18n('xStartedFollowingY', entry.data.u1, entry.data.u2)
   const key = 'follow' + entry.date
 
@@ -112,7 +143,7 @@ function renderFollow(entry: TimelineEntry) {
     >
       <span className="fa fa-arrow-circle-right" />
       {h.trust(entryText.replace(/^(\w+)\s/, '<strong>$1&nbsp;</strong>'))}
-      <small><em>&nbsp;{fromNow}</em></small>
+      <small><em>{entry.fromNow}</em></small>
     </li>
   )
 }
@@ -120,7 +151,6 @@ function renderFollow(entry: TimelineEntry) {
 function renderGameEnd(entry: TimelineEntry) {
   const icon = gameIcon(entry.data.perf)
   const result = typeof entry.data.win === 'undefined' ? i18n('draw') : (entry.data.win ? 'Victory' : 'Defeat')
-  const fromNow = window.moment(entry.date).fromNow()
   const key = 'game-end' + entry.date
 
   return (
@@ -128,7 +158,7 @@ function renderGameEnd(entry: TimelineEntry) {
       data-path={`/game/${entry.data.playerId}?goingBack=1`}
     >
       <strong>{result}</strong> vs. {entry.data.opponent}
-      <small><em>&nbsp;{fromNow}</em></small>
+      <small><em> {entry.fromNow}</em></small>
     </li>
   )
 }

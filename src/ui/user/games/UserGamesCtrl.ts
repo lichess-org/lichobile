@@ -83,7 +83,7 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
   const loadUserAndFilters = (userData: UserFullProfile) => {
     scrollState.user = userData
     const f = Object.keys(userData.count)
-    .filter(k => filters.hasOwnProperty(k) && userData.count[k] > 0)
+    .filter(k => filters.hasOwnProperty(k) && (k === 'all' || userData.count[k] > 0))
     .map(k => {
       return {
         key: <GameFilter>k,
@@ -169,7 +169,8 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
   const goToGame = (id: string, playerId?: string) => {
     const g = scrollState.games.find(game => game.id === id)
     if (g) {
-      const userColor: Color = g.players.white.userId === userId ? 'white' : 'black'
+      const whiteUser = g.players.white.user
+      const userColor: Color = whiteUser && whiteUser.id === userId ? 'white' : 'black'
       positionsCache.set(g.id, { fen: g.fen, orientation: userColor })
       const mePlaying = session.getUserId() === userId
       if (mePlaying && playerId !== undefined) {

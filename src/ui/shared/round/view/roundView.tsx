@@ -31,7 +31,7 @@ import CrazyPocket from '../crazy/CrazyPocket'
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView'
 import { renderInlineReplay, renderReplay } from './replay'
 import OnlineRound from '../OnlineRound'
-import { hasSpaceForReplay } from '../util'
+import { hasSpaceForReplay, hasSpaceForInlineReplay } from '../util'
 import { Position, Material } from '../'
 
 export default function view(ctrl: OnlineRound) {
@@ -217,7 +217,8 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
 
   if (isPortrait) {
     return h.fragment({ key: orientationKey }, [
-      hasSpaceForReplay(vd, bounds) ? renderReplay(ctrl) : renderInlineReplay(ctrl),
+      hasSpaceForReplay(vd, bounds) ? renderReplay(ctrl) :
+        hasSpaceForInlineReplay(vd, bounds) ? renderInlineReplay(ctrl) : null,
       flip ? player : opponent,
       board,
       flip ? opponent : player,

@@ -60,9 +60,11 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
     return h.fragment({ key: orientationKey }, [
       hasSpaceForReplay(vd, bounds) ? renderReplay(ctrl) :
         hasSpaceForInlineReplay(vd, bounds) ? renderInlineReplay(ctrl) : null,
-      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, clock),
-      board,
-      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, clock),
+      h('div.round-boardWrapper', [
+        renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, clock),
+        board,
+        renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, clock),
+      ]),
       renderGameActionsBar(ctrl)
     ])
   else

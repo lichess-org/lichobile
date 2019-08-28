@@ -78,7 +78,7 @@ export default {
       variant
     ].join(' ')
 
-    let wrapperClass = 'game_board_wrapper'
+    let wrapperClass = 'playable_board_wrapper'
 
     if (wrapperClasses) {
       wrapperClass += ' '

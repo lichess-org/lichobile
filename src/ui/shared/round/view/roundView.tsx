@@ -219,9 +219,11 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
     return h.fragment({ key: orientationKey }, [
       hasSpaceForReplay(vd, bounds) ? renderReplay(ctrl) :
         hasSpaceForInlineReplay(vd, bounds) ? renderInlineReplay(ctrl) : null,
-      flip ? player : opponent,
-      board,
-      flip ? opponent : player,
+      h('div.round-boardWrapper', [
+        flip ? player : opponent,
+        board,
+        flip ? opponent : player,
+      ]),
       renderGameActionsBar(ctrl)
     ])
   } else {

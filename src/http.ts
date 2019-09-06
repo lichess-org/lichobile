@@ -143,9 +143,3 @@ export function fetchJSON<T>(url: string, opts?: RequestOpts, feedback = false):
 export function fetchText(url: string, opts?: RequestOpts, feedback = false): Promise<string> {
   return request<string>(url, 'text', opts, feedback)
 }
-
-export function post(url: string, opts?: RequestOpts, feedback = false): Promise<string> {
-  // post request usually has a text body in response (and we don't care about it)
-  const mergedOpts = Object.assign({}, opts, { method: 'POST' })
-  return request<string>(url, 'text', mergedOpts, feedback)
-}

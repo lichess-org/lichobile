@@ -48,7 +48,7 @@ export function renderAntagonist(
     'playTable',
     'offline',
     position,
-    isReducedTableHeight(vd, bounds) ? 'reducedHeight' : '',
+    isPortrait && isReducedTableHeight(vd, bounds) ? 'reducedHeight' : '',
     isCrazy ? 'crazy' : '',
     otbFlip !== undefined ? otbFlip ? 'mode_flip' : 'mode_facing' : '',
     ctrl.chessground.state.turnColor === ctrl.data.player.color ? 'player_turn' : 'opponent_turn',

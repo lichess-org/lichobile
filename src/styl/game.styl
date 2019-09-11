@@ -27,11 +27,14 @@
   flex-flow column nowrap
 
 .playTable
+  position relative
   flex 0 0 55px
   display flex
   overflow hidden
   justify-content space-between
   align-items stretch
+  &.reducedHeight
+    flex-basis 42px
   &.clockOnLeft
     > .antagonistInfos
       order 2
@@ -141,7 +144,7 @@
     margin-right 10px
   .ratingAndMaterial
     display flex
-    margin-top 2px
+    min-height 22px
   &.zen
     > .antagonistUser
       display none
@@ -173,9 +176,6 @@
       > .clock
         line-height 20px
         fluid-type(16px, 26px)
-    .rating
-      display block
-      margin 0.2rem 0 0.5rem
 
 .antagonistUser
   overflow hidden

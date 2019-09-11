@@ -61,9 +61,9 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
       hasSpaceForReplay(vd, bounds) ? renderReplay(ctrl) :
         hasSpaceForInlineReplay(vd, bounds) ? renderInlineReplay(ctrl) : null,
       h('div.round-boardWrapper', [
-        renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, clock),
+        renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, vd, bounds, flip, pieceTheme, clock),
         board,
-        renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, clock),
+        renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, vd, bounds, flip, pieceTheme, clock),
       ]),
       renderGameActionsBar(ctrl)
     ])
@@ -72,9 +72,9 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
       board,
       <section key="table" className="table">
         <section className="playersTable offline">
-          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, clock)}
+          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, vd, bounds, flip, pieceTheme, clock)}
           {replayTable}
-          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, clock)}
+          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, vd, bounds, flip, pieceTheme, clock)}
         </section>
         {renderGameActionsBar(ctrl)}
       </section>

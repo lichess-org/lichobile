@@ -207,7 +207,7 @@ function isSession(data: Session | LobbyData | SignupData): data is Session {
   return (<Session>data).id !== undefined
 }
 
-function login(username: string, password: string, token: string | null): Promise<Session | LobbyData> {
+function login(username: string, password: string, token: string | null): Promise<Session> {
   return fetchJSON('/login', {
     method: 'POST',
     body: JSON.stringify({
@@ -223,6 +223,7 @@ function login(username: string, password: string, token: string | null): Promis
         storage.set(SESSION_ID_KEY, session.sessionId)
       }
       storeSession(data)
+      sendUUID()
       return session
     } else {
       throw { ipban: true }
@@ -273,6 +274,7 @@ function signup(
       if (session.sessionId) {
         storage.set(SESSION_ID_KEY, session.sessionId)
       }
+      sendUUID()
     }
 
     return d
@@ -320,6 +322,12 @@ function backgroundRefresh(): void {
         challengesApi.refresh().then(redraw)
       }
     })
+  }
+}
+
+function sendUUID(): void {
+  if (device.uuid !== 'browser') {
+    fetchText(`/auth/set-fp/${device.uuid}/0`, { method: 'POST' })
   }
 }
 

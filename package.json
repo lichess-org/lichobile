@@ -89,7 +89,7 @@
         "lodash": "4.17.15",
         "mithril": "github:MithrilJS/mithril.js#v2.0.0-rc.4",
         "moment": "2.21.0",
-        "onesignal-cordova-plugin": "2.4.7",
+        "onesignal-cordova-plugin": "2.5.2",
         "rlite-router": "1.1.3",
         "siema": "1.5.1",
         "signals": "1.0.0",
@@ -148,10 +148,10 @@
             "cordova-plugin-stockfish": {},
             "cordova-plugin-x-toast": {},
             "cordova-plugin-file-transfer": {},
-            "onesignal-cordova-plugin": {},
             "cordova-plugin-inappbrowser": {},
             "cordova-plugin-network-information": {},
-            "cordova-plugin-splashscreen": {}
+            "cordova-plugin-splashscreen": {},
+            "onesignal-cordova-plugin": {}
         }
     },
     "jest": {

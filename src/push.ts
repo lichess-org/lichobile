@@ -30,6 +30,16 @@ export default {
   init() {
     // will delay initialization of the SDK until the user provides consent
     window.plugins.OneSignal.setRequiresUserPrivacyConsent(true)
+
+    window.plugins.OneSignal
+    .startInit('2d12e964-92b6-444e-9327-5b2e9a419f4c')
+    .handleNotificationOpened(notificationOpenedCallback)
+    .handleNotificationReceived(notificationReceivedCallback)
+    .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.Notification)
+    .endInit()
+
+    window.plugins.OneSignal.enableVibrate(settings.general.notifications.vibrate())
+    window.plugins.OneSignal.enableSound(settings.general.notifications.sound())
   },
 
   showConsentDialog,
@@ -86,27 +96,15 @@ function showConsentDialog(): Promise<void> {
 
 function register() {
   window.plugins.OneSignal.userProvidedPrivacyConsent((providedConsent: boolean) => {
-    // if providedConsent == true, it means the SDK has been initialized and can be used
-    // both SDK consent and app setting are required
-    // changing setting also change consent
-    if (providedConsent && settings.general.notifications.allow()) {
-      window.plugins.OneSignal
-      .startInit('2d12e964-92b6-444e-9327-5b2e9a419f4c')
-      .handleNotificationOpened(notificationOpenedCallback)
-      .handleNotificationReceived(notificationReceivedCallback)
-      .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.Notification)
-      .endInit()
-
+    const allowed = settings.general.notifications.allow()
+    if (providedConsent && allowed) {
       window.plugins.OneSignal.getIds(({ userId }) => {
         fetchText(`/mobile/register/onesignal/${userId}`, {
           method: 'POST'
         })
       })
-
-      window.plugins.OneSignal.enableVibrate(settings.general.notifications.vibrate())
-      window.plugins.OneSignal.enableSound(settings.general.notifications.sound())
-    } else if (!providedConsent && settings.general.notifications.allow()) {
-      showConsentDialog().then(register).catch(noop)
+    } else if (!providedConsent && allowed) {
+      showConsentDialog().catch(noop)
     }
   })
 }

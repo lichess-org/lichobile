@@ -48,6 +48,13 @@
     getIds: noop,
     enableSound: noop,
     enableVibrate: noop,
+    setRequiresUserPrivacyConsent: noop,
+    provideUserConsent(bool) {
+      localStorage.setItem('__onesignalConsent', bool);
+    },
+    userProvidedPrivacyConsent(callback) {
+      setTimeout(callback(JSON.parse(localStorage.getItem('__onesignalConsent'))));
+    },
     OSInFocusDisplayOption: {
       None: 1
     }

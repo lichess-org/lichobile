@@ -39,7 +39,7 @@ export default {
 
         <h2>Links</h2>
 
-          <ul>
+          <ul className="about_links">
             <li>{externalLink('Github', 'https://github.com/veloce/lichobile')}</li>
             <li>{externalLink('Contribute', 'https://lichess.org/help/contribute')}</li>
             <li>{externalLink('Donate', 'https://lichess.org/patron')}</li>

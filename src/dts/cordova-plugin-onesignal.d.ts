@@ -11,6 +11,9 @@ interface OneSignalStatic {
   getIds: (callback: (ids: any) => void) => void
   enableSound: (v: boolean) => void
   enableVibrate: (v: boolean) => void
+  setRequiresUserPrivacyConsent: (v: boolean) => void
+  provideUserConsent: (v: boolean) => void
+  userProvidedPrivacyConsent: (callback: (v: boolean) => void) => void
   OSInFocusDisplayOption: {
     None: number
     InAppAlert: number

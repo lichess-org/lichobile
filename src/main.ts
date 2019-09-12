@@ -38,6 +38,7 @@ function main() {
 
   routes.init()
   deepLinks.init()
+  push.init()
 
   // cached background images
   loadCachedImages()
@@ -76,7 +77,7 @@ function main() {
   window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false)
 
   if (cordova.platformId === 'android') {
-      window.StatusBar.backgroundColorByHexString('#111')
+    window.StatusBar.backgroundColorByHexString('#111')
   }
 
   setTimeout(() => {

@@ -96,7 +96,7 @@ export default {
     },
     vibrateOnGameEvents: store.prop('settings.vibrateOnGameEvents', false),
     notifications: {
-      allow: store.prop<boolean>('settings.notifications', false),
+      allow: store.prop<boolean>('settings.notifications', true),
       vibrate: store.prop<boolean>('settings.notifications.vibrate', true),
       sound: store.prop<boolean>('settings.notifications.sound', true)
     }

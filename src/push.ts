@@ -59,18 +59,33 @@ function provideUserConsent(consent: boolean): void {
 function showConsentDialog(): Promise<void> {
   return new Promise((resolve, reject) => {
     const content = h('div', [
-      h('p', 'Push notifications are provided to you by a third party service that, when enabled, automatically collect application usage data.'),
       h('p', [
-        'To learn more about this, you can read the ',
+        'Push notifications may be sent to you when it\'s your turn in a correspondence game, or when you receive a private message. This service is provided to you by ',
+        h('a[href=#]', {
+          oncreate: helper.ontap(() => {
+            window.open('https://onesignal.com', '_system')
+          })
+        }, 'OneSignal.'),
+        ' When enabled, it automatically collects application usage data such as session times, IP address, app version.'
+      ]),
+      h('p', [
+        'You can learn more about what data is collected ',
+        h('a[href=#]', {
+          oncreate: helper.ontap(() => {
+            window.open('https://documentation.onesignal.com/docs/data-collected-by-the-onesignal-sdk', '_system')
+          })
+        }, 'here.'),
+        ' Please note that we never send manually any data to OneSignal.'
+      ]),
+      h('p', [
+        'You can also refer to our ',
         h('a[href=#]', {
           oncreate: helper.ontap(() => {
             window.open('https://lichess.org/privacy', '_system')
           })
         }, 'privacy policy.')
       ]),
-      h('p', 'Would you like to use push notifications and allow to share these informations with this third-party service?'),
-      h('p', 'You can change this choice any time on the settings screen.'),
-      h('br'),
+      h('p', 'Would you like to use push notifications and are you willing to share this information with OneSignal?'),
       h('div.buttons', [
         h('button', {
           oncreate: helper.ontap(() => {
@@ -88,7 +103,8 @@ function showConsentDialog(): Promise<void> {
             reject()
           })
         }, 'No'),
-      ])
+      ]),
+      h('p', 'You can change this choice any time on the settings screen.'),
     ])
     promptDialog.show(content, 'Consent required')
   })

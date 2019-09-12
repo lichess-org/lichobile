@@ -75,7 +75,7 @@ function showConsentDialog(): Promise<void> {
             window.open('https://documentation.onesignal.com/docs/data-collected-by-the-onesignal-sdk', '_system')
           })
         }, 'here.'),
-        ' Please note that we never send manually any data to OneSignal.'
+        ' Please note that we never explicitely send any data to OneSignal.'
       ]),
       h('p', [
         'You can also refer to our ',

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="6002009" id="org.lichess.mobileapp" version="6.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="6002010" id="org.lichess.mobileapp" version="6.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>lichess</name>
     <description>lichess.org mobile application</description>
     <author email="vincent.velociter@gmail.com" href="https://github.com/veloce/lichobile">Vincent Velociter</author>
@@ -125,7 +125,6 @@
     <plugin name="cordova-plugin-globalization" spec="1.11.0" />
     <plugin name="cordova-plugin-crosswalk-data-migration" spec="git+https://github.com/veloce/cordova-plugin-crosswalk-data-migration.git#225408d" />
     <plugin name="ionic-plugin-keyboard" spec="2.2.1" />
-    <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#7cc6722" />
     <plugin name="cordova-plugin-x-toast" spec="2.7.2" />
     <plugin name="cordova-plugin-file-transfer" spec="1.7.1" />
     <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
@@ -134,4 +133,5 @@
     <plugin name="onesignal-cordova-plugin" spec="2.5.2" />
     <engine name="ios" spec="5.0.1" />
     <engine name="android" spec="8.0.0" />
+    <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#58dc23e" />
 </widget>

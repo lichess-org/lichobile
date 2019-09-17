@@ -1,6 +1,3 @@
-.zen
-  visibility hidden
-
 .header-gameTitle
   width 100%
   overflow hidden
@@ -25,10 +22,11 @@
   flex 0 0 auto
   display flex
   flex-flow column nowrap
+  margin auto
 
 .playTable
   position relative
-  flex 0 0 55px
+  flex 1 0 auto
   display flex
   overflow hidden
   justify-content space-between
@@ -83,12 +81,14 @@
       background: rgba(#dc322f, 0.8)
 
 .replay_inline
-  flex 1 1 auto
+  flex 0 0 30px
   overflow hidden
   overflow-x auto
   white-space nowrap
   display flex
   align-items center
+  &.bottom
+    order 2
 
 .replay
   min-height 0 // fix chrome 73 regression

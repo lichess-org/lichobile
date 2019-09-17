@@ -169,6 +169,11 @@ export function renderReplay(ctrl: OfflineRoundInterface) {
 
 export function renderInlineReplay(ctrl: OfflineRoundInterface) {
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
+
+  if (!ctrl.moveList) {
+    return null
+  }
+
   return h('div.replay_inline', {
     className: pieceNotation ? ' displayPieces' : '',
     oncreate: (vnode: Mithril.DOMNode) => {

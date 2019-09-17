@@ -53,10 +53,6 @@ export function isReducedTableHeight(vd: helper.ViewportDim, bounds: Bounds): bo
   return remainingSpace(vd, bounds) < 90
 }
 
-export function hasSpaceForReplay(vd: helper.ViewportDim, bounds: Bounds): boolean {
-  return remainingSpace(vd, bounds) - 110 > 90
-}
-
 export function hasSpaceForInlineReplay(vd: helper.ViewportDim, bounds: Bounds): boolean {
-  return remainingSpace(vd, bounds) - 110 >= 25
+  return remainingSpace(vd, bounds) - 110 >= 30
 }

@@ -40,6 +40,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   public actions: AiActionsCtrl
   public newGameMenu: NewAiGameCtrl
   public vm: AiVM
+  public moveList: boolean
 
   public engine: EngineInterface
 
@@ -52,6 +53,8 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     this.engine = engineCtrl(this)
     this.actions = actions.controller(this)
     this.newGameMenu = newGameMenu.controller(this)
+
+    this.moveList = settings.game.moveList()
 
     this.vm = {
       engineSearching: false,

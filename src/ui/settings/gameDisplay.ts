@@ -29,6 +29,9 @@ function renderBody() {
           settings.game.clockPosition
         )
       ),
+      h('li.list_item',
+        formWidgets.renderCheckbox('Move list', 'moveList', settings.game.moveList)
+      ),
       h('li.list_item', [
         formWidgets.renderCheckbox('Zen Mode', 'zenMode', settings.game.zenMode),
       ])

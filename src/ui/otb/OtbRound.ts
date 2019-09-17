@@ -41,6 +41,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public replay!: Replay
   public vm: OtbVM
   public clock?: IChessClock
+  public moveList: boolean
 
   public constructor(
     saved?: StoredOfflineGame | null,
@@ -57,6 +58,8 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
       setupFen,
       savedFen: saved ? saved.data.game.fen : undefined
     }
+
+    this.moveList = settings.game.moveList()
 
     if (setupFen) {
       this.newGameMenu.open()

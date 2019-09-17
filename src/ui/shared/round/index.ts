@@ -45,6 +45,7 @@ export interface OfflineRoundInterface extends RoundInterface {
   replay: Replay
   actions: any
   newGameMenu: any
+  moveList: boolean
 
   startNewGame(variant: VariantKey, setupFen?: string, clockType?: ClockTypeWithNone): void
   save(): void

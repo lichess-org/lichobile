@@ -43,9 +43,9 @@ export function renderContent(ctrl: AiRound) {
     return h.fragment({ key: orientationKey }, [
       hasSpaceForInlineReplay(vd, bounds) ? renderInlineReplay(ctrl) : null,
       h('div.round-boardWrapper', [
-        renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait, vd, bounds),
+        renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
         board,
-        renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait, vd, bounds),
+        renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait),
       ]),
       renderGameActionsBar(ctrl)
     ])
@@ -54,9 +54,9 @@ export function renderContent(ctrl: AiRound) {
       board,
       <section key="table" className="table">
         <section className="playersTable offline">
-          {renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait, vd, bounds)}
+          {renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait)}
           {renderReplay(ctrl)}
-          {renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait, vd, bounds)}
+          {renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait)}
         </section>
         {renderGameActionsBar(ctrl)}
       </section>

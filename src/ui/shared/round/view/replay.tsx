@@ -12,7 +12,6 @@ export function renderReplay(ctrl: OnlineRound) {
   return h('div.replay', {
     className: helper.classSet({
       displayPieces: !!pieceNotation,
-      zen: ctrl.isZen(),
     }),
     oncreate: (vnode: Mithril.DOMNode) => {
       setTimeout(() => autoScroll(vnode.dom as HTMLElement), 100)
@@ -24,10 +23,14 @@ export function renderReplay(ctrl: OnlineRound) {
 
 export function renderInlineReplay(ctrl: OnlineRound) {
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
+
+  if (!ctrl.vm.moveList || ctrl.isZen()) {
+    return null
+  }
+
   return h('div.replay_inline', {
     className: helper.classSet({
       displayPieces: !!pieceNotation,
-      zen: ctrl.isZen(),
     }),
     oncreate: (vnode: Mithril.DOMNode) => {
       setTimeout(() => autoScrollInline(vnode.dom as HTMLElement), 100)

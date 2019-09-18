@@ -115,6 +115,7 @@ export default {
     zenMode: store.prop<boolean>('settings.zenMode', false),
     clockPosition: store.prop<'right' | 'left'>('settings.game.inversedClockPos', 'right'),
     pieceMove: store.prop<'tap' | 'drag' | 'both'>('settings.game.pieceMove', 'both'),
+    moveList: store.prop<boolean>('settings.game.moveList', true),
   },
 
   analyse: {

@@ -49,6 +49,7 @@ interface VM {
   tClockEl: HTMLElement | null
   offlineWatcher: boolean
   clockPosition: 'right' | 'left'
+  moveList: boolean
 }
 
 export default class OnlineRound implements OnlineRoundInterface {
@@ -111,6 +112,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         }
       },
       clockPosition: settings.game.clockPosition() || 'right',
+      moveList: settings.game.moveList(),
       showingActions: false,
       showingShareActions: false,
       confirmResign: false,

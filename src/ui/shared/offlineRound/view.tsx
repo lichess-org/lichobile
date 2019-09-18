@@ -225,23 +225,17 @@ function renderClock(clock: IChessClock, color: Color) {
   const runningColor = clock.activeSide()
   const time = clock.getTime(color)
   const isRunning = runningColor === color
-  let className = helper.classSet({
-    clock: true,
-    outoftime: !time,
-    running: isRunning,
-    offlineClock: true
-  })
-  const clockTime = h('div', {
-    className
-  }, formatClockTime(time, isRunning))
-
   const moves = clock.clockType === 'stage' ? (clock as IStageClock).getMoves(color) : null
-  className = helper.classSet({
-    clockMoves: true
-  })
-  const clockMoves = h('div', {
-    className
-  }, 'Moves: ' + moves)
-  const clockInfo = h('div', {className: 'clockInfo'}, [clockTime, moves ? clockMoves : null])
-  return clockInfo
+  return h('div', {
+    className: helper.classSet({
+      clock: true,
+      outoftime: !time,
+      running: isRunning,
+      offlineClock: true,
+      stageClock: !!moves,
+    })
+  }, [
+    formatClockTime(time, isRunning),
+    moves ? h('div.clockMoves', 'Moves: ' + moves) : null
+  ])
 }

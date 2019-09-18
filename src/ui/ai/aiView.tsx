@@ -42,11 +42,9 @@ export function renderContent(ctrl: AiRound) {
   if (isPortrait) {
     return h.fragment({ key: orientationKey }, [
       hasSpaceForInlineReplay(vd, bounds) ? renderInlineReplay(ctrl) : null,
-      h('div.round-boardWrapper', [
-        renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
-        board,
-        renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait),
-      ]),
+      renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
+      board,
+      renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait),
       renderGameActionsBar(ctrl)
     ])
   } else {

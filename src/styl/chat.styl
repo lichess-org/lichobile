@@ -96,6 +96,9 @@
   flex-flow row nowrap
   min-height 50px
   background-color #fff
+  // iphone X support
+  margin-bottom: constant(safe-area-inset-bottom);
+  margin-bottom: env(safe-area-inset-bottom);
 
 .chat_input
   flex 1 1 auto

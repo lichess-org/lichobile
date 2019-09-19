@@ -85,7 +85,7 @@
     <preference name="android-minSdkVersion" value="21" />
     <preference name="AndroidLaunchMode" value="singleInstance" />
     <preference name="DefaultVolumeStream" value="media" />
-    <preference name="AppendUserAgent" value="v6.2.0" />
+    <preference name="AppendUserAgent" value="Lichobile/6.2.0" />
     <universal-links>
         <host name="lichess.org" scheme="https">
             <path event="analysis" url="/analysis" />

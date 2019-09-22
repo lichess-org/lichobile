@@ -301,9 +301,18 @@ function doSend(socketMsg) {
   var t = socketMsg[1];
   var d = socketMsg[2];
   var o = socketMsg[3];
-  if (socketInstance && socketInstance.ws &&
-    (socketInstance.url === url || url === 'noCheck')) {
-    socketInstance.send(t, d, o);
+  if (socketInstance && socketInstance.ws) {
+    if (socketInstance.url === url || url === 'noCheck') {
+      socketInstance.send(t, d, o);
+    } else {
+      // trying to send to the wrong URL? log it
+      var wrong = {
+        t: t,
+        d: d
+      }
+      socketInstance.send('wrongHole', wrong);
+      console.debug('[socket] wrongHole', wrong);
+    }
   }
   // else console.info('socket instance is null, could not send socket msg: ', socketMsg);
 }

@@ -40,6 +40,11 @@ interface SocketConfig {
 type MessageHandler<D, P extends LichessMessage<D>> = (data?: D, payload?: P) => void
 type MessageHandlerGeneric = MessageHandler<{}, any>
 
+export interface SocketIFace {
+  send: <D, O>(t: string, data?: D, opts?: O) => void
+  ask: <D, O, R>(t: string, listenTo: string, data?: D, opts?: O) => Promise<R>
+}
+
 export interface MessageHandlers {
   [index: string]: MessageHandlerGeneric
 }
@@ -161,13 +166,43 @@ function setupConnection(setup: SocketSetup, socketHandlers: SocketHandlers) {
   tellWorker(worker, 'create', setup)
 }
 
+function send<D, O>(url: string , t: string, data?: D, opts?: O): void {
+  tellWorker(worker, 'send', [url, t, data, opts])
+}
+
+function ask<D, O, R>(url: string, t: string, listenTo: string, data?: D, opts?: O): Promise<R> {
+  return new Promise((resolve, reject) => {
+    let tid: number
+    function listen(e: MessageEvent) {
+      if (e.data.topic === 'handle' && e.data.payload.t === listenTo) {
+        clearTimeout(tid)
+        worker.removeEventListener('message', listen)
+        resolve(e.data.payload.d)
+      }
+    }
+    worker.addEventListener('message', listen)
+    tellWorker(worker, 'ask', { msg: [url, t, data, opts], listenTo })
+    tid = setTimeout(() => {
+      worker.removeEventListener('message', listen)
+      reject()
+    }, 3000)
+  })
+}
+
+function socketIfaceFactory(url: string): SocketIFace {
+  return {
+    send: <D, O>(t: string, data?: D, opts?: O) => send(url, t, data, opts),
+    ask: <D, O>(t: string, listenTo: string, data?: D, opts?: O) => ask(url, t, listenTo, data, opts)
+  }
+}
+
 function createGame(
   url: string,
   version: number,
   handlers: MessageHandlers,
   gameUrl: string,
   userTv?: string
-) {
+): SocketIFace {
   let errorDetected = false
   const socketHandlers = {
     onError: function() {
@@ -206,6 +241,7 @@ function createGame(
     opts
   }
   setupConnection(setup, socketHandlers)
+  return socketIfaceFactory(url)
 }
 
 function createTournament(
@@ -213,7 +249,7 @@ function createTournament(
   version: number,
   handlers: MessageHandlers,
   featuredGameId?: string
-) {
+): SocketIFace {
   let url = '/tournament/' + tournamentId + `/socket/v${globalConfig.apiVersion}`
   const socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers),
@@ -236,6 +272,7 @@ function createTournament(
     opts
   }
   setupConnection(setup, socketHandlers)
+  return socketIfaceFactory(url)
 }
 
 function createChallenge(
@@ -243,7 +280,7 @@ function createChallenge(
   version: number,
   onOpen: () => void,
   handlers: MessageHandlers
-) {
+): SocketIFace {
   const socketHandlers = {
     onOpen: () => {
       session.backgroundRefresh()
@@ -270,13 +307,14 @@ function createChallenge(
     opts
   }
   setupConnection(setup, socketHandlers)
+  return socketIfaceFactory(url)
 }
 
 function createLobby(
   name: string,
   onOpen: () => void,
   handlers: MessageHandlers
-) {
+): SocketIFace {
   const socketHandlers = {
     onOpen: () => {
       session.refresh()
@@ -293,64 +331,70 @@ function createLobby(
       registeredEvents: Object.keys(socketHandlers.events)
     }
   }
+  const url = `/lobby/socket/v${globalConfig.apiVersion}`
   const setup = {
     clientId: newSri(),
     socketEndPoint: globalConfig.socketEndPoint,
-    url: `/lobby/socket/v${globalConfig.apiVersion}`,
+    url,
     opts
   }
   setupConnection(setup, socketHandlers)
+  return socketIfaceFactory(url)
 }
 
 function createAnalysis(
   handlers: MessageHandlers
-) {
-    const socketHandlers = {
-      events: { ...defaultHandlers, ...handlers },
-      onOpen: session.backgroundRefresh
+): SocketIFace {
+  const socketHandlers = {
+    events: { ...defaultHandlers, ...handlers },
+    onOpen: session.backgroundRefresh
+  }
+  const opts = {
+    options: {
+      name: 'analysis',
+      debug: globalConfig.mode === 'dev',
+      pingDelay: 3000,
+      sendOnOpen: [{t: 'following_onlines'}],
+      registeredEvents: Object.keys(socketHandlers.events)
     }
-    const opts = {
-      options: {
-        name: 'analysis',
-        debug: globalConfig.mode === 'dev',
-        pingDelay: 3000,
-        sendOnOpen: [{t: 'following_onlines'}],
-        registeredEvents: Object.keys(socketHandlers.events)
-      }
-    }
-    const setup = {
-      clientId: newSri(),
-      socketEndPoint: globalConfig.socketEndPoint,
-      url: `/analysis/socket/v${globalConfig.apiVersion}`,
-      opts
-    }
-    setupConnection(setup, socketHandlers)
+  }
+  const url = `/analysis/socket/v${globalConfig.apiVersion}`
+  const setup = {
+    clientId: newSri(),
+    socketEndPoint: globalConfig.socketEndPoint,
+    url,
+    opts
+  }
+  setupConnection(setup, socketHandlers)
+  return socketIfaceFactory(url)
 }
 
 function createStudy(
   studyId: string,
   handlers: MessageHandlers
-) {
-    const socketHandlers = {
-      events: { ...defaultHandlers, ...handlers },
-      onOpen: session.backgroundRefresh
+): SocketIFace {
+  const socketHandlers = {
+    events: { ...defaultHandlers, ...handlers },
+    onOpen: session.backgroundRefresh
+  }
+  const opts = {
+    options: {
+      name: 'study',
+      debug: globalConfig.mode === 'dev',
+      pingDelay: 3000,
+      sendOnOpen: [{t: 'following_onlines'}],
+      registeredEvents: Object.keys(socketHandlers.events)
     }
-    const opts = {
-      options: {
-        name: 'study',
-        debug: globalConfig.mode === 'dev',
-        pingDelay: 3000,
-        sendOnOpen: [{t: 'following_onlines'}],
-        registeredEvents: Object.keys(socketHandlers.events)
-      }
-    }
-    const setup = {
-      clientId: newSri(),
-      socketEndPoint: globalConfig.socketEndPoint,
-      url: `/study/${studyId}/socket/v${globalConfig.apiVersion}`,
-      opts
-    }
-    setupConnection(setup, socketHandlers)
+  }
+  const url = `/study/${studyId}/socket/v${globalConfig.apiVersion}`
+  const setup = {
+    clientId: newSri(),
+    socketEndPoint: globalConfig.socketEndPoint,
+    url,
+    opts
+  }
+  setupConnection(setup, socketHandlers)
+  return socketIfaceFactory(url)
 }
 
 function createDefault() {
@@ -440,29 +484,14 @@ export default {
   createAnalysis,
   createStudy,
   redirectToGame,
+  // send a message to socket, not checking if sending to the proper url
+  // use sparingly
+  // TODO: whitelist of authorized message types
+  sendNoCheck<D, O>(t: string, data?: D, opts?: O): void {
+    tellWorker(worker, 'send', ['noCheck', t, data, opts])
+  },
   setVersion(version: number) {
     tellWorker(worker, 'setVersion', version)
-  },
-  send<D, O>(t: string, data?: D, opts?: O) {
-    tellWorker(worker, 'send', [t, data, opts])
-  },
-  ask<D, O>(t: string, listenTo: string, data?: D, opts?: O) {
-    return new Promise((resolve, reject) => {
-      let tid: number
-      function listen(e: MessageEvent) {
-        if (e.data.topic === 'handle' && e.data.payload.t === listenTo) {
-          clearTimeout(tid)
-          worker.removeEventListener('message', listen)
-          resolve(e.data.payload.d)
-        }
-      }
-      worker.addEventListener('message', listen)
-      tellWorker(worker, 'ask', { msg: [t, data, opts], listenTo })
-      tid = setTimeout(() => {
-        worker.removeEventListener('message', listen)
-        reject()
-      }, 3000)
-    })
   },
   connect() {
     tellWorker(worker, 'connect')

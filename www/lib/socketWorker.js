@@ -296,12 +296,16 @@ function create(payload) {
   }
 }
 
-function doSend(payload) {
-  var t = payload[0];
-  var d = payload[1];
-  var o = payload[2];
-  if (socketInstance && socketInstance.ws) socketInstance.send(t, d, o);
-  // else console.info('socket instance is null, could not send socket msg: ', payload);
+function doSend(socketMsg) {
+  var url = socketMsg[0];
+  var t = socketMsg[1];
+  var d = socketMsg[2];
+  var o = socketMsg[3];
+  if (socketInstance && socketInstance.ws &&
+    (socketInstance.url === url || url === 'noCheck')) {
+    socketInstance.send(t, d, o);
+  }
+  // else console.info('socket instance is null, could not send socket msg: ', socketMsg);
 }
 
 self.onmessage = function(msg) {

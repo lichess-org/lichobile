@@ -1,4 +1,4 @@
-import socket from '../../socket'
+import { SocketIFace } from '../../socket'
 import { Tree } from '../shared/tree'
 
 export interface CloudEval {
@@ -41,13 +41,15 @@ export interface Settings {
   canGet: (node: Tree.Node) => boolean
   getNode: () => Tree.Node
   receive: (path: string, ceval?: Tree.ClientEval) => void
+  socketIface: SocketIFace
 }
 
 export function make({
   variant,
   canGet,
   getNode,
-  receive
+  receive,
+  socketIface
 }: Settings): EvalCache {
   const fenFetched: Set<string> = new Set()
   return {
@@ -62,7 +64,7 @@ export function make({
       }
       if (variant !== 'standard') obj.variant = variant
       if (multiPv > 1) obj.mpv = multiPv
-      socket.send('evalGet', obj)
+      socketIface.send('evalGet', obj)
     },
     onCloudEval(cloudEval): void {
       receive(cloudEval.path, toCeval(cloudEval))

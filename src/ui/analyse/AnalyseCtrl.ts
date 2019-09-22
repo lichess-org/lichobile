@@ -10,7 +10,7 @@ import session from '../../session'
 import vibrate from '../../vibrate'
 import sound from '../../sound'
 import { toggleGameBookmark } from '../../xhr'
-import socket from '../../socket'
+import socket, { SocketIFace } from '../../socket'
 import { openingSensibleVariants } from '../../lichess/variant'
 import { playerName as gamePlayerName } from '../../lichess/player'
 import * as gameApi from '../../lichess/game'
@@ -52,6 +52,8 @@ export default class AnalyseCtrl {
   tree: TreeWrapper
   evalCache: EvalCache
   study?: StudyCtrl
+
+  socketIface: SocketIFace
 
   // current tree state, cursor, and denormalized node lists
   path!: Tree.Path
@@ -102,14 +104,6 @@ export default class AnalyseCtrl {
       router.set('/')
     }
 
-    this.evalCache = makeEvalCache({
-      variant: this.data.game.variant.key,
-      canGet: this.canEvalGet,
-      getNode: () => this.node,
-      receive: this.onCevalMsg
-    })
-
-
     this.tree = makeTree(treeOps.reconstruct(this.data.treeParts))
 
     this.settings = analyseSettings.controller(this)
@@ -149,15 +143,32 @@ export default class AnalyseCtrl {
     this.formattedDate = gameMoment.format('L LT')
 
     if (this.study) {
-      this.study.createSocket()
+      this.socketIface = this.study.createSocket()
     } else if (
-      !this.data.analysis && session.isConnected() &&
-      isOnlineAnalyseData(this.data) && gameApi.analysable(this.data)
+      !this.data.analysis &&
+      session.isConnected() &&
+      isOnlineAnalyseData(this.data) &&
+      gameApi.analysable(this.data) &&
+      this.data.url !== undefined &&
+      this.data.player.version !== undefined
     ) {
-      this.connectGameSocket()
+      this.socketIface = socket.createGame(
+        this.data.url.socket,
+        this.data.player.version,
+        socketHandler(this),
+        this.data.url.round
+      )
     } else {
-      socket.createAnalysis(socketHandler(this))
+      this.socketIface = socket.createAnalysis(socketHandler(this))
     }
+
+    this.evalCache = makeEvalCache({
+      variant: this.data.game.variant.key,
+      canGet: this.canEvalGet,
+      getNode: () => this.node,
+      receive: this.onCevalMsg,
+      socketIface: this.socketIface,
+    })
 
     this.updateBoard()
 
@@ -196,20 +207,6 @@ export default class AnalyseCtrl {
 
   bottomColor(): Color {
     return this.settings.s.flip ? oppositeColor(this.data.orientation) : this.data.orientation
-  }
-
-  connectGameSocket = () => {
-    if (hasNetwork() &&
-      this.data.url !== undefined &&
-      this.data.player.version !== undefined
-    ) {
-      socket.createGame(
-        this.data.url.socket,
-        this.data.player.version,
-        socketHandler(this),
-        this.data.url.round
-      )
-    }
   }
 
   availableTabs = (): ReadonlyArray<tabs.Tab> => {
@@ -719,7 +716,7 @@ export default class AnalyseCtrl {
       this.tree.updateAt(this.path, (node: Tree.Node) => {
         // flag opening as null in any case to not request twice
         node.opening = null
-        socket.ask('opening', 'opening', msg)
+        this.socketIface.ask('opening', 'opening', msg)
         .then((d: { opening: Opening, path: string }) => {
           if (d.opening && d.path) {
             node.opening = d.opening

@@ -1,6 +1,5 @@
 import * as throttle from 'lodash/throttle'
-import { ErrorResponse } from '../../../http'
-import socket from '../../../socket'
+import socket, { SocketIFace } from '../../../socket'
 import redraw from '../../../utils/redraw'
 import * as utils from '../../../utils'
 import * as tournamentApi from '../../../lichess/tournament'
@@ -19,54 +18,45 @@ interface PagesCache {
 
 export default class TournamentCtrl {
   public id: string
-  public tournament!: Tournament
+  public tournament: Tournament
   public page: number = 1
   public currentPageResults!: ReadonlyArray<StandingPlayer>
   public hasJoined: boolean = false
-  public notFound: boolean = false
   public focusOnMe: boolean = false
   public isLoadingPage: boolean = false
   public startsAt?: string
+
+  public socketIface: SocketIFace
 
   public faqCtrl: FaqCtrl
   public playerInfoCtrl: PlayerInfoCtrl
 
   private pagesCache: PagesCache = {}
 
-  constructor(id: string) {
-    this.id = id
+  constructor(data: Tournament) {
+    this.id = data.id
 
     this.faqCtrl = faq.controller(this)
     this.playerInfoCtrl = playerInfo.controller(this)
 
-    xhr.tournament(id)
-    .then(data => {
-      this.tournament = data
-      this.startsAt = window.moment(data.startsAt).calendar()
-      this.page = this.tournament.standing.page
-      this.loadCurrentPage(this.tournament.standing)
-      this.hasJoined = !!(data.me && !data.me.withdraw)
-      this.focusOnMe = tournamentApi.isIn(this.tournament)
-      this.scrollToMe()
-      const featuredGame = data.featured ? data.featured.id : undefined
-      socket.createTournament(
-        this.id,
-        this.tournament.socketVersion,
-        socketHandler(this),
-        featuredGame
-      )
-      redraw()
-    })
-    .catch((err: ErrorResponse) => {
-      if (err.status === 404) {
-        this.notFound = true
-        redraw()
-      } else {
-        utils.handleXhrError(err)
-      }
-    })
+    this.tournament = data
+    this.startsAt = window.moment(data.startsAt).calendar()
+    this.page = this.tournament.standing.page
+    this.loadCurrentPage(this.tournament.standing)
+    this.hasJoined = !!(data.me && !data.me.withdraw)
+    this.focusOnMe = tournamentApi.isIn(this.tournament)
+    this.scrollToMe()
+    const featuredGame = data.featured ? data.featured.id : undefined
+    this.socketIface = socket.createTournament(
+      this.id,
+      this.tournament.socketVersion,
+      socketHandler(this),
+      featuredGame
+    )
 
     document.addEventListener('resume', this.reload)
+
+    redraw()
   }
 
   join = throttle((password?: string) => {
@@ -92,7 +82,7 @@ export default class TournamentCtrl {
   reload = throttle(() => {
     xhr.reload(this.id, this.focusOnMe ? this.page : undefined)
     .then(this.onReload)
-    .catch(this.onXhrError)
+    .catch(utils.handleXhrError)
   }, 5000)
 
   loadPage = throttle((page: number) => {
@@ -108,7 +98,7 @@ export default class TournamentCtrl {
     })
     .catch(err => {
       this.isLoadingPage = false
-      this.onXhrError(err)
+      utils.handleXhrError(err)
     })
   }, 1000)
 
@@ -182,7 +172,7 @@ export default class TournamentCtrl {
   private onReload = (data: Tournament) => {
     const oldData = this.tournament
     if (data.featured && (!oldData || !oldData.featured || (data.featured.id !== oldData.featured.id))) {
-      socket.send('startWatching', data.featured.id)
+      this.socketIface.send('startWatching', data.featured.id)
     }
     else if (data.featured && (!oldData || !oldData.featured || (data.featured.id === oldData.featured.id))) {
       data.featured = oldData.featured
@@ -197,13 +187,6 @@ export default class TournamentCtrl {
 
     if (data.socketVersion) {
       socket.setVersion(data.socketVersion)
-    }
-    redraw()
-  }
-
-  private onXhrError = (err: ErrorResponse) => {
-    if (err.status === 404) {
-      this.notFound = true
     }
     redraw()
   }

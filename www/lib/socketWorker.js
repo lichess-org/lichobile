@@ -308,10 +308,11 @@ function doSend(socketMsg) {
       // trying to send to the wrong URL? log it
       var wrong = {
         t: t,
-        d: d
+        d: d,
+        url: url
       }
       socketInstance.send('wrongHole', wrong);
-      console.debug('[socket] wrongHole', wrong);
+      console.warn('[socket] wrongHole', wrong);
     }
   }
   // else console.info('socket instance is null, could not send socket msg: ', socketMsg);

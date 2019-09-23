@@ -1,3 +1,4 @@
+import { batchRequestAnimationFrame } from '../utils/batchRAF'
 import * as cg from './interfaces'
 import * as util from './util'
 import * as board from './board'
@@ -94,12 +95,39 @@ export default class Chessground {
     if (this.dom) this.dom.bounds = bounds
   }
 
+  applyAnim = (now: number): void => {
+    const state = this.state
+    const cur = state.animation.current
+    // animation was cancelled
+    if (cur === null) {
+      this.redrawSync()
+      return
+    }
+    if (cur.start === null) cur.start = now
+    const rest = 1 - (now - cur.start) / cur.duration
+    if (rest <= 0) {
+      state.animation.current = null
+      this.redrawSync()
+    } else {
+      const ease = util.easeInOutCubic(rest)
+      const anims = cur.plan.anims
+      const animsK = Object.keys(anims)
+      for (let i = 0, len = animsK.length; i < len; i++) {
+        const key = animsK[i]
+        const cfg = anims[key]
+        cfg[1] = [util.roundBy(cfg[0][0] * ease, 10), util.roundBy(cfg[0][1] * ease, 10)]
+      }
+      this.redrawSync()
+      batchRequestAnimationFrame(this.applyAnim)
+    }
+  }
+
   redrawSync = (): void => {
     if (this.dom) renderBoard(this.state, this.dom)
   }
 
   redraw = (): void => {
-    this.state.batchRAF(this.redrawSync)
+    batchRequestAnimationFrame(this.redrawSync)
   }
 
   getFen = (): string => {

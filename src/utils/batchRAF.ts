@@ -11,8 +11,8 @@ export function batchRequestAnimationFrame(callback: Callback) {
       const batch = callbacks
       batching = false
       callbacks = new Set()
-      // console.log(Array.from(batch).map(f => f.name))
       batch.forEach(f => f(ts))
+      console.debug('batchRAF', batch, 'execution time (ms)', performance.now() - ts)
     })
   }
 }

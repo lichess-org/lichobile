@@ -9,7 +9,6 @@ export type Pieces = {[index: string]: Piece}
 export type PiecesDiff = {[index: string]: Piece | null}
 
 export interface InitConfig {
-  batchRAF: (callback: () => void) => void
   fen?: string
   orientation?: Color
   turnColor?: Color

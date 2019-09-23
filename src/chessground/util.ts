@@ -18,6 +18,15 @@ export const fileNumbers: { [i: string]: cg.Rank } = {
   h: 8
 }
 
+// https://gist.github.com/gre/1650294
+export function easeInOutCubic(t: number) {
+  return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
+}
+
+export function roundBy(n: number, by: number) {
+  return Math.round(n * by) / by
+}
+
 export function pos2key(pos: cg.Pos): Key {
   return (files[pos[0] - 1] + pos[1]) as Key
 }

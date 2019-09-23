@@ -1,6 +1,5 @@
 import * as cg from '../../chessground/interfaces'
 import settings from '../../settings'
-import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 
 import TrainingCtrl from './TrainingCtrl'
 
@@ -11,7 +10,6 @@ export default function makeConfig(
   const pieceMoveConf = settings.game.pieceMove()
 
   return {
-    batchRAF: batchRequestAnimationFrame,
     fen: ctrl.data.puzzle.fen,
     orientation: ctrl.data.puzzle.color,
     coordinates: settings.game.coords(),

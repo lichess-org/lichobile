@@ -8,7 +8,6 @@ import menu from './menu'
 import pasteFenPopup from './pasteFenPopup'
 import { validateFen } from '../../utils/fen'
 import { loadLocalJsonFile } from '../../utils'
-import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import continuePopup, { Controller as ContinuePopupCtrl } from '../shared/continuePopup'
 import i18n from '../../i18n'
 import drag from './drag'
@@ -100,7 +99,6 @@ export default class Editor {
     })
 
     this.chessground = new Chessground({
-      batchRAF: batchRequestAnimationFrame,
       fen: initFen,
       orientation: 'white',
       movable: {

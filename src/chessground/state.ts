@@ -21,7 +21,6 @@ export interface State {
     lastMove: boolean // add last-move class to squares
     check: boolean // add check class to squares
   }
-  batchRAF: (renderFunction: (ts?: number) => void) => void
   animation: {
     enabled: boolean
     duration: number
@@ -97,7 +96,6 @@ export function makeDefaults(): State {
     viewOnly: false,
     fixed: false,
     exploding: null,
-    batchRAF: requestAnimationFrame.bind(window),
     highlight: {
       lastMove: true,
       check: true

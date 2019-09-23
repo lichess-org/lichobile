@@ -1,7 +1,6 @@
 import Chessground from '../../chessground/Chessground'
 import * as cg from '../../chessground/interfaces'
 import settings from '../../settings'
-import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import { AnalyseData } from '../../lichess/interfaces/analyse'
 
 
@@ -15,7 +14,6 @@ function makeConfig(
   const pieceMoveConf = settings.game.pieceMove()
   return {
     fen: config.fen,
-    batchRAF: batchRequestAnimationFrame,
     check: config.check,
     lastMove: config.lastMove,
     turnColor: config.turnColor,

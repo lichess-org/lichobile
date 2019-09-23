@@ -6,14 +6,12 @@ import { OfflineGameData } from '../../../lichess/interfaces/game'
 import { AfterMoveMeta } from '../../../lichess/interfaces/move'
 import { boardOrientation } from '../../../utils'
 import { uciToMoveOrDrop } from '../../../utils/chessFormat'
-import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import { GameSituation } from '../../../chess'
 
 function makeConfig(data: OfflineGameData, sit: GameSituation): cg.InitConfig {
   const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null
   const pieceMoveConf = settings.game.pieceMove()
   return {
-    batchRAF: batchRequestAnimationFrame,
     fen: sit.fen,
     orientation: boardOrientation(data),
     turnColor: sit.player,

@@ -1,3 +1,4 @@
+import { batchRequestAnimationFrame } from '../utils/batchRAF'
 import * as cg from './interfaces'
 import * as util from './util'
 import { State } from './state'
@@ -47,11 +48,6 @@ export function skip<A>(mutation: Mutation<A>, ctrl: Chessground): A {
   const result = mutation(ctrl.state)
   ctrl.redraw()
   return result
-}
-
-// https://gist.github.com/gre/1650294
-function easeInOutCubic(t: number) {
-  return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
 }
 
 function makePiece(key: Key, piece: Piece): AnimPiece {
@@ -129,37 +125,6 @@ function computePlan(prevPieces: cg.Pieces, state: State, dom: cg.DOM): AnimPlan
   }
 }
 
-function roundBy(n: number, by: number) {
-  return Math.round(n * by) / by
-}
-
-function step(ctrl: Chessground, now: number) {
-  const state = ctrl.state
-  const cur = state.animation.current
-  // animation was cancelled
-  if (cur === null) {
-    ctrl.redrawSync()
-    return
-  }
-  if (cur.start === null) cur.start = now
-  const rest = 1 - (now - cur.start) / cur.duration
-  if (rest <= 0) {
-    state.animation.current = null
-    ctrl.redrawSync()
-  } else {
-    const ease = easeInOutCubic(rest)
-    const anims = cur.plan.anims
-    const animsK = Object.keys(anims)
-    for (let i = 0, len = animsK.length; i < len; i++) {
-      const key = animsK[i]
-      const cfg = anims[key]
-      cfg[1] = [roundBy(cfg[0][0] * ease, 10), roundBy(cfg[0][1] * ease, 10)]
-    }
-    ctrl.redrawSync()
-    state.batchRAF((n: number) => step(ctrl, n))
-  }
-}
-
 function animate<A>(mutation: Mutation<A>, ctrl: Chessground): A {
   const state = ctrl.state
   const prevPieces: cg.Pieces = {...state.pieces}
@@ -175,7 +140,9 @@ function animate<A>(mutation: Mutation<A>, ctrl: Chessground): A {
       duration: state.animation.duration,
       plan
     }
-    if (!alreadyRunning) state.batchRAF((now: number) => step(ctrl, now))
+    if (!alreadyRunning) {
+      batchRequestAnimationFrame(ctrl.applyAnim)
+    }
   } else {
     ctrl.redraw()
   }

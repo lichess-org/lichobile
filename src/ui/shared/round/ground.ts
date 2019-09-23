@@ -1,7 +1,6 @@
 import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
-import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import * as gameApi from '../../../lichess/game'
 import { OnlineGameData } from '../../../lichess/interfaces/game'
 import { AfterMoveMeta } from '../../../lichess/interfaces/move'
@@ -25,7 +24,6 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): c
 
   return {
     fen: fen,
-    batchRAF: batchRequestAnimationFrame,
     orientation: boardOrientation(data, flip),
     turnColor: data.game.player,
     lastMove,

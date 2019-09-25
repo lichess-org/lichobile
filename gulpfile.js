@@ -40,7 +40,11 @@ const browsers = ['and_chr >= 58', 'ios_saf >= 11']
 
 const babelSettings = {
   extensions: ['.tsx', '.ts', '.js', '.jsx'],
-  presets: [['es2015']]
+  presets: [['env', {
+    targets: {
+      browsers
+    }
+  }]]
 }
 
 function logErrorAndExit(error) {

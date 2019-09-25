@@ -184,6 +184,16 @@
     }
   }
 
+  window.plugins.webViewChecker = {
+    getCurrentWebViewPackageInfo: function() {
+      return Promise.resolve({
+        packageName: 'com.android.chrome',
+        versionName: '69.0.3497.100',
+        versionCode: 349710065,
+      })
+    },
+    openGooglePlayPage: noop
+  }
 
 }());
 

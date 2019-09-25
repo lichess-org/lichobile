@@ -29,7 +29,6 @@
         "babel-plugin-transform-react-require": "1.0.1",
         "babel-plugin-transform-remove-console": "6.8.0",
         "babel-preset-env": "1.6.1",
-        "babel-preset-es2015": "6.24.1",
         "babelify": "8.0.0",
         "browserify": "14.5.0",
         "chalk": "2.4.2",
@@ -72,6 +71,7 @@
         "cordova-plugin-statusbar": "2.4.2",
         "cordova-plugin-stockfish": "git+https://github.com/veloce/cordova-plugin-stockfish.git#58dc23e",
         "cordova-plugin-vibration": "3.1.0",
+        "cordova-plugin-webview-checker": "1.0.0",
         "cordova-plugin-whitelist": "1.3.3",
         "cordova-plugin-x-socialsharing": "5.1.3",
         "cordova-plugin-x-toast": "2.7.2",
@@ -151,7 +151,8 @@
             "cordova-plugin-network-information": {},
             "cordova-plugin-splashscreen": {},
             "onesignal-cordova-plugin": {},
-            "cordova-plugin-stockfish": {}
+            "cordova-plugin-stockfish": {},
+            "cordova-plugin-webview-checker": {}
         }
     },
     "jest": {

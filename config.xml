@@ -132,6 +132,7 @@
     <plugin name="cordova-plugin-splashscreen" spec="https://github.com/prageeth/cordova-plugin-splashscreen.git#05d8f9" />
     <plugin name="onesignal-cordova-plugin" spec="2.5.2" />
     <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#58dc23e" />
+    <plugin name="cordova-plugin-webview-checker" spec="1.0.0" />
     <engine name="ios" spec="5.0.1" />
     <engine name="android" spec="8.0.0" />
 </widget>

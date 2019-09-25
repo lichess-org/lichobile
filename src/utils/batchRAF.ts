@@ -12,7 +12,7 @@ export function batchRequestAnimationFrame(callback: Callback) {
       batching = false
       callbacks = new Set()
       batch.forEach(f => f(ts))
-      console.debug('batchRAF', batch, 'execution time (ms)', performance.now() - ts)
+      console.debug('batchRAF', batch.size, 'execution time (ms)', performance.now() - ts)
     })
   }
 }

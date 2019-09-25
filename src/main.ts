@@ -157,9 +157,7 @@ function onPause() {
 let nbRetries = 1
 function getPools() {
   return xhr.lobby()
-  .then(() => {
-    if (nbRetries > 1) redraw()
-  })
+  .then(redraw)
   .catch(() => {
     if (nbRetries <= 5) {
       nbRetries++

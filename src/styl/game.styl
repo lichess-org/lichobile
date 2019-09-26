@@ -28,19 +28,12 @@
   &.clockOnLeft
     > .antagonistInfos
       order 2
-  &.crazy
-    flex 0 0 calc(100vw / 8 + 10px)
-    padding 0
   @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
     width 98vw
     margin 0 auto
-    &.crazy
-      flex 0 0 "calc((100vh - 100vw - 25px - %s - %s) / 2)" % (headerHeight footerHeight)
   @media only screen and (orientation: landscape)
     padding 0
     &.crazy
-      flex 0 0 'calc((100vh - %s) / 8)' % headerHeight
-      max-height 60px
       > .antagonistInfos
         order 2
       > .pocket

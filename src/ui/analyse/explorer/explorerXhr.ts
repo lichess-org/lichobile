@@ -29,8 +29,10 @@ export function openingXhr(variant: VariantKey, fen: string, config: OpeningConf
   }
   return fetchJSON(explorerEndpoint + url, {
     headers: {
-      'Accept': 'application/json, text/*'
+      'Accept': 'application/json, text/*',
+      'X-Requested-With': '__delete',
     },
+    credentials: 'omit',
     query: params
   })
 }
@@ -38,8 +40,10 @@ export function openingXhr(variant: VariantKey, fen: string, config: OpeningConf
 export function tablebaseXhr(variant: VariantKey, fen: string): Promise<ExplorerData> {
   return fetchJSON(tablebaseEndpoint + '/' + variant, {
     headers: {
-      'Accept': 'application/json, text/*'
+      'Accept': 'application/json, text/*',
+      'X-Requested-With': '__delete',
     },
+    credentials: 'omit',
     query: {
       fen: fen
     }

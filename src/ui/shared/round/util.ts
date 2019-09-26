@@ -1,4 +1,5 @@
 import { OnlineGameData, GameStep } from '../../../lichess/interfaces/game'
+import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import * as helper from '../../helper'
 import { Bounds } from '../Board'
 import { RoundInterface } from '.'
@@ -17,7 +18,7 @@ export function plyStep(d: OnlineGameData, ply: number): GameStep {
 
 export function autoScroll(movelist?: HTMLElement) {
   if (!movelist) return
-  requestAnimationFrame(() => {
+  batchRequestAnimationFrame(() => {
     const plyEl = movelist.querySelector('.current') as HTMLElement
     if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2
   })
@@ -25,7 +26,7 @@ export function autoScroll(movelist?: HTMLElement) {
 
 export function autoScrollInline(movelist?: HTMLElement) {
   if (!movelist) return
-  requestAnimationFrame(() => {
+  batchRequestAnimationFrame(() => {
     const plyEl = movelist.querySelector('.current') as HTMLElement
     if (plyEl) movelist.scrollLeft = plyEl.offsetLeft - movelist.offsetWidth / 2 + plyEl.offsetWidth / 2
   })

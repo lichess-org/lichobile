@@ -6,7 +6,7 @@ import asyncStorage from '../../asyncStorage'
 import { Player } from '../../lichess/interfaces/game'
 import { ChatMsg } from '../../lichess/interfaces/chat'
 import router from '../../router'
-import socket from '../../socket'
+import { SocketIFace } from '../../socket'
 import { closeIcon } from '../shared/icons'
 
 export class Chat {
@@ -18,6 +18,7 @@ export class Chat {
   private storageId: string
 
   constructor(
+    readonly socketIface: SocketIFace,
     readonly id: string,
     lines: Array<ChatMsg>,
     readonly player: Player | undefined,
@@ -139,7 +140,7 @@ export function chatView(ctrl: Chat, header?: string) {
           ctrl.inputValue = ''
           ta.setAttribute('rows', '1')
           ta.style.paddingTop = '8px'
-          socket.send('talk', msg)
+          ctrl.socketIface.send('talk', msg)
           const sendButton = document.getElementById('chat_send')
           if (sendButton) {
             sendButton.classList.add('disabled')

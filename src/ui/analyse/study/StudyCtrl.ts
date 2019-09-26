@@ -1,5 +1,5 @@
 import { Study } from '../../../lichess/interfaces/study'
-import socket from '../../../socket'
+import socket, { SocketIFace } from '../../../socket'
 import session from '../../../session'
 import settings from '../../../settings'
 
@@ -28,6 +28,7 @@ export default class StudyCtrl {
 
     if (data.features.chat && data.chat) {
       this.chat = new Chat(
+        rootCtrl.socketIface,
         data.id,
         data.chat.lines,
         undefined,
@@ -53,7 +54,7 @@ export default class StudyCtrl {
   }
 
   public toggleLike = (): void => {
-    socket.send('like', {
+    this.rootCtrl.socketIface.send('like', {
       liked: !this.data.liked
     })
   }
@@ -62,7 +63,7 @@ export default class StudyCtrl {
     this.vm.showComments = !this.vm.showComments
   }
 
-  public createSocket(): void {
-    socket.createStudy(this.data.id, socketHandler(this))
+  public createSocket(): SocketIFace {
+    return socket.createStudy(this.data.id, socketHandler(this))
   }
 }

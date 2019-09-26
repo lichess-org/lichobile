@@ -149,6 +149,27 @@ describe('HTTP fetch wrapper', () => {
     })
   })
 
+  test('Request opts can be overriden', () => {
+    global.fetch = jest.fn()
+
+    http.fetchJSON('/api/test', {
+      headers: {
+        'Accept': 'application/json, text/*',
+        'X-Requested-With': '__delete',
+      },
+      credentials: 'omit',
+    })
+
+    expect(global.fetch.mock.calls.length).toBe(1)
+    expect(global.fetch.mock.calls[0][1]).toEqual({
+      method: 'GET',
+      credentials: 'omit',
+      headers: new Headers({
+        'Accept': 'application/json, text/*'
+      })
+    })
+  })
+
   test('GET query params are url encoded', () => {
     global.fetch = jest.fn()
 

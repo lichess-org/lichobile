@@ -9,7 +9,7 @@ import spinner from '../spinner'
 import router from '../router'
 import * as xhr from '../xhr'
 import i18n from '../i18n'
-import socket, { SEEKING_SOCKET_NAME, RedirectObj } from '../socket'
+import socket, { SocketIFace, SEEKING_SOCKET_NAME, RedirectObj } from '../socket'
 import { PongMessage, PoolMember, HumanSeekSetup, isPoolMember, isSeekSetup } from '../lichess/interfaces'
 import { OnlineGameData } from '../lichess/interfaces/game'
 import { humanSetupFromSettings } from '../lichess/setup'
@@ -34,6 +34,8 @@ let hookId: string | null = null
 // we send poolIn message every 10s in case of server disconnection
 // (bad network, server restart, etc.)
 let poolInIntervalId: number
+
+let socketIface: SocketIFace
 
 const socketHandlers = {
   redirect: (d: RedirectObj) => {
@@ -185,7 +187,7 @@ function sendHook(setup: HumanSeekSetup) {
     // normally can't create hook if already have a hook
     cancelHook()
   }
-  socket.createLobby(SEEKING_SOCKET_NAME, () => {
+  socketIface = socket.createLobby(SEEKING_SOCKET_NAME, () => {
     // socket on open handler
     // we do want to be sure we don't do anything in background here
     if (!isOpenAndSeeking) return
@@ -202,7 +204,7 @@ function sendHook(setup: HumanSeekSetup) {
 
 function enterPool(member: PoolMember) {
   currentSetup = member
-  socket.createLobby(SEEKING_SOCKET_NAME, () => {
+  socketIface = socket.createLobby(SEEKING_SOCKET_NAME, () => {
     // socket on open handler
     // we do want to be sure we don't do anything in background here
     if (!isOpenAndSeeking) return
@@ -211,10 +213,10 @@ function enterPool(member: PoolMember) {
     .then(() => {
       // ensure session with a refresh
       if (session.isConnected()) {
-        socket.send('poolIn', member)
+        socketSend('poolIn', member)
         clearInterval(poolInIntervalId)
         poolInIntervalId = setInterval(() => {
-          socket.send('poolIn', member)
+          socketSend('poolIn', member)
         }, 10 * 1000)
       }
       // if anon. use a seek similar to the pool
@@ -249,10 +251,14 @@ function leavePoolOrCancelHook() {
 
 function leavePool(member: PoolMember) {
   clearInterval(poolInIntervalId)
-  socket.send('poolOut', member.id)
+  socketSend('poolOut', member.id)
 }
 
 function cancelHook() {
-  socket.send('cancel', hookId)
+  socketSend('cancel', hookId)
   hookId = null
+}
+
+function socketSend<D>(t: string, d: D): void {
+  if (socketIface) socketIface.send(t, d)
 }

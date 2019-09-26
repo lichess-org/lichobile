@@ -1,5 +1,5 @@
 import * as throttle from 'lodash/throttle'
-import socket from '../../socket'
+import socket, { SocketIFace } from '../../socket'
 import redraw from '../../utils/redraw'
 import * as helper from '../helper'
 import router from '../../router'
@@ -17,7 +17,6 @@ import { header as headerWidget } from '../shared/common'
 import { joinPopup, awaitChallengePopup, awaitInvitePopup } from './challengeView'
 import { ChallengeState } from './interfaces'
 
-const throttledPing = throttle((): void => socket.send('ping'), 1000)
 
 interface Attrs {
   id: string
@@ -33,6 +32,12 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
   },
 
   oninit(vnode) {
+    let socketIface: SocketIFace
+
+    const throttledPing = throttle((): void => {
+      if (socketIface) socketIface.send('ping')
+    }, 1000)
+
     const challenge: Mithril.Stream<Challenge | undefined> = stream(undefined)
 
     sleepUtils.keepAwake()
@@ -69,7 +74,7 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
 
     getChallenge(vnode.attrs.id).then(d => {
       challenge(d.challenge)
-      socket.createChallenge(d.challenge.id, d.socketVersion, onSocketOpen, {
+      socketIface = socket.createChallenge(d.challenge.id, d.socketVersion, onSocketOpen, {
         reload: reloadChallenge
       })
       redraw()

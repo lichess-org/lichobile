@@ -20,6 +20,8 @@ export interface RequestOpts {
   query?: Object
   headers?: StringMap
   cache?: RequestCache
+  mode?: RequestMode
+  credentials?: RequestCredentials
 }
 
 function addQuerystring(url: string, querystring: string): string {
@@ -48,8 +50,9 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
     delete opts.query
   }
 
-  const cfg = {
+  const cfg: RequestInit = {
     method: 'GET',
+    credentials: 'include',
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
       'Accept': 'application/vnd.lichess.v' + globalConfig.apiVersion + '+json'
@@ -60,15 +63,20 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
 
   const init: RequestInit = {
     ...cfg,
-    credentials: 'include',
-    headers: new Headers(cfg.headers)
+    headers: new Headers(cfg.headers),
+  }
+
+  const headers: Headers = <Headers>init.headers
+
+  for (let pair of headers) {
+    if (pair[1] === '__delete') headers.delete(pair[0])
   }
 
   // by default POST and PUT send json except if defined otherwise in caller
   if ((init.method === 'POST' || init.method === 'PUT') &&
-    !(<Headers>init.headers).get('Content-Type')
+    !headers.get('Content-Type')
   ) {
-    (<Headers>init.headers).append('Content-Type', 'application/json; charset=UTF-8')
+    headers.append('Content-Type', 'application/json; charset=UTF-8')
     // always send a json body
     if (!init.body) {
       init.body = '{}'
@@ -77,7 +85,7 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
 
   const sid = storage.get<string>(SESSION_ID_KEY)
   if (sid !== null) {
-    (<Headers>init.headers).append(SESSION_ID_KEY, sid)
+    headers.append(SESSION_ID_KEY, sid)
   }
 
   const fullUrl = url.indexOf('http') > -1 ? url : baseUrl + url

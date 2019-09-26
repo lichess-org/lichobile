@@ -30,7 +30,7 @@ export default {
     color?: string
   ) {
     background = background || settings.general.theme.background()
-    return h('div.view-container', { className: bgClass(background) }, [
+    return h('div.view-container', containerOpts(background), [
       h(MainBoard, { header, color, hammerHandlers }, content),
       h(MenuView),
       gamesMenu.view(),
@@ -52,7 +52,7 @@ export default {
     overlay?: Mithril.Children
   ) {
     background = background || settings.general.theme.background()
-    return h('div.view-container', { className: bgClass(background) }, [
+    return h('div.view-container', containerOpts(background), [
       h('main#page', { oncreate: handleMenuOpen }, [
         h('header.main_header', header),
         h('div#free_content.content.native_scroller', content),
@@ -74,7 +74,7 @@ export default {
 
   clock(content: () => Mithril.Children, overlay?: () => Mithril.Children) {
     background = background || settings.general.theme.background()
-    return h('div.view-container', { className: bgClass(background) }, [
+    return h('div.view-container', containerOpts(background), [
       h('main#page', [
         h('div.content.fullScreen', content())
       ]),
@@ -101,4 +101,10 @@ function handleMenuOpen({ dom }: Mithril.DOMNode) {
 
 function bgClass(bgTheme: string) {
   return bgTheme === 'dark' || bgTheme === 'light' ? bgTheme : 'transp ' + bgTheme
+}
+
+function containerOpts(bgTheme: string) {
+  return {
+    className: bgClass(bgTheme) + (window.cordova.platformId === 'ios' ? ' ios' : ''),
+  }
 }

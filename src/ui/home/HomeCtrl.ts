@@ -1,6 +1,6 @@
 import * as uniqBy from 'lodash/uniqBy'
 import * as Zanimo from 'zanimo'
-import socket from '../../socket'
+import socket, { SocketIFace } from '../../socket'
 import redraw from '../../utils/redraw'
 import signals from '../../signals'
 import settings from '../../settings'
@@ -21,6 +21,8 @@ import { dailyPuzzle as dailyPuzzleXhr, featuredTournaments as featuredTournamen
 export default class HomeCtrl {
   public selectedTab: number
 
+  public socketIface?: SocketIFace
+
   public corresPool: ReadonlyArray<CorrespondenceSeek>
   public dailyPuzzle?: DailyPuzzle
   public featuredTournaments?: ReadonlyArray<TournamentListItem>
@@ -38,9 +40,13 @@ export default class HomeCtrl {
     }
   }
 
+  public socketSend = <D>(t: string, d: D): void => {
+    if (this.socketIface) this.socketIface.send(t, d)
+  }
+
   public init = () => {
     if (isForeground()) {
-      socket.createLobby('homeLobby', this.reloadCorresPool, {
+      this.socketIface = socket.createLobby('homeLobby', this.reloadCorresPool, {
         redirect: socket.redirectToGame,
         reload_seeks: this.reloadCorresPool,
         resync: () => lobbyXhr().then(d => {
@@ -105,12 +111,12 @@ export default class HomeCtrl {
 
   public cancelCorresSeek = (seekId: string) => {
     return Zanimo(document.getElementById(seekId), 'opacity', '0', '300', 'ease-out')
-      .then(() => socket.send('cancelSeek', seekId))
+      .then(() => this.socketSend('cancelSeek', seekId))
       .catch(console.log.bind(console))
   }
 
   public joinCorresSeek = (seekId: string) => {
-    socket.send('joinSeek', seekId)
+    this.socketSend('joinSeek', seekId)
   }
 
   private reloadCorresPool = () => {

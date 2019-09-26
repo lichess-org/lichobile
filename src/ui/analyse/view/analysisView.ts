@@ -1,6 +1,5 @@
 import * as h from 'mithril/hyperscript'
 import i18n  from '../../../i18n'
-import socket from '../../../socket'
 import { handleXhrError, shallowEqual } from '../../../utils'
 import redraw from '../../../utils/redraw'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
@@ -133,7 +132,7 @@ function renderStudyAnalysisRequest(ctrl: AnalyseCtrl) {
           spinner.getVdom('monochrome')
         ]) : h('button.fatButton', {
           oncreate: helper.ontapXY(() => {
-            socket.send('requestAnalysis', ctrl.study!.data.chapter.id)
+            ctrl.socketIface.send('requestAnalysis', ctrl.study!.data.chapter.id)
             ctrl.analysisProgress = true
             redraw()
           })

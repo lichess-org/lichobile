@@ -10,7 +10,6 @@ import 'whatwg-fetch'
 import './moment'
 
 import * as debounce from 'lodash/debounce'
-import detectWebview from './webviewDetect'
 import { hasNetwork } from './utils'
 import { syncWithNowPlayingGames } from './utils/offlineGames'
 import redraw from './utils/redraw'
@@ -77,9 +76,6 @@ function main() {
 
   setTimeout(() => {
     window.navigator.splashscreen.hide()
-
-    // detect webview version and prompt to upgrade if too old
-    detectWebview()
   }, 500)
 }
 
@@ -152,9 +148,7 @@ function onPause() {
 let nbRetries = 1
 function getPools() {
   return xhr.lobby()
-  .then(() => {
-    if (nbRetries > 1) redraw()
-  })
+  .then(redraw)
   .catch(() => {
     if (nbRetries <= 5) {
       nbRetries++

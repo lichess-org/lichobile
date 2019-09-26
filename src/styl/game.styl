@@ -24,7 +24,7 @@
   display flex
   overflow hidden
   justify-content space-between
-  align-items stretch
+  align-items center
   &.clockOnLeft
     > .antagonistInfos
       order 2
@@ -150,6 +150,7 @@
     > .antagonistUser
       font-size 1em
     > .clock
+      padding 0 2vmin
       line-height 30px
       display inline-block
       fluid-type(20px, 30px)
@@ -197,7 +198,7 @@
   font-family 'Roboto'
   text-align right
   fluid-type(32px, 48px)
-  padding 0 2vmin
+  padding 1vmax 2vmin
   color textDarkBg
   background-color #262626
   > seph
@@ -209,12 +210,10 @@
   &.running
     background-color darkGreen
     color #fff
-  &.berserk
-    color #e35d5b
   &.emerg
-    background-color #a00000
-    color #d0d0d0
+    background-color #502826
     &.running
+      background-color lighten(#502826, 15%)
       color #fff
   &.correspondence
     font-family inherit
@@ -474,7 +473,7 @@
   .antagonistUser
     color textDarkGray
   .clock
-    color #707070
+    color lighten(themeBgLightText, 5%)
     background-color themeBgLight
     border-color #ccc
     &.running
@@ -483,8 +482,10 @@
     &.berserk
       border-color #dc322f
     &.emerg
-      background-color #efaaaa
-      color textDarkGray
+      background-color #f2cccc
+      &.running
+        color #000
+        background-color #e69999
     &.correspondence
       &.offline
         background-color themeBgLight
@@ -499,9 +500,10 @@
     &.running
       color #fff
     &.emerg
-      background-color rgba(#a00000, 0.6)
-      color #d0d0d0
+      color rgba(#8c8c8c, 0.8)
+      background-color rgba(#a00000, 0.4)
       &.running
+        background-color rgba(lighten(#a00000, 30%), 0.4)
         color #fff
   .replay
     background transpBlack04

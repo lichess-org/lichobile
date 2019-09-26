@@ -87,8 +87,10 @@ interface Document {
 
 interface Window {
   cordova:Cordova;
-  ga: Analytics;
   AndroidFullScreen: any
+  Keyboard: {
+    hide: () => void
+  }
 }
 
 // cordova/argscheck module

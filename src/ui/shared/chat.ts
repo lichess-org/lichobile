@@ -42,7 +42,7 @@ export class Chat {
   }
 
   public close = (fromBB?: string) => {
-    // window.cordova.plugins.Keyboard.close()
+    window.Keyboard.hide()
     if (fromBB !== 'backbutton' && this.showing) router.backbutton.stack.pop()
     this.showing = false
     this.nbUnread = 0

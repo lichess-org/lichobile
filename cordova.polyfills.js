@@ -136,6 +136,11 @@
     type: window.Connection.WIFI
   };
 
+  // keyboard
+  window.Keyboard = {
+    hide: noop,
+  }
+
   // notification
   window.navigator.notification = {};
   window.navigator.notification.alert = window.alert.bind(window);

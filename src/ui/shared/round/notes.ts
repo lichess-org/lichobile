@@ -54,7 +54,7 @@ export class NotesCtrl {
   }
 
   public close = (fromBB?: string) => {
-    // window.cordova.plugins.Keyboard.close()
+    window.Keyboard.hide()
     if (fromBB !== 'backbutton' && this.showing) {
       router.backbutton.stack.pop()
     }

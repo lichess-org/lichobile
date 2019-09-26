@@ -101,7 +101,7 @@ function submit(form: HTMLFormElement) {
   const token = form['token'] ? form['token'].value : null
   if (!username || !password) return
   redraw()
-  window.cordova.plugins.Keyboard.close()
+  // window.cordova.plugins.Keyboard.close()
   session.login(username, password, token)
   .then(() => {
     close()
@@ -140,7 +140,7 @@ function open() {
 }
 
 function close(fromBB?: string) {
-  window.cordova.plugins.Keyboard.close()
+  // window.cordova.plugins.Keyboard.close()
   if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
   isOpen = false
 }

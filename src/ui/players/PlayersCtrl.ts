@@ -13,13 +13,8 @@ export default class PlayersCtrl {
   public players?: readonly User[]
   public leaderboard?: Rankings
 
-  private listHeight: number = 0
-
   constructor(defaultTab?: number) {
     this.currentTab = defaultTab || 0
-
-    window.addEventListener('native.keyboardshow', this.onKeyboardShow)
-    window.addEventListener('native.keyboardhide', this.onKeyboardHide)
 
     xhr.onlinePlayers()
     .then(data => {
@@ -45,33 +40,9 @@ export default class PlayersCtrl {
     redraw()
   }
 
-  public onKeyboardShow = (e: Ionic.KeyboardEvent) => {
-    if (window.cordova.platformId === 'ios') {
-      let ul = document.getElementById('players_search_results')
-      if (ul) {
-        this.listHeight = ul.offsetHeight
-        ul.style.height = (this.listHeight - e.keyboardHeight) + 'px'
-      }
-    }
-  }
-
-  public onKeyboardHide = () => {
-    if (window.cordova.platformId === 'ios') {
-      let ul = document.getElementById('players_search_results')
-      if (ul) ul.style.height = this.listHeight + 'px'
-    }
-    let input = document.getElementById('searchPlayers')
-    if (input) input.blur()
-  }
-
   public closeSearch = (fromBB?: string) => {
     if (fromBB !== 'backbutton' && this.isSearchOpen) router.backbutton.stack.pop()
       this.isSearchOpen = false
-  }
-
-  public unload = () => {
-    window.removeEventListener('native.keyboardshow', this.onKeyboardShow)
-    window.removeEventListener('native.keyboardhide', this.onKeyboardHide)
   }
 
   public onInput = throttle((e: Event) => {

@@ -22,10 +22,6 @@ export default {
 
   oncreate: helper.viewFadeIn,
 
-  onremove() {
-    this.ctrl.unload()
-  },
-
   view() {
     const ctrl = this.ctrl
     const headerCtrl = header(ctrl)

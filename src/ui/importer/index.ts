@@ -21,11 +21,6 @@ const ImporterScreen: Mithril.Component<{}, State> = {
 
   oncreate: helper.viewFadeIn,
 
-  onremove() {
-    window.removeEventListener('native.keyboardshow', helper.onKeyboardShow)
-    window.removeEventListener('native.keyboardhide', helper.onKeyboardHide)
-  },
-
   view() {
     const header = dropShadowHeader(i18n('importGame'))
     const body = renderBody(this.ctrl)

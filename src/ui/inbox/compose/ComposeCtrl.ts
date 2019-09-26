@@ -1,5 +1,4 @@
 import * as throttle from 'lodash/throttle'
-import * as helper from '../../helper'
 import { ErrorResponse } from '../../../http'
 import redraw from '../../../utils/redraw'
 import { handleXhrError } from '../../../utils'
@@ -47,9 +46,6 @@ export default function ComposeCtrl(userId: string): IComposeCtrl {
     })
     .catch(handleSendError)
   }
-
-  window.addEventListener('native.keyboardhide', helper.onKeyboardHide)
-  window.addEventListener('native.keyboardshow', helper.onKeyboardShow)
 
   function handleSendError(error: SendErrorResponse) {
     if (error.body && (error.body.username || error.body.subject || error.body.text)) {

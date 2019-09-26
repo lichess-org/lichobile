@@ -1,5 +1,4 @@
 /// <reference path="cordova/cordova.d.ts" />
-/// <reference path="cordova-ionic/cordova-ionic.d.ts" />
 /// <reference path="cordova-plugin-toast.d.ts" />
 /// <reference path="cordova-plugin-insomnia.d.ts" />
 /// <reference path="cordova-plugin-socialsharing.d.ts" />

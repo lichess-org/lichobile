@@ -634,8 +634,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     clearTimeout(this.clockTimeoutId)
     clearInterval(this.clockIntervId)
     document.removeEventListener('resume', this.onResume)
-    if (this.chat) this.chat.unload()
-    if (this.notes) this.notes.unload()
   }
 
   private makeCorrespondenceClock() {

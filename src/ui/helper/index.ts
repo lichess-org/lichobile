@@ -321,24 +321,6 @@ export function autofocus(vnode: Mithril.DOMNode): void {
   (vnode.dom as HTMLElement).focus()
 }
 
-let contentHeight: number
-export function onKeyboardShow(e: Ionic.KeyboardEvent): void {
-  if (window.cordova.platformId === 'ios') {
-    const content = document.getElementById('free_content')
-    if (content) {
-      contentHeight = content.offsetHeight
-      content.style.height = (contentHeight - e.keyboardHeight) + 'px'
-    }
-  }
-}
-
-export function onKeyboardHide(): void {
-  if (window.cordova.platformId === 'ios') {
-    const content = document.getElementById('free_content')
-    if (content) content.style.height = contentHeight + 'px'
-  }
-}
-
 export function renderRatingDiff(player: Player | UserGamePlayer): Mithril.Children {
   if (player.ratingDiff === undefined) return null
   if (player.ratingDiff === 0) return h('span.rp.null', ' +0')

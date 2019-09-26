@@ -25,11 +25,6 @@ export default {
 
   oncreate: helper.viewFadeIn,
 
-  onremove() {
-    window.removeEventListener('native.keyboardshow', helper.onKeyboardShow)
-    window.removeEventListener('native.keyboardhide', helper.onKeyboardHide)
-  },
-
   view() {
     const header = headerWidget(null,
       backButton(i18n('composeMessage'))

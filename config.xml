@@ -72,6 +72,7 @@
     <preference name="Orientation" value="default" />
     <preference name="SuppressesLongPressGesture" value="true" />
     <preference name="EnableViewportScale" value="false" />
+    <preference name="KeyboardResize" value="true" />
     <preference name="KeyboardDisplayRequiresUserAction" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="AutoHideSplashScreen" value="false" />
@@ -123,8 +124,6 @@
     <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
     <plugin name="cordova-plugin-fullscreen" spec="1.2.0" />
     <plugin name="cordova-plugin-globalization" spec="1.11.0" />
-    <plugin name="cordova-plugin-crosswalk-data-migration" spec="git+https://github.com/veloce/cordova-plugin-crosswalk-data-migration.git#225408d" />
-    <plugin name="ionic-plugin-keyboard" spec="2.2.1" />
     <plugin name="cordova-plugin-x-toast" spec="2.7.2" />
     <plugin name="cordova-plugin-file-transfer" spec="1.7.1" />
     <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
@@ -132,6 +131,9 @@
     <plugin name="cordova-plugin-splashscreen" spec="https://github.com/prageeth/cordova-plugin-splashscreen.git#05d8f9" />
     <plugin name="onesignal-cordova-plugin" spec="2.5.2" />
     <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#58dc23e" />
+    <plugin name="cordova-plugin-ionic-webview" spec="4.1.1">
+        <variable name="ANDROID_SUPPORT_ANNOTATIONS_VERSION" value="27.+" />
+    </plugin>
+    <plugin name="cordova-plugin-ionic-keyboard" spec="2.2.0" />
     <engine name="ios" spec="5.0.1" />
-    <engine name="android" spec="8.0.0" />
 </widget>

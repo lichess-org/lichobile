@@ -75,14 +75,6 @@
     open: window.open
   }
 
-  // keyboard
-  window.cordova.plugins.Keyboard = {
-    show: noop,
-    close: noop,
-    disableScroll: noop,
-    hideKeyboardAccessoryBar: noop
-  };
-
   // social sharing
   window.plugins.socialsharing = {
     share: function(message, subject, image, link) {

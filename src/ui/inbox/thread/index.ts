@@ -23,11 +23,6 @@ export default {
     this.ctrl = ThreadCtrl(attrs.id)
   },
 
-  onremove() {
-    window.removeEventListener('native.keyboardshow', this.ctrl.onKeyboardShow)
-    window.removeEventListener('native.keyboardhide', helper.onKeyboardHide)
-  },
-
   view() {
     const header = headerWidget(null,
       backButton(this.ctrl.thread() ? this.ctrl.thread().name : undefined)

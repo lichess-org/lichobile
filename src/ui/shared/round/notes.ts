@@ -10,8 +10,6 @@ import { GameData } from '../../../lichess/interfaces/game'
 import { AnalyseData } from '../../../lichess/interfaces/analyse'
 import { readNote, syncNote } from './roundXhr'
 
-let notesHeight: number
-
 export class NotesCtrl {
   public syncing: boolean
   public showing: boolean
@@ -37,8 +35,6 @@ export class NotesCtrl {
       window.plugins.toast.show('Could not read notes from server.', 'short', 'center')
     })
 
-    window.addEventListener('native.keyboardhide', onKeyboardHide)
-    window.addEventListener('native.keyboardshow', onKeyboardShow)
   }
 
   public syncNotes = debounce((e: Event) => {
@@ -52,18 +48,13 @@ export class NotesCtrl {
     }
   }, 1000)
 
-  public unload = () => {
-    document.removeEventListener('native.keyboardhide', onKeyboardHide)
-    document.removeEventListener('native.keyboardshow', onKeyboardShow)
-  }
-
   public open = () => {
     router.backbutton.stack.push(helper.slidesOutDown(this.close, 'notes'))
     this.showing = true
   }
 
   public close = (fromBB?: string) => {
-    window.cordova.plugins.Keyboard.close()
+    // window.cordova.plugins.Keyboard.close()
     if (fromBB !== 'backbutton' && this.showing) {
       router.backbutton.stack.pop()
     }
@@ -92,21 +83,4 @@ export function notesView(ctrl: NotesCtrl) {
       })
     ])
   ])
-}
-
-function onKeyboardShow(e: Ionic.KeyboardEvent) {
-  if (window.cordova.platformId === 'ios') {
-    let ta = document.getElementById('notesTextarea')
-    if (!ta) return
-    notesHeight = ta.offsetHeight
-    ta.style.height = (notesHeight - e.keyboardHeight) + 'px'
-  }
-}
-
-function onKeyboardHide() {
-  let ta = document.getElementById('notesTextarea')
-  if (window.cordova.platformId === 'ios') {
-    if (ta) ta.style.height = notesHeight + 'px'
-  }
-  if (ta) ta.blur()
 }

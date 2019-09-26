@@ -71,11 +71,6 @@ function main() {
   })
   window.addEventListener('resize', debounce(onResize), false)
 
-  // iOs keyboard hack
-  // TODO we may want to remove this and call only on purpose
-  window.cordova.plugins.Keyboard.disableScroll(true)
-  window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false)
-
   if (cordova.platformId === 'android') {
     window.StatusBar.backgroundColorByHexString('#111')
   }

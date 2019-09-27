@@ -137,4 +137,5 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="2.2.0" />
     <plugin name="cordova-plugin-webview-checker" spec="1.0.0" />
     <engine name="ios" spec="5.0.1" />
+    <engine name="android" spec="8.0.0" />
 </widget>

@@ -59,6 +59,12 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
     }
   }
 
+  const sid = storage.get<string>(SESSION_ID_KEY)
+  if (sid !== null) {
+    const h = <StringMap>cfg.headers!
+    h[SESSION_ID_KEY] = sid
+  }
+
   merge(cfg, opts)
 
   const init: RequestInit = {
@@ -81,11 +87,6 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
     if (!init.body) {
       init.body = '{}'
     }
-  }
-
-  const sid = storage.get<string>(SESSION_ID_KEY)
-  if (sid !== null) {
-    headers.append(SESSION_ID_KEY, sid)
   }
 
   const fullUrl = url.indexOf('http') > -1 ? url : baseUrl + url

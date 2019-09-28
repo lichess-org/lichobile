@@ -66,7 +66,7 @@
         "cordova-plugin-inappbrowser": "3.0.0",
         "cordova-plugin-insomnia": "4.2.0",
         "cordova-plugin-ionic-keyboard": "2.2.0",
-        "cordova-plugin-ionic-webview": "4.1.1",
+        "cordova-plugin-ionic-webview": "4.1.2",
         "cordova-plugin-nativeaudio": "github:veloce/cordova-plugin-nativeaudio#old_interface",
         "cordova-plugin-network-information": "2.0.2",
         "cordova-plugin-splashscreen": "git+https://github.com/prageeth/cordova-plugin-splashscreen.git#05d8f9",
@@ -150,13 +150,13 @@
             "cordova-plugin-network-information": {},
             "cordova-plugin-splashscreen": {},
             "onesignal-cordova-plugin": {},
-            "cordova-plugin-ionic-webview": {
-                "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
-            },
             "com.rjfun.cordova.plugin.lowlatencyaudio": {},
             "cordova-plugin-stockfish": {},
             "cordova-plugin-ionic-keyboard": {},
-            "cordova-plugin-webview-checker": {}
+            "cordova-plugin-webview-checker": {},
+            "cordova-plugin-ionic-webview": {
+                "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
+            }
         }
     },
     "jest": {

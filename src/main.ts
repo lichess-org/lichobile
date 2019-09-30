@@ -2,11 +2,6 @@
 
 'use strict'
 
-import 'core-js/fn/symbol'
-import 'core-js/fn/set'
-import 'core-js/fn/map'
-import 'whatwg-fetch'
-
 import './moment'
 
 import * as debounce from 'lodash/debounce'

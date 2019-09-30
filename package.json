@@ -54,8 +54,6 @@
         "@types/d3": "4.5.0",
         "@types/hammerjs": "2.0.35",
         "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",
-        "cordova-android": "8.0.0",
-        "cordova-ios": "5.0.1",
         "cordova-plugin-fullscreen": "1.2.0",
         "cordova-plugin-insomnia": "4.2.0",
         "cordova-plugin-nativeaudio": "github:veloce/cordova-plugin-nativeaudio#old_interface",
@@ -110,10 +108,7 @@
         "release-ios": "npm run build-cordova-release && cordova build ios --release --browserify"
     },
     "cordova": {
-        "platforms": [
-            "ios",
-            "android"
-        ],
+        "platforms": [],
         "plugins": {
             "cordova-plugin-insomnia": {},
             "cordova-plugin-fullscreen": {},

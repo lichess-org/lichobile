@@ -1,36 +1,9 @@
 (function() {
   function noop() {}
 
-  // dispatch cordova events for testing purpose
-  window.setOffline = function() {
-    window.navigator.connection.type = window.Connection.NONE;
-    document.dispatchEvent(new window.Event('offline'));
-  };
-  window.setOnline = function() {
-    window.navigator.connection.type = window.Connection.WIFI;
-    document.dispatchEvent(new window.Event('online'));
-  };
-  window.setBackground = function() {
-    document.dispatchEvent(new window.Event('pause'));
-  };
-  window.setForeground = function() {
-    document.dispatchEvent(new window.Event('resume'));
-  };
-
   window.cordova = {};
   window.cordova.plugins = {};
   window.plugins = {};
-
-  window.cordova.platformId = 'browser';
-
-  // filesystem
-  window.LocalFileSystem = {
-    PERSISTENT: 0,
-    TEMPORARY: 1
-  };
-  window.requestFileSystem = function() {
-    return Promise.resolve();
-  };
 
   // push
   function oneSignalInit() {
@@ -60,126 +33,10 @@
     }
   };
 
-  // events
-  document.addEventListener('DOMContentLoaded', function() {
-    document.dispatchEvent(new window.Event('deviceready'));
-  }, false);
-
-  // backbutton emulation
-  window.backbutton = function() {
-    document.dispatchEvent(new window.Event('backbutton'));
-  };
-
-  // InAppBrowser
-  window.cordova.InAppBrowser = {
-    open: window.open
-  }
-
-  // social sharing
-  window.plugins.socialsharing = {
-    share: function(message, subject, image, link) {
-      if (message) console.log('Text share widget opened with text: ', message);
-      if (link) console.log('Link share widget opened with link: ', link);
-    }
-  };
-
-  // toast
-  function mockToast() {
-    console.log('Toast fired with args:', arguments);
-  }
-  window.plugins.toast = {
-    show: mockToast,
-    showShortTop: mockToast,
-    showShortCenter: mockToast,
-    showShortBottom: mockToast,
-    showLongTop: mockToast,
-    showLongCenter: mockToast,
-    showLongBottom: mockToast
-  };
-
   // insomnia
   window.plugins.insomnia = {};
   window.plugins.insomnia.allowSleepAgain = noop;
   window.plugins.insomnia.keepAwake = noop;
-
-  // status bar
-  window.StatusBar = {};
-  window.StatusBar.show = noop;
-  window.StatusBar.hide = noop;
-
-  // fullscreen
-  window.AndroidFullScreen = {};
-  window.AndroidFullScreen.showSystemUI = noop;
-  window.AndroidFullScreen.immersiveMode = noop;
-
-  // device
-  window.device = {
-    cordova: 'browser',
-    model: 'browser',
-    platform: 'browser',
-    uuid: 'browser',
-    version: 'browser'
-  };
-
-  // network information
-  window.Connection = {
-    NONE: 'none',
-    UNKNOWN: 'unknown',
-    WIFI: 'wifi',
-    ETHERNET: 'ethernet',
-    CELL_2G: '2g',
-    CELL_3G: '3g',
-    CELL_4G: '4g',
-    CELL: 'cellular'
-  };
-  window.navigator.connection = {
-    type: window.Connection.WIFI
-  };
-
-  // keyboard
-  window.Keyboard = {
-    hide: noop,
-  }
-
-  // notification
-  window.navigator.notification = {};
-  window.navigator.notification.alert = window.alert.bind(window);
-  window.navigator.notification.confirm = function(message, callback) {
-    if (window.confirm(message)) callback()
-  }
-  window.navigator.notification.prompt = window.prompt.bind(window);
-  window.navigator.notification.beep = noop;
-
-  // splashscreen
-  window.navigator.splashscreen = {};
-  window.navigator.splashscreen.hide = noop;
-
-  // globalization
-  window.navigator.globalization = {
-    getPreferredLanguage: function(success) {
-      success({
-        value: 'en'
-      });
-    }
-  };
-
-  // universal/deep linking
-  window.universalLinks = {
-    subscribe: noop
-  };
-
-  // local notifications
-  window.cordova.plugins.notification = {
-    local: {
-      schedule: function(opts) {
-        console.log('Local notification triggered with opts:', opts)
-      },
-      cancelAll: function() {
-        console.log('Local notifications canceled')
-      },
-      on: noop
-    }
-  }
 
   window.plugins.webViewChecker = {
     getCurrentWebViewPackageInfo: function() {

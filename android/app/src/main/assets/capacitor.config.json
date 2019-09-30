@@ -1,0 +1,7 @@
+{
+  "appId": "org.lichess.mobileapp",
+  "appName": "lichess",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www"
+}

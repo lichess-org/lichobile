@@ -51,6 +51,10 @@
         "watchify": "3.11.1"
     },
     "dependencies": {
+        "@capacitor/android": "1.2.1",
+        "@capacitor/cli": "1.2.1",
+        "@capacitor/core": "1.2.1",
+        "@capacitor/ios": "1.2.1",
         "@types/d3": "4.5.0",
         "@types/hammerjs": "2.0.35",
         "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",

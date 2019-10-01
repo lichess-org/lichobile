@@ -1,3 +1,4 @@
+const glob = require('glob');
 const path = require('path');
 const source = require('vinyl-source-stream');
 const minimist = require('minimist');
@@ -100,11 +101,30 @@ gulp.task('watch-scripts', () => {
   );
 
   function rebundle() {
-    return bundleStream
+    var promise = bundleStream
       .bundle()
       .on('error', error => log.error(chalk.red(error.message)))
       .pipe(source('app.js'))
       .pipe(gulp.dest('./www'));
+    glob('platforms/{android,ios}/www', (err, dirs) => {
+      if (err) {
+        log.error(err);
+      }
+      else if (dirs) {
+        promise = promise
+          .pipe(buffer())
+          .pipe(uglify({ safari10: true }))
+          .on('error', logErrorAndExit);
+        dirs.forEach((dir) => {
+          promise = promise.pipe(gulp.dest(dir));
+        });
+        promise = promise
+          .on('end', () => log.info('Rebundled ' +
+                             dirs.map((d) =>
+                                       path.join(d, 'app.js')).join(', ')));
+      }
+    });
+    return promise;
   }
 
   bundleStream.on('update', rebundle);

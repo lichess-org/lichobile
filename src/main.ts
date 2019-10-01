@@ -4,6 +4,7 @@
 
 import './moment'
 
+import { Plugins, DeviceInfo } from '@capacitor/core'
 import * as debounce from 'lodash/debounce'
 import { hasNetwork } from './utils'
 import { syncWithNowPlayingGames } from './utils/offlineGames'
@@ -19,31 +20,35 @@ import router from './router'
 import socket from './socket'
 import push from './push'
 import routes from './routes'
-import deepLinks from './deepLinks'
 import { isForeground, setForeground, setBackground } from './utils/appMode'
-import { loadCachedImages } from './bgtheme'
+// import { loadCachedImages } from './bgtheme'
 
 let firstConnection = true
 
-function main() {
+function main(info: DeviceInfo) {
 
-  // cf https://github.com/apache/cordova-plugin-inappbrowser#readme
-  window.open = cordova.InAppBrowser.open
+  window.open = (url: string) => {
+    Plugins.Browser.open({ url })
+    return null
+  }
+
+  window.deviceInfo = {
+    platform: info.platform,
+    uuid: info.uuid,
+    appVersion: info.appVersion,
+  }
 
   routes.init()
-  deepLinks.init()
+  // TODO
+  // deepLinks.init()
   push.init()
 
   // cached background images
-  loadCachedImages()
+  // TODO
+  // loadCachedImages()
 
   // cache viewport dims
   helper.viewportDim()
-
-  // iOs needs this to auto-rotate
-  window.shouldRotateToOrientation = () => {
-    return true
-  }
 
   // pull session data once (to log in user automatically thanks to cookie)
   // and also listen to online event in case network was disconnected at app
@@ -65,12 +70,8 @@ function main() {
   })
   window.addEventListener('resize', debounce(onResize), false)
 
-  if (cordova.platformId === 'android') {
-    window.StatusBar.backgroundColorByHexString('#111')
-  }
-
   setTimeout(() => {
-    window.navigator.splashscreen.hide()
+    Plugins.SplashScreen.hide()
   }, 500)
 }
 
@@ -152,10 +153,6 @@ function getPools() {
   })
 }
 
-document.addEventListener('deviceready',
-  // i18n must be loaded before any rendering happens
-  () => {
-    loadPreferredLanguage().then(main)
-  },
-  false
-)
+loadPreferredLanguage()
+.then(Plugins.Device.getInfo)
+.then(main)

@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as h from 'mithril/hyperscript'
 import router from '../../router'
 import i18n from '../../i18n'
@@ -115,7 +116,7 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
     isOnlineAnalyseData(ctrl.data) ? h('button', {
       oncreate: helper.ontap(() => {
         ctrl.menu.close()
-        window.plugins.socialsharing.share(null, null, null, gameApi.publicAnalyseUrl(ctrl.data))
+        Plugins.Share.share({ url: gameApi.publicAnalyseUrl(ctrl.data) })
       })
     }, [i18n('shareGameURL')]) : null,
     ctrl.source === 'offline' ? h('button', {
@@ -140,7 +141,7 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
       key: 'shareFEN',
       oncreate: helper.ontap(() => {
         ctrl.menu.close()
-        window.plugins.socialsharing.share(null, null, null, ctrl.node.fen)
+        Plugins.Share.share({ text: ctrl.node.fen })
       }),
     }, 'Share current FEN') : null,
   ])
@@ -154,7 +155,7 @@ function onlinePGNExport(ctrl: AnalyseCtrl, raw: boolean) {
       ctrl.menu.s.computingPGN = false
       ctrl.menu.close()
       redraw()
-      window.plugins.socialsharing.share(pgn)
+      Plugins.Share.share({ text: pgn })
     })
     .catch(e => {
       ctrl.menu.s.computingPGN = false
@@ -185,7 +186,7 @@ function offlinePgnExport(ctrl: AnalyseCtrl) {
       ctrl.menu.s.computingPGN = false
       ctrl.menu.close()
       redraw()
-      window.plugins.socialsharing.share(res.pgn)
+      Plugins.Share.share({ text: res.pgn })
     })
     .catch(e => {
       ctrl.menu.s.computingPGN = false

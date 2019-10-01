@@ -1,3 +1,4 @@
+import { Plugins, NetworkStatus } from '@capacitor/core'
 import i18n from '../i18n'
 import globalConfig from '../config'
 import { ErrorResponse } from '../http'
@@ -89,8 +90,16 @@ export function autoredraw(action: () => void): void {
   return res
 }
 
+let networkStatus: NetworkStatus
+Plugins.Network.addListener('networkStatusChange', st => {
+  networkStatus = st
+})
+Plugins.Network.getStatus().then(st => {
+  networkStatus = st
+})
+
 export function hasNetwork(): boolean {
-  return window.navigator.connection.type !== Connection.NONE
+  return networkStatus.connected
 }
 
 export function handleXhrError(error: ErrorResponse): void {
@@ -122,7 +131,7 @@ export function handleXhrError(error: ErrorResponse): void {
   else if (data.global && data.global.constructor === Array) {
     message += ` ${i18n(data.global[0])}`
   }
-  window.plugins.toast.show(message, 'short', 'center')
+  Plugins.Toast.show({ text: message, duration: 'short' })
 }
 
 export function serializeQueryParameters(obj: StringMap): string {

@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import { Study } from '../../../lichess/interfaces/study'
 import socket, { SocketIFace } from '../../../socket'
 import session from '../../../session'
@@ -43,7 +44,9 @@ export default class StudyCtrl {
 
     if (settings.study.tour() === null) {
       startTour(this)
-      settings.study.tour(window.AppVersion ? window.AppVersion.version : 'dev-snapshot')
+      Plugins.Device.getInfo().then(info => {
+        settings.study.tour(info.appVersion)
+      })
     }
   }
 

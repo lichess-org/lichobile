@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as helper from '../../helper'
 
 import AnalyseCtrl from '../AnalyseCtrl'
@@ -28,7 +29,7 @@ export default function renderActionsBar(ctrl: AnalyseCtrl) {
       <button className={'action_bar_button fa fa-' + (ctrl.settings.s.smallBoard ? 'expand' : 'compress')} key="expand-compress"
         oncreate={helper.ontap(
           ctrl.settings.toggleBoardSize,
-          () => window.plugins.toast.show('Expand/compress board', 'short', 'bottom')
+          () => Plugins.Toast.show({ text: 'Expand/compress board', duration: 'short' })
         )}
       />
       <button key="backward" className="action_bar_button fa fa-backward"

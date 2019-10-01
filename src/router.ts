@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as Rlite from 'rlite-router'
 import * as RenderService from 'mithril/render'
 import * as Vnode from 'mithril/render/vnode'
@@ -119,15 +120,19 @@ const backbutton = (() => {
       // if playing a game as anon ask for confirmation because there is no way
       // back!
       if (/^\/game\/[a-zA-Z0-9]{12}/.test(get()) && !session.isConnected()) {
-        navigator.notification.confirm(
-          'Do you really want to leave the game? You can\'t go back to it after.',
-          i => { if (i === 1) backHistory() }
-        )
+        Plugins.Modals.confirm({
+          title: 'Confirmation',
+          message: 'Do you really want to leave the game? You can\'t go back to it after.',
+        }).then(({ value }) => {
+          if (value) {
+            backHistory()
+          }
+        })
       } else {
         backHistory()
       }
     } else {
-      window.navigator.app.exitApp()
+      Plugins.App.exitApp()
     }
   }
 

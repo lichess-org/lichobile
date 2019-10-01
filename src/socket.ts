@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import router from './router'
 import globalConfig from './config'
 import redraw from './utils/redraw'
@@ -215,7 +216,7 @@ function createGame(
         xhr.game(gameUrl.substring(1))
         .catch((err: ErrorResponse) => {
           if (err.status === 401) {
-            window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center')
+            Plugins.Toast.show({ text: i18n('unauthorizedError'), duration: 'short' })
             router.set('/')
           }
         })

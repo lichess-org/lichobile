@@ -182,9 +182,6 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
         'Infinite analysis', 'ceval.infinite', settings.analyse.cevalInfinite,
         ctrl.settings.cevalToggleInfinite
       ),
-      cordova.platformId === 'android' ?
-        h('small.caution', 'It will stop after 10 minutes when in background') :
-        null
     ]) : null,
     ctrl.ceval.allowed ? h('div.action', {
       key: 'cevalMultiPvs'

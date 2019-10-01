@@ -48,7 +48,7 @@ export default function renderTree(ctrl: AnalyseCtrl): Mithril.Children {
   }
   const commentTags = renderInlineCommentsOf(ctx, root, true)
   return h('div.analyse-moveList', {
-    className: cordova.platformId === 'ios' ? 'ios' : ''
+    className: window.deviceInfo.platform === 'ios' ? 'ios' : ''
   }, [
     commentTags,
     renderChildrenOf(ctx, root, {

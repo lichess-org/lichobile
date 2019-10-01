@@ -1,6 +1,7 @@
+import { Plugins } from '@capacitor/core'
 import globalConfig from './config'
 import { fetchJSON, fetchText } from './http'
-import { currentSri, noop } from './utils'
+import { currentSri } from './utils'
 import storage from './storage'
 import settings from './settings'
 import i18n from './i18n'
@@ -162,25 +163,26 @@ export function timeline(): Promise<TimelineData> {
   return fetchJSON('/timeline', undefined, false)
 }
 
-export function status() {
+export async function status(): Promise<void> {
+  const info = await Plugins.Device.getInfo()
+  const v = info.appVersion
+
   return fetchJSON('/api/status', {
     query: {
-      v: window.AppVersion ? window.AppVersion.version : null
+      v
     }
   })
-  .then((data: ApiStatus) => {
+  .then(async (data: ApiStatus) => {
     // warn if buggy app
     if (data.mustUpgrade) {
-      const v = window.AppVersion ? window.AppVersion.version : 'dev'
       const key = 'warn_bug_' + v
       const warnCount = Number(storage.get(key)) || 0
       if (warnCount === 0) {
-        window.navigator.notification.alert(
-          'A new version of lichess mobile is available. Please upgrade as soon as possible.',
-          () => {
-            storage.set(key, 1)
-          }
-        )
+        await Plugins.Modals.alert({
+          title: 'Alert',
+          message: 'A new version of lichess mobile is available. Please upgrade as soon as possible.',
+        })
+        storage.set(key, 1)
       }
       else if (warnCount === 10) {
         storage.remove(key)
@@ -200,19 +202,18 @@ export function status() {
         const deprWarnCount = Number(storage.get(key)) || 0
 
         if (now > unsupportedDate) {
-          window.navigator.notification.alert(
-            i18n('apiUnsupported'),
-            noop
-          )
+          Plugins.Modals.alert({
+            title: 'Alert',
+            message: i18n('apiUnsupported'),
+          })
         }
         else if (now > deprecatedDate) {
           if (deprWarnCount === 0) {
-            window.navigator.notification.alert(
-              i18n('apiDeprecated', window.moment(unsupportedDate).format('LL')),
-              () => {
-                storage.set(key, 1)
-              }
-            )
+            await Plugins.Modals.alert({
+              title: 'Alert',
+              message: i18n('apiDeprecated', window.moment(unsupportedDate).format('LL')),
+            })
+            storage.set(key, 1)
           }
           else if (deprWarnCount === 15) {
             storage.remove(key)
@@ -232,12 +233,12 @@ function createToken() {
 
 export function openWebsiteAuthPage(path: string) {
   const openAnon = () => {
-    window.open(`${globalConfig.apiEndPoint}${path}`, '_blank', 'location=yes')
+    Plugins.Browser.open({ url: `${globalConfig.apiEndPoint}${path}` })
   }
   if (session.isConnected()) {
     createToken()
     .then((data: {url: string}) => {
-      window.open(data.url + `?referrer=${encodeURIComponent(path)}`, '_blank', 'location=yes,zoom=no')
+      Plugins.Browser.open({ url: data.url + `?referrer=${encodeURIComponent(path)}` })
     })
     .catch(openAnon)
   } else {

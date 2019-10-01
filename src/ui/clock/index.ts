@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as sleepUtils from '../../utils/sleep'
 import * as helper from '../helper'
 import layout from '../layout'
@@ -25,8 +26,8 @@ const ChessClockScreen: Mithril.Component<{}, State> = {
     sleepUtils.allowSleepAgain()
     document.removeEventListener('resume', this.ctrl.hideStatusBar)
     window.removeEventListener('resize', this.ctrl.hideStatusBar)
-    window.StatusBar.show()
-    if (window.cordova.platformId === 'android') {
+    Plugins.StatusBar.show()
+    if (window.deviceInfo.platform === 'android') {
       window.AndroidFullScreen.showSystemUI()
     }
   },

@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import router from '../../router'
 import { hasNetwork, handleXhrError } from '../../utils'
 import { positionsCache } from '../../utils/gamePosition'
@@ -43,7 +44,7 @@ export default {
         gameData = data
 
         if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
-          window.plugins.toast.show(i18n('unsupportedVariant', data.game.variant.name), 'short', 'center')
+          Plugins.Toast.show({ text: i18n('unsupportedVariant', data.game.variant.name), duration: 'short' })
           router.set('/')
         }
         else {
@@ -55,7 +56,10 @@ export default {
             const storageKey = variantStorageKey(data.game.variant.key)
             if (variant.alert && [1, 3].indexOf(variant.id) === -1 &&
             !storage.get(storageKey)) {
-              window.navigator.notification.alert(variant.alert, () => {
+              Plugins.Modals.alert({
+                title: 'Alert',
+                message: variant.alert
+              }).then(() => {
                 storage.set(storageKey, true)
               })
             }
@@ -95,7 +99,7 @@ export default {
         }
         this.round = new OnlineRound(!!attrs.goingBack, attrs.id, gameData)
       } else {
-        window.plugins.toast.show('Could not find saved data for this game', 'short', 'center')
+        Plugins.Toast.show({ text: 'Could not find saved data for this game', duration: 'short' })
         router.set('/')
       }
     }

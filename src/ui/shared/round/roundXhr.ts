@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import { fetchJSON, fetchText } from '../../../http'
 import { serializeQueryParameters } from '../../../utils'
 import i18n from '../../../i18n'
@@ -30,7 +31,7 @@ export function syncNote(gameId: string, notes: string) {
     body: serializeQueryParameters({ text: notes })
   }, false)
   .catch(err => {
-    window.plugins.toast.show(i18n('notesSynchronizationHasFailed'), 'short', 'center')
+    Plugins.Toast.show({ text: i18n('notesSynchronizationHasFailed'), duration: 'short' })
     throw err
   })
 }

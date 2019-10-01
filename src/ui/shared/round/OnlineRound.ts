@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as throttle from 'lodash/throttle'
 import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
@@ -342,7 +343,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     } else {
       this.socketSendMoveOrDrop(move, isPremove, sendBlur)
       if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
-        window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center')
+        Plugins.Toast.show({ text: 'You need to be connected to Internet to send your move.', duration: 'short' })
       }
     }
   }
@@ -387,7 +388,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         this.socketSendMoveOrDrop(this.vm.dropToSubmit)
       }
       if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
-        window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center')
+        Plugins.Toast.show({ text: 'You need to be connected to Internet to send your move.', duration: 'short' })
       }
       this.vm.moveToSubmit = null
       this.vm.dropToSubmit = null
@@ -602,7 +603,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (!this.data.player.spectator) {
       session.backgroundRefresh()
       sleepUtils.allowSleepAgain()
-      window.plugins.toast.show(this.gameStatus(), 'short', 'center')
+      Plugins.Toast.show({ text: this.gameStatus(), duration: 'short' })
     }
     this.score === undefined
   }

@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as cloneDeep from 'lodash/cloneDeep'
 import * as debounce from 'lodash/debounce'
 import * as throttle from 'lodash/throttle'
@@ -208,7 +209,7 @@ export default class TrainingCtrl implements PromotingInterface {
   }
 
   public share = () => {
-    window.plugins.socialsharing.share(null, null, null, `https://lichess.org/training/${this.data.puzzle.id}`)
+    Plugins.Share.share({ url: `https://lichess.org/training/${this.data.puzzle.id}` })
   }
 
   public goToAnalysis = () => {

@@ -51,9 +51,17 @@ interface LichessOptions {
 interface Window {
   lichess: LichessOptions
   moment: any
-  shouldRotateToOrientation: () => boolean
-  AppVersion: { version: string }
   Shepherd: TetherShepherd.ShepherdStatic
+  AndroidFullScreen: {
+    showSystemUI: () => void
+    immersiveMode: () => void
+  }
+  plugins: Plugins
+  deviceInfo: {
+    platform: 'ios' | 'android' | 'electron' | 'web'
+    uuid: string
+    appVersion: string
+  }
 }
 
 interface Piece {

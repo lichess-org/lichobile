@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as h from 'mithril/hyperscript'
 import router from '../../../router'
 import session from '../../../session'
@@ -50,7 +51,7 @@ export function renderFooter(ctrl: TournamentCtrl) {
         <span className="fa fa-question-circle" />
         FAQ
       </button>
-      <button key="share" className="action_bar_button" oncreate={helper.ontap(() => window.plugins.socialsharing.share(tUrl))}>
+      <button key="share" className="action_bar_button" oncreate={helper.ontap(() => Plugins.Share.share({ url: tUrl }))}>
         <span className="fa fa-share-alt" />
         Share
       </button>
@@ -105,7 +106,7 @@ function tournamentPositionInfo(position: Opening) {
   return (
     <div className={'tournamentPositionInfo' + (position.wikiPath ? ' withLink' : '')}
       oncreate={helper.ontapY(() => position && position.wikiPath &&
-        window.open(`https://en.wikipedia.org/wiki/${position.wikiPath}`)
+        Plugins.Browser.open({ url: `https://en.wikipedia.org/wiki/${position.wikiPath}` })
       )}
     >
       {position.eco + ' ' + position.name}

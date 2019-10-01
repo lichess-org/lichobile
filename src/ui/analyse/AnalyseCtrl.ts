@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as debounce from 'lodash/debounce'
 import router from '../../router'
 import Chessground from '../../chessground/Chessground'
@@ -100,7 +101,7 @@ export default class AnalyseCtrl {
     this._currentTabIndex = (!this.study || this.study.data.chapter.tags.length === 0) && this.synthetic ? 0 : 1
 
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
-      window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center')
+      Plugins.Toast.show({ text: `Analysis board does not support ${this.data.game.variant.name} variant.`, duration: 'short' })
       router.set('/')
     }
 
@@ -265,10 +266,11 @@ export default class AnalyseCtrl {
     if (!node) return
     const count = treeOps.countChildrenAndComments(node)
     if (count.nodes >= 10 || count.comments > 0) {
-      navigator.notification.confirm(
-        `Delete ${count.nodes} move(s)` + (count.comments ? ` and ${count.comments} comment(s)` : '') + '?',
-        () => this._deleteNode(path)
-      )
+      Plugins.Modals.confirm({
+        title: 'Confirm',
+        message: `Delete ${count.nodes} move(s)` + (count.comments ? ` and ${count.comments} comment(s)` : '') + '?',
+      })
+      .then(() => this._deleteNode(path))
     } else {
       this._deleteNode(path)
     }

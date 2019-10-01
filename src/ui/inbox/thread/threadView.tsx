@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as h from 'mithril/hyperscript'
 import * as helper from '../../helper'
 import { userStatus } from '../../shared/common'
@@ -22,7 +23,7 @@ export function threadBody(ctrl: IThreadCtrl) {
             if (body.length >= 3)
               return ctrl.sendResponse(form)
             else
-              window.plugins.toast.show('Minimum length is 3', 'short', 'center')
+              Plugins.Toast.show({ text: 'Minimum length is 3', duration: 'short' })
           }}
         >
           <input id="id" key="id" value={ctrl.id()} type="hidden" />

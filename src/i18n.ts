@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import settings from './settings'
 import { loadLocalJsonFile } from './utils'
 
@@ -32,15 +33,12 @@ export function loadPreferredLanguage(): Promise<string> {
     return loadLanguage(fromSettings)
   }
 
-  return new Promise(resolve => {
-    window.navigator.globalization.getPreferredLanguage(
-      l => resolve(l.value.split('-')[0]),
-      () => resolve(defaultCode)
-    )
-  })
-  .then((code: string) => {
-    settings.general.lang(code)
-    return code
+  return Plugins.Device.getLanguageCode()
+  .then(({ value }) => {
+    // TODO test
+    console.log(value)
+    settings.general.lang(value)
+    return value
   })
   .then(loadFile)
   .then(loadMomentLocale)

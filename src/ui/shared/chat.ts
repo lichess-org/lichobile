@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as h from 'mithril/hyperscript'
 import * as helper from '../helper'
 import redraw from '../../utils/redraw'
@@ -42,7 +43,7 @@ export class Chat {
   }
 
   public close = (fromBB?: string) => {
-    window.Keyboard.hide()
+    Plugins.Keyboard.hide()
     if (fromBB !== 'backbutton' && this.showing) router.backbutton.stack.pop()
     this.showing = false
     this.nbUnread = 0

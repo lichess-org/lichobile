@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as h from 'mithril/hyperscript'
 import * as menu from '../menu'
 import router from '../../router'
@@ -33,7 +34,7 @@ export function bookmarkButton(action: () => void, flag: boolean): Mithril.Child
   return session.isConnected() ? h('button.main_header_button.bookmarkButton', {
     oncreate: helper.ontap(
       action,
-      () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'top')
+      () => Plugins.Toast.show({ text: i18n('bookmarkThisGame'), duration: 'short' })
     ),
     key: 'bookmark',
   }, h('span', {
@@ -43,7 +44,7 @@ export function bookmarkButton(action: () => void, flag: boolean): Mithril.Child
 
 export function friendsButton() {
   const nbFriends = friendsApi.count()
-  const longAction = () => window.plugins.toast.show(i18n('onlineFriends'), 'short', 'top')
+  const longAction = () => Plugins.Toast.show({ text: i18n('onlineFriends'), duration: 'short' })
 
   return (
     <button className="main_header_button friends_button" key="friends" data-icon="f"
@@ -81,7 +82,7 @@ function gamesButton() {
     nbIncomingChallenges ? 'new_challenge' : '',
     !utils.hasNetwork() && !hasOfflineGames() ? 'invisible' : ''
   ].join(' ')
-  const longAction = () => window.plugins.toast.show(i18n('nbGamesInPlay', session.nowPlaying().length), 'short', 'top')
+  const longAction = () => Plugins.Toast.show({ text: i18n('nbGamesInPlay', session.nowPlaying().length), duration: 'short' })
 
   return (
     <button key={key} className={className} oncreate={helper.ontap(action, longAction)}>

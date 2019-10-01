@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as h from 'mithril/hyperscript'
 import * as utils from '../../utils'
 import i18n from '../../i18n'
@@ -87,20 +88,20 @@ function renderGameActionsBar(ctrl: OtbRound) {
       <button className="action_bar_button fa fa-plus-circle"
         oncreate={helper.ontap(
           ctrl.newGameMenu.open,
-          () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
+          () => Plugins.Toast.show({ text: i18n('createAGame'), duration: 'short' })
         )}
       />
       <button className="fa fa-share-alt action_bar_button"
         oncreate={helper.ontap(
           ctrl.sharePGN,
-          () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom')
+          () => Plugins.Toast.show({ text: i18n('sharePGN'), duration: 'short' })
         )}
       />
       {ctrl.clock ?
         <button className={'fa action_bar_button ' + (ctrl.clock.isRunning() ? 'fa-pause' : 'fa-play') + (ctrl.isClockEnabled() ? '' : ' disabled')}
           oncreate={helper.ontap(
             ctrl.toggleClockPlay,
-            () => window.plugins.toast.show(i18n('chessClock'), 'short', 'bottom')
+            () => Plugins.Toast.show({ text: i18n('chessClock'), duration: 'short' })
           )}
         />
         : null
@@ -109,7 +110,7 @@ function renderGameActionsBar(ctrl: OtbRound) {
         <button className="fa fa-cloud-upload action_bar_button"
           oncreate={helper.ontap(
             ctrl.importGamePopup.open,
-            () => window.plugins.toast.show(i18n('Import game to lichess'), 'short', 'bottom')
+            () => Plugins.Toast.show({ text: i18n('Import game to lichess'), duration: 'short' })
           )}
         /> : null
       }

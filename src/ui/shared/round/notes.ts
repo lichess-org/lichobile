@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as h from 'mithril/hyperscript'
 import * as debounce from 'lodash/debounce'
 import redraw from '../../../utils/redraw'
@@ -32,7 +33,7 @@ export class NotesCtrl {
     .catch(() => {
       this.syncing = false
       redraw()
-      window.plugins.toast.show('Could not read notes from server.', 'short', 'center')
+      Plugins.Toast.show({ text: 'Could not read notes from server.', duration: 'short' })
     })
 
   }
@@ -54,7 +55,7 @@ export class NotesCtrl {
   }
 
   public close = (fromBB?: string) => {
-    window.Keyboard.hide()
+    Plugins.Keyboard.hide()
     if (fromBB !== 'backbutton' && this.showing) {
       router.backbutton.stack.pop()
     }

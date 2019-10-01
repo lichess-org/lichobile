@@ -16,6 +16,11 @@
     endInit: oneSignalInit
   };
 
+  // fullscreen
+  window.AndroidFullScreen = {};
+  window.AndroidFullScreen.showSystemUI = noop;
+  window.AndroidFullScreen.immersiveMode = noop;
+
   window.plugins.OneSignal = {
     startInit: oneSignalInit,
     getIds: noop,

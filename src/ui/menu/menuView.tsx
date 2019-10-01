@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as h from 'mithril/hyperscript'
 
 import router from '../../router'
@@ -31,7 +32,7 @@ export default {
     return (
       <aside id="side_menu"
         oncreate={({ dom }: Mithril.DOMNode) => {
-          if (window.cordova.platformId === 'ios') {
+          if (window.deviceInfo.platform === 'ios') {
             CloseSwipeHandler(dom as HTMLElement, menu.mainMenuCtrl)
           } else {
             CloseSlideHandler(dom as HTMLElement, menu.mainMenuCtrl)
@@ -255,7 +256,7 @@ function networkStatus(user?: Session) {
   const server = menu.mlat()
   return (
     <div className="pingServer"
-      oncreate={helper.ontapXY(() => window.plugins.toast.show(pingHelp, 'long', 'top'))}
+      oncreate={helper.ontapXY(() => Plugins.Toast.show({ text: pingHelp, duration: 'long' }))}
     >
       { signalBars(hasNetwork() ? ping : undefined)}
       { hasNetwork() ? (

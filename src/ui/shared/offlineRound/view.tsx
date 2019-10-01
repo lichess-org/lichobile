@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as h from 'mithril/hyperscript'
 import * as utils from '../../../utils'
 import i18n from '../../../i18n'
@@ -89,13 +90,13 @@ export function renderGameActionsBar(ctrl: OfflineRoundInterface) {
       <button className="action_bar_button fa fa-plus-circle"
         oncreate={helper.ontap(
           ctrl.newGameMenu.open,
-          () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
+          () => Plugins.Toast.show({ text: i18n('createAGame'), duration: 'short' })
         )}
       />
       <button className="fa fa-share-alt action_bar_button"
         oncreate={helper.ontap(
           ctrl.sharePGN,
-          () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom')
+          () => Plugins.Toast.show({ text: i18n('sharePGN'), duration: 'short' })
         )}
       />
       {renderBackwardButton(ctrl)}
@@ -108,10 +109,10 @@ export function renderGameActionsBarTablet(ctrl: OfflineRoundInterface) {
   return (
     <section className="actions_bar">
       <button className="action_bar_button" data-icon="U"
-        oncreate={helper.ontap(ctrl.newGameMenu.open, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
+        oncreate={helper.ontap(ctrl.newGameMenu.open, () => Plugins.Toast.show({ text: i18n('createAGame'), duration: 'short' }))}
       />
       <button className="fa fa-share-alt action_bar_button"
-        oncreate={helper.ontap(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}
+        oncreate={helper.ontap(ctrl.actions.sharePGN, () => Plugins.Toast.show({ text: i18n('sharePGN'), duration: 'short' }))}
       />
       {renderBackwardButton(ctrl)}
       {renderForwardButton(ctrl)}

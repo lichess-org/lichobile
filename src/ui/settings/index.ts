@@ -1,4 +1,6 @@
+import { Plugins } from '@capacitor/core'
 import router from '../../router'
+import redraw from '../../utils/redraw'
 import * as helper from '../helper'
 import { dropShadowHeader, backButton } from '../shared/common'
 import layout from '../layout'
@@ -6,22 +8,29 @@ import i18n from '../../i18n'
 import socket from '../../socket'
 import * as h from 'mithril/hyperscript'
 
-const SettingsScreen: Mithril.Component<{}, {}> = {
+interface State {
+  appVersion?: string
+}
+
+export default {
   oncreate: helper.viewSlideIn,
 
   oninit() {
     socket.createDefault()
+    Plugins.Device.getInfo()
+    .then(info => {
+      this.appVersion = info.appVersion
+      redraw()
+    })
   },
 
   view() {
     const header = dropShadowHeader(null, backButton(i18n('settings')))
-    return layout.free(header, renderBody())
+    return layout.free(header, renderBody(this.appVersion))
   }
-}
+} as Mithril.Component<{}, State>
 
-export default SettingsScreen
-
-function renderBody() {
+function renderBody(appVersion?: string) {
   return [
     h('ul.settings_list.native_scroller.page', [
       h('li.list_item.nav', {
@@ -52,6 +61,6 @@ function renderBody() {
         oncreate: helper.ontapY(() => router.set('/settings/soundNotifications'))
       }, i18n('soundAndNotifications'))
     ]),
-    window.AppVersion ? h('section.app_version', 'v' + window.AppVersion.version) : null
+    appVersion ? h('section.app_version', 'v' + appVersion) : null
   ]
 }

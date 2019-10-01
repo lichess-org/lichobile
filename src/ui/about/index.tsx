@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as h from 'mithril/hyperscript'
 import router from '../../router'
 import * as helper from '../helper'
@@ -59,7 +60,7 @@ export default {
 function externalLink(text: string, url: string): Mithril.Child {
   return h('a', {
     className: 'external_link',
-    onclick: () => window.open(url, '_blank'),
+    onclick: () => Plugins.Browser.open({ url }),
   }, text)
 }
 

@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import redraw from '../../utils/redraw'
 import settings from '../../settings'
 import formWidgets from '../shared/form'
@@ -75,6 +76,6 @@ export default {
 }
 
 function onChange () {
-  window.StatusBar.hide()
+  Plugins.StatusBar.hide()
   redraw()
 }

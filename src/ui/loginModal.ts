@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as h from 'mithril/hyperscript'
 import session from '../session'
 import { ErrorResponse } from '../http'
@@ -87,7 +88,7 @@ export default {
           i18n('forgotPassword') + ' ',
           h('br'),
           h('a', {
-            oncreate: helper.ontap(() => window.open(`https://lichess.org/password/reset`, '_blank', 'location=no'))
+            oncreate: helper.ontap(() => Plugins.Browser.open({ url: `https://lichess.org/password/reset` }))
           }, [i18n('passwordReset')])
         ])
       ])
@@ -101,11 +102,11 @@ function submit(form: HTMLFormElement) {
   const token = form['token'] ? form['token'].value : null
   if (!username || !password) return
   redraw()
-  window.Keyboard.hide()
+  Plugins.Keyboard.hide()
   session.login(username, password, token)
   .then(() => {
     close()
-    window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center')
+    Plugins.Toast.show({ text: i18n('loginSuccessful'), duration: 'short' })
     signals.afterLogin.dispatch()
     redraw()
     // reconnect socket to refresh friends...
@@ -140,7 +141,7 @@ function open() {
 }
 
 function close(fromBB?: string) {
-  window.Keyboard.hide()
+  Plugins.Keyboard.hide()
   if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
   isOpen = false
 }

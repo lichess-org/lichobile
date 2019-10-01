@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import settings from './settings'
 import * as throttle from 'lodash/throttle'
 
@@ -16,40 +17,39 @@ let shouldPlay: boolean
 let lla: LLA
 let media: Readonly<Media>
 
-if (window.cordova.platformId === 'ios') {
-  media = {
-    move: 'sounds/move.aifc',
-    capture: 'sounds/capture.aifc',
-    explosion: 'sounds/explosion.aifc',
-    lowtime: 'sounds/lowtime.aifc',
-    dong: 'sounds/dong.aifc',
-    berserk: 'sounds/berserk.aifc',
-    clock: 'sounds/clock.aifc',
-    confirmation: 'sounds/confirmation.aifc',
-  }
-}
-else {
-  media = {
-    move: 'sounds/move.mp3',
-    capture: 'sounds/capture.mp3',
-    explosion: 'sounds/explosion.mp3',
-    lowtime: 'sounds/lowtime.mp3',
-    dong: 'sounds/dong.mp3',
-    berserk: 'sounds/berserk.mp3',
-    clock: 'sounds/clock.mp3',
-    confirmation: 'sounds/confirmation.mp3',
-  }
+shouldPlay = settings.general.sound()
+
+if (window.hotjs) {
+  window.hotjs.Audio!.init!()
+  lla = window.hotjs.Audio
+} else {
+  lla = window.plugins.LowLatencyAudio
 }
 
-document.addEventListener('deviceready', () => {
-
-  shouldPlay = settings.general.sound()
-
-  if (window.hotjs) {
-    window.hotjs.Audio!.init!()
-    lla = window.hotjs.Audio
-  } else {
-    lla = window.plugins.LowLatencyAudio
+Plugins.Device.getInfo().then(info => {
+  if (info.platform === 'ios') {
+    media = {
+      move: 'sounds/move.aifc',
+      capture: 'sounds/capture.aifc',
+      explosion: 'sounds/explosion.aifc',
+      lowtime: 'sounds/lowtime.aifc',
+      dong: 'sounds/dong.aifc',
+      berserk: 'sounds/berserk.aifc',
+      clock: 'sounds/clock.aifc',
+      confirmation: 'sounds/confirmation.aifc',
+    }
+  }
+  else {
+    media = {
+      move: 'sounds/move.mp3',
+      capture: 'sounds/capture.mp3',
+      explosion: 'sounds/explosion.mp3',
+      lowtime: 'sounds/lowtime.mp3',
+      dong: 'sounds/dong.mp3',
+      berserk: 'sounds/berserk.mp3',
+      clock: 'sounds/clock.mp3',
+      confirmation: 'sounds/confirmation.mp3',
+    }
   }
 
   lla.preloadFX('move', media.move)
@@ -60,8 +60,7 @@ document.addEventListener('deviceready', () => {
   lla.preloadFX('berserk', media.berserk)
   lla.preloadFX('clock', media.clock)
   lla.preloadFX('confirmation', media.confirmation)
-}, false)
-
+})
 
 export default {
   move() {

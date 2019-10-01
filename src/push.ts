@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as h from 'mithril/hyperscript'
 import settings from './settings'
 import session from './session'
@@ -63,7 +64,7 @@ function showConsentDialog(): Promise<void> {
         'Push notifications may be sent to you when it\'s your turn in a correspondence game, or when you receive a private message. This service is provided to you by ',
         h('a[href=#]', {
           oncreate: helper.ontap(() => {
-            window.open('https://onesignal.com', '_system')
+            Plugins.Browser.open({ url: 'https://onesignal.com' })
           })
         }, 'OneSignal.'),
         ' When enabled, it automatically collects application usage data such as session times, IP address, app version.'
@@ -72,7 +73,7 @@ function showConsentDialog(): Promise<void> {
         'You can learn more about what data is collected ',
         h('a[href=#]', {
           oncreate: helper.ontap(() => {
-            window.open('https://documentation.onesignal.com/docs/data-collected-by-the-onesignal-sdk', '_system')
+            Plugins.Browser.open({ url: 'https://documentation.onesignal.com/docs/data-collected-by-the-onesignal-sdk' })
           })
         }, 'here.'),
         ' Please note that we never explicitely send any data to OneSignal.'
@@ -81,7 +82,7 @@ function showConsentDialog(): Promise<void> {
         'You can also refer to our ',
         h('a[href=#]', {
           oncreate: helper.ontap(() => {
-            window.open('https://lichess.org/privacy', '_system')
+            Plugins.Browser.open({ url: 'https://lichess.org/privacy' })
           })
         }, 'privacy policy.')
       ]),

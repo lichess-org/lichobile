@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import router from '../../router'
 import session from '../../session'
 import loginModal from '../loginModal'
@@ -95,7 +96,7 @@ export function awaitInvitePopup(ctrl: ChallengeState, challenge: Challenge) {
         h('div.go_or_cancel.clearfix', [
           h('button.binary_choice[data-icon=E].withIcon', {
             oncreate: helper.ontap(function() {
-              window.plugins.socialsharing.share(null, null, null, publicUrl(challenge))
+              Plugins.Share.share({ url: publicUrl(challenge) })
             })
           }, i18n('shareGameURL')),
           h('button.binary_choice[data-icon=L].withIcon', {

@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import sound from '../../sound'
 import router from '../../router'
 import Chessground from '../../chessground/Chessground'
@@ -191,7 +192,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public sharePGN = () => {
     this.replay.pgn('White', 'Black')
     .then((data: chess.PgnDumpResponse) =>
-      window.plugins.socialsharing.share(data.pgn)
+      Plugins.Share.share({ text: data.pgn })
     )
   }
 

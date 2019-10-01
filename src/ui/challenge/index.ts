@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as throttle from 'lodash/throttle'
 import socket, { SocketIFace } from '../../socket'
 import redraw from '../../utils/redraw'
@@ -53,7 +54,7 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
               router.set(`/game/${d.challenge.id}`, true)
               break
             case 'declined':
-              window.plugins.toast.show(i18n('challengeDeclined'), 'short', 'center')
+              Plugins.Toast.show({ text: i18n('challengeDeclined'), duration: 'short' })
               router.backHistory()
               break
           }

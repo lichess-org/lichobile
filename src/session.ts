@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as get from 'lodash/get'
 import * as set from 'lodash/set'
 import * as pick from 'lodash/pick'
@@ -125,7 +126,7 @@ function myTurnGames() {
 }
 
 function showSavedPrefToast(data: string): string {
-  window.plugins.toast.show('✓ Your preferences have been saved on lichess server.', 'short', 'center')
+  Plugins.Toast.show({ text: '✓ Your preferences have been saved on lichess server.', duration: 'short' })
   return data
 }
 
@@ -306,7 +307,7 @@ function refresh(): Promise<void> {
       session = undefined
       onLogout()
       redraw()
-      window.plugins.toast.show(i18n('signedOut'), 'short', 'center')
+      Plugins.Toast.show({ text: i18n('signedOut'), duration: 'short' })
     }
   })
 }
@@ -326,9 +327,12 @@ function backgroundRefresh(): void {
 }
 
 function sendUUID(): void {
-  if (device.uuid !== 'browser') {
-    fetchText(`/auth/set-fp/${device.uuid}/0`, { method: 'POST' })
-  }
+  Plugins.Device.getInfo()
+  .then(info => {
+    if (info.uuid !== 'web') {
+      fetchText(`/auth/set-fp/${info.uuid}/0`, { method: 'POST' })
+    }
+  })
 }
 
 export default {

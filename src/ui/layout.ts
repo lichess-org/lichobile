@@ -105,6 +105,6 @@ function bgClass(bgTheme: string) {
 
 function containerOpts(bgTheme: string) {
   return {
-    className: bgClass(bgTheme) + (window.cordova.platformId === 'ios' ? ' ios' : ''),
+    className: bgClass(bgTheme)
   }
 }

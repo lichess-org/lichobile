@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import * as debounce from 'lodash/debounce'
 import Chessground from '../../chessground/Chessground'
 import * as cgDrag from '../../chessground/drag'
@@ -172,7 +173,7 @@ export default class Editor {
     if (validateFen(newFen))
       router.set(`/editor/${encodeURIComponent(newFen)}`, true)
     else
-      window.plugins.toast.show('Invalid FEN', 'short', 'center')
+      Plugins.Toast.show({ text: 'Invalid FEN', duration: 'short' })
   }
 
   private fenMetadatas() {

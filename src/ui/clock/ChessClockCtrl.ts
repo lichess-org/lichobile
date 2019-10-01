@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import router from '../../router'
 import settings from '../../settings'
 import clockSettings from './clockSettings'
@@ -45,12 +46,12 @@ export default function ChessClockCtrl(): IChessClockCtrl {
   }
 
   function hideStatusBar() {
-    window.StatusBar.hide()
+    Plugins.StatusBar.hide()
   }
 
-  window.StatusBar.hide()
+  Plugins.StatusBar.hide()
 
-  if (window.cordova.platformId === 'android') {
+  if (window.deviceInfo.platform === 'android') {
     window.AndroidFullScreen.immersiveMode()
   }
   document.addEventListener('resume', hideStatusBar)

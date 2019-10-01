@@ -154,5 +154,5 @@ function getPools() {
 }
 
 loadPreferredLanguage()
-.then(Plugins.Device.getInfo)
+.then(() => Plugins.Device.getInfo())
 .then(main)

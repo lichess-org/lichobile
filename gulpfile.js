@@ -24,7 +24,7 @@ const minimistOptions = {
   default: {
     env: 'env.json',
     mode: 'dev',
-    target: 'browser'
+    target: 'web'
   }
 };
 const options = minimist(process.argv.slice(2), minimistOptions);
@@ -36,15 +36,9 @@ const paths = {
   ]
 };
 
-const browsers = ['and_chr >= 58', 'ios_saf >= 11']
-
 const babelSettings = {
   extensions: ['.tsx', '.ts', '.js', '.jsx'],
-  presets: [['env', {
-    targets: {
-      browsers
-    }
-  }]]
+  presets: [["@babel/preset-env"]]
 }
 
 function logErrorAndExit(error) {
@@ -69,7 +63,7 @@ gulp.task('styl', () => {
   .pipe(stylus({
     compress: options.mode === 'release'
   }))
-  .pipe(autoprefixer({ browsers }))
+  .pipe(autoprefixer())
   .pipe(rename('app.css'))
   .on('error', logErrorAndExit)
   .pipe(gulp.dest(DEST + '/css/compiled/'));

@@ -1,8 +1,6 @@
 (function() {
   function noop() {}
 
-  window.cordova = {};
-  window.cordova.plugins = {};
   window.plugins = {};
 
   // push
@@ -31,7 +29,10 @@
       localStorage.setItem('__onesignalConsent', bool);
     },
     userProvidedPrivacyConsent(callback) {
-      setTimeout(callback(JSON.parse(localStorage.getItem('__onesignalConsent'))));
+      setTimeout(() => {
+        var consent = JSON.parse(localStorage.getItem('__onesignalConsent'))
+        callback(consent)
+      })
     },
     OSInFocusDisplayOption: {
       None: 1

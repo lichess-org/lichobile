@@ -11,6 +11,9 @@
     <link rel="stylesheet" type="text/css" href="css/lichess-font.css" />
     <link rel="stylesheet" type="text/css" href="css/fonts.css" />
     <link rel="stylesheet" type="text/css" href="css/compiled/app.css" />
+    <!-- @if TARGET='web' -->
+    <link rel="manifest" href="manifest.json">
+    <!-- @endif -->
     <script>
       window.lichess = {
         mode: "<!-- @echo MODE -->",
@@ -22,10 +25,7 @@
   <body>
     <script type="text/javascript" src="lib/polyfills.js"></script>
     <script type="text/javascript" src="lib/webviewChecker.js"></script>
-    <!-- @if TARGET='cordova' -->
-    <script type="text/javascript" src="cordova.js"></script>
-    <!-- @endif -->
-    <!-- @if TARGET='browser' -->
+    <!-- @if TARGET='web' -->
     <script type="text/javascript" src="../cordova.polyfills.js"></script>
     <!-- @endif -->
     <script type="text/javascript" src="app.js"></script>

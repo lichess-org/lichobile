@@ -62,7 +62,6 @@
         "cordova-plugin-fullscreen": "1.2.0",
         "cordova-plugin-insomnia": "4.2.0",
         "cordova-plugin-nativeaudio": "git+https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",
-        "cordova-plugin-stockfish": "git+https://github.com/veloce/cordova-plugin-stockfish.git#58dc23e",
         "cordova-plugin-webview-checker": "1.0.0",
         "d3-axis": "1.0.8",
         "d3-scale": "1.0.6",

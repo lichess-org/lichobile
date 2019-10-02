@@ -45,6 +45,10 @@ To build and watch for changes:
 
     $ npm run watch
 
+## Run the linter
+
+    $ npm run lint
+
 ## Run the tests
 
     $ npm run test

@@ -24,9 +24,13 @@ const ChessClockScreen: Mithril.Component<{}, State> = {
       c.clear()
     }
     sleepUtils.allowSleepAgain()
-    document.removeEventListener('resume', this.ctrl.hideStatusBar)
+
+    this.ctrl.appStateListener.remove()
+
     window.removeEventListener('resize', this.ctrl.hideStatusBar)
+
     Plugins.StatusBar.show()
+
     if (window.deviceInfo.platform === 'android') {
       window.AndroidFullScreen.showSystemUI()
     }

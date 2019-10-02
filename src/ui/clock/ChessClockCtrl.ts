@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
 import router from '../../router'
 import settings from '../../settings'
 import clockSettings from './clockSettings'
@@ -16,6 +16,7 @@ export interface IChessClockCtrl {
   goHome: () => void
   clockTap: (side: 'white' | 'black') => void
   clockType: Mithril.Stream<ClockType>
+  appStateListener: PluginListenerHandle
 }
 
 export default function ChessClockCtrl(): IChessClockCtrl {
@@ -49,12 +50,16 @@ export default function ChessClockCtrl(): IChessClockCtrl {
     Plugins.StatusBar.hide()
   }
 
-  Plugins.StatusBar.hide()
+  hideStatusBar()
 
   if (window.deviceInfo.platform === 'android') {
     window.AndroidFullScreen.immersiveMode()
   }
-  document.addEventListener('resume', hideStatusBar)
+
+  const appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
+    if (state.isActive) hideStatusBar()
+  })
+
   window.addEventListener('resize', hideStatusBar)
 
   return {
@@ -65,6 +70,7 @@ export default function ChessClockCtrl(): IChessClockCtrl {
     reload,
     goHome,
     clockTap,
-    clockType
+    clockType,
+    appStateListener
   }
 }

@@ -1,10 +1,6 @@
 import settings from './settings'
 
-let shouldVibrate: boolean
-
-document.addEventListener('deviceready', function() {
-  shouldVibrate = settings.general.vibrateOnGameEvents()
-})
+let shouldVibrate: boolean = settings.general.vibrateOnGameEvents()
 
 export default {
   quick() {

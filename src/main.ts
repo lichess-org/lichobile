@@ -4,7 +4,7 @@
 
 import './moment'
 
-import { Plugins, DeviceInfo } from '@capacitor/core'
+import { Plugins, AppState, DeviceInfo, NetworkStatus } from '@capacitor/core'
 import * as debounce from 'lodash/debounce'
 import { hasNetwork } from './utils'
 import { syncWithNowPlayingGames } from './utils/offlineGames'
@@ -59,15 +59,39 @@ function main(info: DeviceInfo) {
     session.restoreStoredSession()
   }
 
-  document.addEventListener('online', onOnline, false)
-  document.addEventListener('offline', onOffline, false)
-  document.addEventListener('resume', onResume, false)
-  document.addEventListener('pause', onPause, false)
-  document.addEventListener('backbutton', router.backbutton, false)
+  Plugins.App.addListener('appStateChange', (state: AppState) => {
+    if (state.isActive) {
+      setForeground()
+      session.refresh()
+      getPools().then(() => redraw())
+      socket.connect()
+      redraw()
+    }
+    else {
+      setBackground()
+      lobby.appCancelSeeking()
+      socket.disconnect()
+    }
+  })
+
+  Plugins.Network.addListener('networkStatusChange', (s: NetworkStatus) => {
+    if (s.connected) {
+      onOnline()
+    }
+    else {
+      onOffline()
+    }
+  })
+
+  Plugins.App.addListener('backButton', router.backbutton)
+
+  // TODO
+  // probably not needed
   window.addEventListener('unload', () => {
     socket.destroy()
     socket.terminate()
   })
+
   window.addEventListener('resize', debounce(onResize), false)
 
   setTimeout(() => {
@@ -117,26 +141,13 @@ function onOnline() {
 }
 
 function onOffline() {
+  // TODO check this behavior with capacitor
   // offline event fires every time the network connection changes
   // it doesn't mean necessarily the network is off
   if (isForeground() && !hasNetwork()) {
     socket.disconnect()
     redraw()
   }
-}
-
-function onResume() {
-  setForeground()
-  session.refresh()
-  getPools().then(() => redraw())
-  socket.connect()
-  redraw()
-}
-
-function onPause() {
-  setBackground()
-  lobby.appCancelSeeking()
-  socket.disconnect()
 }
 
 // pre fetch and cache available pools

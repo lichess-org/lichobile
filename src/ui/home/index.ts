@@ -21,16 +21,13 @@ export default {
     this.ctrl = new HomeCtrl(safeStringToNum(attrs.tab))
 
     signals.sessionRestored.add(this.ctrl.loadOfflinePuzzle)
-    document.addEventListener('online', this.ctrl.init)
-    document.addEventListener('resume', this.ctrl.onResume)
   },
 
   oncreate: helper.viewFadeIn,
 
   onremove() {
     socket.destroy()
-    document.removeEventListener('online', this.ctrl.init)
-    document.removeEventListener('resume', this.ctrl.onResume)
+    this.ctrl.unload()
     signals.sessionRestored.remove(this.ctrl.loadOfflinePuzzle)
   },
 

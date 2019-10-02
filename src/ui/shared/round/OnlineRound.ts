@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
 import * as throttle from 'lodash/throttle'
 import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
@@ -78,6 +78,8 @@ export default class OnlineRound implements OnlineRoundInterface {
   private clockIntervId!: number
   private clockTimeoutId!: number
   private blur: boolean
+
+  private appStateListener: PluginListenerHandle
 
   public constructor(
     goingBack: boolean,
@@ -173,7 +175,9 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.makeCorrespondenceClock()
     if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick, 6000)
 
-    document.addEventListener('resume', this.onResume)
+    this.appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
+      if (state.isActive) this.onResume()
+    })
 
     redraw()
   }
@@ -637,7 +641,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public unload() {
     clearTimeout(this.clockTimeoutId)
     clearInterval(this.clockIntervId)
-    document.removeEventListener('resume', this.onResume)
+    this.appStateListener.remove()
   }
 
   private makeCorrespondenceClock() {

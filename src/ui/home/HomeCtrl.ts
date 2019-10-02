@@ -1,3 +1,4 @@
+import { Plugins, AppState, NetworkStatus, PluginListenerHandle } from '@capacitor/core'
 import * as uniqBy from 'lodash/uniqBy'
 import * as Zanimo from 'zanimo'
 import socket, { SocketIFace } from '../../socket'
@@ -6,7 +7,7 @@ import signals from '../../signals'
 import settings from '../../settings'
 import { timeline as timelineXhr, seeks as corresSeeksXhr, lobby as lobbyXhr } from '../../xhr'
 import { hasNetwork, noop } from '../../utils'
-import { isForeground, setForeground } from '../../utils/appMode'
+import { isForeground } from '../../utils/appMode'
 import { PongMessage, TimelineEntry, DailyPuzzle, CorrespondenceSeek } from '../../lichess/interfaces'
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
 import { PuzzleData } from '../../lichess/interfaces/training'
@@ -29,6 +30,9 @@ export default class HomeCtrl {
   public timeline?: ReadonlyArray<TimelineEntry>
   public offlinePuzzle?: PuzzleData | undefined
 
+  private networkListener: PluginListenerHandle
+  private appStateListener: PluginListenerHandle
+
   constructor(defaultTab?: number) {
     this.corresPool = []
     this.selectedTab = defaultTab || 0
@@ -38,10 +42,23 @@ export default class HomeCtrl {
     } else {
       this.loadOfflinePuzzle()
     }
+
+    this.networkListener = Plugins.Network.addListener('networkStatusChange', (s: NetworkStatus) => {
+      if (s.connected) this.init()
+    })
+
+    this.appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
+      if (state.isActive) this.init()
+    })
   }
 
   public socketSend = <D>(t: string, d: D): void => {
     if (this.socketIface) this.socketIface.send(t, d)
+  }
+
+  public unload = () => {
+    this.networkListener.remove()
+    this.appStateListener.remove()
   }
 
   public init = () => {
@@ -82,11 +99,6 @@ export default class HomeCtrl {
       })
       .catch(noop)
     }
-  }
-
-  public onResume = () => {
-    setForeground()
-    this.init()
   }
 
   public loadOfflinePuzzle = () => {

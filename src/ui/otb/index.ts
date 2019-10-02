@@ -35,15 +35,13 @@ const OtbScreen: Mithril.Component<Attrs, State> = {
     this.round = new OtbRound(saved, setupFen, setupVariant)
 
     sleepUtils.keepAwake()
-    document.addEventListener('pause', this.round.saveClock)
     window.addEventListener('unload', this.round.saveClock)
   },
   oncreate: helper.viewFadeIn,
   onremove() {
     sleepUtils.allowSleepAgain()
-    document.removeEventListener('pause', this.round.saveClock)
+    this.round.unload()
     window.removeEventListener('unload', this.round.saveClock)
-    this.round.saveClock()
   },
   view() {
     let content: Mithril.Children, header: Mithril.Children

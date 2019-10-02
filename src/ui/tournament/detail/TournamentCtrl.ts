@@ -1,3 +1,4 @@
+import { Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
 import * as throttle from 'lodash/throttle'
 import socket, { SocketIFace } from '../../../socket'
 import redraw from '../../../utils/redraw'
@@ -33,6 +34,8 @@ export default class TournamentCtrl {
 
   private pagesCache: PagesCache = {}
 
+  private appStateListener: PluginListenerHandle
+
   constructor(data: Tournament) {
     this.id = data.id
 
@@ -54,7 +57,9 @@ export default class TournamentCtrl {
       featuredGame
     )
 
-    document.addEventListener('resume', this.reload)
+    this.appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
+      if (state.isActive) this.reload()
+    })
 
     redraw()
   }
@@ -134,7 +139,7 @@ export default class TournamentCtrl {
   }
 
   unload = () => {
-    document.removeEventListener('resume', this.reload)
+    this.appStateListener.remove()
   }
 
   private scrollToMe = () => {

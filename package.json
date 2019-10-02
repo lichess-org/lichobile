@@ -58,6 +58,7 @@
         "@capacitor/ios": "1.2.1",
         "@types/d3": "4.5.0",
         "@types/hammerjs": "2.0.35",
+        "capacitor-cordova-plugin-stockfish": "git+https://github.com/veloce/cordova-plugin-stockfish.git#capacitor",
         "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",
         "cordova-plugin-fullscreen": "1.2.0",
         "cordova-plugin-insomnia": "4.2.0",

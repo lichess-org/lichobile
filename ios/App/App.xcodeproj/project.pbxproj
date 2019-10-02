@@ -358,6 +358,7 @@
 					"-DRACE",
 					"-DANTI",
 					"-DCRAZYHOUSE",
+					"-DSKILL",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = org.lichess.mobileapp.official;
@@ -387,6 +388,7 @@
 					"-DRACE",
 					"-DANTI",
 					"-DCRAZYHOUSE",
+					"-DSKILL",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.lichess.mobileapp.official;
 				PRODUCT_NAME = "$(TARGET_NAME)";

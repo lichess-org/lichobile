@@ -3,7 +3,7 @@
 
 [![Build Status](https://travis-ci.org/veloce/lichobile.svg?branch=master)](https://travis-ci.org/veloce/lichobile)
 
-![lichess mobile screenshots](res/portfolio.png)
+![lichess mobile screenshots](portfolio.png)
 
 Lichess mobile is a [cordova](https://cordova.apache.org/) application. It is written
 in [TypeScript](http://www.typescriptlang.org/) and JavaScript. The rendering

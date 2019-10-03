@@ -89,7 +89,7 @@
         "watch-stage": "gulp watch --env=env-stage.json",
         "watch-prod": "gulp watch --env=env-prod.json",
         "prebuild": "npm run lint && npm run test",
-        "build": "gulp --target='capacitor'",
+        "build": "gulp --target='capacitor' && npx cap copy",
         "build-stage": "npm run build -- --env=env-stage.json",
         "build-prod": "npm run build -- --env=env-prod.json",
         "build-release": "BABEL_ENV=production npm run build -- --mode='release' --env=env-prod.json"

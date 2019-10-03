@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.lichess.mobileapp">
+  package="org.lichess.mobileapp"
+  android:versionCode="7000000"
+  android:versionName="7.0.0"
+  android:installLocation="auto">
 
     <application
         android:allowBackup="true"
@@ -8,7 +11,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:resizeableActivity="false">
 
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"

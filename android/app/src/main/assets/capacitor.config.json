@@ -3,5 +3,6 @@
   "appName": "lichess",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "www"
+  "webDir": "www",
+  "backgroundColor": "ff000000"
 }

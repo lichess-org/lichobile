@@ -13,11 +13,9 @@ interface Media {
   confirmation: string
 }
 
-let shouldPlay: boolean
+let shouldPlay: boolean = settings.general.sound()
 let lla: LLA
 let media: Readonly<Media>
-
-shouldPlay = settings.general.sound()
 
 if (window.hotjs) {
   window.hotjs.Audio!.init!()
@@ -27,29 +25,17 @@ if (window.hotjs) {
 }
 
 Plugins.Device.getInfo().then(info => {
-  if (info.platform === 'ios') {
-    media = {
-      move: 'sounds/move.aifc',
-      capture: 'sounds/capture.aifc',
-      explosion: 'sounds/explosion.aifc',
-      lowtime: 'sounds/lowtime.aifc',
-      dong: 'sounds/dong.aifc',
-      berserk: 'sounds/berserk.aifc',
-      clock: 'sounds/clock.aifc',
-      confirmation: 'sounds/confirmation.aifc',
-    }
-  }
-  else {
-    media = {
-      move: 'sounds/move.mp3',
-      capture: 'sounds/capture.mp3',
-      explosion: 'sounds/explosion.mp3',
-      lowtime: 'sounds/lowtime.mp3',
-      dong: 'sounds/dong.mp3',
-      berserk: 'sounds/berserk.mp3',
-      clock: 'sounds/clock.mp3',
-      confirmation: 'sounds/confirmation.mp3',
-    }
+  const ext = info.platform === 'ios' ? '.aifc' : '.mp3'
+
+  media = {
+    move: `sounds/move${ext}`,
+    capture: `sounds/capture${ext}`,
+    explosion: `sounds/explosion${ext}`,
+    lowtime: `sounds/lowtime${ext}`,
+    dong: `sounds/dong${ext}`,
+    berserk: `sounds/berserk${ext}`,
+    clock: `sounds/clock${ext}`,
+    confirmation: `sounds/confirmation${ext}`,
   }
 
   lla.preloadFX('move', media.move)

@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import { select } from 'd3-selection'
 import { scaleTime, scaleLinear } from 'd3-scale'
 import { line } from 'd3-shape'

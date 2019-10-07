@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import * as utils from '../../utils'
 import * as playerApi from '../../lichess/player'

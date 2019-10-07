@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import * as helper from '../helper'
 import clockSettings from './clockSettings'
 import { formatTime, isStageClock } from '../shared/clock/utils'

@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import * as helper from '../helper'
 
 interface TabButton {

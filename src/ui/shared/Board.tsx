@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import settings from '../../settings'
 import redraw from '../../utils/redraw'
 import Chessground from '../../chessground/Chessground'

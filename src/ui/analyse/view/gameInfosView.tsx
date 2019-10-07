@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import i18n from '../../../i18n'
 import router from '../../../router'
 import { playerName } from '../../../lichess/player'

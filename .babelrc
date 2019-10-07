@@ -1,14 +1,5 @@
 {
-  "plugins": [
-    ["@babel/transform-react-jsx", {
-      "pragma": "h"
-    }],
-
-    ["transform-react-require", {
-      "identifier": "h",
-      "moduleName": "mithril/hyperscript"
-    }]
-  ],
+  "presets": [["@babel/preset-env"]],
   "env": {
     "production": {
       "plugins": ["transform-remove-console"]

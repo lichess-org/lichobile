@@ -36,11 +36,6 @@ const paths = {
   ]
 };
 
-const babelSettings = {
-  extensions: ['.tsx', '.ts', '.js', '.jsx'],
-  presets: [["@babel/preset-env"]]
-}
-
 function logErrorAndExit(error) {
   log.error(chalk.red(error.message))
   process.exit(1)
@@ -72,7 +67,7 @@ gulp.task('styl', () => {
 gulp.task('scripts', () => {
   return browserify(SRC + '/main.ts', { debug: true })
     .plugin(tsify)
-    .transform(babelify, babelSettings)
+    .transform(babelify)
     .bundle()
     .pipe(source('app.js'))
     .pipe(buffer())
@@ -90,7 +85,7 @@ gulp.task('watch-scripts', () => {
   const bundleStream = watchify(
     browserify(SRC + '/main.ts', opts)
     .plugin(tsify)
-    .transform(babelify, babelSettings)
+    .transform(babelify)
   );
 
   function rebundle() {

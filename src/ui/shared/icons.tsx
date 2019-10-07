@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 
 export const backArrow =
   <div className="svg_icon">

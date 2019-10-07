@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import router from '../../router'
 import * as helper from '../helper'
 import { closeIcon } from '../shared/icons'

@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import settings from '../../settings'
 import i18n from '../../i18n'
 import router from '../../router'

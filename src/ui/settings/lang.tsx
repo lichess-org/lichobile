@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import { dropShadowHeader, backButton } from '../shared/common'
 import redraw from '../../utils/redraw'
 import * as helper from '../helper'

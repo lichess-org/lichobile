@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import * as stream from 'mithril/stream'
 import router from '../../../router'
 import * as utils from '../../../utils'

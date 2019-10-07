@@ -1,5 +1,5 @@
 const IDLE_TIMER_DELAY = 15 * 60 * 1000
-const SLEEP_DELAY = 60 * 60 * 1000
+const SLEEP_DELAY = 45 * 60 * 1000
 
 let sleepAgainTimeoutId: number
 let cancelTimer: (() => void) | undefined

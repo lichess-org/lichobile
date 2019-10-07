@@ -4,6 +4,9 @@
 
 import './moment'
 
+// capacitor plugins registration
+import 'capacitor-sound-effect'
+
 import { Plugins, AppState, DeviceInfo, NetworkStatus } from '@capacitor/core'
 import * as debounce from 'lodash/debounce'
 import { hasNetwork } from './utils'

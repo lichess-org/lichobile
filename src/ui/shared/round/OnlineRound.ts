@@ -1,5 +1,6 @@
+import * as Mithril from 'mithril'
 import { Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
-import * as throttle from 'lodash/throttle'
+import throttle from 'lodash-es/throttle'
 import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'

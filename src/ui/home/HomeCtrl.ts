@@ -1,6 +1,6 @@
 import { Plugins, AppState, NetworkStatus, PluginListenerHandle } from '@capacitor/core'
-import * as uniqBy from 'lodash/uniqBy'
-import * as Zanimo from 'zanimo'
+import uniqBy from 'lodash-es/uniqBy'
+import Zanimo from 'zanimo'
 import socket, { SocketIFace } from '../../socket'
 import redraw from '../../utils/redraw'
 import signals from '../../signals'

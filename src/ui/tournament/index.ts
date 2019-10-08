@@ -1,3 +1,4 @@
+import * as Mithril from 'mithril'
 import socket from '../../socket'
 import i18n from '../../i18n'
 import session from '../../session'

@@ -1,12 +1,13 @@
+import Stream from 'mithril/Stream'
 
 export interface IExplorerCtrl {
   allowed: boolean
   setStep(): void
-  loading: Mithril.Stream<boolean>
-  failing: Mithril.Stream<boolean>
+  loading: Stream<boolean>
+  failing: Stream<boolean>
   config: any
   withGames: boolean
-  current: Mithril.Stream<ExplorerData>
+  current: Stream<ExplorerData>
   fetchMasterOpening: (fen: string) => Promise<ExplorerData>
 }
 

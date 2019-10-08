@@ -1,4 +1,4 @@
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import * as chessFormat from '../../../utils/chessFormat'
 import gameStatusApi from '../../../lichess/status'
 import { findTag, gameResult } from '../../../lichess/interfaces/study'

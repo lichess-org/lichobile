@@ -1,5 +1,5 @@
 import { Plugins } from '@capacitor/core'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import session from '../session'
 import { ErrorResponse } from '../http'
 import redraw from '../utils/redraw'

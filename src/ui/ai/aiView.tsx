@@ -1,4 +1,4 @@
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import { getBoardBounds } from '../helper'
 import Board from '../shared/Board'
 import {

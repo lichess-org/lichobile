@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import socket from '../../socket'
 import settings from '../../settings'
 import * as helper from '../helper'

@@ -1,5 +1,6 @@
-import * as h from 'mithril/hyperscript'
-import * as range from 'lodash/range'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
+import range from 'lodash-es/range'
 import i18n from '../../../i18n'
 import * as helper from '../../helper'
 import { isClientEval } from '../../shared/tree/interfaces'

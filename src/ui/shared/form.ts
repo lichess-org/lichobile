@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 
 import i18n from '../../i18n'
 import redraw from '../../utils/redraw'

@@ -1,4 +1,5 @@
-import * as debounce from 'lodash/debounce'
+import * as Mithril from 'mithril'
+import debounce from 'lodash-es/debounce'
 import { handleXhrError } from '../../utils'
 import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import redraw from '../../utils/redraw'
@@ -118,7 +119,7 @@ export default class StudyListCtrl {
     this.saveState()
   }
 
-  public afterLoad = ({ dom }: Mithril.DOMNode) => {
+  public afterLoad = ({ dom }: Mithril.VnodeDOM<any, any>) => {
     if (this.cacheAvailable && !this.initialized) {
       batchRequestAnimationFrame(() => {
         if (cachedState) {

@@ -1,5 +1,5 @@
-import * as h from 'mithril/hyperscript'
-import * as stream from 'mithril/stream'
+import h from 'mithril/hyperscript'
+import stream from 'mithril/stream'
 import * as utils from '../utils'
 import router from '../router'
 import redraw from '../utils/redraw'

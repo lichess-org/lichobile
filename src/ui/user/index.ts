@@ -1,3 +1,4 @@
+import * as Mithril from 'mithril'
 import * as helper from '../helper'
 import { loadingBackbutton } from '../shared/common'
 import UserCtrl, { IUserCtrl } from './UserCtrl'
@@ -20,7 +21,7 @@ const UserScreen: Mithril.Component<Attrs, State> = {
     this.ctrl = UserCtrl(attrs.id)
   },
 
-  oncreate(vnode: Mithril.DOMNode) {
+  oncreate(vnode: Mithril.VnodeDOM<any, any>) {
     if (this.ctrl.isMe()) {
       helper.elFadeIn(vnode.dom as HTMLElement)
     } else {

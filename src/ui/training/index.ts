@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import signals from '../../signals'
 import socket from '../../socket'
 import session from '../../session'

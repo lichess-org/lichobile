@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import Stream from 'mithril/stream'
+import h from 'mithril/hyperscript'
 import i18n from '../../i18n'
 import router from '../../router'
 import settings from '../../settings'
@@ -7,7 +8,6 @@ import ViewOnlyBoard from '../shared/ViewOnlyBoard'
 import formWidgets from '../shared/form'
 import popupWidget from '../shared/popup'
 import * as helper from '../helper'
-import * as stream from 'mithril/stream'
 import redraw from '../../utils/redraw'
 import { OtbRoundInterface } from '../shared/round'
 import { clockSettingsView } from '../shared/clock/utils'
@@ -15,14 +15,14 @@ import { clockSettingsView } from '../shared/clock/utils'
 export interface NewOtbGameCtrl {
   open: () => void
   close: (fromBB?: string) => void
-  isOpen: Mithril.Stream<boolean>
+  isOpen: Stream<boolean>
   root: OtbRoundInterface
 }
 
 export default {
 
   controller(root: OtbRoundInterface) {
-    const isOpen = stream(false)
+    const isOpen = Stream(false)
 
     function open() {
       router.backbutton.stack.push(close)

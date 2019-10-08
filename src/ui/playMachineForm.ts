@@ -7,7 +7,7 @@ import popupWidget from './shared/popup'
 import i18n from '../i18n'
 import ViewOnlyBoard from './shared/ViewOnlyBoard'
 import * as helper from './helper'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 
 let isOpen = false
 let fromPositionFen: string | undefined

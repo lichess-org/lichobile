@@ -1,5 +1,6 @@
+import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import i18n from '../../i18n'
 import { hasNetwork } from '../../utils'
 import session from '../../session'
@@ -155,7 +156,7 @@ function renderFeedback(ctrl: TrainingCtrl) {
 
 function renderViewSolution(ctrl: TrainingCtrl) {
   return ctrl.vm.canViewSolution ? h('button.fatButton', {
-    oncreate: (vnode: Mithril.DOMNode) => {
+    oncreate: (vnode: Mithril.VnodeDOM<any, any>) => {
       helper.elFadeIn(vnode.dom as HTMLElement, 1500, '0', '0.8')
       helper.ontap(ctrl.viewSolution)(vnode)
     }

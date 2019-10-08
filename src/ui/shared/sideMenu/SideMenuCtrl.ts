@@ -1,4 +1,4 @@
-import * as Zanimo from 'zanimo'
+import Zanimo from 'zanimo'
 import redraw from '../../../utils/redraw'
 import router from '../../../router'
 

@@ -1,4 +1,4 @@
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 
 let timeoutId: number | undefined
 

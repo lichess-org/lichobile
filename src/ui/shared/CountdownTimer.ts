@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import { formatTimeInSecs } from '../../utils'
 import sound from '../../sound'
 
@@ -14,8 +15,8 @@ interface State {
   seconds: number
   el?: HTMLElement
   rang: boolean
-  clockOnCreate(vnode: Mithril.DOMNode): void
-  clockOnUpdate(vnode: Mithril.DOMNode): void
+  clockOnCreate(vnode: Mithril.VnodeDOM<any, any>): void
+  clockOnUpdate(vnode: Mithril.VnodeDOM<any, any>): void
   render(sec: Seconds): void
   tick(): void
   clockTimeoutId: number
@@ -61,7 +62,7 @@ export default {
     this.clockTimeoutId = setTimeout(this.tick, 1000)
   },
 
-  onupdate({ dom }: Mithril.DOMNode) {
+  onupdate({ dom }: Mithril.VnodeDOM<any, any>) {
     this.el = dom as HTMLElement
   },
 

@@ -1,4 +1,4 @@
-import * as isObject from 'lodash/isObject'
+import isObject from 'lodash-es/isObject'
 
 const uciRoleMap: {[k: string]: Role } = {
   P: 'pawn',

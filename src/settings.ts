@@ -1,5 +1,5 @@
 import store, { StoredProp } from './storage'
-import * as range from 'lodash/range'
+import range from 'lodash-es/range'
 import { ClockType, ClockTypeWithNone } from './ui/shared/clock/interfaces'
 
 function tupleOf(x: number) {

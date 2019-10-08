@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import { select } from 'd3-selection'
 import { scaleTime, scaleLinear } from 'd3-scale'
 import { line } from 'd3-shape'
@@ -45,7 +46,7 @@ export function renderBody(ctrl: State) {
             height="230"
             id="variantPerf-graph"
             className="variantPerf-graph"
-            oncreate={({ dom }: Mithril.DOMNode) => delayDrawChart(graphData, dom as SVGElement)}
+            oncreate={({ dom }: Mithril.VnodeDOM<any, any>) => delayDrawChart(graphData, dom as SVGElement)}
             key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'}
           />
         </div> : null

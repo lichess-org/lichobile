@@ -1,6 +1,6 @@
 import { Plugins } from '@capacitor/core'
-import * as h from 'mithril/hyperscript'
-import * as debounce from 'lodash/debounce'
+import h from 'mithril/hyperscript'
+import debounce from 'lodash-es/debounce'
 import session, { SignupData, EmailConfirm } from '../session'
 import socket from '../socket'
 import redraw from '../utils/redraw'

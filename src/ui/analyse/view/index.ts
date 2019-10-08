@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import router from '../../../router'
 import i18n from '../../../i18n'
 import settings from '../../../settings'
@@ -192,7 +193,7 @@ function renderReplay(ctrl: AnalyseCtrl) {
   ])
 }
 
-const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.BaseNode } = {
+const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Vnode<any, any> } = {
   infos: renderGameInfos,
   moves: renderReplay,
   explorer: renderExplorer,

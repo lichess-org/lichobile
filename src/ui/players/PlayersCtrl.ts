@@ -1,4 +1,4 @@
-import * as throttle from 'lodash/throttle'
+import throttle from 'lodash-es/throttle'
 import redraw from '../../utils/redraw'
 import * as utils from '../../utils'
 import router from '../../router'

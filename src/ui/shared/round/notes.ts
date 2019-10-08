@@ -1,6 +1,6 @@
 import { Plugins } from '@capacitor/core'
-import * as h from 'mithril/hyperscript'
-import * as debounce from 'lodash/debounce'
+import h from 'mithril/hyperscript'
+import debounce from 'lodash-es/debounce'
 import redraw from '../../../utils/redraw'
 import spinner from '../../../spinner'
 import i18n from '../../../i18n'

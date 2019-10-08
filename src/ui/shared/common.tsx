@@ -1,5 +1,6 @@
+import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import * as menu from '../menu'
 import router from '../../router'
 import * as utils from '../../utils'
@@ -128,7 +129,7 @@ export function headerBtns() {
 }
 
 // TODO refactor this
-export function header(title: Mithril.BaseNode | string | null, leftButton?: Mithril.Children): Mithril.Children {
+export function header(title: Mithril.Vnode<any, any> | string | null, leftButton?: Mithril.Children): Mithril.Children {
   return h('nav', [
     leftButton ? leftButton : menuButton(),
     typeof title === 'string' ?

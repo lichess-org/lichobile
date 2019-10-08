@@ -1,5 +1,7 @@
+import * as Mithril from 'mithril'
+import Stream from 'mithril/stream'
 import { Plugins } from '@capacitor/core'
-import * as throttle from 'lodash/throttle'
+import throttle from 'lodash-es/throttle'
 import socket, { SocketIFace } from '../../socket'
 import redraw from '../../utils/redraw'
 import * as helper from '../helper'
@@ -11,7 +13,6 @@ import { Challenge } from '../../lichess/interfaces/challenge'
 import challengesApi from '../../lichess/challenges'
 import { standardFen } from '../../lichess/variant'
 import i18n from '../../i18n'
-import * as stream from 'mithril/stream'
 import layout from '../layout'
 import { viewOnlyBoardContent } from '../shared/round/view/roundView'
 import { header as headerWidget } from '../shared/common'
@@ -39,7 +40,7 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
       if (socketIface) socketIface.send('ping')
     }, 1000)
 
-    const challenge: Mithril.Stream<Challenge | undefined> = stream(undefined)
+    const challenge: Stream<Challenge | undefined> = Stream(undefined)
 
     sleepUtils.keepAwake()
 

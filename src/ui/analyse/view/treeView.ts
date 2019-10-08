@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import { fixCrazySan } from '../../../utils/chessFormat'
 import { linkify } from '../../../utils/html'
 import * as gameApi from '../../../lichess/game'
@@ -9,7 +10,7 @@ import { plyToTurn, empty } from '../util'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 
-type MaybeVNode = Mithril.BaseNode | null
+type MaybeVNode = Mithril.Vnode<any, any> | null
 
 export interface Ctx {
   ctrl: AnalyseCtrl
@@ -124,7 +125,7 @@ function renderInlined(ctx: Ctx, nodes: Tree.Node[], opts: Opts): MaybeVNode[] |
   })
 }
 
-function renderLines(ctx: Ctx, nodes: Tree.Node[], opts: Opts): Mithril.BaseNode {
+function renderLines(ctx: Ctx, nodes: Tree.Node[], opts: Opts): Mithril.Vnode<any, any> {
   return h('lines', nodes.map(n => {
     return h('line', renderMoveAndChildrenOf(ctx, n, {
       parentPath: opts.parentPath,
@@ -152,7 +153,7 @@ function renderMoveAndChildrenOf(ctx: Ctx, node: Tree.Node, opts: Opts): MaybeVN
     }) || [])
 }
 
-function renderInline(ctx: Ctx, node: Tree.Node, opts: Opts): Mithril.BaseNode {
+function renderInline(ctx: Ctx, node: Tree.Node, opts: Opts): Mithril.Vnode<any, any> {
   return h('inline', renderMoveAndChildrenOf(ctx, node, {
     withIndex: true,
     parentPath: opts.parentPath,
@@ -169,7 +170,7 @@ function nodeClasses(c: AnalyseCtrl, path: Tree.Path): NodeClasses {
   }
 }
 
-function renderGlyphs(glyphs: Glyph[]): Mithril.BaseNode[] {
+function renderGlyphs(glyphs: Glyph[]): Mithril.Vnode<any, any>[] {
   return glyphs.map(glyph => h('glyph', glyph.symbol))
 }
 
@@ -181,7 +182,7 @@ function renderIndex(ply: Ply, withDots?: boolean): Mithril.Children {
   return h('index', renderIndexText(ply, withDots))
 }
 
-function renderMoveOf(ctx: Ctx, node: Tree.Node, opts: Opts): Mithril.BaseNode {
+function renderMoveOf(ctx: Ctx, node: Tree.Node, opts: Opts): Mithril.Vnode<any, any> {
   const path = opts.parentPath + node.id
   const content: Mithril.Children = [
     opts.withIndex || node.ply & 1 ? renderIndex(node.ply, true) : null,

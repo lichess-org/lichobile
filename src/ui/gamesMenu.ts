@@ -1,5 +1,6 @@
-import * as h from 'mithril/hyperscript'
-import * as range from 'lodash/range'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
+import range from 'lodash-es/range'
 import * as Siema from 'siema'
 import * as utils from '../utils'
 import redraw from '../utils/redraw'
@@ -56,14 +57,14 @@ export default {
 
 const menuOnOverlayTap = helper.ontap(() => close())
 
-function menuOnBeforeRemove({ dom }: Mithril.DOMNode) {
+function menuOnBeforeRemove({ dom }: Mithril.VnodeDOM<any, any>) {
   dom.classList.add('fading_out')
   return new Promise((resolve) => {
     setTimeout(resolve, 500)
   })
 }
 
-function wrapperOnCreate({ dom }: Mithril.DOMNode) {
+function wrapperOnCreate({ dom }: Mithril.VnodeDOM<any, any>) {
   if (helper.isPortrait()) {
     scroller = new Siema({
       selector: dom as HTMLElement,

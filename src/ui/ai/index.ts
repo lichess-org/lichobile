@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import socket from '../../socket'
 import { getCurrentAIGame } from '../../utils/offlineGames'
 import * as sleepUtils from '../../utils/sleep'

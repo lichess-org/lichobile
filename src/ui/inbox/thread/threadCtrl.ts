@@ -1,22 +1,22 @@
+import Stream from 'mithril/stream'
 import redraw from '../../../utils/redraw'
 import { handleXhrError } from '../../../utils'
 import * as xhr from './../inboxXhr'
 import { ThreadData } from '../interfaces'
 import router from '../../../router'
-import * as stream from 'mithril/stream'
 
 export interface IThreadCtrl {
-  id: Mithril.Stream<string>
-  thread: Mithril.Stream<ThreadData>
-  deleteAttempted: Mithril.Stream<boolean>
+  id: Stream<string>
+  thread: Stream<ThreadData>
+  deleteAttempted: Stream<boolean>
   sendResponse: (form: HTMLFormElement) => void
   deleteThread: (id: string) => void
 }
 
 export default function ThreadCtrl(threadId: string): IThreadCtrl {
-  const id = stream<string>(threadId)
-  const thread = stream<ThreadData>()
-  const deleteAttempted = stream<boolean>(false)
+  const id = Stream<string>(threadId)
+  const thread = Stream<ThreadData>()
+  const deleteAttempted = Stream<boolean>(false)
 
   xhr.thread(id())
   .then(data => {

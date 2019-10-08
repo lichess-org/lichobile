@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import * as helper from '../../../helper'
 import { hasNetwork } from '../../../../utils'
 import i18n from '../../../../i18n'
@@ -39,12 +40,12 @@ export function view(ctrl: CorresClockCtrl, color: Color, runningColor: Color) {
     'emerg': time < ctrl.data.emerg,
     'offline': !hasNetwork()
   })
-  function cOnCreate(vnode: Mithril.DOMNode) {
+  function cOnCreate(vnode: Mithril.VnodeDOM<any, any>) {
     const el = vnode.dom as HTMLElement
     el.textContent = formatClockTime(time * 1000)
     ctrl.els[color] = el
   }
-  function cOnUpdate(vnode: Mithril.DOMNode) {
+  function cOnUpdate(vnode: Mithril.VnodeDOM<any, any>) {
     const el = vnode.dom as HTMLElement
     el.textContent = formatClockTime(time * 1000)
     ctrl.els[color] = el

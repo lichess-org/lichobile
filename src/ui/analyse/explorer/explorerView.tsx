@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import * as helper from '../../helper'
 import explorerConfig from './explorerConfig'
 import { Move, isTablebaseData } from './interfaces'

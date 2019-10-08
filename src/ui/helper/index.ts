@@ -1,5 +1,6 @@
-import * as h from 'mithril/hyperscript'
-import * as Zanimo from 'zanimo'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
+import Zanimo from 'zanimo'
 import * as utils from '../../utils'
 import redraw from '../../utils/redraw'
 import router from '../../router'
@@ -25,14 +26,14 @@ export const headerHeight = 56
 export const footerHeight = 45
 
 export function onPageEnter(anim: (el: HTMLElement) => void) {
-  return ({ dom }: Mithril.DOMNode) => anim(dom as HTMLElement)
+  return ({ dom }: Mithril.VnodeDOM<any, any>) => anim(dom as HTMLElement)
 }
 
 // because mithril will call 'onremove' asynchronously when the component has
 // an 'onbeforeremove' hook, some cleanup tasks must be done in the latter hook
 // thus this helper
 export function onPageLeave(anim: (el: HTMLElement) => Promise<void>, cleanup?: () => void) {
-  return function({ dom }: Mithril.DOMNode, done: () => void) {
+  return function({ dom }: Mithril.VnodeDOM<any, any>, done: () => void) {
     if (cleanup) cleanup()
     return anim(dom as HTMLElement)
     .then(done)
@@ -145,7 +146,7 @@ export function clearCachedViewportDim(): void {
   cachedIsPortrait = undefined
 }
 
-export function slidesInUp(vnode: Mithril.DOMNode): Promise<HTMLElement> {
+export function slidesInUp(vnode: Mithril.VnodeDOM<any, any>): Promise<HTMLElement> {
   const el = (vnode.dom as HTMLElement)
   el.style.transform = 'translateY(100%)'
   // force reflow hack
@@ -163,7 +164,7 @@ export function slidesOutDown(callback: (fromBB?: string) => void, elID: string)
   }
 }
 
-export function slidesInLeft(vnode: Mithril.DOMNode): Promise<HTMLElement> {
+export function slidesInLeft(vnode: Mithril.VnodeDOM<any, any>): Promise<HTMLElement> {
   const el = vnode.dom as HTMLElement
   el.style.transform = 'translateX(100%)'
   // force reflow hack
@@ -198,7 +199,7 @@ type TapHandler = (e: TouchEvent) => void
 type RepeatHandler = () => boolean
 
 function createTapHandler(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: RepeatHandler, scrollX?: boolean, scrollY?: boolean, getElement?: (e: TouchEvent) => HTMLElement, preventEndDefault?: boolean) {
-  return function(vnode: Mithril.DOMNode) {
+  return function(vnode: Mithril.VnodeDOM<any, any>) {
     ButtonHandler(vnode.dom as HTMLElement,
       (e: TouchEvent) => {
         tapHandler(e)
@@ -215,7 +216,7 @@ function createTapHandler(tapHandler: TapHandler, holdHandler?: TapHandler, repe
 }
 
 export function ontouch(handler: TapHandler) {
-  return ({ dom }: Mithril.DOMNode) => {
+  return ({ dom }: Mithril.VnodeDOM<any, any>) => {
     dom.addEventListener('touchstart', handler)
   }
 }
@@ -317,7 +318,7 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, ha
   }
 }
 
-export function autofocus(vnode: Mithril.DOMNode): void {
+export function autofocus(vnode: Mithril.VnodeDOM<any, any>): void {
   (vnode.dom as HTMLElement).focus()
 }
 

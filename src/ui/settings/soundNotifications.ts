@@ -7,7 +7,7 @@ import i18n from '../../i18n'
 import settings from '../../settings'
 import sound from '../../sound'
 import vibrate from '../../vibrate'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 
 function renderBody() {
   const allowed = settings.general.notifications.allow()

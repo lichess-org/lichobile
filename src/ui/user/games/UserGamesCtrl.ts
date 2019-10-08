@@ -1,4 +1,5 @@
-import * as debounce from 'lodash/debounce'
+import * as Mithril from 'mithril'
+import debounce from 'lodash-es/debounce'
 import { handleXhrError } from '../../../utils'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import { positionsCache } from '../../../utils/gamePosition'
@@ -14,7 +15,7 @@ import { GameFilter, UserFullProfile, UserGameWithDate } from '../../../lichess/
 export interface IUserGamesCtrl {
   scrollState: ScrollState
   onScroll(e: Event): void
-  onGamesLoaded(vn: Mithril.DOMNode): void
+  onGamesLoaded(vn: Mithril.VnodeDOM<any, any>): void
   onFilterChange(e: Event): void
   toggleBookmark(id: string): void
   boardTheme: string
@@ -122,7 +123,7 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
     redraw()
   }
 
-  const onGamesLoaded = ({ dom }: Mithril.DOMNode) => {
+  const onGamesLoaded = ({ dom }: Mithril.VnodeDOM<any, any>) => {
     if (cacheAvailable && !initialized) {
       batchRequestAnimationFrame(() => {
         (dom.parentNode as HTMLElement).scrollTop = cachedScrollState.scrollPos

@@ -1,5 +1,5 @@
 import { Plugins } from '@capacitor/core'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import router from '../../router'
 import i18n from '../../i18n'
 import session from '../../session'

@@ -1,3 +1,4 @@
+import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
 import router from '../../router'
 import session from '../../session'
@@ -7,7 +8,7 @@ import challengesApi from '../../lichess/challenges'
 import * as helper from '../helper'
 import popupWidget from '../shared/popup'
 import i18n from '../../i18n'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import { Challenge, ChallengeUser } from '../../lichess/interfaces/challenge'
 import { ChallengeState } from './interfaces'
 
@@ -26,7 +27,7 @@ function gameInfos(challenge: Challenge) {
 }
 
 export function joinPopup(ctrl: ChallengeState, challenge: Challenge) {
-  let joinDom: Mithril.BaseNode
+  let joinDom: Mithril.Vnode<any, any>
   if (challenge.rated && !session.isConnected()) {
     joinDom = h('div.error', [
       i18n('thisGameIsRated'), h('br'), h('br'), i18n('mustSignInToJoin'),

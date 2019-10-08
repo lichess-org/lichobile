@@ -1,4 +1,4 @@
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import * as cgUtil from '../../../chessground/util'
 import { Bounds } from '../Board'
 import { Shape } from '.'

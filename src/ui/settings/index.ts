@@ -1,3 +1,4 @@
+import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
 import router from '../../router'
 import redraw from '../../utils/redraw'
@@ -6,7 +7,7 @@ import { dropShadowHeader, backButton } from '../shared/common'
 import layout from '../layout'
 import i18n from '../../i18n'
 import socket from '../../socket'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 
 interface State {
   appVersion?: string

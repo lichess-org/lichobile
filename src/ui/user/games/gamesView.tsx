@@ -1,5 +1,5 @@
-import * as throttle from 'lodash/throttle'
-import * as h from 'mithril/hyperscript'
+import throttle from 'lodash-es/throttle'
+import h from 'mithril/hyperscript'
 import router from '../../../router'
 import * as utils from '../../../utils'
 import * as helper from '../../helper'

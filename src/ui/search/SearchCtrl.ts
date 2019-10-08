@@ -1,3 +1,4 @@
+import * as Mithril from 'mithril'
 import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import { Paginator } from '../../lichess/interfaces'
 import { UserGameWithDate } from '../../lichess/interfaces/user'
@@ -19,7 +20,7 @@ export interface ISearchCtrl {
   boardTheme: string
   searchState: SearchState
   onScroll(e: Event): void
-  onGamesLoaded(vn: Mithril.DOMNode): void
+  onGamesLoaded(vn: Mithril.VnodeDOM<any, any>): void
 }
 
 export interface SearchState {

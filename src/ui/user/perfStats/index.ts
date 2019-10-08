@@ -1,5 +1,6 @@
-import * as h from 'mithril/hyperscript'
-import * as stream from 'mithril/stream'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
+import Stream from 'mithril/stream'
 import * as helper from '../../helper'
 import * as xhr from '../userXhr'
 import socket from '../../../socket'
@@ -18,8 +19,8 @@ interface Attrs {
 }
 
 export interface State {
-  user: Mithril.Stream<User>
-  perfData: Mithril.Stream<PerfStats>
+  user: Stream<User>
+  perfData: Stream<PerfStats>
 }
 
 export default {
@@ -29,8 +30,8 @@ export default {
     const userId = vnode.attrs.id
     const perf = vnode.attrs.perf
 
-    this.user = stream()
-    this.perfData = stream()
+    this.user = Stream()
+    this.perfData = Stream()
 
     socket.createDefault()
 

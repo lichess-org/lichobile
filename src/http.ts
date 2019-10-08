@@ -1,4 +1,4 @@
-import * as merge from 'lodash/merge'
+import merge from 'lodash-es/merge'
 import storage from './storage'
 import spinner from './spinner'
 import globalConfig from './config'

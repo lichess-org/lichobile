@@ -1,8 +1,9 @@
+import * as Mithril from 'mithril'
 import * as helper from '../helper'
 import ViewOnlyBoard from './ViewOnlyBoard'
 import { noop } from '../../utils'
 import { FeaturedGame } from '../../lichess/interfaces'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 
 interface Bounds {
   width: number

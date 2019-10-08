@@ -1,6 +1,6 @@
 import { Plugins } from '@capacitor/core'
-import * as h from 'mithril/hyperscript'
-import * as throttle from 'lodash/throttle'
+import h from 'mithril/hyperscript'
+import throttle from 'lodash-es/throttle'
 import { handleXhrError, hasNetwork } from '../../../../utils'
 import * as gameApi from '../../../../lichess/game'
 import session from '../../../../session'

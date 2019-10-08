@@ -1,4 +1,6 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import Stream from 'mithril/stream'
+import h from 'mithril/hyperscript'
 import { dropShadowHeader, backButton } from '../shared/common'
 import redraw from '../../utils/redraw'
 import * as helper from '../helper'
@@ -7,19 +9,18 @@ import layout from '../layout'
 import i18n, { loadLanguage, getAvailableLanguages } from '../../i18n'
 import settings from '../../settings'
 import { setServerLang } from '../../xhr'
-import * as stream from 'mithril/stream'
 
 type Lang = [string, string]
 
 interface State {
-  langs: Mithril.Stream<ReadonlyArray<Lang>>
+  langs: Stream<ReadonlyArray<Lang>>
 }
 
 export const LangPrefScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewSlideIn,
 
   oninit() {
-    this.langs = stream([])
+    this.langs = Stream([])
 
     getAvailableLanguages().then(data => {
       this.langs(data)

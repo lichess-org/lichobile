@@ -1,10 +1,10 @@
-import * as debounce from 'lodash/debounce'
+import debounce from 'lodash-es/debounce'
 import router from '../../router'
 import settings from '../../settings'
 import i18n from '../../i18n'
 import popupWidget from '../shared/popup'
 import * as helper from '../helper'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 
 import ImporterCtrl, { IImporterCtrl } from '../importer/ImporterCtrl'
 

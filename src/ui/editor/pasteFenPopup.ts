@@ -1,7 +1,7 @@
 import i18n from '../../i18n'
 import popupWidget from '../shared/popup'
 import router from '../../router'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import Editor, { MenuInterface } from './Editor'
 
 export default {

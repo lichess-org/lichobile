@@ -1,5 +1,5 @@
-import * as h from 'mithril/hyperscript'
-import * as stream from 'mithril/stream'
+import h from 'mithril/hyperscript'
+import Stream from 'mithril/stream'
 import router from '../../../router'
 import * as utils from '../../../utils'
 import redraw from '../../../utils/redraw'
@@ -16,13 +16,13 @@ export interface PlayerInfoCtrl {
   close: (fromBB?: string) => void
   isOpen: () => boolean
   root: TournamentCtrl
-  playerData: Mithril.Stream<PlayerInfo>
+  playerData: Stream<PlayerInfo>
 }
 
 export default {
   controller(root: TournamentCtrl): PlayerInfoCtrl {
     let isOpen = false
-    const playerData = stream<PlayerInfo>()
+    const playerData = Stream<PlayerInfo>()
 
     function open(playerId: string) {
       xhr.playerInfo(root.tournament.id, playerId)

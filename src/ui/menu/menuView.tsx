@@ -1,5 +1,6 @@
+import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 
 import router from '../../router'
 import * as utils from '../../utils'
@@ -31,7 +32,7 @@ export default {
 
     return (
       <aside id="side_menu"
-        oncreate={({ dom }: Mithril.DOMNode) => {
+        oncreate={({ dom }: Mithril.VnodeDOM<any, any>) => {
           if (window.deviceInfo.platform === 'ios') {
             CloseSwipeHandler(dom as HTMLElement, menu.mainMenuCtrl)
           } else {

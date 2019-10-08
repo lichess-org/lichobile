@@ -1,5 +1,5 @@
 import { Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
-import * as throttle from 'lodash/throttle'
+import throttle from 'lodash-es/throttle'
 import socket, { SocketIFace } from '../../../socket'
 import redraw from '../../../utils/redraw'
 import * as utils from '../../../utils'

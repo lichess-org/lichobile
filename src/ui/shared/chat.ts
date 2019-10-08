@@ -1,5 +1,6 @@
+import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import * as helper from '../helper'
 import redraw from '../../utils/redraw'
 import i18n from '../../i18n'
@@ -122,8 +123,8 @@ export function chatView(ctrl: Chat, header?: string) {
     ]),
     h('div#chat_content.modal_content.chat_content', [
       h('div.chat_scroller.native_scroller', {
-        oncreate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement),
-        onupdate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement)
+        oncreate: ({ dom }: Mithril.VnodeDOM<any, any>) => scrollChatToBottom(dom as HTMLElement),
+        onupdate: ({ dom }: Mithril.VnodeDOM<any, any>) => scrollChatToBottom(dom as HTMLElement)
       }, [
         h('ul.chat_messages', ctrl.selectLines().map((msg: ChatMsg, i: number, all: ChatMsg[]) => {
           if (ctrl.player !== undefined) return renderPlayerMsg(ctrl.player, msg, i, all)

@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import i18n  from '../../../i18n'
 import { handleXhrError, shallowEqual } from '../../../utils'
 import redraw from '../../../utils/redraw'
@@ -15,7 +16,7 @@ import AnalyseCtrl from '../AnalyseCtrl'
 import drawAcplChart from '../charts/acpl'
 import drawMoveTimesChart from '../charts/moveTimes'
 
-export default function renderAnalysis(ctrl: AnalyseCtrl): Mithril.BaseNode {
+export default function renderAnalysis(ctrl: AnalyseCtrl): Mithril.Vnode<any, any> {
   const isPortrait = helper.isPortrait()
   const vd = helper.viewportDim()
   const d = ctrl.data
@@ -38,7 +39,7 @@ function renderAnalysisGraph(ctrl: AnalyseCtrl, vd: helper.ViewportDim, isPortra
       key: 'chart',
       width: isPortrait ? vd.vw : vd.vw - vd.vh + helper.headerHeight,
       height: 100,
-      oncreate({ dom }: Mithril.DOMNode) {
+      oncreate({ dom }: Mithril.VnodeDOM<any, any>) {
         setTimeout(() => {
           this.updateCurPly = drawAcplChart(dom as SVGElement, ctrl.data, ctrl.node.ply)
         }, 100)
@@ -150,7 +151,7 @@ function renderMoveTimes(ctrl: AnalyseCtrl, moveCentis: number[], vd: helper.Vie
       key: 'movetimes-chart',
       width: isPortrait ? vd.vw : vd.vw - vd.vh + helper.headerHeight,
       height: 150,
-      oncreate({ dom }: Mithril.DOMNode) {
+      oncreate({ dom }: Mithril.VnodeDOM<any, any>) {
         setTimeout(() => {
           this.updateCurPly = drawMoveTimesChart(dom as SVGElement, ctrl.data, moveCentis, ctrl.node.ply)
         }, 100)

@@ -1,5 +1,7 @@
+import * as Mithril from 'mithril'
+import Stream from 'mithril/stream'
 import { Plugins } from '@capacitor/core'
-import * as debounce from 'lodash/debounce'
+import debounce from 'lodash-es/debounce'
 import Chessground from '../../chessground/Chessground'
 import * as cgDrag from '../../chessground/drag'
 import router from '../../router'
@@ -12,22 +14,21 @@ import { loadLocalJsonFile } from '../../utils'
 import continuePopup, { Controller as ContinuePopupCtrl } from '../shared/continuePopup'
 import i18n from '../../i18n'
 import drag from './drag'
-import * as stream from 'mithril/stream'
 
 const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
 interface EditorData {
-  color: Mithril.Stream<Color>
+  color: Stream<Color>
   castles: {
-    K: Mithril.Stream<boolean>
-    Q: Mithril.Stream<boolean>
-    k: Mithril.Stream<boolean>
-    q: Mithril.Stream<boolean>
-    [k: string]: Mithril.Stream<boolean>
+    K: Stream<boolean>
+    Q: Stream<boolean>
+    k: Stream<boolean>
+    q: Stream<boolean>
+    [k: string]: Stream<boolean>
   }
-  enpassant: Mithril.Stream<string>
-  halfmove: Mithril.Stream<string>
-  moves: Mithril.Stream<string>
+  enpassant: Stream<string>
+  halfmove: Stream<string>
+  moves: Stream<string>
 }
 
 interface Data {
@@ -53,8 +54,8 @@ export default class Editor {
   public continuePopup: ContinuePopupCtrl
   public chessground: Chessground
 
-  public positions: Mithril.Stream<Array<BoardPosition>>
-  public endgamesPositions: Mithril.Stream<Array<BoardPosition>>
+  public positions: Stream<Array<BoardPosition>>
+  public endgamesPositions: Stream<Array<BoardPosition>>
   public extraPositions: Array<BoardPosition>
 
   public constructor(fen?: string) {
@@ -73,8 +74,8 @@ export default class Editor {
       }
     }
 
-    this.positions = stream([])
-    this.endgamesPositions = stream([])
+    this.positions = Stream([])
+    this.endgamesPositions = Stream([])
 
     this.extraPositions = [{
       fen: startingFen,
@@ -147,7 +148,7 @@ export default class Editor {
   public onmove = (e: TouchEvent) => cgDrag.move(this.chessground, e)
   public onend = (e: TouchEvent) => cgDrag.end(this.chessground, e)
 
-  public editorOnCreate = (vn: Mithril.DOMNode) => {
+  public editorOnCreate = (vn: Mithril.VnodeDOM<any, any>) => {
     if (!vn.dom) return
     const editorNode = document.getElementById('boardEditor')
     if (editorNode) {
@@ -188,16 +189,16 @@ export default class Editor {
   private readFen(fen: string): EditorData {
     const parts = fen.split(' ')
     return {
-      color: stream(parts[1] as Color),
+      color: Stream(parts[1] as Color),
       castles: {
-        K: stream(parts[2].includes('K')),
-        Q: stream(parts[2].includes('Q')),
-        k: stream(parts[2].includes('k')),
-        q: stream(parts[2].includes('q'))
+        K: Stream(parts[2].includes('K')),
+        Q: Stream(parts[2].includes('Q')),
+        k: Stream(parts[2].includes('k')),
+        q: Stream(parts[2].includes('q'))
       },
-      enpassant: stream(parts[3]),
-      halfmove: stream(parts[4]),
-      moves: stream(parts[5])
+      enpassant: Stream(parts[3]),
+      halfmove: Stream(parts[4]),
+      moves: Stream(parts[5])
     }
   }
 }

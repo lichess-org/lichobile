@@ -1,5 +1,6 @@
+import * as Mithril from 'mithril'
 import * as Hammer from 'hammerjs'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 
 import EdgeOpenHandler, { HammerHandlers } from '../sideMenu/EdgeOpenHandler'
 import * as menu from '../../menu'

@@ -1,5 +1,5 @@
 import { Plugins } from '@capacitor/core'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import * as helper from '../../helper'
 import { userStatus } from '../../shared/common'
 import i18n from '../../../i18n'

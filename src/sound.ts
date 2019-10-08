@@ -1,6 +1,6 @@
 import { Plugins } from '@capacitor/core'
 import settings from './settings'
-import * as throttle from 'lodash/throttle'
+import throttle from 'lodash-es/throttle'
 
 let shouldPlay: boolean = settings.general.sound()
 

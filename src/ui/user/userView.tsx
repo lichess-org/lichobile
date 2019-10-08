@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import router from '../../router'
 import { dropShadowHeader, backButton as renderBackbutton } from '../shared/common'
 import { getLanguageNativeName } from '../../utils/langs'
@@ -201,15 +202,13 @@ function renderPerf(key: PerfKey, name: string, perf: Perf, user: ProfileUser) {
 
   const avail = variantPerfAvailable(key, perf)
 
-  const props = {
+  return h('div', {
     className: 'profilePerf' + (avail ? ' nav' : ''),
     'data-icon': gameIcon(key),
-    oncreate: avail ? helper.ontapY(() => {
-      router.set(`/@/${user.id}/${key}/perf`)
-    }) : null
-  }
-
-  return h('div', props, [
+    oncreate: helper.ontapY(() => {
+      if (avail) router.set(`/@/${user.id}/${key}/perf`)
+    })
+  }, [
     h('span.name', name),
     h('div.rating', [
       perf.rating,

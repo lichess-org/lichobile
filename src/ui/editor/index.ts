@@ -1,3 +1,4 @@
+import * as Mithril from 'mithril'
 import * as helper from '../helper'
 import socket from '../../socket'
 import * as sleepUtils from '../../utils/sleep'

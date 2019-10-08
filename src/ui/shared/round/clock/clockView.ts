@@ -1,5 +1,6 @@
+import * as Mithril from 'mithril'
 import * as helper from '../../../helper'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import ClockCtrl from './ClockCtrl'
 
 export interface ClockAttrs {
@@ -10,18 +11,18 @@ export interface ClockAttrs {
 }
 
 interface ClockState {
-  clockOnCreate(vnode: Mithril.DOMNode): void
-  clockOnUpdate(vnode: Mithril.DOMNode): void
+  clockOnCreate(vnode: Mithril.VnodeDOM<any, any>): void
+  clockOnUpdate(vnode: Mithril.VnodeDOM<any, any>): void
 }
 
 export default {
   oninit({ attrs }) {
     const { ctrl, color } = attrs
-    this.clockOnCreate = ({ dom }: Mithril.DOMNode) => {
+    this.clockOnCreate = ({ dom }: Mithril.VnodeDOM<any, any>) => {
       ctrl.elements[color] = dom as HTMLElement
       ctrl.updateElement(color, ctrl.millisOf(color))
     }
-    this.clockOnUpdate = ({ dom }: Mithril.DOMNode) => {
+    this.clockOnUpdate = ({ dom }: Mithril.VnodeDOM<any, any>) => {
       ctrl.elements[color] = dom as HTMLElement
       ctrl.updateElement(color, ctrl.millisOf(color))
     }

@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import * as utils from '../../utils'
 import * as helper from '../helper'
 
@@ -36,7 +37,7 @@ export default function popup(
     // dirty hack to be sure each popup element is unique
     // TODO should refactor into a component
     <div key={String(contentF)} className="overlay_popup_wrapper fade-in"
-      onbeforeremove={(vnode: Mithril.DOMNode) => {
+      onbeforeremove={(vnode: Mithril.VnodeDOM<any, any>) => {
         vnode.dom.classList.add('fading_out')
         return new Promise((resolve) => {
           setTimeout(resolve, 500)

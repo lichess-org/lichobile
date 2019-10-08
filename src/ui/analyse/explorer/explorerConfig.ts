@@ -1,9 +1,9 @@
-import * as h from 'mithril/hyperscript'
+import Stream from 'mithril/stream'
+import h from 'mithril/hyperscript'
 import * as helper from '../../helper'
 import router from '../../../router'
 import settings from '../../../settings'
 import { StoredProp } from '../../../storage'
-import * as stream from 'mithril/stream'
 
 interface Data {
   db: {
@@ -21,7 +21,7 @@ interface Data {
 }
 
 interface Controller {
-  open: Mithril.Stream<boolean>
+  open: Stream<boolean>
   data: Data
   toggleOpen(): void
   toggleDb(db: string): void
@@ -39,7 +39,7 @@ export default {
       available.push('masters')
     }
 
-    const open = stream(false)
+    const open = Stream(false)
 
     const data = {
       db: {

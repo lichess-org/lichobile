@@ -1,4 +1,4 @@
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import { defs, renderShape } from './svg'
 import { brushes } from './brushes'
 import { Bounds } from '../Board'

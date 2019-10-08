@@ -1,5 +1,6 @@
-import * as h from 'mithril/hyperscript'
-import * as stream from 'mithril/stream'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
+import Stream from 'mithril/stream'
 import router from '../router'
 import redraw from '../utils/redraw'
 import { timeline as timelineXhr, openWebsiteAuthPage } from '../xhr'
@@ -13,12 +14,12 @@ import { TimelineEntry } from '../lichess/interfaces'
 export const supportedTypes = ['follow', 'game-end', 'tour-join', 'study-create', 'study-like', 'forum-post', 'blog-post']
 
 interface State {
-  timeline: Mithril.Stream<ReadonlyArray<TimelineEntry>>
+  timeline: Stream<ReadonlyArray<TimelineEntry>>
 }
 
 export default {
   oninit() {
-    this.timeline = stream([] as TimelineEntry[])
+    this.timeline = Stream([] as TimelineEntry[])
 
     timelineXhr()
     .then(data => {

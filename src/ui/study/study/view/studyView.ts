@@ -1,5 +1,5 @@
 import { Plugins } from '@capacitor/core'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import { Study } from '../../../../lichess/interfaces/study'
 import { header, backButton } from '../../../shared/common'
 import * as helper from '../../../helper'

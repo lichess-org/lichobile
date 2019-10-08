@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import settings from '../../../../settings'
 import * as chessgroundDrag from '../../../../chessground/drag'
 import { Pockets } from '../../../../lichess/interfaces/game'
@@ -19,8 +20,8 @@ export interface Attrs {
 }
 
 interface State {
-  pocketOnCreate(vnode: Mithril.DOMNode): void
-  pocketOnRemove(vnode: Mithril.DOMNode): void
+  pocketOnCreate(vnode: Mithril.VnodeDOM<any, any>): void
+  pocketOnRemove(vnode: Mithril.VnodeDOM<any, any>): void
 }
 
 const CrazyPocket: Mithril.Component<Attrs, State> = {
@@ -30,13 +31,13 @@ const CrazyPocket: Mithril.Component<Attrs, State> = {
     const onmove = (e: TouchEvent) => chessgroundDrag.move(ctrl.chessground, e)
     const onend = (e: TouchEvent) => chessgroundDrag.end(ctrl.chessground, e)
 
-    this.pocketOnCreate = function({ dom }: Mithril.DOMNode) {
+    this.pocketOnCreate = function({ dom }: Mithril.VnodeDOM<any, any>) {
       dom.addEventListener('touchstart', onstart)
       dom.addEventListener('touchmove', onmove)
       dom.addEventListener('touchend', onend)
     }
 
-    this.pocketOnRemove = function({ dom }: Mithril.DOMNode) {
+    this.pocketOnRemove = function({ dom }: Mithril.VnodeDOM<any, any>) {
       dom.removeEventListener('touchstart', onstart)
       dom.removeEventListener('touchmove', onmove)
       dom.removeEventListener('touchend', onend)

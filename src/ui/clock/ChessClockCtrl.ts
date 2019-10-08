@@ -1,9 +1,9 @@
+import Stream from 'mithril/stream'
 import { Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
 import router from '../../router'
 import settings from '../../settings'
 import clockSettings from './clockSettings'
 import clockSet from './clockSet'
-import * as stream from 'mithril/stream'
 
 import { ClockType, IChessClock } from '../shared/clock/interfaces'
 
@@ -11,18 +11,18 @@ export interface IChessClockCtrl {
   hideStatusBar: () => void
   startStop: () => void
   clockSettingsCtrl: any
-  clockObj: Mithril.Stream<IChessClock>
+  clockObj: Stream<IChessClock>
   reload: () => void
   goHome: () => void
   clockTap: (side: 'white' | 'black') => void
-  clockType: Mithril.Stream<ClockType>
+  clockType: Stream<ClockType>
   appStateListener: PluginListenerHandle
 }
 
 export default function ChessClockCtrl(): IChessClockCtrl {
 
-  const clockType: Mithril.Stream<ClockType> = stream(settings.clock.clockType())
-  const clockObj: Mithril.Stream<IChessClock> = stream(clockSet[clockType()]())
+  const clockType: Stream<ClockType> = Stream(settings.clock.clockType())
+  const clockObj: Stream<IChessClock> = Stream(clockSet[clockType()]())
 
   function reload() {
     if (clockObj() && clockObj().isRunning() && !clockObj().flagged()) return

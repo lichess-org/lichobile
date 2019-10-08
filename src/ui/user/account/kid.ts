@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import session from '../../../session'
 import { StoredProp } from '../../../storage'
 import formWidgets from '../../shared/form'

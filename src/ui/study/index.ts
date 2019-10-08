@@ -1,3 +1,4 @@
+import * as Mithril from 'mithril'
 import socket from '../../socket'
 import { PagerCategory, PagerOrder } from '../../lichess/interfaces/study'
 import * as helper from '../helper'

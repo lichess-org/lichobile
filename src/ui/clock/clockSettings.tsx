@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import Stream from 'mithril/stream'
+import h from 'mithril/hyperscript'
 import { Plugins } from '@capacitor/core'
 import redraw from '../../utils/redraw'
 import settings from '../../settings'
@@ -18,7 +19,7 @@ interface IClockSettingsCtrl {
 
 export default {
 
-  controller(reload: () => void, clockObj: Mithril.Stream<IChessClock>): IClockSettingsCtrl {
+  controller(reload: () => void, clockObj: Stream<IChessClock>): IClockSettingsCtrl {
     let isOpen = false
 
     function open() {

@@ -8,7 +8,7 @@ import './moment'
 import 'capacitor-sound-effect'
 
 import { Plugins, AppState, DeviceInfo, NetworkStatus } from '@capacitor/core'
-import * as debounce from 'lodash/debounce'
+import debounce from 'lodash-es/debounce'
 import { hasNetwork } from './utils'
 import { syncWithNowPlayingGames } from './utils/offlineGames'
 import redraw from './utils/redraw'

@@ -1,5 +1,6 @@
-import * as throttle from 'lodash/throttle'
-import * as stream from 'mithril/stream'
+import * as Mithril from 'mithril'
+import Stream from 'mithril/stream'
+import throttle from 'lodash-es/throttle'
 import socket from '../../socket'
 import redraw from '../../utils/redraw'
 import { handleXhrError } from '../../utils'
@@ -13,8 +14,8 @@ import { PagedThreads } from './interfaces'
 import * as xhr from './inboxXhr'
 
 export interface InboxCtrl {
-  threads: Mithril.Stream<PagedThreads>
-  isLoading: Mithril.Stream<boolean>
+  threads: Stream<PagedThreads>
+  isLoading: Stream<boolean>
   first: () => void
   prev: () => void
   next: () => void
@@ -27,8 +28,8 @@ export default {
   oninit() {
     socket.createDefault()
 
-    const threads = stream<PagedThreads>()
-    const isLoading = stream<boolean>(false)
+    const threads = Stream<PagedThreads>()
+    const isLoading = Stream<boolean>(false)
 
     const throttledReload = throttle((p: number) => {
       isLoading(true)

@@ -1,5 +1,6 @@
+import * as Mithril from 'mithril'
 import * as Hammer from 'hammerjs'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import settings from '../settings'
 import * as menu from './menu'
 import MenuView from './menu/menuView'
@@ -83,7 +84,7 @@ export default {
   }
 }
 
-function handleMenuOpen({ dom }: Mithril.DOMNode) {
+function handleMenuOpen({ dom }: Mithril.VnodeDOM<any, any>) {
   const mainEl = dom as HTMLElement
   const mc = new Hammer.Manager(mainEl, {
     inputClass: Hammer.TouchInput

@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "target": "es6",
+    "target": "es2015",
     "suppressImplicitAnyIndexErrors": false,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
     "strict": true,
     "strictFunctionTypes": false,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "jsx": "react",
-    "jsxFactory": "h"
+    "jsxFactory": "h",
+    "types": ["lodash-es", "mithril", "d3", "hammerjs"]
   },
   "include": [
     "src/**/*.js",

@@ -1,3 +1,5 @@
+import h from 'mithril/hyperscript'
+import Stream from 'mithril/stream'
 import { Plugins } from '@capacitor/core'
 import i18n from '../../i18n'
 import router from '../../router'
@@ -8,15 +10,13 @@ import * as helper from '../helper'
 import playMachineForm from '../playMachineForm'
 import challengeForm from '../challengeForm'
 import { hasNetwork } from '../../utils'
-import * as h from 'mithril/hyperscript'
-import * as stream from 'mithril/stream'
 
 export interface Controller {
   open(fentoSet: string, variantToSet: VariantKey, colorToSet?: Color): void
   close(fromBB?: string): void
-  fen: Mithril.Stream<string | undefined>
-  variant: Mithril.Stream<VariantKey>
-  color: Mithril.Stream<Color>
+  fen: Stream<string | undefined>
+  variant: Stream<VariantKey>
+  color: Stream<Color>
   isOpen(): boolean
 }
 
@@ -24,9 +24,9 @@ export default {
 
   controller() {
     let isOpen = false
-    const fen: Mithril.Stream<string | undefined> = stream(undefined)
-    const variant: Mithril.Stream<VariantKey> = stream('standard' as VariantKey)
-    const color: Mithril.Stream<Color> = stream('white' as Color)
+    const fen: Stream<string | undefined> = Stream(undefined)
+    const variant: Stream<VariantKey> = Stream('standard' as VariantKey)
+    const color: Stream<Color> = Stream('white' as Color)
 
     function open(fentoSet: string, variantToSet: VariantKey, colorToSet: Color = 'white') {
       router.backbutton.stack.push(close)

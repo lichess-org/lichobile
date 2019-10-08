@@ -1,3 +1,4 @@
+import * as Mithril from 'mithril'
 import socket from '../../../socket'
 import * as helper from '../../helper'
 import { dropShadowHeader as headerWidget, backButton } from '../../shared/common'

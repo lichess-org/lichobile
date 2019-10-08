@@ -1,4 +1,4 @@
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import { oppositeColor } from '../../../utils'
 import CrazyPocket from '../../shared/round/crazy/CrazyPocket'
 

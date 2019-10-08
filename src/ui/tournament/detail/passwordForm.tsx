@@ -1,4 +1,4 @@
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import settings from '../../../settings'
 import popupWidget from '../../shared/popup'
 import i18n from '../../../i18n'

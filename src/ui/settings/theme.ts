@@ -1,3 +1,4 @@
+import * as Mithril from 'mithril'
 import { dropShadowHeader, backButton } from '../shared/common'
 import redraw from '../../utils/redraw'
 import formWidgets from '../shared/form'
@@ -5,7 +6,7 @@ import layout from '../layout'
 import i18n from '../../i18n'
 import settings from '../../settings'
 import * as helper from '../helper'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 // import { loadImage, handleError } from '../../bgtheme'
 
 interface Progress {

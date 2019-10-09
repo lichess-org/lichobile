@@ -97,7 +97,7 @@
         "web-build": "npm run compile && rollup -c",
         "web-watch": "rollup -w -c",
         "watch": "concurrently 'npm:compile-watch' 'npm:web-watch' 'npm:styles-watch'",
-        "prebuild": "npm run lint && npm run test",
+        "prebuild": "npm run lint",
         "build": "concurrently 'npm:styles' 'npm:web-build' && npx cap copy",
         "build-stage": "npm run build -- --env=env-stage.json",
         "build-prod": "npm run build -- --env=env-prod.json",

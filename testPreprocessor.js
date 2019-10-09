@@ -1,9 +1,8 @@
 const tsc = require('typescript');
 const tsConfig = require('./tsconfig.json');
 
-// delete tsConfig.compilerOptions.moduleResolution
-// delete tsConfig.compilerOptions.types
-// delete tsConfig.compilerOptions.allowSyntheticDefaultImports
+tsConfig.compilerOptions.module = 'commonjs'
+tsConfig.compilerOptions.target = 'es5'
 
 module.exports = {
   process(src, path) {

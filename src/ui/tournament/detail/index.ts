@@ -52,7 +52,7 @@ export default {
     if (this.notFound) {
       return layout.free(
         headerWidget(null, backButton(i18n('tournamentNotFound'))),
-        h('div.tournamentNotFound', { key: 'tournament-not-found' }, [
+        h('div.tournamentNotFound', [
           h('p', i18n('tournamentDoesNotExist')),
           h('p', i18n('tournamentMayHaveBeenCanceled'))
         ])
@@ -74,8 +74,8 @@ export default {
         ]),
         h('h2.header-subTitle.tournament-subtTitle',
         !tournament.isFinished && !tournament.isStarted ?
-          timeInfo('created', tournament.secondsToStart, 'Starting in') :
-          timeInfo('started', tournament.secondsToFinish, '')
+          timeInfo(tournament.secondsToStart, 'Starting in') :
+          timeInfo(tournament.secondsToFinish, '')
         )
       ]))
     )

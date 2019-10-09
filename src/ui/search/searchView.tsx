@@ -91,7 +91,7 @@ export function renderSearchForm(ctrl: ISearchCtrl) {
             </div>
           </div>
         </div>
-        <button key="search" className="fatButton" type="submit">
+        <button className="fatButton" type="submit">
           <span className="fa fa-search" />
           {i18n('search')}
         </button>

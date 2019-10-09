@@ -1,4 +1,4 @@
-import * as localForage from 'localforage'
+import localForage from 'localforage'
 
 const appStore = localForage.createInstance({
   // driver: localForage.INDEXEDDB,

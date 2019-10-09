@@ -1,6 +1,6 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
-import * as Hammer from 'hammerjs'
+import Hammer from 'hammerjs'
 import { EDGE_SLIDE_THRESHOLD } from './sideMenu'
 import { viewportDim, findParentBySelector, headerHeight, isPortrait, is43Aspect } from '../helper'
 

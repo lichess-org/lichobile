@@ -139,7 +139,6 @@ function renderLinks(user?: Session) {
 
   return (
     <ul
-      key={online ? 'online-links' : 'offline-links'}
       className="side_links"
       oncreate={helper.ontapXY(onLinkTap, undefined, helper.getLI)}
     >

@@ -37,28 +37,26 @@ export function renderContent(ctrl: AiRound) {
     bounds
   })
 
-  const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
-
   if (isPortrait) {
-    return h.fragment({ key: orientationKey }, [
+    return [
       hasSpaceForInlineReplay(vd, bounds) ? renderInlineReplay(ctrl) : null,
-      renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
+      renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent'),
       board,
-      renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait),
+      renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player'),
       renderGameActionsBar(ctrl)
-    ])
+    ]
   } else {
-    return h.fragment({ key: orientationKey }, [
+    return [
       board,
-      <section key="table" className="table">
+      <section className="table">
         <section className="playersTable offline">
-          {renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait)}
+          {renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent')}
           {renderReplay(ctrl)}
-          {renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait)}
+          {renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player')}
         </section>
         {renderGameActionsBar(ctrl)}
       </section>
-    ])
+    ]
   }
 }
 

@@ -49,7 +49,7 @@ function renderForm() {
         </div>
       </fieldset>
       <div className="popupActionWrapper">
-        <button key="join" className="popupAction" type="submit">
+        <button className="popupAction" type="submit">
           <span className="fa fa-check" />
           {i18n('join')}
         </button>

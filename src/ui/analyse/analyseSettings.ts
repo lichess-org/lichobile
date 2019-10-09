@@ -125,9 +125,7 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
   const cores = getNbCores()
 
   return h('div.analyseSettings', [
-    h('div.action', {
-      key: 'boardPosition',
-    }, [
+    h('div.action', [
       formWidgets.renderMultipleChoiceButton(
         'Board position', [
           { label: 'First', value: '1' },
@@ -138,9 +136,7 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
         ctrl.settings.setBoardPosition
       )
     ]),
-    ctrl.ceval.allowed ? h('div.action', {
-      key: 'enableCeval'
-    }, [
+    ctrl.ceval.allowed ? h('div.action', [
       formWidgets.renderCheckbox(
         i18n('enableLocalComputerEvaluation'), 'allowCeval', settings.analyse.enableCeval,
         v => {
@@ -159,41 +155,31 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
       ),
       h('small.caution', i18n('localEvalCaution'))
     ]) : null,
-    ctrl.study || ctrl.ceval.allowed ? h('div.action', {
-      key: 'showBestMove'
-    }, [
+    ctrl.study || ctrl.ceval.allowed ? h('div.action', [
       formWidgets.renderCheckbox(
         i18n('showBestMove'), 'showBestMove', settings.analyse.showBestMove,
         ctrl.settings.toggleBestMove
       )
     ]) : null,
-    ctrl.study || (ctrl.source === 'online' && isOnlineAnalyseData(ctrl.data) && gameApi.analysable(ctrl.data)) ? h('div.action', {
-      key: 'showComments'
-    }, [
+    ctrl.study || (ctrl.source === 'online' && isOnlineAnalyseData(ctrl.data) && gameApi.analysable(ctrl.data)) ? h('div.action', [
       formWidgets.renderCheckbox(
         i18n('keyShowOrHideComments'), 'showComments', settings.analyse.showComments,
         ctrl.settings.toggleComments
       )
     ]) : null,
-    ctrl.ceval.allowed ? h('div.action', {
-      key: 'infiniteAnalysis'
-    }, [
+    ctrl.ceval.allowed ? h('div.action', [
       formWidgets.renderCheckbox(
         'Infinite analysis', 'ceval.infinite', settings.analyse.cevalInfinite,
         ctrl.settings.cevalToggleInfinite
       ),
     ]) : null,
-    ctrl.ceval.allowed ? h('div.action', {
-      key: 'cevalMultiPvs'
-    }, [
+    ctrl.ceval.allowed ? h('div.action', [
       formWidgets.renderSlider(
         'Analysis lines', 'ceval.multipv', 1, 5, 1, settings.analyse.cevalMultiPvs,
         ctrl.settings.cevalSetMultiPv
       )
     ]) : null,
-    ctrl.ceval.allowed && cores > 1 ? h('div.action', {
-      key: 'cevalCores'
-    }, [
+    ctrl.ceval.allowed && cores > 1 ? h('div.action', [
       formWidgets.renderSlider(
         'Processor cores', 'ceval.cores', 1, cores, 1, settings.analyse.cevalCores,
         ctrl.settings.cevalSetCores

@@ -95,20 +95,14 @@ function renderForm() {
   ]
 
   const generalFieldset = [
-    h('div.select_input', {
-      key: formName + 'color'
-    },
+    h('div.select_input',
       formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color)
     ),
-    h('div.select_input', {
-      key: formName + 'variant'
-    },
+    h('div.select_input',
       formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant)
     ),
     settingsObj.variant() === '3' ?
-    h('div.setupPosition', {
-      key: 'position'
-    },
+    h('div.setupPosition',
     userId ?
     h('input[type=text][name=fen]', {
       placeholder: i18n('pasteTheFenStringHere'),
@@ -145,32 +139,24 @@ function renderForm() {
       ] : null
     ) : null,
     settingsObj.variant() !== '3' ?
-    h('div.select_input', {
-      key: formName + 'mode'
-    },
+    h('div.select_input',
       formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)
     ) : null
   ]
 
   const timeFieldset = [
-    h('div.select_input', {
-      key: formName + 'timeMode'
-    },
+    h('div.select_input',
       formWidgets.renderSelect('clock', formName + 'timeMode', timeModes, settingsObj.timeMode)
     )
   ]
 
   if (hasClock) {
     timeFieldset.push(
-      h('div.select_input.inline', {
-        key: formName + 'time'
-      },
+      h('div.select_input.inline',
         formWidgets.renderSelect('time', formName + 'time',
           settings.gameSetup.availableTimes, settingsObj.time, false)
       ),
-      h('div.select_input.inline', {
-        key: formName + 'increment'
-      },
+      h('div.select_input.inline',
         formWidgets.renderSelect('increment', formName + 'increment',
           settings.gameSetup.availableIncrements.map(utils.tupleOf), settingsObj.increment, false)
       )
@@ -179,9 +165,7 @@ function renderForm() {
 
   if (hasDays) {
     timeFieldset.push(
-      h('div.select_input.large_label', {
-        key: formName + 'days'
-      },
+      h('div.select_input.large_label',
         formWidgets.renderSelect('daysPerTurn', formName + 'days',
           settings.gameSetup.availableDays.map(utils.tupleOf), settingsObj.days, false)
       ))

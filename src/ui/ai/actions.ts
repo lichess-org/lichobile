@@ -41,9 +41,7 @@ function renderAlways(ctrl: AiRoundInterface) {
 }
 
 function resignButton(ctrl: AiRoundInterface) {
-  return gameApi.playable(ctrl.data) ? h('div.resign', {
-    key: 'resign'
-  }, [
+  return gameApi.playable(ctrl.data) ? h('div.resign', [
     h('button[data-icon=b]', {
       oncreate: helper.ontap(() => {
         ctrl.actions.close()

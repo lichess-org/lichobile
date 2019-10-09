@@ -50,7 +50,7 @@ export function clockBody(ctrl: IChessClockCtrl) {
 
   return (
     <div className="clockContainer">
-      <div key="whiteClockTapArea" className={whiteClockClass} oncreate={helper.ontouch(() => onClockTouch(ctrl, 'white'))}>
+      <div className={whiteClockClass} oncreate={helper.ontouch(() => onClockTouch(ctrl, 'white'))}>
         { isStageClock(clock) ? renderMoves(clock.whiteMoves()) : null }
         <div className="clockTapAreaContent">
           <span className={whiteClockTimeClass}>
@@ -59,12 +59,12 @@ export function clockBody(ctrl: IChessClockCtrl) {
         </div>
       </div>
       <div className="clockControls">
-        { !flagged && clock.activeSide() ? <span key="running-play-pause" className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} oncreate={helper.ontap(() => ctrl.startStop())} /> : <span key="disabled-pause" className="fa fa-pause disabled" /> }
-        <span key="refresh" className={'fa fa-refresh' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={helper.ontap(ctrl.reload)} />
-        <span key="settings" className={'fa fa-cog' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={helper.ontap(ctrl.clockSettingsCtrl.open)} />
+        { !flagged && clock.activeSide() ? <span className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} oncreate={helper.ontap(() => ctrl.startStop())} /> : <span className="fa fa-pause disabled" /> }
+        <span className={'fa fa-refresh' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={helper.ontap(ctrl.reload)} />
+        <span className={'fa fa-cog' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={helper.ontap(ctrl.clockSettingsCtrl.open)} />
         <span hey="home" className={'fa fa-home' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={helper.ontap(ctrl.goHome)} />
       </div>
-      <div key="blackClockTapArea" className={blackClockClass} oncreate={helper.ontouch(() => onClockTouch(ctrl, 'black'))}>
+      <div className={blackClockClass} oncreate={helper.ontouch(() => onClockTouch(ctrl, 'black'))}>
         <div className="clockTapAreaContent">
           <span className={blackClockTimeClass}>
             { blackFlagged ? 'b' : formatTime(ctrl.clockType(), clock.blackTime() / 1000) }

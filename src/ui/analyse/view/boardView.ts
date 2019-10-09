@@ -45,13 +45,8 @@ export default function renderBoard(
     ...pastBestShape, ...curBestShapes, ...badMoveShape
   ]
 
-  const key =
-    (ctrl.settings.s.smallBoard ? 'board-small' : 'board-full') +
-    '-' + ctrl.settings.s.boardPosition
-
   return h('div.analyse-boardWrapper', {
     className: 'pos' + ctrl.settings.s.boardPosition,
-    key
   }, [
     playerBar(ctrl, ctrl.topColor()),
     h(Board, {

@@ -41,7 +41,7 @@ export function renderFooter(ctrl: InboxCtrl) {
         {renderNavButton('V', !ctrl.isLoading() && forwardEnabled, ctrl.last)}
       </div>
       <div className="actions_bar composeAction">
-        <button key="compose" className="action_bar_button" oncreate={helper.ontapY(() => router.set('/inbox/new'))}>
+        <button className="action_bar_button" oncreate={helper.ontapY(() => router.set('/inbox/new'))}>
           <span className="fa fa-pencil" />
           {i18n('composeMessage')}
         </button>

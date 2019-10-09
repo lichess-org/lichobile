@@ -71,28 +71,23 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
 
   return h('div.analyseMenu', [
     h('button', {
-      key: 'share',
       oncreate: helper.ontap(() => {
         ctrl.menu.s.showShareMenu = true
       })
     }, [h('span.fa.fa-share'), 'Share']),
     h('button[data-icon=B]', {
-      key: 'flipBoard',
       oncreate: helper.ontap(ctrl.settings.flip)
     }, i18n('flipBoard')),
     ctrl.isOfflineOrNotPlayable() ? h('button[data-icon=U]', {
-      key: 'continueFromHere',
       oncreate: helper.ontap(() => {
         ctrl.menu.close()
         ctrl.continuePopup.open(ctrl.node.fen, ctrl.data.game.variant.key, ctrl.data.player.color)
       })
     }, i18n('continueFromHere')) : null,
     ctrl.isOfflineOrNotPlayable() ? h('button', {
-      key: 'boardEditor',
       oncreate: helper.ontap(() => router.set(`/editor/${encodeURIComponent(ctrl.node.fen)}`))
     }, [h('span.fa.fa-pencil'), i18n('boardEditor')]) : null,
     ctrl.data.analysis ? h('button', {
-      key: 'retro',
       oncreate: helper.ontap(() => {
         ctrl.menu.close()
         ctrl.toggleRetro()
@@ -100,7 +95,6 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
       disabled: !!ctrl.retro
     }, [h('span.fa.fa-play'), 'Learn from your mistakes']) : null,
     ctrl.notes ? h('button', {
-      key: 'notes',
       oncreate: helper.ontap(() => {
         if (ctrl.notes) {
           ctrl.menu.close()
@@ -120,25 +114,21 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
       })
     }, [i18n('shareGameURL')]) : null,
     ctrl.source === 'offline' ? h('button', {
-      key: 'sharePGN',
       oncreate: helper.ontap(() => {
         offlinePgnExport(ctrl)
       }),
     }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : [i18n('sharePGN')]) : null,
     ctrl.source === 'online' && !gameApi.playable(ctrl.data) ? h('button', {
-      key: 'shareAnnotatedPGN',
       oncreate: helper.ontap(() => {
         onlinePGNExport(ctrl, false)
       }),
     }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : 'Share annotated PGN') : null,
     ctrl.source === 'online' && !gameApi.playable(ctrl.data) ? h('button', {
-      key: 'shareRawPGN',
       oncreate: helper.ontap(() => {
         onlinePGNExport(ctrl, true)
       }),
     }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : 'Share raw PGN') : null,
     ctrl.isOfflineOrNotPlayable() ? h('button', {
-      key: 'shareFEN',
       oncreate: helper.ontap(() => {
         ctrl.menu.close()
         Plugins.Share.share({ text: ctrl.node.fen })

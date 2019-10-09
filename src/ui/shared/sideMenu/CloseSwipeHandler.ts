@@ -1,4 +1,4 @@
-import * as Hammer from 'hammerjs'
+import Hammer from 'hammerjs'
 
 import SideMenuCtrl from './SideMenuCtrl'
 

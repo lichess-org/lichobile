@@ -1,4 +1,5 @@
-import * as moment from 'moment'
+import moment from 'moment'
+
 window.moment = moment
 
 // Round relative time evaluation down

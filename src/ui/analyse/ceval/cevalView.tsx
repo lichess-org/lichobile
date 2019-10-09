@@ -82,14 +82,10 @@ function renderCevalPvs(ctrl: AnalyseCtrl) {
     }))
   }
   else if (ctrl.gameOver()) {
-    return h('div.ceval-pv_box.native_scroller.loading.gameOver', {
-      key: 'ceval-gameover'
-    }, [h('i.withIcon[data-icon=]'), i18n('gameOver')])
+    return h('div.ceval-pv_box.native_scroller.loading.gameOver', [h('i.withIcon[data-icon=]'), i18n('gameOver')])
   }
   else {
-    return h('div.ceval-pv_box.native_scroller.loading', {
-      key: 'ceval-loading'
-    }, spinnerPearl())
+    return h('div.ceval-pv_box.native_scroller.loading', spinnerPearl())
   }
 }
 

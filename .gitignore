@@ -12,6 +12,7 @@ npm-debug.log
 /plugins
 
 /www/app.js
+/www/app.js.map
 /www/index.html
 /www/css/compiled
 /www/locale

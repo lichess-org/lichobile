@@ -1,4 +1,4 @@
-import * as Hammer from 'hammerjs'
+import Hammer from 'hammerjs'
 
 import { getMenuWidth, translateMenu, backdropOpacity, OPEN_AFTER_SLIDE_RATIO, BACKDROP_OPACITY } from '.'
 import SideMenuCtrl from './SideMenuCtrl'

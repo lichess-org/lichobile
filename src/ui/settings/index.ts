@@ -35,30 +35,24 @@ function renderBody(appVersion?: string) {
   return [
     h('ul.settings_list.native_scroller.page', [
       h('li.list_item.nav', {
-        key: 'gameDisplay',
         oncreate: helper.ontapY(() => router.set('/settings/gameDisplay'))
       }, i18n('gameDisplay')),
       h('li.list_item.nav', {
         oncreate: helper.ontapY(() => router.set('/settings/gameBehavior'))
       }, i18n('gameBehavior')),
       h('li.list_item.nav', {
-        key: 'lang',
         oncreate: helper.ontapY(() => router.set('/settings/lang'))
       }, i18n('language')),
       h('li.list_item.nav', {
-        key: 'theme',
         oncreate: helper.ontapY(() => router.set('/settings/theme'))
       }, `${i18n('theming')}`),
       h('li.list_item.nav', {
-        key: 'boardTheme',
         oncreate: helper.ontapY(() => router.set('/settings/themes/board'))
       }, i18n('board')),
       h('li.list_item.nav', {
-        key: 'piecesTheme',
         oncreate: helper.ontapY(() => router.set('/settings/themes/piece'))
       }, i18n('pieces')),
       h('li.list_item.nav', {
-        key: 'soundNotifications',
         oncreate: helper.ontapY(() => router.set('/settings/soundNotifications'))
       }, i18n('soundAndNotifications'))
     ]),

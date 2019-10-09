@@ -29,14 +29,11 @@ export default function renderAnalysis(ctrl: AnalyseCtrl): Mithril.Vnode<any, an
 }
 
 function renderAnalysisGraph(ctrl: AnalyseCtrl, vd: helper.ViewportDim, isPortrait: boolean) {
-  return h('div.analyse-computerAnalysis', {
-    key: 'analysis'
-  }, [
+  return h('div.analyse-computerAnalysis', [
     h('strong.title', i18n('computerAnalysis')),
     ctrl.analysisProgress ?
     h('div.analyse-gameAnalysis_chartPlaceholder', spinner.getVdom('monochrome')) :
     h('svg#acpl-chart.analyse-chart', {
-      key: 'chart',
       width: isPortrait ? vd.vw : vd.vw - vd.vh + helper.headerHeight,
       height: 100,
       oncreate({ dom }: Mithril.VnodeDOM<any, any>) {
@@ -99,9 +96,7 @@ const AcplSummary: Mithril.Component<{
 }
 
 function renderGameAnalysisRequest(ctrl: AnalyseCtrl) {
-  return h('div.analyse-computerAnalysis.request', {
-    key: 'request-analysis'
-  }, [
+  return h('div.analyse-computerAnalysis.request', [
     ctrl.analysisProgress ? h('div.analyse-requestProgress', [
       h('span', 'Analysis in progress'),
       spinner.getVdom('monochrome')
@@ -119,9 +114,7 @@ function renderGameAnalysisRequest(ctrl: AnalyseCtrl) {
 }
 
 function renderStudyAnalysisRequest(ctrl: AnalyseCtrl) {
-  return h('div.analyse-computerAnalysis.request', {
-    key: 'request-analysis'
-  }, ctrl.mainline.length < 5 ? h('p', 'The study is too short to be analysed.') :
+  return h('div.analyse-computerAnalysis.request', ctrl.mainline.length < 5 ? h('p', 'The study is too short to be analysed.') :
       !ctrl.study!.canContribute() ? h('p', 'Only the study contributors can request a computer analysis') : [
         h('p', [
           'Get a full server-side computer analysis of the main line.',
@@ -143,12 +136,9 @@ function renderStudyAnalysisRequest(ctrl: AnalyseCtrl) {
 }
 
 function renderMoveTimes(ctrl: AnalyseCtrl, moveCentis: number[], vd: helper.ViewportDim, isPortrait: boolean) {
-  return h('div.analyse-moveTimes', {
-    key: 'move-times'
-  }, [
+  return h('div.analyse-moveTimes', [
     h('strong.title', i18n('moveTimes')),
     h('svg#moveTimes-chart.analyse-chart', {
-      key: 'movetimes-chart',
       width: isPortrait ? vd.vw : vd.vw - vd.vh + helper.headerHeight,
       height: 150,
       oncreate({ dom }: Mithril.VnodeDOM<any, any>) {

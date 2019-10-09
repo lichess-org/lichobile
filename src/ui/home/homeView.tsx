@@ -216,7 +216,7 @@ function renderDailyPuzzle(ctrl: HomeCtrl) {
   }
 
   return (
-    <section className="miniPuzzle" key={puzzle ? puzzle.id : 'empty'}>
+    <section className="miniPuzzle">
       {h(MiniBoard, boardConf)}
     </section>
   )

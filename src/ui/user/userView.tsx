@@ -240,39 +240,37 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
       { isFullUser(user) ?
         <div className="list_item nav"
           oncreate={helper.ontapY(ctrl.goToGames)}
-          key="view_all_games"
         >
           {i18n('viewAllNbGames', user.count.all)}
         </div> : null
       }
-      <div className="list_item nav" key="followers"
+      <div className="list_item nav"
         oncreate={helper.ontapY(ctrl.followers)}
       >
         {i18n('nbFollowers', user.nbFollowers || '')}
       </div>
       { !ctrl.isMe() ? <div className="list_item nav" data-icon="1"
         oncreate={helper.ontapY(ctrl.goToUserTV)}
-        key="user_tv"
       >
         {i18n('watchGames')}
       </div> : null
       }
       { session.isConnected() && !ctrl.isMe() ?
-      <div className="list_item" key="challenge_to_play" data-icon="U"
+      <div className="list_item" data-icon="U"
         oncreate={helper.ontapY(ctrl.challenge)}
       >
         {i18n('challengeToPlay')}
       </div> : null
       }
       { session.isConnected() && !ctrl.isMe() ?
-      <div className="list_item nav" key="compose_message" data-icon="c"
+      <div className="list_item nav" data-icon="c"
         oncreate={helper.ontapY(ctrl.composeMessage)}
       >
         {i18n('composeMessage')}
       </div> : null
       }
       {session.isConnected() && isFullUser(user) && user.followable && !ctrl.isMe() ?
-      <div className={['list_item', user.blocking ? 'disabled' : ''].join(' ')} key="user_following">
+      <div className={['list_item', user.blocking ? 'disabled' : ''].join(' ')}>
         <div className="check_container">
           <label htmlFor="user_following">{i18n('follow')}</label>
           <input id="user_following" type="checkbox" checked={user.following}
@@ -282,7 +280,7 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
       </div> : null
       }
       {session.isConnected() && isFullUser(user) && !ctrl.isMe() ?
-      <div className={['list_item', user.following ? 'disabled' : ''].join(' ')} key="user_blocking">
+      <div className={['list_item', user.following ? 'disabled' : ''].join(' ')}>
         <div className="check_container">
           <label htmlFor="user_blocking">{i18n('block')}</label>
           <input id="user_blocking" type="checkbox" checked={user.blocking}
@@ -292,7 +290,7 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
       </div> : null
       }
       { session.isConnected() && !ctrl.isMe() ?
-      <div className="list_item" key="report" data-icon="!"
+      <div className="list_item" data-icon="!"
         oncreate={helper.ontapY(() => xhr.openWebsiteAuthPage(`/report?username=${user.username}`))}
       >
         {i18n('reportXToModerators', user.username)}

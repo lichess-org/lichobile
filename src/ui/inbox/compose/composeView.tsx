@@ -25,17 +25,17 @@ export function composeBody(ctrl: IComposeCtrl) {
             })}
           </ul> : null
         }
-        {(ctrl.errors() && ctrl.errors().username) ? renderError('recipientError', ctrl.errors().username[0]) : null}
+        {(ctrl.errors() && ctrl.errors().username) ? renderError(ctrl.errors().username[0]) : null}
 
-        <input id="subject" key="subject" type="text" className="composeInput"
+        <input id="subject" type="text" className="composeInput"
         placeholder={i18n('subject')}
         oncreate={ctrl.id() ? helper.autofocus : null}
         />
-        {(ctrl.errors() && ctrl.errors().subject) ? renderError('subjectError', ctrl.errors().subject[0]) : null}
+        {(ctrl.errors() && ctrl.errors().subject) ? renderError(ctrl.errors().subject[0]) : null}
 
-        <textarea id="body" key="body" className="composeInput composeTextarea" />
-        {(ctrl.errors() && ctrl.errors().text) ? renderError('textError', ctrl.errors().text[0]) : null}
-        <button key="send" className="fatButton composeSend" type="submit">
+        <textarea id="body" className="composeInput composeTextarea" />
+        {(ctrl.errors() && ctrl.errors().text) ? renderError(ctrl.errors().text[0]) : null}
+        <button className="fatButton composeSend" type="submit">
           <span className="fa fa-check" />
           {i18n('send')}
         </button>
@@ -46,7 +46,7 @@ export function composeBody(ctrl: IComposeCtrl) {
 
 function recipientWithName(ctrl: IComposeCtrl) {
   return (
-    <input id="recipient" key="recipient" type="text" className="composeInput"
+    <input id="recipient" type="text" className="composeInput"
       placeholder={i18n('recipient')}
       autocapitalize="off"
       autocomplete="off"
@@ -62,7 +62,7 @@ function recipientWithName(ctrl: IComposeCtrl) {
 
 function recipientWithoutName(ctrl: IComposeCtrl) {
   return (
-    <input id="recipient" key="recipient" type="text" className="composeInput"
+    <input id="recipient" type="text" className="composeInput"
       placeholder={i18n('recipient')}
       autocapitalize="off"
       autocomplete="off"
@@ -76,9 +76,9 @@ function recipientWithoutName(ctrl: IComposeCtrl) {
   )
 }
 
-function renderError(divKey: string, errorMessage: string) {
+function renderError(errorMessage: string) {
   return (
-    <div key={divKey} className="errorMessage">
+    <div className="errorMessage">
       {errorMessage}
     </div>
   )

@@ -68,9 +68,7 @@ function renderForm(formName: string, settingsObj: AiSettings, variants: string[
   const hasClock = timeMode === '1'
 
   const generalFieldset = [
-    h('div.select_input', {
-      key: formName + 'variant'
-    }, [
+    h('div.select_input', [
       formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant)
     ])
   ]
@@ -82,17 +80,13 @@ function renderForm(formName: string, settingsObj: AiSettings, variants: string[
   ]
 
   generalFieldset.unshift(
-    h('div.select_input', {
-      key: formName + 'color'
-    }, [
+    h('div.select_input', [
       formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color)
     ])
   )
 
   if (settingsObj.variant() === '3') {
-    generalFieldset.push(h('div.setupPosition', {
-      key: 'position'
-    }, fromPositionFen ? [
+    generalFieldset.push(h('div.setupPosition', fromPositionFen ? [
       h('div.setupMiniBoardWrapper', {
         style: {
           width: '100px',
@@ -116,33 +110,25 @@ function renderForm(formName: string, settingsObj: AiSettings, variants: string[
     ))
   }
 
-  generalFieldset.push(h('div.select_input', {
-    key: 'ailevel'
-  }, [
+  generalFieldset.push(h('div.select_input', [
     formWidgets.renderSelect('level', 'ailevel', [
       '1', '2', '3', '4', '5', '6', '7', '8'
     ].map(utils.tupleOf), settingsObj.level)
   ]))
 
   const timeFieldset = [
-    h('div.select_input', {
-      key: formName + 'timeMode'
-    }, [
+    h('div.select_input', [
       formWidgets.renderSelect('clock', formName + 'timeMode', timeModes, settingsObj.timeMode)
     ])
   ]
 
   if (hasClock) {
     timeFieldset.push(
-      h('div.select_input.inline', {
-        key: formName + 'time'
-      }, [
+      h('div.select_input.inline', [
         formWidgets.renderSelect('time', formName + 'time',
           settings.gameSetup.availableTimes, settingsObj.time, false)
       ]),
-      h('div.select_input.inline', {
-        key: formName + 'increment'
-      }, [
+      h('div.select_input.inline', [
         formWidgets.renderSelect('increment', formName + 'increment',
           settings.gameSetup.availableIncrements.map(utils.tupleOf), settingsObj.increment, false)
       ])

@@ -53,35 +53,33 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
     customPieceTheme: pieceTheme
   })
 
-  const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
-
   const clock = ctrl.clock
 
   if (isPortrait)
-    return h.fragment({ key: orientationKey }, [
+    return [
       hasSpaceForInlineReplay(vd, bounds) ? renderInlineReplay(ctrl) : null,
-      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, clock),
+      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', flip, pieceTheme, clock),
       board,
-      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, clock),
+      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', flip, pieceTheme, clock),
       renderGameActionsBar(ctrl)
-    ])
+    ]
   else
-    return h.fragment({ key: orientationKey }, [
+    return [
       board,
-      <section key="table" className="table">
+      <section className="table">
         <section className="playersTable offline">
-          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme, clock)}
+          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', flip, pieceTheme, clock)}
           {replayTable}
-          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme, clock)}
+          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', flip, pieceTheme, clock)}
         </section>
         {renderGameActionsBar(ctrl)}
       </section>
-    ])
+    ]
 }
 
 function renderGameActionsBar(ctrl: OtbRound) {
   return (
-    <section key="actionsBar" className="actions_bar">
+    <section className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-v"
         oncreate={helper.ontap(ctrl.actions.open)}
       />

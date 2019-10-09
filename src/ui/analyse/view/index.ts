@@ -52,7 +52,7 @@ export function loadingScreen(isPortrait: boolean, color?: Color, curFen?: strin
 export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Bounds) {
   const availTabs = ctrl.availableTabs()
 
-  return h.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
+  return [
     renderBoard(ctrl, bounds),
     h('div.analyse-tableWrapper', [
       ctrl.data.game.variant.key === 'crazyhouse' ? renderCrazy(ctrl) : null,
@@ -60,7 +60,7 @@ export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Bo
       !isPortrait ? renderActionsBar(ctrl) : null,
     ]),
     isPortrait ? renderActionsBar(ctrl) : null,
-  ])
+  ]
 }
 
 export function overlay(ctrl: AnalyseCtrl) {
@@ -112,9 +112,7 @@ function viewOnlyBoard(color: Color, bounds: Bounds, isSmall: boolean, fen: stri
 
 function renderOpening(ctrl: AnalyseCtrl) {
   const opening = ctrl.tree.getOpening(ctrl.nodeList) || ctrl.data.game.opening
-  if (opening) return h('div', {
-    key: 'opening-title',
-  }, [
+  if (opening) return h('div', [
     h('strong', opening.eco),
     ' ' + opening.name
   ])
@@ -150,29 +148,24 @@ function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
 function renderTabTitle(ctrl: AnalyseCtrl, curTab: Tab) {
   const defaultTitle = i18n(curTab.title)
   let children: Mithril.Children
-  let key: string
   if (curTab.id === 'moves') {
     const op = renderOpening(ctrl)
     children = [op || defaultTitle]
-    key = op ? 'opening' : curTab.id
   }
   else if (curTab.id === 'ceval') {
     children = [
       h('span', defaultTitle),
       ctrl.ceval.isSearching() ? h('div.ceval-spinner', 'analyzing ', h('span.fa.fa-spinner.fa-pulse')) : null
     ]
-    key = ctrl.ceval.isSearching() ? 'searching-ceval' : curTab.id
   }
   else if (curTab.id === 'explorer') {
     children = [getExplorerTitle(ctrl)]
-    key = curTab.id
   }
   else {
     children = [defaultTitle]
-    key = curTab.id
   }
 
-  return h.fragment({ key }, children)
+  return h.fragment({}, children)
 }
 
 function renderReplay(ctrl: AnalyseCtrl) {
@@ -204,9 +197,7 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Vno
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
-  return h('div.analyse-table', {
-    key: 'analyse'
-  }, [
+  return h('div.analyse-table', [
     renderAnalyseTabs(ctrl, availTabs),
     h(TabView, {
       className: 'analyse-tabsContent',

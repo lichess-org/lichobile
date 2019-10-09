@@ -29,7 +29,7 @@ const OpeningTable: Mithril.Component<Attrs, {}> = {
 
     if (moveTable || recentTable || topTable) {
       return (
-        <div key="explorer-opening" className="explorer-data">
+        <div className="explorer-data">
           {moveTable}
           {topTable}
           {recentTable}
@@ -45,7 +45,7 @@ export default OpeningTable
 
 export function showEmpty(ctrl: AnalyseCtrl) {
   return (
-    <div key="explorer-empty" className="explorer-data empty">
+    <div className="explorer-data empty">
       <div className="message">
         <h3>
           <i className="withIcon" data-icon="" />

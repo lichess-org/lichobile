@@ -319,7 +319,6 @@ function renderAllGames() {
   }
 
   return h('div.games_carousel', {
-    key: helper.isPortrait() ? 'o-portrait' : 'o-landscape',
     oncreate: wrapperOnCreate,
     onremove: wrapperOnRemove,
   }, allCards)

@@ -59,30 +59,24 @@ export function overlay(ctrl: TrainingCtrl) {
 function renderActionsBar(ctrl: TrainingCtrl) {
   return h('section#training_actions.actions_bar', [
     h('button.action_bar_button.training_action.fa.fa-area-chart', {
-      key: 'puzzleMenu',
       oncreate: helper.ontap(ctrl.menu.open)
     }),
     h('button.action_bar_button.training_action.fa.fa-share-alt', {
-      key: 'sharePuzzle',
       oncreate: helper.ontap(ctrl.share, () => Plugins.Toast.show({ text: 'Share this puzzle', duration: 'short' }))
     }),
     h('button.action_bar_button.training_action[data-icon=A]', {
-      key: 'analysePuzzle',
       oncreate: helper.ontap(ctrl.goToAnalysis, () => Plugins.Toast.show({ text: i18n('analysis'), duration: 'short' })),
       disabled: ctrl.vm.mode !== 'view'
     }),
     session.isConnected() ? h('button.action_bar_button.training_action.fa.fa-refresh', {
-      key: 'puzzleRefresh',
       oncreate: helper.ontap(ctrl.resync, () => Plugins.Toast.show({ text: 'Sync and refresh saved puzzles', duration: 'short' }))
     }) : null,
     h('button.action_bar_button.training_action.fa.fa-backward', {
       oncreate: helper.ontap(ctrl.rewind, undefined, ctrl.rewind),
-      key: 'historyPrev',
       disabled: !ctrl.canGoBackward()
     }),
     h('button.action_bar_button.training_action.fa.fa-forward', {
       oncreate: helper.ontap(ctrl.fastforward, undefined, ctrl.fastforward),
-      key: 'historyNext',
       disabled: !ctrl.canGoForward()
     })
   ])

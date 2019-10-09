@@ -32,14 +32,12 @@ export function renderAntagonist(
   content: Mithril.Children,
   material: Material,
   position: Position,
-  isPortrait: boolean,
   otbFlip?: boolean,
   customPieceTheme?: string,
   clock?: IChessClock,
 ) {
   const sit = ctrl.replay.situation()
   const isCrazy = !!sit.crazyhouse
-  const key = isPortrait ? position + '-portrait' : position + '-landscape'
   const antagonist = position === 'player' ? ctrl.data.player : ctrl.data.opponent
   const antagonistColor = antagonist.color
 
@@ -53,8 +51,8 @@ export function renderAntagonist(
   ].join(' ')
 
   return (
-    <section id={position + '_info'} className={className} key={key}>
-      <div key="infos" className={'antagonistInfos offline' + (isCrazy ? ' crazy' : '')}>
+    <section id={position + '_info'} className={className}>
+      <div className={'antagonistInfos offline' + (isCrazy ? ' crazy' : '')}>
         <div className="antagonistUser">
           {content}
           {isCrazy && clock ? renderClock(clock, antagonistColor) : ''}
@@ -84,7 +82,7 @@ export function renderAntagonist(
 
 export function renderGameActionsBar(ctrl: OfflineRoundInterface) {
   return (
-    <section key="actionsBar" className="actions_bar">
+    <section className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-v"
         oncreate={helper.ontap(ctrl.actions.open)}
       />
@@ -131,7 +129,7 @@ export function renderEndedGameStatus(ctrl: OfflineRoundInterface) {
     const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
       (winner ? '. ' + i18n(winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
     return (
-      <div key="result" className="result">
+      <div className="result">
         {result}
         <br />
         <em className="resultStatus">{status}</em>
@@ -143,9 +141,7 @@ export function renderEndedGameStatus(ctrl: OfflineRoundInterface) {
 }
 
 export function renderClaimDrawButton(ctrl: OfflineRoundInterface) {
-  return gameApi.playable(ctrl.data) ? h('div.claimDraw', {
-    key: 'claimDraw'
-  }, [
+  return gameApi.playable(ctrl.data) ? h('div.claimDraw', [
     h('button[data-icon=2].draw-yes', {
       oncreate: helper.ontap(() => ctrl.replay.claimDraw())
     }, i18n('threefoldRepetition'))

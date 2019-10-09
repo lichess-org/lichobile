@@ -1,7 +1,7 @@
 import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
-import * as Rlite from 'rlite-router'
-import RenderService from 'mithril/render'
+import Rlite from 'rlite-router'
+import render from 'mithril/render'
 import Vnode from 'mithril/render/vnode'
 import signals from './signals'
 import isFunction from 'lodash-es/isFunction'
@@ -37,7 +37,8 @@ export function defineRoutes(mountPoint: HTMLElement, routes: {[index: string]: 
       }}
 
       function redraw() {
-        RenderService.render(mountPoint, Vnode(RouteComponent))
+        // temp hack because of @types/mithril
+        (render as any)(mountPoint, Vnode(RouteComponent))
       }
 
       signals.redraw.removeAll()

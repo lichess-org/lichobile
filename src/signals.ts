@@ -1,4 +1,4 @@
-import * as Signal from 'signals'
+import Signal from 'signals'
 
 export default {
   // global screen redraw mechanism; it works the same way as m.redraw() works

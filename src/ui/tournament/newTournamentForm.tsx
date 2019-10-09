@@ -118,7 +118,7 @@ function renderForm(ctrl: TournamentsListCtrl) {
         </div>
       </fieldset>
       <div className="popupActionWrapper">
-        <button key="create" className="popupAction" type="submit">
+        <button className="popupAction" type="submit">
           <span className="fa fa-check" />
           {i18n('createANewTournament')}
         </button>

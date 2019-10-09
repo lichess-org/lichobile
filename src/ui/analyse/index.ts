@@ -143,9 +143,7 @@ export default {
         }
       }
 
-      const title = this.ctrl.shouldGoBack ? null : h('div.main_header_title.withSub', {
-        key: 'title-selector'
-      }, [
+      const title = this.ctrl.shouldGoBack ? null : h('div.main_header_title.withSub', [
         h('div', i18n('analysis')),
         renderVariantSelector(this.ctrl)
       ])

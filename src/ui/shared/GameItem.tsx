@@ -101,7 +101,7 @@ function renderBoard(fen: string, orientation: Color, boardTheme: string) {
   ].join(' ')
 
   return (
-    <div className={boardClass} key={fen}
+    <div className={boardClass}
       oncreate={({ dom }: Mithril.VnodeDOM<any, any>) => {
         const img = document.createElement('img')
         img.className = 'cg-board'

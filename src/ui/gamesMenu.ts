@@ -1,7 +1,7 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import range from 'lodash-es/range'
-import * as Siema from 'siema'
+import Siema from 'siema'
 import * as utils from '../utils'
 import redraw from '../utils/redraw'
 import { positionsCache } from '../utils/gamePosition'

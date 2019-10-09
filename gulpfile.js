@@ -1,18 +1,19 @@
 const path = require('path');
+const { exec } = require('child_process');
 const source = require('vinyl-source-stream');
 const minimist = require('minimist');
 const gulp = require('gulp');
+const rollup = require('rollup')
+const resolve = require('rollup-plugin-node-resolve')
+const commonjs = require('rollup-plugin-commonjs')
+const json = require('rollup-plugin-json')
+const terser = require('rollup-plugin-terser')
 const chalk = require('chalk');
 const log = require('fancy-log');
 const preprocess = require('gulp-preprocess');
-const watchify = require('watchify');
-const browserify = require('browserify');
-const babelify = require('babelify');
-const tsify = require('tsify');
 const stylus = require('gulp-stylus');
 const autoprefixer = require('gulp-autoprefixer');
 const rename = require('gulp-rename');
-const uglify = require('gulp-uglify-es').default;
 const buffer = require('vinyl-buffer')
 
 const SRC = 'src'
@@ -64,42 +65,41 @@ gulp.task('styl', () => {
   .pipe(gulp.dest(DEST + '/css/compiled/'));
 });
 
-gulp.task('scripts', () => {
-  return browserify(SRC + '/main.ts', { debug: true })
-    .plugin(tsify)
-    .transform(babelify)
-    .bundle()
-    .pipe(source('app.js'))
-    .pipe(buffer())
-    // work around Safari 10/11 bugs in loop scoping and await
-    // see https://www.npmjs.com/package/uglify-es
-    .pipe(uglify({ safari10: true }))
-    .on('error', logErrorAndExit)
-    .pipe(gulp.dest(DEST));
+gulp.task('compile', cb => {
+  exec('npx tsc --outDir build/', (err, stdout, stderr) => {
+    log.error(chalk.red(stdout))
+    cb(err)
+  })
+})
+
+gulp.task('bundle', (cb) => {
+  // return rollup.rollup({
+  //   input: 'build/main.js',
+  //   plugins: [
+  //     resolve(),
+  //     commonjs(),
+  //     json(),
+  //     options.mode === 'release' && terser(),
+  //   ],
+  //   onwarn(warning, warn) {
+  //     if (warning.code === 'CIRCULAR_DEPENDENCY') return
+  //     if ( warning.code === 'THIS_IS_UNDEFINED' ) return
+  //     warn(warning)
+  //   }
+  // }).then(bundle => {
+  //   return bundle.write({
+  //     file: 'www/app.js',
+  //     format: 'iife',
+  //     sourcemap: true
+  //   });
+  // });
+  exec('npx rollup -c', (err, stdout, stderr) => {
+    log.info(stderr)
+    cb(err)
+  })
 });
 
 gulp.task('watch-scripts', () => {
-  const opts = watchify.args;
-  opts.debug = true;
-
-  const bundleStream = watchify(
-    browserify(SRC + '/main.ts', opts)
-    .plugin(tsify)
-    .transform(babelify)
-  );
-
-  function rebundle() {
-    return bundleStream
-      .bundle()
-      .on('error', error => log.error(chalk.red(error.message)))
-      .pipe(source('app.js'))
-      .pipe(gulp.dest('./www'));
-  }
-
-  bundleStream.on('update', rebundle);
-  bundleStream.on('log', log);
-
-  return rebundle();
 });
 
 // Watch Files For Changes
@@ -108,5 +108,5 @@ gulp.task('launch-watch', () => {
   gulp.watch(['src/index.html', 'env.json'], gulp.parallel(['html']));
 });
 
-gulp.task('default', gulp.parallel(['html', 'styl', 'scripts']));
+gulp.task('default', gulp.parallel(['html', 'styl', 'bundle']));
 gulp.task('watch', gulp.series(['html', 'styl', 'watch-scripts', 'launch-watch']));

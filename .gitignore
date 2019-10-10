@@ -2,6 +2,9 @@ npm-debug.log
 
 /build
 
+/appconfig.*.json
+!/appconfig.dev.json
+
 /app.js.map
 /*.mobileprovision
 /*.keystore

@@ -1,0 +1,4 @@
+{
+  "apiEndPoint": "https://lichess.dev",
+  "socketEndPoint": "wss://socket.lichess.dev"
+}

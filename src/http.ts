@@ -1,4 +1,3 @@
-import merge from 'lodash-es/merge'
 import storage from './storage'
 import spinner from './spinner'
 import globalConfig from './config'
@@ -50,7 +49,7 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
     delete opts.query
   }
 
-  const cfg: RequestInit = {
+  let cfg: RequestInit = {
     method: 'GET',
     credentials: 'include',
     headers: {
@@ -65,7 +64,30 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
     h[SESSION_ID_KEY] = sid
   }
 
-  merge(cfg, opts)
+
+  // merge opts if they are defined
+  if (opts !== undefined) {
+    const { headers: optsHeaders, ...optsRest } = opts
+    cfg = {
+      ...cfg,
+      ...optsRest,
+    }
+    cfg.headers! = {
+      ...cfg.headers,
+      ...optsHeaders
+    } as HeadersInit
+    // allow to remove header if caller specifically mark it as __delete
+    // (important for cors)
+    cfg.headers = Object.keys(cfg.headers!)
+    .filter(k => {
+      const p = (<StringMap>cfg.headers!)[k]
+      return p !== '__delete'
+    })
+    .reduce((obj: StringMap, key: string) => {
+      obj[key] = (<StringMap>cfg.headers!)[key]
+      return obj
+    }, {}) as HeadersInit
+  }
 
   const init: RequestInit = {
     ...cfg,
@@ -73,10 +95,6 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
   }
 
   const headers: Headers = <Headers>init.headers
-
-  for (let pair of headers) {
-    if (pair[1] === '__delete') headers.delete(pair[0])
-  }
 
   // by default POST and PUT send json except if defined otherwise in caller
   if ((init.method === 'POST' || init.method === 'PUT') &&

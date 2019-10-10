@@ -92,9 +92,7 @@ function main(info: DeviceInfo) {
 
   window.addEventListener('resize', debounce(onResize), false)
 
-  setTimeout(() => {
-    Plugins.SplashScreen.hide()
-  }, 500)
+  Plugins.SplashScreen.hide()
 }
 
 function onResize() {

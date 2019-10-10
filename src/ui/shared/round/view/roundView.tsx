@@ -48,7 +48,7 @@ export default function view(ctrl: OnlineRound) {
 
 export function renderMaterial(material: Material) {
   const tomb = Object.keys(material.pieces).map((role: Role) =>
-    h('div.tomb', { key: role }, range(material.pieces[role])
+    h('div.tomb', range(material.pieces[role])
       .map(_ => h('piece', { className: role }))
     )
   )

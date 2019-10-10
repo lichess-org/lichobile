@@ -36,7 +36,7 @@ export function loadPreferredLanguage(): Promise<string> {
   return Plugins.Device.getLanguageCode()
   .then(({ value }) => {
     // TODO test
-    console.log(value)
+    console.log('language code', value)
     settings.general.lang(value)
     return value
   })

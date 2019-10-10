@@ -54,7 +54,6 @@
         "capacitor-sound-effect": "file:../capacitor-sound-effect",
         "cordova-plugin-fullscreen": "1.2.0",
         "cordova-plugin-insomnia": "4.2.0",
-        "cordova-plugin-webview-checker": "1.0.0",
         "d3-axis": "1.0.8",
         "d3-scale": "1.0.6",
         "d3-selection": "1.1.0",

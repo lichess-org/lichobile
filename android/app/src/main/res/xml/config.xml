@@ -17,11 +17,6 @@
   </feature>
 
 
-  <feature name="WebViewChecker">
-    <param name="android-package" value="com.nonameprovided.cordova.WebViewChecker.WebViewChecker"/>
-  </feature>
-
-
   <feature name="OneSignalPush">
     <param name="android-package" value="com.plugin.gcm.OneSignalPush"/>
   </feature>

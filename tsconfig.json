@@ -4,6 +4,7 @@
     "target": "es2015",
     "suppressImplicitAnyIndexErrors": false,
     "allowSyntheticDefaultImports": true,
+    "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
     "strictFunctionTypes": false,

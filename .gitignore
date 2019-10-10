@@ -14,8 +14,8 @@ npm-debug.log
 /platforms
 /plugins
 
-/www/app.js
-/www/app.js.map
+/www/*.js
+/www/*.js.map
 /www/index.html
 /www/css/compiled
 /www/locale

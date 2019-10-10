@@ -2,7 +2,7 @@ import * as Mithril from 'mithril'
 import * as helper from '../helper'
 import socket from '../../socket'
 import * as sleepUtils from '../../utils/sleep'
-import Editor from './Editor'
+import EditorCtrl from './EditorCtrl'
 import editorView from './editorView'
 
 interface Attrs {
@@ -10,7 +10,7 @@ interface Attrs {
 }
 
 interface State {
-  editor: Editor
+  editor: EditorCtrl
 }
 
 const EditorScreen: Mithril.Component<Attrs, State> = {
@@ -19,7 +19,7 @@ const EditorScreen: Mithril.Component<Attrs, State> = {
 
     sleepUtils.keepAwake()
 
-    this.editor = new Editor(attrs.fen)
+    this.editor = new EditorCtrl(attrs.fen)
   },
   oncreate: helper.viewFadeIn,
   onremove() {

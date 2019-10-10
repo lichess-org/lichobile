@@ -8,8 +8,8 @@ const production = process.env.NODE_ENV === 'production'
 export default {
 	input: 'build/main.js',
 	output: {
-		file: 'www/app.js',
-		format: 'iife',
+		dir: 'www',
+		format: 'esm',
 		sourcemap: true
 	},
 	plugins: [

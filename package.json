@@ -83,10 +83,11 @@
         "styles-watch": "stylus -w -q -u autoprefixer-stylus src/styl/index.styl -o www/css/compiled/app.css",
         "compile": "tsc --outDir build/",
         "compile-watch": "tsc -w --outDir build/",
-        "web-build": "npm run compile && rollup -c",
-        "web-watch": "rollup -w -c",
+        "web-clean": "rm -f www/*.js && rm -f www/*.js.map",
+        "web-build": "npm run web-clean && npm run compile && rollup -c",
+        "web-watch": "npm run web-clean && rollup -w -c",
         "watch": "node scripts/process_html && concurrently 'npm:compile-watch' 'npm:web-watch' 'npm:styles-watch'",
-        "prebuild": "npm run lint && npm run test",
+        "prebuild": "npm run lint && npm run test && npm run web-clean",
         "build": "node scripts/process_html && concurrently 'npm:styles' 'npm:web-build'"
     },
     "cordova": {

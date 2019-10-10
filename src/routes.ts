@@ -1,98 +1,324 @@
-import home from './ui/home'
-import timeline from './ui/timeline'
-import game from './ui/game'
-import analyse from './ui/analyse'
-import challenge from './ui/challenge'
-import tv from './ui/tv'
-import otb from './ui/otb'
-import ai from './ui/ai'
-import settingsUi from './ui/settings'
-import settingsSoundNotifications from './ui/settings/soundNotifications'
-import settingsLang from './ui/settings/lang'
-import settingsGameDisplay from './ui/settings/gameDisplay'
-import settingsGameBehavior from './ui/settings/gameBehavior'
-import theme from './ui/settings/theme'
-import boardThemes from './ui/settings/boardThemes'
-import pieceThemes from './ui/settings/pieceThemes'
-import user from './ui/user'
-import userRelated from './ui/user/related'
-import userGames from './ui/user/games'
-import userPerfStats from './ui/user/perfStats'
-import userTV from './ui/user/tv'
-import accountPreferences from './ui/user/account/preferences'
-import accountPrivacy from './ui/user/account/privacy'
-import accountKidMode from './ui/user/account/kid'
-import players from './ui/players'
-import training from './ui/training'
-import tournamentsList from './ui/tournament'
-import tournamentDetail from './ui/tournament/detail'
-import editor from './ui/editor'
-import clock from './ui/clock'
-import inbox from './ui/inbox'
-import inboxThread from './ui/inbox/thread'
-import inboxCompose from './ui/inbox/compose'
-import importer from './ui/importer'
-import search from './ui/search'
-import studyList from './ui/study'
-import study from './ui/study/study'
-import about from './ui/about'
-import { defineRoutes } from './router'
+import { withRouter, onRouteMatch, processQuerystring } from './router'
 
 export default {
   init() {
-    defineRoutes(document.body, {
-      '': home,
-      'timeline': timeline,
-      'otb': otb,
-      'otb/variant/:variant/fen/:fen': otb,
-      'ai': ai,
-      'ai/variant/:variant/fen/:fen/color/:color': ai,
-      'game/:id': game,
-      'tournament/:tournamentId/game/:id': game,
-      'analyse/:source/:id/:color': analyse,
-      'analyse/:source/:id': analyse,
-      'analyse/fen/:fen': analyse,
-      'analyse/variant/:variant': analyse,
-      'analyse/variant/:variant/fen/:fen': analyse,
-      'analyse': analyse,
-      'importer': importer,
-      'challenge/:id': challenge,
-      'tv': tv,
-      'tv/:channel': tv,
-      '@/:id': user,
-      '@/:id/related': userRelated,
-      '@/:id/games': userGames,
-      '@/:id/games/:filter': userGames,
-      '@/:id/:perf/perf': userPerfStats,
-      '@/:id/tv': userTV,
-      'about': about,
-      'account/preferences': accountPreferences,
-      'account/preferences/privacy': accountPrivacy,
-      'account/preferences/kidMode': accountKidMode,
-      'clock': clock,
-      'editor': editor,
-      'editor/:fen': editor,
-      'inbox': inbox,
-      'inbox/:id': inboxThread,
-      'inbox/new': inboxCompose,
-      'inbox/new/:userId': inboxCompose,
-      'players': players,
-      'search': search,
-      'settings': settingsUi,
-      'settings/gameDisplay': settingsGameDisplay,
-      'settings/gameBehavior': settingsGameBehavior,
-      'settings/soundNotifications': settingsSoundNotifications,
-      'settings/theme': theme,
-      'settings/themes/board': boardThemes,
-      'settings/themes/piece': pieceThemes,
-      'settings/lang': settingsLang,
-      'training': training,
-      'training/:id': training,
-      'tournament': tournamentsList,
-      'tournament/:id': tournamentDetail,
-      'study': studyList,
-      'study/:id': study,
-      'study/:id/chapter/:chapterId': study,
+    withRouter(router => {
+
+      router.add('',  ({ params }) => {
+        import('./ui/home/home').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('timeline', ({ params }) => {
+        import('./ui/timeline').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('otb', ({ params }) => {
+        import('./ui/otb/otb').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('otb/variant/:variant/fen/:fen', ({ params }) => {
+        import('./ui/otb/otb').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('ai', ({ params }) => {
+        import('./ui/ai/ai').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('ai/variant/:variant/fen/:fen/color/:color', ({ params }) => {
+        import('./ui/ai/ai').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('game/:id', ({ params }) => {
+        import('./ui/game').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('tournament/:tournamentId/game/:id', ({ params }) => {
+        import('./ui/game').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('analyse/:source/:id/:color', ({ params }) => {
+        import('./ui/analyse/analyse').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('analyse/:source/:id', ({ params }) => {
+        import('./ui/analyse/analyse').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('analyse/fen/:fen', ({ params }) => {
+        import('./ui/analyse/analyse').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('analyse/variant/:variant', ({ params }) => {
+        import('./ui/analyse/analyse').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('analyse/variant/:variant/fen/:fen', ({ params }) => {
+        import('./ui/analyse/analyse').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('analyse', ({ params }) => {
+        import('./ui/analyse/analyse').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('importer', ({ params }) => {
+        import('./ui/importer/importer').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('challenge/:id', ({ params }) => {
+        import('./ui/challenge/challenge').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('tv', ({ params }) => {
+        import('./ui/tv').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('tv/:channel', ({ params }) => {
+        import('./ui/tv').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('@/:id', ({ params }) => {
+        import('./ui/user/user').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('@/:id/related', ({ params }) => {
+        import('./ui/user/related').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('@/:id/games', ({ params }) => {
+        import('./ui/user/games').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('@/:id/games/:filter', ({ params }) => {
+        import('./ui/user/games').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('@/:id/:perf/perf', ({ params }) => {
+        import('./ui/user/perfStats').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('@/:id/tv', ({ params }) => {
+        import('./ui/user/tv').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('about', ({ params }) => {
+        import('./ui/about').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('account/preferences', ({ params }) => {
+        import('./ui/user/account/preferences').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('account/preferences/privacy', ({ params }) => {
+        import('./ui/user/account/privacy').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('account/preferences/kidMode', ({ params }) => {
+        import('./ui/user/account/kid').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('clock', ({ params }) => {
+        import('./ui/clock/clock').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('editor', ({ params }) => {
+        import('./ui/editor/editor').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('editor/:fen', ({ params }) => {
+        import('./ui/editor/editor').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('inbox', ({ params }) => {
+        import('./ui/inbox/inbox').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('inbox/:id', ({ params }) => {
+        import('./ui/inbox/thread/thread').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('inbox/new', ({ params }) => {
+        import('./ui/inbox/compose/compose').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('inbox/new/:userId', ({ params }) => {
+        import('./ui/inbox/compose/compose').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('players', ({ params }) => {
+        import('./ui/players/players').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('search', ({ params }) => {
+        import('./ui/search/search').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('settings', ({ params }) => {
+        import('./ui/settings/settings').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('settings/gameDisplay', ({ params }) => {
+        import('./ui/settings/gameDisplay').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('settings/gameBehavior', ({ params }) => {
+        import('./ui/settings/gameBehavior').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('settings/soundNotifications', ({ params }) => {
+        import('./ui/settings/soundNotifications').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('settings/theme', ({ params }) => {
+        import('./ui/settings/theme').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('settings/themes/board', ({ params }) => {
+        import('./ui/settings/boardThemes').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('settings/themes/piece', ({ params }) => {
+        import('./ui/settings/pieceThemes').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('settings/lang', ({ params }) => {
+        import('./ui/settings/lang').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('training', ({ params }) => {
+        import('./ui/training/training').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('training/:id', ({ params }) => {
+        import('./ui/training/training').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('tournament', ({ params }) => {
+        import('./ui/tournament/tournamentList').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('tournament/:id', ({ params }) => {
+        import('./ui/tournament/detail/tournamentDetail').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('study', ({ params }) => {
+        import('./ui/study/studyList').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('study/:id', ({ params }) => {
+        import('./ui/study/study/study').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('study/:id/chapter/:chapterId', ({ params }) => {
+        import('./ui/study/study/study').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
     })
+
+    window.addEventListener('popstate', processQuerystring)
+    processQuerystring()
   }
 }

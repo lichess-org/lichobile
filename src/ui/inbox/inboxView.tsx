@@ -4,7 +4,7 @@ import router from '../../router'
 import i18n from '../../i18n'
 import { Thread } from './interfaces'
 
-import { InboxCtrl } from '.'
+import { InboxCtrl } from './inbox'
 
 export function inboxBody(ctrl: InboxCtrl) {
   if (!ctrl.threads() || !ctrl.threads().currentPageResults) return null

@@ -44,10 +44,10 @@ export interface MenuInterface {
   open: () => void
   close: () => void
   isOpen: () => boolean
-  root: Editor
+  root: EditorCtrl
 }
 
-export default class Editor {
+export default class EditorCtrl {
   public data: Data
   public menu: MenuInterface
   public pasteFenPopup: MenuInterface

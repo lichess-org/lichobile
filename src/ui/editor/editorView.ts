@@ -9,10 +9,10 @@ import i18n from '../../i18n'
 import layout from '../layout'
 import continuePopup from '../shared/continuePopup'
 import pasteFenPopup from './pasteFenPopup'
-import Editor from './Editor'
+import EditorCtrl from './EditorCtrl'
 import menu from './menu'
 
-export default function view(ctrl: Editor) {
+export default function view(ctrl: EditorCtrl) {
   const color = ctrl.chessground.state.orientation
   const opposite = color === 'white' ? 'black' : 'white'
   const isPortrait = helper.isPortrait()
@@ -62,7 +62,7 @@ function sparePieces(color: Color, orientation: Color, position: 'top' | 'bottom
   })))
 }
 
-function renderActionsBar(ctrl: Editor) {
+function renderActionsBar(ctrl: EditorCtrl) {
   return h('section.actions_bar', [
     h('button.action_bar_button.fa.fa-gear', {
       oncreate: helper.ontap(ctrl.menu.open)

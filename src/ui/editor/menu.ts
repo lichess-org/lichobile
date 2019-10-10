@@ -4,11 +4,11 @@ import popupWidget from '../shared/popup'
 import router from '../../router'
 import * as helper from '../helper'
 import h from 'mithril/hyperscript'
-import Editor, { MenuInterface } from './Editor'
+import EditorCtrl, { MenuInterface } from './EditorCtrl'
 
 export default {
 
-  controller: function(root: Editor) {
+  controller: function(root: EditorCtrl) {
     let isOpen = false
 
     function open() {
@@ -42,14 +42,14 @@ export default {
   }
 }
 
-function renderEditorMenu(ctrl: Editor) {
+function renderEditorMenu(ctrl: EditorCtrl) {
   return h('div.editorMenu', [
     renderSelectColorPosition(ctrl),
     renderCastlingOptions(ctrl)
   ])
 }
 
-export function renderSelectColorPosition(ctrl: Editor) {
+export function renderSelectColorPosition(ctrl: EditorCtrl) {
   const fen = ctrl.computeFen()
   return h('div.editorSelectors', [
     h('div.select_input', [
@@ -116,7 +116,7 @@ export function renderSelectColorPosition(ctrl: Editor) {
   ])
 }
 
-function renderCastlingOptions(ctrl: Editor) {
+function renderCastlingOptions(ctrl: EditorCtrl) {
   const white = [
     ['K', i18n('whiteCastlingKingside')],
     ['Q', i18n('whiteCastlingQueenside')],
@@ -133,7 +133,7 @@ function renderCastlingOptions(ctrl: Editor) {
   ])
 }
 
-function castlingButton(ctrl: Editor, c: string[]) {
+function castlingButton(ctrl: EditorCtrl, c: string[]) {
   const cur = ctrl.data.editor.castles[c[0]]
   return h('span', {
     className: cur() ? 'selected' : '',

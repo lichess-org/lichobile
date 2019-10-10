@@ -27,38 +27,37 @@ let viewSlideDirection = 'fwd'
 
 let previousPath: string = '/'
 
-export function defineRoutes(mountPoint: HTMLElement, routes: {[index: string]: Mithril.Component<any, any>}) {
-  for (let route in routes) {
-    const component = routes[route]
-    router.add(route, function onRouteMatch({ params }) {
+const mountPoint = document.body
 
-      const RouteComponent = {view() {
-        return Vnode(component, undefined, params)
-      }}
-
-      function redraw() {
-        // temp hack because of @types/mithril
-        (render as any)(mountPoint, Vnode(RouteComponent))
-      }
-
-      signals.redraw.removeAll()
-      signals.redraw.add(redraw)
-      // some error may be thrown during component initialization
-      // in that case shutdown redraws to avoid multiple execution of oninit
-      // hook of buggy component
-      try {
-        redraw()
-      } catch (e) {
-        signals.redraw.removeAll()
-        throw e
-      }
-    })
-  }
-  window.addEventListener('popstate', processQuerystring)
-  processQuerystring()
+export function withRouter(f: (r: Rlite.Rlite) => void): void {
+  f(router)
 }
 
-function processQuerystring(e?: PopStateEvent) {
+export function onRouteMatch<T>(component: Mithril.Component<any, any>, params: T) {
+
+  const RouteComponent = {view() {
+    return Vnode(component, undefined, params)
+  }}
+
+  function redraw() {
+    // temp hack because of @types/mithril
+    (render as any)(mountPoint, Vnode(RouteComponent))
+  }
+
+  signals.redraw.removeAll()
+  signals.redraw.add(redraw)
+  // some error may be thrown during component initialization
+  // in that case shutdown redraws to avoid multiple execution of oninit
+  // hook of buggy component
+  try {
+    redraw()
+  } catch (e) {
+    signals.redraw.removeAll()
+    throw e
+  }
+}
+
+export function processQuerystring(e?: PopStateEvent) {
   if (e && e.state) {
     if (e.state.id < currentStateId) {
       viewSlideDirection = 'bwd'

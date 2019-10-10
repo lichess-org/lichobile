@@ -3,14 +3,14 @@ import commonjs from 'rollup-plugin-commonjs'
 import json from 'rollup-plugin-json'
 import { terser } from 'rollup-plugin-terser'
 
-const production = process.env.NODE_ENV === 'production'
+const production = process.env.APP_MODE === 'prod'
 
 export default {
 	input: 'build/main.js',
 	output: {
 		dir: 'www',
 		format: 'esm',
-		sourcemap: true
+		sourcemap: !production,
 	},
 	plugins: [
     resolve(),

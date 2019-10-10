@@ -30,11 +30,6 @@ let firstConnection = true
 
 function main(info: DeviceInfo) {
 
-  window.open = (url: string) => {
-    Plugins.Browser.open({ url })
-    return null
-  }
-
   window.deviceInfo = {
     platform: info.platform,
     uuid: info.uuid,

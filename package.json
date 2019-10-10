@@ -38,8 +38,6 @@
         "rollup-plugin-terser": "5.1.2",
         "tslint": "5.8.0",
         "typescript": "3.4.5",
-        "vinyl-buffer": "1.0.1",
-        "vinyl-source-stream": "2.0.0",
         "whatwg-fetch": "3.0.0"
     },
     "dependencies": {

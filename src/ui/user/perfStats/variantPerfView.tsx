@@ -11,7 +11,7 @@ import i18n from '../../../i18n'
 import * as helper from '../../helper'
 import { GraphPoint } from '../../../lichess/interfaces/user'
 
-import { State } from '.'
+import { State } from './perfStats'
 
 interface DateRating {
   date: Date

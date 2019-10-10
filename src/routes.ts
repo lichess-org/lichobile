@@ -119,31 +119,31 @@ export default {
       })
 
       router.add('@/:id/related', ({ params }) => {
-        import('./ui/user/related').then(m => {
+        import('./ui/user/related/related').then(m => {
           onRouteMatch(m.default, params)
         })
       })
 
       router.add('@/:id/games', ({ params }) => {
-        import('./ui/user/games').then(m => {
+        import('./ui/user/games/games').then(m => {
           onRouteMatch(m.default, params)
         })
       })
 
       router.add('@/:id/games/:filter', ({ params }) => {
-        import('./ui/user/games').then(m => {
+        import('./ui/user/games/games').then(m => {
           onRouteMatch(m.default, params)
         })
       })
 
       router.add('@/:id/:perf/perf', ({ params }) => {
-        import('./ui/user/perfStats').then(m => {
+        import('./ui/user/perfStats/perfStats').then(m => {
           onRouteMatch(m.default, params)
         })
       })
 
       router.add('@/:id/tv', ({ params }) => {
-        import('./ui/user/tv').then(m => {
+        import('./ui/user/userTv').then(m => {
           onRouteMatch(m.default, params)
         })
       })

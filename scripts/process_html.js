@@ -10,7 +10,7 @@ const rootDir = path.join(__dirname, '..')
 const target = process.env.APP_TARGET || 'web'
 // dev | prod
 const mode = process.env.APP_MODE || 'dev'
-// stage | prod | custom
+// dev | prod | custom
 const confKey = process.env.APP_CONFIG || 'dev'
 
 const config = require(path.join(rootDir, 'appconfig.' + confKey + '.json'))

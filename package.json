@@ -51,7 +51,7 @@
         "@types/mithril": "2.0.0",
         "autoprefixer-stylus": "1.0.0",
         "capacitor-cordova-plugin-stockfish": "git+https://github.com/veloce/cordova-plugin-stockfish.git#capacitor",
-        "capacitor-sound-effect": "file:../capacitor-sound-effect",
+        "capacitor-sound-effect": "git+https://github.com/veloce/capacitor-sound-effect.git",
         "cordova-plugin-fullscreen": "1.2.0",
         "cordova-plugin-insomnia": "4.2.0",
         "d3-axis": "1.0.8",

@@ -22,7 +22,7 @@
         "url": "https://github.com/veloce/lichobile/issues"
     },
     "homepage": "https://github.com/veloce/lichobile",
-    "browserslist": "and_chr >= 58, ios_saf >= 11",
+    "browserslist": "and_chr >= 63, ios_saf >= 11",
     "devDependencies": {
         "@babel/preset-env": "7.6.2",
         "@types/jest": "24.0.11",

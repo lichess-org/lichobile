@@ -21,7 +21,6 @@ import * as helper from './ui/helper'
 import lobby from './ui/lobby'
 import router from './router'
 import socket from './socket'
-import push from './push'
 import routes from './routes'
 import { isForeground, setForeground, setBackground } from './utils/appMode'
 // import { loadCachedImages } from './bgtheme'
@@ -39,7 +38,7 @@ function main(info: DeviceInfo) {
   routes.init()
   // TODO
   // deepLinks.init()
-  push.init()
+  // push.init()
 
   // cached background images
   // TODO
@@ -120,7 +119,7 @@ function onOnline() {
             loadLanguage(lang)
           })
         }
-        push.register()
+        // push.register()
         challengesApi.refresh()
         syncWithNowPlayingGames(session.nowPlaying())
         redraw()

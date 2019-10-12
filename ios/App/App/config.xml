@@ -11,9 +11,4 @@
     <param name="ios-package" value="Insomnia"/>
   </feature>
 
-
-  <feature name="OneSignalPush">
-    <param name="ios-package" value="OneSignalPush"/>
-  </feature>
-
   </widget>

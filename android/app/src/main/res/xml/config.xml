@@ -16,9 +16,4 @@
     <param name="android-package" value="nl.xservices.plugins.Insomnia"/>
   </feature>
 
-
-  <feature name="OneSignalPush">
-    <param name="android-package" value="com.plugin.gcm.OneSignalPush"/>
-  </feature>
-
   </widget>

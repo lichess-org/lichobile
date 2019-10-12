@@ -66,7 +66,6 @@
         "lodash-es": "4.17.15",
         "mithril": "2.0.4",
         "moment": "2.21.0",
-        "onesignal-cordova-plugin": "2.5.2",
         "rlite-router": "1.1.3",
         "siema": "1.5.1",
         "signals": "1.0.0",
@@ -87,8 +86,7 @@
         "web-watch": "npm run web-clean && rollup -w -c",
         "watch": "node scripts/process_html && concurrently 'npm:compile-watch' 'npm:web-watch' 'npm:styles-watch'",
         "prebuild": "npm run web-clean",
-        "build": "node scripts/process_html && concurrently 'npm:styles' 'npm:web-build'",
-        "build-capacitor": "APP_TARGET=native npm run build && npx cap copy"
+        "build": "node scripts/process_html && concurrently 'npm:styles' 'npm:web-build' && npx cap copy"
     },
     "cordova": {
         "platforms": [],

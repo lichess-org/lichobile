@@ -10,10 +10,9 @@ android {
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':capacitor-sound-effect')
-    implementation "com.onesignal:OneSignal:3.11.2"
+
 }
 apply from: "../../node_modules/capacitor-cordova-plugin-stockfish/build-extras-stockfish.gradle"
-apply from: "../../node_modules/onesignal-cordova-plugin/build-extras-onesignal.gradle"
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

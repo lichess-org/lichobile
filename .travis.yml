@@ -15,10 +15,11 @@ before_install:
   - echo y | sdkmanager "ndk-bundle"
 install:
   - npm install
+  - npx cap update android
 before_script:
   - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
 script:
-  - sh scripts/travis_build.sh
+  - npm run build
   - cd android && ./gradlew build connectedCheck
   # - test -e platforms/android/app/build/outputs/apk/debug/app-debug.apk 
 before_cache:

@@ -1,4 +1,4 @@
-import Stream from 'mithril/Stream'
+import Stream from 'mithril/stream'
 
 export interface IExplorerCtrl {
   allowed: boolean

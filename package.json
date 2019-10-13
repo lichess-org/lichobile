@@ -22,19 +22,17 @@
         "url": "https://github.com/veloce/lichobile/issues"
     },
     "homepage": "https://github.com/veloce/lichobile",
-    "browserslist": "and_chr >= 63, ios_saf >= 11",
+    "browserslist": "and_chr >= 63, ios_saf >= 11.1",
     "devDependencies": {
-        "@babel/preset-env": "7.6.2",
         "@types/jest": "24.0.11",
-        "babel-plugin-transform-remove-console": "6.9.4",
         "concurrently": "5.0.0",
         "jest": "24.7.1",
         "mustache": "3.1.0",
-        "ncp": "2.0.0",
         "rollup": "1.23.1",
         "rollup-plugin-commonjs": "10.1.0",
         "rollup-plugin-json": "4.0.0",
         "rollup-plugin-node-resolve": "5.2.0",
+        "rollup-plugin-strip": "1.2.2",
         "rollup-plugin-terser": "5.1.2",
         "tslint": "5.8.0",
         "typescript": "3.4.5",
@@ -84,10 +82,10 @@
         "web-clean": "rm -f www/*.js && rm -f www/*.js.map",
         "web-build": "npm run web-clean && npm run compile && rollup -c",
         "web-watch": "npm run web-clean && rollup -w -c",
-        "watch": "node scripts/process_html && concurrently 'npm:compile-watch' 'npm:web-watch' 'npm:styles-watch'",
+        "watch": "node scripts/inject_conf && concurrently 'npm:compile-watch' 'npm:web-watch' 'npm:styles-watch'",
         "prebuild": "npm run web-clean",
-        "build": "node scripts/process_html && concurrently 'npm:styles' 'npm:web-build'",
-        "build-cap": "npm run build && npx cap copy"
+        "build": "node scripts/inject_conf && concurrently 'npm:styles' 'npm:web-build'",
+        "build-copy": "npm run build && npx cap copy"
     },
     "cordova": {
         "platforms": [],

@@ -1,6 +1,7 @@
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 import json from 'rollup-plugin-json'
+import strip from 'rollup-plugin-strip'
 import { terser } from 'rollup-plugin-terser'
 
 const production = process.env.APP_MODE === 'prod'
@@ -16,6 +17,10 @@ export default {
     resolve(),
     commonjs(),
     json(),
+    production && strip({
+      debugger: true,
+      sourceMap: false,
+    }),
 		production && terser(),
 	],
   onwarn(warning, warn) {

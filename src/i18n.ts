@@ -20,6 +20,9 @@ let dateTimeFormat: Intl.DateTimeFormat = new Intl.DateTimeFormat(undefined, dat
 
 export default function i18n(key: string, ...args: Array<string | number>): string {
   let str: string = messages[key] || untranslated[key] || key
+  args.forEach((arg, idx) => {
+    str = str.replace(new RegExp(`%${idx + 1}\\$s`, 'g'), String(arg))
+  })
   args.forEach(a => { str = str.replace('%s', String(a)) })
   return str
 }

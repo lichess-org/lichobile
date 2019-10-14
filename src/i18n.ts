@@ -6,8 +6,6 @@ import addSeconds from 'date-fns/esm/addSeconds'
 import settings from './settings'
 import { loadLocalJsonFile } from './utils'
 
-const supportedDateLocales = ['ar-DZ', 'ar-SA', 'en-CA', 'en-GB', 'en-US', 'fa-IR', 'fr-CH', 'nl-BE', 'pt-BR', 'zh-CN', 'zh-TW']
-
 const defaultCode = 'en'
 
 let lang = defaultCode
@@ -116,7 +114,12 @@ function loadFile(code: string): Promise<string> {
   })
 }
 
+// supported date-fns locales with region
+const supportedDateLocales = ['ar-DZ', 'ar-SA', 'en-CA', 'en-GB', 'en-US', 'fa-IR', 'fr-CH', 'nl-BE', 'pt-BR', 'zh-CN', 'zh-TW']
+
 function loadDateLocale(code: string): Promise<string> {
+  if (code === 'en') return Promise.resolve(code)
+
   const lCode = supportedDateLocales.includes(code) ? code : code.split('-')[0]
   return import('./locale/' + lCode + '/index.js')
   .then(module => {

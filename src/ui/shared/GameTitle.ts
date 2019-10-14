@@ -1,7 +1,7 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import * as utils from '../../utils'
-import i18n from '../../i18n'
+import i18n, { fromNow } from '../../i18n'
 import gameStatusApi from '../../lichess/status'
 import { isGameData } from '../../lichess/interfaces'
 import { GameData } from '../../lichess/interfaces/game'
@@ -46,7 +46,7 @@ export default {
         subEls = i18n('gameAborted')
       }
       else if (data.game.createdAt) {
-        subEls = window.moment(data.game.createdAt).calendar()
+        subEls = fromNow(new Date(data.game.createdAt))
       }
     }
     else if (subTitle === 'corres' && isGameData(data)) {
@@ -73,7 +73,7 @@ export default {
           h('span', [
             data.tournament.name,
             data.game.createdAt ?
-              (' (' + window.moment(data.game.createdAt).calendar() + ')') : null
+              (' (' + fromNow(new Date(data.game.createdAt)) + ')') : null
           ])
         ]
       }

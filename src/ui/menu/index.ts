@@ -43,10 +43,10 @@ export function route(route: string) {
   }
 }
 
-export function popup(action: () => void) {
+export function action(f: () => void) {
   return function() {
     return mainMenuCtrl.close().then(() => {
-      action()
+      f()
       redraw()
     })
   }

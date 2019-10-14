@@ -2,6 +2,7 @@ import { Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
 import throttle from 'lodash-es/throttle'
 import socket, { SocketIFace } from '../../../socket'
 import redraw from '../../../utils/redraw'
+import { fromNow } from '../../../i18n'
 import * as utils from '../../../utils'
 import * as tournamentApi from '../../../lichess/tournament'
 import { Tournament, StandingPlayer, StandingPage } from '../../../lichess/interfaces/tournament'
@@ -43,7 +44,7 @@ export default class TournamentCtrl {
     this.playerInfoCtrl = playerInfo.controller(this)
 
     this.tournament = data
-    this.startsAt = window.moment(data.startsAt).calendar()
+    this.startsAt = fromNow(new Date(data.startsAt))
     this.page = this.tournament.standing.page
     this.loadCurrentPage(this.tournament.standing)
     this.hasJoined = !!(data.me && !data.me.withdraw)

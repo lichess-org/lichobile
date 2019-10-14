@@ -7,6 +7,7 @@ import signals from '../../signals'
 import settings from '../../settings'
 import { timeline as timelineXhr, seeks as corresSeeksXhr, lobby as lobbyXhr } from '../../xhr'
 import { hasNetwork, noop } from '../../utils'
+import { fromNow } from '../../i18n'
 import { isForeground } from '../../utils/appMode'
 import { PongMessage, TimelineEntry, DailyPuzzle, CorrespondenceSeek } from '../../lichess/interfaces'
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
@@ -92,7 +93,7 @@ export default class HomeCtrl {
           .filter((o: TimelineEntry) => supportedTimelineTypes.indexOf(o.type) !== -1)
           .slice(0, 10)
           .map(o => {
-            o.fromNow = window.moment(o.date).fromNow()
+            o.fromNow = fromNow(new Date(o.date))
             return o
           })
         redraw()

@@ -2,7 +2,7 @@ import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
 import * as helper from '../../helper'
 import { userStatus } from '../../shared/common'
-import i18n from '../../../i18n'
+import i18n, { fromNow } from '../../../i18n'
 import { linkify } from '../../../utils/html'
 import redraw from '../../../utils/redraw'
 import { Post } from '../interfaces'
@@ -62,8 +62,7 @@ function renderPost(post: Post, index: number, posts: Array<Post>) {
 }
 
 function postDateFormat (timeInMillis: number) {
-  const time = window.moment(timeInMillis)
-  return time.calendar()
+  return fromNow(new Date(timeInMillis))
 }
 
 function deleteButton (ctrl: IThreadCtrl) {

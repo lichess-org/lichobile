@@ -58,12 +58,12 @@
         "d3-shape": "1.2.0",
         "d3-time": "1.0.7",
         "d3-time-format": "2.0.5",
+        "date-fns": "2.4.1",
         "hammerjs": "2.0.8",
         "localforage": "1.5.5",
         "lodash": "4.17.15",
         "lodash-es": "4.17.15",
         "mithril": "2.0.4",
-        "moment": "2.21.0",
         "rlite-router": "1.1.3",
         "siema": "1.5.1",
         "signals": "1.0.0",
@@ -84,7 +84,7 @@
         "web-watch": "npm run web-clean && rollup -w -c",
         "watch": "node scripts/inject_conf && concurrently 'npm:compile-watch' 'npm:web-watch' 'npm:styles-watch'",
         "prebuild": "npm run web-clean",
-        "build": "node scripts/inject_conf && concurrently 'npm:styles' 'npm:web-build'",
+        "build": "node scripts/inject_conf && concurrently 'node scripts/link_locales' 'npm:styles' 'npm:web-build'",
         "build-copy": "npm run build && npx cap copy"
     },
     "cordova": {

@@ -8,7 +8,7 @@ import { linkify } from '../../utils/html'
 import { perfTypes, provisionalDeviation } from '../../lichess/perfs'
 import { Perf } from '../../lichess/interfaces/user'
 import * as xhr from '../../xhr'
-import i18n from '../../i18n'
+import i18n, { formatDate, formatDuration, fromNow } from '../../i18n'
 import countries from '../../utils/countries'
 import * as helper from '../helper'
 import session from '../../session'
@@ -76,7 +76,7 @@ function renderProfile(user: ProfileUser) {
     if (user.profile.lastName) fullname += (user.profile.firstName ? ' ' : '') + user.profile.lastName
     const country = countries[user.profile.country]
     const location = user.profile.location
-    const memberSince = i18n('memberSince') + ' ' + window.moment(user.createdAt).format('LL')
+    const memberSince = i18n('memberSince') + ' ' + formatDate(new Date(user.createdAt))
 
     return (
       <section className="profileSection">
@@ -108,7 +108,7 @@ function renderProfile(user: ProfileUser) {
           </p>
           <p>{memberSince}</p>
           {user.seenAt ?
-          <p>Active <small>{window.moment(user.seenAt).fromNow()}</small></p> : null
+          <p>Active <small>{fromNow(new Date(user.seenAt))}</small></p> : null
           }
         </div>
       </section>
@@ -154,10 +154,10 @@ function renderStats(user: ProfileUser) {
   let tvTime: string | null = null
 
   if (isFullUser(user)) {
-    totalPlayTime = user.playTime ? 'Time spent playing: ' + window.moment.duration(user.playTime.total, 'seconds').humanize() : null
-    tvTime = user.playTime && user.playTime.tv > 0 ? 'Time on TV: ' + window.moment.duration(user.playTime.tv, 'seconds').humanize() : null
+    totalPlayTime = user.playTime ? 'Time spent playing: ' + formatDuration(user.playTime.total) : null
+    tvTime = user.playTime && user.playTime.tv > 0 ? 'Time on TV: ' + formatDuration(user.playTime.tv) : null
   } else if (isSessionUser(user)) {
-    totalPlayTime = user.playTime ? 'Time spent playing: ' + window.moment.duration(user.playTime, 'seconds').humanize() : null
+    totalPlayTime = user.playTime ? 'Time spent playing: ' + formatDuration(user.playTime.total) : null
   }
 
   return (

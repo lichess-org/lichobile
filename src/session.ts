@@ -12,13 +12,13 @@ import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils'
 import i18n from './i18n'
 import push from './push'
 import settings from './settings'
-import { TempBan } from './lichess/interfaces'
+import { TempBan, LobbyData, NowPlayingGame } from './lichess/interfaces'
+import { PlayTime } from './lichess/interfaces/user'
 import friendsApi from './lichess/friends'
 import challengesApi from './lichess/challenges'
 import storage, { StoredProp } from './storage'
 import asyncStorage from './asyncStorage'
 
-import { LobbyData, NowPlayingGame } from './lichess/interfaces'
 
 type PrefValue = number | string | boolean
 interface Prefs {
@@ -53,7 +53,7 @@ export interface Session {
   readonly perfs: any
   readonly createdAt: number
   readonly seenAt: number
-  readonly playTime: number
+  readonly playTime: PlayTime
   readonly nowPlaying: ReadonlyArray<NowPlayingGame>
   readonly prefs: Prefs
   readonly nbChallenges: number

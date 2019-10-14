@@ -1,5 +1,6 @@
 import * as Mithril from 'mithril'
 import debounce from 'lodash-es/debounce'
+import { fromNow } from '../../i18n'
 import { handleXhrError } from '../../utils'
 import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import redraw from '../../utils/redraw'
@@ -153,6 +154,6 @@ let cachedState: State | undefined
 function addDate(s: PagerData): PagerDataWithDate {
   return {
     ...s,
-    date: window.moment(s.updatedAt).calendar()
+    date: fromNow(new Date(s.updatedAt))
   }
 }

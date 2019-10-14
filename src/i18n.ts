@@ -1,12 +1,24 @@
 import { Plugins } from '@capacitor/core'
+import { Locale } from 'date-fns'
+import formatDistanceStrict from 'date-fns/esm/formatDistanceStrict'
+import formatRelative from 'date-fns/esm/formatRelative'
+import addSeconds from 'date-fns/esm/addSeconds'
 import settings from './settings'
 import { loadLocalJsonFile } from './utils'
+
+const supportedDateLocales = ['ar-DZ', 'ar-SA', 'en-CA', 'en-GB', 'en-US', 'fa-IR', 'fr-CH', 'nl-BE', 'pt-BR', 'zh-CN', 'zh-TW']
 
 const defaultCode = 'en'
 
 let lang = defaultCode
+let dateLocale: Locale | undefined
 let messages = {} as StringMap
 let numberFormat: Intl.NumberFormat = new Intl.NumberFormat()
+
+const dateFormatOpts = { day: '2-digit', month: 'long', year: 'numeric' }
+const dateTimeFormatOpts = { ...dateFormatOpts, hour: '2-digit', minute: '2-digit' }
+let dateFormat: Intl.DateTimeFormat = new Intl.DateTimeFormat(undefined, dateFormatOpts)
+let dateTimeFormat: Intl.DateTimeFormat = new Intl.DateTimeFormat(undefined, dateTimeFormatOpts)
 
 export default function i18n(key: string, ...args: Array<string | number>): string {
   let str: string = messages[key] || untranslated[key] || key
@@ -16,6 +28,29 @@ export default function i18n(key: string, ...args: Array<string | number>): stri
 
 export function formatNumber(n: number): string {
   return numberFormat.format(n)
+}
+
+export function formatDate(d: Date): string {
+  return dateFormat.format(d)
+}
+
+export function formatDateTime(d: Date): string {
+  return dateTimeFormat.format(d)
+}
+
+export function formatDuration(duration: Seconds): string {
+  const epoch = new Date(0)
+  return formatDistanceStrict(
+    epoch,
+    addSeconds(epoch, duration),
+    { locale: dateLocale },
+  )
+}
+
+export function fromNow(date: Date): string {
+  return formatRelative(date, new Date(), {
+    locale: dateLocale
+  })
 }
 
 export function getLang(): string {
@@ -41,7 +76,7 @@ export function loadPreferredLanguage(): Promise<string> {
     return value
   })
   .then(loadFile)
-  .then(loadMomentLocale)
+  .then(loadDateLocale)
 }
 
 export function getAvailableLanguages(): Promise<ReadonlyArray<[string, string]>> {
@@ -62,7 +97,7 @@ export function ensureLangIsAvailable(lang: string): Promise<string> {
 
 export function loadLanguage(lang: string): Promise<string> {
   return loadFile(lang)
-  .then(loadMomentLocale)
+  .then(loadDateLocale)
 }
 
 function loadFile(code: string): Promise<string> {
@@ -71,6 +106,8 @@ function loadFile(code: string): Promise<string> {
     lang = code
     messages = data
     numberFormat = new Intl.NumberFormat(code)
+    dateFormat = new Intl.DateTimeFormat(code, dateFormatOpts)
+    dateTimeFormat = new Intl.DateTimeFormat(code, dateTimeFormatOpts)
     return code
   })
   .catch(error => {
@@ -79,24 +116,17 @@ function loadFile(code: string): Promise<string> {
   })
 }
 
-function isLocaleLoaded(code: string): boolean {
-  const scripts = document.head.getElementsByTagName('script')
-  for (let i = 0, len = scripts.length; i < len; i++) {
-    if (scripts[i].getAttribute('src') === 'locale/' + code + '.js') {
-      return true
-    }
-  }
-  return false
-}
-
-function loadMomentLocale(code: string): string {
-  if (code !== 'en' && !isLocaleLoaded(code)) {
-    const script = document.createElement('script')
-    script.src = 'locale/' + code + '.js'
-    document.head.appendChild(script)
-  }
-  window.moment.locale(code)
-  return code
+function loadDateLocale(code: string): Promise<string> {
+  const lCode = supportedDateLocales.includes(code) ? code : code.split('-')[0]
+  return import('./locale/' + lCode + '/index.js')
+  .then(module => {
+    dateLocale = module.default || undefined
+    return code
+  })
+  .catch(() => {
+    dateLocale = undefined
+    return code
+  })
 }
 
 const untranslated: StringMap = {

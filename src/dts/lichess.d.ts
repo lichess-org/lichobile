@@ -50,7 +50,6 @@ interface LichessOptions {
 
 interface Window {
   lichess: LichessOptions
-  moment: any
   Shepherd: TetherShepherd.ShepherdStatic
   AndroidFullScreen: {
     showSystemUI: () => void

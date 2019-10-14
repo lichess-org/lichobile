@@ -4,7 +4,7 @@ import { fetchJSON, fetchText } from './http'
 import { currentSri } from './utils'
 import storage from './storage'
 import settings from './settings'
-import i18n from './i18n'
+import i18n, { formatDate } from './i18n'
 import session from './session'
 import { TimelineData, LobbyData, HookData, Pool, HumanSeekSetup, CorrespondenceSeek, ApiStatus } from './lichess/interfaces'
 import { ChallengesData, Challenge } from './lichess/interfaces/challenge'
@@ -212,7 +212,7 @@ export function status(): Promise<void> {
             if (deprWarnCount === 0) {
               Plugins.Modals.alert({
                 title: 'Alert',
-                message: i18n('apiDeprecated', window.moment(unsupportedDate).format('LL')),
+                message: i18n('apiDeprecated', formatDate(unsupportedDate)),
               }).then(() => {
                 storage.set(key, 1)
               })

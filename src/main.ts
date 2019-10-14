@@ -2,8 +2,6 @@
 
 'use strict'
 
-import './moment'
-
 // capacitor plugins registration
 import 'capacitor-sound-effect'
 

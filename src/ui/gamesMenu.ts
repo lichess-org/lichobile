@@ -2,6 +2,7 @@ import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import range from 'lodash-es/range'
 import Siema from 'siema'
+import addSeconds from 'date-fns/esm/addSeconds'
 import * as utils from '../utils'
 import redraw from '../utils/redraw'
 import { positionsCache } from '../utils/gamePosition'
@@ -15,7 +16,7 @@ import challengesApi from '../lichess/challenges'
 import { standardFen } from '../lichess/variant'
 import router from '../router'
 import session from '../session'
-import i18n from '../i18n'
+import i18n, { fromNow } from '../i18n'
 import * as xhr from '../xhr'
 import * as helper from './helper'
 import ViewOnlyBoard from './shared/ViewOnlyBoard'
@@ -142,10 +143,8 @@ function renderViewOnlyBoard(fen: string, orientation: Color, lastMove?: string,
 function timeLeft(g: NowPlayingGame): Mithril.Child {
   if (!g.isMyTurn) return i18n('waitingForOpponent')
   if (!g.secondsLeft) return i18n('yourTurn')
-  const time = window.moment().add(g.secondsLeft, 'seconds')
   return h('time', {
-    datetime: time.format()
-  }, time.fromNow())
+  }, fromNow(addSeconds(new Date(), g.secondsLeft)))
 }
 
 function savedGameDataToCardData(data: OnlineGameData): NowPlayingGame {

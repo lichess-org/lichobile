@@ -1,8 +1,6 @@
 import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
-
-import router from '../../router'
 import * as utils from '../../utils'
 import socket from '../../socket'
 import session, { Session } from '../../session'
@@ -75,42 +73,38 @@ function renderHeader(user?: Session) {
 }
 
 function renderProfileActions(user: Session) {
+  const gamesRouteParams: StringMap = {
+    username: user.username,
+    title: user.title,
+  }
+  if (user.patron) gamesRouteParams.patron = '1'
   return (
-    <ul className="side_links profileActions">
-      <li className="side_link" oncreate={helper.ontapXY(menu.route('/@/' + user.id))}>
+    <ul className="side_links profileActions"
+      oncreate={helper.ontapXY(onLinkTap, undefined, helper.getLI)}
+    >
+      <li className="side_link" data-route={`/@/${user.id}`}>
         <span className="fa fa-user" />{i18n('profile')}
       </li>
-      <li className="side_link" oncreate={helper.ontapXY(() => {
-        menu.mainMenuCtrl.close().then(() => {
-          const params: StringMap = {
-            username: user.username,
-            title: user.title,
-          }
-          if (user.patron) params.patron = '1'
-          router.set(`/@/${user.id}/games?${utils.serializeQueryParameters(params)}`)
-        })
-      })}>
+      <li className="side_link" data-route={`/@/${user.id}/games?${utils.serializeQueryParameters(gamesRouteParams)}`}
+      >
         <span className="menu_icon_game" />{i18n('games')}
       </li>
-      <li className="side_link" oncreate={helper.ontapXY(menu.route('/inbox'))}>
+      <li className="side_link" date-route="/inbox">
         <span className="fa fa-envelope"/>{i18n('inbox') + ((menu.inboxUnreadCount() !== null && menu.inboxUnreadCount() > 0) ? (' (' + menu.inboxUnreadCount() + ')') : '')}
       </li>
-      <li className="side_link" oncreate={helper.ontapXY(menu.route('/account/preferences'))}>
+      <li className="side_link" date-route="/account/preferences">
         <span data-icon="%" />
         {i18n('preferences')}
       </li>
-      <li className="side_link" oncreate={helper.ontapXY(menu.popup(friendsPopup.open))}>
+      <li className="side_link" data-action="friends">
         <span data-icon="f" />
         {i18n('onlineFriends') + ` (${friendsApi.count()})`}
       </li>
-      <li className="side_link" oncreate={helper.ontapXY(menu.route(`/@/${user.id}/related`))}>
+      <li className="side_link" data-route={`/@/${user.id}/related`}>
         <span className="fa fa-arrow-circle-left" />
         {i18n('nbFollowers', user.nbFollowers || 0)}
       </li>
-      <li className="side_link" oncreate={helper.ontapXY(() => {
-        session.logout()
-        menu.profileMenuOpen(false)
-      })}>
+      <li className="side_link" data-action="logout">
         <span data-icon="w" />
         {i18n('logOut')}
       </li>
@@ -118,9 +112,14 @@ function renderProfileActions(user: Session) {
   )
 }
 
-const popupActionMap: { [index: string]: () => void } = {
+const actionMap: { [index: string]: () => void } = {
   gamesMenu: () => gamesMenu.open(),
   createGame: () => newGameForm.openRealTime(),
+  friends: () => friendsPopup.open(),
+  logout: () => {
+    session.logout()
+    menu.profileMenuOpen(false)
+  },
 }
 
 function onLinkTap(e: Event) {
@@ -129,7 +128,7 @@ function onLinkTap(e: Event) {
   if (el && ds.route) {
     menu.route(ds.route)()
   } else if (el && ds.popup) {
-    menu.popup(popupActionMap[ds.popup])()
+    menu.action(actionMap[ds.popup])()
   }
 }
 
@@ -149,12 +148,12 @@ function renderLinks(user?: Session) {
       <li className="sep_link">{i18n('playOnline')}</li> : null
       }
       {!online && offlineGames.length ?
-      <li className="side_link" data-popup="gamesMenu">
+      <li className="side_link" data-action="gamesMenu">
         <span className="menu_icon_game" />{i18n('nbGamesInPlay', offlineGames.length)}
       </li> : null
       }
       {online && !session.hasCurrentBan() ?
-      <li className="side_link" data-popup="createGame">
+      <li className="side_link" data-action="createGame">
         <span className="fa fa-plus-circle"/>{i18n('createAGame')}
       </li> : null
       }

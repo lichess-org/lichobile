@@ -4,6 +4,7 @@ import { handleXhrError } from '../../../utils'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import { positionsCache } from '../../../utils/gamePosition'
 import settings from '../../../settings'
+import { fromNow } from '../../../i18n'
 import router from '../../../router'
 import session from '../../../session'
 import * as xhr from '../userXhr'
@@ -75,7 +76,7 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
   function prepareData(xhrData: xhr.FilterResult) {
     if (xhrData.paginator && xhrData.paginator.currentPageResults) {
       xhrData.paginator.currentPageResults.forEach(g => {
-        g.date = window.moment(g.timestamp).calendar()
+        g.date = fromNow(new Date(g.timestamp))
       })
     }
     return xhrData
@@ -194,10 +195,9 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
       .then(prepareData),
       xhr.user(scrollState.userId, false)
     ])
-    .then(results => {
-      const [gamesData, userData] = results
+    .then(([gamesData, userData]) => {
       loadUserAndFilters(userData)
-      setTimeout(() => loadInitialGames(gamesData), 300)
+      loadInitialGames(gamesData)
     })
     .catch(err => {
       handleXhrError(err)

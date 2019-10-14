@@ -3,7 +3,7 @@ import h from 'mithril/hyperscript'
 import router from '../../router'
 import { emptyFen } from '../../utils/fen'
 import { hasNetwork } from '../../utils'
-import i18n, { formatNumber } from '../../i18n'
+import i18n, { formatNumber, fromNow } from '../../i18n'
 import session from '../../session'
 import socket from '../../socket'
 import { PongMessage, CorrespondenceSeek } from '../../lichess/interfaces'
@@ -249,7 +249,7 @@ function renderPlayban(endsAt: Date) {
       <h2>Sorry :(</h2>
       <p>We had to time you out for a {seconds < 3600 ? 'little ' : ''}while.</p>
       <br />
-      <p>The timeout expires <strong>{window.moment(endsAt).fromNow()}</strong>.</p>
+      <p>The timeout expires <strong>{fromNow(endsAt)}</strong>.</p>
       <h2>Why?</h2>
       <p>
         We aim to provide a pleasant chess experience for everyone.

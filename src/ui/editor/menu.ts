@@ -70,7 +70,7 @@ export function renderSelectColorPosition(ctrl: EditorCtrl) {
           }),
           ctrl.extraPositions.map((pos: BoardPosition) => position2option(fen, pos))
         ]),
-        optgroup('Popular openings',
+        optgroup(i18n('popularOpenings'),
           ctrl.positions().map((pos: BoardPosition) => position2option(fen, pos, true))
         )
       ])

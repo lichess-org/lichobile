@@ -1,7 +1,7 @@
 import h from 'mithril/hyperscript'
 import router from '../../../router'
 import { gameIcon } from '../../../utils'
-import i18n from '../../../i18n'
+import i18n, { plural } from '../../../i18n'
 import spinner from '../../../spinner'
 import { Related } from '../../../lichess/interfaces/user'
 import { Paginator } from '../../../lichess/interfaces'
@@ -17,12 +17,17 @@ export function renderBody(ctrl: RelatedCtrl) {
     () => renderContent(ctrl, ctrl.following, ctrl.followingPaginator),
   ]
 
+  const nbFollowers = ctrl.followersPaginator ?
+    ctrl.followersPaginator.nbResults : 0
+  const nbFollowing = ctrl.followingPaginator ?
+    ctrl.followingPaginator.nbResults : 0
+
   return [
     h('div.tabs-nav-header.subHeader',
       h(TabNavigation, {
         buttons: [
-          { label: i18n('nbFollowers', ctrl.followersPaginator ? ctrl.followersPaginator.nbResults : '') },
-          { label: i18n('nbFollowing', ctrl.followingPaginator ? ctrl.followingPaginator.nbResults : '') },
+          { label: plural('nbFollowers', nbFollowers, ctrl.followersPaginator ? ctrl.followersPaginator.nbResults : '') },
+          { label: plural('nbFollowing', nbFollowing, ctrl.followingPaginator ? ctrl.followingPaginator.nbResults : '') },
         ],
         selectedIndex: ctrl.currentTab,
         onTabChange: ctrl.onTabChange

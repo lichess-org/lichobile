@@ -1,9 +1,10 @@
 import Stream from 'mithril/stream'
 import h from 'mithril/hyperscript'
-import * as helper from '../../helper'
+import i18n from '../../../i18n'
 import router from '../../../router'
 import settings from '../../../settings'
 import { StoredProp } from '../../../storage'
+import * as helper from '../../helper'
 
 interface Data {
   db: {
@@ -113,7 +114,7 @@ export default {
     const d = ctrl.data
     return [
       h('section.db', [
-        h('label', 'Database'),
+        h('label', i18n('database')),
         h('div.form-multipleChoice', d.db.available.map(s => {
           return h('span', {
             className: d.db.selected() === s ? 'selected' : '',
@@ -123,12 +124,10 @@ export default {
       ]),
       d.db.selected() === 'masters' ? h('div.masters.message', [
         h('i[data-icon=C]'),
-        h('p', 'Two million OTB games'),
-        h('p', 'of 2200+ FIDE rated players'),
-        h('p', 'from 1952 to 2018')
+        h('p', i18n('masterDbExplanation', '2200', '1952', '2019')),
       ]) : h('div', [
         h('section.rating', [
-          h('label', 'Players Average rating'),
+          h('label', i18n('averageElo')),
           h('div.form-multipleChoice',
             d.rating.available.map(r => {
               return h('span', {
@@ -139,7 +138,7 @@ export default {
           )
         ]),
         h('section.speed', [
-          h('label', 'Game speed'),
+          h('label', i18n('timeControl')),
           h('div.form-multipleChoice',
             d.speed.available.map(s => {
               return h('span', {
@@ -153,7 +152,7 @@ export default {
       h('section.save',
         h('button.text[data-icon=E]', {
           oncreate: helper.ontapY(ctrl.toggleOpen)
-        }, 'All set!')
+        }, i18n('allSet'))
       )
     ]
   }

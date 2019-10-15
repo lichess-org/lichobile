@@ -1,5 +1,6 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
+import i18n from '../../../i18n'
 import * as helper from '../../helper'
 import explorerConfig from './explorerConfig'
 import { Move, isTablebaseData } from './interfaces'
@@ -40,13 +41,10 @@ export default function renderExplorer(ctrl: AnalyseCtrl) {
 }
 
 export function getTitle(ctrl: AnalyseCtrl): Mithril.Children {
-  const data = ctrl.explorer.current()
   if (ctrl.data.game.variant.key === 'standard' || ctrl.data.game.variant.key === 'fromPosition') {
-    if (data && data.tablebase) return 'Endgame tablebase'
-    else return 'Opening explorer'
+    return i18n('openingExplorer')
   } else {
-    const what = data && data.tablebase ? ' endgame tablebase' :  ' opening explorer'
-    return ctrl.data.game.variant.name + what
+    return i18n('xOpeningExplorer', ctrl.data.game.variant.name)
   }
 }
 

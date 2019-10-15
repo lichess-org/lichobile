@@ -121,7 +121,7 @@ function renderLobby(ctrl: HomeCtrl) {
     h(TabNavigation, {
       buttons: [
         {
-          label: 'Quick setup'
+          label: i18n('quickPairing')
         },
         {
           label: i18n('correspondence')

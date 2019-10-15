@@ -1,3 +1,5 @@
+import i18n from '../../i18n'
+
 export interface Tab {
   id: string
   title: string
@@ -12,7 +14,7 @@ export const gameInfos: Tab = {
 
 export const moves: Tab = {
   id: 'moves',
-  title: 'Move list',
+  title: i18n('movesPlayed'),
   className: 'fa fa-list-alt'
 }
 
@@ -24,13 +26,13 @@ export const ceval: Tab = {
 
 export const explorer: Tab = {
   id: 'explorer',
-  title: 'Opening explorer & tablebase',
+  title: i18n('openingExplorer'),
   className: 'fa fa-book'
 }
 
 export const charts: Tab = {
   id: 'analysis',
-  title: 'gameAnalysis',
+  title: i18n('gameAnalysis'),
   className: 'fa fa-area-chart'
 }
 

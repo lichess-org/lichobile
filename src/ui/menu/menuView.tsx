@@ -102,7 +102,7 @@ function renderProfileActions(user: Session) {
       </li>
       <li className="side_link" data-route={`/@/${user.id}/related`}>
         <span className="fa fa-arrow-circle-left" />
-        {i18n('nbFollowers', user.nbFollowers || 0)}
+        {plural('nbFollowers', user.nbFollowers || 0, user.nbFollowers || 0)}
       </li>
       <li className="side_link" data-action="logout">
         <span data-icon="w" />
@@ -245,7 +245,7 @@ function profileActionsToggle() {
       oncreate={helper.ontapXY(menu.toggleHeader)}
     >
       <span className="fa fa-exchange" />
-      {menu.profileMenuOpen() ? 'Main menu' : 'User menu'}
+      {menu.profileMenuOpen() ? i18n('menu') : i18n('user')}
     </div>
   )
 }

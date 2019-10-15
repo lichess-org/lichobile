@@ -1,3 +1,4 @@
+/* tslint:disable:semicolon */
 import { readFileSync, createWriteStream, WriteStream, writeFileSync, fstat, existsSync, readdirSync, readdir, mkdirSync } from 'fs';
 import { parseStringPromise } from 'xml2js';
 import { get } from 'request';
@@ -28,22 +29,10 @@ function unzipTranslations(zipFilePath: string) {
   });
 }
 
-function loadTranslations(locale: string, destLocales: string[]) {
+function loadTranslations(locale: string) {
   console.log(colors.blue(`Loading translations for ${colors.bold(locale)}...`));
 
-  // look for exact match first, then the first "locale-*"
-  const matchingLocale =
-    destLocales.find((destLocale: string) => destLocale == locale) ||
-    destLocales.find((destLocale: string) => destLocale.split('-')[0] == locale);
-
-  if (!matchingLocale) {
-    console.error(colors.red(`  Could not find lila translation for ${colors.bold(locale)}.`));
-    return Promise.resolve();
-  } else if (matchingLocale != locale) {
-    console.log(colors.yellow(`  Using ${colors.bold(matchingLocale)} for ${colors.bold(locale)}.`))
-  }
-
-  return parseStringPromise(readFileSync(`${baseDir}/master/translation/dest/site/${matchingLocale}.xml`));
+  return parseStringPromise(readFileSync(`${baseDir}/master/translation/dest/site/${locale}.xml`));
 }
 
 function unescape(str) {
@@ -56,7 +45,7 @@ function transformTranslations(data: any, locale: string) {
 
   if (!(data && data.resources && data.resources.string)) {
     console.log(data);
-    return Promise.reject('Malformed translations');
+    return Promise.reject(`Malformed translations in locale: ${locale}`);
   }
 
   data.resources.string.forEach((stringElement: any) => {
@@ -74,7 +63,7 @@ function transformTranslations(data: any, locale: string) {
 
 function writeTranslations(where: string, data: object) {
   console.log(colors.blue(`Writing to ${where}`));
-  writeFileSync(where, JSON.stringify(data));
+  writeFileSync(where, 'export default ' + JSON.stringify(data, null, 2));
 }
 
 async function main(args: string[]) {
@@ -87,43 +76,42 @@ async function main(args: string[]) {
 
     await unzipTranslations(`${baseDir}/out.zip`);
 
-    // List available lila translations.
-    const locales = readdirSync(i18nBaseDir)
-      .map((fileName: string) => fileName.split('.')[0])
-      .filter(locale => args.length == 2 ? true : args.includes(locale));
-
-    // Match lichobile translations to lila translations.
-    const destLocales = readdirSync(`${baseDir}/master/translation/dest/site`).map((fileName) => fileName.split('.')[0]);
+    const locales = readdirSync(`${baseDir}/master/translation/dest/site`)
+    .map(fn => fn.split('.')[0])
 
     // Load XML
     const localeToXml = {};
     for (const idx in locales) {
       const locale = locales[idx];
-      localeToXml[locale] = await loadTranslations(locale, destLocales);
+      localeToXml[locale] = await loadTranslations(locale);
     }
 
     // Flatten plurals, etc.
     const localeToFlattened = {};
     for (const locale in localeToXml) {
       if (localeToXml[locale]) {
-        localeToFlattened[locale] = await transformTranslations(localeToXml[locale], locale);
+        try {
+          localeToFlattened[locale] = await transformTranslations(localeToXml[locale], locale);
+        } catch (e) {
+          console.error(e);
+        }
       }
     }
 
+    const allKeys = Object.keys(localeToFlattened);
+
+    writeFileSync(`${i18nBaseDir}/refs.js`, 'export default ' + JSON.stringify(allKeys, null, 2));
+    console.log(
+      'Supported locales: ', allKeys.join(', ')
+    );
+
     // Write flattened translation objects to file. Skip if it would remove one or more keys.
-    Object.keys(localeToFlattened).forEach(locale => {
+    allKeys.forEach(locale => {
       const newData = localeToFlattened[locale];
       try {
-        const oldData = JSON.parse(readFileSync(`${i18nBaseDir}/${locale}.json`).toString('utf8'));
-         for (const key in oldData) {
-            if (!(key in newData)) {
-              // Keep the key.
-              newData[key] = oldData[key];
-            }
-          }
-          writeTranslations(`${i18nBaseDir}/${locale}.json`, localeToFlattened[locale]);
+        writeTranslations(`${i18nBaseDir}/${locale}.js`, newData);
       } catch (e) {
-        console.error(colors.red(`Could not read existing translations for ${colors.bold(locale)}, skipping...`));
+        console.error(colors.red(`Could not write translations for ${colors.bold(locale)}, skipping...`));
       }
     });
   });

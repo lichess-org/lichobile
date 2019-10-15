@@ -105,8 +105,8 @@ const Stats = {
   },
   view() {
     return h('div.stats', [
-      h('div#nb_connected_players', h.trust(i18n('nbConnectedPlayers', '<strong>?</strong>'))),
-      h('div#nb_games_in_play', h.trust(i18n('nbGamesInPlay', '<strong>?</strong>'))),
+      h('div#nb_connected_players', h.trust(i18n('nbPlayers:other', '<strong>?</strong>'))),
+      h('div#nb_games_in_play', h.trust(i18n('nbGames:other', '<strong>?</strong>'))),
     ])
   }
 } as Mithril.Component<{}, { render: (p: PongMessage) => void }>

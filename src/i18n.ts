@@ -4,13 +4,15 @@ import formatDistanceStrict from 'date-fns/esm/formatDistanceStrict'
 import formatRelative from 'date-fns/esm/formatRelative'
 import addSeconds from 'date-fns/esm/addSeconds'
 import settings from './settings'
-import { loadLocalJsonFile } from './utils'
+import { getLanguageNativeName } from './utils/langs'
 
-const defaultCode = 'en'
+type Quantity = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other'
 
-let lang = defaultCode
+const defaultCode = 'en-US'
+
+let currentLocale: string = defaultCode
 let dateLocale: Locale | undefined
-let messages = {} as StringMap
+let messages: StringMap = {} as StringMap
 let numberFormat: Intl.NumberFormat = new Intl.NumberFormat()
 
 const dateFormatOpts = { day: '2-digit', month: 'long', year: 'numeric' }
@@ -19,11 +21,26 @@ let dateFormat: Intl.DateTimeFormat = new Intl.DateTimeFormat(undefined, dateFor
 let dateTimeFormat: Intl.DateTimeFormat = new Intl.DateTimeFormat(undefined, dateTimeFormatOpts)
 
 export default function i18n(key: string, ...args: Array<string | number>): string {
-  let str: string = messages[key] || untranslated[key] || key
-  args.forEach((arg, idx) => {
-    str = str.replace(new RegExp(`%${idx + 1}\\$s`, 'g'), String(arg))
+  const str = messages[key] || untranslated[key]
+  return str ? format(str, ...args) : key
+}
+
+export function plural(key: string, count: number, ...args: Array<string | number>): string {
+  const pluralKey = key + ':' + quantity(currentLocale, count)
+  const str = messages[pluralKey] || messages[key]
+  return str ? format(str, ...args) : key
+}
+
+function format(message: string, ...args: Array<string | number>): string {
+  let str = message
+  if (args.length && str.includes('$s')) {
+    for (let i = 1; i < 4; i++) {
+      str = str.replace('%' + i + '$s', String(args[i - 1]))
+    }
+  }
+  args.forEach(arg => {
+    str = str.replace('%s', String(arg))
   })
-  args.forEach(a => { str = str.replace('%s', String(a)) })
   return str
 }
 
@@ -54,8 +71,12 @@ export function fromNow(date: Date): string {
   })
 }
 
-export function getLang(): string {
-  return lang
+export function getIsoCodeFromLocale(locale: string): string {
+  return locale.split('-')[0]
+}
+
+export function getCurrentLocale(): string {
+  return currentLocale
 }
 
 /*
@@ -81,19 +102,32 @@ export function loadPreferredLanguage(): Promise<string> {
 }
 
 export function getAvailableLanguages(): Promise<ReadonlyArray<[string, string]>> {
-  return loadLocalJsonFile('i18n/refs.json')
+  return getAvailableLocales()
+  .then(locales => locales.map(l => {
+      return [
+        l,
+        getLanguageNativeName(getIsoCodeFromLocale(l))
+      ]
+    })
+  )
 }
 
-export function ensureLangIsAvailable(lang: string): Promise<string> {
+function getAvailableLocales(): Promise<ReadonlyArray<string>> {
+  // must leave this const to avoid typescript error module not found
+  // and to prevent rollup from generating another refs.js module
+  const refFile = 'refs.js'
+  return import('./i18n/' + refFile).then(({ default: data }) => data)
+}
+
+export function ensureLocaleIsAvailable(locale: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    getAvailableLanguages()
-    .then(langs => {
-      const l = langs.find(l => l[0] === lang)
-      if (l !== undefined) resolve(l[0])
-      else reject(new Error(`Lang ${l} is not available in the application.`))
+    getAvailableLocales()
+    .then(locales => {
+      const l = locales.find(l => l === locale)
+      if (l !== undefined) resolve(l)
+      else reject(new Error(`locale ${l} is not available in the application.`))
     })
   })
-
 }
 
 export function loadLanguage(lang: string): Promise<string> {
@@ -102,9 +136,9 @@ export function loadLanguage(lang: string): Promise<string> {
 }
 
 function loadFile(code: string): Promise<string> {
-  return loadLocalJsonFile<StringMap>('i18n/' + code + '.json')
-  .then(data => {
-    lang = code
+  return import('./i18n/' + code + '.js')
+  .then(({ default: data }) => {
+    currentLocale = code
     messages = data
     numberFormat = new Intl.NumberFormat(code)
     dateFormat = new Intl.DateTimeFormat(code, dateFormatOpts)
@@ -121,10 +155,10 @@ function loadFile(code: string): Promise<string> {
 const supportedDateLocales = ['ar-DZ', 'ar-SA', 'en-CA', 'en-GB', 'en-US', 'fa-IR', 'fr-CH', 'nl-BE', 'pt-BR', 'zh-CN', 'zh-TW']
 
 function loadDateLocale(code: string): Promise<string> {
-  if (code === 'en') return Promise.resolve(code)
+  if (code === 'en-US') return Promise.resolve(code)
 
   const lCode = supportedDateLocales.includes(code) ? code : code.split('-')[0]
-  return import('./locale/' + lCode + '/index.js')
+  return import('locale/' + lCode + '/index.js')
   .then(module => {
     dateLocale = module.default || undefined
     return code
@@ -133,6 +167,148 @@ function loadDateLocale(code: string): Promise<string> {
     dateLocale = undefined
     return code
   })
+}
+
+function quantity(l: string, c: number): Quantity {
+  const rem100 = c % 100
+  const rem10 = c % 10
+  switch (l) {
+    // french
+    case 'fr':
+    case 'ff':
+    case 'kab':
+      return c < 2 ? 'one' : 'other'
+    // czech
+    case 'cs':
+    case 'sk':
+      if (c === 1) return 'one'
+      else if (c >= 2 && c <= 4) return 'few'
+      else return 'other'
+    // balkan
+    case 'hr':
+    case 'ru':
+    case 'sr':
+    case 'uk':
+    case 'be':
+    case 'bs':
+    case 'sh':
+      if (rem10 === 1 && rem100 !== 11) return 'one'
+      else if (rem10 >= 2 && rem10 <= 4 && !(rem100 >= 12 && rem100 <= 14)) return 'few'
+      else if (rem10 === 0 || (rem10 >= 5 && rem10 <= 9) || (rem100 >= 11 && rem100 <= 14)) return 'many'
+      else return 'other'
+    // latvian
+    case 'lv':
+      if (c === 0) return 'zero'
+      else if (c % 10 === 1 && c % 100 !== 11) return 'one'
+      else return 'other'
+    // lithuanian
+    case 'lt':
+      if (rem10 === 1 && !(rem100 >= 11 && rem100 <= 19)) return 'one'
+      else if (rem10 >= 2 && rem10 <= 9 && !(rem100 >= 11 && rem100 <= 19)) return 'few'
+      else return 'other'
+    // polish
+    case 'pl':
+      if (c === 1) return 'one'
+      else if (rem10 >= 2 && rem10 <= 4 && !(rem100 >= 12 && rem100 <= 14)) return 'few'
+      else return 'other'
+    // romanian
+    case 'ro':
+    case 'mo':
+      if (c === 1) return 'one'
+      else if ((c === 0 || (rem100 >= 1 && rem100 <= 19))) return 'few'
+      else return 'other'
+    // slovenian
+    case 'sl':
+      if (rem100 === 1) return 'one'
+      else if (rem100 === 2) return 'two'
+      else if (rem100 >= 3 && rem100 <= 4) return 'few'
+      else return 'other'
+    // arabic
+    case 'ar':
+      if (c === 0) return 'zero'
+      else if (c === 1) return 'one'
+      else if (c === 2) return 'two'
+      else if (rem100 >= 3 && rem100 <= 10) return 'few'
+      else if (rem100 >= 11 && rem100 <= 99) return 'many'
+      else return 'other'
+    // macedonian
+    case 'mk':
+      return (c % 10 === 1 && c !== 11) ? 'one' : 'other'
+    // welsh
+    case 'cy':
+    case 'br':
+      if (c === 0) return 'zero'
+      else if (c === 1) return 'one'
+      else if (c === 2) return 'two'
+      else if (c === 3) return 'few'
+      else if (c === 6) return 'many'
+      else return 'other'
+    // maltese
+    case 'mt':
+      if (c === 1) return 'one'
+      else if (c === 0 || (rem100 >= 2 && rem100 <= 10)) return 'few'
+      else if (rem100 >= 11 && rem100 <= 19) return 'many'
+      else return 'other'
+    // two
+    case 'ga':
+    case 'se':
+    case 'sma':
+    case 'smi':
+    case 'smj':
+    case 'smn':
+    case 'sms':
+      if (c === 1) return 'one'
+      else if (c === 2) return 'two'
+      else return 'other'
+    // zero
+    case 'ak':
+    case 'am':
+    case 'bh':
+    case 'fil':
+    case 'tl':
+    case 'guw':
+    case 'hi':
+    case 'ln':
+    case 'mg':
+    case 'nso':
+    case 'ti':
+    case 'wa':
+      return (c === 0 || c === 1) ? 'one' : 'other'
+    // none
+    case 'az':
+    case 'bm':
+    case 'fa':
+    case 'ig':
+    case 'hu':
+    case 'ja':
+    case 'kde':
+    case 'kea':
+    case 'ko':
+    case 'my':
+    case 'ses':
+    case 'sg':
+    case 'to':
+    case 'tr':
+    case 'vi':
+    case 'wo':
+    case 'yo':
+    case 'zh':
+    case 'bo':
+    case 'dz':
+    case 'id':
+    case 'jv':
+    case 'ka':
+    case 'km':
+    case 'kn':
+    case 'ms':
+    case 'th':
+    case 'tp':
+    case 'io':
+    case 'ia':
+      return 'other'
+    default:
+      return c === 1 ? 'one' : 'other'
+  }
 }
 
 const untranslated: StringMap = {

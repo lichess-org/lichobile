@@ -4,7 +4,7 @@ import h from 'mithril/hyperscript'
 import * as utils from '../../utils'
 import socket from '../../socket'
 import session, { Session } from '../../session'
-import i18n from '../../i18n'
+import i18n, { plural } from '../../i18n'
 import { hasNetwork, noop } from '../../utils'
 import { getOfflineGames } from '../../utils/offlineGames'
 import friendsApi from '../../lichess/friends'
@@ -149,7 +149,7 @@ function renderLinks(user?: Session) {
       }
       {!online && offlineGames.length ?
       <li className="side_link" data-action="gamesMenu">
-        <span className="menu_icon_game" />{i18n('nbGamesInPlay', offlineGames.length)}
+        <span className="menu_icon_game" />{plural('nbGamesInPlay', offlineGames.length, offlineGames.length)}
       </li> : null
       }
       {online && !session.hasCurrentBan() ?

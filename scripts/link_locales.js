@@ -6,7 +6,7 @@ const path = require('path')
 const rootDir = path.join(__dirname, '..')
 
 var source = path.join(rootDir, 'node_modules', 'date-fns', 'esm', 'locale')
-var dest = path.join(rootDir, 'www', 'locale')
+var dest = path.join(rootDir, 'www', 'i18n', 'date')
 var frPath = path.join(dest, 'fr', 'index.js')
 
 function recreateLink() {

@@ -18,7 +18,7 @@ npm-debug.log
 /www/*.js.map
 /www/index.html
 /www/css/compiled
-/www/locale
+/www/i18n/date
 
 /node_modules
 /env.json

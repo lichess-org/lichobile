@@ -166,10 +166,10 @@ function loadFile(code: string, langFallback = false): Promise<string> {
 const supportedDateLocales = ['ar-DZ', 'ar-SA', 'en-CA', 'en-GB', 'en-US', 'fa-IR', 'fr-CH', 'nl-BE', 'pt-BR', 'zh-CN', 'zh-TW']
 
 function loadDateLocale(code: string): Promise<string> {
-  if (code === 'en-US') return Promise.resolve(code)
+  if (code === defaultCode) return Promise.resolve(code)
 
-  const lCode = supportedDateLocales.includes(code) ? code : code.split('-')[0]
-  return import('locale/' + lCode + '/index.js')
+  const lCode = supportedDateLocales.includes(code) ? code : getIsoCodeFromLocale(code)
+  return import('./i18n/date/' + lCode + '/index.js')
   .then(module => {
     dateLocale = module.default || undefined
     return code

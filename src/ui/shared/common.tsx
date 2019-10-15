@@ -79,10 +79,9 @@ function gamesButton() {
     nbIncomingChallenges ? 'new_challenge' : '',
     !utils.hasNetwork() && !hasOfflineGames() ? 'invisible' : ''
   ].join(' ')
-  const longAction = () => Plugins.Toast.show({ text: i18n('nbGamesInPlay', session.nowPlaying().length), duration: 'short' })
 
   return (
-    <button className={className} oncreate={helper.ontap(action, longAction)}>
+    <button className={className} oncreate={helper.ontap(action)}>
       {!nbIncomingChallenges && myTurns ?
         <span className="chip nb_playing">{myTurns}</span> : null
       }

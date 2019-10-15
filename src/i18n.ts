@@ -113,8 +113,8 @@ export function getAvailableLanguages(): Promise<ReadonlyArray<[string, string]>
 }
 
 function getAvailableLocales(): Promise<ReadonlyArray<string>> {
-  // must leave this const to avoid typescript error module not found
-  // and to prevent rollup from generating another refs.js module
+  // must leave this const to avoid typescript error (module not found)
+  // and force module resolution at runtime
   const refFile = 'refs.js'
   return import('./i18n/' + refFile).then(({ default: data }) => data)
 }

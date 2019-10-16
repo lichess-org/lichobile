@@ -1,4 +1,4 @@
-import i18n from '../i18n'
+import i18n, { plural } from '../i18n'
 import { secondsToMinutes } from '../utils'
 import settings from '../settings'
 import gameStatus from './status'
@@ -143,7 +143,7 @@ export function time(data: GameData | UserGame | AnalyseData) {
     return t + '+' + data.clock.increment
   }
   else if (data.correspondence) {
-    return i18n('nbDays', data.correspondence.daysPerTurn)
+    return plural('nbDays', data.correspondence.daysPerTurn, data.correspondence.daysPerTurn)
   }
   else {
     return '∞'

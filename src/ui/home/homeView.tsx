@@ -3,7 +3,7 @@ import h from 'mithril/hyperscript'
 import router from '../../router'
 import { emptyFen } from '../../utils/fen'
 import { hasNetwork } from '../../utils'
-import i18n, { formatNumber, fromNow } from '../../i18n'
+import i18n, { plural, formatNumber, fromNow } from '../../i18n'
 import session from '../../session'
 import socket from '../../socket'
 import { PongMessage, CorrespondenceSeek } from '../../lichess/interfaces'
@@ -181,7 +181,7 @@ function renderSeek(ctrl: HomeCtrl, seek: CorrespondenceSeek) {
     h('td', h('span.color-icon.' + icon)),
     h('td', seek.username),
     h('td', seek.rating + (seek.provisional ? '?' : '')),
-    h('td', seek.days ? i18n(seek.days === 1 ? 'oneDay' : 'nbDays', seek.days) : '∞'),
+    h('td', seek.days ? plural('nbDays', seek.days, seek.days) : '∞'),
     h('td', h('span.withIcon', {
       'data-icon': seek.perf.icon
     }, i18n(seek.mode === 1 ? 'rated' : 'casual'))),

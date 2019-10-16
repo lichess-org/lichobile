@@ -9,14 +9,13 @@ import { getLanguageNativeName } from './utils/langs'
 type Quantity = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other'
 
 const defaultCode = 'en-US'
+const dateFormatOpts = { day: '2-digit', month: 'long', year: 'numeric' }
+const dateTimeFormatOpts = { ...dateFormatOpts, hour: '2-digit', minute: '2-digit' }
 
 let currentLocale: string = defaultCode
 let dateLocale: Locale | undefined
 let messages: StringMap = {} as StringMap
 let numberFormat: Intl.NumberFormat = new Intl.NumberFormat()
-
-const dateFormatOpts = { day: '2-digit', month: 'long', year: 'numeric' }
-const dateTimeFormatOpts = { ...dateFormatOpts, hour: '2-digit', minute: '2-digit' }
 let dateFormat: Intl.DateTimeFormat = new Intl.DateTimeFormat(undefined, dateFormatOpts)
 let dateTimeFormat: Intl.DateTimeFormat = new Intl.DateTimeFormat(undefined, dateTimeFormatOpts)
 

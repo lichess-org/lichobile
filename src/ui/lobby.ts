@@ -133,7 +133,7 @@ function renderCustomSetup(setup: HumanSeekSetup) {
   if (timeMode === 1) {
     time = utils.displayTime(String(minutes)) + '+' + setup.increment
   } else if (timeMode === 2) {
-    time = i18n('nbDays', setup.days)
+    time = plural('nbDays', setup.days, setup.days)
   } else {
     time = '∞'
   }

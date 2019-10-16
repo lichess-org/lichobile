@@ -43,11 +43,10 @@ export function bookmarkButton(action: () => void, flag: boolean): Mithril.Child
 
 export function friendsButton() {
   const nbFriends = friendsApi.count()
-  const longAction = () => Plugins.Toast.show({ text: i18n('onlineFriends'), duration: 'short' })
 
   return (
     <button className="main_header_button friends_button" data-icon="f"
-      oncreate={helper.ontap(friendsPopup.open, longAction)}
+      data-button="friends"
     >
     {nbFriends > 0 ?
       <span className="chip nb_friends">{nbFriends}</span> : null
@@ -61,17 +60,9 @@ export function onBoardThemeChange(theme: string) {
   boardTheme = theme
 }
 function gamesButton() {
-  let action: () => void
-  const nbChallenges = challengesApi.all().length
-  const nbIncomingChallenges = challengesApi.incoming().length
-  const withOfflineGames = !utils.hasNetwork() && hasOfflineGames()
   boardTheme = boardTheme || settings.general.theme.board()
-  if (session.nowPlaying().length || nbChallenges || withOfflineGames) {
-    action = () => gamesMenu.open()
-  } else {
-    action = () => newGameForm.open()
-  }
   const myTurns = session.myTurnGames().length
+  const nbIncomingChallenges = challengesApi.incoming().length
   const className = [
     'main_header_button',
     'game_menu_button',
@@ -81,7 +72,7 @@ function gamesButton() {
   ].join(' ')
 
   return (
-    <button className={className} oncreate={helper.ontap(action)}>
+    <button className={className} data-button="games">
       {!nbIncomingChallenges && myTurns ?
         <span className="chip nb_playing">{myTurns}</span> : null
       }
@@ -92,23 +83,35 @@ function gamesButton() {
   )
 }
 
+function onHeaderBtnTap(e: Event) {
+  const el = helper.getByClass('main_header_button')(e)
+  const ds = el.dataset
+  const button = ds.button
+  if (el && button) {
+    if (button === 'games') {
+      const nbChallenges = challengesApi.all().length
+      const withOfflineGames = !utils.hasNetwork() && hasOfflineGames()
+      if (session.nowPlaying().length || nbChallenges || withOfflineGames) {
+        gamesMenu.open()
+      } else {
+        newGameForm.open()
+      }
+    } else if (button === 'friends') {
+      friendsPopup.open()
+    }
+  }
+}
+
 export function headerBtns() {
-  if (utils.hasNetwork() && session.isConnected() && friendsApi.count()) {
+  const handler = helper.ontap(
+    onHeaderBtnTap,
+    undefined,
+    undefined,
+    helper.getByClass('main_header_button')
+  )
+  if (session.isConnected() && friendsApi.count()) {
     return (
-      <div className="buttons">
-        {friendsButton()}
-        {gamesButton()}
-      </div>
-    )
-  } else if (utils.hasNetwork() && session.isConnected()) {
-    return (
-      <div className="buttons">
-        {gamesButton()}
-      </div>
-    )
-  } else if (utils.hasNetwork() && session.isConnected() && friendsApi.count()) {
-    return (
-      <div className="buttons">
+      <div className="buttons" oncreate={handler}>
         {friendsButton()}
         {gamesButton()}
       </div>
@@ -116,7 +119,7 @@ export function headerBtns() {
   }
   else {
     return (
-      <div className="buttons">
+      <div className="buttons" oncreate={handler}>
         {gamesButton()}
       </div>
     )

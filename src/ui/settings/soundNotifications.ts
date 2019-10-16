@@ -13,7 +13,7 @@ function renderBody() {
   // const allowed = settings.general.notifications.allow()
   return h('ul.native_scroller.page.settings_list.game', [
     h('li.list_item', {
-    }, formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound, sound.onSettingChange)),
+    }, formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound, sound.onSettingChange)),
     h('li.list_item', {
     }, formWidgets.renderCheckbox(i18n('vibrateOnGameEvents'), 'vibrate', settings.general.vibrateOnGameEvents, vibrate.onSettingChange)),
     // h('li.list_item', formWidgets.renderCheckbox(i18n('notifications'), 'notifications', settings.general.notifications.allow, isOn => {

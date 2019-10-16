@@ -1,4 +1,4 @@
-import i18n from '../i18n'
+import { plural } from '../i18n'
 import sound from '../sound'
 import settings from '../settings'
 import throttle from 'lodash-es/throttle'
@@ -54,7 +54,7 @@ export default {
     if (isTimeControlClock(c.timeControl)) {
       return c.timeControl.show
     } else if (isTimeControlCorrespondence(c.timeControl)) {
-      return i18n('nbDays', c.timeControl.daysPerTurn)
+      return plural('nbDays', c.timeControl.daysPerTurn, c.timeControl.daysPerTurn)
     } else {
       return '∞'
     }

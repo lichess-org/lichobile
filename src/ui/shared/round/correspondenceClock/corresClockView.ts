@@ -2,7 +2,7 @@ import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import * as helper from '../../../helper'
 import { hasNetwork } from '../../../../utils'
-import i18n from '../../../../i18n'
+import { plural } from '../../../../i18n'
 
 import CorresClockCtrl from './corresClockCtrl'
 
@@ -19,8 +19,8 @@ export function formatClockTime(time: number) {
     // days : hours
     const days = date.getUTCDate() - 1
     hours = date.getUTCHours()
-    str += (days === 1 ? i18n('oneDay') : i18n('nbDays', days))
-    if (hours !== 0) str += ' ' + i18n('nbHours', hours)
+    str += plural('nbDays', days, days)
+    if (hours !== 0) str += ' ' + plural('nbHours', hours, hours)
   } else if (time >= 3600 * 1000) {
     // hours : minutes
     hours = date.getUTCHours()

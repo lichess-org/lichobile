@@ -48,13 +48,13 @@ function renderBody(appVersion?: string) {
       }, `${i18n('theming')}`),
       h('li.list_item.nav', {
         oncreate: helper.ontapY(() => router.set('/settings/themes/board'))
-      }, i18n('board')),
+      }, i18n('boardTheme')),
       h('li.list_item.nav', {
         oncreate: helper.ontapY(() => router.set('/settings/themes/piece'))
-      }, i18n('pieces')),
+      }, i18n('pieceSet')),
       h('li.list_item.nav', {
         oncreate: helper.ontapY(() => router.set('/settings/soundNotifications'))
-      }, i18n('soundAndNotifications'))
+      }, i18n('sound') + ' | ' + i18n('notifications'))
     ]),
     appVersion ? h('section.app_version', 'v' + appVersion) : null
   ]

@@ -52,10 +52,10 @@ function renderAppPrefs() {
   return [
     h('li.list_item',
       formWidgets.renderMultipleChoiceButton(
-        'How do you move pieces?', [
-          { label: 'Tap two squares', value: 'tap' },
-          { label: 'Drag a piece', value: 'drag' },
-          { label: 'Either', value: 'both' },
+        i18n('howDoYouMovePieces'), [
+          { label: i18n('clickTwoSquares'), value: 'tap' },
+          { label: i18n('dragPiece'), value: 'drag' },
+          { label: i18n('bothClicksAndDrag'), value: 'both' },
         ],
         settings.game.pieceMove
       )

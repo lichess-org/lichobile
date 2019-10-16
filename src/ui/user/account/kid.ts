@@ -1,5 +1,6 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
+import i18n from '../../../i18n'
 import session from '../../../session'
 import { StoredProp } from '../../../storage'
 import formWidgets from '../../shared/form'
@@ -19,7 +20,7 @@ const KidPrefScreen: Mithril.Component<{}, State> = {
   },
 
   view() {
-    const header = dropShadowHeader(null, backButton('Kid mode'))
+    const header = dropShadowHeader(null, backButton(i18n('kidMode')))
     return layout.free(header, renderBody(this))
   }
 }
@@ -29,13 +30,9 @@ export default KidPrefScreen
 function renderBody(ctrl: State) {
   return [
     h('div.native_scroller.page.settings_list.game', [
-      h('p.explanation', 'This is about safety. In kid mode, all site communications are disabled.  Enable this for your children and school students, to protect them from other Internet users.'),
-      h('p.list_item', [
-        'In kid mode, the logo above username in the menu is the ', h('span.kiddo', '😊'), ' icon.',
-        h('br'),
-        'So you know that it\'s enabled and your kids are safe.'
-      ]),
-      h('p.list_item', formWidgets.renderCheckbox('Enable kid mode', 'kidMode', ctrl.kidMode))
+      h('p.explanation', i18n('kidModeExplanation')),
+      h('p.list_item', h.trust(i18n('inKidModeTheLichessLogoGetsIconX', '<span class="kiddo">😊</span>'))),
+      h('p.list_item', formWidgets.renderCheckbox(i18n('enableKidMode'), 'kidMode', ctrl.kidMode))
     ])
   ]
 }

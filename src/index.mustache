@@ -6,12 +6,13 @@
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, width=device-width, viewport-fit=cover" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' gap: data: https://ssl.gstatic.com; connect-src 'self' https://explorer.lichess.ovh https://tablebase.lichess.ovh {{{apiEndPoint}}} {{{socketEndPoint}}}:*; script-src 'self' 'unsafe-inline'; child-src 'self' filesystem: gap://ready; style-src 'self' 'unsafe-inline'; img-src 'self' data: {{{apiEndPoint}}}; media-src 'self'">
     <title>mobile.lichess.org</title>
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" type="text/css" href="css/normalize.css" />
     <link rel="stylesheet" type="text/css" href="css/fa.css" />
     <link rel="stylesheet" type="text/css" href="css/lichess-font.css" />
     <link rel="stylesheet" type="text/css" href="css/fonts.css" />
     <link rel="stylesheet" type="text/css" href="css/compiled/app.css" />
-    <link rel="manifest" href="manifest.json">
+    <link rel="modulepreload" href="i18n/refs.js" />
     <script>
       window.lichess = {
         mode: "{{appMode}}",

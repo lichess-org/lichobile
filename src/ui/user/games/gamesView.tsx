@@ -1,9 +1,8 @@
 import throttle from 'lodash-es/throttle'
 import h from 'mithril/hyperscript'
 import router from '../../../router'
-import * as utils from '../../../utils'
 import * as helper from '../../helper'
-import i18n from '../../../i18n'
+import { plural } from '../../../i18n'
 import spinner from '../../../spinner'
 import GameItem from '../../shared/GameItem'
 
@@ -18,7 +17,7 @@ export function renderBody(ctrl: IUserGamesCtrl) {
           {ctrl.scrollState.availableFilters.map(f => {
             return (
               <option value={f.key} selected={ctrl.scrollState.currentFilter === f.key}>
-                {utils.capitalize(i18n(f.label).replace('%s ', ''))} ({f.count})
+                {plural(f.label, f.count, f.count)}
               </option>
             )
           })}

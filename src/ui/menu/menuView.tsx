@@ -89,10 +89,10 @@ function renderProfileActions(user: Session) {
       >
         <span className="menu_icon_game" />{i18n('games')}
       </li>
-      <li className="side_link" date-route="/inbox">
+      <li className="side_link" data-route="/inbox">
         <span className="fa fa-envelope"/>{i18n('inbox') + ((menu.inboxUnreadCount() !== null && menu.inboxUnreadCount() > 0) ? (' (' + menu.inboxUnreadCount() + ')') : '')}
       </li>
-      <li className="side_link" date-route="/account/preferences">
+      <li className="side_link" data-route="/account/preferences">
         <span data-icon="%" />
         {i18n('preferences')}
       </li>

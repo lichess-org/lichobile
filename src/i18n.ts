@@ -32,14 +32,16 @@ export function plural(key: string, count: number, ...args: Array<string | numbe
 
 function format(message: string, ...args: Array<string | number>): string {
   let str = message
-  if (args.length && str.includes('$s')) {
-    for (let i = 1; i < 4; i++) {
-      str = str.replace('%' + i + '$s', String(args[i - 1]))
+  if (args.length) {
+    if (str.includes('$s')) {
+      for (let i = 1; i < 4; i++) {
+        str = str.replace('%' + i + '$s', String(args[i - 1]))
+      }
     }
+    args.forEach(arg => {
+      str = str.replace('%s', String(arg))
+    })
   }
-  args.forEach(arg => {
-    str = str.replace('%s', String(arg))
-  })
   return str
 }
 

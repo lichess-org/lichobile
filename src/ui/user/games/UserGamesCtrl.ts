@@ -41,15 +41,15 @@ interface AvailableFilter {
 }
 
 const filters: StringMap = {
-  all: 'gamesPlayed',
-  rated: 'rated',
-  win: 'wins',
+  all: 'nbGames',
+  rated: 'nbRated',
+  win: 'nbWins',
   loss: 'nbLosses',
   draw: 'nbDraws',
   bookmark: 'nbBookmarks',
   me: 'nbGamesWithYou',
   import: 'nbImportedGames',
-  playing: 'playingRightNow'
+  playing: 'nbPlaying'
 }
 
 let cachedScrollState: ScrollState

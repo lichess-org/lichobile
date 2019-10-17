@@ -83,8 +83,9 @@
         "web-build": "npm run web-clean && npm run compile && rollup -c",
         "web-watch": "npm run web-clean && rollup -w -c",
         "watch": "node scripts/inject_conf && concurrently 'npm:compile-watch' 'npm:web-watch' 'npm:styles-watch'",
+        "copy-locales": "if [ ! -d www/i18n/date ]; then cp -R node_modules/date-fns/esm/locale/ www/i18n/date/; fi",
         "prebuild": "npm run web-clean",
-        "build": "node scripts/inject_conf && concurrently 'node scripts/link_locales' 'npm:styles' 'npm:web-build'",
+        "build": "node scripts/inject_conf && concurrently 'npm:copy-locales' 'npm:styles' 'npm:web-build'",
         "build-copy": "npm run build && npx cap copy"
     },
     "cordova": {

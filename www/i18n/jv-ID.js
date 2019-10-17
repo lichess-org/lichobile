@@ -36,6 +36,8 @@ export default {
   "whiteLeftTheGame": "putih kabur seko dulanan",
   "blackLeftTheGame": "ireng kabur seko dulanan",
   "shareThisUrlToLetSpectatorsSeeTheGame": "sebarke alamat URL iki kanggo wong sing pengen ndelok dulanan",
+  "viewTheComputerAnalysis": "Ndelok analisa tekan komputer",
+  "computerAnalysis": "AnalisaKomputer",
   "fromPosition": "seka posisi",
   "continueFromHere": "lanjut seka kene"
 }

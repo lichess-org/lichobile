@@ -6,7 +6,7 @@ import sound from '../../sound'
 interface Attrs {
   seconds: number
   emergTime?: number
-  textWrap?: (t: string) => string
+  textWrap?: (sec: Seconds, t: string) => string
   showOnlySecs?: boolean
 }
 
@@ -29,7 +29,7 @@ export default {
     this.render = (sec: Seconds) => {
       if (this.el) {
         const t = formatTimeInSecs(sec, attrs.showOnlySecs ? 'secs_only' : undefined)
-        if (attrs.textWrap) this.el.innerHTML = attrs.textWrap(t)
+        if (attrs.textWrap) this.el.innerHTML = attrs.textWrap(sec, t)
         else this.el.textContent = t
       }
     }

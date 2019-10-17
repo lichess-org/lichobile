@@ -164,69 +164,66 @@ export function timeline(): Promise<TimelineData> {
 }
 
 export function status(): Promise<void> {
-  return Plugins.Device.getInfo().then(info => {
-    const v = info.appVersion
-
-    return fetchJSON('/api/status', {
-      query: {
-        v
+  const v = window.deviceInfo.appVersion || 'web-dev'
+  return fetchJSON('/api/status', {
+    query: {
+      v
+    }
+  })
+  .then((data: ApiStatus) => {
+    // warn if buggy app
+    if (data.mustUpgrade) {
+      const key = 'warn_bug_' + v
+      const warnCount = Number(storage.get(key)) || 0
+      if (warnCount === 0) {
+        Plugins.Modals.alert({
+          title: 'Alert',
+          message: 'A new version of lichess mobile is available. Please upgrade as soon as possible.',
+        }).then(() => {
+          storage.set(key, 1)
+        })
       }
-    })
-    .then((data: ApiStatus) => {
-      // warn if buggy app
-      if (data.mustUpgrade) {
-        const key = 'warn_bug_' + v
-        const warnCount = Number(storage.get(key)) || 0
-        if (warnCount === 0) {
+      else if (warnCount === 10) {
+        storage.remove(key)
+      }
+      else {
+        storage.set(key, warnCount + 1)
+      }
+    }
+    else if (data.api.current > globalConfig.apiVersion) {
+      const versionInfo = data.api.olds.find(o => o.version === globalConfig.apiVersion)
+      if (versionInfo) {
+        const now = new Date(),
+        unsupportedDate = new Date(versionInfo.unsupportedAt),
+        deprecatedDate = new Date(versionInfo.deprecatedAt)
+
+        const key = 'warn_old_' + versionInfo.version
+        const deprWarnCount = Number(storage.get(key)) || 0
+
+        if (now > unsupportedDate) {
           Plugins.Modals.alert({
             title: 'Alert',
-            message: 'A new version of lichess mobile is available. Please upgrade as soon as possible.',
-          }).then(() => {
-            storage.set(key, 1)
+            message: i18n('apiUnsupported'),
           })
         }
-        else if (warnCount === 10) {
-          storage.remove(key)
-        }
-        else {
-          storage.set(key, warnCount + 1)
-        }
-      }
-      else if (data.api.current > globalConfig.apiVersion) {
-        const versionInfo = data.api.olds.find(o => o.version === globalConfig.apiVersion)
-        if (versionInfo) {
-          const now = new Date(),
-          unsupportedDate = new Date(versionInfo.unsupportedAt),
-          deprecatedDate = new Date(versionInfo.deprecatedAt)
-
-          const key = 'warn_old_' + versionInfo.version
-          const deprWarnCount = Number(storage.get(key)) || 0
-
-          if (now > unsupportedDate) {
+        else if (now > deprecatedDate) {
+          if (deprWarnCount === 0) {
             Plugins.Modals.alert({
               title: 'Alert',
-              message: i18n('apiUnsupported'),
+              message: i18n('apiDeprecated', formatDate(unsupportedDate)),
+            }).then(() => {
+              storage.set(key, 1)
             })
           }
-          else if (now > deprecatedDate) {
-            if (deprWarnCount === 0) {
-              Plugins.Modals.alert({
-                title: 'Alert',
-                message: i18n('apiDeprecated', formatDate(unsupportedDate)),
-              }).then(() => {
-                storage.set(key, 1)
-              })
-            }
-            else if (deprWarnCount === 15) {
-              storage.remove(key)
-            }
-            else {
-              storage.set(key, deprWarnCount + 1)
-            }
+          else if (deprWarnCount === 15) {
+            storage.remove(key)
+          }
+          else {
+            storage.set(key, deprWarnCount + 1)
           }
         }
       }
-    })
+    }
   })
 }
 

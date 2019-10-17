@@ -59,7 +59,6 @@ export default {
   "timeControl": "وختمهار",
   "usernameOrEmail": "د کارن نوم",
   "password": "پټ نوم",
-  "haveAnAccount": "ګڼون لري؟",
   "rank": "پوړ",
   "gamesPlayed": "ترسره شوي لوبې",
   "cancel": "ړنګول",

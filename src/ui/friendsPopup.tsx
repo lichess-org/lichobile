@@ -2,7 +2,7 @@ import h from 'mithril/hyperscript'
 import * as helper from './helper'
 import router from '../router'
 import popupWidget from './shared/popup'
-import i18n from '../i18n'
+import i18n, { plural } from '../i18n'
 import friendsApi, { Friend } from '../lichess/friends'
 import * as utils from '../utils'
 import challengeForm from './challengeForm'
@@ -16,7 +16,7 @@ export default {
 
     function header() {
       return [
-        h('span', i18n('onlineFriends'))
+        h('span', plural('nbFriendsOnline', friendsApi.count(), friendsApi.count()))
       ]
     }
 

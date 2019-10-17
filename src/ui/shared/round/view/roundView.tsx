@@ -14,7 +14,7 @@ import { User } from '../../../../lichess/interfaces/user'
 import settings from '../../../../settings'
 import * as utils from '../../../../utils'
 import { emptyFen } from '../../../../utils/fen'
-import i18n from '../../../../i18n'
+import i18n, { plural } from '../../../../i18n'
 import layout from '../../../layout'
 import * as helper from '../../../helper'
 import { connectingHeader, backButton, menuButton, loader, headerBtns, bookmarkButton } from '../../../shared/common'
@@ -247,7 +247,7 @@ function renderExpiration(ctrl: OnlineRound, position: Position, myTurn: boolean
   }, h(CountdownTimer, {
       seconds: Math.round(timeLeft / 1000),
       emergTime: myTurn ? 8 : undefined,
-      textWrap: (t: string) => `<strong>${t}</strong> seconds to play the first move`,
+      textWrap: (sec: Seconds, t: string) => plural('nbSecondsToPlayTheFirstMove', sec, `<strong>${t}</<strong>`),
       showOnlySecs: true
     })
   )

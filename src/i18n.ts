@@ -8,7 +8,10 @@ import { getLanguageNativeName } from './utils/langs'
 
 type Quantity = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other'
 
+const refFile = 'refs.js'
+
 const defaultCode = 'en-US'
+const englishMessages: StringMap = {}
 const dateFormatOpts = { day: '2-digit', month: 'long', year: 'numeric' }
 const dateTimeFormatOpts = { ...dateFormatOpts, hour: '2-digit', minute: '2-digit' }
 
@@ -81,25 +84,32 @@ export function getCurrentLocale(): string {
 }
 
 /*
+ * Call this once during app init.
+ * Load english messages, they must always be there.
  * Load either lang stored as a setting or default app language.
  * It is called during app initialization, when we don't know yet server lang
  * preference.
  */
-export function loadPreferredLanguage(): Promise<string> {
+export function init(): Promise<string> {
+
+  // must use concat with defaultCode const to force runtime module resolution
+  const englishPromise = import('./i18n/' + defaultCode + '.js')
+  .then(({ default: data }) => {
+    Object.assign(englishMessages, data)
+  })
+
   const fromSettings = settings.general.lang()
   if (fromSettings) {
-    return loadLanguage(fromSettings)
+    return englishPromise.then(() => loadLanguage(fromSettings))
   }
 
-  return Plugins.Device.getLanguageCode()
+  return englishPromise
+  .then(() => Plugins.Device.getLanguageCode())
   .then(({ value }) => {
-    // TODO test
-    console.log('language code', value)
     settings.general.lang(value)
     return value
   })
-  .then(loadFile)
-  .then(loadDateLocale)
+  .then(loadLanguage)
 }
 
 export function getAvailableLanguages(): Promise<ReadonlyArray<[string, string]>> {
@@ -114,9 +124,7 @@ export function getAvailableLanguages(): Promise<ReadonlyArray<[string, string]>
 }
 
 function getAvailableLocales(): Promise<ReadonlyArray<string>> {
-  // must leave this const to avoid typescript error (module not found)
-  // and force module resolution at runtime
-  const refFile = 'refs.js'
+  // must use this const to force module resolution at runtime
   return import('./i18n/' + refFile).then(({ default: data }) => data)
 }
 
@@ -132,6 +140,7 @@ export function ensureLocaleIsAvailable(locale: string): Promise<string> {
 }
 
 export function loadLanguage(lang: string): Promise<string> {
+  console.info('Load language', lang)
   return loadFile(lang)
   .then(loadDateLocale)
 }
@@ -140,7 +149,12 @@ function loadFile(code: string, langFallback = false): Promise<string> {
   return import('./i18n/' + code + '.js')
   .then(({ default: data }) => {
     currentLocale = code
-    messages = data
+    // some translation files don't have all the keys, merge with english
+    // messages to keep a fallback to english
+    messages = {
+      ...englishMessages,
+      ...data,
+    }
     numberFormat = new Intl.NumberFormat(code)
     dateFormat = new Intl.DateTimeFormat(code, dateFormatOpts)
     dateTimeFormat = new Intl.DateTimeFormat(code, dateTimeFormatOpts)

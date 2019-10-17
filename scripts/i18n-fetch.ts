@@ -8,6 +8,10 @@ const colors = require('colors/safe');
 const baseDir = 'tmp/translations';
 const i18nBaseDir = '../www/i18n';
 
+type StringMap = {
+  [i: string]: string | undefined
+}
+
 function downloadTranslationsTo(zipFile: WriteStream) {
   console.log(colors.blue('Downloading translations...'));
   return get('https://crowdin.com/backend/download/project/lichess.zip')
@@ -29,17 +33,15 @@ function unzipTranslations(zipFilePath: string) {
   });
 }
 
-function loadTranslations(locale: string) {
-  console.log(colors.blue(`Loading translations for ${colors.bold(locale)}...`));
-
-  return parseStringPromise(readFileSync(`${baseDir}/master/translation/dest/site/${locale}.xml`));
+function loadTranslations(dir: string, locale: string) {
+  return parseStringPromise(readFileSync(`${baseDir}/master/translation/dest/${dir}/${locale}.xml`));
 }
 
 function unescape(str) {
   return str.replace('\\', '');
 }
 
-function transformTranslations(data: any, locale: string) {
+function transformTranslations(data: any, locale: string): Promise<StringMap> {
   console.log(colors.blue(`Transforming translations for ${colors.bold(locale)}...`));
   const flattenedTranslations = {};
 
@@ -80,18 +82,37 @@ async function main(args: string[]) {
     .map(fn => fn.split('.')[0])
 
     // Load XML
-    const localeToXml = {};
+    const siteLocaleXml = {};
+    const studyLocaleXml = {};
     for (const idx in locales) {
       const locale = locales[idx];
-      localeToXml[locale] = await loadTranslations(locale);
+      console.log(colors.blue(`Loading translations for ${colors.bold(locale)}...`));
+      siteLocaleXml[locale] = await loadTranslations('site', locale);
+      try {
+        studyLocaleXml[locale] = await loadTranslations('study', locale);
+      } catch (_) {
+        console.warn(colors.yellow(`Could not load study translations for locale: ${locale}`));
+      }
     }
 
     // Flatten plurals, etc.
     const localeToFlattened = {};
-    for (const locale in localeToXml) {
-      if (localeToXml[locale]) {
+    for (const locale in siteLocaleXml) {
+      if (siteLocaleXml[locale]) {
         try {
-          localeToFlattened[locale] = await transformTranslations(localeToXml[locale], locale);
+          localeToFlattened[locale] = await transformTranslations(siteLocaleXml[locale], locale);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      if (studyLocaleXml[locale]) {
+        try {
+          const transStudy =
+            await transformTranslations(studyLocaleXml[locale], locale)
+          localeToFlattened[locale] = {
+            ...localeToFlattened[locale],
+            ...transStudy
+          }
         } catch (e) {
           console.error(e);
         }

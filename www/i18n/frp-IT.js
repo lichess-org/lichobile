@@ -52,7 +52,6 @@ export default {
   "timeControl": "Controlo d’o tèmps",
   "usernameOrEmail": "Nom d'usor",
   "password": "Contrasinyi",
-  "haveAnAccount": "T'as jà un aconto?",
   "rank": "Rang",
   "gamesPlayed": "Passes joyìyes",
   "rematch": "Rejoyèr",

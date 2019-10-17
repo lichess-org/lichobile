@@ -12,7 +12,7 @@ import { syncWithNowPlayingGames } from './utils/offlineGames'
 import redraw from './utils/redraw'
 import session from './session'
 import settings from './settings'
-import { loadPreferredLanguage, ensureLocaleIsAvailable, loadLanguage } from './i18n'
+import { init as i18nInit, ensureLocaleIsAvailable, loadLanguage, getCurrentLocale } from './i18n'
 import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
 import * as helper from './ui/helper'
@@ -110,8 +110,8 @@ function onOnline() {
       session.rememberLogin()
       .then((user) => {
         const serverLocale = user.language
-        console.log('Got locale from server: ', serverLocale)
-        if (serverLocale) {
+        if (serverLocale && getCurrentLocale() !== serverLocale) {
+          console.debug('Locale from server differs from app: ', serverLocale)
           ensureLocaleIsAvailable(serverLocale)
           .then(lang => {
             settings.general.lang(lang)
@@ -158,6 +158,6 @@ function getPools() {
   })
 }
 
-loadPreferredLanguage()
+i18nInit()
 .then(() => Plugins.Device.getInfo())
 .then(main)

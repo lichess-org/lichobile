@@ -13,6 +13,12 @@ export default {
   "whiteIsVictorious": "বগা দল বিজয়ী",
   "blackIsVictorious": "ক’লা দল বিজয়ী",
   "kingInTheCenter": "ৰজা আহিল মাজ'লৈ",
+  "joinTheGame": "খেলখনত ভাগ লোৱা",
   "whitePlays": "বগা দলৰ পাল",
-  "blackPlays": "ক’লা দলৰ পাল"
+  "blackPlays": "ক’লা দলৰ পাল",
+  "forceResignation": "জয় লাভ কৰক",
+  "talkInChat": "চেতত ভাল বাবে কথা পাতিব!",
+  "whiteLeftTheGame": "বগা খেলোৱৈয়ে খেলখন এৰি গ'ল",
+  "blackLeftTheGame": "ক'লা খেলোৱৈয়ে খেলখন এৰি গ\\'ল",
+  "close": "বন্ধ"
 }

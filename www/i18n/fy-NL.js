@@ -44,7 +44,6 @@ export default {
   "computerAnalysis": "Kompjûter analyze",
   "analysis": "Boerd analyze",
   "signIn": "Oanmelde",
-  "newToLichess": "Nij by Lichess?",
   "signUp": "Registrearje",
   "games": "Spullen",
   "players": "Spilers",

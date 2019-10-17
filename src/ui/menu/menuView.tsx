@@ -98,7 +98,7 @@ function renderProfileActions(user: Session) {
       </li>
       <li className="side_link" data-action="friends">
         <span data-icon="f" />
-        {i18n('onlineFriends') + ` (${friendsApi.count()})`}
+        {plural('nbFriendsOnline', friendsApi.count(), friendsApi.count())}
       </li>
       <li className="side_link" data-route={`/@/${user.id}/related`}>
         <span className="fa fa-arrow-circle-left" />

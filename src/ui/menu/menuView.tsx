@@ -15,7 +15,6 @@ import gamesMenu from '../gamesMenu'
 import friendsPopup from '../friendsPopup'
 import * as helper from '../helper'
 import CloseSlideHandler from '../shared/sideMenu/CloseSlideHandler'
-import CloseSwipeHandler from '../shared/sideMenu/CloseSwipeHandler'
 
 import * as menu from '.'
 
@@ -31,11 +30,7 @@ export default {
     return (
       <aside id="side_menu"
         oncreate={({ dom }: Mithril.VnodeDOM<any, any>) => {
-          if (window.deviceInfo.platform === 'ios') {
-            CloseSwipeHandler(dom as HTMLElement, menu.mainMenuCtrl)
-          } else {
-            CloseSlideHandler(dom as HTMLElement, menu.mainMenuCtrl)
-          }
+          CloseSlideHandler(dom as HTMLElement, menu.mainMenuCtrl)
         }}
       >
         {renderHeader(user)}

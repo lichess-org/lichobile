@@ -1,6 +1,6 @@
 {
     "name": "lichobile",
-    "version": "6.3.0",
+    "version": "7.0.0",
     "description": "lichess.org mobile application",
     "main": "app.js",
     "repository": {
@@ -72,7 +72,7 @@
     },
     "scripts": {
         "start": "npm run compile && npm run watch",
-        "version": "node scripts/bump_version.js",
+        "version": "node scripts/bump-version.js",
         "lint": "tslint --project tsconfig.json -e '**/dts/**' -e '**/*.js'",
         "test": "jest",
         "styles": "stylus -q -u autoprefixer-stylus src/styl/index.styl -c -o www/css/compiled/app.css",
@@ -82,10 +82,10 @@
         "web-clean": "rm -f www/*.js && rm -f www/*.js.map",
         "web-build": "npm run web-clean && npm run compile && rollup -c",
         "web-watch": "npm run web-clean && rollup -w -c",
-        "watch": "node scripts/inject_conf && concurrently 'npm:compile-watch' 'npm:web-watch' 'npm:styles-watch'",
+        "watch": "node scripts/inject-conf && concurrently 'npm:compile-watch' 'npm:web-watch' 'npm:styles-watch'",
         "compile-locales": "if [ ! -d www/i18n/date ]; then node scripts/compile-locales; fi",
         "prebuild": "npm run web-clean",
-        "build": "node scripts/inject_conf && concurrently 'npm:compile-locales' 'npm:styles' 'npm:web-build'",
+        "build": "node scripts/inject-conf && concurrently 'npm:compile-locales' 'npm:styles' 'npm:web-build'",
         "build-copy": "npm run build && npx cap copy"
     },
     "cordova": {

@@ -5,6 +5,7 @@ import i18n from '../../../i18n'
 import { linkify } from '../../../utils/html'
 import redraw from '../../../utils/redraw'
 import { Post } from '../interfaces'
+import router from '../../../router'
 
 import { IThreadCtrl } from './threadCtrl'
 
@@ -47,9 +48,13 @@ function renderPost(post: Post, index: number, posts: Array<Post>) {
   return (
     <div className={postClass} key={post.createdAt}>
       <div className="infos">
-        {userStatus(post.sender)}
+        <span id="sender" oncreate={helper.ontapY(() => router.set('/@/' + post.sender.id))}>
+          {userStatus(post.sender)}
+        </span>
         <span className="arrow" data-icon="H" />
-        {userStatus(post.receiver)}
+        <span id="receiver" oncreate={helper.ontapY(() => router.set('/@/' + post.receiver.id))}>
+          {userStatus(post.receiver)}
+        </span>
         &nbsp;–&nbsp;
         {postDateFormat(post.createdAt)}
       </div>

@@ -13,10 +13,10 @@ import * as helper from '../helper'
 import session from '../../session'
 import { IUserCtrl, ProfileUser, isSessionUser, isFullUser } from './UserCtrl'
 
-export function header(user: ProfileUser, ctrl: IUserCtrl) {
+export function header(user: ProfileUser) {
   const title = userTitle(user.online!!, user.patron!!, user.username, user.title)
 
-  const backButton = !ctrl.isMe() ? renderBackbutton(title) : null
+  const backButton = renderBackbutton(title)
   return dropShadowHeader(backButton ? null : title, backButton)
 }
 

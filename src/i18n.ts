@@ -184,7 +184,7 @@ function loadDateLocale(code: string): Promise<string> {
   if (code === defaultCode) return Promise.resolve(code)
 
   const lCode = supportedDateLocales.includes(code) ? code : getIsoCodeFromLocale(code)
-  return import('./i18n/date/' + lCode + '/index.js')
+  return import(`./i18n/date/${lCode}.js`)
   .then(module => {
     dateLocale = module.default || undefined
     return code

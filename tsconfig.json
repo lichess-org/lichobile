@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "target": "es2015",
+    "target": "es2017",
     "suppressImplicitAnyIndexErrors": false,
     "allowSyntheticDefaultImports": true,
     "module": "esnext",

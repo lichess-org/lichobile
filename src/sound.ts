@@ -15,7 +15,6 @@ Plugins.Device.getInfo().then(info => {
   Plugins.SoundEffect.loadSound({ id: 'berserk', path: `sounds/berserk${ext}` })
   Plugins.SoundEffect.loadSound({ id: 'clock', path: `sounds/clock${ext}` })
   Plugins.SoundEffect.loadSound({ id: 'confirmation', path: `sounds/confirmation${ext}` })
-
 })
 
 export default {

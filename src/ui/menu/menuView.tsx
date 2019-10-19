@@ -3,6 +3,7 @@ import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
 import * as utils from '../../utils'
 import socket from '../../socket'
+import redraw from '../../utils/redraw'
 import session, { Session } from '../../session'
 import i18n, { plural } from '../../i18n'
 import { hasNetwork, noop } from '../../utils'
@@ -99,7 +100,7 @@ function renderProfileActions(user: Session) {
         <span className="fa fa-arrow-circle-left" />
         {plural('nbFollowers', user.nbFollowers || 0, user.nbFollowers || 0)}
       </li>
-      <li className="side_link" data-action="logout">
+      <li className="side_link" data-nocloseaction="logout">
         <span data-icon="w" />
         {i18n('logOut')}
       </li>
@@ -122,8 +123,11 @@ function onLinkTap(e: Event) {
   const ds = el.dataset
   if (el && ds.route) {
     menu.route(ds.route)()
-  } else if (el && ds.popup) {
-    menu.action(actionMap[ds.popup])()
+  } else if (el && ds.action) {
+    menu.action(actionMap[ds.action])()
+  } else if (el && ds.nocloseaction) {
+    actionMap[ds.nocloseaction]()
+    redraw()
   }
 }
 

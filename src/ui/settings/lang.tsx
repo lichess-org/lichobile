@@ -39,7 +39,6 @@ export const LangPrefScreen: Mithril.Component<{}, State> = {
             settings.general.lang() === l[0],
             e => {
               const lang = (e.target as HTMLInputElement).value
-              settings.general.lang(lang)
               setServerLang(lang)
               loadLanguage(lang).then(redraw)
             }

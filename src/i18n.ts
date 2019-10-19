@@ -105,11 +105,7 @@ export function init(): Promise<string> {
 
   return englishPromise
   .then(() => Plugins.Device.getLanguageCode())
-  .then(({ value }) => {
-    settings.general.lang(value)
-    return value
-  })
-  .then(loadLanguage)
+  .then(({ value }) => loadLanguage(value))
 }
 
 export function getAvailableLanguages(): Promise<ReadonlyArray<[string, string]>> {
@@ -140,40 +136,36 @@ export function ensureLocaleIsAvailable(locale: string): Promise<string> {
 }
 
 export function loadLanguage(lang: string): Promise<string> {
-  console.info('Load language', lang)
   return loadFile(lang)
-  .then(loadDateLocale)
+  .then(code => {
+    settings.general.lang(code)
+    return loadDateLocale(code)
+  })
 }
 
-function loadFile(code: string, langFallback = false): Promise<string> {
-  return import('./i18n/' + code + '.js')
-  .then(({ default: data }) => {
-    currentLocale = code
-    // some translation files don't have all the keys, merge with english
-    // messages to keep a fallback to english
-    messages = {
-      ...englishMessages,
-      ...data,
-    }
-    numberFormat = new Intl.NumberFormat(code)
-    dateFormat = new Intl.DateTimeFormat(code, dateFormatOpts)
-    dateTimeFormat = new Intl.DateTimeFormat(code, dateTimeFormatOpts)
-    return code
+function loadFile(code: string): Promise<string> {
+  return getAvailableLocales()
+  .then(locales => {
+    return locales.find(l =>
+      getIsoCodeFromLocale(l) === getIsoCodeFromLocale(code)
+    ) || defaultCode
   })
-  .catch(error => {
-    if (code === defaultCode) {
-      throw new Error(error)
-    }
-    if (code.includes('-') && !langFallback) {
-      return getAvailableLocales().then(locales => {
-        const l = locales.find(l =>
-          getIsoCodeFromLocale(l) === getIsoCodeFromLocale(code)
-        )
-        if (l) return loadFile(l, true)
-        else return loadFile(defaultCode)
-      })
-    }
-    return loadFile(defaultCode)
+  .then(availCode => {
+    console.info('Load language', availCode)
+    return import('./i18n/' + availCode + '.js')
+    .then(({ default: data }) => {
+      currentLocale = availCode
+      // some translation files don't have all the keys, merge with english
+      // messages to keep a fallback to english
+      messages = {
+        ...englishMessages,
+        ...data,
+      }
+      numberFormat = new Intl.NumberFormat(availCode)
+      dateFormat = new Intl.DateTimeFormat(availCode, dateFormatOpts)
+      dateTimeFormat = new Intl.DateTimeFormat(availCode, dateTimeFormatOpts)
+      return availCode
+    })
   })
 }
 

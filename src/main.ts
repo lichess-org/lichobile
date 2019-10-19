@@ -11,7 +11,6 @@ import { hasNetwork } from './utils'
 import { syncWithNowPlayingGames } from './utils/offlineGames'
 import redraw from './utils/redraw'
 import session from './session'
-import settings from './settings'
 import { init as i18nInit, ensureLocaleIsAvailable, loadLanguage, getCurrentLocale } from './i18n'
 import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
@@ -113,10 +112,7 @@ function onOnline() {
         if (serverLocale && getCurrentLocale() !== serverLocale) {
           console.debug('Locale from server differs from app: ', serverLocale)
           ensureLocaleIsAvailable(serverLocale)
-          .then(lang => {
-            settings.general.lang(lang)
-            loadLanguage(lang)
-          })
+          .then(loadLanguage)
         }
         // push.register()
         challengesApi.refresh()

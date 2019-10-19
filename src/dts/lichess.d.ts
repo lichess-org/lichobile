@@ -48,6 +48,15 @@ interface LichessOptions {
   mode: string
 }
 
+type RequestIdleCallbackHandle = any
+type RequestIdleCallbackOptions = {
+  timeout: number
+}
+type RequestIdleCallbackDeadline = {
+  readonly didTimeout: boolean
+  timeRemaining: (() => number)
+}
+
 interface Window {
   lichess: LichessOptions
   Shepherd: TetherShepherd.ShepherdStatic
@@ -61,6 +70,11 @@ interface Window {
     uuid: string
     appVersion: string
   }
+  requestIdleCallback: ((
+    callback: ((deadline: RequestIdleCallbackDeadline) => void),
+    opts?: RequestIdleCallbackOptions,
+  ) => RequestIdleCallbackHandle)
+  cancelIdleCallback: ((handle: RequestIdleCallbackHandle) => void)
 }
 
 interface Piece {

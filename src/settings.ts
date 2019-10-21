@@ -1,10 +1,5 @@
 import store, { StoredProp } from './storage'
-import range from 'lodash-es/range'
 import { ClockType, ClockTypeWithNone } from './ui/shared/clock/interfaces'
-
-function tupleOf(x: number) {
-  return [x.toString(), x.toString()]
-}
 
 const offlineAvailableVariants: [string, VariantKey][] = [
   ['Standard', 'standard'],
@@ -41,6 +36,30 @@ export interface HumanSettings extends GameSettings {
 export interface AiSettings extends GameSettings {
   readonly level: StoredProp<string>
 }
+
+const minRatingRanges = [
+  ['800', '800'],
+  ['900', '900'],
+  ['1000', '1000'],
+  ['1100', '1100'],
+  ['1200', '1200'],
+  ['1300', '1300'],
+  ['1400', '1400'],
+  ['1500', '1500'],
+  ['1600', '1600'],
+  ['1700', '1700'],
+  ['1800', '1800'],
+  ['1900', '1900'],
+  ['2000', '2000'],
+  ['2100', '2100'],
+  ['2200', '2200'],
+  ['2300', '2300'],
+  ['2400', '2400'],
+  ['2500', '2500'],
+  ['2600', '2600'],
+  ['2700', '2700'],
+  ['2800', '2800'],
+]
 
 export default {
   general: {
@@ -338,8 +357,11 @@ export default {
         ['Racing Kings', '9']
       ],
       availableRatingRanges: {
-        min: range(800, 2900, 100).map(tupleOf),
-        max: range(900, 3000, 100).map(tupleOf)
+        min: minRatingRanges,
+        max: [
+          ...minRatingRanges,
+          ['2900', '2900']
+        ].slice(1)
       },
       ratingMin: store.prop('settings.game.human.rating.min', '800'),
       ratingMax: store.prop('settings.game.human.rating.max', '2900'),

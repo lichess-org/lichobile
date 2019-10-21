@@ -36,7 +36,8 @@ main
   flex-flow column nowrap
 
 .main_header
-  position relative
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
   background headerBgDark
   flex 0 0 headerHeight
   color headerBgDarkColor

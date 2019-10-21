@@ -1,3 +1,4 @@
+import { Plugins, StatusBarStyle } from '@capacitor/core'
 import * as Mithril from 'mithril'
 import { dropShadowHeader, backButton } from '../shared/common'
 import redraw from '../../utils/redraw'
@@ -77,6 +78,9 @@ function renderBody(ctrl: State) {
               const val = (e.target as HTMLInputElement).value
               // const prevTheme = settings.general.theme.background()
               settings.general.theme.background(val)
+              Plugins.StatusBar.setStyle({
+                style: val === 'light' ? StatusBarStyle.Light : StatusBarStyle.Dark
+              })
               if (val === 'dark' || val === 'light') {
                 layout.onBackgroundChange(val)
                 redraw()

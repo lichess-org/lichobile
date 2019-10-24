@@ -29,6 +29,7 @@ export interface Attrs {
   // fen used for placeholder board while loading
   curFen?: string
   goBack?: string
+  fallback?: boolean
 }
 
 export interface State {
@@ -61,7 +62,11 @@ export default {
       })
       .catch(err => {
         handleXhrError(err)
-        router.set('/analyse', true)
+        if (vnode.attrs.fallback && vnode.attrs.curFen && vnode.attrs.color) {
+          router.set(`/analyse/variant/standard/fen/${encodeURIComponent(vnode.attrs.curFen)}?color=${vnode.attrs.color}&goBack=1`)
+        } else {
+          router.set('/analyse', true)
+        }
         redraw()
       })
     } else if (source === 'offline' && gameId === 'otb') {

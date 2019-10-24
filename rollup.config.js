@@ -4,24 +4,24 @@ import json from 'rollup-plugin-json'
 import strip from 'rollup-plugin-strip'
 import { terser } from 'rollup-plugin-terser'
 
-const production = process.env.APP_MODE === 'prod'
+const release = process.env.APP_MODE === 'release'
 
 export default {
 	input: 'build/main.js',
 	output: {
 		dir: 'www',
 		format: 'esm',
-		sourcemap: !production,
+		sourcemap: !release,
 	},
 	plugins: [
     resolve(),
     commonjs(),
     json(),
-    production && strip({
+    release && strip({
       debugger: true,
       sourceMap: false,
     }),
-		production && terser(),
+		release && terser(),
 	],
   onwarn(warning, warn) {
     if (warning.code === 'CIRCULAR_DEPENDENCY') return

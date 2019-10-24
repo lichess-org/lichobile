@@ -6,8 +6,15 @@ const Mustache = require('mustache')
 
 const rootDir = path.join(__dirname, '..')
 
-// dev | prod
+// dev | release
 const mode = process.env.APP_MODE || 'dev'
+
+if (!['dev', 'release'].includes(mode)) {
+  console.error("APP_MODE possible value: 'dev' | 'release'")
+  process.exit(1)
+}
+
+
 // dev | prod | custom
 const confKey = process.env.APP_CONFIG || 'dev'
 

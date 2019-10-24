@@ -1,6 +1,7 @@
 import { Plugins, StatusBarStyle } from '@capacitor/core'
 import settings from './settings'
 import { getThemeFilename, getLocalFile, createStylesheetRule } from './bgtheme'
+import app from './app'
 
 const theme = settings.general.theme.background()
 
@@ -16,6 +17,4 @@ if (theme !== 'dark' && theme !== 'light') {
 
 Plugins.SplashScreen.hide()
 
-import('./app').then(({ default: app }) => {
-  app()
-})
+app()

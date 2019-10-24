@@ -122,6 +122,9 @@ function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, 
   else if (player.aiLevel) {
     playerName = playerApi.aiName({ ai: player.aiLevel })
   }
+  else if (player.name) {
+    playerName = player.name
+  }
   else playerName = 'Anonymous'
 
   return (

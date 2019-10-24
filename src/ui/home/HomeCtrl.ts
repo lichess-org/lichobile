@@ -1,6 +1,6 @@
 import { Plugins, AppState, NetworkStatus, PluginListenerHandle } from '@capacitor/core'
 import uniqBy from 'lodash-es/uniqBy'
-import Zanimo from 'zanimo'
+import Zanimo from '../../utils/zanimo'
 import socket, { SocketIFace } from '../../socket'
 import redraw from '../../utils/redraw'
 import signals from '../../signals'
@@ -123,9 +123,12 @@ export default class HomeCtrl {
   }
 
   public cancelCorresSeek = (seekId: string) => {
-    return Zanimo(document.getElementById(seekId), 'opacity', '0', '300', 'ease-out')
+    const el = document.getElementById(seekId)
+    if (el) {
+      Zanimo(el, 'opacity', '0', 300, 'ease-out')
       .then(() => this.socketSend('cancelSeek', seekId))
       .catch(console.log.bind(console))
+    }
   }
 
   public joinCorresSeek = (seekId: string) => {

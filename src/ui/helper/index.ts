@@ -1,6 +1,6 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
-import Zanimo from 'zanimo'
+import Zanimo from '../../utils/zanimo'
 import * as utils from '../../utils'
 import redraw from '../../utils/redraw'
 import router from '../../router'
@@ -146,7 +146,7 @@ export function clearCachedViewportDim(): void {
   cachedIsPortrait = undefined
 }
 
-export function slidesInUp(vnode: Mithril.VnodeDOM<any, any>): Promise<HTMLElement> {
+export function slidesInUp(vnode: Mithril.VnodeDOM<any, any>): Promise<void> {
   const el = (vnode.dom as HTMLElement)
   el.style.transform = 'translateY(100%)'
   // force reflow hack
@@ -155,16 +155,29 @@ export function slidesInUp(vnode: Mithril.VnodeDOM<any, any>): Promise<HTMLEleme
   .catch(console.log.bind(console))
 }
 
-export function slidesOutDown(callback: (fromBB?: string) => void, elID: string): () => Promise<HTMLElement> {
+export function slidesOutDown(callback: (fromBB?: string) => void, elID: string): () => void {
   return function(fromBB?: string) {
     const el = document.getElementById(elID)
-    return Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
-    .then(() => utils.autoredraw(() => callback(fromBB)))
-    .catch(console.log.bind(console))
+    if (el) {
+      Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
+      .then(() => utils.autoredraw(() => callback(fromBB)))
+      .catch(console.log.bind(console))
+    }
   }
 }
 
-export function slidesInLeft(vnode: Mithril.VnodeDOM<any, any>): Promise<HTMLElement> {
+export function slidesOutRight(callback: (fromBB?: string) => void, elID: string): () => void {
+  return function(fromBB?: string) {
+    const el = document.getElementById(elID)
+    if (el) {
+      Zanimo(el, 'transform', 'translateX(100%)', 250, 'ease-out')
+      .then(() => utils.autoredraw(() => callback(fromBB)))
+      .catch(console.log.bind(console))
+    }
+  }
+}
+
+export function slidesInLeft(vnode: Mithril.VnodeDOM<any, any>): Promise<void> {
   const el = vnode.dom as HTMLElement
   el.style.transform = 'translateX(100%)'
   // force reflow hack
@@ -173,18 +186,9 @@ export function slidesInLeft(vnode: Mithril.VnodeDOM<any, any>): Promise<HTMLEle
   .catch(console.log.bind(console))
 }
 
-export function slidesOutRight(callback: (fromBB?: string) => void, elID: string): () => Promise<HTMLElement> {
-  return function(fromBB?: string) {
-    const el = document.getElementById(elID)
-    return Zanimo(el, 'transform', 'translateX(100%)', 250, 'ease-out')
-    .then(() => utils.autoredraw(() => callback(fromBB)))
-    .catch(console.log.bind(console))
-  }
-}
-
 export function fadesOut(e: Event, callback: () => void, selector?: string, time = 150) {
   e.stopPropagation()
-  const el = selector ? findParentBySelector((e.target as HTMLElement), selector) : e.target
+  const el = selector ? findParentBySelector((e.target as HTMLElement), selector) : (e.target as HTMLElement)
   if (el) {
     Zanimo(el, 'opacity', 0, time)
     .then(() => utils.autoredraw(callback))

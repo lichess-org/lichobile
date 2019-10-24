@@ -23,6 +23,7 @@
     "homepage": "https://github.com/veloce/lichobile",
     "browserslist": "and_chr >= 63, ios_saf >= 11.1",
     "devDependencies": {
+        "autoprefixer-stylus": "1.0.0",
         "@types/jest": "24.0.11",
         "concurrently": "5.0.0",
         "jest": "24.7.1",
@@ -33,6 +34,7 @@
         "rollup-plugin-node-resolve": "5.2.0",
         "rollup-plugin-strip": "1.2.2",
         "rollup-plugin-terser": "5.1.2",
+        "stylus": "0.54.7",
         "tslint": "5.8.0",
         "typescript": "3.4.5",
         "whatwg-fetch": "3.0.0"
@@ -46,7 +48,6 @@
         "@types/hammerjs": "2.0.35",
         "@types/lodash-es": "4.17.3",
         "@types/mithril": "2.0.0",
-        "autoprefixer-stylus": "1.0.0",
         "capacitor-cordova-plugin-stockfish": "git+https://github.com/veloce/cordova-plugin-stockfish.git#capacitor",
         "capacitor-sound-effect": "git+https://github.com/veloce/capacitor-sound-effect.git",
         "cordova-plugin-fullscreen": "1.2.0",
@@ -65,9 +66,7 @@
         "mithril": "2.0.4",
         "rlite-router": "1.1.3",
         "siema": "1.5.1",
-        "signals": "1.0.0",
-        "stylus": "0.54.7",
-        "zanimo": "git+https://github.com/veloce/Zanimo.git"
+        "signals": "1.0.0"
     },
     "scripts": {
         "start": "npm run compile && npm run watch",

@@ -1,4 +1,4 @@
-import Zanimo from 'zanimo'
+import Zanimo from '../../../utils/zanimo'
 import redraw from '../../../utils/redraw'
 import router from '../../../router'
 
@@ -32,8 +32,8 @@ export default class SideMenuCtrl {
   public readonly open = () => {
     this.isOpen = true
     router.backbutton.stack.push(this.close)
-    const el = document.getElementById(this.menuID)
-    const bd = document.getElementById(this.backdropID)
+    const el = document.getElementById(this.menuID)!
+    const bd = document.getElementById(this.backdropID)!
     if (this.onOpen) this.onOpen()
     return Promise.all([
       Zanimo(bd, 'visibility', 'visible', 0),
@@ -52,8 +52,8 @@ export default class SideMenuCtrl {
   public readonly close = (fromBB?: string) => {
     if (fromBB !== 'backbutton' && this.isOpen) router.backbutton.stack.pop()
     this.isOpen = false
-    const el = document.getElementById(this.menuID)
-    const bd = document.getElementById(this.backdropID)
+    const el = document.getElementById(this.menuID)!
+    const bd = document.getElementById(this.backdropID)!
     if (this.onClose) this.onClose()
     return Promise.all([
       Zanimo(bd, 'opacity', 0, 250, 'linear'),

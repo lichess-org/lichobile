@@ -15,7 +15,6 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
   let readyPromise: Promise<void> = Promise.resolve()
 
   let curEval: Tree.ClientEval | null = null
-  let expectedPvs = 1
 
   // after a 'go' command, stockfish will be continue to emit until the 'bestmove'
   // message, reached by depth or after a 'stop' command
@@ -91,6 +90,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
       })
 
       return setOption('Threads', work.cores)
+      .then(() => curEval = null)
       .then(() => setOption('MultiPV', work.multiPv))
       .then(() => send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' ')))
       .then(() => send('go depth ' + work.maxDepth))
@@ -128,9 +128,6 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
     // Sometimes we get #0. Let's just skip it.
     if (isMate && !ev) return
 
-    // Track max pv index to determine when pv prints are done.
-    if (expectedPvs < multiPv) expectedPvs = multiPv
-
     let pivot = work.threatMode ? 0 : 1
     if (work.ply % 2 === pivot) ev = -ev
 
@@ -147,7 +144,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
       depth
     }
 
-    if (multiPv === 1) {
+    if (curEval == null) {
       curEval = {
         fen: work.currentFen,
         maxDepth: work.maxDepth,
@@ -159,14 +156,20 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
         pvs: [pvData],
         millis: elapsedMs
       }
-    } else if (curEval) {
-      curEval.pvs.push(pvData)
-      curEval.depth = Math.min(curEval.depth, depth)
+    } else {
+      if (multiPv === 1) {
+        curEval.depth = depth
+      }
+
+      const multiPvIdx = multiPv - 1
+      if (curEval.pvs.length > multiPvIdx) {
+        curEval.pvs[multiPvIdx] = pvData
+      } else {
+        curEval.pvs.push(pvData)
+      }
     }
 
-    if (multiPv === expectedPvs && curEval) {
-      work.emit(curEval)
-    }
+    work.emit(curEval)
   }
 
 

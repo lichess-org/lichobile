@@ -107,7 +107,7 @@ function renderContent() {
   return h('div', [
     h('div.newGame-preset_switch', [
       h('div.nice-radio', formWidgets.renderRadio(
-        'Quick game',
+        i18n('quickPairing'),
         'preset',
         'quick',
         tabPreset === 'quick',

@@ -7,7 +7,6 @@ import storage from './storage'
 import { SESSION_ID_KEY, ErrorResponse } from './http'
 import xorWith from 'lodash-es/xorWith'
 import isEqual from 'lodash-es/isEqual'
-import cloneDeep from 'lodash-es/cloneDeep'
 import { newSri, autoredraw, hasNetwork } from './utils'
 import { tellWorker, askWorker } from './utils/worker'
 import * as xhr from './xhr'
@@ -111,7 +110,7 @@ const defaultHandlers: MessageHandlers = {
 
 function handleFollowingOnline(data: Array<string>, payload: FollowingOnlinePayload) {
   // We clone the friends online before we update it for comparison later
-  const oldFriendList = cloneDeep(friendsApi.list())
+  const oldFriendList = friendsApi.list().slice()
 
   const friendsPlaying = payload.playing
   const friendsPatrons = payload.patrons

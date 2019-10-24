@@ -85,7 +85,8 @@
         "compile-locales": "if [ ! -d www/i18n/date ]; then node scripts/compile-locales; fi",
         "prebuild": "npm run web-clean",
         "build": "node scripts/inject-conf && concurrently 'npm:compile-locales' 'npm:styles' 'npm:web-build'",
-        "build-copy": "npm run build && npx cap copy"
+        "build-copy": "npm run build && npx cap copy",
+        "run-android": "npm run build-copy && cd android && ./gradlew installDebug"
     },
     "cordova": {
         "platforms": [],

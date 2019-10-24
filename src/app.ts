@@ -18,7 +18,6 @@ import router from './router'
 import socket from './socket'
 import routes from './routes'
 import { isForeground, setForeground, setBackground } from './utils/appMode'
-// import { loadCachedImages } from './bgtheme'
 
 let firstConnection = true
 
@@ -40,10 +39,6 @@ function appInit(info: DeviceInfo) {
   // TODO
   // deepLinks.init()
   // push.init()
-
-  // cached background images
-  // TODO
-  // loadCachedImages()
 
   // cache viewport dims
   helper.viewportDim()

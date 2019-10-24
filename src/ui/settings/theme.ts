@@ -8,7 +8,7 @@ import i18n from '../../i18n'
 import settings from '../../settings'
 import * as helper from '../helper'
 import h from 'mithril/hyperscript'
-// import { loadImage, handleError } from '../../bgtheme'
+import { loadImage, handleError } from '../../bgtheme'
 
 interface Progress {
   loaded: number
@@ -76,7 +76,7 @@ function renderBody(ctrl: State) {
             selected,
             e => {
               const val = (e.target as HTMLInputElement).value
-              // const prevTheme = settings.general.theme.background()
+              const prevTheme = settings.general.theme.background()
               settings.general.theme.background(val)
               Plugins.StatusBar.setStyle({
                 style: val === 'light' ? StatusBarStyle.Light : StatusBarStyle.Dark
@@ -85,19 +85,18 @@ function renderBody(ctrl: State) {
                 layout.onBackgroundChange(val)
                 redraw()
               } else {
-                // TODO
-                // ctrl.loading = true
-                // loadImage(val + '.' + t.ext, ctrl.onProgress)
-                // .then(() => {
-                //   layout.onBackgroundChange(val)
-                //   ctrl.stopLoading()
-                // })
-                // .catch((err) => {
-                //   settings.general.theme.background(prevTheme)
-                //   ctrl.stopLoading()
-                //   handleError(err)
-                // })
-                // redraw()
+                ctrl.loading = true
+                loadImage(val, ctrl.onProgress)
+                .then(() => {
+                  layout.onBackgroundChange(val)
+                  ctrl.stopLoading()
+                })
+                .catch((err) => {
+                  settings.general.theme.background(prevTheme)
+                  ctrl.stopLoading()
+                  handleError(err)
+                })
+                redraw()
               }
             },
             ctrl.loading

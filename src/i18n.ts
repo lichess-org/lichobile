@@ -4,7 +4,6 @@ import formatDistanceStrict from 'date-fns/esm/formatDistanceStrict'
 import formatRelative from 'date-fns/esm/formatRelative'
 import addSeconds from 'date-fns/esm/addSeconds'
 import settings from './settings'
-import { getLanguageNativeName } from './utils/langs'
 
 type Quantity = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other'
 
@@ -108,18 +107,7 @@ export function init(): Promise<string> {
   .then(({ value }) => loadLanguage(value))
 }
 
-export function getAvailableLanguages(): Promise<ReadonlyArray<[string, string]>> {
-  return getAvailableLocales()
-  .then(locales => locales.map(l => {
-      return [
-        l,
-        getLanguageNativeName(getIsoCodeFromLocale(l))
-      ]
-    })
-  )
-}
-
-function getAvailableLocales(): Promise<ReadonlyArray<string>> {
+export function getAvailableLocales(): Promise<ReadonlyArray<string>> {
   // must use this const to force module resolution at runtime
   return import('./i18n/' + refFile).then(({ default: data }) => data)
 }

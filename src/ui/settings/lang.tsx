@@ -1,29 +1,25 @@
 import * as Mithril from 'mithril'
-import Stream from 'mithril/stream'
 import h from 'mithril/hyperscript'
 import { dropShadowHeader, backButton } from '../shared/common'
 import redraw from '../../utils/redraw'
+import { getLanguageNativeName } from '../../utils/langs'
+import spinner from '../../spinner'
 import * as helper from '../helper'
-import formWidgets from '../shared/form'
 import layout from '../layout'
-import i18n, { loadLanguage, getAvailableLanguages } from '../../i18n'
+import i18n, { loadLanguage, getAvailableLocales, getIsoCodeFromLocale } from '../../i18n'
 import settings from '../../settings'
 import { setServerLang } from '../../xhr'
 
-type Lang = [string, string]
-
 interface State {
-  langs: Stream<ReadonlyArray<Lang>>
+  langs?: ReadonlyArray<string>
 }
 
 export const LangPrefScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewSlideIn,
 
   oninit() {
-    this.langs = Stream([])
-
-    getAvailableLanguages().then(data => {
-      this.langs(data)
+    getAvailableLocales().then(data => {
+      this.langs = data
       redraw()
     })
   },
@@ -31,28 +27,44 @@ export const LangPrefScreen: Mithril.Component<{}, State> = {
   view() {
     const ctrl = this
     const header = dropShadowHeader(null, backButton(i18n('language')))
+    const currentLang = settings.general.lang()
 
-    function renderLang(l: Lang) {
+    function renderLang(l: string) {
+      const name = getLanguageNativeName(getIsoCodeFromLocale(l))
+      const selected = l === currentLang
       return (
-        <li className="list_item">
-          {formWidgets.renderRadio(l[1], 'lang', l[0],
-            settings.general.lang() === l[0],
-            e => {
-              const lang = (e.target as HTMLInputElement).value
-              setServerLang(lang)
-              loadLanguage(lang).then(redraw)
-            }
-          )}
+        <li className={'list_item' + (selected ? ' selected' : '')} data-lang={l}>
+          {name}
+          {selected ?
+            <span className="fa fa-check" /> : null
+          }
         </li>
       )
     }
 
+    function onTap(e: Event) {
+      const el = helper.getLI(e)
+      const lang = el && el.dataset.lang
+      if (lang) {
+        setServerLang(lang)
+        loadLanguage(lang).then(redraw)
+      }
+    }
+
     function renderBody() {
-      return (
-        <ul className="native_scroller page settings_list radio_list">
-          {ctrl.langs().map(l => renderLang(l))}
-        </ul>
-      )
+      return ctrl.langs ?
+        <ul
+          className="native_scroller page settings_list"
+          oncreate={helper.ontapY(onTap, undefined, helper.getLI)}
+        >
+          {ctrl.langs.map(l => renderLang(l))}
+        </ul> :
+        <div
+          className="loader_container"
+          oncreate={helper.ontapY(onTap, undefined, helper.getLI)}
+        >
+          {spinner.getVdom('monochrome')}
+        </div>
     }
 
     return layout.free(header, renderBody())

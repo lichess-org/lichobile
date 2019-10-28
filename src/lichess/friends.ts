@@ -6,8 +6,41 @@ export interface Friend {
 
 let onlineFriends: Array<Friend> = []
 
-function makeFriend(name: string, isPlaying: boolean, isPatron: boolean) {
-  return {'name' : name, 'playing': isPlaying, 'patron': isPatron}
+export default {
+  list(): ReadonlyArray<Friend> {
+    return onlineFriends
+  },
+  count(): number {
+    return onlineFriends.length
+  },
+  set(friends: string[], playings: string[], patrons: string[] ): void {
+    onlineFriends = friends.map(name => makeFriend(name, false, false))
+    playings.forEach(user => setPlaying(user, true))
+    patrons.forEach(user => setPatron(user, true))
+    onlineFriends.sort(lexicallyCompareFriends)
+  },
+  add(name: string, playing: boolean, patron: boolean): void {
+    const friend = makeFriend(name, playing, patron)
+
+    onlineFriends.push(friend)
+    onlineFriends.sort(lexicallyCompareFriends)
+  },
+  playing(name: string): void {
+    setPlaying(name, true)
+  },
+  stoppedPlaying(name: string): void {
+    setPlaying(name, false)
+  },
+  remove(leaving: string): void {
+    onlineFriends = onlineFriends.filter(friend => friend.name !== leaving)
+  },
+  clear(): void {
+    onlineFriends = []
+  },
+}
+
+function makeFriend(name: string, playing: boolean, patron: boolean) {
+  return { name, playing, patron }
 }
 
 /** Compares usernames for equality, ignoring prefixed titles (such as GM) */
@@ -37,54 +70,4 @@ function lexicallyCompareFriends(friend1: Friend, friend2: Friend) {
     return 1
   else
     return 0
-}
-
-function list(): Array<Friend> {
-  return onlineFriends
-}
-
-function count() {
-  return onlineFriends.length
-}
-
-function set(friends: Array<string>, playings: Array<string>, patrons: Array<string> ) {
-  onlineFriends = friends.map(name => makeFriend(name, false, false))
-
-  playings.forEach(user => setPlaying(user, true))
-  patrons.forEach(user => setPatron(user, true))
-  onlineFriends.sort(lexicallyCompareFriends)
-}
-
-function add(name: string, playing: boolean, patron: boolean) {
-  const friend = makeFriend(name, playing, patron)
-
-  onlineFriends.push(friend)
-  onlineFriends.sort(lexicallyCompareFriends)
-}
-
-function playing(name: string) {
-  setPlaying(name, true)
-}
-
-function stoppedPlaying(name: string) {
-  setPlaying(name, false)
-}
-
-function remove(leaving: string) {
-  onlineFriends = onlineFriends.filter(friend => friend.name !== leaving)
-}
-
-function clear() {
-  onlineFriends = []
-}
-
-export default {
-  list,
-  count,
-  set,
-  add,
-  playing,
-  stoppedPlaying,
-  remove,
-  clear
 }

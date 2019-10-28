@@ -60,7 +60,6 @@
         "d3-time-format": "2.0.5",
         "date-fns": "2.4.1",
         "hammerjs": "2.0.8",
-        "localforage": "1.5.5",
         "lodash": "4.17.15",
         "lodash-es": "4.17.15",
         "mithril": "2.0.4",

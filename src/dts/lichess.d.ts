@@ -70,11 +70,11 @@ interface Window {
     uuid: string
     appVersion: string
   }
-  requestIdleCallback: ((
+  requestIdleCallback?: ((
     callback: ((deadline: RequestIdleCallbackDeadline) => void),
     opts?: RequestIdleCallbackOptions,
   ) => RequestIdleCallbackHandle)
-  cancelIdleCallback: ((handle: RequestIdleCallbackHandle) => void)
+  cancelIdleCallback?: ((handle: RequestIdleCallbackHandle) => void)
 }
 
 interface Piece {

@@ -1,19 +1,17 @@
-import localForage from 'localforage'
-
-const appStore = localForage.createInstance({
-  driver: localForage.INDEXEDDB,
-  name: 'AppStore',
-  version: 1.0,
-})
+import { Plugins } from '@capacitor/core'
 
 export default {
   getItem<T>(key: string): Promise<T | null> {
-    return appStore.getItem(key)
+    return Plugins.Storage.get({ key }).then(({ value }) => {
+      if (value) return JSON.parse(value)
+      else return null
+    })
   },
   setItem<T>(key: string, value: T): Promise<T> {
-    return appStore.setItem(key, value)
+    return Plugins.Storage.set({ key, value: JSON.stringify(value) })
+    .then(() => value)
   },
   removeItem(key: string): Promise<void> {
-    return appStore.removeItem(key)
+    return Plugins.Storage.remove({ key })
   }
 }

@@ -12,7 +12,7 @@
     "noUnusedLocals": true,
     "jsx": "react",
     "jsxFactory": "h",
-    "types": ["lodash-es", "mithril", "d3", "hammerjs"]
+    "types": ["lodash-es", "mithril", "d3"]
   },
   "include": [
     "src/**/*.js",

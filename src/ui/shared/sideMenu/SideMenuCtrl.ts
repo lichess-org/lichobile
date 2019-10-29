@@ -72,7 +72,8 @@ export default class SideMenuCtrl {
     .catch(console.log.bind(console))
   }
 
-  public readonly toggle = () => {
+  public readonly toggle = (e: TouchEvent) => {
+    e.stopPropagation()
     if (this.isOpen) this.close()
     else this.open()
   }

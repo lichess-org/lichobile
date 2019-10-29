@@ -119,6 +119,7 @@ const actionMap: { [index: string]: () => void } = {
 }
 
 function onLinkTap(e: Event) {
+  e.stopPropagation()
   const el = helper.getLI(e)
   const ds = el.dataset
   if (el && ds.route) {

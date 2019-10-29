@@ -1,7 +1,8 @@
 import * as Mithril from 'mithril'
-import Hammer from 'hammerjs'
 import h from 'mithril/hyperscript'
 import settings from '../settings'
+import TinyGesture from '../utils/gesture/TinyGesture'
+import { viewportDim } from './helper'
 import * as menu from './menu'
 import MenuView from './menu/menuView'
 import gamesMenu from './gamesMenu'
@@ -12,7 +13,7 @@ import loginModal from './loginModal'
 import signupModal from './signupModal'
 import friendsPopup from './friendsPopup'
 import lobby from './lobby'
-import EdgeOpenHandler, { HammerHandlers } from './shared/sideMenu/EdgeOpenHandler'
+import EdgeOpenHandler, { Handlers } from './shared/sideMenu/EdgeOpenHandler'
 import MainBoard from './shared/layout/MainBoard'
 
 let background: string
@@ -27,12 +28,12 @@ export default {
     header: Mithril.Children,
     content: Mithril.Children,
     overlay?: Mithril.Children,
-    hammerHandlers?: HammerHandlers,
+    handlers?: Handlers,
     color?: string
   ) {
     background = background || settings.general.theme.background()
     return h('div.view-container', containerOpts(background), [
-      h(MainBoard, { header, color, hammerHandlers }, content),
+      h(MainBoard, { header, color, handlers }, content),
       h(MenuView),
       gamesMenu.view(),
       loginModal.view(),
@@ -86,17 +87,11 @@ export default {
 
 function handleMenuOpen({ dom }: Mithril.VnodeDOM<any, any>) {
   const mainEl = dom as HTMLElement
-  const mc = new Hammer.Manager(mainEl, {
-    inputClass: Hammer.TouchInput
-  })
-  mc.add(new Hammer.Pan({
-    direction: Hammer.DIRECTION_HORIZONTAL,
-    threshold: 5
-  }))
+  const gesture = new TinyGesture(mainEl, viewportDim())
 
-  const defaultHandlers: HammerHandlers = EdgeOpenHandler(menu.mainMenuCtrl)
+  const defaultHandlers: Handlers = EdgeOpenHandler(menu.mainMenuCtrl)
   for (const eventName in defaultHandlers) {
-    mc.on(eventName, defaultHandlers[eventName])
+    gesture.on(eventName, defaultHandlers[eventName](gesture))
   }
 }
 

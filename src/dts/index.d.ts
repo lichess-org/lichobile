@@ -12,3 +12,4 @@
 declare module 'siema'
 declare module 'zanimo'
 declare module 'mithril/render/vnode'
+declare module 'tinygesture'

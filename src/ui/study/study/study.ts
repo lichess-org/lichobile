@@ -7,7 +7,7 @@ import router from '../../../router'
 import * as utils from '../../../utils'
 import * as helper from '../../helper'
 import layout from '../../layout'
-import EdgeOpenHandler, { HammerHandlers } from '../../shared/sideMenu/EdgeOpenHandler'
+import EdgeOpenHandler, { Handlers } from '../../shared/sideMenu/EdgeOpenHandler'
 
 import AnalyseCtrl from '../../analyse/AnalyseCtrl'
 import { renderContent, overlay, loadingScreen } from '../../analyse/view'
@@ -28,7 +28,7 @@ export interface Attrs {
 export interface State {
   ctrl?: AnalyseCtrl
   notFound?: boolean
-  hammerHandlers?: HammerHandlers
+  handlers?: Handlers
 }
 
 export default {
@@ -54,7 +54,7 @@ export default {
           ply || 0,
           tabId
         )
-        this.hammerHandlers = EdgeOpenHandler(this.ctrl.study!.sideMenu)
+        this.handlers = EdgeOpenHandler(this.ctrl.study!.sideMenu)
         redraw()
       }, Math.max(400 - elapsed, 0))
     })
@@ -107,7 +107,7 @@ export default {
             oncreate: helper.ontap(() => ctrl.study!.sideMenu.close())
           })
         ],
-        this.hammerHandlers
+        this.handlers
       )
     } else {
       return loadingScreen(isPortrait, undefined, vnode.attrs.curFen)

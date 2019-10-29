@@ -1,7 +1,6 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
-import Hammer from 'hammerjs'
-import { EDGE_SLIDE_THRESHOLD } from './sideMenu'
+import TinyGesture from '../../utils/gesture/TinyGesture'
 import { viewportDim, findParentBySelector, headerHeight, isPortrait, is43Aspect } from '../helper'
 
 interface Attrs {
@@ -15,7 +14,7 @@ interface Attrs {
 
 interface State {
   nbTabs: number
-  mc: HammerManager
+  gesture: TinyGesture
 }
 
 export default {
@@ -24,28 +23,27 @@ export default {
   },
 
   oncreate({ attrs, dom }) {
-    this.mc = new Hammer.Manager(dom, {
-      inputClass: Hammer.TouchInput
-    })
-    this.mc.add(new Hammer.Swipe({
-      direction: Hammer.DIRECTION_HORIZONTAL,
-      threshold: 10,
-      velocity: 0.4
-    }))
+    this.gesture = new TinyGesture(dom as HTMLElement, viewportDim())
 
-    this.mc.on('swiperight swipeleft', (e: HammerInput) => {
-      if (e.center.x - e.deltaX > EDGE_SLIDE_THRESHOLD) {
-        const tab = findParentBySelector(e.target, '.tab-content')
-        if (tab) {
-          const ds = tab.dataset as DOMStringMap
-          const index = Number(ds.index)
-          if (index !== undefined) {
-            if (e.direction === Hammer.DIRECTION_LEFT && index < this.nbTabs - 1) {
-              attrs.onTabChange(index + 1)
-            }
-            else if (e.direction === Hammer.DIRECTION_RIGHT && index > 0) {
-              attrs.onTabChange(index - 1)
-            }
+    this.gesture.on('swiperight', (e: TouchEvent) => {
+      const tab = findParentBySelector(e.target as HTMLElement, '.tab-content')
+      if (tab) {
+        const ds = tab.dataset as DOMStringMap
+        const index = Number(ds.index)
+        if (index !== undefined && index > 0) {
+          attrs.onTabChange(index - 1)
+        }
+      }
+    })
+
+    this.gesture.on('swipeleft', (e: TouchEvent) => {
+      const tab = findParentBySelector(e.target as HTMLElement, '.tab-content')
+      if (tab) {
+        const ds = tab.dataset as DOMStringMap
+        const index = Number(ds.index)
+        if (index !== undefined) {
+          if (index < this.nbTabs - 1) {
+            attrs.onTabChange(index + 1)
           }
         }
       }
@@ -57,7 +55,7 @@ export default {
   },
 
   onremove() {
-    this.mc.destroy()
+    this.gesture.destroy()
   },
 
   view({ attrs }) {

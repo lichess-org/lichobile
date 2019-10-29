@@ -1,4 +1,5 @@
 import redraw from '../../../utils/redraw'
+import TinyGesture from '../../../utils/gesture/TinyGesture'
 import { viewportDim } from '../../helper'
 import { getMenuWidth, translateMenu, backdropOpacity, EDGE_SLIDE_THRESHOLD, OPEN_AFTER_SLIDE_RATIO, BACKDROP_OPACITY } from '.'
 
@@ -10,11 +11,11 @@ interface State {
   canSlide: boolean
 }
 
-export interface HammerHandlers {
-  [eventName: string]: (e: HammerInput) => void
+export interface Handlers {
+  [eventName: string]: (gesture: TinyGesture) => (e: TouchEvent) => void
 }
 
-export default function EdgeOpenHandler(ctrl: SideMenuCtrl): HammerHandlers {
+export default function EdgeOpenHandler(ctrl: SideMenuCtrl): Handlers {
   const side = ctrl.side
   const menuWidth = getMenuWidth()
 
@@ -25,13 +26,14 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): HammerHandlers {
   }
 
   return {
-    panstart: (e: HammerInput) => {
+    panstart: (gesture: TinyGesture) => (e: TouchEvent) => {
+      const target = e.target! as HTMLElement
       if (
-        e.target.nodeName === 'PIECE' ||
-        e.target.nodeName === 'SQUARE' ||
+        target.nodeName === 'PIECE' ||
+        target.nodeName === 'SQUARE' ||
         // svg element className is not a string
-        (e.target.className.startsWith && e.target.className.startsWith('cg-board manipulable')) ||
-        !inEdgeArea(e.center.x, side, viewportDim().vw)
+        (target.className.startsWith && target.className.startsWith('cg-board manipulable')) ||
+        !inEdgeArea(gesture.touchStartX, side, viewportDim().vw)
       ) {
         state.canSlide = false
       } else {
@@ -46,11 +48,9 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): HammerHandlers {
       }
     },
 
-    panmove: (e: HammerInput) => {
+    panmove: (gesture: TinyGesture) => (_: TouchEvent) => {
       if (state.canSlide) {
-        // disable scrolling of content when sliding menu
-        e.preventDefault()
-        const delta = e.deltaX
+        const delta = gesture.touchMoveX
         if (side === 'left') {
           if (delta <= menuWidth) {
             translateMenu(state.menuElement!, -menuWidth + delta)
@@ -65,11 +65,11 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): HammerHandlers {
       }
     },
 
-    'panend pancancel': (e: HammerInput) => {
-      if (state.canSlide) {
+    panend: (gesture: TinyGesture) => () => {
+      const velocity = gesture.velocityX
+      if (state.canSlide && velocity !== null) {
         state.canSlide = false
-        const velocity = e.velocityX
-        const delta = e.deltaX
+        const delta = gesture.touchMoveX
         if (side === 'left') {
           if (
             velocity >= 0 &&

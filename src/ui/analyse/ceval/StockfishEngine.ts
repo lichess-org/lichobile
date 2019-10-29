@@ -128,7 +128,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
     // Sometimes we get #0. Let's just skip it.
     if (isMate && !ev) return
 
-    let pivot = work.threatMode ? 0 : 1
+    const pivot = work.threatMode ? 0 : 1
     if (work.ply % 2 === pivot) ev = -ev
 
     // For now, ignore most upperbound/lowerbound messages.
@@ -137,30 +137,34 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
     // See: https://github.com/ddugovic/Stockfish/issues/228
     if (evalType && multiPv === 1) return
 
-    let pvData = {
+    const pvData = {
       moves,
       cp: isMate ? undefined : ev,
       mate: isMate ? ev : undefined,
       depth
     }
 
+    const knps = nodes / elapsedMs
+
     if (curEval == null) {
       curEval = {
         fen: work.currentFen,
         maxDepth: work.maxDepth,
         depth,
-        knps: nodes / elapsedMs,
+        knps,
         nodes,
-        cp: isMate ? undefined : ev,
-        mate: isMate ? ev : undefined,
+        cp: pvData.cp,
+        mate: pvData.mate,
         pvs: [pvData],
         millis: elapsedMs
       }
     } else {
-      if (multiPv === 1) {
-        curEval.depth = depth
-      }
-
+      curEval.depth = depth
+      curEval.knps = knps
+      curEval.nodes = nodes
+      curEval.cp = pvData.cp
+      curEval.mate = pvData.mate
+      curEval.millis = elapsedMs
       const multiPvIdx = multiPv - 1
       if (curEval.pvs.length > multiPvIdx) {
         curEval.pvs[multiPvIdx] = pvData

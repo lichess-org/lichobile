@@ -1,6 +1,5 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
-import range from 'lodash-es/range'
 import i18n from '../../../i18n'
 import * as helper from '../../helper'
 import { isClientEval } from '../../shared/tree/interfaces'
@@ -69,7 +68,7 @@ function renderCevalPvs(ctrl: AnalyseCtrl) {
     const pvs = node.ceval.pvs
     return h('ul.ceval-pv_box.native_scroller', {
       oncreate: helper.ontapXY(e => onLineTap(ctrl, e), undefined, helper.getLI)
-    }, range(multiPv).map((i) => {
+    }, Array.from(Array(multiPv).keys()).map((i) => {
       if (!pvs[i]) return h('li.pv')
       const san = pv2san(ctrl.ceval.variant, node.fen, false, pvs[i].moves, pvs[i].mate)
       return h('li.ceval-pv', {

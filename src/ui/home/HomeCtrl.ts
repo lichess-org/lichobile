@@ -1,5 +1,4 @@
 import { Plugins, AppState, NetworkStatus, PluginListenerHandle } from '@capacitor/core'
-import uniqBy from 'lodash-es/uniqBy'
 import Zanimo from '../../utils/zanimo'
 import socket, { SocketIFace } from '../../socket'
 import redraw from '../../utils/redraw'
@@ -157,9 +156,14 @@ function fixSeeks(seeks: CorrespondenceSeek[]): CorrespondenceSeek[] {
     if (seekUserId(b) === userId) return 1
     return 0
   })
-  return uniqBy(seeks, s => {
-    const username = seekUserId(s) === userId ? s.id : s.username
-    const key = username + s.mode + s.variant.key + s.days + s.color
-    return key
-  })
+  return [
+    ...seeks
+    .map(s => {
+      const username = seekUserId(s) === userId ? s.id : s.username
+      const key = username + s.mode + s.variant.key + s.days + s.color
+      return [s, key]
+    })
+    .filter(([_, key], i, a) => a.map(e => e[1]).indexOf(key) === i)
+    .map(([s]) => s)
+  ] as CorrespondenceSeek[]
 }

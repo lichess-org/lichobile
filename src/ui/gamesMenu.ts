@@ -1,6 +1,5 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
-import range from 'lodash-es/range'
 import Siema from 'siema'
 import addSeconds from 'date-fns/esm/addSeconds'
 import * as utils from '../utils'
@@ -282,7 +281,7 @@ function renderCarouselIndicators() {
       Math.ceil(scroller.innerElements.length / 2) :
       scroller.innerElements.length
     return h('div.carouselIndicators',
-      range(0, elsNb).map(i =>
+      Array.from(Array(elsNb).keys()).map(i =>
         h('i.indicator', {
           className: i === scroller.currentSlide ? 'current' : ''
         })

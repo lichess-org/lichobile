@@ -2,7 +2,7 @@ const tsc = require('typescript');
 const tsConfig = require('./tsconfig.json');
 
 tsConfig.compilerOptions.module = 'commonjs'
-tsConfig.compilerOptions.target = 'es5'
+tsConfig.compilerOptions.target = 'es3'
 
 module.exports = {
   process(src, path) {

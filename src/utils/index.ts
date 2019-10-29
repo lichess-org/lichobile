@@ -266,12 +266,6 @@ export function flatten<T>(arr: T[][]): T[] {
   return arr.reduce((a: T[], b: T[]) => a.concat(b), [])
 }
 
-export function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U> {
-  const res = {} as Record<K, U>
-  Object.keys(obj).map((k: K) => res[k] = f(obj[k]))
-  return res
-}
-
 export function lichessAssetSrc(path: string) {
   return `${globalConfig.apiEndPoint}/assets/${path}`
 }
@@ -291,40 +285,4 @@ export function truncate(text: string, len: number): string {
 export function safeStringToNum(s: string | null | undefined): number | undefined {
   const n = Number(s)
   return isNaN(n) ? undefined : n
-}
-
-/**
- * Performs equality by iterating through keys on an object and returning false
- * when any key has values which are not strictly equal between the arguments.
- * Returns true when the values of all keys are strictly equal.
- */
-const hasOwnProperty = Object.prototype.hasOwnProperty
-type OAny = { [k: string]: any }
-export function shallowEqual(objA: OAny, objB: OAny): boolean {
-  if (Object.is(objA, objB)) {
-    return true
-  }
-
-  if (typeof objA !== 'object' || objA === null ||
-      typeof objB !== 'object' || objB === null) {
-    return false
-  }
-
-  const keysA = Object.keys(objA)
-  const keysB = Object.keys(objB)
-
-  if (keysA.length !== keysB.length) {
-    return false
-  }
-
-  for (let i = 0; i < keysA.length; i++) {
-    if (
-      !hasOwnProperty.call(objB, keysA[i]) ||
-      !Object.is(objA[keysA[i]], objB[keysA[i]])
-    ) {
-      return false
-    }
-  }
-
-  return true
 }

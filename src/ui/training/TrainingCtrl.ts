@@ -1,5 +1,4 @@
 import { Plugins } from '@capacitor/core'
-import cloneDeep from 'lodash-es/cloneDeep'
 import debounce from 'lodash-es/debounce'
 import throttle from 'lodash-es/throttle'
 import Chessground from '../../chessground/Chessground'
@@ -249,7 +248,7 @@ export default class TrainingCtrl implements PromotingInterface {
       })
     }
 
-    const data = cloneDeep(cfg)
+    const data = JSON.parse(JSON.stringify(cfg))
     const variant = {
       key: 'standard' as VariantKey
     }

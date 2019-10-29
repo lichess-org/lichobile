@@ -1,14 +1,10 @@
 import { Plugins } from '@capacitor/core'
-import get from 'lodash-es/get'
-import set from 'lodash-es/set'
-import pick from 'lodash-es/pick'
-import mapValues from 'lodash-es/mapValues'
-import mapKeys from 'lodash-es/mapKeys'
 import throttle from 'lodash-es/throttle'
 import redraw from './utils/redraw'
 import signals from './signals'
 import { SESSION_ID_KEY, fetchJSON, fetchText, ErrorResponse } from './http'
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils'
+import { getAtPath, setAtPath, pick } from './utils/object'
 import i18n from './i18n'
 import push from './push'
 import settings from './settings'
@@ -137,16 +133,26 @@ function setKidMode(): Promise<string> {
   .then(showSavedPrefToast)
 }
 
+function numValue(v: string | boolean | number): string {
+  if (v === true) return '1'
+  else if (v === false) return '0'
+  else return String(v)
+}
+
+function makeReducer(prefix: string) {
+  return function(acc: Prefs, [k, v]: [string, PrefValue]) {
+    return {
+      ...acc,
+      [prefix + k]: numValue(v)
+    }
+  }
+}
+
 function savePreferences(): Promise<string> {
 
-  function numValue(v: boolean | number): string {
-    if (v === true) return '1'
-    else if (v === false) return '0'
-    else return String(v)
-  }
-
   const prefs = session && session.prefs || {}
-  const display = mapKeys(<Prefs>mapValues(pick(prefs, [
+
+  const display = Object.entries(pick(prefs, [
     'animation',
     'captured',
     'highlight',
@@ -154,8 +160,9 @@ function savePreferences(): Promise<string> {
     'coords',
     'replay',
     'blindfold'
-  ]), numValue), (_, k) => 'display.' + k) as StringMap
-  const behavior = mapKeys(<Prefs>mapValues(pick(prefs, [
+  ])).reduce(makeReducer('display.'), {})
+
+  const behavior = Object.entries(pick(prefs, [
     'premove',
     'takeback',
     'autoQueen',
@@ -163,8 +170,9 @@ function savePreferences(): Promise<string> {
     'submitMove',
     'confirmResign',
     'moretime'
-  ]), numValue), (_, k) => 'behavior.' + k) as StringMap
-  const rest = mapValues(pick(prefs, [
+  ])).reduce(makeReducer('behavior.'), {})
+
+  const rest = Object.entries(pick(prefs, [
     'clockTenths',
     'clockBar',
     'clockSound',
@@ -172,7 +180,7 @@ function savePreferences(): Promise<string> {
     'challenge',
     'message',
     'insightShare'
-  ]), numValue) as StringMap
+  ])).reduce(makeReducer(''), {})
 
   return fetchText('/account/preferences', {
     method: 'POST',
@@ -180,7 +188,7 @@ function savePreferences(): Promise<string> {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       'Accept': 'application/json, text/*'
     },
-    body: serializeQueryParameters(Object.assign(rest, display, behavior))
+    body: serializeQueryParameters({ ...rest, ...display, ...behavior })
   }, true)
   .then(showSavedPrefToast)
 }
@@ -190,17 +198,17 @@ function lichessBackedProp<T extends string | number | boolean>(path: string, pr
     if (arguments.length) {
       let oldPref: T
       if (session) {
-        oldPref = <T>get(session, path)
-        set(session, path, arguments[0])
+        oldPref = <T>getAtPath(session, path)
+        setAtPath(session, path, arguments[0])
       }
       prefRequest()
       .catch((err) => {
-        if (session) set(session, path, oldPref)
+        if (session) setAtPath(session, path, oldPref)
         handleXhrError(err)
       })
     }
 
-    return session ? <T>get(session, path) : defaultVal
+    return session ? <T>getAtPath(session, path) : defaultVal
   }
 }
 

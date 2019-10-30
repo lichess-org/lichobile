@@ -1,8 +1,3 @@
-/// <reference path="dts/index.d.ts" />
-
-// capacitor plugins registration
-import 'capacitor-sound-effect'
-
 import { Plugins, AppState, DeviceInfo, NetworkStatus } from '@capacitor/core'
 import debounce from 'lodash-es/debounce'
 import { hasNetwork } from './utils'

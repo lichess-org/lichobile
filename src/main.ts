@@ -1,3 +1,5 @@
+/// <reference path="dts/index.d.ts" />
+
 import { Plugins, StatusBarStyle } from '@capacitor/core'
 import settings from './settings'
 import { getThemeFilename, getLocalFile, createStylesheetRule } from './bgtheme'

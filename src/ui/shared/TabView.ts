@@ -1,6 +1,7 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import TinyGesture from '../../utils/gesture/TinyGesture'
+import { hashCode } from '../../utils'
 import { viewportDim, findParentBySelector, headerHeight, isPortrait, is43Aspect } from '../helper'
 
 interface Attrs {
@@ -84,14 +85,15 @@ export default {
     const view = h('div.tabs-view', {
       style,
       className: attrs.className
-    }, contentRenderers.map((_: any, index: number) =>
+    }, contentRenderers.map((f: () => Mithril.Children, index: number) =>
       h('div.tab-content', {
         style: {
           width: `${tabWidth}px`,
         },
+        key: hashCode(f.toString()),
         'data-index': index,
         className: selectedIndex === index ? 'current' : '',
-      },  selectedIndex === index ? contentRenderers[index]() : null)
+      },  selectedIndex === index ? f() : null)
     ))
 
     return withWrapper ? h('div.tabs-view-wrapper', view) : view

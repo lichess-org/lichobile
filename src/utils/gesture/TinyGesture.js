@@ -69,8 +69,6 @@ export default class TinyGesture {
   onTouchStart (event) {
     this.thresholdX = this.opts.threshold('x', this);
     this.thresholdY = this.opts.threshold('y', this);
-    this.disregardVelocityThresholdX = this.opts.disregardVelocityThreshold('x', this);
-    this.disregardVelocityThresholdY = this.opts.disregardVelocityThreshold('y', this);
     this.touchStartX = event.changedTouches[0].pageX;
     this.touchStartY = event.changedTouches[0].pageY;
     this.touchMoveX = null;
@@ -113,12 +111,12 @@ export default class TinyGesture {
       if (this.swipedHorizontal) {
         if (x < 0) {
           // Left swipe.
-          if (this.velocityX < -this.opts.velocityThreshold || x < -this.disregardVelocityThresholdX) {
+          if (this.velocityX < -this.opts.velocityThreshold) {
             this.fire('swipeleft', event);
           }
         } else {
           // Right swipe.
-          if (this.velocityX > this.opts.velocityThreshold || x > this.disregardVelocityThresholdX) {
+          if (this.velocityX > this.opts.velocityThreshold) {
             this.fire('swiperight', event);
           }
         }
@@ -126,12 +124,12 @@ export default class TinyGesture {
       if (this.swipedVertical) {
         if (y < 0) {
           // Upward swipe.
-          if (this.velocityY < -this.opts.velocityThreshold || y < -this.disregardVelocityThresholdY) {
+          if (this.velocityY < -this.opts.velocityThreshold) {
             this.fire('swipeup', event);
           }
         } else {
           // Downward swipe.
-          if (this.velocityY > this.opts.velocityThreshold || y > this.disregardVelocityThresholdY) {
+          if (this.velocityY > this.opts.velocityThreshold) {
             this.fire('swipedown', event);
           }
         }
@@ -143,7 +141,6 @@ export default class TinyGesture {
 TinyGesture.defaults = {
   threshold: (type, self) => Math.max(25, Math.floor(0.15 * (type === 'x' ? self.vd.vw : self.vd.vh))),
   velocityThreshold: 10,
-  disregardVelocityThreshold: (type, self) => Math.floor(0.5 * (type === 'x' ? self.element.clientWidth : self.element.clientHeight)),
   diagonalSwipes: false,
   diagonalLimit: Math.tan(45 * 1.5 / 180 * Math.PI),
 };

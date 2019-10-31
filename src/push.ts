@@ -4,12 +4,7 @@ import {
   PushNotificationToken,
   PushNotificationActionPerformed
 } from '@capacitor/core'
-// import settings from './settings'
-// import session from './session'
-// import router from './router'
-// import challengesApi from './lichess/challenges'
 import { fetchText } from './http'
-// import * as helper from './ui/helper'
 
 const { PushNotifications } = Plugins
 
@@ -38,6 +33,8 @@ export default {
         console.log('Push action performed: ' + JSON.stringify(notification))
       }
     )
+
+    register()
   },
 
   register,

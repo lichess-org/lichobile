@@ -11,6 +11,7 @@ import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
 import * as helper from './ui/helper'
 import lobby from './ui/lobby'
+import push from './push'
 import router from './router'
 import sound from './sound'
 import socket from './socket'
@@ -33,7 +34,7 @@ export default function appInit(info: DeviceInfo) {
 
   // TODO
   // deepLinks.init()
-  // push.init()
+  push.init()
 
   requestIdleCallback(() => {
     // cache viewport dims

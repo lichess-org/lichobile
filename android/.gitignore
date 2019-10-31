@@ -4,6 +4,8 @@
 
 # Using Android gitignore template: https://github.com/github/gitignore/blob/master/Android.gitignore
 
+app/google-services.json
+
 # Built application files
 *.apk
 *.ap_

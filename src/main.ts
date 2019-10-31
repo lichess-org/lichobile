@@ -1,9 +1,10 @@
 /// <reference path="dts/index.d.ts" />
-
 import { Plugins, StatusBarStyle } from '@capacitor/core'
-import settings from './settings'
+
+import appInit from './app'
 import { getThemeFilename, getLocalFile, createStylesheetRule } from './bgtheme'
-import app from './app'
+import { init as i18nInit } from './i18n'
+import settings from './settings'
 
 const theme = settings.general.theme.background()
 
@@ -17,6 +18,7 @@ if (theme !== 'dark' && theme !== 'light') {
   })
 }
 
-Plugins.SplashScreen.hide()
-
-app()
+i18nInit()
+.then(() => Plugins.Device.getInfo())
+.then(appInit)
+.then(() => Plugins.SplashScreen.hide())

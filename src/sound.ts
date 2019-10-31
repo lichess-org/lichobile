@@ -1,4 +1,4 @@
-import { Capacitor, WebPlugin, Plugins, registerWebPlugin } from '@capacitor/core'
+import { DeviceInfo, Capacitor, WebPlugin, Plugins, registerWebPlugin } from '@capacitor/core'
 import settings from './settings'
 import throttle from 'lodash-es/throttle'
 
@@ -37,20 +37,19 @@ if (Capacitor.platform === 'web') {
 
 let shouldPlay: boolean = settings.general.sound()
 
-Plugins.Device.getInfo().then(info => {
-  const ext = info.platform === 'ios' ? '.aifc' : '.mp3'
-
-  Plugins.SoundEffect.loadSound({ id: 'move', path: `sounds/move${ext}` })
-  Plugins.SoundEffect.loadSound({ id: 'capture', path: `sounds/capture${ext}` })
-  Plugins.SoundEffect.loadSound({ id: 'explosion', path: `sounds/explosion${ext}` })
-  Plugins.SoundEffect.loadSound({ id: 'lowtime', path: `sounds/lowtime${ext}` })
-  Plugins.SoundEffect.loadSound({ id: 'dong', path: `sounds/dong${ext}` })
-  Plugins.SoundEffect.loadSound({ id: 'berserk', path: `sounds/berserk${ext}` })
-  Plugins.SoundEffect.loadSound({ id: 'clock', path: `sounds/clock${ext}` })
-  Plugins.SoundEffect.loadSound({ id: 'confirmation', path: `sounds/confirmation${ext}` })
-})
-
 export default {
+  load(info: DeviceInfo) {
+    const ext = info.platform === 'ios' ? '.aifc' : '.mp3'
+
+    Plugins.SoundEffect.loadSound({ id: 'move', path: `sounds/move${ext}` })
+    Plugins.SoundEffect.loadSound({ id: 'capture', path: `sounds/capture${ext}` })
+    Plugins.SoundEffect.loadSound({ id: 'explosion', path: `sounds/explosion${ext}` })
+    Plugins.SoundEffect.loadSound({ id: 'lowtime', path: `sounds/lowtime${ext}` })
+    Plugins.SoundEffect.loadSound({ id: 'dong', path: `sounds/dong${ext}` })
+    Plugins.SoundEffect.loadSound({ id: 'berserk', path: `sounds/berserk${ext}` })
+    Plugins.SoundEffect.loadSound({ id: 'clock', path: `sounds/clock${ext}` })
+    Plugins.SoundEffect.loadSound({ id: 'confirmation', path: `sounds/confirmation${ext}` })
+  },
   move() {
     if (shouldPlay) Plugins.SoundEffect.play({ id: 'move' })
   },

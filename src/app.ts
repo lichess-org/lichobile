@@ -1,3 +1,4 @@
+/// <reference path="dts/index.d.ts" />
 import { Plugins, AppState, DeviceInfo, NetworkStatus } from '@capacitor/core'
 import debounce from 'lodash-es/debounce'
 import { hasNetwork } from './utils'
@@ -5,25 +6,22 @@ import { syncWithNowPlayingGames } from './utils/offlineGames'
 import redraw from './utils/redraw'
 import session, { Session } from './session'
 import { fetchJSON } from './http'
-import { init as i18nInit, ensureLocaleIsAvailable, loadLanguage, getCurrentLocale } from './i18n'
+import { ensureLocaleIsAvailable, loadLanguage, getCurrentLocale } from './i18n'
 import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
 import * as helper from './ui/helper'
 import lobby from './ui/lobby'
 import router from './router'
+import sound from './sound'
 import socket from './socket'
 import routes from './routes'
 import { isForeground, setForeground, setBackground } from './utils/appMode'
 
 let firstConnection = true
+const requestIdleCallback: (c: () => void) => void =
+  window.requestIdleCallback || window.setTimeout
 
-export default function app() {
-  i18nInit()
-  .then(() => Plugins.Device.getInfo())
-  .then(appInit)
-}
-
-function appInit(info: DeviceInfo) {
+export default function appInit(info: DeviceInfo) {
 
   window.deviceInfo = {
     platform: info.platform,
@@ -32,12 +30,16 @@ function appInit(info: DeviceInfo) {
   }
 
   routes.init()
+
   // TODO
   // deepLinks.init()
   // push.init()
 
-  // cache viewport dims
-  helper.viewportDim()
+  requestIdleCallback(() => {
+    // cache viewport dims
+    helper.viewportDim()
+    sound.load(info)
+  })
 
   // pull session data once (to log in user automatically thanks to cookie)
   // and also listen to online event in case network was disconnected at app
@@ -74,13 +76,6 @@ function appInit(info: DeviceInfo) {
 
   Plugins.App.addListener('backButton', router.backbutton)
 
-  // TODO
-  // probably not needed
-  window.addEventListener('unload', () => {
-    socket.destroy()
-    socket.terminate()
-  })
-
   window.addEventListener('resize', debounce(onResize), false)
 }
 
@@ -114,7 +109,6 @@ function onOnline() {
 
         // TODO remove in next version (from 7.0.0)
         // localForage has been removed, we only want to sync unsolved puzzle if any
-        const requestIdleCallback: (c: () => void) => void = window.requestIdleCallback || window.setTimeout
         requestIdleCallback(() => syncSolvedPuzzlesInOldStorage(user))
         // end of to remove part
       })

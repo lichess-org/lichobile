@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core'
 import redraw from '../../../utils/redraw'
 import TinyGesture from '../../../utils/gesture/TinyGesture'
 import { viewportDim } from '../../helper'
@@ -48,8 +49,14 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): Handlers {
       }
     },
 
-    panmove: (gesture: TinyGesture) => (_: TouchEvent) => {
+    panmove: (gesture: TinyGesture) => (e: TouchEvent) => {
       if (state.canSlide) {
+        if (Capacitor.platform === 'ios') {
+          // disable scrolling of content when sliding menu
+          if (!e.defaultPrevented) {
+            e.preventDefault()
+          }
+        }
         const delta = gesture.touchMoveX
         if (side === 'left') {
           if (delta <= menuWidth) {

@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core'
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import settings from '../settings'
@@ -87,7 +88,9 @@ export default {
 
 function handleMenuOpen({ dom }: Mithril.VnodeDOM<any, any>) {
   const mainEl = dom as HTMLElement
-  const gesture = new TinyGesture(mainEl, viewportDim())
+  const gesture = new TinyGesture(mainEl, viewportDim(), {
+    passiveMove: Capacitor.platform !== 'ios'
+  })
 
   const defaultHandlers: Handlers = EdgeOpenHandler(menu.mainMenuCtrl)
   for (const eventName in defaultHandlers) {

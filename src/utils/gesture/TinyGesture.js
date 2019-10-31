@@ -30,7 +30,7 @@ export default class TinyGesture {
     this._onTouchEnd = this.onTouchEnd.bind(this);
 
     this.element.addEventListener('touchstart', this._onTouchStart, passive);
-    this.element.addEventListener('touchmove', this._onTouchMove, passive);
+    this.element.addEventListener('touchmove', this._onTouchMove, this.opts.passiveMove ? passive : false);
     this.element.addEventListener('touchend', this._onTouchEnd, passive);
   }
 
@@ -141,6 +141,7 @@ export default class TinyGesture {
 TinyGesture.defaults = {
   threshold: (type, self) => Math.max(25, Math.floor(0.15 * (type === 'x' ? self.vd.vw : self.vd.vh))),
   velocityThreshold: 10,
+  passiveMove: true,
   diagonalSwipes: false,
   diagonalLimit: Math.tan(45 * 1.5 / 180 * Math.PI),
 };

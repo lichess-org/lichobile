@@ -1,5 +1,5 @@
+import { Capacitor } from '@capacitor/core'
 import TinyGesture from '../../../utils/gesture/TinyGesture'
-
 import { viewportDim } from '../../helper'
 import SideMenuCtrl from './SideMenuCtrl'
 import { getMenuWidth, translateMenu, backdropOpacity, OPEN_AFTER_SLIDE_RATIO, BACKDROP_OPACITY } from '.'
@@ -17,12 +17,25 @@ export default function CloseSlideHandler(el: HTMLElement, ctrl: SideMenuCtrl) {
     backDropElement: null,
   }
 
-  const gesture = new TinyGesture(el, viewportDim())
+  const gesture = new TinyGesture(el, viewportDim(), {
+    passiveMove: Capacitor.platform !== 'ios'
+  })
 
   gesture.on('panstart', () => {
     state.backDropElement = ctrl.getBackdropEl()
   })
-  gesture.on('panmove', () => {
+  gesture.on('panmove', (e: TouchEvent) => {
+    if (Capacitor.platform === 'ios') {
+      if (!e.defaultPrevented) {
+        if (
+          (side === 'left' && gesture.touchMoveX < -8) ||
+          (side === 'right' && gesture.touchMoveX > 8)
+        ) {
+          e.preventDefault()
+        }
+      }
+    }
+
     if (side === 'left') {
       if (gesture.touchMoveX < 0 && gesture.touchMoveX >= -menuWidth) {
         translateMenu(el, gesture.touchMoveX)

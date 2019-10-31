@@ -11,4 +11,5 @@ export default class TinyGesture {
   public touchMoveX: number
   public touchMoveY: number
   public velocityX: number
+  public velocityY: number
 }

@@ -21,8 +21,7 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:name="org.lichess.mobileapp.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBarLaunch"
-            android:launchMode="singleTask">
+            android:theme="@style/AppTheme.NoActionBarLaunch">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

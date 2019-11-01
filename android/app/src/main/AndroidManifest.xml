@@ -17,6 +17,8 @@
         android:theme="@style/AppTheme"
         android:resizeableActivity="false">
 
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/push_icon" />
+
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:name="org.lichess.mobileapp.MainActivity"

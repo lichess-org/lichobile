@@ -34,7 +34,7 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): Handlers {
         target.nodeName === 'SQUARE' ||
         // svg element className is not a string
         (target.className.startsWith && target.className.startsWith('cg-board manipulable')) ||
-        !inEdgeArea(gesture.touchStartX, side, viewportDim().vw)
+        !inEdgeArea(gesture.touchStartX!, side, viewportDim().vw)
       ) {
         state.canSlide = false
       } else {

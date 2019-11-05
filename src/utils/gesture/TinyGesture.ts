@@ -1,10 +1,5 @@
 import { ViewportDim } from '../../ui/helper'
 
-/**
- * TinyGesture.js
- *
- * Adapted from https://github.com/sciactive/tinygesture
- */
 type Handler = (e: TouchEvent) => void
 
 interface Handlers {
@@ -18,6 +13,9 @@ interface Handlers {
   [k: string]: Handler[]
 }
 
+/**
+ * Adapted from https://github.com/sciactive/tinygesture
+ */
 export default class TinyGesture {
   private readonly handlers: Handlers = {
     panstart: [],
@@ -40,15 +38,17 @@ export default class TinyGesture {
   public touchMoveY: number
   public swipingDirection: 'horizontal' | 'vertical' | 'pre-horizontal' | 'pre-vertical' | null = null
 
-  private thresholdX: number = 0
-  private thresholdY: number = 0
+  private swipeThresholdX: number
+  private swipeThresholdY: number
+  private startInputTimestamp: number = 0
 
   constructor (
     readonly element: HTMLElement,
     readonly vd: ViewportDim,
     readonly options?: Partial<Options>
   ) {
-    this.vd = vd
+    this.swipeThresholdX = threshold('x', vd)
+    this.swipeThresholdY = threshold('y', vd)
     this.element = element
     this.opts = Object.assign({}, defaults, options) as Options
     this.touchStartX = null
@@ -98,28 +98,26 @@ export default class TinyGesture {
   }
 
   private onTouchStart = (event: TouchEvent) => {
-    this.thresholdX = this.opts.threshold('x', this)
-    this.thresholdY = this.opts.threshold('y', this)
     this.touchStartX = event.changedTouches[0].pageX
     this.touchStartY = event.changedTouches[0].pageY
     this.touchMoveX = 0
     this.touchMoveY = 0
     this.touchEndX = null
     this.touchEndY = null
+    this.startInputTimestamp = performance.now()
     this.fire('panstart', event)
   }
 
   private onTouchMove = (event: TouchEvent) => {
-    const touchMoveX = event.changedTouches[0].pageX - this.touchStartX!
-    this.velocityX = touchMoveX - this.touchMoveX
-    this.touchMoveX = touchMoveX
-    const touchMoveY = event.changedTouches[0].pageY - this.touchStartY!
-    this.velocityY = touchMoveY - this.touchMoveY
-    this.touchMoveY = touchMoveY
+    this.touchMoveX = event.changedTouches[0].pageX - this.touchStartX!
+    const deltaTime = performance.now() - this.startInputTimestamp
+    this.velocityX = this.touchMoveX / deltaTime
+    this.touchMoveY = event.changedTouches[0].pageY - this.touchStartY!
+    this.velocityY = this.touchMoveY / deltaTime
     const absTouchMoveX = Math.abs(this.touchMoveX)
     const absTouchMoveY = Math.abs(this.touchMoveY)
-    const swipingHorizontal = absTouchMoveX > this.thresholdX
-    const swipingVertical = absTouchMoveY > this.thresholdY
+    const swipingHorizontal = absTouchMoveX > this.swipeThresholdX
+    const swipingVertical = absTouchMoveY > this.swipeThresholdY
     this.swipingDirection = absTouchMoveX > absTouchMoveY
       ? (swipingHorizontal ? 'horizontal' : 'pre-horizontal')
       : (swipingVertical ? 'vertical' : 'pre-vertical')
@@ -136,31 +134,27 @@ export default class TinyGesture {
     const y = this.touchEndY - this.touchStartY!
     const absY = Math.abs(y)
 
-    if (absX > this.thresholdX || absY > this.thresholdY) {
-      const swipedHorizontal = this.opts.diagonalSwipes ? Math.abs(x / y) <= this.opts.diagonalLimit : absX >= absY && absX > this.thresholdX
-      const swipedVertical = this.opts.diagonalSwipes ? Math.abs(y / x) <= this.opts.diagonalLimit : absY > absX && absY > this.thresholdY
+    if (absX > this.swipeThresholdX || absY > this.swipeThresholdY) {
+      const swipedHorizontal = absX >= absY && absX > this.swipeThresholdX
+      const swipedVertical = absY > absX && absY > this.swipeThresholdY
       if (swipedHorizontal) {
         if (x < 0) {
-          // Left swipe.
-          if (this.velocityX! < -this.opts.velocityThreshold) {
+          if (this.velocityX! < -this.opts.swipeVelocityThreshold) {
             this.fire('swipeleft', event)
           }
         } else {
-          // Right swipe.
-          if (this.velocityX! > this.opts.velocityThreshold) {
+          if (this.velocityX! > this.opts.swipeVelocityThreshold) {
             this.fire('swiperight', event)
           }
         }
       }
       if (swipedVertical) {
         if (y < 0) {
-          // Upward swipe.
-          if (this.velocityY! < -this.opts.velocityThreshold) {
+          if (this.velocityY! < -this.opts.swipeVelocityThreshold) {
             this.fire('swipeup', event)
           }
         } else {
-          // Downward swipe.
-          if (this.velocityY! > this.opts.velocityThreshold) {
+          if (this.velocityY! > this.opts.swipeVelocityThreshold) {
             this.fire('swipedown', event)
           }
         }
@@ -169,20 +163,18 @@ export default class TinyGesture {
   }
 }
 
+function threshold(t: string, vd: ViewportDim) {
+  return Math.max(25, Math.floor(0.15 * (t === 'x' ? vd.vw : vd.vh)))
+}
+
 interface Options {
-  threshold: (t: string, s: TinyGesture) => number
-  velocityThreshold: number
+  swipeVelocityThreshold: number
   passiveMove: boolean
-  diagonalSwipes: boolean
-  diagonalLimit: number
 }
 
 const defaults: Partial<Options> = {
-  threshold: (type, self) => Math.max(25, Math.floor(0.15 * (type === 'x' ? self.vd.vw : self.vd.vh))),
-  velocityThreshold: 10,
+  swipeVelocityThreshold: 0.4,
   passiveMove: true,
-  diagonalSwipes: false,
-  diagonalLimit: Math.tan(45 * 1.5 / 180 * Math.PI),
 }
 
 const passive = { passive: true }

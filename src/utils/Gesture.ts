@@ -1,4 +1,4 @@
-import { ViewportDim } from '../../ui/helper'
+import { ViewportDim } from '../ui/helper'
 
 type Handler = (e: TouchEvent) => void
 
@@ -16,7 +16,7 @@ interface Handlers {
 /**
  * Adapted from https://github.com/sciactive/tinygesture
  */
-export default class TinyGesture {
+export default class Gesture {
   private readonly handlers: Handlers = {
     panstart: [],
     panmove: [],

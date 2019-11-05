@@ -1,6 +1,6 @@
 import { Capacitor } from '@capacitor/core'
 import redraw from '../../../utils/redraw'
-import TinyGesture from '../../../utils/gesture/TinyGesture'
+import Gesture from '../../../utils/Gesture'
 import { viewportDim } from '../../helper'
 import { getMenuWidth, translateMenu, backdropOpacity, EDGE_SLIDE_THRESHOLD, OPEN_AFTER_SLIDE_RATIO, BACKDROP_OPACITY } from '.'
 
@@ -13,7 +13,7 @@ interface State {
 }
 
 export interface Handlers {
-  [eventName: string]: (gesture: TinyGesture) => (e: TouchEvent) => void
+  [eventName: string]: (gesture: Gesture) => (e: TouchEvent) => void
 }
 
 export default function EdgeOpenHandler(ctrl: SideMenuCtrl): Handlers {
@@ -27,7 +27,7 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): Handlers {
   }
 
   return {
-    panstart: (gesture: TinyGesture) => (e: TouchEvent) => {
+    panstart: (gesture: Gesture) => (e: TouchEvent) => {
       const target = e.target! as HTMLElement
       if (
         target.nodeName === 'PIECE' ||
@@ -49,7 +49,7 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): Handlers {
       }
     },
 
-    panmove: (gesture: TinyGesture) => (e: TouchEvent) => {
+    panmove: (gesture: Gesture) => (e: TouchEvent) => {
       if (state.canSlide) {
         if (Capacitor.platform === 'ios') {
           // disable scrolling of content when sliding menu
@@ -72,7 +72,7 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): Handlers {
       }
     },
 
-    panend: (gesture: TinyGesture) => () => {
+    panend: (gesture: Gesture) => () => {
       const velocity = gesture.velocityX
       if (state.canSlide && velocity !== null) {
         state.canSlide = false

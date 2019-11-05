@@ -1,6 +1,6 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
-import TinyGesture from '../../utils/gesture/TinyGesture'
+import Gesture from '../../utils/Gesture'
 import { hashCode } from '../../utils'
 import { viewportDim, findParentBySelector, headerHeight, isPortrait, is43Aspect } from '../helper'
 
@@ -15,7 +15,7 @@ interface Attrs {
 
 interface State {
   nbTabs: number
-  gesture: TinyGesture
+  gesture: Gesture
 }
 
 export default {
@@ -24,7 +24,7 @@ export default {
   },
 
   oncreate({ attrs, dom }) {
-    this.gesture = new TinyGesture(dom as HTMLElement, viewportDim())
+    this.gesture = new Gesture(dom as HTMLElement, viewportDim())
 
     this.gesture.on('swiperight', (e: TouchEvent) => {
       const tab = findParentBySelector(e.target as HTMLElement, '.tab-content')

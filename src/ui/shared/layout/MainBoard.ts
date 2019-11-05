@@ -1,7 +1,7 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 
-import TinyGesture from '../../../utils/gesture/TinyGesture'
+import Gesture from '../../../utils/Gesture'
 import { viewportDim } from '../../helper'
 import * as menu from '../../menu'
 import EdgeOpenHandler, { Handlers } from '../sideMenu/EdgeOpenHandler'
@@ -13,7 +13,7 @@ interface Attrs {
 }
 
 interface State {
-  gesture: TinyGesture
+  gesture: Gesture
   boundHandlers: boolean
 }
 
@@ -23,7 +23,7 @@ export default {
   },
 
   oncreate({ dom }) {
-    this.gesture = new TinyGesture(dom as HTMLElement, viewportDim())
+    this.gesture = new Gesture(dom as HTMLElement, viewportDim())
     const defaultHandlers: Handlers = EdgeOpenHandler(menu.mainMenuCtrl)
     for (const eventName in defaultHandlers) {
       this.gesture.on(eventName, defaultHandlers[eventName](this.gesture))

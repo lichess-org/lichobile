@@ -1,5 +1,5 @@
 import { Capacitor } from '@capacitor/core'
-import TinyGesture from '../../../utils/gesture/TinyGesture'
+import Gesture from '../../../utils/Gesture'
 import { viewportDim } from '../../helper'
 import SideMenuCtrl from './SideMenuCtrl'
 import { getMenuWidth, translateMenu, backdropOpacity, OPEN_AFTER_SLIDE_RATIO, BACKDROP_OPACITY } from '.'
@@ -17,7 +17,7 @@ export default function CloseSlideHandler(el: HTMLElement, ctrl: SideMenuCtrl) {
     backDropElement: null,
   }
 
-  const gesture = new TinyGesture(el, viewportDim(), {
+  const gesture = new Gesture(el, viewportDim(), {
     passiveMove: Capacitor.platform !== 'ios'
   })
 

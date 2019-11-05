@@ -2,7 +2,7 @@ import { Capacitor } from '@capacitor/core'
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import settings from '../settings'
-import TinyGesture from '../utils/gesture/TinyGesture'
+import Gesture from '../utils/Gesture'
 import { viewportDim } from './helper'
 import * as menu from './menu'
 import MenuView from './menu/menuView'
@@ -88,7 +88,7 @@ export default {
 
 function handleMenuOpen({ dom }: Mithril.VnodeDOM<any, any>) {
   const mainEl = dom as HTMLElement
-  const gesture = new TinyGesture(mainEl, viewportDim(), {
+  const gesture = new Gesture(mainEl, viewportDim(), {
     passiveMove: Capacitor.platform !== 'ios'
   })
 

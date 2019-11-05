@@ -72,18 +72,18 @@ function getSession(): Session | undefined {
 
 // store session data for offline usage
 function storeSession(d: Session): void {
-  asyncStorage.setItem('session', d)
+  asyncStorage.set('session', d)
 }
 
 // clear session data stored in async storage and sessionId
 function onLogout(): void {
-  asyncStorage.removeItem('session')
+  asyncStorage.remove('session')
   storage.remove(SESSION_ID_KEY)
   signals.afterLogout.dispatch()
 }
 
 function restoreStoredSession(): void {
-  asyncStorage.getItem<Session>('session')
+  asyncStorage.get<Session>('session')
   .then(d => {
     session = d || undefined
     if (d !== null) {

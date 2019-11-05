@@ -91,7 +91,7 @@ export class Chat {
   }
 
   private checkUnreadFromStorage() {
-    asyncStorage.getItem<number>(this.storageId)
+    asyncStorage.get<number>(this.storageId)
     .then(data => {
       const storedNb = data || 0
       const actualNb = this.nbLines()
@@ -105,7 +105,7 @@ export class Chat {
   private storeNbLinesRead() {
     const linesRead = this.nbLines()
     if (linesRead > 0) {
-      asyncStorage.setItem(this.storageId, linesRead)
+      asyncStorage.set(this.storageId, linesRead)
     }
   }
 }

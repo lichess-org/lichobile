@@ -98,6 +98,7 @@ export default class Gesture {
   }
 
   private onTouchStart = (event: TouchEvent) => {
+    if (event.changedTouches.length > 1) return
     this.touchStartX = event.changedTouches[0].pageX
     this.touchStartY = event.changedTouches[0].pageY
     this.touchMoveX = 0
@@ -109,6 +110,7 @@ export default class Gesture {
   }
 
   private onTouchMove = (event: TouchEvent) => {
+    if (event.changedTouches.length > 1) return
     this.touchMoveX = event.changedTouches[0].pageX - this.touchStartX!
     const deltaTime = performance.now() - this.startInputTimestamp
     this.velocityX = this.touchMoveX / deltaTime
@@ -125,6 +127,7 @@ export default class Gesture {
   }
 
   private onTouchEnd = (event: TouchEvent) => {
+    if (event.changedTouches.length > 1) return
     this.touchEndX = event.changedTouches[0].pageX
     this.touchEndY = event.changedTouches[0].pageY
     this.fire('panend', event)

@@ -89,7 +89,7 @@ export function getCurrentLocale(): string {
  * It is called during app initialization, when we don't know yet server lang
  * preference.
  */
-export function init(): Promise<string> {
+export async function init(): Promise<string> {
 
   // must use concat with defaultCode const to force runtime module resolution
   const englishPromise = import('./i18n/' + defaultCode + '.js')
@@ -97,7 +97,7 @@ export function init(): Promise<string> {
     Object.assign(englishMessages, data)
   })
 
-  const fromSettings = settings.general.lang()
+  const fromSettings = await settings.general.lang()
   if (fromSettings) {
     return englishPromise.then(() => loadLanguage(fromSettings))
   }
@@ -125,10 +125,8 @@ export function ensureLocaleIsAvailable(locale: string): Promise<string> {
 
 export function loadLanguage(lang: string): Promise<string> {
   return loadFile(lang)
-  .then(code => {
-    settings.general.lang(code)
-    return loadDateLocale(code)
-  })
+  .then(settings.general.lang)
+  .then(loadDateLocale)
 }
 
 function loadFile(code: string): Promise<string> {
@@ -367,7 +365,6 @@ const untranslated: StringMap = {
   vibrationOnNotification: 'Vibrate on notification',
   soundOnNotification: 'Play sound on notification',
   vibrateOnGameEvents: 'Vibrate on game events',
-  soundAndNotifications: 'Sound and notifications',
   usernameStartNoNumber: 'The username must not start with a number',
   usernameUnacceptable: 'This username is not acceptable',
   usernameInvalid: 'The username contains invalid characters',

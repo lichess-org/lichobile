@@ -11,15 +11,17 @@ import settings from '../../settings'
 import { setServerLang } from '../../xhr'
 
 interface State {
-  langs?: ReadonlyArray<string>
+  locales?: ReadonlyArray<string>
+  lang?: string | null
 }
 
 export const LangPrefScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewSlideIn,
 
   oninit() {
-    getAvailableLocales().then(data => {
-      this.langs = data
+    Promise.all([getAvailableLocales(), settings.general.lang()]).then(([locales, lang]) => {
+      this.locales = locales
+      this.lang = lang
       redraw()
     })
   },
@@ -27,7 +29,7 @@ export const LangPrefScreen: Mithril.Component<{}, State> = {
   view() {
     const ctrl = this
     const header = dropShadowHeader(null, backButton(i18n('language')))
-    const currentLang = settings.general.lang()
+    const currentLang = ctrl.lang
 
     function renderLang(l: string) {
       const name = getLanguageNativeName(getIsoCodeFromLocale(l))
@@ -52,12 +54,12 @@ export const LangPrefScreen: Mithril.Component<{}, State> = {
     }
 
     function renderBody() {
-      return ctrl.langs ?
+      return ctrl.locales ?
         <ul
           className="native_scroller page settings_list"
           oncreate={helper.ontapY(onTap, undefined, helper.getLI)}
         >
-          {ctrl.langs.map(l => renderLang(l))}
+          {ctrl.locales.map(l => renderLang(l))}
         </ul> :
         <div
           className="loader_container"

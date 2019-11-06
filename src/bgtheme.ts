@@ -1,4 +1,4 @@
-import { Capacitor, Plugins, FilesystemDirectory, FileReadResult } from '@capacitor/core'
+import { Plugins, FilesystemDirectory, FileReadResult } from '@capacitor/core'
 import settings from './settings'
 
 const { Filesystem } = Plugins
@@ -47,8 +47,8 @@ export function createStylesheetRule(theme: string, { data }: FileReadResult): v
   }
   // FIXME should be fixed in capacitor
   const cleanData = data.replace(/\n/g, '')
-  const mime = Capacitor.platform === 'web' ? '' :
-    (theme === 'checkerboard' ? 'data:image/png;base64,' : 'data:image/jpeg;base64,')
+  const mime = theme === 'checkerboard' ?
+    'data:image/png;base64,' : 'data:image/jpeg;base64,'
   const dataUrl = mime + cleanData
   const css =
     `.view-container.transp.${theme} > main { background-image: url(${dataUrl}); }`

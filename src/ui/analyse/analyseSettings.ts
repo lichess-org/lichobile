@@ -138,7 +138,7 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
     ]),
     ctrl.ceval.allowed ? h('div.action', [
       formWidgets.renderCheckbox(
-        i18n('enableLocalComputerEvaluation'), 'allowCeval', settings.analyse.enableCeval,
+        i18n('toggleLocalEvaluation'), 'allowCeval', settings.analyse.enableCeval,
         v => {
           ctrl.ceval.toggle()
           if (v) ctrl.initCeval()
@@ -157,7 +157,7 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
     ]) : null,
     ctrl.study || ctrl.ceval.allowed ? h('div.action', [
       formWidgets.renderCheckbox(
-        i18n('showBestMove'), 'showBestMove', settings.analyse.showBestMove,
+        i18n('bestMoveArrow'), 'showBestMove', settings.analyse.showBestMove,
         ctrl.settings.toggleBestMove
       )
     ]) : null,
@@ -169,19 +169,19 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
     ]) : null,
     ctrl.ceval.allowed ? h('div.action', [
       formWidgets.renderCheckbox(
-        'Infinite analysis', 'ceval.infinite', settings.analyse.cevalInfinite,
+        i18n('infiniteAnalysis'), 'ceval.infinite', settings.analyse.cevalInfinite,
         ctrl.settings.cevalToggleInfinite
       ),
     ]) : null,
     ctrl.ceval.allowed ? h('div.action', [
       formWidgets.renderSlider(
-        'Analysis lines', 'ceval.multipv', 1, 5, 1, settings.analyse.cevalMultiPvs,
+        i18n('multipleLines'), 'ceval.multipv', 1, 5, 1, settings.analyse.cevalMultiPvs,
         ctrl.settings.cevalSetMultiPv
       )
     ]) : null,
     ctrl.ceval.allowed && cores > 1 ? h('div.action', [
       formWidgets.renderSlider(
-        'Processor cores', 'ceval.cores', 1, cores, 1, settings.analyse.cevalCores,
+        i18n('cpus'), 'ceval.cores', 1, cores, 1, settings.analyse.cevalCores,
         ctrl.settings.cevalSetCores
       )
     ]) : null

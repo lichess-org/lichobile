@@ -44,8 +44,8 @@ function renderBody(appVersion?: string) {
         oncreate: helper.ontapY(() => router.set('/settings/lang'))
       }, i18n('language')),
       h('li.list_item.nav', {
-        oncreate: helper.ontapY(() => router.set('/settings/theme'))
-      }, `${i18n('theming')}`),
+        oncreate: helper.ontapY(() => router.set('/settings/background'))
+      }, `${i18n('background')}`),
       h('li.list_item.nav', {
         oncreate: helper.ontapY(() => router.set('/settings/themes/board'))
       }, i18n('boardTheme')),

@@ -1,6 +1,5 @@
 import * as Mithril from 'mithril'
 import Stream from 'mithril/stream'
-import { Plugins } from '@capacitor/core'
 import throttle from 'lodash-es/throttle'
 import socket, { SocketIFace } from '../../socket'
 import redraw from '../../utils/redraw'
@@ -12,7 +11,6 @@ import { acceptChallenge, declineChallenge, cancelChallenge, getChallenge } from
 import { Challenge } from '../../lichess/interfaces/challenge'
 import challengesApi from '../../lichess/challenges'
 import { standardFen } from '../../lichess/variant'
-import i18n from '../../i18n'
 import layout from '../layout'
 import { viewOnlyBoardContent } from '../shared/round/view/roundView'
 import { header as headerWidget } from '../shared/common'
@@ -55,7 +53,6 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
               router.set(`/game/${d.challenge.id}`, true)
               break
             case 'declined':
-              Plugins.Toast.show({ text: i18n('challengeDeclined'), duration: 'short' })
               router.backHistory()
               break
           }

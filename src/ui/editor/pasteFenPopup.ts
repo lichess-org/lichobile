@@ -44,7 +44,7 @@ export default {
           }
         }, [
           h('input[type=text]', {
-            placeholder: 'Paste FEN position'
+            placeholder: i18n('pasteTheFenStringHere'),
           }),
           h('button[data-icon=E].withIcon.popupAction', i18n('loadPosition'))
         ])

@@ -250,8 +250,8 @@ export default {
         })
       })
 
-      router.add('settings/theme', ({ params }) => {
-        import('./ui/settings/theme').then(m => {
+      router.add('settings/background', ({ params }) => {
+        import('./ui/settings/background').then(m => {
           onRouteMatch(m.default, params)
         })
       })

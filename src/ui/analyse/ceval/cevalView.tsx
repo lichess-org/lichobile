@@ -28,16 +28,13 @@ function renderCevalInfos(ctrl: AnalyseCtrl) {
     className: ceval.cloud ? 'cloud' : ''
   }, [
     h('div.depth', [
-      h('strong', 'Depth: '), ceval.depth + (isInfinite || ceval.maxDepth === undefined ? '' : `/${ceval.maxDepth}`)
-    ]),
-    ceval.knps !== undefined ? h('div.knps', [
-      h('strong', 'kn/s: '), Math.round(ceval.knps)
-    ]) : null,
-    h('div.nodes', [
-      h('strong', 'nodes: '), Math.round(ceval.nodes / 1000) + 'k'
+      h('span', i18n('depthX', ceval.depth + (isInfinite || ceval.maxDepth === undefined ? '' : `/${ceval.maxDepth}`)))
     ]),
     ceval.millis !== undefined ? h('div.time', [
-      h('strong', 'time: '), formatTime(ceval.millis)
+      i18n('time'), ' ', formatTime(ceval.millis)
+    ]) : null,
+    ceval.knps !== undefined ? h('div.knps', [
+      'kn/s ', Math.round(ceval.knps)
     ]) : null,
     ceval.cloud ? h('span.ceval-cloud', 'Cloud') : null
   ])

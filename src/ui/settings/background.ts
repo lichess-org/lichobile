@@ -53,7 +53,7 @@ const ThemePrefScreen: Mithril.Component<{}, State> = {
   },
 
   view() {
-    const header = dropShadowHeader(null, backButton(i18n('theming')))
+    const header = dropShadowHeader(null, backButton(i18n('background')))
     return layout.free(header, renderBody(this))
   }
 }

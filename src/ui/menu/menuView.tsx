@@ -159,7 +159,7 @@ function renderLinks(user?: Session) {
       }
       {online ?
       <li className="side_link" data-route="/tournament">
-        <span className="fa fa-trophy"/>{i18n('tournament')}
+        <span className="fa fa-trophy"/>{i18n('tournaments')}
       </li> : null
       }
       <li className="sep_link">{i18n('learn')}</li>

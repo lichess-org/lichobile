@@ -24,7 +24,7 @@ export default {
   "joinTheGame": "Bretar la passa",
   "whitePlays": "Bllanc joya",
   "blackPlays": "Nèyr joya",
-  "opponentLeftChoices": "L'autro joyor a modà la passa. Te pòs lo fàre depitar u l\\'atèndre.",
+  "opponentLeftChoices": "L'autro joyor a modà la passa. Te pòs lo fàre depitar u l'atèndre.",
   "makeYourOpponentResign": "Fàre depitar l'adverséro",
   "forceResignation": "Fàre depitar",
   "talkInChat": "Devesar dèns lo barjacàjo",

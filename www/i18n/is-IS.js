@@ -397,7 +397,7 @@ export default {
   "insult": "Móðgun",
   "troll": "Tröll",
   "other": "Annað",
-  "reportDescriptionHelp": "Límdu hér hlekk(i) að leik eða leikjum og útskýrðu hvað er að hegðun notandans. Ekki segja bara ,,hann svindlar'\\', en segðu okkur hvernig þú komst að þeirri niðurstöðu. Unnið verður örar úr kvörtuninni ef hún er skrifuð á ensku.",
+  "reportDescriptionHelp": "Límdu hér hlekk(i) að leik eða leikjum og útskýrðu hvað er að hegðun notandans. Ekki segja bara ,,hann svindlar'', en segðu okkur hvernig þú komst að þeirri niðurstöðu. Unnið verður örar úr kvörtuninni ef hún er skrifuð á ensku.",
   "error.provideOneCheatedGameLink": "Vinsamlegast gefðu upp hlekk á að minnsta kosti einn leik þar sem svindlað var.",
   "by": "eftir %s",
   "thisTopicIsNowClosed": "Þessarri umræðu hefur verið lokað.",

@@ -408,7 +408,7 @@ export default {
   "aboutSimulImage": "在50个对手中，菲舍尔赢了47局，和了2局，输了1局。",
   "aboutSimulRealLife": "这个概念来自真实的国际赛事。 在现实中，这涉及到主持在桌与桌之间来回穿梭走棋。",
   "aboutSimulRules": "当表演赛开始的时候， 每个玩家都与主持开始对弈， 而主持用白方。 当所有的对局都结束时，表演赛就结束了。",
-  "aboutSimulSettings": "表演赛总是不定级的。 复赛、悔棋和\"加时\\\"功能将被禁用。",
+  "aboutSimulSettings": "表演赛总是不定级的。 复赛、悔棋和\"加时\"功能将被禁用。",
   "create": "创建",
   "whenCreateSimul": "当你创建一个同步赛时，你要一次同时跟几个棋手一起下棋。",
   "simulVariantsHint": "如果您选择几个变体，每个玩家都要选择下哪一种。",

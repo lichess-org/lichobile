@@ -115,5 +115,6 @@ export default {
   "nbGames:one": "%s ක්‍රීඩාව",
   "nbGames:other": "%s ක්‍රීඩා",
   "nbMembers:one": "%s සාමාජික",
-  "nbMembers:other": "%s සාමාජිකයන්"
+  "nbMembers:other": "%s සාමාජිකයන්",
+  "thereIsACountdown": "ඔබගේ පළමු පියවර සඳහා ගණන් කිරීමක් තිබේ. මෙම කාලය තුළ පියවරක් ගැනීමට අපොහොසත් වීමෙන් ඔබගේ ප්‍රතිවාදියාට ක්‍රීඩාව අහිමි වනු ඇත."
 }

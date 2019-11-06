@@ -498,7 +498,7 @@ export default {
   "aboutSimulImage": "Ex 50 adversariis, Fischer 47 ludos superavit, duas paces habuit, et unum perdidit.",
   "aboutSimulRealLife": "Haec notio ab exhibitione reali mundana devenit. In vita reali, hospes simultaneae movens ab tabula ad tabulam motum singulum ludit.",
   "aboutSimulRules": "Cum simultanea incepit, omnes lusores ludum cum hospite incipiunt, qui cum calculis albis ludit. Cum omnes ludi finiti sunt, sumultanea completa erit.",
-  "aboutSimulSettings": "Simultaneae semper leviores sunt. Vindictas, receptus, atque \"plus temporis\\\" tibi non licet.",
+  "aboutSimulSettings": "Simultaneae semper leviores sunt. Vindictas, receptus, atque \"plus temporis\" tibi non licet.",
   "create": "Creare",
   "whenCreateSimul": "Cum simultaneam exhibitionem creas, plures lusores una ludis.",
   "simulVariantsHint": "Si variationes plures legis quas ludere quisque lusor eligere potest.",
@@ -673,5 +673,6 @@ export default {
   "nbPerfTypePlayersThisWeek:one": "Hac hebdomada una %2$s ludio.",
   "nbPerfTypePlayersThisWeek:other": "Hac hebdomada %1$s %2$s ludio.",
   "availableInNbLanguages:one": "In sermonibus %s!",
-  "availableInNbLanguages:other": "In sermonibus %s!"
+  "availableInNbLanguages:other": "In sermonibus %s!",
+  "isItRated": "Censitane est?"
 }

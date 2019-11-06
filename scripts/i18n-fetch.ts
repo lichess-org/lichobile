@@ -34,11 +34,13 @@ function unzipTranslations(zipFilePath: string) {
 }
 
 function loadTranslations(dir: string, locale: string) {
-  return parseStringPromise(readFileSync(`${baseDir}/master/translation/dest/${dir}/${locale}.xml`));
+  return parseStringPromise(
+    readFileSync(`${baseDir}/master/translation/dest/${dir}/${locale}.xml`)
+  );
 }
 
-function unescape(str) {
-  return str.replace('\\', '');
+function unescape(str: string) {
+  return str.replace(/\\"/g, '"').replace(/\\'/g, '\'');
 }
 
 function transformTranslations(data: any, locale: string): Promise<StringMap> {
@@ -84,6 +86,7 @@ async function main(args: string[]) {
     // Load XML
     const siteLocaleXml = {};
     const studyLocaleXml = {};
+    const arenaLocaleXml = {};
     for (const idx in locales) {
       const locale = locales[idx];
       console.log(colors.blue(`Loading translations for ${colors.bold(locale)}...`));
@@ -92,6 +95,11 @@ async function main(args: string[]) {
         studyLocaleXml[locale] = await loadTranslations('study', locale);
       } catch (_) {
         console.warn(colors.yellow(`Could not load study translations for locale: ${locale}`));
+      }
+      try {
+        arenaLocaleXml[locale] = await loadTranslations('arena', locale);
+      } catch (_) {
+        console.warn(colors.yellow(`Could not load arena translations for locale: ${locale}`));
       }
     }
 
@@ -112,6 +120,18 @@ async function main(args: string[]) {
           localeToFlattened[locale] = {
             ...localeToFlattened[locale],
             ...transStudy
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      if (arenaLocaleXml[locale]) {
+        try {
+          const transArena =
+            await transformTranslations(arenaLocaleXml[locale], locale)
+          localeToFlattened[locale] = {
+            ...localeToFlattened[locale],
+            ...transArena
           }
         } catch (e) {
           console.error(e);

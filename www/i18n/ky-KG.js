@@ -9,7 +9,7 @@ export default {
   "aiNameLevelAiLevel": "%1$s басамак %2$s",
   "level": "Басамак",
   "toggleTheChat": "Чатты алмаштыруу",
-  "toggleSound": "хъйцукенеъяч.юбьтиимъхзъйцукУкенду алмаштыруу",
+  "toggleSound": "хъйцукенеъяч.юбьтиимъхзъйцукУке\\нду алмаштыруу",
   "chat": "Чат",
   "resign": "Баш тартуу",
   "checkmate": "Мат болуу",

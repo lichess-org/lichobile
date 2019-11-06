@@ -470,7 +470,7 @@ export default {
   "aboutSimulImage": "50 rəqib içindən, Fischer 47 oyunu qazandı, 2 heç-heçə, və 1 uduzdu",
   "aboutSimulRealLife": "Konsept real dünya hadisələrindən götürülmüşdür.  Gerçək həyatda, bu simulun tək gedişi etməsi üçün masadan maya hərkətini əhatə edir",
   "aboutSimulRules": "Simul başladığı zaman hər bir oyunçu ağ fiqurlarla oynayan ustadla oyuna başlayır. Bütün oyunlar bitdiyi zaman simul sona çatır.",
-  "aboutSimulSettings": "Simullar adətən gündəlikdir. Revanşlar, geri almalar və \"daha çox vaxt\\\" ləğv edilmişdir.",
+  "aboutSimulSettings": "Simullar adətən gündəlikdir. Revanşlar, geri almalar və \"daha çox vaxt\" ləğv edilmişdir.",
   "create": "Yarat",
   "whenCreateSimul": "Simul yaratdığın zaman bir neçə oyunçuyla eyni zamanda oynayırsan",
   "simulVariantsHint": "Əgər bir neçə versiya seçərsən, hər bir oyunçu oynaqmaq istədiyi versiyanı seçə biləcək",
@@ -581,5 +581,15 @@ export default {
   "nbForumPosts:one": "%s Forum Mesajları",
   "nbForumPosts:other": "%s Forum Mesajları",
   "availableInNbLanguages:one": "%s dillərdə mövcuddur",
-  "availableInNbLanguages:other": "%s dillərdə mövcuddur"
+  "availableInNbLanguages:other": "%s dillərdə mövcuddur",
+  "isItRated": "Reytinq hesablanırmı?",
+  "willBeNotified": "Turnir başlayanda xəbərdarlıq olunacaq, gozlediyiniz müddətdə yeni sehifede, yeni oyuna başlaya bilersiniz.",
+  "isRated": "Bu turnir reytinqlidir və reytinqinizə tesir edəcək.",
+  "isNotRated": "Bu turnir reytinqli deyil ve reqtinqinizə təsir etməyəcək.",
+  "someRated": "Bəzi turnirlər reytinqlidir ve reytinqinizə təsir edəcək.",
+  "howAreScoresCalculated": "Ballar necə hesablanır?",
+  "howIsTheWinnerDecided": "Qalib necə təyin olunur?",
+  "otherRules": "Digər vacib qaydalar",
+  "thisIsPrivate": "Bu özəl turnirdir",
+  "shareUrl": "Dəvət etmək ücün, linki paylaş: %s"
 }

@@ -36,5 +36,20 @@ export default {
   "country": "Orilẹ-ede",
   "training": "Ikẹkọ",
   "thankYou": "E dupe!",
-  "victory": "Isegun!"
+  "victory": "Isegun!",
+  "isItRated": "so jo ara won?",
+  "willBeNotified": "won je ki o mo ti idije na ba bere,so o dara ki o lo ma sere ni bomi nigba ti o fin duro.",
+  "isRated": "idije yi wa lori osuwon beni yio ba igbelewon re je.",
+  "isNotRated": "idije yi kosi lori osuwon beni ko ba igbelewon re je",
+  "someRated": "awon idije kan wa lori osuwon beni yio ba igbelewon re je.",
+  "howAreScoresCalculated": "bawo la se le ka ami ayo.",
+  "berserk": "ibudo berseki",
+  "howIsTheWinnerDecided": "bawo la se ma mu asegu?",
+  "howIsTheWinnerDecidedAnswer": "akopa ti igbelewon re ba poju ni ipari igelewon wakati idije ni akade gege bi asegun",
+  "howDoesPairingWork": "bawoni ipinni se sise?",
+  "howDoesPairingWorkAnswer": "ni ibere idije,apin akopa ko kan gege bi igbelewon re.bi oba si pari idije tan,pada lo si yara idije:beni won ma pin e pelu akopa ti igelewon e ati ti sun mon ara won.Ayi jeki ama fi asiko so fo,sugbon o le ma ba akopa miiran pade ninu ideje.kopa kia kosi padi losi yara idije lati lo kopa ninu idije miiran lati je igelewon si.",
+  "howDoesItEnd": "bawo lose pari?",
+  "howDoesItEndAnswer": "idije na ni agogo ti ka wakati.to ba si ti dori o do,igbelewon pari asi kede asegun.idije tin lo yo pari sugbon won si lara idije mo.",
+  "otherRules": "awon ikilo to se pataki miiran",
+  "thisIsPrivate": "idije bonkele ni yi"
 }

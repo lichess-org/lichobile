@@ -119,11 +119,11 @@ export function renderSelectColorPosition(ctrl: EditorCtrl) {
 function renderCastlingOptions(ctrl: EditorCtrl) {
   const white = [
     ['K', i18n('whiteCastlingKingside')],
-    ['Q', i18n('whiteCastlingQueenside')],
+    ['Q', 'O-O-O'],
   ]
   const black = [
     ['k', i18n('blackCastlingKingside')],
-    ['q', i18n('blackCastlingQueenside')]
+    ['q', 'O-O-O']
   ]
 
   return h('div.editor-castling', [

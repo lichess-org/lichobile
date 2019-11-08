@@ -62,12 +62,13 @@ export default ThemePrefScreen
 
 function renderBody(ctrl: State) {
   const list = settings.general.theme.availableBackgroundThemes
+  const current = settings.general.theme.background()
   return [
     h('div#bgThemes.native_scroller.page.settings_list.radio_list', {
       className: ctrl.loading ? 'loading' : ''
     }, [
       h('ul', list.map((t) => {
-        const selected = settings.general.theme.background() === t.key
+        const selected = current === t.key
         return h('li.list_item', [
           formWidgets.renderRadio(
             t.name,

@@ -25,7 +25,6 @@ script:
   - npm run test
   - npx cap copy
   - cd android && ./gradlew assembleDebug
-  - test -e android/app/build/outputs/apk/debug/app-debug.apk 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/

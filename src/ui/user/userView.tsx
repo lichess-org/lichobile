@@ -161,7 +161,7 @@ function renderStats(user: ProfileUser) {
   return (
     <section className="profileSection">
       {isFullUser(user) && user.completionRate ?
-      <p>{i18n('gameCompletionRate', user.completionRate)}</p> : null
+      <p>{i18n('gameCompletionRate', user.completionRate + '%')}</p> : null
       }
       {totalPlayTime ?
       <p>{totalPlayTime}</p> : null

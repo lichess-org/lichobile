@@ -1,6 +1,8 @@
-import store, { StoredProp } from './storage'
-import { prop as asyncProp } from './asyncStorage'
+import asyncStorage from './asyncStorage'
+import { getAtPath, setAtPath } from './utils/object'
 import { ClockType } from './ui/shared/clock/interfaces'
+
+const STORAGE_KEY = 'settings'
 
 const offlineAvailableVariants: [string, VariantKey][] = [
   ['Standard', 'standard'],
@@ -23,30 +25,6 @@ const availableClocks = [
   ['Hourglass', 'hourglass'],
   ['Stage', 'stage'],
 ]
-
-export interface GameSettings {
-  readonly time: StoredProp<string>
-  readonly timeMode: StoredProp<string>
-  readonly increment: StoredProp<string>
-  readonly color: StoredProp<string>
-  readonly mode?: StoredProp<string>
-  readonly variant: StoredProp<string>
-  readonly ratingMin?: StoredProp<string>
-  readonly ratingMax?: StoredProp<string>
-  readonly days?: StoredProp<string>
-  readonly level?: StoredProp<string>
-}
-
-export interface HumanSettings extends GameSettings {
-  readonly mode: StoredProp<string>
-  readonly ratingMin: StoredProp<string>
-  readonly ratingMax: StoredProp<string>
-  readonly days: StoredProp<string>
-}
-
-export interface AiSettings extends GameSettings {
-  readonly level: StoredProp<string>
-}
 
 const minRatingRanges = [
   ['800', '800'],
@@ -72,10 +50,21 @@ const minRatingRanges = [
   ['2800', '2800'],
 ]
 
+const settingsStore = {}
+
+export function init(): Promise<void> {
+  console.time('settings init')
+  return asyncStorage.get(STORAGE_KEY)
+  .then(data => {
+    Object.assign(settingsStore, data)
+    console.timeEnd('settings init')
+  })
+}
+
 export default {
   general: {
-    lang: asyncProp<string | null>('settings.lang', null),
-    sound: asyncProp<boolean>('settings.sound', true),
+    lang: prop<string | null>('lang', null),
+    sound: prop<boolean>('sound', true),
     theme: {
       availableBackgroundThemes: [
         { key: 'dark', name: 'dark', ext: '' },
@@ -120,15 +109,15 @@ export default {
         ['riohacha' ],
         ['symmetric' ],
       ],
-      background: store.prop('settings.bgTheme', 'dark'),
-      board: store.prop('settings.theme.board', 'brown'),
-      piece: store.prop('settings.theme.piece', 'cburnett')
+      background: prop('bgTheme', 'dark'),
+      board: prop('theme.board', 'brown'),
+      piece: prop('theme.piece', 'cburnett')
     },
-    vibrateOnGameEvents: store.prop('settings.vibrateOnGameEvents', false),
+    vibrateOnGameEvents: prop('vibrateOnGameEvents', false),
     notifications: {
-      allow: store.prop<boolean>('settings.notifications', true),
-      vibrate: store.prop<boolean>('settings.notifications.vibrate', true),
-      sound: store.prop<boolean>('settings.notifications.sound', true)
+      allow: prop<boolean>('notifications', true),
+      vibrate: prop<boolean>('notifications.vibrate', true),
+      sound: prop<boolean>('notifications.sound', true)
     }
   },
 
@@ -136,16 +125,16 @@ export default {
     supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
       'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings', 'crazyhouse'
     ],
-    animations: store.prop<boolean>('settings.gameAnimations', true),
-    highlights: store.prop<boolean>('settings.boardHighlights', true),
-    pieceDestinations: store.prop<boolean>('settings.pieceDestinations', true),
-    coords: store.prop<boolean>('settings.coords', true),
-    magnified: store.prop<boolean>('settings.pieceMagnified', true),
-    pieceNotation: store.prop<boolean>('settings.pieceNotation', true),
-    zenMode: store.prop<boolean>('settings.zenMode', false),
-    clockPosition: store.prop<'right' | 'left'>('settings.game.inversedClockPos', 'right'),
-    pieceMove: store.prop<'tap' | 'drag' | 'both'>('settings.game.pieceMove', 'both'),
-    moveList: store.prop<boolean>('settings.game.moveList', true),
+    animations: prop<boolean>('gameAnimations', true),
+    highlights: prop<boolean>('boardHighlights', true),
+    pieceDestinations: prop<boolean>('pieceDestinations', true),
+    coords: prop<boolean>('coords', true),
+    magnified: prop<boolean>('pieceMagnified', true),
+    pieceNotation: prop<boolean>('pieceNotation', true),
+    zenMode: prop<boolean>('zenMode', false),
+    clockPosition: prop<'right' | 'left'>('game.inversedClockPos', 'right'),
+    pieceMove: prop<'tap' | 'drag' | 'both'>('game.pieceMove', 'both'),
+    moveList: prop<boolean>('game.moveList', true),
   },
 
   analyse: {
@@ -153,21 +142,21 @@ export default {
       'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings', 'crazyhouse'
     ],
     availableVariants: offlineAvailableVariants,
-    syntheticVariant: store.prop<VariantKey>('settings.analyse.syntheticVariant', 'standard'),
-    enableCeval: store.prop('settings.analyse.enableCeval', false),
-    cevalMultiPvs: store.prop<number>('settings.ceval.multipv', 1),
-    cevalCores: store.prop<number>('settings.ceval.cores', 1),
-    cevalInfinite: store.prop<boolean>('settings.ceval.infinite', false),
-    showBestMove: store.prop('settings.analyse.showBestMove', true),
-    showComments: store.prop('settings.analyse.showComments', true),
-    smallBoard: store.prop<boolean>('settings.analyse.smallBoard', true),
-    boardPosition: store.prop<'1' | '2'>('settings.analyse.boardPosition', '1'),
+    syntheticVariant: prop<VariantKey>('analyse.syntheticVariant', 'standard'),
+    enableCeval: prop<boolean>('analyse.enableCeval', false),
+    cevalMultiPvs: prop<number>('ceval.multipv', 1),
+    cevalCores: prop<number>('ceval.cores', 1),
+    cevalInfinite: prop<boolean>('ceval.infinite', false),
+    showBestMove: prop('analyse.showBestMove', true),
+    showComments: prop('analyse.showComments', true),
+    smallBoard: prop<boolean>('analyse.smallBoard', true),
+    boardPosition: prop<'1' | '2'>('analyse.boardPosition', '1'),
     explorer: {
-      db: store.prop('settings.analyse.explorer.db', 'lichess'),
+      db: prop('analyse.explorer.db', 'lichess'),
       availableRatings: [1600, 1800, 2000, 2200, 2500],
-      rating: store.prop('settings.analyse.explorer.rating', [1600, 1800, 2000, 2200, 2500]),
+      rating: prop('analyse.explorer.rating', [1600, 1800, 2000, 2200, 2500]),
       availableSpeeds: ['bullet', 'blitz', 'rapid', 'classical'],
-      speed: store.prop('settings.analyse.explorer.speed', ['bullet', 'blitz', 'rapid', 'classical'])
+      speed: prop('analyse.explorer.speed', ['bullet', 'blitz', 'rapid', 'classical'])
     }
   },
 
@@ -182,20 +171,20 @@ export default {
       ['Stockfish', '7'],
       ['Stockfish', '8']
     ],
-    color: store.prop<Color | 'random'>('settings.ai.color', 'white'),
-    opponent: store.prop('settings.ai.opponent', '1'),
-    variant: store.prop<VariantKey>('settings.ai.variant', 'standard'),
+    color: prop<Color | 'random'>('ai.color', 'white'),
+    opponent: prop('ai.opponent', '1'),
+    variant: prop<VariantKey>('ai.variant', 'standard'),
     availableVariants: offlineAvailableVariants
   },
 
   otb: {
-    flipPieces: store.prop('settings.otb.flipPieces', false),
-    useSymmetric: store.prop('settings.otb.useSymmetric', false),
-    variant: store.prop<VariantKey>('settings.otb.variant', 'standard'),
+    flipPieces: prop('otb.flipPieces', false),
+    useSymmetric: prop('otb.useSymmetric', false),
+    variant: prop<VariantKey>('otb.variant', 'standard'),
     availableVariants: offlineAvailableVariants,
-    whitePlayer: store.prop('settings.otb.whitePlayer', 'White'),
-    blackPlayer: store.prop('settings.otb.blackPlayer', 'Black'),
-    clockType: store.prop<ClockType | 'none'>('settings.otb.clockType', 'none'),
+    whitePlayer: prop('otb.whitePlayer', 'White'),
+    blackPlayer: prop('otb.blackPlayer', 'Black'),
+    clockType: prop<ClockType | 'none'>('otb.clockType', 'none'),
     availableClocks: [
       ['none', 'None']
     ].concat(availableClocks)
@@ -203,51 +192,40 @@ export default {
 
   clock: {
     availableClocks,
-
-    clockType: store.prop<ClockType>('settings.clock.clockType', 'simple'),
-
+    clockType: prop<ClockType>('clock.clockType', 'simple'),
     simple: {
-      time: store.prop('settings.clock.simple.time', '5')
+      time: prop('clock.simple.time', '5')
     },
-
     increment: {
-      time: store.prop('settings.clock.increment.time', '3'),
-      increment: store.prop('settings.clock.increment.increment', '2')
+      time: prop('clock.increment.time', '3'),
+      increment: prop('clock.increment.increment', '2')
     },
-
     handicapInc: {
-      topTime: store.prop('settings.clock.handicapInc.topTime', '3'),
-      topIncrement: store.prop('settings.clock.handicapInc.topIncrement', '2'),
-      bottomTime: store.prop('settings.clock.handicapInc.bottomTime', '3'),
-      bottomIncrement: store.prop('settings.clock.handicapInc.bottomIncrement', '2')
+      topTime: prop('clock.handicapInc.topTime', '3'),
+      topIncrement: prop('clock.handicapInc.topIncrement', '2'),
+      bottomTime: prop('clock.handicapInc.bottomTime', '3'),
+      bottomIncrement: prop('clock.handicapInc.bottomIncrement', '2')
     },
-
     delay: {
-      time: store.prop('settings.clock.delay.time', '3'),
-      increment: store.prop('settings.clock.delay.increment', '2')
+      time: prop('clock.delay.time', '3'),
+      increment: prop('clock.delay.increment', '2')
     },
-
     bronstein: {
-      time: store.prop('settings.clock.bronstein.time', '3'),
-      increment: store.prop('settings.clock.bronstein.increment', '2')
+      time: prop('clock.bronstein.time', '3'),
+      increment: prop('clock.bronstein.increment', '2')
     },
-
     hourglass: {
-      time: store.prop('settings.clock.hourglass.time', '5')
+      time: prop('clock.hourglass.time', '5')
     },
-
     stage: {
-      stages: store.prop('settings.clock.stage.stages', [{time: '120', moves: '40'}, {time: '60', moves: null}]),
-      increment: store.prop('settings.clock.stage.increment', '30')
+      stages: prop('clock.stage.stages', [{time: '120', moves: '40'}, {time: '60', moves: null}]),
+      increment: prop('clock.stage.increment', '30')
     },
-
     availableTimes: [['0', '0'], ['½', '0.5'], ['¾', '0.75'], ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'], ['6', '6'], ['7', '7'], ['8', '8'], ['9', '9'], ['10', '10'], ['15', '15'], ['20', '20'], ['25', '25'], ['30', '30'], ['45', '45'], ['60', '60'], ['90', '90'], ['120', '120'], ['150', '150'], ['180', '180']
     ],
-
     availableIncrements: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
       '10', '15', '20', '25', '30', '45', '60', '90', '120', '150', '180'
     ],
-
     availableMoves: ['5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60'
     ]
   },
@@ -266,7 +244,7 @@ export default {
     },
 
     ai: {
-      color: store.prop('settings.game.ai.color', 'random'),
+      color: prop('game.ai.color', 'random'),
       availableVariants: [
         ['Standard', '1'],
         ['Crazyhouse', '10'],
@@ -279,16 +257,16 @@ export default {
         ['Racing Kings', '9'],
         ['From Position', '3']
       ],
-      variant: store.prop('settings.game.ai.variant', '1'),
+      variant: prop('game.ai.variant', '1'),
       availableTimeModes: [
         ['unlimited', '0'],
         ['realTime', '1']
       ],
-      timeMode: store.prop('settings.game.ai.clock', '1'),
-      time: store.prop('settings.game.ai.time', '10'),
-      increment: store.prop('settings.game.ai.increment', '0'),
-      days: store.prop('settings.game.ai.days', '2'),
-      level: store.prop('settings.game.ai.aiLevel', '3')
+      timeMode: prop('game.ai.clock', '1'),
+      time: prop('game.ai.time', '10'),
+      increment: prop('game.ai.increment', '0'),
+      days: prop('game.ai.days', '2'),
+      level: prop('game.ai.aiLevel', '3')
     },
 
     human: {
@@ -310,22 +288,22 @@ export default {
           ['2900', '2900']
         ].slice(1)
       },
-      ratingMin: store.prop('settings.game.human.rating.min', '800'),
-      ratingMax: store.prop('settings.game.human.rating.max', '2900'),
-      color: store.prop('settings.game.human.color', 'random'),
-      variant: store.prop('settings.game.human.variant', '1'),
+      ratingMin: prop('game.human.rating.min', '800'),
+      ratingMax: prop('game.human.rating.max', '2900'),
+      color: prop('game.human.color', 'random'),
+      variant: prop('game.human.variant', '1'),
       availableTimeModes: [
         ['realTime', '1'],
         ['correspondence', '2'],
         ['unlimited', '0']
       ],
-      timeMode: store.prop('settings.game.human.clock', '1'),
-      time: store.prop('settings.game.human.time', '5'),
-      increment: store.prop('settings.game.human.increment', '0'),
-      days: store.prop('settings.game.human.days', '2'),
-      mode: store.prop('settings.game.human.mode', '0'),
-      preset: store.prop('settings.game.human.preset', 'quick'),
-      pool: store.prop('settings.game.human.pool', ''),
+      timeMode: prop('game.human.clock', '1'),
+      time: prop('game.human.time', '5'),
+      increment: prop('game.human.increment', '0'),
+      days: prop('game.human.days', '2'),
+      mode: prop('game.human.mode', '0'),
+      preset: prop('game.human.preset', 'quick'),
+      pool: prop('game.human.pool', ''),
     },
 
     challenge: {
@@ -341,18 +319,18 @@ export default {
         ['Racing Kings', '9'],
         ['From Position', '3']
       ],
-      color: store.prop('settings.game.invite.color', 'random'),
-      variant: store.prop('settings.game.invite.variant', '1'),
+      color: prop('game.invite.color', 'random'),
+      variant: prop('game.invite.variant', '1'),
       availableTimeModes: [
         ['realTime', '1'],
         ['correspondence', '2'],
         ['unlimited', '0']
       ],
-      timeMode: store.prop('settings.game.invite.clock', '1'),
-      time: store.prop('settings.game.invite.time', '5'),
-      increment: store.prop('settings.game.invite.increment', '0'),
-      days: store.prop('settings.game.invite.days', '2'),
-      mode: store.prop('settings.game.invite.mode', '0')
+      timeMode: prop('game.invite.clock', '1'),
+      time: prop('game.invite.time', '5'),
+      increment: prop('game.invite.increment', '0'),
+      days: prop('game.invite.days', '2'),
+      mode: prop('game.invite.mode', '0')
     }
   },
 
@@ -376,22 +354,22 @@ export default {
     availableIncrements: ['0', '1', '2'],
     availableDurations: ['20', '25', '30', '35', '40', '45', '50', '55', '60', '70', '80', '90', '100', '110', '120'],
     availableTimesToStart: ['1', '2', '3', '5', '10', '15', '20', '30', '45', '60'],
-    variant: store.prop('settings.tournament.variant', '1'),
-    mode: store.prop('settings.tournament.mode', '0'),
-    time: store.prop('settings.tournament.time', '5'),
-    increment: store.prop('settings.tournament.increment', '0'),
-    duration: store.prop('settings.tournament.duration', '45'),
-    timeToStart: store.prop('settings.tournament.timeToStart', '15'),
-    position: store.prop('settings.tournament.timeToStart', '15'),
-    private: store.prop('settings.tournament.private', false)
+    variant: prop('tournament.variant', '1'),
+    mode: prop('tournament.mode', '0'),
+    time: prop('tournament.time', '5'),
+    increment: prop('tournament.increment', '0'),
+    duration: prop('tournament.duration', '45'),
+    timeToStart: prop('tournament.timeToStart', '15'),
+    position: prop('tournament.timeToStart', '15'),
+    private: prop('tournament.private', false)
   },
 
   tv: {
-    channel: store.prop('settings.tv.channel', 'best')
+    channel: prop('tv.channel', 'best')
   },
 
   importer: {
-    analyse: store.prop('importer.analyse', false)
+    analyse: prop('importer.analyse', false)
   },
 
   training: {
@@ -400,6 +378,50 @@ export default {
   },
 
   study: {
-    tour: store.prop<string | null>('study.tour', null)
+    tour: prop<string | null>('study.tour', null)
   },
+}
+
+export interface Prop<T> {
+  (): T
+  (value: T): T
+}
+
+function prop<T>(key: string, initialValue: T): Prop<T> {
+  return function(value?: T): T {
+    if (value !== undefined) {
+      setAtPath(settingsStore, key, value)
+      asyncStorage.set(STORAGE_KEY, settingsStore)
+      .then(() => {
+        console.log(`${key}:${value} settings successfully persisted`)
+      })
+      return value
+    }
+    const ret: T = getAtPath(settingsStore, key)
+    return ret !== undefined ? ret : initialValue
+  }
+}
+
+export interface GameSettings {
+  readonly time: Prop<string>
+  readonly timeMode: Prop<string>
+  readonly increment: Prop<string>
+  readonly color: Prop<string>
+  readonly mode?: Prop<string>
+  readonly variant: Prop<string>
+  readonly ratingMin?: Prop<string>
+  readonly ratingMax?: Prop<string>
+  readonly days?: Prop<string>
+  readonly level?: Prop<string>
+}
+
+export interface HumanSettings extends GameSettings {
+  readonly mode: Prop<string>
+  readonly ratingMin: Prop<string>
+  readonly ratingMax: Prop<string>
+  readonly days: Prop<string>
+}
+
+export interface AiSettings extends GameSettings {
+  readonly level: Prop<string>
 }

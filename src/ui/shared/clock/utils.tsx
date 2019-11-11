@@ -1,8 +1,7 @@
 import h from 'mithril/hyperscript'
 import { formatTimeInSecs } from '../../../utils'
 import { ClockType, IChessClock, IStageClock, StageSetting } from './interfaces'
-import { StoredProp } from '../../../storage'
-import settings from '../../../settings'
+import settings, { Prop } from '../../../settings'
 import redraw from '../../../utils/redraw'
 import * as helper from '../../helper'
 import * as utils from '../../../utils'
@@ -24,7 +23,7 @@ export function isStageClock(c: IChessClock): c is IStageClock {
   return (c as IStageClock).whiteMoves !== undefined
 }
 
-export function addStage (stagesSetting: StoredProp<Array<StageSetting>>) {
+export function addStage (stagesSetting: Prop<Array<StageSetting>>) {
   let stages = stagesSetting()
   stages[stages.length - 1].moves = stages[stages.length - 2].moves
   stages.push({time: stages[stages.length - 1].time, moves: null})
@@ -32,7 +31,7 @@ export function addStage (stagesSetting: StoredProp<Array<StageSetting>>) {
   redraw()
 }
 
-export function removeStage (stagesSetting: StoredProp<Array<StageSetting>>) {
+export function removeStage (stagesSetting: Prop<Array<StageSetting>>) {
   let stages = stagesSetting()
   if (stages.length <= 2)
     return
@@ -140,8 +139,8 @@ export function clockSettingsView (clockType: ClockType | 'none', onChange: () =
 }
 
 function renderStage(onChange: () => void, index: number) {
-  const timeProp = updateTime.bind(undefined, index) as StoredProp<string>
-  const moves = updateMoves.bind(undefined, index) as StoredProp<string>
+  const timeProp = updateTime.bind(undefined, index) as Prop<string>
+  const moves = updateMoves.bind(undefined, index) as Prop<string>
   const hidePlus = settings.clock.stage.stages().length >= 5
   const hideMinus = settings.clock.stage.stages().length <= 2
   return (

@@ -2,16 +2,16 @@ import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import i18n from '../../../i18n'
 import session from '../../../session'
+import { Prop } from '../../../settings'
 import { LichessPropOption, ChallengeChoices, Challenge } from '../../../lichess/prefs'
-import { StoredProp } from '../../../storage'
 import { dropShadowHeader, backButton } from '../../shared/common'
 import formWidgets from '../../shared/form'
 import layout from '../../layout'
 import * as helper from '../../helper'
 
 interface Ctrl {
-  follow: StoredProp<boolean>
-  challenge: StoredProp<number>
+  follow: Prop<boolean>
+  challenge: Prop<number>
 }
 
 export default {

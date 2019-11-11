@@ -2,14 +2,14 @@ import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import i18n from '../../../i18n'
 import session from '../../../session'
-import { StoredProp } from '../../../storage'
+import { Prop } from '../../../settings'
 import formWidgets from '../../shared/form'
 import { dropShadowHeader, backButton } from '../../shared/common'
 import * as helper from '../../helper'
 import layout from '../../layout'
 
 interface State {
-  kidMode: StoredProp<boolean>
+  kidMode: Prop<boolean>
 }
 
 const KidPrefScreen: Mithril.Component<{}, State> = {

@@ -97,7 +97,7 @@ export async function init(): Promise<string> {
     Object.assign(englishMessages, data)
   })
 
-  const fromSettings = await settings.general.lang()
+  const fromSettings = settings.general.lang()
   if (fromSettings) {
     return englishPromise.then(() => loadLanguage(fromSettings))
   }

@@ -7,14 +7,13 @@ import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils'
 import { getAtPath, setAtPath, pick } from './utils/object'
 import i18n from './i18n'
 import push from './push'
-import settings from './settings'
+import settings, { Prop } from './settings'
 import { TempBan, LobbyData, NowPlayingGame } from './lichess/interfaces'
 import { PlayTime } from './lichess/interfaces/user'
 import friendsApi from './lichess/friends'
 import challengesApi from './lichess/challenges'
-import storage, { StoredProp } from './storage'
+import storage from './storage'
 import asyncStorage from './asyncStorage'
-
 
 type PrefValue = number | string | boolean
 interface Prefs {
@@ -193,7 +192,7 @@ function savePreferences(): Promise<string> {
   .then(showSavedPrefToast)
 }
 
-function lichessBackedProp<T extends string | number | boolean>(path: string, prefRequest: () => Promise<string>, defaultVal: T): StoredProp<T> {
+function lichessBackedProp<T extends string | number | boolean>(path: string, prefRequest: () => Promise<string>, defaultVal: T): Prop<T> {
   return function() {
     if (arguments.length) {
       let oldPref: T

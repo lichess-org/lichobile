@@ -2,32 +2,28 @@ import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 
 import redraw from '../../../utils/redraw'
-import { StoredProp as AsyncStoredProp } from '../../../asyncStorage'
+import { Prop } from '../../../settings'
 
 interface Attrs {
   label: Mithril.Children
   name: string
-  prop: AsyncStoredProp<boolean>
+  prop: Prop<boolean>
   callback?: (v: boolean) => void
   disabled?: boolean
 }
 
 interface State {
-  value?: boolean
+  value: boolean
 }
 
 export default {
   oninit({ attrs }) {
-    attrs.prop().then(v => {
-      this.value = v
-      redraw()
-    })
+    this.value = attrs.prop()
   },
 
   view({ attrs }) {
-    const disabled = this.value === undefined || attrs.disabled
     return h('div.check_container', {
-      className: disabled ? 'disabled' : ''
+      className: attrs.disabled ? 'disabled' : ''
     }, [
       h('label', {
         'for': attrs.name
@@ -35,15 +31,14 @@ export default {
       h('input[type=checkbox]', {
         id: attrs.name,
         name: attrs.name,
-        disabled,
+        disabled: attrs.disabled,
         checked: this.value,
         onchange: () => {
           this.value = !this.value
-          attrs.prop(this.value).then(() => {
-            if (attrs.callback) {
-              attrs.callback(Boolean(this.value))
-            }
-          })
+          attrs.prop(this.value)
+          if (attrs.callback) {
+            attrs.callback(this.value)
+          }
           redraw()
         }
       })

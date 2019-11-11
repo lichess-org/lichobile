@@ -3,20 +3,19 @@ import h from 'mithril/hyperscript'
 import layout from '../layout'
 import i18n from '../../i18n'
 import { hasNetwork } from '../../utils'
-import settings from '../../settings'
+import settings, { Prop } from '../../settings'
 import session from '../../session'
-import { StoredProp } from '../../storage'
 import { Takeback, SubmitMove, AutoQueen, AutoThreefold, SubmitMoveChoices, TakebackChoices, AutoQueenChoices, AutoThreefoldChoices } from '../../lichess/prefs'
 import * as helper from '../helper'
 import { dropShadowHeader, backButton } from '../shared/common'
 import formWidgets from '../shared/form'
 
 interface Ctrl {
-  readonly premove: StoredProp<boolean>
-  readonly takeback: StoredProp<number>
-  readonly autoQueen: StoredProp<number>
-  readonly autoThreefold: StoredProp<number>
-  readonly submitMove: StoredProp<number>
+  readonly premove: Prop<boolean>
+  readonly takeback: Prop<number>
+  readonly autoQueen: Prop<number>
+  readonly autoThreefold: Prop<number>
+  readonly submitMove: Prop<number>
 }
 
 interface State {

@@ -57,7 +57,7 @@ export default {
                 <div className="select_input">
                   {formWidgets.renderSelect('Clock', 'clock', settings.clock.availableClocks, settings.clock.clockType, false, onChange)}
                 </div>
-                {clockSettingsView(settings.clock, onChange)}
+                {clockSettingsView(settings.clock.clockType(), onChange)}
               </div>
               <button className="newClockButton" data-icon="E" oncreate={helper.ontap(function () {
                   ctrl.reload()

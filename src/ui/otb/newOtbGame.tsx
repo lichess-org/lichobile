@@ -55,7 +55,6 @@ export default {
 
           const setupVariant = settings.otb.variant()
           const hasSpecialSetup = ctrl.root.vm.setupFen && specialFenVariants.has(setupVariant)
-
           return (
             <div>
               <div className="action">
@@ -92,15 +91,15 @@ export default {
                   </div> : null
                 }
                 <div className="select_input">
-                  {formWidgets.renderSelect('Clock', 'clock', settings.otb.clock.availableClocks, settings.otb.clock.clockType, false, onChange)}
+                  {formWidgets.renderSelect(i18n('clock'), 'clock', settings.otb.availableClocks, settings.otb.clockType, false, onChange)}
                 </div>
-                {clockSettingsView(settings.otb.clock, onChange)}
+                {clockSettingsView(settings.otb.clockType(), onChange)}
               </div>
               <div className="popupActionWrapper">
                 <button className="popupAction" data-icon="E"
                   oncreate={helper.ontap(() => {
                     ctrl.close()
-                    ctrl.root.startNewGame(settings.otb.variant() as VariantKey, ctrl.root.vm.setupFen, settings.otb.clock.clockType())
+                    ctrl.root.startNewGame(settings.otb.variant() as VariantKey, ctrl.root.vm.setupFen, settings.otb.clockType())
                   })}>
                   {i18n('play')}
                 </button>

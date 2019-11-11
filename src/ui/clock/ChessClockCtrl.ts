@@ -3,8 +3,8 @@ import { Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
 import router from '../../router'
 import settings from '../../settings'
 import clockSettings from './clockSettings'
-import clockSet from './clockSet'
 
+import clockSet from '../shared/clock/clockSet'
 import { ClockType, IChessClock } from '../shared/clock/interfaces'
 
 export interface IChessClockCtrl {
@@ -19,15 +19,17 @@ export interface IChessClockCtrl {
   appStateListener: PluginListenerHandle
 }
 
+function noop() {}
+
 export default function ChessClockCtrl(): IChessClockCtrl {
 
   const clockType: Stream<ClockType> = Stream(settings.clock.clockType())
-  const clockObj: Stream<IChessClock> = Stream(clockSet[clockType()]())
+  const clockObj: Stream<IChessClock> = Stream(clockSet[clockType()](noop))
 
   function reload() {
     if (clockObj() && clockObj().isRunning() && !clockObj().flagged()) return
     clockType(settings.clock.clockType())
-    clockObj(clockSet[clockType()]())
+    clockObj(clockSet[clockType()](noop))
   }
 
   const clockSettingsCtrl = clockSettings.controller(reload, clockObj)

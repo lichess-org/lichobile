@@ -1,6 +1,6 @@
 import store, { StoredProp } from './storage'
 import { prop as asyncProp } from './asyncStorage'
-import { ClockType, ClockTypeWithNone } from './ui/shared/clock/interfaces'
+import { ClockType } from './ui/shared/clock/interfaces'
 
 const offlineAvailableVariants: [string, VariantKey][] = [
   ['Standard', 'standard'],
@@ -12,6 +12,16 @@ const offlineAvailableVariants: [string, VariantKey][] = [
   ['Atomic', 'atomic'],
   ['Horde', 'horde'],
   ['Racing Kings', 'racingKings']
+]
+
+const availableClocks = [
+  ['Sudden Death', 'simple'],
+  ['Increment', 'increment'],
+  ['Increment with Handicap', 'handicapInc'],
+  ['Simple Delay', 'delay'],
+  ['Bronstein Delay', 'bronstein'],
+  ['Hourglass', 'hourglass'],
+  ['Stage', 'stage'],
 ]
 
 export interface GameSettings {
@@ -78,7 +88,6 @@ export default {
         { key: 'wood', name: 'Wood', ext: 'jpg' },
         { key: 'space', name: 'Space', ext: 'jpg' },
       ],
-      background: store.prop('settings.bgTheme', 'dark'),
       availableBoardThemes: [
         ['Brown', 'brown'],
         ['Blue', 'blue'],
@@ -111,6 +120,7 @@ export default {
         ['riohacha' ],
         ['symmetric' ],
       ],
+      background: store.prop('settings.bgTheme', 'dark'),
       board: store.prop('settings.theme.board', 'brown'),
       piece: store.prop('settings.theme.piece', 'cburnett')
     },
@@ -185,78 +195,14 @@ export default {
     availableVariants: offlineAvailableVariants,
     whitePlayer: store.prop('settings.otb.whitePlayer', 'White'),
     blackPlayer: store.prop('settings.otb.blackPlayer', 'Black'),
-
-    clock: {
-      availableClocks: [
-        ['No Clock', 'none'],
-        ['Sudden Death', 'simple'],
-        ['Increment', 'increment'],
-        ['Increment with Handicap', 'handicapInc'],
-        ['Simple Delay', 'delay'],
-        ['Bronstein Delay', 'bronstein'],
-        ['Hourglass', 'hourglass'],
-        ['Stage', 'stage']
-      ],
-
-      clockType: store.prop<ClockTypeWithNone>('settings.otb.clock.clockType', 'none'),
-
-      simple: {
-        time: store.prop('settings.otb.clock.simple.time', '5')
-      },
-
-      increment: {
-        time: store.prop('settings.otb.clock.increment.time', '3'),
-        increment: store.prop('settings.otb.clock.increment.increment', '2')
-      },
-
-      handicapInc: {
-        topTime: store.prop('settings.otb.clock.handicapInc.topTime', '3'),
-        topIncrement: store.prop('settings.otb.clock.handicapInc.topIncrement', '2'),
-        bottomTime: store.prop('settings.otb.clock.handicapInc.bottomTime', '3'),
-        bottomIncrement: store.prop('settings.otb.clock.handicapInc.bottomIncrement', '2')
-      },
-
-      delay: {
-        time: store.prop('settings.otb.clock.delay.time', '3'),
-        increment: store.prop('settings.otb.clock.delay.increment', '2')
-      },
-
-      bronstein: {
-        time: store.prop('settings.otb.clock.bronstein.time', '3'),
-        increment: store.prop('settings.otb.clock.bronstein.increment', '2')
-      },
-
-      hourglass: {
-        time: store.prop('settings.otb.clock.hourglass.time', '5')
-      },
-
-      stage: {
-        stages: store.prop('settings.otb.clock.stage.stages', [{time: '120', moves: '40'}, {time: '60', moves: null}]),
-        increment: store.prop('settings.otb.clock.stage.increment', '30')
-      },
-
-      availableTimes: [['0', '0'], ['½', '0.5'], ['¾', '0.75'], ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'], ['6', '6'], ['7', '7'], ['8', '8'], ['9', '9'], ['10', '10'], ['15', '15'], ['20', '20'], ['25', '25'], ['30', '30'], ['45', '45'], ['60', '60'], ['90', '90'], ['120', '120'], ['150', '150'], ['180', '180']
-      ],
-
-      availableIncrements: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        '10', '15', '20', '25', '30', '45', '60', '90', '120', '150', '180'
-      ],
-
-      availableMoves: ['5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60'
-      ]
-    }
+    clockType: store.prop<ClockType | 'none'>('settings.otb.clockType', 'none'),
+    availableClocks: [
+      ['none', 'None']
+    ].concat(availableClocks)
   },
 
   clock: {
-    availableClocks: [
-      ['Sudden Death', 'simple'],
-      ['Increment', 'increment'],
-      ['Increment with Handicap', 'handicapInc'],
-      ['Simple Delay', 'delay'],
-      ['Bronstein Delay', 'bronstein'],
-      ['Hourglass', 'hourglass'],
-      ['Stage', 'stage']
-    ],
+    availableClocks,
 
     clockType: store.prop<ClockType>('settings.clock.clockType', 'simple'),
 

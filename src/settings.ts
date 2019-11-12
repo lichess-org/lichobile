@@ -393,7 +393,7 @@ function prop<T>(key: string, initialValue: T): Prop<T> {
       setAtPath(settingsStore, key, value)
       asyncStorage.set(STORAGE_KEY, settingsStore)
       .then(() => {
-        console.log(`${key}:${value} settings successfully persisted`)
+        console.debug(`${key}:${value} settings successfully persisted`)
       })
       return value
     }

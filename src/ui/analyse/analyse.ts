@@ -71,29 +71,33 @@ export default {
         redraw()
       })
     } else if (source === 'offline' && gameId === 'otb') {
-      setTimeout(() => {
-        const savedOtbGame = getCurrentOTBGame()
-        const otbData = savedOtbGame && getAnalyseData(savedOtbGame, orientation)
-        if (!otbData) {
-          router.set('/analyse', true)
-        } else {
-          otbData.player.spectator = true
-          this.ctrl = new AnalyseCtrl(otbData, undefined, source, orientation, shouldGoBack, ply, tabId)
-          redraw()
-        }
-      }, 400)
+      getCurrentOTBGame()
+      .then(savedOtbGame => {
+        setTimeout(() => {
+          const otbData = savedOtbGame && getAnalyseData(savedOtbGame, orientation)
+          if (!otbData) {
+            router.set('/analyse', true)
+          } else {
+            otbData.player.spectator = true
+            this.ctrl = new AnalyseCtrl(otbData, undefined, source, orientation, shouldGoBack, ply, tabId)
+            redraw()
+          }
+        }, 400)
+      })
     } else if (source === 'offline' && gameId === 'ai') {
-      setTimeout(() => {
-        const savedAiGame = getCurrentAIGame()
-        const aiData = savedAiGame && getAnalyseData(savedAiGame, orientation)
-        if (!aiData) {
-          router.set('/analyse', true)
-        } else {
-          aiData.player.spectator = true
-          this.ctrl = new AnalyseCtrl(aiData, undefined, source, orientation, shouldGoBack, ply, tabId)
-          redraw()
-        }
-      }, 400)
+      getCurrentAIGame()
+      .then(savedAiGame => {
+        setTimeout(() => {
+          const aiData = savedAiGame && getAnalyseData(savedAiGame, orientation)
+          if (!aiData) {
+            router.set('/analyse', true)
+          } else {
+            aiData.player.spectator = true
+            this.ctrl = new AnalyseCtrl(aiData, undefined, source, orientation, shouldGoBack, ply, tabId)
+            redraw()
+          }
+        }, 400)
+      })
     } else {
       if (variant === undefined) {
         let settingsVariant = settings.analyse.syntheticVariant()

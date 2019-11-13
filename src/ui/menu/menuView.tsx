@@ -7,7 +7,6 @@ import redraw from '../../utils/redraw'
 import session, { Session } from '../../session'
 import i18n, { plural } from '../../i18n'
 import { hasNetwork, noop } from '../../utils'
-import { getOfflineGames } from '../../utils/offlineGames'
 import friendsApi from '../../lichess/friends'
 
 import loginModal from '../loginModal'
@@ -133,7 +132,6 @@ function onLinkTap(e: Event) {
 }
 
 function renderLinks(user?: Session) {
-  const offlineGames = getOfflineGames()
   const online = hasNetwork()
 
   return (
@@ -146,11 +144,6 @@ function renderLinks(user?: Session) {
       </li>
       {online ?
       <li className="sep_link">{i18n('playOnline')}</li> : null
-      }
-      {!online && offlineGames.length ?
-      <li className="side_link" data-action="gamesMenu">
-        <span className="menu_icon_game" />{plural('nbGamesInPlay', offlineGames.length, offlineGames.length)}
-      </li> : null
       }
       {online && !session.hasCurrentBan() ?
       <li className="side_link" data-action="createGame">

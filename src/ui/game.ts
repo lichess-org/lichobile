@@ -1,15 +1,13 @@
 import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
 import router from '../router'
-import { hasNetwork, handleXhrError } from '../utils'
+import { handleXhrError } from '../utils'
 import { positionsCache } from '../utils/gamePosition'
-import { getOfflineGameData, saveOfflineGameData, removeOfflineGameData } from '../utils/offlineGames'
 import { game as gameXhr } from '../xhr'
 import storage from '../storage'
 import * as sleepUtils from '../utils/sleep'
 import * as gameApi from '../lichess/game'
 import variantApi from '../lichess/variant'
-import { OnlineGameData } from '../lichess/interfaces/game'
 import sound from '../sound'
 import vibrate from '../vibrate'
 import i18n from '../i18n'
@@ -34,76 +32,50 @@ interface State {
 
 export default {
   oninit({ attrs }) {
-    let gameData: OnlineGameData
-
     sleepUtils.keepAwake()
 
-    if (hasNetwork()) {
-      const now = performance.now()
-      gameXhr(attrs.id, attrs.color)
-      .then(data => {
-        gameData = data
-
-        if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
-          Plugins.Toast.show({ text: i18n('unsupportedVariant', data.game.variant.name), duration: 'short' })
-          router.set('/')
-        }
-        else {
-          if (gameApi.isPlayerPlaying(data) &&
-          gameApi.nbMoves(data, data.player.color) === 0) {
-            sound.dong()
-            vibrate.quick()
-            const variant = variantApi(data.game.variant.key)
-            const storageKey = variantStorageKey(data.game.variant.key)
-            if (variant.alert && [1, 3].indexOf(variant.id) === -1 &&
-            !storage.get(storageKey)) {
-              Plugins.Modals.alert({
-                title: 'Alert',
-                message: variant.alert
-              }).then(() => {
-                storage.set(storageKey, true)
-              })
-            }
-          }
-
-          const elapsed = performance.now() - now
-
-          setTimeout(() => {
-            this.round = new OnlineRound(!!attrs.goingBack, attrs.id, data)
-          }, Math.max(400 - elapsed, 0))
-
-          gamesMenu.resetLastJoined()
-
-          if (data.player.user === undefined) {
-            storage.set('lastPlayedGameURLAsAnon', data.url.round)
-          }
-
-          if (gameData.game.speed === 'correspondence') {
-            if (!gameApi.playable(gameData)) {
-              removeOfflineGameData(attrs.id)
-            } else {
-              saveOfflineGameData(attrs.id, gameData)
-            }
-          }
-        }
-      })
-      .catch(error => {
-        handleXhrError(error)
-        router.set('/')
-      })
-    } else {
-      const savedData = getOfflineGameData(attrs.id)
-      if (savedData) {
-        gameData = savedData
-        if (!gameApi.playable(gameData)) {
-          removeOfflineGameData(attrs.id)
-        }
-        this.round = new OnlineRound(!!attrs.goingBack, attrs.id, gameData)
-      } else {
-        Plugins.Toast.show({ text: 'Could not find saved data for this game', duration: 'short' })
+    const now = performance.now()
+    gameXhr(attrs.id, attrs.color)
+    .then(data => {
+      if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
+        Plugins.Toast.show({ text: i18n('unsupportedVariant', data.game.variant.name), duration: 'short' })
         router.set('/')
       }
-    }
+      else {
+        if (gameApi.isPlayerPlaying(data) &&
+        gameApi.nbMoves(data, data.player.color) === 0) {
+          sound.dong()
+          vibrate.quick()
+          const variant = variantApi(data.game.variant.key)
+          const storageKey = variantStorageKey(data.game.variant.key)
+          if (variant.alert && [1, 3].indexOf(variant.id) === -1 &&
+          !storage.get(storageKey)) {
+            Plugins.Modals.alert({
+              title: 'Alert',
+              message: variant.alert
+            }).then(() => {
+              storage.set(storageKey, true)
+            })
+          }
+        }
+
+        const elapsed = performance.now() - now
+
+        setTimeout(() => {
+          this.round = new OnlineRound(!!attrs.goingBack, attrs.id, data)
+        }, Math.max(400 - elapsed, 0))
+
+        gamesMenu.resetLastJoined()
+
+        if (data.player.user === undefined) {
+          storage.set('lastPlayedGameURLAsAnon', data.url.round)
+        }
+      }
+    })
+    .catch(error => {
+      handleXhrError(error)
+      router.set('/')
+    })
   },
 
   oncreate(vnode) {

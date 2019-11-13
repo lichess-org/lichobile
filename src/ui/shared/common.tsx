@@ -3,8 +3,6 @@ import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
 import * as menu from '../menu'
 import router from '../../router'
-import * as utils from '../../utils'
-import { hasOfflineGames } from '../../utils/offlineGames'
 import settings from '../../settings'
 import * as helper from '../helper'
 import gamesMenu from '../gamesMenu'
@@ -68,7 +66,6 @@ function gamesButton() {
     'game_menu_button',
     boardTheme,
     nbIncomingChallenges ? 'new_challenge' : '',
-    !utils.hasNetwork() && !hasOfflineGames() ? 'invisible' : ''
   ].join(' ')
 
   return (
@@ -90,8 +87,7 @@ function onHeaderBtnTap(e: Event) {
   if (el && button) {
     if (button === 'games') {
       const nbChallenges = challengesApi.all().length
-      const withOfflineGames = !utils.hasNetwork() && hasOfflineGames()
-      if (session.nowPlaying().length || nbChallenges || withOfflineGames) {
+      if (session.nowPlaying().length || nbChallenges) {
         gamesMenu.open()
       } else {
         newGameForm.open()

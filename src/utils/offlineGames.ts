@@ -1,13 +1,10 @@
-import storage from '../storage'
 import asyncStorage from '../asyncStorage'
 import { AnalyseData } from '../lichess/interfaces/analyse'
-import { NowPlayingGame } from '../lichess/interfaces'
 import { OnlineGameData, OfflineGameData } from '../lichess/interfaces/game'
 import { GameSituation } from '../chess'
 
 const OTB_STORAGE_KEY = 'otb.current'
 const AI_STORAGE_KEY = 'ai.current'
-const CORRES_STORAGE_KEY = 'offline.corres.games'
 
 export interface StoredOfflineGame {
   data: OfflineGameData
@@ -60,68 +57,4 @@ export function getAnalyseData(data: StoredOfflineGame, orientation: Color): Ana
     return node
   })
   return aData as AnalyseData
-}
-
-export function getOfflineGames(): Array<OnlineGameData> {
-  const stored = storage.get<StoredOfflineGames>(CORRES_STORAGE_KEY)
-  let arr: OnlineGameData[] = []
-  if (stored) {
-    for (const id in stored) {
-      arr.push(stored[id])
-    }
-  }
-  return arr
-}
-
-let nbOfflineGames: number | undefined
-export function hasOfflineGames(): boolean {
-  nbOfflineGames =
-    nbOfflineGames !== undefined ? nbOfflineGames : getOfflineGames().length
-
-  return nbOfflineGames > 0
-}
-
-export function getOfflineGameData(id: string): OnlineGameData | null {
-  const stored = storage.get<StoredOfflineGames>(CORRES_STORAGE_KEY)
-  return stored && stored[id]
-}
-
-export function saveOfflineGameData(id: string, gameData: OnlineGameData): void {
-  const stored = storage.get<StoredOfflineGames>(CORRES_STORAGE_KEY) || {}
-  const toStore = JSON.parse(JSON.stringify(gameData))
-  toStore.player.onGame = false
-  toStore.opponent.onGame = false
-  if (toStore.player.user) toStore.player.user.online = false
-  if (toStore.opponent.user) toStore.opponent.user.online = false
-  stored[id] = toStore
-  storage.set(CORRES_STORAGE_KEY, stored)
-  nbOfflineGames = undefined
-}
-
-export function removeOfflineGameData(id: string): void {
-  const stored = storage.get<StoredOfflineGames>(CORRES_STORAGE_KEY)
-  if (stored && stored[id]) {
-    delete stored[id]
-    nbOfflineGames = undefined
-  }
-  storage.set(CORRES_STORAGE_KEY, stored)
-}
-
-export function syncWithNowPlayingGames(nowPlaying: Array<NowPlayingGame>): void {
-  if (nowPlaying === undefined) return
-
-  const stored = storage.get<StoredOfflineGames>(CORRES_STORAGE_KEY) || {}
-  const storedIds = Object.keys(stored)
-  const playingIds = nowPlaying.map(g => g.fullId)
-  const toRemove = storedIds.filter(x => !playingIds.includes(x))
-
-  if (toRemove.length > 0) {
-    toRemove.forEach(id => {
-      if (stored && stored[id]) {
-        delete stored[id]
-      }
-    })
-    storage.set(CORRES_STORAGE_KEY, stored)
-    nbOfflineGames = undefined
-  }
 }

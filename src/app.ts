@@ -2,7 +2,6 @@
 import { Plugins, AppState, DeviceInfo, NetworkStatus } from '@capacitor/core'
 import debounce from 'lodash-es/debounce'
 import { hasNetwork } from './utils'
-import { syncWithNowPlayingGames } from './utils/offlineGames'
 import redraw from './utils/redraw'
 import session, { Session } from './session'
 import { fetchJSON } from './http'
@@ -105,7 +104,6 @@ function onOnline() {
         }
         // push.register()
         challengesApi.refresh()
-        syncWithNowPlayingGames(session.nowPlaying())
         redraw()
 
         // TODO remove in next version (from 7.0.0)

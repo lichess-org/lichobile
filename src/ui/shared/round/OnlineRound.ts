@@ -4,7 +4,6 @@ import throttle from 'lodash-es/throttle'
 import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
-import { saveOfflineGameData, removeOfflineGameData } from '../../../utils/offlineGames'
 import { hasNetwork, boardOrientation, handleXhrError } from '../../../utils'
 import * as sleepUtils from '../../../utils/sleep'
 import session from '../../../session'
@@ -555,7 +554,6 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     if (this.data.game.speed === 'correspondence') {
       session.refresh()
-      saveOfflineGameData(this.id, this.data)
     }
   }
 
@@ -598,9 +596,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
     if (this.clock && o.clock) this.clock.setClock(d, o.clock.wc * .01, o.clock.bc * .01)
 
-    if (this.data.game.speed === 'correspondence') {
-      removeOfflineGameData(this.data.url.round.substr(1))
-    }
     if (d.game.turns > 1) {
       sound.dong()
       vibrate.quick()

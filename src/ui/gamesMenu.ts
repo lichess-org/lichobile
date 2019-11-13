@@ -5,12 +5,9 @@ import addSeconds from 'date-fns/esm/addSeconds'
 import * as utils from '../utils'
 import redraw from '../utils/redraw'
 import { positionsCache } from '../utils/gamePosition'
-import { getOfflineGames } from '../utils/offlineGames'
 import { playerName as liPlayerName } from '../lichess/player'
-import { OnlineGameData } from '../lichess/interfaces/game'
 import { NowPlayingGame } from '../lichess/interfaces'
 import { Challenge } from '../lichess/interfaces/challenge'
-import * as gameApi from '../lichess/game'
 import challengesApi from '../lichess/challenges'
 import { standardFen } from '../lichess/variant'
 import router from '../router'
@@ -144,29 +141,6 @@ function timeLeft(g: NowPlayingGame): Mithril.Child {
   if (!g.secondsLeft) return i18n('yourTurn')
   return h('time', {
   }, fromNow(addSeconds(new Date(), g.secondsLeft)))
-}
-
-function savedGameDataToCardData(data: OnlineGameData): NowPlayingGame {
-  return {
-    color: data.player.color,
-    fen: data.game.fen,
-    fullId: data.url.round.substr(1),
-    gameId: data.game.id,
-    isMyTurn: gameApi.isPlayerTurn(data),
-    lastMove: data.game.lastMove,
-    perf: data.game.perf,
-    opponent: data.opponent.user ? {
-      id: data.opponent.user.id,
-      username: data.opponent.user.username,
-      rating: data.opponent.rating
-    } : {
-      username: 'Anonymous'
-    },
-    rated: data.game.rated,
-    secondsLeft: data.correspondence && data.correspondence[data.player.color],
-    speed: data.game.speed,
-    variant: data.game.variant
-  }
 }
 
 function renderGame(g: NowPlayingGame) {
@@ -308,13 +282,6 @@ function renderAllGames() {
     ...sendingChallengesDom,
     ...(nowPlaying.map(g => renderGame(g)))
   ]
-
-  if (!utils.hasNetwork()) {
-    allCards = getOfflineGames().map(d => {
-      const g = savedGameDataToCardData(d)
-      return renderGame(g)
-    })
-  }
 
   return h('div.games_carousel', {
     oncreate: wrapperOnCreate,

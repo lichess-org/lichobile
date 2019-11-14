@@ -46,7 +46,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   public engine: EngineInterface
 
   public constructor(
-    saved?: StoredOfflineGame | null,
+    saved: StoredOfflineGame | null,
     setupFen?: string,
     setupVariant?: VariantKey,
     setupColor?: Color

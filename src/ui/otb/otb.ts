@@ -4,8 +4,7 @@ import socket from '../../socket'
 import * as helper from '../helper'
 import { getCurrentOTBGame } from '../../utils/offlineGames'
 import * as sleepUtils from '../../utils/sleep'
-import { playerFromFen } from '../../utils/fen'
-import { standardFen } from '../../lichess/variant'
+import { playerFromFen, emptyFen } from '../../utils/fen'
 import settings from '../../settings'
 import i18n from '../../i18n'
 import layout from '../layout'
@@ -52,7 +51,7 @@ export default {
       header = renderHeader(h(GameTitle, { data: this.round.data }))
       content = renderContent(this.round, pieceTheme)
     } else {
-      const fen = attrs.fen || standardFen
+      const fen = attrs.fen || emptyFen
       const color = fen ? playerFromFen(fen) : 'white'
       header = renderHeader(i18n('playOnTheBoardOffline'))
       content = viewOnlyBoardContent(fen, color, undefined, 'standard', undefined, pieceTheme)

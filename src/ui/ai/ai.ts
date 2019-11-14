@@ -4,8 +4,7 @@ import socket from '../../socket'
 import { getCurrentAIGame } from '../../utils/offlineGames'
 import * as sleepUtils from '../../utils/sleep'
 import * as helper from '../helper'
-import { playerFromFen } from '../../utils/fen'
-import { standardFen } from '../../lichess/variant'
+import { emptyFen, playerFromFen } from '../../utils/fen'
 import i18n from '../../i18n'
 import layout from '../layout'
 import { header as renderHeader } from '../shared/common'
@@ -51,7 +50,7 @@ export default {
       header = renderHeader(h(GameTitle, { data: this.round.data }))
       content = renderContent(this.round)
     } else {
-      const fen = attrs.fen || standardFen
+      const fen = attrs.fen || emptyFen
       const color = playerFromFen(fen)
       header = renderHeader(i18n('playOfflineComputer'))
       content = viewOnlyBoardContent(fen, color, undefined)

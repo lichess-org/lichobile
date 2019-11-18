@@ -74,23 +74,17 @@ export default {
             ]),
           ] : null,
           h('div.submit', [
-            h('button.submitButton[data-icon=F]', i18n('signIn'))
+            h('button.defaultButton', i18n('signIn'))
           ])
         ]),
-        h('div.signup', [
-          i18n('newToLichess') + ' ',
-          h('br'),
+        h('div.loginActions', [
           h('a', {
             oncreate: helper.ontap(signupModal.open)
-          }, [i18n('signUp')])
-        ]),
-        h('div.reset', [
-          i18n('forgotPassword') + ' ',
-          h('br'),
+          }, [i18n('signUp')]),
           h('a', {
             oncreate: helper.ontap(() => Plugins.Browser.open({ url: `https://lichess.org/password/reset` }))
           }, [i18n('passwordReset')])
-        ])
+        ]),
       ])
     ])
   }

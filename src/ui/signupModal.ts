@@ -136,7 +136,7 @@ function renderForm() {
         })
       ]),
       h('div.submit', [
-        h('button.submitButton[data-icon=F]', i18n('signUp'))
+        h('button.defaultButton', i18n('signUp'))
       ])
     ])
   ]

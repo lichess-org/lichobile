@@ -102,7 +102,7 @@ function onOnline() {
           ensureLocaleIsAvailable(serverLocale)
           .then(loadLanguage)
         }
-        // push.register()
+        push.register()
         challengesApi.refresh()
         redraw()
 

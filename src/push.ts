@@ -5,6 +5,8 @@ import {
   PushNotificationActionPerformed
 } from '@capacitor/core'
 import { fetchText } from './http'
+import settings from './settings'
+import { handleXhrError } from './utils'
 
 const { PushNotifications } = Plugins
 
@@ -12,7 +14,13 @@ export default {
   init() {
     PushNotifications.addListener('registration',
       (token: PushNotificationToken) => {
+
         console.log('Push registration success, token: ' + token.value)
+
+        fetchText(`/mobile/register/firebase/${token.value}`, {
+          method: 'POST'
+        })
+        .catch(handleXhrError)
       }
     )
 
@@ -44,6 +52,10 @@ export default {
   }
 }
 
-function register() {
-  PushNotifications.register()
+function register(): Promise<void> {
+  if (settings.general.notifications.allow()) {
+    return PushNotifications.register()
+  }
+
+  return Promise.resolve()
 }

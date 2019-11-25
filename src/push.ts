@@ -5,8 +5,12 @@ import {
   PushNotificationActionPerformed
 } from '@capacitor/core'
 import { fetchText } from './http'
+import challengesApi from './lichess/challenges'
+import router from './router'
+import session from './session'
 import settings from './settings'
 import { handleXhrError } from './utils'
+import { isForeground } from './utils/appMode'
 
 const { PushNotifications } = Plugins
 
@@ -15,12 +19,13 @@ export default {
     PushNotifications.addListener('registration',
       (token: PushNotificationToken) => {
 
-        console.log('Push registration success, token: ' + token.value)
+        console.debug('Push registration success, token: ' + token.value)
 
         fetchText(`/mobile/register/firebase/${token.value}`, {
           method: 'POST'
         })
         .catch(handleXhrError)
+
       }
     )
 
@@ -32,13 +37,48 @@ export default {
 
     PushNotifications.addListener('pushNotificationReceived',
       (notification: PushNotification) => {
-        console.log('Push received: ' + JSON.stringify(notification))
+        if (isForeground()) {
+          switch (notification.data.type) {
+            case 'challengeAccept':
+              session.refresh()
+              break
+            case 'corresAlarm':
+            case 'gameTakebackOffer':
+            case 'gameDrawOffer':
+            case 'gameFinish':
+              session.refresh()
+              break
+            case 'gameMove':
+              session.refresh()
+              break
+          }
+        }
       }
     )
 
     PushNotifications.addListener('pushNotificationActionPerformed',
-      (notification: PushNotificationActionPerformed) => {
-        console.log('Push action performed: ' + JSON.stringify(notification))
+      (action: PushNotificationActionPerformed) => {
+        if (action.actionId === 'tap') {
+          switch (action.notification.data.type) {
+            case 'challengeAccept':
+              challengesApi.refresh()
+              router.set(`/game/${action.notification.data.challengeId}`)
+              break
+            case 'challengeCreate':
+              router.set(`/challenge/${action.notification.data.challengeId}`)
+              break
+            case 'corresAlarm':
+            case 'gameMove':
+            case 'gameFinish':
+            case 'gameTakebackOffer':
+            case 'gameDrawOffer':
+              router.set(`/game/${action.notification.data.fullId}`)
+              break
+            case 'newMessage':
+              router.set(`/inbox/${action.notification.data.threadId}`)
+              break
+          }
+        }
       }
     )
 

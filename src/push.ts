@@ -38,7 +38,7 @@ export default {
     PushNotifications.addListener('pushNotificationReceived',
       (notification: PushNotification) => {
         if (isForeground()) {
-          switch (notification.data.type) {
+          switch (notification.data['lichess.type']) {
             case 'challengeAccept':
               session.refresh()
               break
@@ -59,23 +59,23 @@ export default {
     PushNotifications.addListener('pushNotificationActionPerformed',
       (action: PushNotificationActionPerformed) => {
         if (action.actionId === 'tap') {
-          switch (action.notification.data.type) {
+          switch (action.notification.data['lichess.type']) {
             case 'challengeAccept':
               challengesApi.refresh()
-              router.set(`/game/${action.notification.data.challengeId}`)
+              router.set(`/game/${action.notification.data['lichess.challengeId']}`)
               break
             case 'challengeCreate':
-              router.set(`/challenge/${action.notification.data.challengeId}`)
+              router.set(`/challenge/${action.notification.data['lichess.challengeId']}`)
               break
             case 'corresAlarm':
             case 'gameMove':
             case 'gameFinish':
             case 'gameTakebackOffer':
             case 'gameDrawOffer':
-              router.set(`/game/${action.notification.data.fullId}`)
+              router.set(`/game/${action.notification.data['lichess.fullId']}`)
               break
             case 'newMessage':
-              router.set(`/inbox/${action.notification.data.threadId}`)
+              router.set(`/inbox/${action.notification.data['lichess.threadId']}`)
               break
           }
         }

@@ -1,6 +1,8 @@
 headerHeight = 56px
 footerHeight = 45px
 
+footerHeightBigScreens = 55px
+
 a
   color linkBlue
   text-decoration none
@@ -98,7 +100,7 @@ span.fa
 
 .list_item
   position relative
-  line-height 20px
+  line-height 1.5em
   padding .8em
   border-bottom 1px solid borderColor
   word-wrap break-word
@@ -278,6 +280,8 @@ span.fa
   // iphone X support
   margin-bottom: constant(safe-area-inset-bottom);
   margin-bottom: env(safe-area-inset-bottom);
+  @media only screen and (min-width 768px) and (min-height 768px)
+    flex 0 0 footerHeightBigScreens
 
 .chip
   font-family 'Noto Sans', sans-serif

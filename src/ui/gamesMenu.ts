@@ -67,7 +67,7 @@ function wrapperOnCreate({ dom }: Mithril.VnodeDOM<any, any>) {
       selector: dom as HTMLElement,
       duration: 150,
       easing: 'ease-out',
-      perPage: helper.isWideScreen() ? 2 : 1,
+      perPage: helper.isTablet() ? 2 : 1,
       startIndex: 0,
       draggable: true,
       onChange: () => redraw(),
@@ -88,7 +88,7 @@ function open(page?: number) {
   session.refresh()
   isOpen = true
   setTimeout(() => {
-    if (scroller && !helper.isWideScreen()) {
+    if (scroller && !helper.isTablet()) {
       scroller.goTo(page !== undefined ? page : 0)
     }
   }, 400)
@@ -251,7 +251,7 @@ function renderSendingChallenge(c: Challenge) {
 
 function renderCarouselIndicators() {
   if (helper.isPortrait() && scroller) {
-    const elsNb = helper.isWideScreen() ?
+    const elsNb = helper.isTablet() ?
       Math.ceil(scroller.innerElements.length / 2) :
       scroller.innerElements.length
     return h('div.carouselIndicators',

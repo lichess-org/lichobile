@@ -79,6 +79,8 @@
   flex-flow column nowrap
   min-width 0 // fix width bug on landscape
   min-height 0 // fix chrome 73 regression
+  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
+    margin 3vh
 
 .analyse-table
   flex-flow column nowrap

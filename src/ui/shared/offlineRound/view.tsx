@@ -141,11 +141,9 @@ export function renderEndedGameStatus(ctrl: OfflineRoundInterface) {
 }
 
 export function renderClaimDrawButton(ctrl: OfflineRoundInterface) {
-  return gameApi.playable(ctrl.data) ? h('div.claimDraw', [
-    h('button[data-icon=2].draw-yes', {
-      oncreate: helper.ontap(() => ctrl.replay.claimDraw())
-    }, i18n('threefoldRepetition'))
-  ]) : null
+  return gameApi.playable(ctrl.data) ? h('button[data-icon=2].draw-yes', {
+    oncreate: helper.ontap(() => ctrl.replay.claimDraw())
+  }, i18n('threefoldRepetition')) : null
 }
 
 export function renderReplay(ctrl: OfflineRoundInterface) {

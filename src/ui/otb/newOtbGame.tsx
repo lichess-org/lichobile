@@ -96,7 +96,7 @@ export default {
                 {clockSettingsView(settings.otb.clockType(), onChange)}
               </div>
               <div className="popupActionWrapper">
-                <button className="popupAction" data-icon="E"
+                <button className="defaultButton"
                   oncreate={helper.ontap(() => {
                     ctrl.close()
                     ctrl.root.startNewGame(settings.otb.variant() as VariantKey, ctrl.root.vm.setupFen, settings.otb.clockType())

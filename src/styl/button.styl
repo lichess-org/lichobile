@@ -4,13 +4,15 @@ button, .li-button
   -webkit-tap-highlight-color rgba(0,0,0,0)
   user-select none
   background-color transparent
-  transition opacity 50ms
-  &.active
-    opacity 0.8
   &.disabled
     opacity 1
     &::before
       opacity 0.4
+
+.li-button
+  transition opacity 50ms
+  &.active
+    opacity 0.8
 
 .defaultButton
   background: #3692e7
@@ -115,7 +117,7 @@ button, .li-button
   &.disabled, &:disabled
     opacity 0.5
   &.active
-    background darkBlue
+    background darken(bgdark, 8%)
     color #ccc
   &.empty::before
     visibility hidden
@@ -123,7 +125,7 @@ button, .li-button
     animation answer_glow 5s infinite
   &.highlight
     color #fff
-    background blue
+    background darken(bgdark, 15%)
   &:before
     font-size 18px
   @media only screen and (max-height 400px) and (orientation landscape)

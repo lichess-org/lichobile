@@ -22,7 +22,7 @@
   width 90%
   max-height 80%
   z-index 12
-  background-color #fff
+  background-color bglight
   color textDarkGray
   box-shadow 0 0 35px 10px rgba(0,0,0,0.5)
   &.native_scroller
@@ -65,13 +65,12 @@
     max-height 85%
 
 .popup_content
-  height 100%
   .form-multipleChoice
     span
       border-color #ddd
 
 .offline_actions, .player_controls, .trainingMenu, .editorMenu, .continueFromHere, .go_or_cancel, .analyse_menu, .new_offline_game, .analyse-cm, .mini_user_actions_wrapper
-  button
+  button:not(.defaultButton)
     width 100%
     margin 0
     padding 10px
@@ -99,12 +98,6 @@
     &:last-child
       border-bottom none
       border-radius 0 0 5px 5px
-  .select_input
-    background selectBg
-    color textDarkGray
-    box-shadow none
-    > select
-      color textDarkGray
   .action
     padding 0.5em 1em
   @media only screen and (min-width 700px)

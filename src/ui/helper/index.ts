@@ -257,12 +257,9 @@ export function classSet(classes: {[cl: string]: boolean}): string {
   return arr.join(' ')
 }
 
-export function isWideScreen(): boolean {
-  return viewportDim().vw >= 600
-}
-
-export function isVeryWideScreen(): boolean {
-  return viewportDim().vw >= 960
+export function isTablet(): boolean {
+  const { vw, vh } = viewportDim()
+  return vw >= 768 && vh >= 768
 }
 
 export function is43Aspect(): boolean {
@@ -294,7 +291,7 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, ha
       }
     }
     else if (is43) {
-      const side = vw * 0.98
+      const side = vw * 0.94
       return {
         width: side,
         height: side
@@ -307,7 +304,7 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, ha
     }
   } else {
     if (is43) {
-      const wsSide = vh - headerHeight - (vh * 0.12)
+      const wsSide = vh - headerHeight - (vh * 0.06)
       return {
         width: wsSide,
         height: wsSide

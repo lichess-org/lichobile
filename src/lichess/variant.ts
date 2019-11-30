@@ -76,7 +76,7 @@ const variantMap: {[key: string]: DocVariant} = {
     tinyName: 'Horde',
     id: 8,
     link: 'https://lichess.org/variant/horde',
-    alert: 'This is a horde chess game!\n\nWhite must take all black pawns to win. Black must checkmate white king.',
+    alert: 'This is a horde chess game!\n\nBlack must take all white pawns to win. White must checkmate black king.',
     title: 'Destroy the horde to win!',
     initialFen: 'rnbqkbnr/pppppppp/8/1PP2PP1/PPPPPPPP/PPPPPPPP/PPPPPPPP/PPPPPPPP w kq - 0 1'
   },

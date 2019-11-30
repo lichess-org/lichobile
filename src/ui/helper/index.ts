@@ -19,7 +19,6 @@ const animDuration = 250
 // this must be cached because of the access to document.body.style
 let cachedTransformProp: string
 let cachedIsPortrait: boolean | undefined
-let cachedViewportAspectIs43: boolean
 let cachedViewportDim: ViewportDim | null = null
 
 export const headerHeight = 56
@@ -262,14 +261,6 @@ export function isTablet(): boolean {
   return vw >= 768 && vh >= 768
 }
 
-export function is43Aspect(): boolean {
-  if (cachedViewportAspectIs43 !== undefined) return cachedViewportAspectIs43
-  else {
-    cachedViewportAspectIs43 = window.matchMedia('(aspect-ratio: 4/3), (aspect-ratio: 3/4), (device-aspect-ratio: 4/3), (device-aspect-ratio: 3/4)').matches
-    return cachedViewportAspectIs43
-  }
-}
-
 export function isPortrait(): boolean {
   if (cachedIsPortrait !== undefined) return cachedIsPortrait
   else {
@@ -280,7 +271,7 @@ export function isPortrait(): boolean {
 
 export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, halfsize: boolean = false): Bounds {
   const { vh, vw } = viewportDim
-  const is43 = is43Aspect()
+  const tablet = isTablet()
 
   if (isPortrait) {
     if (halfsize) {
@@ -290,7 +281,7 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, ha
         height: side
       }
     }
-    else if (is43) {
+    else if (tablet) {
       const side = vw * 0.94
       return {
         width: side,
@@ -303,7 +294,7 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, ha
       }
     }
   } else {
-    if (is43) {
+    if (tablet) {
       const wsSide = vh - headerHeight - (vh * 0.06)
       return {
         width: wsSide,

@@ -28,7 +28,7 @@
   &.clockOnLeft
     > .antagonistInfos
       order 2
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
     width 94vw
     margin 0 auto
   @media only screen and (orientation: landscape)
@@ -40,7 +40,7 @@
       > .pocket
         flex 0 0 auto
         order 1
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
     padding 1em 0
     &:first-child
       padding-top 0
@@ -379,7 +379,7 @@
       left initial
       right 1vw
       width 'calc(100vw - 100vh + %s - 2vw)' % headerHeight
-    @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
+    @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
       width 'calc(100vw - 100vh + %s + 12vh - 2vw)' % headerHeight
     // tablets
     @media only screen and (orientation portrait) and (min-width 500px)
@@ -456,7 +456,7 @@
     height 'calc((100vh - %s) / 8)' % headerHeight
     max-width 60px
     max-height 60px
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
     width "calc((100vh - 100vw - 25px - %s - %s) / 2)" % (headerHeight footerHeight)
     height "calc((100vh - 100vw - 25px - %s - %s) / 2)" % (headerHeight footerHeight)
 

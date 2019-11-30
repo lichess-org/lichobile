@@ -4,7 +4,7 @@
   flex-flow column nowrap
   justify-content center
   min-height 0 // fix chrome bug
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
     > .actions_bar
       width 94vw
       margin 0 auto
@@ -28,14 +28,14 @@
       height 'calc((100vh - %s) / 2)' % headerHeight
       width 'calc((100vh - %s) / 2)' % headerHeight
       align-self center
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
     height 94vw
     width 94vw
     margin auto
   @media only screen and (orientation: landscape)
     height 'calc(100vh - %s)' % headerHeight
     width 'calc(100vh - %s)' % headerHeight
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
     height 'calc(100vh - %s - 6vh)' % headerHeight
     width 'calc(100vh - %s - 6vh)' % headerHeight
     margin auto
@@ -106,7 +106,7 @@
     display flex
     flex-flow column nowrap
     justify-content space-around
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
     margin 3vh
     > .playersTable
       padding 0
@@ -123,7 +123,7 @@
     .clock
       font-size 25px
       max-width initial
-  @media only screen and (orientation: landscape) and (min-width 801px) and (aspect-ratio 4/3), only screen and (orientation: landscape) and (min-width 801px) and (device-aspect-ratio 4/3)
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
     .clock
       max-width 180px
   @media only screen and (orientation: landscape) and (min-width 1025px)

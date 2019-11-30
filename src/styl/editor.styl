@@ -32,10 +32,10 @@
   @media only screen and (orientation: landscape)
     width "calc((100vh - %s) / 10)" % headerHeight
     height "calc((100vh - %s) / 10)" % headerHeight
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
     width calc(100vw / 14)
     height calc(100vw / 14)
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
     width "calc((100vh - %s) / 12)" % headerHeight
     height "calc((100vh - %s) / 12)" % headerHeight
 

@@ -2,7 +2,7 @@ import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import Gesture from '../../utils/Gesture'
 import { hashCode } from '../../utils'
-import { viewportDim, findParentBySelector, headerHeight, isPortrait, is43Aspect } from '../helper'
+import { viewportDim, findParentBySelector, headerHeight, isPortrait, isTablet } from '../helper'
 
 interface Attrs {
   selectedIndex: number
@@ -70,8 +70,8 @@ export default {
     const curIndex = selectedIndex
     const tabWidth = isPortrait() || !boardView ?
       vd.vw :
-        is43Aspect() ?
-          vd.vw - (vd.vh * 0.88) + headerHeight :
+        isTablet() ?
+          vd.vw - (vd.vh * 0.94) + headerHeight - (vd.vh * 0.09) :
           vd.vw - vd.vh + headerHeight
 
     const width = contentRenderers.length * tabWidth

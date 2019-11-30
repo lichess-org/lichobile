@@ -79,7 +79,9 @@
   flex-flow column nowrap
   min-width 0 // fix width bug on landscape
   min-height 0 // fix chrome 73 regression
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
+    margin 0 3vw
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
     margin 3vh
 
 .analyse-table
@@ -97,8 +99,8 @@
       width 100%
     @media only screen and (orientation: landscape)
       width 'calc(100vw - 100vh + %s)' % headerHeight
-    @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
-      width 'calc(100vw - 88vh + %s)' % headerHeight
+    @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
+      width 'calc(100vw - 94vh + %s - 9vh)' % headerHeight
 
 .analyse_actions_bar
   order 3

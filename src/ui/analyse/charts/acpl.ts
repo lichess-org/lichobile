@@ -9,14 +9,22 @@ interface Point {
   acpl: number
 }
 
-export default function drawAcplChart(element: SVGElement, aData: AnalyseData, curPly: number) {
+export default function drawAcplChart(
+  element: HTMLElement,
+  aData: AnalyseData,
+  curPly: number
+) {
   const division = aData.game.division
+  const rect = element.getBoundingClientRect()
 
   const svg = select(element)
+  .append('svg')
+  .attr('viewBox', `0 0 ${rect.width} ${rect.height}`)
+
   const graphData = makeSerieData(aData)
   const margin = {top: 10, right: 10, bottom: 10, left: 10}
-  const width = +svg.attr('width') - margin.left - margin.right
-  const height = +svg.attr('height') - margin.top - margin.bottom
+  const width = rect.width - margin.left - margin.right
+  const height = rect.height - margin.top - margin.bottom
   const g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
   function addDivisionLine(xPos: number, name: string) {

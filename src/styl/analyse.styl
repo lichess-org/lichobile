@@ -96,11 +96,9 @@
   > .tab-content
     > div
       flex-grow 1
-      width 100%
-    @media only screen and (orientation: landscape)
-      width 'calc(100vw - 100vh + %s)' % headerHeight
-    @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
-      width 'calc(100vw - 94vh + %s - 9vh)' % headerHeight
+
+.analyse-chart
+  height 150px
 
 .analyse_actions_bar
   order 3

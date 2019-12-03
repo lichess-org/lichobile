@@ -1,8 +1,7 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import Gesture from '../../utils/Gesture'
-import { hashCode } from '../../utils'
-import { viewportDim, findParentBySelector, headerHeight, isPortrait, isTablet } from '../helper'
+import { viewportDim, findParentBySelector, elSlideIn } from '../helper'
 
 interface Attrs {
   selectedIndex: number
@@ -16,11 +15,13 @@ interface Attrs {
 interface State {
   nbTabs: number
   gesture: Gesture
+  prevIndex: number
 }
 
 export default {
   oninit({ attrs }) {
     this.nbTabs = attrs.contentRenderers.length
+    this.prevIndex = attrs.selectedIndex
   },
 
   oncreate({ attrs, dom }) {
@@ -51,8 +52,17 @@ export default {
     })
   },
 
-  onupdate({ attrs }) {
+  onupdate({ attrs, dom }) {
     this.nbTabs = attrs.contentRenderers.length
+
+    const el = dom.querySelector('.tab-content') as HTMLElement
+    if (attrs.selectedIndex > this.prevIndex) {
+      elSlideIn(el, 'left')
+    } else if (attrs.selectedIndex < this.prevIndex) {
+      elSlideIn(el, 'right')
+    }
+
+    this.prevIndex = attrs.selectedIndex
   },
 
   onremove() {
@@ -63,38 +73,17 @@ export default {
     const {
       contentRenderers,
       selectedIndex,
-      boardView = false,
       withWrapper = false
     } = attrs
-    const vd = viewportDim()
-    const curIndex = selectedIndex
-    const tabWidth = isPortrait() || !boardView ?
-      vd.vw :
-        isTablet() ?
-          vd.vw - (vd.vh * 0.94) + headerHeight - (vd.vh * 0.09) :
-          vd.vw - vd.vh + headerHeight
-
-    const width = contentRenderers.length * tabWidth
-    const shift = -(curIndex * tabWidth)
-
-    const style = {
-      width: `${width}px`,
-      transform: `translateX(${shift}px)`
-    }
+    const renderer = contentRenderers[selectedIndex]
 
     const view = h('div.tabs-view', {
-      style,
       className: attrs.className
-    }, contentRenderers.map((f: () => Mithril.Children, index: number) =>
+    }, [
       h('div.tab-content', {
-        style: {
-          width: `${tabWidth}px`,
-        },
-        key: hashCode(f.toString()),
-        'data-index': index,
-        className: selectedIndex === index ? 'current' : '',
-      },  selectedIndex === index ? f() : null)
-    ))
+        'data-index': selectedIndex,
+      },  renderer())
+    ])
 
     return withWrapper ? h('div.tabs-view-wrapper', view) : view
   }

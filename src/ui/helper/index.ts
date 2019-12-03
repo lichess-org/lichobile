@@ -87,9 +87,33 @@ export function pageSlideIn(el: HTMLElement) {
 
   const direction = router.getViewSlideDirection() === 'fwd' ? '100%' : '-100%'
   el.style.transform = `translate3d(${direction},0,0)`
-  el.style.transition = `transform ${animDuration}ms ease-out`
 
   setTimeout(() => {
+    el.style.transition = `transform ${animDuration}ms ease-out`
+    el.style.transform = 'translate3d(0%,0,0)'
+  }, 10)
+
+  el.addEventListener('transitionend', after, false)
+  // in case transitionend does not fire
+  tId = setTimeout(after, animDuration + 20)
+}
+
+export function elSlideIn(el: HTMLElement, dir: 'left' | 'right') {
+  let tId: number
+
+  function after() {
+    clearTimeout(tId)
+    if (el) {
+      el.removeAttribute('style')
+      el.removeEventListener('transitionend', after, false)
+    }
+  }
+
+  const trans = dir === 'left' ? '100%' : '-100%'
+  el.style.transform = `translate3d(${trans},0,0)`
+
+  setTimeout(() => {
+    el.style.transition = `transform ${animDuration}ms ease-out`
     el.style.transform = 'translate3d(0%,0,0)'
   }, 10)
 

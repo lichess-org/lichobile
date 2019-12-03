@@ -18,29 +18,25 @@ import drawAcplChart from '../charts/acpl'
 import drawMoveTimesChart from '../charts/moveTimes'
 
 export default function renderAnalysis(ctrl: AnalyseCtrl): Mithril.Vnode<any, any> {
-  const isPortrait = helper.isPortrait()
-  const vd = helper.viewportDim()
   const d = ctrl.data
 
   return h('div.analyse-gameAnalysis.native_scroller', [
-    d.analysis ? renderAnalysisGraph(ctrl, vd, isPortrait) :
+    d.analysis ? renderAnalysisGraph(ctrl) :
       ctrl.study ? renderStudyAnalysisRequest(ctrl) : renderGameAnalysisRequest(ctrl),
-    d.game.moveCentis ? renderMoveTimes(ctrl, d.game.moveCentis, vd, isPortrait) : null
+    d.game.moveCentis ? renderMoveTimes(ctrl, d.game.moveCentis) : null
   ])
 }
 
-function renderAnalysisGraph(ctrl: AnalyseCtrl, vd: helper.ViewportDim, isPortrait: boolean) {
+function renderAnalysisGraph(ctrl: AnalyseCtrl) {
   return h('div.analyse-computerAnalysis', [
     h('strong.title', i18n('computerAnalysis')),
     ctrl.analysisProgress ?
     h('div.analyse-gameAnalysis_chartPlaceholder', spinner.getVdom('monochrome')) :
-    h('svg#acpl-chart.analyse-chart', {
-      width: isPortrait ? vd.vw : vd.vw - vd.vh + helper.headerHeight,
-      height: 100,
+    h('div.analyse-chart', {
       oncreate({ dom }: Mithril.VnodeDOM<any, any>) {
         setTimeout(() => {
-          this.updateCurPly = drawAcplChart(dom as SVGElement, ctrl.data, ctrl.node.ply)
-        }, 100)
+          this.updateCurPly = drawAcplChart(dom as HTMLElement, ctrl.data, ctrl.node.ply)
+        }, 200)
       },
       onupdate() {
         if (this.updateCurPly) batchRequestAnimationFrame(() => {
@@ -136,16 +132,14 @@ function renderStudyAnalysisRequest(ctrl: AnalyseCtrl) {
   )
 }
 
-function renderMoveTimes(ctrl: AnalyseCtrl, moveCentis: number[], vd: helper.ViewportDim, isPortrait: boolean) {
+function renderMoveTimes(ctrl: AnalyseCtrl, moveCentis: number[]) {
   return h('div.analyse-moveTimes', [
     h('strong.title', i18n('moveTimes')),
-    h('svg#moveTimes-chart.analyse-chart', {
-      width: isPortrait ? vd.vw : vd.vw - vd.vh + helper.headerHeight,
-      height: 150,
+    h('div.analyse-chart', {
       oncreate({ dom }: Mithril.VnodeDOM<any, any>) {
         setTimeout(() => {
-          this.updateCurPly = drawMoveTimesChart(dom as SVGElement, ctrl.data, moveCentis, ctrl.node.ply)
-        }, 100)
+          this.updateCurPly = drawMoveTimesChart(dom as HTMLElement, ctrl.data, moveCentis, ctrl.node.ply)
+        }, 200)
       },
       onupdate() {
         if (this.updateCurPly) batchRequestAnimationFrame(() => {

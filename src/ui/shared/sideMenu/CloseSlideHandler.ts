@@ -1,4 +1,3 @@
-import { Capacitor } from '@capacitor/core'
 import Gesture from '../../../utils/Gesture'
 import { viewportDim } from '../../helper'
 import SideMenuCtrl from './SideMenuCtrl'
@@ -6,6 +5,8 @@ import { getMenuWidth, translateMenu, backdropOpacity, OPEN_AFTER_SLIDE_RATIO, B
 
 interface CloseSlideHandlerState {
   backDropElement: HTMLElement | null
+  isScrolling: boolean
+  isClosing: boolean
 }
 
 export default function CloseSlideHandler(el: HTMLElement, ctrl: SideMenuCtrl) {
@@ -15,24 +16,36 @@ export default function CloseSlideHandler(el: HTMLElement, ctrl: SideMenuCtrl) {
 
   const state: CloseSlideHandlerState = {
     backDropElement: null,
+    isScrolling: false,
+    isClosing: false,
   }
 
   const gesture = new Gesture(el, viewportDim(), {
-    passiveMove: Capacitor.platform !== 'ios'
+    passiveMove: false
   })
 
   gesture.on('panstart', () => {
     state.backDropElement = ctrl.getBackdropEl()
+    state.isScrolling = false
+    state.isClosing = false
   })
   gesture.on('panmove', (e: TouchEvent) => {
-    if (Capacitor.platform === 'ios') {
-      if (!e.defaultPrevented) {
-        if (
-          (side === 'left' && gesture.touchMoveX < -8) ||
-          (side === 'right' && gesture.touchMoveX > 8)
-        ) {
-          e.preventDefault()
-        }
+
+    if (state.isScrolling) return
+
+    if (state.isClosing) {
+      e.preventDefault()
+    }
+    else {
+      if (
+        (side === 'left' && gesture.touchMoveX < -5) ||
+        (side === 'right' && gesture.touchMoveX > 5)
+      ) {
+        e.preventDefault()
+        state.isClosing = true
+      } else {
+        state.isScrolling = Math.abs(gesture.touchMoveY) > 5
+        if (state.isScrolling) return
       }
     }
 
@@ -49,6 +62,11 @@ export default function CloseSlideHandler(el: HTMLElement, ctrl: SideMenuCtrl) {
     }
   })
   gesture.on('panend', () => {
+    if (state.isScrolling) return
+
+    state.isScrolling = false
+    state.isClosing = false
+
     // we don't want to close menu accidentaly when scrolling thus it is important
     // to check X velocity only
     const velocity = gesture.velocityX

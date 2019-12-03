@@ -5,7 +5,6 @@ import { emptyFen } from '../../utils/fen'
 import { hasNetwork } from '../../utils'
 import i18n, { plural, formatNumber, fromNow } from '../../i18n'
 import session from '../../session'
-import socket from '../../socket'
 import { PongMessage, CorrespondenceSeek } from '../../lichess/interfaces'
 import * as helper from '../helper'
 import { renderTimelineEntry, timelineOnTap } from '../timeline'
@@ -33,7 +32,7 @@ export function body(ctrl: HomeCtrl) {
     } : null
 
     return (
-      <div className={'native_scroller homeOfflineWrapper' + (boardConf ? ' withBoard' : '')}>
+      <div className={'homeOfflineWrapper' + (boardConf ? ' withBoard' : '')}>
         <div className="home homeOffline">
           <section className="playOffline">
             <h2>{i18n('playOffline')}</h2>
@@ -52,52 +51,46 @@ export function body(ctrl: HomeCtrl) {
   }
 
   return (
-    <div className="native_scroller page">
-      <div className="home">
-        {playbanEndsAt && ((playbanEndsAt.valueOf() - Date.now()) / 1000) > 1 ?
-          renderPlayban(playbanEndsAt) : renderLobby(ctrl)
-        }
-        <div className="home_start">
-          <button className="buttonMetal"
-            oncreate={helper.ontapY(() => newGameForm.openRealTime('custom'))}
-          >
-            {i18n('createAGame')}
-          </button>
-          <button className="buttonMetal"
-            oncreate={helper.ontapY(() => challengeForm.open())}
-          >
-            {i18n('playWithAFriend')}
-          </button>
-          <button className="buttonMetal"
-            oncreate={helper.ontapY(playMachineForm.open)}
-          >
-            {i18n('playWithTheMachine')}
-          </button>
-        </div>
-        {h(Stats)}
-        {renderFeaturedTournaments(ctrl)}
-        {renderDailyPuzzle(ctrl)}
-        {renderTimeline(ctrl)}
+    <div className="home">
+      {playbanEndsAt && ((playbanEndsAt.valueOf() - Date.now()) / 1000) > 1 ?
+        renderPlayban(playbanEndsAt) : renderLobby(ctrl)
+      }
+      <div className="home_start">
+        <button className="buttonMetal"
+          oncreate={helper.ontapY(() => newGameForm.openRealTime('custom'))}
+        >
+          {i18n('createAGame')}
+        </button>
+        <button className="buttonMetal"
+          oncreate={helper.ontapY(() => challengeForm.open())}
+        >
+          {i18n('playWithAFriend')}
+        </button>
+        <button className="buttonMetal"
+          oncreate={helper.ontapY(playMachineForm.open)}
+        >
+          {i18n('playWithTheMachine')}
+        </button>
       </div>
+      {h(Stats)}
+      {renderFeaturedTournaments(ctrl)}
+      {renderDailyPuzzle(ctrl)}
+      {renderTimeline(ctrl)}
     </div>
   )
 }
 
 const Stats = {
   oncreate() {
-    const nbRoundSpread = spreadNumber(
-      document.querySelector('#nb_games_in_play > strong'),
-      8,
-      socket.getCurrentPingInterval
-    )
-    const nbUserSpread = spreadNumber(
-      document.querySelector('#nb_connected_players > strong'),
-      10,
-      socket.getCurrentPingInterval
-    )
+    const nbUserEl = document.querySelector('#nb_connected_players > strong')
+    const nbGameEl = document.querySelector('#nb_games_in_play > strong')
     this.render = (pong: PongMessage) => {
-      nbUserSpread(pong.d)
-      setTimeout(() => nbRoundSpread(pong.r), socket.getCurrentPingInterval() / 2)
+      if (nbGameEl) {
+        nbGameEl.textContent = formatNumber(pong.r)
+      }
+      if (nbUserEl) {
+        nbUserEl.textContent = formatNumber(pong.d)
+      }
     }
     signals.homePong.add(this.render)
   },
@@ -274,28 +267,4 @@ function renderPlayban(endsAt: Date) {
       </p>
     </div>
   )
-}
-
-function spreadNumber(el: HTMLElement | null, nbSteps: number, getDuration: () => number) {
-  let previous: number
-  let displayed: string
-  function display(prev: number, cur: number, it: number) {
-    const val = formatNumber(Math.round(((prev * (nbSteps - 1 - it)) + (cur * (it + 1))) / nbSteps))
-    if (el && val !== displayed) {
-      el.textContent = val
-      displayed = val
-    }
-  }
-  let timeouts: Array<number> = []
-  return function(nb: number, overrideNbSteps?: number) {
-    if (!el || (!nb && nb !== 0)) return
-    if (overrideNbSteps) nbSteps = Math.abs(overrideNbSteps)
-    timeouts.forEach(clearTimeout)
-    timeouts = []
-    let prev = previous === 0 ? 0 : (previous || nb)
-    previous = nb
-    let interv = Math.abs(getDuration() / nbSteps)
-    for (let i = 0; i < nbSteps; i++)
-      timeouts.push(setTimeout(() => display(prev, nb, i), Math.round(i * interv)))
-  }
 }

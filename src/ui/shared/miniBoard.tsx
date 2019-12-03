@@ -5,11 +5,6 @@ import { noop } from '../../utils'
 import { FeaturedGame } from '../../lichess/interfaces'
 import h from 'mithril/hyperscript'
 
-interface Bounds {
-  width: number
-  height: number
-}
-
 export interface Attrs {
   readonly fen: string
   readonly orientation: Color
@@ -17,7 +12,6 @@ export interface Attrs {
   readonly gameObj?: FeaturedGame
   readonly boardTitle?: Mithril.Children
   readonly lastMove?: string
-  readonly bounds?: Bounds
   readonly customPieceTheme?: string
   readonly variant?: VariantKey
   readonly fixed?: boolean

@@ -66,7 +66,7 @@ export function viewOnlyBoardContent(fen: string, orientation: Color, lastMove?:
   const className = 'board_wrapper' + (wrapperClass ? ' ' + wrapperClass : '')
   const board = (
     <section className={className}>
-      {h(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
+      {h(ViewOnlyBoard, {fen, lastMove, orientation, variant, customPieceTheme})}
     </section>
   )
   const showMoveList = hasSpaceForInlineReplay(vd, bounds) &&
@@ -208,7 +208,6 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessground: ctrl.chessground,
-    bounds
   })
 
   const flip = !ctrl.data.tv && ctrl.vm.flip

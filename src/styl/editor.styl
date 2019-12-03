@@ -3,15 +3,21 @@
   width 100%
   display flex
   flex-flow column nowrap
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
+    margin 3vh
 
 .editor-table
   flex 1 1 auto
   display: flex
   flex-flow: column nowrap
   justify-content: center
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
+    justify-content space-evenly
 
 .editor-piecesDrawer
   background #e6e6e6
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
+    margin 0 3vw
 
 .sparePieces
   display flex
@@ -36,8 +42,8 @@
     width calc(100vw / 14)
     height calc(100vw / 14)
   @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
-    width "calc((100vh - %s) / 12)" % headerHeight
-    height "calc((100vh - %s) / 12)" % headerHeight
+    width "calc((100vh - %s - 18vh - env(safe-area-inset-top)) / 12)" % headerHeight
+    height "calc((100vh - %s - 18vh - env(safe-area-inset-top)) / 12)" % headerHeight
 
 .editorMenu
   > .popup_content

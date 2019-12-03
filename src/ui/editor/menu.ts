@@ -116,7 +116,7 @@ export function renderSelectColorPosition(ctrl: EditorCtrl) {
   ])
 }
 
-function renderCastlingOptions(ctrl: EditorCtrl) {
+export function renderCastlingOptions(ctrl: EditorCtrl) {
   const white = [
     ['K', i18n('whiteCastlingKingside')],
     ['Q', 'O-O-O'],

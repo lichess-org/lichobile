@@ -10,11 +10,9 @@ import spinner from '../../../spinner'
 import { view as renderPromotion } from '../../shared/offlineRound/promotion'
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard'
 import { notesView } from '../../shared/round/notes'
-import { Bounds } from '../../shared/Board'
 import TabNavigation from '../../shared/TabNavigation'
 import TabView from '../../shared/TabView'
 import { loadingBackbutton } from '../../shared/common'
-import * as helper from '../../helper'
 import layout from '../../layout'
 import { chatView } from '../../shared/chat'
 
@@ -38,22 +36,23 @@ import renderActionsBar from './actionsView'
 export function loadingScreen(isPortrait: boolean, color?: Color, curFen?: string) {
   const isSmall = settings.analyse.smallBoard()
   const boardPos = settings.analyse.boardPosition()
-  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, isSmall)
   return layout.board(
     loadingBackbutton(),
     [
-      viewOnlyBoard(color || 'white', bounds, isSmall, curFen || emptyFen, boardPos),
+      viewOnlyBoard(color || 'white', isSmall, curFen || emptyFen, boardPos),
       h('div.analyse-tableWrapper', spinner.getVdom('monochrome')),
       isPortrait && boardPos === '2' ? h('section.analyse_actions_bar') : null,
     ]
   )
 }
 
-export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Bounds) {
+export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean) {
   const availTabs = ctrl.availableTabs()
 
-  return h.fragment({ key: 'boardPos' + ctrl.settings.s.boardPosition }, [
-    renderBoard(ctrl, bounds),
+  return h.fragment({
+    key: 'boardPos' + ctrl.settings.s.boardPosition + 'size' + ctrl.settings.s.smallBoard,
+  }, [
+    renderBoard(ctrl),
     h('div.analyse-tableWrapper', [
       ctrl.data.game.variant.key === 'crazyhouse' ? renderCrazy(ctrl) : null,
       renderAnalyseTable(ctrl, availTabs),
@@ -104,10 +103,10 @@ export function renderVariantSelector(ctrl: AnalyseCtrl) {
   )
 }
 
-function viewOnlyBoard(color: Color, bounds: Bounds, isSmall: boolean, fen: string, pos: '1' | '2') {
+function viewOnlyBoard(color: Color, isSmall: boolean, fen: string, pos: '1' | '2') {
   return h('section.board_wrapper.analyse-boardWrapper', {
     className: (isSmall ? 'halfsize ' : '') + 'pos' + pos
-  }, h(ViewOnlyBoard, { orientation: color, bounds, fen }))
+  }, h(ViewOnlyBoard, { orientation: color, fen }))
 }
 
 function renderOpening(ctrl: AnalyseCtrl) {

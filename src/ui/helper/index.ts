@@ -14,6 +14,13 @@ export interface ViewportDim {
   vh: number
 }
 
+export interface SafeAreaInset {
+  top: number
+  right: number
+  bottom: number
+  left: number
+}
+
 const animDuration = 250
 
 // this must be cached because of the access to document.body.style
@@ -269,8 +276,30 @@ export function isPortrait(): boolean {
   }
 }
 
+let cachedSafeAreaInset: SafeAreaInset | null = null
+function nbFromPropValue(p: string): number {
+  const f = p.match(/\d{1,3}/)
+  const r = f && f[0]
+  const n = Number(r)
+  return isNaN(n) ? 0 : n
+}
+export function getSafeArea(): SafeAreaInset {
+  if (!cachedSafeAreaInset) {
+    const s = getComputedStyle(document.documentElement)
+    cachedSafeAreaInset = {
+      top: nbFromPropValue(s.getPropertyValue('--sat')),
+      right: nbFromPropValue(s.getPropertyValue('--sar')),
+      bottom: nbFromPropValue(s.getPropertyValue('--sab')),
+      left: nbFromPropValue(s.getPropertyValue('--sal')),
+    }
+    return cachedSafeAreaInset
+  }
+  return cachedSafeAreaInset
+}
+
 export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, halfsize: boolean = false): Bounds {
   const { vh, vw } = viewportDim
+  const safeArea = getSafeArea()
   const tablet = isTablet()
 
   if (isPortrait) {
@@ -295,13 +324,13 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, ha
     }
   } else {
     if (tablet) {
-      const wsSide = vh - headerHeight - (vh * 0.06)
+      const wsSide = vh - headerHeight - (vh * 0.06) - safeArea.top
       return {
         width: wsSide,
         height: wsSide
       }
     } else {
-      const lSide = vh - headerHeight
+      const lSide = vh - headerHeight - safeArea.top
       return {
         width: lSide,
         height: lSide

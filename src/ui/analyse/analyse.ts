@@ -138,7 +138,6 @@ export default {
     const isPortrait = helper.isPortrait()
 
     if (this.ctrl) {
-      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, this.ctrl.settings.s.smallBoard)
 
       let backButton: Mithril.Children = null
       if (this.ctrl.shouldGoBack) {
@@ -159,7 +158,7 @@ export default {
 
       return layout.board(
         header(title, backButton),
-        renderContent(this.ctrl!, isPortrait, bounds),
+        renderContent(this.ctrl!, isPortrait),
         overlay(this.ctrl!)
       )
     } else {

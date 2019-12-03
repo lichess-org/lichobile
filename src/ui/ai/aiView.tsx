@@ -34,7 +34,6 @@ export function renderContent(ctrl: AiRound) {
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessground: ctrl.chessground,
-    bounds
   })
 
   if (isPortrait) {

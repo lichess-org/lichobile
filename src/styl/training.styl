@@ -3,6 +3,10 @@
   display: flex;
   flex-flow: column nowrap;
   min-width: 0;
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
+    margin 3vh
+    > .training-table > .training-explanation
+      padding 0
 
 .training-table
   height initial
@@ -10,6 +14,10 @@
   display flex
   flex-flow column nowrap
   font-size 0.9em
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
+    margin 0 3vw
+    > .training-explanation
+      padding 0
 
 .training-explanation
   padding 5px

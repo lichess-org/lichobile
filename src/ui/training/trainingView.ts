@@ -5,7 +5,7 @@ import i18n, { plural } from '../../i18n'
 import { hasNetwork } from '../../utils'
 import session from '../../session'
 import settings from '../../settings'
-import Board, { Bounds } from '../shared/Board'
+import Board from '../shared/Board'
 import { view as renderPromotion } from '../shared/offlineRound/promotion'
 import { header, connectingHeader } from '../shared/common'
 import * as helper from '../helper'
@@ -31,10 +31,9 @@ export function renderHeader(ctrl: TrainingCtrl) {
   ]))
 }
 
-export function renderContent(ctrl: TrainingCtrl, key: string, bounds: Bounds) {
+export function renderContent(ctrl: TrainingCtrl, key: string) {
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
-    bounds,
     chessground: ctrl.chessground
   })
 

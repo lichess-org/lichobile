@@ -99,7 +99,7 @@ function renderForm(formName: string, settingsObj: AiSettings, variants: string[
           }
         })
       }, [
-        h(ViewOnlyBoard, { fen: fromPositionFen, orientation: 'white', bounds: { width: 100, height: 100 }})
+        h(ViewOnlyBoard, { fen: fromPositionFen, orientation: 'white'})
       ])
       ] : h('div', h('button.withIcon.fa.fa-pencil', {
         oncreate: helper.ontap(() => {

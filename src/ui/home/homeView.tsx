@@ -26,6 +26,7 @@ export function body(ctrl: HomeCtrl) {
   if (!hasNetwork()) {
     const puzzleData = ctrl.offlinePuzzle
     const boardConf = puzzleData ? {
+      fixed: true,
       fen: puzzleData.puzzle.fen,
       orientation: puzzleData.puzzle.color,
       link: () => router.set('/training'),
@@ -202,6 +203,7 @@ function renderFeaturedTournaments(ctrl: HomeCtrl) {
 function renderDailyPuzzle(ctrl: HomeCtrl) {
   const puzzle = ctrl.dailyPuzzle
   const boardConf = puzzle ? {
+    fixed: true,
     fen: puzzle.fen,
     orientation: puzzle.color,
     link: () => router.set(`/training/${puzzle.id}?initFen=${puzzle.fen}&initColor=${puzzle.color}`),
@@ -211,6 +213,7 @@ function renderDailyPuzzle(ctrl: HomeCtrl) {
       h('span', puzzle.color === 'white' ? i18n('whitePlays') : i18n('blackPlays')),
     ]
   } : {
+    fixed: true,
     orientation: 'white' as Color,
     fen: emptyFen,
   }

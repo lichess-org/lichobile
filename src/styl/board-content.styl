@@ -5,7 +5,7 @@
   justify-content center
   min-height 0 // fix chrome bug
   @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
-    > .actions_bar
+    .actions_bar
       width 94vw
       margin 0 auto
     > .playTable
@@ -33,11 +33,11 @@
     width 94vw
     margin auto
   @media only screen and (orientation: landscape)
-    height 'calc(100vh - %s)' % headerHeight
-    width 'calc(100vh - %s)' % headerHeight
+    height 'calc(100vh - %s - env(safe-area-inset-top))' % headerHeight
+    width 'calc(100vh - %s - env(safe-area-inset-top))' % headerHeight
   @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
-    height 'calc(100vh - %s - 6vh)' % headerHeight
-    width 'calc(100vh - %s - 6vh)' % headerHeight
+    height 'calc(100vh - %s - 6vh - env(safe-area-inset-top))' % headerHeight
+    width 'calc(100vh - %s - 6vh - env(safe-area-inset-top))' % headerHeight
     margin auto
     margin-left 3vh
 
@@ -58,6 +58,9 @@
 
 .playable_board_wrapper
   position relative
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
+    &:first-child
+      margin-top 3vw
 
 .display_board
   width 100%

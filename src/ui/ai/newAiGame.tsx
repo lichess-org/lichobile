@@ -98,7 +98,6 @@ export default {
                         {h(ViewOnlyBoard, {
                           fen: ctrl.root.vm.setupFen,
                           orientation: setupColor,
-                          bounds: { width: 130, height: 130 }
                         })}
                       </div>
                     </div>

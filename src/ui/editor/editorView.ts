@@ -10,18 +10,16 @@ import layout from '../layout'
 import continuePopup from '../shared/continuePopup'
 import pasteFenPopup from './pasteFenPopup'
 import EditorCtrl from './EditorCtrl'
-import menu from './menu'
+import menu, { renderSelectColorPosition, renderCastlingOptions } from './menu'
 
 export default function view(ctrl: EditorCtrl) {
   const color = ctrl.chessground.state.orientation
   const opposite = color === 'white' ? 'black' : 'white'
   const isPortrait = helper.isPortrait()
-  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait)
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessground: ctrl.chessground,
-    bounds
   })
 
   return layout.board(
@@ -38,6 +36,10 @@ export default function view(ctrl: EditorCtrl) {
             sparePieces(opposite, color, 'top'),
             sparePieces(color, color, 'bottom')
           ]),
+          !isPortrait && helper.isTablet() ? h('div.editor-menu', [
+            renderSelectColorPosition(ctrl),
+            renderCastlingOptions(ctrl)
+          ]) : null
         ]),
         renderActionsBar(ctrl)
       ])
@@ -64,9 +66,9 @@ function sparePieces(color: Color, orientation: Color, position: 'top' | 'bottom
 
 function renderActionsBar(ctrl: EditorCtrl) {
   return h('section.actions_bar', [
-    h('button.action_bar_button.fa.fa-gear', {
+    helper.isPortrait() || !helper.isTablet() ? h('button.action_bar_button.fa.fa-gear', {
       oncreate: helper.ontap(ctrl.menu.open)
-    }),
+    }) : null,
     h('button.action_bar_button[data-icon=B]', {
       oncreate: helper.ontap(ctrl.chessground.toggleOrientation)
     }),

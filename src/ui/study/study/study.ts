@@ -95,11 +95,10 @@ export default {
     const ctrl = this.ctrl
 
     if (ctrl) {
-      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, ctrl.settings.s.smallBoard)
 
       return layout.board(
         studyHeader(ctrl.study!.data),
-        renderContent(ctrl, isPortrait, bounds),
+        renderContent(ctrl, isPortrait),
         [
           ...overlay(ctrl),
           h(RightSideMenu, { studyCtrl: ctrl.study! }),

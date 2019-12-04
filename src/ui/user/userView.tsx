@@ -239,7 +239,7 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
         <div className="list_item nav"
           oncreate={helper.ontapY(ctrl.goToGames)}
         >
-          {plural('nbGamesInPlay', user.count.all, user.count.all)}
+          {plural('nbGames', user.count.all, user.count.all)}
         </div> : null
       }
       <div className="list_item nav"

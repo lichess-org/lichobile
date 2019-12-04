@@ -35,8 +35,6 @@ export default class Chessground {
 
     wrapper.appendChild(board)
 
-    console.debug('chessground attached with bounds', bounds)
-
     this.dom = {
       board,
       elements: {},

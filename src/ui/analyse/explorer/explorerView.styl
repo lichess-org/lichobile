@@ -6,8 +6,6 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
   position relative
   overflow-x: hidden;
   white-space: nowrap;
-  > div
-    width 100%
   .empty
     flex 1 1 auto
     display flex
@@ -28,8 +26,9 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
       width initial
       height initial
       font-size 25px
-  tbody, > .message
-    transition: opacity 0.13s;
+  // disable bc of iOS bug
+  // tbody, > .message
+  //   transition: opacity 0.13s;
   thead
     > tr
       background-color explorerHeaderBg
@@ -48,7 +47,6 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
     &.explorerMove-result
       padding-left 15px
   tr
-    transition: background-color 0.13s
     &:nth-child(even)
       background-color: lighten(bgdark, 15%)
   td
@@ -108,10 +106,8 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
     text-align: center;
     opacity: 0.7;
   .message
-    margin-top 1em
     text-align: center;
     font-style: italic;
-    font-size 1.2em
     > h3
       > i
         display inline

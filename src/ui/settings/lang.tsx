@@ -19,9 +19,9 @@ export const LangPrefScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewSlideIn,
 
   oninit() {
-    Promise.all([getAvailableLocales(), settings.general.lang()]).then(([locales, lang]) => {
+    this.lang = settings.general.lang()
+    getAvailableLocales().then(locales => {
       this.locales = locales
-      this.lang = lang
       redraw()
     })
   },
@@ -49,7 +49,10 @@ export const LangPrefScreen: Mithril.Component<{}, State> = {
       const lang = el && el.dataset.lang
       if (lang) {
         setServerLang(lang)
-        loadLanguage(lang).then(redraw)
+        loadLanguage(lang).then(() => {
+          ctrl.lang = lang
+          redraw()
+        })
       }
     }
 

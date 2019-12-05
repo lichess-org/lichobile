@@ -7,7 +7,6 @@ import router from '../../router'
 import ButtonHandler from './button'
 import { UserGamePlayer } from '../../lichess/interfaces/user'
 import { Player } from '../../lichess/interfaces/game'
-import { Bounds } from '../shared/Board'
 
 export interface ViewportDim {
   vw: number
@@ -307,7 +306,7 @@ function nbFromPropValue(p: string): number {
   const n = Number(r)
   return isNaN(n) ? 0 : n
 }
-export function getSafeArea(): SafeAreaInset {
+function getSafeArea(): SafeAreaInset {
   if (!cachedSafeAreaInset) {
     const s = getComputedStyle(document.documentElement)
     cachedSafeAreaInset = {
@@ -321,20 +320,13 @@ export function getSafeArea(): SafeAreaInset {
   return cachedSafeAreaInset
 }
 
-export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, halfsize: boolean = false): Bounds {
+function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean) {
   const { vh, vw } = viewportDim
   const safeArea = getSafeArea()
   const tablet = isTablet()
 
   if (isPortrait) {
-    if (halfsize) {
-      const side = (vh - headerHeight) / 2
-      return {
-        width: side,
-        height: side
-      }
-    }
-    else if (tablet) {
+    if (tablet) {
       const side = vw * 0.94
       return {
         width: side,
@@ -361,6 +353,15 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, ha
       }
     }
   }
+}
+
+export function hasSpaceForInlineReplay(
+  vd: ViewportDim,
+  isPortrait: boolean,
+): boolean {
+  const bounds = getBoardBounds(vd, isPortrait)
+  // vh - headerHeight - boardHeight - footerHeight - min size of player tables
+  return vd.vh - bounds.height - 56 - 45 - 110 >= 25
 }
 
 export function autofocus(vnode: Mithril.VnodeDOM<any, any>): void {

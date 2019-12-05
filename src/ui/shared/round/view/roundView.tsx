@@ -32,7 +32,6 @@ import CrazyPocket from '../crazy/CrazyPocket'
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView'
 import { renderInlineReplay, renderReplay } from './replay'
 import OnlineRound from '../OnlineRound'
-import { hasSpaceForInlineReplay } from '../util'
 import { Position, Material } from '../'
 
 export default function view(ctrl: OnlineRound) {
@@ -62,14 +61,13 @@ export function renderMaterial(material: Material) {
 export function viewOnlyBoardContent(fen: string, orientation: Color, lastMove?: string, variant?: VariantKey, wrapperClass?: string, customPieceTheme?: string) {
   const isPortrait = helper.isPortrait()
   const vd = helper.viewportDim()
-  const bounds = helper.getBoardBounds(vd, isPortrait)
   const className = 'board_wrapper' + (wrapperClass ? ' ' + wrapperClass : '')
   const board = (
     <section className={className}>
       {h(ViewOnlyBoard, {fen, lastMove, orientation, variant, customPieceTheme})}
     </section>
   )
-  const showMoveList = hasSpaceForInlineReplay(vd, bounds) &&
+  const showMoveList = helper.hasSpaceForInlineReplay(vd, isPortrait) &&
     settings.game.moveList() &&
     !settings.game.zenMode()
 
@@ -198,7 +196,6 @@ function renderHeader(ctrl: OnlineRound) {
 
 function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const vd = helper.viewportDim()
-  const bounds = helper.getBoardBounds(vd, isPortrait)
 
   const material = ctrl.chessground.getMaterialDiff()
 
@@ -214,7 +211,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
 
   if (isPortrait) {
     return [
-      hasSpaceForInlineReplay(vd, bounds) ? renderInlineReplay(ctrl) : null,
+      helper.hasSpaceForInlineReplay(vd, isPortrait) ? renderInlineReplay(ctrl) : null,
       flip ? player : opponent,
       board,
       flip ? opponent : player,

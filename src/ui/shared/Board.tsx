@@ -5,11 +5,6 @@ import redraw from '../../utils/redraw'
 import Chessground from '../../chessground/Chessground'
 import BoardBrush, { Shape } from './BoardBrush'
 
-export interface Bounds {
-  width: number
-  height: number
-}
-
 export interface Attrs {
   variant: VariantKey
   chessground: Chessground

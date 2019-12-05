@@ -53,11 +53,9 @@ const minRatingRanges = [
 const settingsStore = {}
 
 export function init(): Promise<void> {
-  console.time('settings init')
   return asyncStorage.get(STORAGE_KEY)
   .then(data => {
     Object.assign(settingsStore, data)
-    console.timeEnd('settings init')
   })
 }
 

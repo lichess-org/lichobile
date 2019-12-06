@@ -38,8 +38,8 @@ if (Capacitor.platform === 'web') {
 let shouldPlay: boolean
 
 export default {
-  async load(info: DeviceInfo): Promise<void> {
-    shouldPlay = await settings.general.sound()
+  load(info: DeviceInfo): Promise<void> {
+    shouldPlay = settings.general.sound()
     const ext = info.platform === 'ios' ? '.aifc' : '.mp3'
 
     return Promise.all([

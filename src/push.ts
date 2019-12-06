@@ -1,4 +1,5 @@
 import {
+  Capacitor,
   Plugins,
   PushNotification,
   PushNotificationToken,
@@ -12,20 +13,24 @@ import settings from './settings'
 import { handleXhrError } from './utils'
 import { isForeground } from './utils/appMode'
 
-const { PushNotifications } = Plugins
+const { PushNotifications, FCM } = Plugins
 
 export default {
   init() {
     PushNotifications.addListener('registration',
       (token: PushNotificationToken) => {
 
-        console.debug('Push registration success, token: ' + token.value)
+        const tokenPromise = Capacitor.platform === 'ios' ?
+          FCM.getToken() : Promise.resolve(token)
 
-        fetchText(`/mobile/register/firebase/${token.value}`, {
-          method: 'POST'
+        tokenPromise.then(({ value }: PushNotificationToken) => {
+          console.debug('Push registration success, FCM token: ' + value)
+
+          fetchText(`/mobile/register/firebase/${value}`, {
+            method: 'POST'
+          })
+          .catch(handleXhrError)
         })
-        .catch(handleXhrError)
-
       }
     )
 
@@ -81,21 +86,18 @@ export default {
         }
       }
     )
-
-    register()
   },
 
-  register,
+  register(): Promise<void> {
+    if (settings.general.notifications.allow()) {
+      return PushNotifications.register()
+    }
+
+    return Promise.resolve()
+  },
 
   unregister(): Promise<string> {
     return fetchText('/mobile/unregister', { method: 'POST' })
   }
 }
 
-function register(): Promise<void> {
-  if (settings.general.notifications.allow()) {
-    return PushNotifications.register()
-  }
-
-  return Promise.resolve()
-}

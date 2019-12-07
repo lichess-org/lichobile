@@ -7,13 +7,13 @@ import { terser } from 'rollup-plugin-terser'
 const release = process.env.APP_MODE === 'release'
 
 export default {
-	input: 'build/main.js',
-	output: {
-		dir: 'www',
-		format: 'esm',
-		sourcemap: !release,
-	},
-	plugins: [
+  input: 'build/main.js',
+  output: {
+    dir: 'www',
+    format: 'esm',
+    sourcemap: !release,
+  },
+  plugins: [
     resolve(),
     commonjs(),
     json(),
@@ -21,8 +21,8 @@ export default {
       debugger: true,
       sourceMap: false,
     }),
-		release && terser(),
-	],
+    release && terser(),
+  ],
   onwarn(warning, warn) {
     if (warning.code === 'CIRCULAR_DEPENDENCY') return
     if ( warning.code === 'THIS_IS_UNDEFINED' ) return

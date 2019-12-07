@@ -1,11 +1,12 @@
+import Stream from 'mithril/stream'
 import { Related } from '../../lichess/interfaces/user'
 import { Paginator } from '../../lichess/interfaces'
 
 export interface IRelationCtrl {
-  related: Mithril.Stream<Related[] | null>
+  related: Stream<Related[] | null>
   loadNextPage: (page: number) => void
-  isLoadingNextPage: Mithril.Stream<boolean>
+  isLoadingNextPage: Stream<boolean>
   toggleFollowing: (obj: Related) => void
   challenge: (id: string) => void
-  paginator: Mithril.Stream<Paginator<Related> | undefined>
+  paginator: Stream<Paginator<Related> | undefined>
 }

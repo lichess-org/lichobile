@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">lichess</string>
+    <string name="title_activity_main">lichess</string>
+    <string name="package_name">org.lichess.mobileapp</string>
+    <string name="fileprovider_authority">org.lichess.mobileapp.fileprovider</string>
+    <string name="custom_url_scheme">org.lichess.mobileapp</string>
+</resources>

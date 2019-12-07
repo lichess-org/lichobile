@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import { fixCrazySan } from '../../../../utils/chessFormat'
 import * as helper from '../../../helper'
 import settings from '../../../../settings'
@@ -13,11 +14,11 @@ export function renderReplay(ctrl: OnlineRound) {
     className: helper.classSet({
       displayPieces: !!pieceNotation,
     }),
-    oncreate: (vnode: Mithril.DOMNode) => {
+    oncreate: (vnode: Mithril.VnodeDOM<any, any>) => {
       setTimeout(() => autoScroll(vnode.dom as HTMLElement), 100)
       helper.ontapY((e: Event) => onReplayTap(ctrl, e), undefined, getMoveEl)(vnode)
     },
-    onupdate: (vnode: Mithril.DOMNode) => autoScroll(vnode.dom as HTMLElement),
+    onupdate: (vnode: Mithril.VnodeDOM<any, any>) => autoScroll(vnode.dom as HTMLElement),
   }, renderMoves(ctrl))
 }
 
@@ -32,11 +33,11 @@ export function renderInlineReplay(ctrl: OnlineRound) {
     className: helper.classSet({
       displayPieces: !!pieceNotation,
     }),
-    oncreate: (vnode: Mithril.DOMNode) => {
+    oncreate: (vnode: Mithril.VnodeDOM<any, any>) => {
       setTimeout(() => autoScrollInline(vnode.dom as HTMLElement), 100)
       helper.ontapX((e: Event) => onReplayTap(ctrl, e), undefined, getMoveEl)(vnode)
     },
-    onupdate: (vnode: Mithril.DOMNode) => autoScrollInline(vnode.dom as HTMLElement),
+    onupdate: (vnode: Mithril.VnodeDOM<any, any>) => autoScrollInline(vnode.dom as HTMLElement),
   }, renderMoves(ctrl))
 }
 

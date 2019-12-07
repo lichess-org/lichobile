@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "i18n-fetch": "npx tsc i18n-fetch.ts && node i18n-fetch.js"
+  },
+  "devDependencies": {
+    "colors": "^1.3.3",
+    "request": "^2.88.0",
+    "typescript": "^3.6.3",
+    "xml2js": "^0.4.22"
+  }
+}

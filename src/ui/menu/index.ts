@@ -1,4 +1,4 @@
-import * as stream from 'mithril/stream'
+import stream from 'mithril/stream'
 import { hasNetwork } from '../../utils'
 import redraw from '../../utils/redraw'
 import router from '../../router'
@@ -43,10 +43,10 @@ export function route(route: string) {
   }
 }
 
-export function popup(action: () => void) {
+export function action(f: () => void) {
   return function() {
     return mainMenuCtrl.close().then(() => {
-      action()
+      f()
       redraw()
     })
   }

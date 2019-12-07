@@ -1,3 +1,5 @@
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import router from '../../router'
 import * as utils from '../../utils'
 import countries from '../../utils/countries'
@@ -42,7 +44,7 @@ function content(mini: any, player: Player, opponent: Player, score?: Score) {
   const user = player.user
   if (!mini || !user) {
     return (
-      <div key="loading" className="miniUser">
+      <div className="miniUser">
         {spinner.getVdom()}
       </div>
     )
@@ -54,7 +56,7 @@ function content(mini: any, player: Player, opponent: Player, score?: Score) {
   const sessionUserId = curSess && curSess.id
   const showYourScore = sessionUserId && mini.crosstable && mini.crosstable.nbGames > 0
   return (
-    <div key="loaded" className="miniUser">
+    <div className="miniUser">
       <div className="title">
         <div className="username" oncreate={helper.ontap(() => router.set(`/@/${user.username}`))}>
           {status}
@@ -103,7 +105,7 @@ function content(mini: any, player: Player, opponent: Player, score?: Score) {
       }
       { !isMe ?
         <div className="mini_user_actions_wrapper">
-          <button data-icon="1" key="tv"
+          <button data-icon="1"
             oncreate={helper.ontap(() => {
               router.set(`/@/${user.id}/tv`)
             })}

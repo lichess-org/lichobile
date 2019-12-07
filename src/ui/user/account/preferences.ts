@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import socket from '../../../socket'
 import router from '../../../router'
 import { dropShadowHeader, backButton } from '../../shared/common'
@@ -14,7 +15,7 @@ function renderBody() {
       }, i18n('privacy')),
       h('li.list_item.nav', {
         oncreate: helper.ontapY(() => router.set('/account/preferences/kidMode'))
-      }, 'Kid mode')
+      }, i18n('kidMode'))
     ])
   ]
 }

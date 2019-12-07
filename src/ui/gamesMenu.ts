@@ -1,20 +1,18 @@
-import * as h from 'mithril/hyperscript'
-import * as range from 'lodash/range'
-import * as Siema from 'siema'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
+import Siema from 'siema'
+import addSeconds from 'date-fns/esm/addSeconds'
 import * as utils from '../utils'
 import redraw from '../utils/redraw'
 import { positionsCache } from '../utils/gamePosition'
-import { getOfflineGames } from '../utils/offlineGames'
 import { playerName as liPlayerName } from '../lichess/player'
-import { OnlineGameData } from '../lichess/interfaces/game'
 import { NowPlayingGame } from '../lichess/interfaces'
 import { Challenge } from '../lichess/interfaces/challenge'
-import * as gameApi from '../lichess/game'
 import challengesApi from '../lichess/challenges'
 import { standardFen } from '../lichess/variant'
 import router from '../router'
 import session from '../session'
-import i18n from '../i18n'
+import i18n, { fromNow } from '../i18n'
 import * as xhr from '../xhr'
 import * as helper from './helper'
 import ViewOnlyBoard from './shared/ViewOnlyBoard'
@@ -56,20 +54,20 @@ export default {
 
 const menuOnOverlayTap = helper.ontap(() => close())
 
-function menuOnBeforeRemove({ dom }: Mithril.DOMNode) {
+function menuOnBeforeRemove({ dom }: Mithril.VnodeDOM<any, any>) {
   dom.classList.add('fading_out')
   return new Promise((resolve) => {
     setTimeout(resolve, 500)
   })
 }
 
-function wrapperOnCreate({ dom }: Mithril.DOMNode) {
+function wrapperOnCreate({ dom }: Mithril.VnodeDOM<any, any>) {
   if (helper.isPortrait()) {
     scroller = new Siema({
       selector: dom as HTMLElement,
       duration: 150,
       easing: 'ease-out',
-      perPage: helper.isWideScreen() ? 2 : 1,
+      perPage: helper.isTablet() ? 2 : 1,
       startIndex: 0,
       draggable: true,
       onChange: () => redraw(),
@@ -90,7 +88,7 @@ function open(page?: number) {
   session.refresh()
   isOpen = true
   setTimeout(() => {
-    if (scroller && !helper.isWideScreen()) {
+    if (scroller && !helper.isTablet()) {
       scroller.goTo(page !== undefined ? page : 0)
     }
   }, 400)
@@ -141,33 +139,8 @@ function renderViewOnlyBoard(fen: string, orientation: Color, lastMove?: string,
 function timeLeft(g: NowPlayingGame): Mithril.Child {
   if (!g.isMyTurn) return i18n('waitingForOpponent')
   if (!g.secondsLeft) return i18n('yourTurn')
-  const time = window.moment().add(g.secondsLeft, 'seconds')
   return h('time', {
-    datetime: time.format()
-  }, time.fromNow())
-}
-
-function savedGameDataToCardData(data: OnlineGameData): NowPlayingGame {
-  return {
-    color: data.player.color,
-    fen: data.game.fen,
-    fullId: data.url.round.substr(1),
-    gameId: data.game.id,
-    isMyTurn: gameApi.isPlayerTurn(data),
-    lastMove: data.game.lastMove,
-    perf: data.game.perf,
-    opponent: data.opponent.user ? {
-      id: data.opponent.user.id,
-      username: data.opponent.user.username,
-      rating: data.opponent.rating
-    } : {
-      username: 'Anonymous'
-    },
-    rated: data.game.rated,
-    secondsLeft: data.correspondence && data.correspondence[data.player.color],
-    speed: data.game.speed,
-    variant: data.game.variant
-  }
+  }, fromNow(addSeconds(new Date(), g.secondsLeft)))
 }
 
 function renderGame(g: NowPlayingGame) {
@@ -278,11 +251,11 @@ function renderSendingChallenge(c: Challenge) {
 
 function renderCarouselIndicators() {
   if (helper.isPortrait() && scroller) {
-    const elsNb = helper.isWideScreen() ?
+    const elsNb = helper.isTablet() ?
       Math.ceil(scroller.innerElements.length / 2) :
       scroller.innerElements.length
     return h('div.carouselIndicators',
-      range(0, elsNb).map(i =>
+      Array.from(Array(elsNb).keys()).map(i =>
         h('i.indicator', {
           className: i === scroller.currentSlide ? 'current' : ''
         })
@@ -310,15 +283,7 @@ function renderAllGames() {
     ...(nowPlaying.map(g => renderGame(g)))
   ]
 
-  if (!utils.hasNetwork()) {
-    allCards = getOfflineGames().map(d => {
-      const g = savedGameDataToCardData(d)
-      return renderGame(g)
-    })
-  }
-
   return h('div.games_carousel', {
-    key: helper.isPortrait() ? 'o-portrait' : 'o-landscape',
     oncreate: wrapperOnCreate,
     onremove: wrapperOnRemove,
   }, allCards)

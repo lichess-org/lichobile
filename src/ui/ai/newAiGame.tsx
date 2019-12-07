@@ -1,5 +1,5 @@
-import * as stream from 'mithril/stream'
-import * as h from 'mithril/hyperscript'
+import Stream from 'mithril/stream'
+import h from 'mithril/hyperscript'
 import router from '../../router'
 import i18n from '../../i18n'
 import settings from '../../settings'
@@ -20,14 +20,14 @@ const colors = [
 export interface NewAiGameCtrl {
   open: () => void
   close: (fromBB?: string) => void
-  isOpen: Mithril.Stream<boolean>
+  isOpen: Stream<boolean>
   root: AiRoundInterface
 }
 
 export default {
 
   controller(root: AiRoundInterface) {
-    const isOpen = stream(false)
+    const isOpen = Stream(false)
 
     function open() {
       router.backbutton.stack.push(close)
@@ -98,7 +98,6 @@ export default {
                         {h(ViewOnlyBoard, {
                           fen: ctrl.root.vm.setupFen,
                           orientation: setupColor,
-                          bounds: { width: 130, height: 130 }
                         })}
                       </div>
                     </div>
@@ -106,7 +105,7 @@ export default {
                 }
               </div>
               <div className="popupActionWrapper">
-                <button className="popupAction" data-icon="E"
+                <button className="defaultButton"
                   oncreate={helper.ontap(() => {
                     ctrl.root.startNewGame(settings.ai.variant() as VariantKey, ctrl.root.vm.setupFen)
                   })}>

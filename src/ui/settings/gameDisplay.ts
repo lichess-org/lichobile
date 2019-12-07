@@ -4,7 +4,7 @@ import formWidgets from '../shared/form'
 import layout from '../layout'
 import i18n from '../../i18n'
 import settings from '../../settings'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 
 function renderBody() {
   return [
@@ -18,8 +18,15 @@ function renderBody() {
         settings.game.highlights)),
       h('li.list_item', formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations',
         settings.game.pieceDestinations)),
-      h('li.list_item', formWidgets.renderCheckbox('Use piece symbols in move list', 'pieceNotation',
-        settings.game.pieceNotation)),
+      h('li.list_item',
+        formWidgets.renderMultipleChoiceButton(
+          i18n('pgnPieceNotation'), [
+            { label: i18n('chessPieceSymbol'), value: true },
+            { label: i18n('pgnLetter'), value: false },
+          ],
+          settings.game.pieceNotation
+        )
+      ),
       h('li.list_item',
         formWidgets.renderMultipleChoiceButton(
           'Clock position', [
@@ -30,10 +37,10 @@ function renderBody() {
         )
       ),
       h('li.list_item',
-        formWidgets.renderCheckbox('Move list', 'moveList', settings.game.moveList)
+        formWidgets.renderCheckbox(i18n('movesPlayed'), 'moveList', settings.game.moveList)
       ),
       h('li.list_item', [
-        formWidgets.renderCheckbox('Zen Mode', 'zenMode', settings.game.zenMode),
+        formWidgets.renderCheckbox(i18n('zenMode'), 'zenMode', settings.game.zenMode),
       ])
    ])
   ]

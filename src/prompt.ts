@@ -1,4 +1,5 @@
-import * as RenderService from 'mithril/render'
+import * as Mithril from 'mithril'
+import RenderService from 'mithril/render'
 import popupWidget from './ui/shared/popup'
 
 const PORTAL_ID = 'prompt_portal'

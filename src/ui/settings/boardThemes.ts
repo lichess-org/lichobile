@@ -5,7 +5,7 @@ import layout from '../layout'
 import i18n from '../../i18n'
 import settings from '../../settings'
 import * as helper from '../helper'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 
 function renderBody() {
   return [
@@ -34,7 +34,7 @@ export default {
   oncreate: helper.viewSlideIn,
 
   view: function() {
-    const header = dropShadowHeader(null, backButton(i18n('board')))
+    const header = dropShadowHeader(null, backButton(i18n('boardTheme')))
     return layout.free(header, renderBody())
   }
 }

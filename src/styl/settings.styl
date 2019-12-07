@@ -2,6 +2,11 @@
   flex-grow 1
   .explanation
     padding 15px
+  .list_item
+    &.selected
+      background-color lighten(bgdark, 5%)
+    > .fa-check
+      margin-left 1em
 
 .app_version
   flex-grow 0
@@ -28,7 +33,8 @@
   label
     display inline-block
     vertical-align middle
-    padding 15px
+    padding .8em
+    line-height 1.5em
     width 100%
     height 100%
     text-transform capitalize

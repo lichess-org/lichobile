@@ -1,5 +1,7 @@
-import * as debounce from 'lodash/debounce'
+import { Plugins } from '@capacitor/core'
+import debounce from 'lodash-es/debounce'
 import router from '../../router'
+import { formatDateTime } from '../../i18n'
 import Chessground from '../../chessground/Chessground'
 import * as cg from '../../chessground/interfaces'
 import * as chess from '../../chess'
@@ -76,7 +78,7 @@ export default class AnalyseCtrl {
   cgConfig?: cg.SetConfig
   analysisProgress: boolean = false
   retroGlowing: boolean = false
-  formattedDate: string
+  formattedDate?: string
 
   private _currentTabIndex: number = 0
 
@@ -100,7 +102,7 @@ export default class AnalyseCtrl {
     this._currentTabIndex = (!this.study || this.study.data.chapter.tags.length === 0) && this.synthetic ? 0 : 1
 
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
-      window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center')
+      Plugins.Toast.show({ text: `Analysis board does not support ${this.data.game.variant.name} variant.`, duration: 'short' })
       router.set('/')
     }
 
@@ -138,9 +140,9 @@ export default class AnalyseCtrl {
     this.initialPath = treeOps.takePathWhile(mainline, n => n.ply <= initPly)
     this.setPath(this.initialPath)
 
-    const gameMoment = window.moment(this.data.game.createdAt)
-
-    this.formattedDate = gameMoment.format('L LT')
+    if (this.data.game.createdAt) {
+      this.formattedDate = formatDateTime(new Date(this.data.game.createdAt))
+    }
 
     if (this.study) {
       this.socketIface = this.study.createSocket()
@@ -265,10 +267,11 @@ export default class AnalyseCtrl {
     if (!node) return
     const count = treeOps.countChildrenAndComments(node)
     if (count.nodes >= 10 || count.comments > 0) {
-      navigator.notification.confirm(
-        `Delete ${count.nodes} move(s)` + (count.comments ? ` and ${count.comments} comment(s)` : '') + '?',
-        () => this._deleteNode(path)
-      )
+      Plugins.Modals.confirm({
+        title: 'Confirm',
+        message: `Delete ${count.nodes} move(s)` + (count.comments ? ` and ${count.comments} comment(s)` : '') + '?',
+      })
+      .then(() => this._deleteNode(path))
     } else {
       this._deleteNode(path)
     }

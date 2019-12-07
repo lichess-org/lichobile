@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import i18n from '../../../i18n'
 import socket, { RedirectObj, LichessMessageAny, MessageHandlers } from '../../../socket'
 import * as gameApi from '../../../lichess/game'
@@ -93,7 +94,7 @@ export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedi
       ctrl.data.player.offeringRematch = by === ctrl.data.player.color
       const fromOp = ctrl.data.opponent.offeringRematch = by === ctrl.data.opponent.color
       if (fromOp) {
-        window.plugins.toast.show(i18n('yourOpponentWantsToPlayANewGameWithYou'), 'short', 'center')
+        Plugins.Toast.show({ text: i18n('yourOpponentWantsToPlayANewGameWithYou'), duration: 'short' })
       }
       redraw()
     },
@@ -105,7 +106,7 @@ export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedi
       ctrl.data.player.offeringDraw = by === ctrl.data.player.color
       const fromOp = ctrl.data.opponent.offeringDraw = by === ctrl.data.opponent.color
       if (fromOp) {
-        window.plugins.toast.show(i18n('yourOpponentOffersADraw'), 'short', 'center')
+        Plugins.Toast.show({ text: i18n('yourOpponentOffersADraw'), duration: 'short' })
       }
       redraw()
     },

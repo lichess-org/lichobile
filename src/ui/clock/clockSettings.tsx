@@ -1,3 +1,6 @@
+import Stream from 'mithril/stream'
+import h from 'mithril/hyperscript'
+import { Plugins } from '@capacitor/core'
 import redraw from '../../utils/redraw'
 import settings from '../../settings'
 import formWidgets from '../shared/form'
@@ -16,7 +19,7 @@ interface IClockSettingsCtrl {
 
 export default {
 
-  controller(reload: () => void, clockObj: Mithril.Stream<IChessClock>): IClockSettingsCtrl {
+  controller(reload: () => void, clockObj: Stream<IChessClock>): IClockSettingsCtrl {
     let isOpen = false
 
     function open() {
@@ -54,7 +57,7 @@ export default {
                 <div className="select_input">
                   {formWidgets.renderSelect('Clock', 'clock', settings.clock.availableClocks, settings.clock.clockType, false, onChange)}
                 </div>
-                {clockSettingsView(settings.clock, onChange)}
+                {clockSettingsView(settings.clock.clockType(), onChange)}
               </div>
               <button className="newClockButton" data-icon="E" oncreate={helper.ontap(function () {
                   ctrl.reload()
@@ -75,6 +78,6 @@ export default {
 }
 
 function onChange () {
-  window.StatusBar.hide()
+  Plugins.StatusBar.hide()
   redraw()
 }

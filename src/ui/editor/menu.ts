@@ -1,13 +1,14 @@
+import * as Mithril from 'mithril'
 import i18n from '../../i18n'
 import popupWidget from '../shared/popup'
 import router from '../../router'
 import * as helper from '../helper'
-import * as h from 'mithril/hyperscript'
-import Editor, { MenuInterface } from './Editor'
+import h from 'mithril/hyperscript'
+import EditorCtrl, { MenuInterface } from './EditorCtrl'
 
 export default {
 
-  controller: function(root: Editor) {
+  controller: function(root: EditorCtrl) {
     let isOpen = false
 
     function open() {
@@ -41,14 +42,14 @@ export default {
   }
 }
 
-function renderEditorMenu(ctrl: Editor) {
+function renderEditorMenu(ctrl: EditorCtrl) {
   return h('div.editorMenu', [
     renderSelectColorPosition(ctrl),
     renderCastlingOptions(ctrl)
   ])
 }
 
-export function renderSelectColorPosition(ctrl: Editor) {
+export function renderSelectColorPosition(ctrl: EditorCtrl) {
   const fen = ctrl.computeFen()
   return h('div.editorSelectors', [
     h('div.select_input', [
@@ -69,7 +70,7 @@ export function renderSelectColorPosition(ctrl: Editor) {
           }),
           ctrl.extraPositions.map((pos: BoardPosition) => position2option(fen, pos))
         ]),
-        optgroup('Popular openings',
+        optgroup(i18n('popularOpenings'),
           ctrl.positions().map((pos: BoardPosition) => position2option(fen, pos, true))
         )
       ])
@@ -115,14 +116,14 @@ export function renderSelectColorPosition(ctrl: Editor) {
   ])
 }
 
-function renderCastlingOptions(ctrl: Editor) {
+export function renderCastlingOptions(ctrl: EditorCtrl) {
   const white = [
     ['K', i18n('whiteCastlingKingside')],
-    ['Q', i18n('whiteCastlingQueenside')],
+    ['Q', 'O-O-O'],
   ]
   const black = [
     ['k', i18n('blackCastlingKingside')],
-    ['q', i18n('blackCastlingQueenside')]
+    ['q', 'O-O-O']
   ]
 
   return h('div.editor-castling', [
@@ -132,7 +133,7 @@ function renderCastlingOptions(ctrl: Editor) {
   ])
 }
 
-function castlingButton(ctrl: Editor, c: string[]) {
+function castlingButton(ctrl: EditorCtrl, c: string[]) {
   const cur = ctrl.data.editor.castles[c[0]]
   return h('span', {
     className: cur() ? 'selected' : '',
@@ -140,7 +141,7 @@ function castlingButton(ctrl: Editor, c: string[]) {
   }, c[1])
 }
 
-function position2option(fen: string, pos: BoardPosition, showEco = false): Mithril.BaseNode {
+function position2option(fen: string, pos: BoardPosition, showEco = false): Mithril.Vnode<any, any> {
   return h('option', {
     value: pos.fen,
     selected: fen === pos.fen

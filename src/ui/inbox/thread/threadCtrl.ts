@@ -1,31 +1,22 @@
+import Stream from 'mithril/stream'
 import redraw from '../../../utils/redraw'
 import { handleXhrError } from '../../../utils'
 import * as xhr from './../inboxXhr'
-import * as helper from '../../helper'
 import { ThreadData } from '../interfaces'
 import router from '../../../router'
-import * as stream from 'mithril/stream'
 
 export interface IThreadCtrl {
-  id: Mithril.Stream<string>
-  thread: Mithril.Stream<ThreadData>
-  deleteAttempted: Mithril.Stream<boolean>
+  id: Stream<string>
+  thread: Stream<ThreadData>
+  deleteAttempted: Stream<boolean>
   sendResponse: (form: HTMLFormElement) => void
   deleteThread: (id: string) => void
-  onKeyboardShow(e: Event): void
 }
 
 export default function ThreadCtrl(threadId: string): IThreadCtrl {
-  const id = stream<string>(threadId)
-  const thread = stream<ThreadData>()
-  const deleteAttempted = stream<boolean>(false)
-
-  function onKeyboardShow(e: Ionic.KeyboardEvent) {
-    helper.onKeyboardShow(e);
-    (document.activeElement as HTMLElement).scrollIntoView(true)
-  }
-  window.addEventListener('native.keyboardshow', onKeyboardShow)
-  window.addEventListener('native.keyboardhide', helper.onKeyboardHide)
+  const id = Stream<string>(threadId)
+  const thread = Stream<ThreadData>()
+  const deleteAttempted = Stream<boolean>(false)
 
   xhr.thread(id())
   .then(data => {
@@ -40,7 +31,6 @@ export default function ThreadCtrl(threadId: string): IThreadCtrl {
     deleteAttempted,
     sendResponse,
     deleteThread,
-    onKeyboardShow
   }
 }
 

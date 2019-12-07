@@ -1,4 +1,6 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import { Plugins } from '@capacitor/core'
+import h from 'mithril/hyperscript'
 import * as utils from '../../../utils'
 import i18n from '../../../i18n'
 import * as gameApi from '../../../lichess/game'
@@ -30,14 +32,12 @@ export function renderAntagonist(
   content: Mithril.Children,
   material: Material,
   position: Position,
-  isPortrait: boolean,
   otbFlip?: boolean,
   customPieceTheme?: string,
   clock?: IChessClock,
 ) {
   const sit = ctrl.replay.situation()
   const isCrazy = !!sit.crazyhouse
-  const key = isPortrait ? position + '-portrait' : position + '-landscape'
   const antagonist = position === 'player' ? ctrl.data.player : ctrl.data.opponent
   const antagonistColor = antagonist.color
 
@@ -51,8 +51,8 @@ export function renderAntagonist(
   ].join(' ')
 
   return (
-    <section id={position + '_info'} className={className} key={key}>
-      <div key="infos" className={'antagonistInfos offline' + (isCrazy ? ' crazy' : '')}>
+    <section id={position + '_info'} className={className}>
+      <div className={'antagonistInfos offline' + (isCrazy ? ' crazy' : '')}>
         <div className="antagonistUser">
           {content}
           {isCrazy && clock ? renderClock(clock, antagonistColor) : ''}
@@ -82,20 +82,20 @@ export function renderAntagonist(
 
 export function renderGameActionsBar(ctrl: OfflineRoundInterface) {
   return (
-    <section key="actionsBar" className="actions_bar">
+    <section className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-v"
         oncreate={helper.ontap(ctrl.actions.open)}
       />
       <button className="action_bar_button fa fa-plus-circle"
         oncreate={helper.ontap(
           ctrl.newGameMenu.open,
-          () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
+          () => Plugins.Toast.show({ text: i18n('createAGame'), duration: 'short' })
         )}
       />
       <button className="fa fa-share-alt action_bar_button"
         oncreate={helper.ontap(
           ctrl.sharePGN,
-          () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom')
+          () => Plugins.Toast.show({ text: i18n('sharePGN'), duration: 'short' })
         )}
       />
       {renderBackwardButton(ctrl)}
@@ -108,10 +108,10 @@ export function renderGameActionsBarTablet(ctrl: OfflineRoundInterface) {
   return (
     <section className="actions_bar">
       <button className="action_bar_button" data-icon="U"
-        oncreate={helper.ontap(ctrl.newGameMenu.open, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
+        oncreate={helper.ontap(ctrl.newGameMenu.open, () => Plugins.Toast.show({ text: i18n('createAGame'), duration: 'short' }))}
       />
       <button className="fa fa-share-alt action_bar_button"
-        oncreate={helper.ontap(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}
+        oncreate={helper.ontap(ctrl.actions.sharePGN, () => Plugins.Toast.show({ text: i18n('sharePGN'), duration: 'short' }))}
       />
       {renderBackwardButton(ctrl)}
       {renderForwardButton(ctrl)}
@@ -129,7 +129,7 @@ export function renderEndedGameStatus(ctrl: OfflineRoundInterface) {
     const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
       (winner ? '. ' + i18n(winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
     return (
-      <div key="result" className="result">
+      <div className="result">
         {result}
         <br />
         <em className="resultStatus">{status}</em>
@@ -141,24 +141,20 @@ export function renderEndedGameStatus(ctrl: OfflineRoundInterface) {
 }
 
 export function renderClaimDrawButton(ctrl: OfflineRoundInterface) {
-  return gameApi.playable(ctrl.data) ? h('div.claimDraw', {
-    key: 'claimDraw'
-  }, [
-    h('button[data-icon=2].draw-yes', {
-      oncreate: helper.ontap(() => ctrl.replay.claimDraw())
-    }, i18n('threefoldRepetition'))
-  ]) : null
+  return gameApi.playable(ctrl.data) ? h('button[data-icon=2].draw-yes', {
+    oncreate: helper.ontap(() => ctrl.replay.claimDraw())
+  }, i18n('threefoldRepetition')) : null
 }
 
 export function renderReplay(ctrl: OfflineRoundInterface) {
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
   return h('div.replay', {
     className: pieceNotation ? ' displayPieces' : '',
-    oncreate: (vnode: Mithril.DOMNode) => {
+    oncreate: (vnode: Mithril.VnodeDOM<any, any>) => {
       setTimeout(() => autoScroll(vnode.dom as HTMLElement), 100)
       helper.ontapY((e: Event) => onReplayTap(ctrl, e), undefined, getMoveEl)(vnode)
     },
-    onupdate: (vnode: Mithril.DOMNode) => autoScroll(vnode.dom as HTMLElement),
+    onupdate: (vnode: Mithril.VnodeDOM<any, any>) => autoScroll(vnode.dom as HTMLElement),
   }, renderMoves(ctrl.replay))
 }
 
@@ -172,11 +168,11 @@ export function renderInlineReplay(ctrl: OfflineRoundInterface) {
 
   return h('div.replay_inline', {
     className: pieceNotation ? ' displayPieces' : '',
-    oncreate: (vnode: Mithril.DOMNode) => {
+    oncreate: (vnode: Mithril.VnodeDOM<any, any>) => {
       setTimeout(() => autoScrollInline(vnode.dom as HTMLElement), 100)
       helper.ontapX((e: Event) => onReplayTap(ctrl, e), undefined, getMoveEl)(vnode)
     },
-    onupdate: (vnode: Mithril.DOMNode) => autoScrollInline(vnode.dom as HTMLElement),
+    onupdate: (vnode: Mithril.VnodeDOM<any, any>) => autoScrollInline(vnode.dom as HTMLElement),
   }, renderMoves(ctrl.replay))
 }
 

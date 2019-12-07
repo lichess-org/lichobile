@@ -1,37 +1,32 @@
 import * as helper from '../helper'
 import { dropShadowHeader, backButton } from '../shared/common'
 import formWidgets from '../shared/form'
+import Checkbox from '../shared/form/Checkbox'
 import layout from '../layout'
 import push from '../../push'
 import i18n from '../../i18n'
 import settings from '../../settings'
 import sound from '../../sound'
 import vibrate from '../../vibrate'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 
 function renderBody() {
-  const allowed = settings.general.notifications.allow()
   return h('ul.native_scroller.page.settings_list.game', [
+    h('li.list_item', h(Checkbox, {
+      label: i18n('toggleSound'),
+      name: 'sound',
+      prop: settings.general.sound,
+      callback: sound.onSettingChange
+    })),
     h('li.list_item', {
-      key: 'sound'
-    }, formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound, sound.onSettingChange)),
-    h('li.list_item', {
-      key: 'vibrate'
     }, formWidgets.renderCheckbox(i18n('vibrateOnGameEvents'), 'vibrate', settings.general.vibrateOnGameEvents, vibrate.onSettingChange)),
     h('li.list_item', formWidgets.renderCheckbox(i18n('notifications'), 'notifications', settings.general.notifications.allow, isOn => {
       if (isOn) {
         push.register()
       } else {
         push.unregister()
-        push.provideUserConsent(false)
       }
     })),
-    h('li.list_item', formWidgets.renderCheckbox(i18n('vibrationOnNotification'), 'vibrate', settings.general.notifications.vibrate, isOn => {
-      window.plugins.OneSignal.enableVibrate(isOn)
-    }, !allowed)),
-    h('li.list_item', formWidgets.renderCheckbox(i18n('soundOnNotification'), 'sound', settings.general.notifications.sound, isOn => {
-      window.plugins.OneSignal.enableSound(isOn)
-    }, !allowed))
   ])
 }
 
@@ -39,7 +34,7 @@ export default {
   oncreate: helper.viewSlideIn,
 
   view() {
-    const header = dropShadowHeader(null, backButton(i18n('soundAndNotifications')))
+    const header = dropShadowHeader(null, backButton(i18n('sound') + ' | ' + i18n('notifications')))
     return layout.free(header, renderBody())
   }
 }

@@ -20,13 +20,13 @@ export interface UserOfflineData {
 type UserId = string
 
 function fetch(userId: UserId): Promise<UserOfflineData | null> {
-  return asyncStorage.getItem<UserOfflineData>(`offlinePuzzles.${userId}`)
+  return asyncStorage.get<UserOfflineData>(`offlinePuzzles.${userId}`)
 }
 
 function save(userId: UserId, userData: UserOfflineData): Promise<UserOfflineData> {
-  return asyncStorage.setItem(`offlinePuzzles.${userId}`, userData)
+  return asyncStorage.set(`offlinePuzzles.${userId}`, userData)
 }
 
 function clean(userId: UserId) {
-  return asyncStorage.removeItem(`offlinePuzzles.${userId}`)
+  return asyncStorage.remove(`offlinePuzzles.${userId}`)
 }

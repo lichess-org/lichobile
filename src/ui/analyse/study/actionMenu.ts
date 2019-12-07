@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import { Plugins } from '@capacitor/core'
+import h from 'mithril/hyperscript'
 import router from '../../../router'
 import redraw from '../../../utils/redraw'
 import { ErrorResponse } from '../../../http'
@@ -72,13 +73,11 @@ function renderStudyMenu(ctrl: AnalyseCtrl) {
 
   return h('div.analyseMenu', [
     h('button', {
-      key: 'share',
       oncreate: helper.ontap(() => {
         ctrl.study!.actionMenu.s.showShareMenu = true
       })
     }, [h('span.fa.fa-share'), 'Share']),
     h('button', {
-      key: 'like',
       oncreate: helper.ontap(ctrl.study!.toggleLike)
     }, [
       h.trust('&nbsp;'),
@@ -88,18 +87,15 @@ function renderStudyMenu(ctrl: AnalyseCtrl) {
       `Like (${ctrl.study!.data.likes})`
     ]),
      h('button[data-icon=U]', {
-      key: 'continueFromHere',
       oncreate: helper.ontap(() => {
         ctrl.menu.close()
         ctrl.continuePopup.open(ctrl.node.fen, ctrl.data.game.variant.key, ctrl.data.player.color)
       })
     }, i18n('continueFromHere')),
     h('button', {
-      key: 'boardEditor',
       oncreate: helper.ontap(() => router.set(`/editor/${encodeURIComponent(ctrl.node.fen)}`))
     }, [h('span.fa.fa-pencil'), i18n('boardEditor')]),
     h('button', {
-      key: 'help',
       oncreate: helper.ontap(() => {
         ctrl.study!.actionMenu.close()
         startTour(ctrl.study!)
@@ -117,7 +113,7 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
     ctrl.study!.actionMenu.s.loadingChapterPGN = false
     ctrl.study!.actionMenu.s.loadingStudyPGN = false
     redraw()
-    window.plugins.socialsharing.share(pgn)
+    Plugins.Share.share({ text: pgn })
   }
 
   function onPgnError(e: ErrorResponse) {
@@ -131,13 +127,13 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
     h('button', {
       oncreate: helper.ontap(() => {
         const url = baseUrl + `study/${ctrl.study!.data.id}`
-        window.plugins.socialsharing.share(null, null, null, url)
+        Plugins.Share.share({ url })
       })
     }, [i18n('Study URL')]),
     h('button', {
       oncreate: helper.ontap(() => {
         const url = baseUrl + `study/${ctrl.study!.data.id}/${ctrl.study!.data.chapter.id}`
-        window.plugins.socialsharing.share(null, null, null, url)
+        Plugins.Share.share({ url })
       })
     }, [i18n('Current chapter URL')]),
     h('button', {

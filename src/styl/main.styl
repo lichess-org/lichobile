@@ -1,3 +1,9 @@
+:root
+  --sat env(safe-area-inset-top)
+  --sar env(safe-area-inset-right)
+  --sab env(safe-area-inset-bottom)
+  --sal env(safe-area-inset-left)
+
 html
   font-family 'Noto Sans', sans-serif
 
@@ -16,10 +22,6 @@ body
   bottom: 0
   left: 0
   right: 0
-  &.ios
-    // fixes keyboard bug
-    // https://github.com/apache/cordova-ios/issues/472
-    position fixed
   // iphone X safe area
   // safe raw values, for reference:
   // landscape: top=0, right=44, bottom=21, left=44
@@ -40,7 +42,8 @@ main
   flex-flow column nowrap
 
 .main_header
-  position relative
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
   background headerBgDark
   flex 0 0 headerHeight
   color headerBgDarkColor

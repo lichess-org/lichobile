@@ -28,17 +28,22 @@
   &.clockOnLeft
     > .antagonistInfos
       order 2
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
-    width 98vw
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
+    width 94vw
     margin 0 auto
   @media only screen and (orientation: landscape)
-    padding 0
+    padding 0.5em 0
+    flex-grow 0
     &.crazy
       > .antagonistInfos
         order 2
       > .pocket
         flex 0 0 auto
         order 1
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
+    padding 1em 0
+    &:first-child
+      padding-top 0
 
 .round-expiration
   position: absolute;
@@ -66,6 +71,7 @@
       background: rgba(#dc322f, 0.8)
 
 .replay_inline
+  background headerBgDark
   flex 0 0 30px
   overflow hidden
   overflow-x auto
@@ -81,7 +87,6 @@
   overflow hidden
   background lighten(bgdark, 3%)
   overflow-y auto
-  -webkit-overflow-scrolling touch
   @media only screen and (orientation: portrait)
     margin .5em
 
@@ -156,6 +161,7 @@
       > .antagonistUser
         font-size 1em
   @media only screen and (orientation landscape)
+    padding 0
     &.crazy
       > .antagonistUser
         font-size 0.7em
@@ -243,10 +249,6 @@
     background-image url(../../images/pieces/mono/Q.svg)
   .king
     background-image url(../../images/pieces/mono/K.svg)
-  @media only screen and (min-width 960px) and (orientation landscape)
-    piece
-      width 25px
-      height 25px
 
 #promotion_choice
   border 1px solid black
@@ -376,7 +378,7 @@
       left initial
       right 1vw
       width 'calc(100vw - 100vh + %s - 2vw)' % headerHeight
-    @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
+    @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
       width 'calc(100vw - 100vh + %s + 12vh - 2vw)' % headerHeight
     // tablets
     @media only screen and (orientation portrait) and (min-width 500px)
@@ -453,7 +455,7 @@
     height 'calc((100vh - %s) / 8)' % headerHeight
     max-width 60px
     max-height 60px
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
     width "calc((100vh - 100vw - 25px - %s - %s) / 2)" % (headerHeight footerHeight)
     height "calc((100vh - 100vw - 25px - %s - %s) / 2)" % (headerHeight footerHeight)
 

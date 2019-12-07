@@ -1,6 +1,6 @@
-import * as stream from 'mithril/stream'
+import Stream from 'mithril/stream'
 import redraw from '../../../utils/redraw'
-import * as debounce from 'lodash/debounce'
+import debounce from 'lodash-es/debounce'
 import explorerConfig from './explorerConfig'
 import { openingXhr, tablebaseXhr } from './explorerXhr'
 import { isSynthetic } from '../util'
@@ -13,9 +13,9 @@ export default function ExplorerCtrl(
   allowed: boolean
 ): IExplorerCtrl {
 
-  const loading = stream(true)
-  const failing = stream(false)
-  const current: Mithril.Stream<ExplorerData> = stream({
+  const loading = Stream(true)
+  const failing = Stream(false)
+  const current: Stream<ExplorerData> = Stream({
     moves: []
   })
 

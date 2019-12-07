@@ -3,7 +3,7 @@ import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
 import * as helper from '../../helper'
 import settings from '../../../settings'
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import { PromotingInterface } from '../round'
 
 type PromoteCallback = (orig: Key, dest: Key, prom: Role) => void

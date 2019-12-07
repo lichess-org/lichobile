@@ -1,13 +1,10 @@
-import storage from '../storage'
-import * as cloneDeep from 'lodash/cloneDeep'
-import * as difference from 'lodash/difference'
+import asyncStorage from '../asyncStorage'
 import { AnalyseData } from '../lichess/interfaces/analyse'
-import { NowPlayingGame } from '../lichess/interfaces'
 import { OnlineGameData, OfflineGameData } from '../lichess/interfaces/game'
 import { GameSituation } from '../chess'
 
-const otbStorageKey = 'otb.current'
-const aiStorageKey = 'ai.current'
+const OTB_STORAGE_KEY = 'otb.current'
+const AI_STORAGE_KEY = 'ai.current'
 
 export interface StoredOfflineGame {
   data: OfflineGameData
@@ -17,8 +14,20 @@ export interface StoredOfflineGame {
 
 export type StoredOfflineGames = { [id: string]: OnlineGameData }
 
-export function getCurrentOTBGame(): StoredOfflineGame | null {
-  return storage.get<StoredOfflineGame>(otbStorageKey)
+export function getCurrentOTBGame(): Promise<StoredOfflineGame | null> {
+  return asyncStorage.get<StoredOfflineGame>(OTB_STORAGE_KEY)
+}
+
+export function setCurrentOTBGame(game: StoredOfflineGame): Promise<StoredOfflineGame> {
+  return asyncStorage.set(OTB_STORAGE_KEY, game)
+}
+
+export function getCurrentAIGame(): Promise<StoredOfflineGame | null> {
+  return asyncStorage.get<StoredOfflineGame>(AI_STORAGE_KEY)
+}
+
+export function setCurrentAIGame(game: StoredOfflineGame): Promise<StoredOfflineGame> {
+  return asyncStorage.set(AI_STORAGE_KEY, game)
 }
 
 export function getAnalyseData(data: StoredOfflineGame, orientation: Color): AnalyseData | null {
@@ -48,81 +57,4 @@ export function getAnalyseData(data: StoredOfflineGame, orientation: Color): Ana
     return node
   })
   return aData as AnalyseData
-}
-
-export function setCurrentOTBGame(game: StoredOfflineGame): void {
-  storage.set(otbStorageKey, game)
-}
-
-export function getCurrentAIGame(): StoredOfflineGame | null {
-  return storage.get<StoredOfflineGame>(aiStorageKey)
-}
-
-export function setCurrentAIGame(game: StoredOfflineGame): void {
-  storage.set(aiStorageKey, game)
-}
-
-const offlineCorresStorageKey = 'offline.corres.games'
-
-export function getOfflineGames(): Array<OnlineGameData> {
-  const stored = storage.get<StoredOfflineGames>(offlineCorresStorageKey)
-  let arr: OnlineGameData[] = []
-  if (stored) {
-    for (const id in stored) {
-      arr.push(stored[id])
-    }
-  }
-  return arr
-}
-
-let nbOfflineGames: number | undefined
-export function hasOfflineGames(): boolean {
-  nbOfflineGames =
-    nbOfflineGames !== undefined ? nbOfflineGames : getOfflineGames().length
-
-  return nbOfflineGames > 0
-}
-
-export function getOfflineGameData(id: string): OnlineGameData | null {
-  const stored = storage.get<StoredOfflineGames>(offlineCorresStorageKey)
-  return stored && stored[id]
-}
-
-export function saveOfflineGameData(id: string, gameData: OnlineGameData): void {
-  const stored = storage.get<StoredOfflineGames>(offlineCorresStorageKey) || {}
-  const toStore = cloneDeep(gameData)
-  toStore.player.onGame = false
-  toStore.opponent.onGame = false
-  if (toStore.player.user) toStore.player.user.online = false
-  if (toStore.opponent.user) toStore.opponent.user.online = false
-  stored[id] = toStore
-  storage.set(offlineCorresStorageKey, stored)
-  nbOfflineGames = undefined
-}
-
-export function removeOfflineGameData(id: string): void {
-  const stored = storage.get<StoredOfflineGames>(offlineCorresStorageKey)
-  if (stored && stored[id]) {
-    delete stored[id]
-    nbOfflineGames = undefined
-  }
-  storage.set(offlineCorresStorageKey, stored)
-}
-
-export function syncWithNowPlayingGames(nowPlaying: Array<NowPlayingGame>): void {
-  if (nowPlaying === undefined) return
-
-  const stored = storage.get<StoredOfflineGames>(offlineCorresStorageKey) || {}
-  const storedIds = Object.keys(stored)
-  const toRemove = difference(storedIds, nowPlaying.map((g: NowPlayingGame) => g.fullId))
-
-  if (toRemove.length > 0) {
-    toRemove.forEach(id => {
-      if (stored && stored[id]) {
-        delete stored[id]
-      }
-    })
-    storage.set(offlineCorresStorageKey, stored)
-    nbOfflineGames = undefined
-  }
 }

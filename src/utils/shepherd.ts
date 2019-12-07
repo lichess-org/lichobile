@@ -6,7 +6,7 @@ export default function loadShepherd(): Promise<string> {
   const shepherdTheme = theme === 'light' ?
     'shepherd-theme-dark' : 'shepherd-theme-default'
   return loadCss(`vendor/shepherd/css/${shepherdTheme}.css`)
-  .then(() => loadCss('css/shepherd.css'))
+  .then(() => loadCss('vendor/shepherd/css/shepherd.css'))
   .then(() => loadScript('vendor/shepherd/js/tether.js'))
   .then(() => loadScript('vendor/shepherd/js/shepherd.min.js'))
   .then(() => shepherdTheme)

@@ -43,7 +43,7 @@ export default class StudyCtrl {
 
     if (settings.study.tour() === null) {
       startTour(this)
-      settings.study.tour(window.AppVersion ? window.AppVersion.version : 'dev-snapshot')
+      settings.study.tour(window.deviceInfo.appVersion)
     }
   }
 

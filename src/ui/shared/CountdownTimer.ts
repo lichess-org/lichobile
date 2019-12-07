@@ -1,11 +1,12 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import { formatTimeInSecs } from '../../utils'
 import sound from '../../sound'
 
 interface Attrs {
   seconds: number
   emergTime?: number
-  textWrap?: (t: string) => string
+  textWrap?: (sec: Seconds, t: string) => string
   showOnlySecs?: boolean
 }
 
@@ -14,8 +15,8 @@ interface State {
   seconds: number
   el?: HTMLElement
   rang: boolean
-  clockOnCreate(vnode: Mithril.DOMNode): void
-  clockOnUpdate(vnode: Mithril.DOMNode): void
+  clockOnCreate(vnode: Mithril.VnodeDOM<any, any>): void
+  clockOnUpdate(vnode: Mithril.VnodeDOM<any, any>): void
   render(sec: Seconds): void
   tick(): void
   clockTimeoutId: number
@@ -28,7 +29,7 @@ export default {
     this.render = (sec: Seconds) => {
       if (this.el) {
         const t = formatTimeInSecs(sec, attrs.showOnlySecs ? 'secs_only' : undefined)
-        if (attrs.textWrap) this.el.innerHTML = attrs.textWrap(t)
+        if (attrs.textWrap) this.el.innerHTML = attrs.textWrap(sec, t)
         else this.el.textContent = t
       }
     }
@@ -61,7 +62,7 @@ export default {
     this.clockTimeoutId = setTimeout(this.tick, 1000)
   },
 
-  onupdate({ dom }: Mithril.DOMNode) {
+  onupdate({ dom }: Mithril.VnodeDOM<any, any>) {
     this.el = dom as HTMLElement
   },
 

@@ -1,5 +1,5 @@
-import * as h from 'mithril/hyperscript'
-import * as range from 'lodash/range'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import i18n from '../../../i18n'
 import * as helper from '../../helper'
 import { isClientEval } from '../../shared/tree/interfaces'
@@ -28,16 +28,13 @@ function renderCevalInfos(ctrl: AnalyseCtrl) {
     className: ceval.cloud ? 'cloud' : ''
   }, [
     h('div.depth', [
-      h('strong', 'Depth: '), ceval.depth + (isInfinite || ceval.maxDepth === undefined ? '' : `/${ceval.maxDepth}`)
-    ]),
-    ceval.knps !== undefined ? h('div.knps', [
-      h('strong', 'kn/s: '), Math.round(ceval.knps)
-    ]) : null,
-    h('div.nodes', [
-      h('strong', 'nodes: '), Math.round(ceval.nodes / 1000) + 'k'
+      h('span', i18n('depthX', ceval.depth + (isInfinite || ceval.maxDepth === undefined ? '' : `/${ceval.maxDepth}`)))
     ]),
     ceval.millis !== undefined ? h('div.time', [
-      h('strong', 'time: '), formatTime(ceval.millis)
+      i18n('time'), ' ', formatTime(ceval.millis)
+    ]) : null,
+    ceval.knps !== undefined ? h('div.knps', [
+      'kn/s ', Math.round(ceval.knps)
     ]) : null,
     ceval.cloud ? h('span.ceval-cloud', 'Cloud') : null
   ])
@@ -68,7 +65,7 @@ function renderCevalPvs(ctrl: AnalyseCtrl) {
     const pvs = node.ceval.pvs
     return h('ul.ceval-pv_box.native_scroller', {
       oncreate: helper.ontapXY(e => onLineTap(ctrl, e), undefined, helper.getLI)
-    }, range(multiPv).map((i) => {
+    }, Array.from(Array(multiPv).keys()).map((i) => {
       if (!pvs[i]) return h('li.pv')
       const san = pv2san(ctrl.ceval.variant, node.fen, false, pvs[i].moves, pvs[i].mate)
       return h('li.ceval-pv', {
@@ -81,14 +78,10 @@ function renderCevalPvs(ctrl: AnalyseCtrl) {
     }))
   }
   else if (ctrl.gameOver()) {
-    return h('div.ceval-pv_box.native_scroller.loading.gameOver', {
-      key: 'ceval-gameover'
-    }, [h('i.withIcon[data-icon=]'), i18n('gameOver')])
+    return h('div.ceval-pv_box.native_scroller.loading.gameOver', [h('i.withIcon[data-icon=]'), i18n('gameOver')])
   }
   else {
-    return h('div.ceval-pv_box.native_scroller.loading', {
-      key: 'ceval-loading'
-    }, spinnerPearl())
+    return h('div.ceval-pv_box.native_scroller.loading', spinnerPearl())
   }
 }
 

@@ -1,4 +1,4 @@
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import * as utils from '../../utils'
 import router from '../../router'
 import * as helper from '../helper'

@@ -1,7 +1,7 @@
-import i18n from '../i18n'
+import { plural } from '../i18n'
 import sound from '../sound'
 import settings from '../settings'
-import * as throttle from 'lodash/throttle'
+import throttle from 'lodash-es/throttle'
 import { getChallenges } from '../xhr'
 import { Challenge, ChallengesData, isTimeControlClock, isTimeControlCorrespondence } from '../lichess/interfaces/challenge'
 
@@ -54,7 +54,7 @@ export default {
     if (isTimeControlClock(c.timeControl)) {
       return c.timeControl.show
     } else if (isTimeControlCorrespondence(c.timeControl)) {
-      return i18n('nbDays', c.timeControl.daysPerTurn)
+      return plural('nbDays', c.timeControl.daysPerTurn, c.timeControl.daysPerTurn)
     } else {
       return '∞'
     }

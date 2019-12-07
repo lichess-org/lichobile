@@ -1,23 +1,19 @@
-import * as get from 'lodash/get'
-import * as set from 'lodash/set'
-import * as pick from 'lodash/pick'
-import * as mapValues from 'lodash/mapValues'
-import * as mapKeys from 'lodash/mapKeys'
-import * as throttle from 'lodash/throttle'
+import { Plugins } from '@capacitor/core'
+import throttle from 'lodash-es/throttle'
 import redraw from './utils/redraw'
 import signals from './signals'
 import { SESSION_ID_KEY, fetchJSON, fetchText, ErrorResponse } from './http'
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils'
+import { getAtPath, setAtPath, pick } from './utils/object'
 import i18n from './i18n'
 import push from './push'
-import settings from './settings'
-import { TempBan } from './lichess/interfaces'
+import settings, { Prop } from './settings'
+import { TempBan, LobbyData, NowPlayingGame } from './lichess/interfaces'
+import { PlayTime } from './lichess/interfaces/user'
 import friendsApi from './lichess/friends'
 import challengesApi from './lichess/challenges'
-import storage, { StoredProp } from './storage'
+import storage from './storage'
 import asyncStorage from './asyncStorage'
-
-import { LobbyData, NowPlayingGame } from './lichess/interfaces'
 
 type PrefValue = number | string | boolean
 interface Prefs {
@@ -52,7 +48,7 @@ export interface Session {
   readonly perfs: any
   readonly createdAt: number
   readonly seenAt: number
-  readonly playTime: number
+  readonly playTime: PlayTime
   readonly nowPlaying: ReadonlyArray<NowPlayingGame>
   readonly prefs: Prefs
   readonly nbChallenges: number
@@ -75,18 +71,18 @@ function getSession(): Session | undefined {
 
 // store session data for offline usage
 function storeSession(d: Session): void {
-  asyncStorage.setItem('session', d)
+  asyncStorage.set('session', d)
 }
 
 // clear session data stored in async storage and sessionId
 function onLogout(): void {
-  asyncStorage.removeItem('session')
+  asyncStorage.remove('session')
   storage.remove(SESSION_ID_KEY)
   signals.afterLogout.dispatch()
 }
 
 function restoreStoredSession(): void {
-  asyncStorage.getItem<Session>('session')
+  asyncStorage.get<Session>('session')
   .then(d => {
     session = d || undefined
     if (d !== null) {
@@ -125,7 +121,7 @@ function myTurnGames() {
 }
 
 function showSavedPrefToast(data: string): string {
-  window.plugins.toast.show('✓ Your preferences have been saved on lichess server.', 'short', 'center')
+  Plugins.Toast.show({ text: '✓ Your preferences have been saved on lichess server.', duration: 'short' })
   return data
 }
 
@@ -136,16 +132,26 @@ function setKidMode(): Promise<string> {
   .then(showSavedPrefToast)
 }
 
+function numValue(v: string | boolean | number): string {
+  if (v === true) return '1'
+  else if (v === false) return '0'
+  else return String(v)
+}
+
+function makeReducer(prefix: string) {
+  return function(acc: Prefs, [k, v]: [string, PrefValue]) {
+    return {
+      ...acc,
+      [prefix + k]: numValue(v)
+    }
+  }
+}
+
 function savePreferences(): Promise<string> {
 
-  function numValue(v: boolean | number): string {
-    if (v === true) return '1'
-    else if (v === false) return '0'
-    else return String(v)
-  }
-
   const prefs = session && session.prefs || {}
-  const display = mapKeys(<Prefs>mapValues(pick(prefs, [
+
+  const display = Object.entries(pick(prefs, [
     'animation',
     'captured',
     'highlight',
@@ -153,8 +159,9 @@ function savePreferences(): Promise<string> {
     'coords',
     'replay',
     'blindfold'
-  ]), numValue), (_, k) => 'display.' + k) as StringMap
-  const behavior = mapKeys(<Prefs>mapValues(pick(prefs, [
+  ])).reduce(makeReducer('display.'), {})
+
+  const behavior = Object.entries(pick(prefs, [
     'premove',
     'takeback',
     'autoQueen',
@@ -162,8 +169,9 @@ function savePreferences(): Promise<string> {
     'submitMove',
     'confirmResign',
     'moretime'
-  ]), numValue), (_, k) => 'behavior.' + k) as StringMap
-  const rest = mapValues(pick(prefs, [
+  ])).reduce(makeReducer('behavior.'), {})
+
+  const rest = Object.entries(pick(prefs, [
     'clockTenths',
     'clockBar',
     'clockSound',
@@ -171,7 +179,7 @@ function savePreferences(): Promise<string> {
     'challenge',
     'message',
     'insightShare'
-  ]), numValue) as StringMap
+  ])).reduce(makeReducer(''), {})
 
   return fetchText('/account/preferences', {
     method: 'POST',
@@ -179,27 +187,27 @@ function savePreferences(): Promise<string> {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       'Accept': 'application/json, text/*'
     },
-    body: serializeQueryParameters(Object.assign(rest, display, behavior))
+    body: serializeQueryParameters({ ...rest, ...display, ...behavior })
   }, true)
   .then(showSavedPrefToast)
 }
 
-function lichessBackedProp<T extends string | number | boolean>(path: string, prefRequest: () => Promise<string>, defaultVal: T): StoredProp<T> {
+function lichessBackedProp<T extends string | number | boolean>(path: string, prefRequest: () => Promise<string>, defaultVal: T): Prop<T> {
   return function() {
     if (arguments.length) {
       let oldPref: T
       if (session) {
-        oldPref = <T>get(session, path)
-        set(session, path, arguments[0])
+        oldPref = <T>getAtPath(session, path)
+        setAtPath(session, path, arguments[0])
       }
       prefRequest()
       .catch((err) => {
-        if (session) set(session, path, oldPref)
+        if (session) setAtPath(session, path, oldPref)
         handleXhrError(err)
       })
     }
 
-    return session ? <T>get(session, path) : defaultVal
+    return session ? <T>getAtPath(session, path) : defaultVal
   }
 }
 
@@ -306,7 +314,7 @@ function refresh(): Promise<void> {
       session = undefined
       onLogout()
       redraw()
-      window.plugins.toast.show(i18n('signedOut'), 'short', 'center')
+      Plugins.Toast.show({ text: i18n('signedOut'), duration: 'short' })
     }
   })
 }
@@ -326,9 +334,12 @@ function backgroundRefresh(): void {
 }
 
 function sendUUID(): void {
-  if (device.uuid !== 'browser') {
-    fetchText(`/auth/set-fp/${device.uuid}/0`, { method: 'POST' })
-  }
+  Plugins.Device.getInfo()
+  .then(info => {
+    if (info.uuid !== 'web') {
+      fetchText(`/auth/set-fp/${info.uuid}/0`, { method: 'POST' })
+    }
+  })
 }
 
 export default {

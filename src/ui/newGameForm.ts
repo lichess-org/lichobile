@@ -1,4 +1,4 @@
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import * as utils from '../utils'
 import i18n from '../i18n'
 import router from '../router'
@@ -107,14 +107,14 @@ function renderContent() {
   return h('div', [
     h('div.newGame-preset_switch', [
       h('div.nice-radio', formWidgets.renderRadio(
-        'Quick game',
+        i18n('quickPairing'),
         'preset',
         'quick',
         tabPreset === 'quick',
         handleTabTap
       )),
       h('div.nice-radio', formWidgets.renderRadio(
-        'Custom',
+        i18n('custom'),
         'preset',
         'custom',
         tabPreset === 'custom',
@@ -140,13 +140,13 @@ function renderContent() {
 }
 
 export function renderQuickSetup(onCustom: () => void) {
-  return h('div.newGame-pools', { key: 'quickSetup' }, xhr.cachedPools.length ?
+  return h('div.newGame-pools', xhr.cachedPools.length ?
     xhr.cachedPools
       .map(p => renderPool(p))
       .concat(h('div.newGame-pool', {
           key: 'pool-custom',
           oncreate: helper.ontap(onCustom)
-        }, h('div.newGame-custom', 'Custom'))
+        }, h('div.newGame-custom', i18n('custom')))
       ) : spinner.getVdom('monochrome')
   )
 }
@@ -211,29 +211,21 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
   }
 
   const generalFieldset = [
-    h('div.select_input', {
-      key: formName + 'color'
-    },
+    h('div.select_input',
       formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color)
     ),
-    h('div.select_input', {
-      key: formName + 'variant'
-    },
+    h('div.select_input',
       formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant)
     )
   ]
 
-  generalFieldset.push(h('div.select_input', {
-    key: formName + 'mode'
-  },
+  generalFieldset.push(h('div.select_input',
     formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)
   ))
 
   if (session.isConnected()) {
     generalFieldset.push(
-      h('div.rating_range', {
-        key: 'rating_range'
-      }, [
+      h('div.rating_range', [
         h('div.title', i18n('ratingRange')),
         h('div.select_input.inline',
           formWidgets.renderSelect('Min', formName + 'rating_min',
@@ -248,24 +240,18 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
   }
 
   const timeFieldset = [
-    h('div.select_input', {
-      key: formName + 'timeMode'
-    },
+    h('div.select_input',
       formWidgets.renderSelect('clock', formName + 'timeMode', timeModes, settingsObj.timeMode)
     )
   ]
 
   if (hasClock) {
     timeFieldset.push(
-      h('div.select_input.inline', {
-        key: formName + 'time'
-      },
+      h('div.select_input.inline',
         formWidgets.renderSelect('time', formName + 'time',
           settings.gameSetup.availableTimes, settingsObj.time, false)
       ),
-      h('div.select_input.inline', {
-        key: formName + 'increment'
-      },
+      h('div.select_input.inline',
         formWidgets.renderSelect('increment', formName + 'increment',
           settings.gameSetup.availableIncrements.map(utils.tupleOf), settingsObj.increment, false)
       )
@@ -274,15 +260,12 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
 
   if (hasDays) {
     timeFieldset.push(
-      h('div.select_input.large_label', {
-        key: formName + 'days'
-      }, formWidgets.renderSelect('daysPerTurn', formName + 'days',
+      h('div.select_input.large_label', formWidgets.renderSelect('daysPerTurn', formName + 'days',
           settings.gameSetup.availableDays.map(utils.tupleOf), settingsObj.days!, false)
       ))
   }
 
   return h('form.game_form', {
-    key: 'customSetup',
     onsubmit(e: Event) {
       e.preventDefault()
       if (!settings.gameSetup.isTimeValid(settingsObj)) return

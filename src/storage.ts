@@ -5,16 +5,10 @@ function withStorage<T>(f: (s: Storage) => T | void): T | void | null {
   } catch (e) {}
 }
 
-export interface StoredProp<T> {
-  (): T
-  (value: T): T
-}
-
 export default {
   get,
   set,
   remove,
-  prop,
 }
 
 function get<T>(k: string): T | null {
@@ -40,12 +34,4 @@ function set<T>(k: string, v: T): void {
       s.setItem(k, JSON.stringify(v))
     }
   })
-}
-
-function prop<T>(key: string, initialValue: T): StoredProp<T> {
-  return function() {
-    if (arguments.length) set(key, arguments[0])
-    const ret = get<T>(key)
-    return (ret !== null && ret !== undefined) ? ret : initialValue
-  }
 }

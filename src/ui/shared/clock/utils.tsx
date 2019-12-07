@@ -1,6 +1,7 @@
+import h from 'mithril/hyperscript'
 import { formatTimeInSecs } from '../../../utils'
-import { ClockType, IChessClock, IStageClock, ClockSettings, StageSetting } from './interfaces'
-import { StoredProp } from '../../../storage'
+import { ClockType, IChessClock, IStageClock, StageSetting } from './interfaces'
+import settings, { Prop } from '../../../settings'
 import redraw from '../../../utils/redraw'
 import * as helper from '../../helper'
 import * as utils from '../../../utils'
@@ -22,7 +23,7 @@ export function isStageClock(c: IChessClock): c is IStageClock {
   return (c as IStageClock).whiteMoves !== undefined
 }
 
-export function addStage (stagesSetting: StoredProp<Array<StageSetting>>) {
+export function addStage (stagesSetting: Prop<Array<StageSetting>>) {
   let stages = stagesSetting()
   stages[stages.length - 1].moves = stages[stages.length - 2].moves
   stages.push({time: stages[stages.length - 1].time, moves: null})
@@ -30,7 +31,7 @@ export function addStage (stagesSetting: StoredProp<Array<StageSetting>>) {
   redraw()
 }
 
-export function removeStage (stagesSetting: StoredProp<Array<StageSetting>>) {
+export function removeStage (stagesSetting: Prop<Array<StageSetting>>) {
   let stages = stagesSetting()
   if (stages.length <= 2)
     return
@@ -39,140 +40,140 @@ export function removeStage (stagesSetting: StoredProp<Array<StageSetting>>) {
   redraw()
 }
 
-export function clockSettingsView (clockSettings: ClockSettings, onChange: () => void) {
-  let clockTypes = {
+export function clockSettingsView (clockType: ClockType | 'none', onChange: () => void) {
+  const clockTypes = {
     none() {
       return('')
     },
     simple() {
       return (
-        <div key="simpleSettings" className="clockSettingParameters">
-          <div className="select_input">
-            {formWidgets.renderSelect('Time', 'time', clockSettings.availableTimes, clockSettings.simple.time, false, onChange)}
-          </div>
+        <div className="clockSettingParameters">
+        <div className="select_input">
+        {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.simple.time, false, onChange)}
+        </div>
         </div>
       )
     },
     increment() {
       return (
-        <div key="incrementSettings" className="clockSettingParameters">
-          <div className="select_input">
-            {formWidgets.renderSelect('Time', 'time', clockSettings.availableTimes, clockSettings.increment.time, false, onChange)}
-          </div>
-          <div className="select_input">
-            {formWidgets.renderSelect('Increment', 'increment', clockSettings.availableIncrements.map(utils.tupleOf), clockSettings.increment.increment, false, onChange)}
-          </div>
+        <div className="clockSettingParameters">
+        <div className="select_input">
+        {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.increment.time, false, onChange)}
+        </div>
+        <div className="select_input">
+        {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.increment.increment, false, onChange)}
+        </div>
         </div>
       )
     },
     handicapInc() {
       return (
-        <div key="handicapIncSettings" className="clockSettingParameters">
-          <div className="handicapRow">
-            <div className="handicapRowTitle">Top</div>
-            <div className="select_input inline handicapRowMember">
-              {formWidgets.renderSelect('Time', 'topTime', clockSettings.availableTimes, clockSettings.handicapInc.topTime, false, onChange)}
-            </div>
-            <div className="select_input inline handicapRowMember">
-              {formWidgets.renderSelect('Increment', 'topIncrement', clockSettings.availableIncrements.map(utils.tupleOf), clockSettings.handicapInc.topIncrement, false, onChange)}
-            </div>
-          </div>
-          <div className="handicapRow">
-            <div className="handicapRowTitle">Bottom</div>
-            <div className="select_input inline handicapRowMember">
-              {formWidgets.renderSelect('Time', 'bottomTime', clockSettings.availableTimes, clockSettings.handicapInc.bottomTime, false, onChange)}
-            </div>
-            <div className="select_input inline handicapRowMember">
-              {formWidgets.renderSelect('Increment', 'bottomIncrement', clockSettings.availableIncrements.map(utils.tupleOf), clockSettings.handicapInc.bottomIncrement, false, onChange)}
-            </div>
-          </div>
+        <div className="clockSettingParameters">
+        <div className="handicapRow">
+        <div className="handicapRowTitle">Top</div>
+        <div className="select_input inline handicapRowMember">
+        {formWidgets.renderSelect('Time', 'topTime', settings.clock.availableTimes, settings.clock.handicapInc.topTime, false, onChange)}
+        </div>
+        <div className="select_input inline handicapRowMember">
+        {formWidgets.renderSelect('Increment', 'topIncrement', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.handicapInc.topIncrement, false, onChange)}
+        </div>
+        </div>
+        <div className="handicapRow">
+        <div className="handicapRowTitle">Bottom</div>
+        <div className="select_input inline handicapRowMember">
+        {formWidgets.renderSelect('Time', 'bottomTime', settings.clock.availableTimes, settings.clock.handicapInc.bottomTime, false, onChange)}
+        </div>
+        <div className="select_input inline handicapRowMember">
+        {formWidgets.renderSelect('Increment', 'bottomIncrement', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.handicapInc.bottomIncrement, false, onChange)}
+        </div>
+        </div>
         </div>
       )
     },
     delay() {
       return (
-        <div key="delaySettings" className="clockSettingParameters">
-          <div className="select_input">
-            {formWidgets.renderSelect('Time', 'time', clockSettings.availableTimes, clockSettings.delay.time, false, onChange)}
-          </div>
-          <div className="select_input">
-            {formWidgets.renderSelect('Increment', 'increment', clockSettings.availableIncrements.map(utils.tupleOf), clockSettings.delay.increment, false, onChange)}
-          </div>
+        <div className="clockSettingParameters">
+        <div className="select_input">
+        {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.delay.time, false, onChange)}
+        </div>
+        <div className="select_input">
+        {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.delay.increment, false, onChange)}
+        </div>
         </div>
       )
     },
     bronstein() {
       return (
-        <div key="bronsteinSettings" className="clockSettingParameters">
-          <div className="select_input">
-            {formWidgets.renderSelect('Time', 'time', clockSettings.availableTimes, clockSettings.bronstein.time, false, onChange)}
-          </div>
-          <div className="select_input">
-            {formWidgets.renderSelect('Increment', 'increment', clockSettings.availableIncrements.map(utils.tupleOf), clockSettings.bronstein.increment, false, onChange)}
-          </div>
+        <div className="clockSettingParameters">
+        <div className="select_input">
+        {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.bronstein.time, false, onChange)}
+        </div>
+        <div className="select_input">
+        {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.bronstein.increment, false, onChange)}
+        </div>
         </div>
       )
     },
     hourglass() {
       return (
-        <div key="hourglassSettings" className="clockSettingParameters">
-          <div className="select_input">
-            {formWidgets.renderSelect('Time', 'time', clockSettings.availableTimes, clockSettings.hourglass.time, false, onChange)}
-          </div>
+        <div className="clockSettingParameters">
+        <div className="select_input">
+        {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.hourglass.time, false, onChange)}
+        </div>
         </div>
       )
     },
     stage() {
       return (
-        <div key="hourglassSettings" className="clockSettingParameters">
-          { clockSettings.stage.stages().map((_, index) => renderStage(clockSettings, onChange, index)) }
-          <div className="select_input">
-            {formWidgets.renderSelect('Increment', 'increment', clockSettings.availableIncrements.map(utils.tupleOf), clockSettings.stage.increment, false, onChange)}
-          </div>
+        <div className="clockSettingParameters">
+        { settings.clock.stage.stages().map((_, index) => renderStage(onChange, index)) }
+        <div className="select_input">
+        {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.stage.increment, false, onChange)}
+        </div>
         </div>
       )
     }
   }
 
-  return clockTypes[clockSettings.clockType()]()
+  return clockTypes[clockType]()
 }
 
-function renderStage(clockSettings: ClockSettings, onChange: () => void, index: number) {
-  const timeProp = updateTime.bind(undefined, clockSettings, index) as StoredProp<string>
-  const moves = updateMoves.bind(undefined, clockSettings, index) as StoredProp<string>
-  const hidePlus = clockSettings.stage.stages().length >= 5
-  const hideMinus = clockSettings.stage.stages().length <= 2
+function renderStage(onChange: () => void, index: number) {
+  const timeProp = updateTime.bind(undefined, index) as Prop<string>
+  const moves = updateMoves.bind(undefined, index) as Prop<string>
+  const hidePlus = settings.clock.stage.stages().length >= 5
+  const hideMinus = settings.clock.stage.stages().length <= 2
   return (
     <div className="stageRow">
       <div className="stageRowTitle">{index + 1}</div>
       <div className="select_input inline stage stageRowMember">
-        {formWidgets.renderSelect('Time', 'time', clockSettings.availableTimes, timeProp, false, onChange)}
+        {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, timeProp, false, onChange)}
       </div>
-      <div className={'select_input inline stage stageRowMember' + ((index === clockSettings.stage.stages().length - 1 ) ? ' lastStage' : '')}>
-        {formWidgets.renderSelect('Moves', 'moves', clockSettings.availableMoves.map(utils.tupleOf), moves, false, onChange)}
+      <div className={'select_input inline stage stageRowMember' + ((index === settings.clock.stage.stages().length - 1 ) ? ' lastStage' : '')}>
+        {formWidgets.renderSelect('Moves', 'moves', settings.clock.availableMoves.map(utils.tupleOf), moves, false, onChange)}
       </div>
-      <div className={'stageRowMember addSubtractStage' + ((index === clockSettings.stage.stages().length - 1 ) ? ' lastStage' : '')}>
-        <span  className={'fa fa-plus-square-o' + (hidePlus ? ' hiddenButton' : '')} oncreate={helper.ontap(() => addStage(clockSettings.stage.stages))}/> <span className={'fa fa-minus-square-o' + (hideMinus ? ' hiddenButton' : '')} oncreate={helper.ontap(() => removeStage(clockSettings.stage.stages))}/>
+      <div className={'stageRowMember addSubtractStage' + ((index === settings.clock.stage.stages().length - 1 ) ? ' lastStage' : '')}>
+        <span  className={'fa fa-plus-square-o' + (hidePlus ? ' hiddenButton' : '')} oncreate={helper.ontap(() => addStage(settings.clock.stage.stages))}/> <span className={'fa fa-minus-square-o' + (hideMinus ? ' hiddenButton' : '')} oncreate={helper.ontap(() => removeStage(settings.clock.stage.stages))}/>
       </div>
     </div>
   )
 }
 
-function updateTime(clockSettings: ClockSettings, index: number, time: string) {
-  let stages = clockSettings.stage.stages()
+function updateTime(index: number, time: string) {
+  let stages = settings.clock.stage.stages()
 
   if (time) {
     stages[index].time = time
-    clockSettings.stage.stages(stages)
+    settings.clock.stage.stages(stages)
   }
   return stages[index].time
 }
 
-function updateMoves (clockSettings: ClockSettings, index: number, moves: string) {
-  let stages = clockSettings.stage.stages()
+function updateMoves (index: number, moves: string) {
+  let stages = settings.clock.stage.stages()
   if (moves) {
     stages[index].moves = moves
-    clockSettings.stage.stages(stages)
+    settings.clock.stage.stages(stages)
   }
 
   return stages[index].moves

@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import router from '../../router'
 import { dropShadowHeader, backButton as renderBackbutton } from '../shared/common'
 import { getLanguageNativeName } from '../../utils/langs'
@@ -7,11 +8,11 @@ import { linkify } from '../../utils/html'
 import { perfTypes, provisionalDeviation } from '../../lichess/perfs'
 import { Perf } from '../../lichess/interfaces/user'
 import * as xhr from '../../xhr'
-import i18n from '../../i18n'
+import i18n, { plural, formatDate, formatDuration, fromNow } from '../../i18n'
 import countries from '../../utils/countries'
 import * as helper from '../helper'
 import session from '../../session'
-import { IUserCtrl, ProfileUser, isSessionUser, isFullUser } from './UserCtrl'
+import { IUserCtrl, ProfileUser, isFullUser } from './UserCtrl'
 
 export function header(user: ProfileUser, ctrl: IUserCtrl) {
   const title = userTitle(user.online!!, user.patron!!, user.username, user.title)
@@ -75,7 +76,7 @@ function renderProfile(user: ProfileUser) {
     if (user.profile.lastName) fullname += (user.profile.firstName ? ' ' : '') + user.profile.lastName
     const country = countries[user.profile.country]
     const location = user.profile.location
-    const memberSince = i18n('memberSince') + ' ' + window.moment(user.createdAt).format('LL')
+    const memberSince = i18n('memberSince') + ' ' + formatDate(new Date(user.createdAt))
 
     return (
       <section className="profileSection">
@@ -107,7 +108,7 @@ function renderProfile(user: ProfileUser) {
           </p>
           <p>{memberSince}</p>
           {user.seenAt ?
-          <p>Active <small>{window.moment(user.seenAt).fromNow()}</small></p> : null
+          <p>{h.trust(i18n('lastSeenActive', `<small>${fromNow(new Date(user.seenAt))}</small>`))}</p> : null
           }
         </div>
       </section>
@@ -124,7 +125,7 @@ function renderWebsiteLinks(ctrl: IUserCtrl, user: ProfileUser) {
           <a className="external_link"
             oncreate={helper.ontapY(() => xhr.openWebsiteAuthPage(`/account/profile`))}
           >
-            Edit profile
+            {i18n('editProfile')}
           </a>
         </p> :
         <p>
@@ -149,20 +150,18 @@ function renderWebsiteLinks(ctrl: IUserCtrl, user: ProfileUser) {
 }
 
 function renderStats(user: ProfileUser) {
-  let totalPlayTime: string | null = null
   let tvTime: string | null = null
 
+  const totalPlayTime = user.playTime ? i18n('tpTimeSpentPlaying', formatDuration(user.playTime.total)) : null
+
   if (isFullUser(user)) {
-    totalPlayTime = user.playTime ? 'Time spent playing: ' + window.moment.duration(user.playTime.total, 'seconds').humanize() : null
-    tvTime = user.playTime && user.playTime.tv > 0 ? 'Time on TV: ' + window.moment.duration(user.playTime.tv, 'seconds').humanize() : null
-  } else if (isSessionUser(user)) {
-    totalPlayTime = user.playTime ? 'Time spent playing: ' + window.moment.duration(user.playTime, 'seconds').humanize() : null
+    tvTime = user.playTime && user.playTime.tv > 0 ? i18n('tpTimeSpentOnTV', formatDuration(user.playTime.tv)) : null
   }
 
   return (
     <section className="profileSection">
       {isFullUser(user) && user.completionRate ?
-      <p>Game completion rate: <strong>{user.completionRate}%</strong></p> : null
+      <p>{i18n('gameCompletionRate', user.completionRate + '%')}</p> : null
       }
       {totalPlayTime ?
       <p>{totalPlayTime}</p> : null
@@ -201,15 +200,13 @@ function renderPerf(key: PerfKey, name: string, perf: Perf, user: ProfileUser) {
 
   const avail = variantPerfAvailable(key, perf)
 
-  const props = {
+  return h('div', {
     className: 'profilePerf' + (avail ? ' nav' : ''),
     'data-icon': gameIcon(key),
-    oncreate: avail ? helper.ontapY(() => {
-      if (hasNetwork()) router.set(`/@/${user.id}/${key}/perf`)
-    }) : null
-  }
-
-  return h('div', props, [
+    oncreate: helper.ontapY(() => {
+      if (avail) router.set(`/@/${user.id}/${key}/perf`)
+    })
+  }, [
     h('span.name', name),
     h('div.rating', [
       perf.rating,
@@ -241,39 +238,38 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
       { isFullUser(user) ?
         <div className="list_item nav"
           oncreate={helper.ontapY(ctrl.goToGames)}
-          key="view_all_games"
         >
-          {i18n('viewAllNbGames', user.count.all)}
+          {plural('nbGames', user.count.all, user.count.all)}
         </div> : null
       }
-      <div className="list_item nav" key="followers"
+      <div className="list_item nav"
         oncreate={helper.ontapY(ctrl.followers)}
       >
-        {i18n('nbFollowers', user.nbFollowers || '')}
+        {plural('nbFollowers', user.nbFollowers, user.nbFollowers)}
       </div>
       { !ctrl.isMe() ? <div className="list_item nav" data-icon="1"
         oncreate={helper.ontapY(ctrl.goToUserTV)}
-        key="user_tv"
       >
         {i18n('watchGames')}
       </div> : null
       }
       { session.isConnected() && !ctrl.isMe() ?
-      <div className="list_item" key="challenge_to_play" data-icon="U"
+      <div className="list_item" data-icon="U"
         oncreate={helper.ontapY(ctrl.challenge)}
       >
         {i18n('challengeToPlay')}
       </div> : null
       }
       { session.isConnected() && !ctrl.isMe() ?
-      <div className="list_item nav" key="compose_message" data-icon="c"
+      <div className="list_item nav"
         oncreate={helper.ontapY(ctrl.composeMessage)}
       >
+        <span className="fa fa-comment" />
         {i18n('composeMessage')}
       </div> : null
       }
       {session.isConnected() && isFullUser(user) && user.followable && !ctrl.isMe() ?
-      <div className={['list_item', user.blocking ? 'disabled' : ''].join(' ')} key="user_following">
+      <div className={['list_item', user.blocking ? 'disabled' : ''].join(' ')}>
         <div className="check_container">
           <label htmlFor="user_following">{i18n('follow')}</label>
           <input id="user_following" type="checkbox" checked={user.following}
@@ -283,7 +279,7 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
       </div> : null
       }
       {session.isConnected() && isFullUser(user) && !ctrl.isMe() ?
-      <div className={['list_item', user.following ? 'disabled' : ''].join(' ')} key="user_blocking">
+      <div className={['list_item', user.following ? 'disabled' : ''].join(' ')}>
         <div className="check_container">
           <label htmlFor="user_blocking">{i18n('block')}</label>
           <input id="user_blocking" type="checkbox" checked={user.blocking}
@@ -293,7 +289,7 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
       </div> : null
       }
       { session.isConnected() && !ctrl.isMe() ?
-      <div className="list_item" key="report" data-icon="!"
+      <div className="list_item" data-icon="!"
         oncreate={helper.ontapY(() => xhr.openWebsiteAuthPage(`/report?username=${user.username}`))}
       >
         {i18n('reportXToModerators', user.username)}

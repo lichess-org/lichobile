@@ -1,3 +1,4 @@
+import h from 'mithril/hyperscript'
 import settings from '../../settings'
 import i18n from '../../i18n'
 import router from '../../router'
@@ -117,7 +118,7 @@ function renderForm(ctrl: TournamentsListCtrl) {
         </div>
       </fieldset>
       <div className="popupActionWrapper">
-        <button key="create" className="popupAction" type="submit">
+        <button className="popupAction" type="submit">
           <span className="fa fa-check" />
           {i18n('createANewTournament')}
         </button>

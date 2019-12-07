@@ -1,7 +1,6 @@
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import { defs, renderShape } from './svg'
 import { brushes } from './brushes'
-import { Bounds } from '../Board'
 
 export interface Shape {
   brush: string
@@ -13,7 +12,7 @@ export interface Shape {
 const usedBrushes = defs(Object.keys(brushes).map(name => brushes[name]))
 
 export default function BoardBrush(
-  bounds: Bounds,
+  bounds: ClientRect,
   orientation: Color,
   shapes: ReadonlyArray<Shape>,
   pieceTheme: string
@@ -24,7 +23,7 @@ export default function BoardBrush(
 
   return h('svg', {
     xmlns: 'http://www.w3.org/2000/svg',
-    version: '1.1'
+    version: '1.1',
   }, [
     usedBrushes,
     shapes.map(renderShape(orientation, false, brushes, bounds, pieceTheme))

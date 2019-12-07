@@ -4,6 +4,13 @@
   flex-flow column nowrap
   justify-content center
   min-height 0 // fix chrome bug
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
+    .actions_bar
+      width 94vw
+      margin 0 auto
+    > .playTable
+      > .antagonistInfos
+        padding 0
   @media only screen and (orientation: landscape)
     display flex
     flex-flow row nowrap
@@ -21,19 +28,18 @@
       height 'calc((100vh - %s) / 2)' % headerHeight
       width 'calc((100vh - %s) / 2)' % headerHeight
       align-self center
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
-    height 98vw
-    width 98vw
-    margin 0 auto
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
+    height 94vw
+    width 94vw
+    margin auto
   @media only screen and (orientation: landscape)
-    height 'calc(100vh - %s)' % headerHeight
-    width 'calc(100vh - %s)' % headerHeight
-    flex 0 0 auto
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
-    height 'calc(100vh - %s - 12vh)' % headerHeight
-    width 'calc(100vh - %s - 12vh)' % headerHeight
-    flex 0 0 auto
-    margin auto 0
+    height 'calc(100vh - %s - env(safe-area-inset-top))' % headerHeight
+    width 'calc(100vh - %s - env(safe-area-inset-top))' % headerHeight
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
+    height 'calc(100vh - %s - 6vh - env(safe-area-inset-top))' % headerHeight
+    width 'calc(100vh - %s - 6vh - env(safe-area-inset-top))' % headerHeight
+    margin auto
+    margin-left 3vh
 
   > svg
     overflow: hidden;
@@ -52,6 +58,9 @@
 
 .playable_board_wrapper
   position relative
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
+    &:first-child
+      margin-top 3vw
 
 .display_board
   width 100%
@@ -100,6 +109,10 @@
     display flex
     flex-flow column nowrap
     justify-content space-around
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
+    margin 3vh
+    > .playersTable
+      padding 0
   @media only screen and (max-height 400px) and (orientation landscape)
     > .playersTable
       justify-content space-around
@@ -113,7 +126,7 @@
     .clock
       font-size 25px
       max-width initial
-  @media only screen and (orientation: landscape) and (min-width 801px) and (aspect-ratio 4/3), only screen and (orientation: landscape) and (min-width 801px) and (device-aspect-ratio 4/3)
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
     .clock
       max-width 180px
   @media only screen and (orientation: landscape) and (min-width 1025px)

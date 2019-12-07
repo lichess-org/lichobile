@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, width=device-width, viewport-fit=cover" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' gap: data: https://ssl.gstatic.com; connect-src 'self' https://veloce.github.io https://explorer.lichess.ovh https://tablebase.lichess.ovh {{{apiEndPoint}}} {{{socketEndPoint}}}:*; script-src 'self' 'unsafe-inline'; child-src 'self' filesystem: gap://ready; style-src 'self' 'unsafe-inline'; img-src 'self' data: {{{apiEndPoint}}}; media-src 'self'">
+    <title>mobile.lichess.org</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="preload" href="css/compiled/app.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="fonts/fontawesome-webfont.ttf?v=4.7.0" as="font" crossorigin>
+    <link rel="preload" href="fonts/Noto-Sans.ttf" as="font" crossorigin>
+    <link rel="modulepreload" href="i18n/refs.js" />
+    <link rel="modulepreload" href="i18n/en-US.js" />
+    <script>
+      window.lichess = {
+        mode: "{{appMode}}",
+        apiEndPoint: "{{{apiEndPoint}}}",
+        socketEndPoint: "{{{socketEndPoint}}}",
+      };
+    </script>
+    <script type="text/javascript" src="lib/cordova.polyfills.js"></script>
+    <script type="module" src="main.js"></script>
+  </head>
+  <body>
+  </body>
+</html>

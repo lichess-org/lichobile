@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import redraw from '../../../utils/redraw'
 import settings from '../../../settings'
 import * as helper from '../../helper'

@@ -1,5 +1,5 @@
-import * as throttle from 'lodash/throttle'
-import * as h from 'mithril/hyperscript'
+import throttle from 'lodash-es/throttle'
+import h from 'mithril/hyperscript'
 import router from '../../router'
 import i18n from '../../i18n'
 import { UserGameWithDate } from '../../lichess/interfaces/user'
@@ -91,7 +91,7 @@ export function renderSearchForm(ctrl: ISearchCtrl) {
             </div>
           </div>
         </div>
-        <button key="search" className="fatButton" type="submit">
+        <button className="fatButton" type="submit">
           <span className="fa fa-search" />
           {i18n('search')}
         </button>

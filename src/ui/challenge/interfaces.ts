@@ -1,8 +1,9 @@
+import Stream from 'mithril/stream'
 import { Challenge } from '../../lichess/interfaces/challenge'
 
 export interface ChallengeState {
   pingTimeoutId: number
-  challenge: Mithril.Stream<Challenge | undefined>
+  challenge: Stream<Challenge | undefined>
   joinChallenge(): Promise<void>
   declineChallenge(): Promise<void>
   cancelChallenge(): Promise<void>

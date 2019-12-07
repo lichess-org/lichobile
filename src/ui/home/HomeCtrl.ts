@@ -1,12 +1,13 @@
-import * as uniqBy from 'lodash/uniqBy'
-import * as Zanimo from 'zanimo'
+import { Plugins, AppState, NetworkStatus, PluginListenerHandle } from '@capacitor/core'
+import Zanimo from '../../utils/zanimo'
 import socket, { SocketIFace } from '../../socket'
 import redraw from '../../utils/redraw'
 import signals from '../../signals'
 import settings from '../../settings'
 import { timeline as timelineXhr, seeks as corresSeeksXhr, lobby as lobbyXhr } from '../../xhr'
 import { hasNetwork, noop } from '../../utils'
-import { isForeground, setForeground } from '../../utils/appMode'
+import { fromNow } from '../../i18n'
+import { isForeground } from '../../utils/appMode'
 import { PongMessage, TimelineEntry, DailyPuzzle, CorrespondenceSeek } from '../../lichess/interfaces'
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
 import { PuzzleData } from '../../lichess/interfaces/training'
@@ -29,6 +30,9 @@ export default class HomeCtrl {
   public timeline?: ReadonlyArray<TimelineEntry>
   public offlinePuzzle?: PuzzleData | undefined
 
+  private networkListener: PluginListenerHandle
+  private appStateListener: PluginListenerHandle
+
   constructor(defaultTab?: number) {
     this.corresPool = []
     this.selectedTab = defaultTab || 0
@@ -38,10 +42,23 @@ export default class HomeCtrl {
     } else {
       this.loadOfflinePuzzle()
     }
+
+    this.networkListener = Plugins.Network.addListener('networkStatusChange', (s: NetworkStatus) => {
+      if (s.connected) this.init()
+    })
+
+    this.appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
+      if (state.isActive) this.init()
+    })
   }
 
   public socketSend = <D>(t: string, d: D): void => {
     if (this.socketIface) this.socketIface.send(t, d)
+  }
+
+  public unload = () => {
+    this.networkListener.remove()
+    this.appStateListener.remove()
   }
 
   public init = () => {
@@ -75,18 +92,13 @@ export default class HomeCtrl {
           .filter((o: TimelineEntry) => supportedTimelineTypes.indexOf(o.type) !== -1)
           .slice(0, 10)
           .map(o => {
-            o.fromNow = window.moment(o.date).fromNow()
+            o.fromNow = fromNow(new Date(o.date))
             return o
           })
         redraw()
       })
       .catch(noop)
     }
-  }
-
-  public onResume = () => {
-    setForeground()
-    this.init()
   }
 
   public loadOfflinePuzzle = () => {
@@ -110,9 +122,12 @@ export default class HomeCtrl {
   }
 
   public cancelCorresSeek = (seekId: string) => {
-    return Zanimo(document.getElementById(seekId), 'opacity', '0', '300', 'ease-out')
+    const el = document.getElementById(seekId)
+    if (el) {
+      Zanimo(el, 'opacity', '0', 300, 'ease-out')
       .then(() => this.socketSend('cancelSeek', seekId))
       .catch(console.log.bind(console))
+    }
   }
 
   public joinCorresSeek = (seekId: string) => {
@@ -141,9 +156,14 @@ function fixSeeks(seeks: CorrespondenceSeek[]): CorrespondenceSeek[] {
     if (seekUserId(b) === userId) return 1
     return 0
   })
-  return uniqBy(seeks, s => {
-    const username = seekUserId(s) === userId ? s.id : s.username
-    const key = username + s.mode + s.variant.key + s.days + s.color
-    return key
-  })
+  return [
+    ...seeks
+    .map(s => {
+      const username = seekUserId(s) === userId ? s.id : s.username
+      const key = username + s.mode + s.variant.key + s.days + s.color
+      return [s, key]
+    })
+    .filter(([_, key], i, a) => a.map(e => e[1]).indexOf(key) === i)
+    .map(([s]) => s)
+  ] as CorrespondenceSeek[]
 }

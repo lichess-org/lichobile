@@ -1,8 +1,8 @@
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import * as chessFormat from '../../../utils/chessFormat'
 import gameStatusApi from '../../../lichess/status'
 import { findTag, gameResult } from '../../../lichess/interfaces/study'
-import Board, { Bounds } from '../../shared/Board'
+import Board from '../../shared/Board'
 import { Shape } from '../../shared/BoardBrush'
 
 import Clock from './Clock'
@@ -11,7 +11,6 @@ import AnalyseCtrl from '../AnalyseCtrl'
 
 export default function renderBoard(
   ctrl: AnalyseCtrl,
-  bounds: Bounds,
 ) {
   const player = ctrl.data.game.player
   const ceval = ctrl.node && ctrl.node.ceval
@@ -45,19 +44,13 @@ export default function renderBoard(
     ...pastBestShape, ...curBestShapes, ...badMoveShape
   ]
 
-  const key =
-    (ctrl.settings.s.smallBoard ? 'board-small' : 'board-full') +
-    '-' + ctrl.settings.s.boardPosition
-
   return h('div.analyse-boardWrapper', {
     className: 'pos' + ctrl.settings.s.boardPosition,
-    key
   }, [
     playerBar(ctrl, ctrl.topColor()),
     h(Board, {
       variant: ctrl.data.game.variant.key,
       chessground: ctrl.chessground,
-      bounds,
       shapes,
       clearableShapes: ctrl.node.shapes,
       wrapperClasses: ctrl.settings.s.smallBoard ? 'halfsize' : '',

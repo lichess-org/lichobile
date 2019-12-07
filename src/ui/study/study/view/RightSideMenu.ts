@@ -1,10 +1,10 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import router from '../../../../router'
 import { lightPlayerName } from '../../../../lichess/player'
 import { StudyMemberMap, StudyMember } from '../../../../lichess/interfaces/study'
 import * as helper from '../../../helper'
 import CloseSlideHandler from '../../../shared/sideMenu/CloseSlideHandler'
-import CloseSwipeHandler from '../../../shared/sideMenu/CloseSwipeHandler'
 import { expandMore, expandLess } from '../../../shared/icons'
 
 import StudyCtrl from '../../../analyse/study/StudyCtrl'
@@ -39,12 +39,8 @@ export default {
     const members = sortMembers(study.members)
     const membPluralSuffix = members.length > 1 ? 's' : ''
     return h('aside#studyMenu', {
-      oncreate: ({ dom }: Mithril.DOMNode) => {
-        if (window.cordova.platformId === 'ios') {
-          CloseSwipeHandler(dom as HTMLElement, studyCtrl.sideMenu)
-        } else {
-          CloseSlideHandler(dom as HTMLElement, studyCtrl.sideMenu)
-        }
+      oncreate: ({ dom }: Mithril.VnodeDOM<any, any>) => {
+        CloseSlideHandler(dom as HTMLElement, studyCtrl.sideMenu)
       }
     }, [
       h('div.native_scroller', [

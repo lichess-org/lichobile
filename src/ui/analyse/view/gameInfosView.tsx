@@ -1,3 +1,4 @@
+import h from 'mithril/hyperscript'
 import i18n from '../../../i18n'
 import router from '../../../router'
 import { playerName } from '../../../lichess/player'
@@ -56,7 +57,7 @@ export default function renderGameInfos(ctrl: AnalyseCtrl) {
 function renderStatus(ctrl: AnalyseCtrl) {
   const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner)
   return (
-    <div key="gameStatus" className="status">
+    <div className="status">
       {gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key)}
 
       {winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : null}

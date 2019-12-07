@@ -1,5 +1,6 @@
-import * as h from 'mithril/hyperscript'
-import * as range from 'lodash/range'
+import * as Mithril from 'mithril'
+import { Plugins } from '@capacitor/core'
+import h from 'mithril/hyperscript'
 import redraw from '../../../../utils/redraw'
 import socket from '../../../../socket'
 import session from '../../../../session'
@@ -12,7 +13,7 @@ import { User } from '../../../../lichess/interfaces/user'
 import settings from '../../../../settings'
 import * as utils from '../../../../utils'
 import { emptyFen } from '../../../../utils/fen'
-import i18n from '../../../../i18n'
+import i18n, { plural } from '../../../../i18n'
 import layout from '../../../layout'
 import * as helper from '../../../helper'
 import { connectingHeader, backButton, menuButton, loader, headerBtns, bookmarkButton } from '../../../shared/common'
@@ -31,7 +32,6 @@ import CrazyPocket from '../crazy/CrazyPocket'
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView'
 import { renderInlineReplay, renderReplay } from './replay'
 import OnlineRound from '../OnlineRound'
-import { hasSpaceForInlineReplay } from '../util'
 import { Position, Material } from '../'
 
 export default function view(ctrl: OnlineRound) {
@@ -46,7 +46,7 @@ export default function view(ctrl: OnlineRound) {
 
 export function renderMaterial(material: Material) {
   const tomb = Object.keys(material.pieces).map((role: Role) =>
-    h('div.tomb', { key: role }, range(material.pieces[role])
+    h('div.tomb', Array.from(Array(material.pieces[role]).keys())
       .map(_ => h('piece', { className: role }))
     )
   )
@@ -61,20 +61,18 @@ export function renderMaterial(material: Material) {
 export function viewOnlyBoardContent(fen: string, orientation: Color, lastMove?: string, variant?: VariantKey, wrapperClass?: string, customPieceTheme?: string) {
   const isPortrait = helper.isPortrait()
   const vd = helper.viewportDim()
-  const orientKey = 'viewonlyboard' + (isPortrait ? 'portrait' : 'landscape')
-  const bounds = helper.getBoardBounds(vd, isPortrait)
   const className = 'board_wrapper' + (wrapperClass ? ' ' + wrapperClass : '')
   const board = (
     <section className={className}>
-      {h(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
+      {h(ViewOnlyBoard, {fen, lastMove, orientation, variant, customPieceTheme})}
     </section>
   )
-  const showMoveList = hasSpaceForInlineReplay(vd, bounds) &&
+  const showMoveList = helper.hasSpaceForInlineReplay(vd, isPortrait) &&
     settings.game.moveList() &&
     !settings.game.zenMode()
 
   if (isPortrait) {
-    return h.fragment({ key: orientKey }, [
+    return h.fragment({}, [
       showMoveList ? h('div.replay_inline') : null,
       h('section.playTable'),
       board,
@@ -82,7 +80,7 @@ export function viewOnlyBoardContent(fen: string, orientation: Color, lastMove?:
       h('section.actions_bar'),
     ])
   } else {
-    return h.fragment({ key: orientKey}, [
+    return h.fragment({}, [
       board,
       h('section.table'),
     ])
@@ -137,17 +135,13 @@ function renderTitle(ctrl: OnlineRound) {
   if (ctrl.vm.offlineWatcher || socket.isConnected()) {
     const isCorres = !data.player.spectator && data.game.speed === 'correspondence'
     if (ctrl.data.tv) {
-      return h('div.main_header_title.withSub', {
-        key: 'tv'
-      }, [
+      return h('div.main_header_title.withSub', [
         h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), 'Lichess TV']),
         h('h2.header-subTitle', tvChannelSelector(ctrl))
       ])
     }
     else if (ctrl.data.userTV) {
-      return h('div.main_header_title.withSub', {
-        key: 'user-tv'
-      }, [
+      return h('div.main_header_title.withSub', [
         h('h1.header-gameTitle', [
           h(`span.withIcon[data-icon=${utils.gameIcon(ctrl.data.game.perf)}]`),
           gameApi.title(ctrl.data)
@@ -163,7 +157,6 @@ function renderTitle(ctrl: OnlineRound) {
     }
     else {
       return h(GameTitle, {
-        key: 'playing-title',
         data: ctrl.data,
         kidMode: session.isKidMode(),
         subTitle: tournament ? 'tournament' : isCorres ? 'corres' : 'date'
@@ -171,7 +164,7 @@ function renderTitle(ctrl: OnlineRound) {
     }
   } else {
     return (
-      <div key="reconnecting-title" className="main_header_title reconnecting">
+      <div className="main_header_title reconnecting">
         {loader}
       </div>
     )
@@ -203,7 +196,6 @@ function renderHeader(ctrl: OnlineRound) {
 
 function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const vd = helper.viewportDim()
-  const bounds = helper.getBoardBounds(vd, isPortrait)
 
   const material = ctrl.chessground.getMaterialDiff()
 
@@ -213,22 +205,20 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessground: ctrl.chessground,
-    bounds
   })
 
-  const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
   const flip = !ctrl.data.tv && ctrl.vm.flip
 
   if (isPortrait) {
-    return h.fragment({ key: orientationKey }, [
-      hasSpaceForInlineReplay(vd, bounds) ? renderInlineReplay(ctrl) : null,
+    return [
+      helper.hasSpaceForInlineReplay(vd, isPortrait) ? renderInlineReplay(ctrl) : null,
       flip ? player : opponent,
       board,
       flip ? opponent : player,
       renderGameActionsBar(ctrl)
-    ])
+    ]
   } else {
-    return h.fragment({ key: orientationKey }, [
+    return [
       board,
       h('section.table',
         h('section.playersTable', [
@@ -238,7 +228,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
         ]),
         renderGameActionsBar(ctrl),
       ),
-    ])
+    ]
   }
 }
 
@@ -252,7 +242,7 @@ function renderExpiration(ctrl: OnlineRound, position: Position, myTurn: boolean
   }, h(CountdownTimer, {
       seconds: Math.round(timeLeft / 1000),
       emergTime: myTurn ? 8 : undefined,
-      textWrap: (t: string) => `<strong>${t}</strong> seconds to play the first move`,
+      textWrap: (sec: Seconds, t: string) => plural('nbSecondsToPlayTheFirstMove', sec, `<strong>${t}</<strong>`),
       showOnlySecs: true
     })
   )
@@ -283,9 +273,10 @@ function userInfos(user: User, player: Player, playerName: string) {
     let onlineStatus = user.online ? 'connected to lichess' : 'offline'
     let onGameStatus = player.onGame ? 'currently on this game' : 'currently not on this game'
     title = `${playerName}: ${onlineStatus}; ${onGameStatus}`
-  } else
+  } else {
     title = playerName
-  window.plugins.toast.show(title, 'short', 'center')
+  }
+  Plugins.Toast.show({ text: title, duration: 'short' })
 }
 
 function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Material, position: Position, isCrazy: boolean) {
@@ -294,7 +285,7 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
   const togglePopup = user ? () => ctrl.openUserPopup(position, user.id) : utils.noop
   const vConf = user ?
     helper.ontap(togglePopup, () => userInfos(user, player, playerName)) :
-    helper.ontap(utils.noop, () => window.plugins.toast.show(playerName, 'short', 'center'))
+    helper.ontap(utils.noop, () => Plugins.Toast.show({ text: playerName, duration: 'short' }))
 
   const checksNb = getChecksCount(ctrl, player.color)
 
@@ -473,7 +464,6 @@ function renderGameEndedActions(ctrl: OnlineRound) {
   const tournamentId = ctrl.data.game.tournamentId
 
   const shareActions = h('button', {
-    key: 'showShareActions',
     oncreate: helper.ontap(ctrl.showShareActions),
   }, [h('span.fa.fa-share'), 'Share'])
 
@@ -578,14 +568,14 @@ function renderGameActionsBar(ctrl: OnlineRound) {
 
   const gmDataIcon = ctrl.data.opponent.offeringDraw ? '2' : null
   const gmButton = gmDataIcon ?
-    <button className={gmClass} data-icon={gmDataIcon} key="gameMenu" oncreate={helper.ontap(ctrl.showActions)} /> :
-    <button className={gmClass} key="gameMenu" oncreate={helper.ontap(ctrl.showActions)} />
+    <button className={gmClass} data-icon={gmDataIcon} oncreate={helper.ontap(ctrl.showActions)} /> :
+    <button className={gmClass} oncreate={helper.ontap(ctrl.showActions)} />
 
   return (
     <section className="actions_bar">
       {gmButton}
       {ctrl.chat ?
-        <button className="action_bar_button fa fa-comments withChip" key="chat"
+        <button className="action_bar_button fa fa-comments withChip"
           oncreate={helper.ontap(ctrl.chat.open)}
         >
          { ctrl.chat.nbUnread > 0 ?

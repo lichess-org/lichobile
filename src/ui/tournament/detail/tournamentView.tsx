@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import { Plugins } from '@capacitor/core'
+import h from 'mithril/hyperscript'
 import router from '../../../router'
 import session from '../../../session'
 import i18n from '../../../i18n'
@@ -46,11 +47,11 @@ export function renderFooter(ctrl: TournamentCtrl) {
 
   return (
     <div className="actions_bar">
-      <button key="faq" className="action_bar_button" oncreate={helper.ontap(ctrl.faqCtrl.open)}>
+      <button className="action_bar_button" oncreate={helper.ontap(ctrl.faqCtrl.open)}>
         <span className="fa fa-question-circle" />
         FAQ
       </button>
-      <button key="share" className="action_bar_button" oncreate={helper.ontap(() => window.plugins.socialsharing.share(tUrl))}>
+      <button className="action_bar_button" oncreate={helper.ontap(() => Plugins.Share.share({ url: tUrl }))}>
         <span className="fa fa-share-alt" />
         Share
       </button>
@@ -59,18 +60,18 @@ export function renderFooter(ctrl: TournamentCtrl) {
   )
 }
 
-export function timeInfo(key: string, seconds?: number, preceedingText?: string) {
+export function timeInfo(seconds?: number, preceedingText?: string) {
   if (seconds === undefined) return null
 
   return [
     preceedingText ? (preceedingText + ' ') : null,
-    h(CountdownTimer, { key, seconds })
+    h(CountdownTimer, { seconds })
   ]
 }
 
 function tournamentHeader(data: Tournament, ctrl: TournamentCtrl) {
   return (
-    <div key="header" className="tournamentHeader">
+    <div className="tournamentHeader">
       {tournamentTimeInfo(data)}
       {data.spotlight ? tournamentSpotlightInfo(data.spotlight) : null}
       {tournamentCreatorInfo(data, ctrl.startsAt!)}
@@ -105,7 +106,7 @@ function tournamentPositionInfo(position: Opening) {
   return (
     <div className={'tournamentPositionInfo' + (position.wikiPath ? ' withLink' : '')}
       oncreate={helper.ontapY(() => position && position.wikiPath &&
-        window.open(`https://en.wikipedia.org/wiki/${position.wikiPath}`)
+        Plugins.Browser.open({ url: `https://en.wikipedia.org/wiki/${position.wikiPath}` })
       )}
     >
       {position.eco + ' ' + position.name}
@@ -156,7 +157,7 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
     () => ctrl.join()
 
   return (
-    <button key="join" className="action_bar_button" oncreate={helper.ontap(action)}>
+    <button className="action_bar_button" oncreate={helper.ontap(action)}>
       <span className="fa fa-play" />
       {i18n('join')}
     </button>
@@ -168,7 +169,7 @@ function withdrawButton(ctrl: TournamentCtrl, t: Tournament) {
     return null
   }
   return (
-    <button key="withdraw" className="action_bar_button" oncreate={helper.ontap(ctrl.withdraw)}>
+    <button className="action_bar_button" oncreate={helper.ontap(ctrl.withdraw)}>
       <span className="fa fa-flag" />
       {i18n('withdraw')}
     </button>
@@ -200,7 +201,7 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
   const userName = user ? user.username : ''
 
   return (
-    <div key="leaderboard" className="tournamentLeaderboard">
+    <div className="tournamentLeaderboard">
       { data.nbPlayers > 0 ?
         <p className="tournamentTitle"> {i18n('leaderboard')} ({i18n('nbConnectedPlayers', data.nbPlayers)})</p> : null
       }
@@ -260,7 +261,7 @@ function tournamentFeaturedGame(ctrl: TournamentCtrl) {
 
   return (
     <div className="tournamentGames">
-      <div key={featured.id} className="tournamentMiniBoard">
+      <div className="tournamentMiniBoard">
         {h(miniBoard, {
           fixed: false,
           fen: featured.fen,
@@ -277,7 +278,7 @@ function tournamentFeaturedGame(ctrl: TournamentCtrl) {
 
 function tournamentPodium(podium: ReadonlyArray<PodiumPlace>) {
   return (
-    <div key="podium" className="podium">
+    <div className="podium">
       { renderPlace(podium[1]) }
       { renderPlace(podium[0]) }
       { renderPlace(podium[2]) }

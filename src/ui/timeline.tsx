@@ -1,5 +1,6 @@
-import * as h from 'mithril/hyperscript'
-import * as stream from 'mithril/stream'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
+import Stream from 'mithril/stream'
 import router from '../router'
 import redraw from '../utils/redraw'
 import { timeline as timelineXhr, openWebsiteAuthPage } from '../xhr'
@@ -7,18 +8,18 @@ import { gameIcon, handleXhrError } from '../utils'
 import { dropShadowHeader as headerWidget, backButton } from './shared/common'
 import * as helper from './helper'
 import layout from './layout'
-import i18n from '../i18n'
+import i18n, { fromNow } from '../i18n'
 import { TimelineEntry } from '../lichess/interfaces'
 
 export const supportedTypes = ['follow', 'game-end', 'tour-join', 'study-create', 'study-like', 'forum-post', 'blog-post']
 
 interface State {
-  timeline: Mithril.Stream<ReadonlyArray<TimelineEntry>>
+  timeline: Stream<ReadonlyArray<TimelineEntry>>
 }
 
 export default {
   oninit() {
-    this.timeline = stream([] as TimelineEntry[])
+    this.timeline = Stream([] as TimelineEntry[])
 
     timelineXhr()
     .then(data => {
@@ -26,7 +27,7 @@ export default {
         data.entries
         .filter(o => supportedTypes.indexOf(o.type) !== -1)
         .map(o => {
-          o.fromNow = window.moment(o.date).fromNow()
+          o.fromNow = fromNow(new Date(o.date))
           return o
         })
       )
@@ -143,7 +144,7 @@ function renderFollow(entry: TimelineEntry) {
     >
       <span className="fa fa-arrow-circle-right" />
       {h.trust(entryText.replace(/^(\w+)\s/, '<strong>$1&nbsp;</strong>'))}
-      <small><em>{entry.fromNow}</em></small>
+      <small><em> {entry.fromNow}</em></small>
     </li>
   )
 }

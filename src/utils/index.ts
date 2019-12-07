@@ -1,3 +1,4 @@
+import { Plugins, NetworkStatus } from '@capacitor/core'
 import i18n from '../i18n'
 import globalConfig from '../config'
 import { ErrorResponse } from '../http'
@@ -89,8 +90,16 @@ export function autoredraw(action: () => void): void {
   return res
 }
 
+let networkStatus: NetworkStatus
+Plugins.Network.addListener('networkStatusChange', st => {
+  networkStatus = st
+})
+Plugins.Network.getStatus().then(st => {
+  networkStatus = st
+})
+
 export function hasNetwork(): boolean {
-  return window.navigator.connection.type !== Connection.NONE
+  return networkStatus.connected
 }
 
 export function handleXhrError(error: ErrorResponse): void {
@@ -122,7 +131,7 @@ export function handleXhrError(error: ErrorResponse): void {
   else if (data.global && data.global.constructor === Array) {
     message += ` ${i18n(data.global[0])}`
   }
-  window.plugins.toast.show(message, 'short', 'center')
+  Plugins.Toast.show({ text: message, duration: 'short' })
 }
 
 export function serializeQueryParameters(obj: StringMap): string {
@@ -257,12 +266,6 @@ export function flatten<T>(arr: T[][]): T[] {
   return arr.reduce((a: T[], b: T[]) => a.concat(b), [])
 }
 
-export function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U> {
-  const res = {} as Record<K, U>
-  Object.keys(obj).map((k: K) => res[k] = f(obj[k]))
-  return res
-}
-
 export function lichessAssetSrc(path: string) {
   return `${globalConfig.apiEndPoint}/assets/${path}`
 }
@@ -284,38 +287,12 @@ export function safeStringToNum(s: string | null | undefined): number | undefine
   return isNaN(n) ? undefined : n
 }
 
-/**
- * Performs equality by iterating through keys on an object and returning false
- * when any key has values which are not strictly equal between the arguments.
- * Returns true when the values of all keys are strictly equal.
- */
-const hasOwnProperty = Object.prototype.hasOwnProperty
-type OAny = { [k: string]: any }
-export function shallowEqual(objA: OAny, objB: OAny): boolean {
-  if (Object.is(objA, objB)) {
-    return true
+export function hashCode(str: string) {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash
   }
-
-  if (typeof objA !== 'object' || objA === null ||
-      typeof objB !== 'object' || objB === null) {
-    return false
-  }
-
-  const keysA = Object.keys(objA)
-  const keysB = Object.keys(objB)
-
-  if (keysA.length !== keysB.length) {
-    return false
-  }
-
-  for (let i = 0; i < keysA.length; i++) {
-    if (
-      !hasOwnProperty.call(objB, keysA[i]) ||
-      !Object.is(objA[keysA[i]], objB[keysA[i]])
-    ) {
-      return false
-    }
-  }
-
-  return true
+  return hash
 }

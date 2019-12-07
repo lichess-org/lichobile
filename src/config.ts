@@ -1,5 +1,5 @@
 export interface Config {
-  mode: 'dev' | 'release'
+  mode: 'dev' | 'prod'
   apiEndPoint: string
   socketEndPoint: string
   apiVersion: number

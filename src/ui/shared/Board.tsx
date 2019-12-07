@@ -1,17 +1,13 @@
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import settings from '../../settings'
 import redraw from '../../utils/redraw'
 import Chessground from '../../chessground/Chessground'
 import BoardBrush, { Shape } from './BoardBrush'
 
-export interface Bounds {
-  width: number
-  height: number
-}
-
 export interface Attrs {
   variant: VariantKey
   chessground: Chessground
-  bounds: Bounds
   wrapperClasses?: string
   customPieceTheme?: string
   shapes?: ReadonlyArray<Shape>
@@ -20,12 +16,14 @@ export interface Attrs {
 }
 
 interface State {
-  wrapperOnCreate(vnode: Mithril.DOMNode): void
-  boardOnCreate(vnode: Mithril.DOMNode): void
+  wrapperOnCreate(vnode: Mithril.VnodeDOM<any, any>): void
+  boardOnCreate(vnode: Mithril.VnodeDOM<any, any>): void
   boardOnRemove(): void
   boardTheme: string
   pieceTheme: string
   shapesCleared: boolean
+  bounds?: ClientRect
+  onResize: () => void
 }
 
 export default {
@@ -42,10 +40,15 @@ export default {
           }
         })
       }
+      this.bounds = dom.getBoundingClientRect()
+      this.onResize = () => {
+        this.bounds = dom.getBoundingClientRect()
+      }
+      window.addEventListener('resize', this.onResize)
     }
 
-    this.boardOnCreate = ({ dom }: Mithril.DOMNode) => {
-      chessground.attach(dom as HTMLElement)
+    this.boardOnCreate = ({ dom }: Mithril.VnodeDOM<any, any>) => {
+      chessground.attach(dom as HTMLElement, this.bounds!)
     }
 
     this.boardOnRemove = () => {
@@ -67,7 +70,7 @@ export default {
   },
 
   view(vnode) {
-    const { variant, chessground, bounds, wrapperClasses, customPieceTheme, shapes, clearableShapes } = vnode.attrs
+    const { variant, chessground, wrapperClasses, customPieceTheme, shapes, clearableShapes } = vnode.attrs
 
     const boardClass = [
       'display_board',
@@ -84,33 +87,30 @@ export default {
       wrapperClass += wrapperClasses
     }
 
-    const wrapperStyle = bounds ? {
-      'flex-basis': bounds.height + 'px',
-      height: bounds.height + 'px',
-      width: bounds.width + 'px'
-    } : {}
-
     const allShapes = [
       ...(shapes !== undefined ? shapes : []),
       ...(clearableShapes !== undefined && !this.shapesCleared ? clearableShapes : [])
     ]
 
-    return (
-      <section oncreate={this.wrapperOnCreate} className={wrapperClass} style={wrapperStyle}>
-        <div className={boardClass}
-          oncreate={this.boardOnCreate}
-          onremove={this.boardOnRemove}
-        />
-        {
-          allShapes.length > 0 ?
-            BoardBrush(
-              bounds,
-              chessground.state.orientation,
-              allShapes,
-              this.pieceTheme
-            ) : null
-        }
-      </section>
-    )
+    return h('section', {
+      className: wrapperClass,
+      oncreate: this.wrapperOnCreate,
+      onremove: () => {
+        window.removeEventListener('resize', this.onResize)
+      }
+    }, [
+      h('div', {
+        className: boardClass,
+        oncreate: this.boardOnCreate,
+        onremove: this.boardOnRemove,
+      }),
+      allShapes.length > 0 && this.bounds ?
+        BoardBrush(
+          this.bounds,
+          chessground.state.orientation,
+          allShapes,
+          this.pieceTheme
+        ) : null
+    ])
   }
 } as Mithril.Component<Attrs, State>

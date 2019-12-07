@@ -1,4 +1,6 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
+import i18n from '../../../i18n'
 import * as helper from '../../helper'
 import explorerConfig from './explorerConfig'
 import { Move, isTablebaseData } from './interfaces'
@@ -16,13 +18,13 @@ export default function renderExplorer(ctrl: AnalyseCtrl) {
   })
   const opening = ctrl.tree.getOpening(ctrl.nodeList) || ctrl.data.game.opening
   return (
-    <div id="explorerTable" className={className} key="explorer">
+    <div id="explorerTable" className={className}>
       { data && data.opening ?
       <div className="explorer-fixedTitle">
         { opening ? opening.eco + ' ' + opening.name : '' }
       </div> : null
       }
-      { loading ? <div key="loader" className="spinner_overlay">
+      { loading ? <div className="spinner_overlay">
         <div className="spinner fa fa-hourglass-half" />
       </div> : null
       }
@@ -30,7 +32,7 @@ export default function renderExplorer(ctrl: AnalyseCtrl) {
       { !configOpened && ctrl.explorer.failing() ? failing() : null }
       { !configOpened && !ctrl.explorer.failing() ? show(ctrl) : null }
       { configOpened || (data && data.opening) ?
-        <span key={configOpened ? 'config-onpen' : 'config-close'} className="toconf" data-icon={configOpened ? 'L' : '%'}
+        <span className="toconf" data-icon={configOpened ? 'L' : '%'}
           oncreate={helper.ontap(config.toggleOpen)}
         /> : null
       }
@@ -39,13 +41,10 @@ export default function renderExplorer(ctrl: AnalyseCtrl) {
 }
 
 export function getTitle(ctrl: AnalyseCtrl): Mithril.Children {
-  const data = ctrl.explorer.current()
   if (ctrl.data.game.variant.key === 'standard' || ctrl.data.game.variant.key === 'fromPosition') {
-    if (data && data.tablebase) return 'Endgame tablebase'
-    else return 'Opening explorer'
+    return i18n('openingExplorer')
   } else {
-    const what = data && data.tablebase ? ' endgame tablebase' :  ' opening explorer'
-    return ctrl.data.game.variant.name + what
+    return i18n('xOpeningExplorer', ctrl.data.game.variant.name)
   }
 }
 
@@ -114,9 +113,7 @@ function showDtz(stm: string, move: Move) {
 }
 
 function showGameEnd(title: string) {
-  return h('div.explorer-data.empty', {
-    key: 'explorer-game-end' + title
-  }, [
+  return h('div.explorer-data.empty', [
     h('div.message', [
       h('h3', [
         h('i.withIcon[data-icon=]'),
@@ -135,7 +132,7 @@ function show(ctrl: AnalyseCtrl) {
     const moves = data.moves
     if (moves.length) {
       return (
-        <div key="explorer-tablebase" className="explorer-data">
+        <div className="explorer-data">
           {showTablebase(ctrl, 'Winning', moves.filter((move: Move) => move.wdl === -2), data.fen)}
           {showTablebase(ctrl, 'Unknown', moves.filter((move: Move) => move.wdl === null), data.fen)}
           {showTablebase(ctrl, 'Win prevented by 50-move rule', moves.filter((move: Move) => move.wdl === -1), data.fen)}
@@ -150,18 +147,16 @@ function show(ctrl: AnalyseCtrl) {
     else if (data.variant_win || data.variant_loss) return showGameEnd('Variant end')
     else return showEmpty(ctrl)
   }
-  return <div key="explorer-no-data" />
+  return <div />
 }
 
 function showConfig(ctrl: AnalyseCtrl) {
   return h('div.explorerConfig', {
-    key: 'opening-config'
   }, explorerConfig.view(ctrl.explorer.config))
 }
 
 function failing() {
   return h('div.explorer-data.empty', {
-    key: 'failing'
   }, h('div.failing.message', [
     h('h3', [
       h('i.withIcon[data-icon=,]'),

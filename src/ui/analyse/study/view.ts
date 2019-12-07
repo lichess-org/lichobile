@@ -1,4 +1,4 @@
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import { linkify } from '../../../utils/html'
 import * as helper from '../../helper'
 

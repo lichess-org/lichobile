@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 
@@ -31,7 +32,7 @@ export default {
   }
 } as Mithril.Component<{ ctrl: AnalyseCtrl, color: Color }, {}>
 
-function clockContent(centis: number): Mithril.BaseNode {
+function clockContent(centis: number): Mithril.Vnode<any, any> {
   if (centis === undefined) return h('span.time', ['-'])
   const date = new Date(centis * 10),
   millis = date.getUTCMilliseconds(),

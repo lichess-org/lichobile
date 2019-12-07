@@ -1,8 +1,10 @@
-import * as Rlite from 'rlite-router'
-import * as RenderService from 'mithril/render'
-import * as Vnode from 'mithril/render/vnode'
+import * as Mithril from 'mithril'
+import { Plugins } from '@capacitor/core'
+import Rlite from 'rlite-router'
+import render from 'mithril/render'
+import Vnode from 'mithril/render/vnode'
 import signals from './signals'
-import * as isFunction from 'lodash/isFunction'
+import isFunction from 'lodash-es/isFunction'
 import session from './session'
 import { serializeQueryParameters } from './utils'
 import redraw from './utils/redraw'
@@ -25,37 +27,37 @@ let viewSlideDirection = 'fwd'
 
 let previousPath: string = '/'
 
-export function defineRoutes(mountPoint: HTMLElement, routes: {[index: string]: Mithril.Component<any, any>}) {
-  for (let route in routes) {
-    const component = routes[route]
-    router.add(route, function onRouteMatch({ params }) {
+const mountPoint = document.body
 
-      const RouteComponent = {view() {
-        return Vnode(component, undefined, params)
-      }}
-
-      function redraw() {
-        RenderService.render(mountPoint, Vnode(RouteComponent))
-      }
-
-      signals.redraw.removeAll()
-      signals.redraw.add(redraw)
-      // some error may be thrown during component initialization
-      // in that case shutdown redraws to avoid multiple execution of oninit
-      // hook of buggy component
-      try {
-        redraw()
-      } catch (e) {
-        signals.redraw.removeAll()
-        throw e
-      }
-    })
-  }
-  window.addEventListener('popstate', processQuerystring)
-  processQuerystring()
+export function withRouter(f: (r: Rlite.Rlite) => void): void {
+  f(router)
 }
 
-function processQuerystring(e?: PopStateEvent) {
+export function onRouteMatch<T>(component: Mithril.Component<any, any>, params: T) {
+
+  const RouteComponent = {view() {
+    return Vnode(component, undefined, params)
+  }}
+
+  function redraw() {
+    // temp hack because of @types/mithril
+    (render as any)(mountPoint, Vnode(RouteComponent))
+  }
+
+  signals.redraw.removeAll()
+  signals.redraw.add(redraw)
+  // some error may be thrown during component initialization
+  // in that case shutdown redraws to avoid multiple execution of oninit
+  // hook of buggy component
+  try {
+    redraw()
+  } catch (e) {
+    signals.redraw.removeAll()
+    throw e
+  }
+}
+
+export function processQuerystring(e?: PopStateEvent) {
   if (e && e.state) {
     if (e.state.id < currentStateId) {
       viewSlideDirection = 'bwd'
@@ -119,15 +121,19 @@ const backbutton = (() => {
       // if playing a game as anon ask for confirmation because there is no way
       // back!
       if (/^\/game\/[a-zA-Z0-9]{12}/.test(get()) && !session.isConnected()) {
-        navigator.notification.confirm(
-          'Do you really want to leave the game? You can\'t go back to it after.',
-          i => { if (i === 1) backHistory() }
-        )
+        Plugins.Modals.confirm({
+          title: 'Confirmation',
+          message: 'Do you really want to leave the game? You can\'t go back to it after.',
+        }).then(({ value }) => {
+          if (value) {
+            backHistory()
+          }
+        })
       } else {
         backHistory()
       }
     } else {
-      window.navigator.app.exitApp()
+      Plugins.App.exitApp()
     }
   }
 

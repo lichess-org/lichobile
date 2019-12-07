@@ -1,8 +1,9 @@
-import * as throttle from 'lodash/throttle'
+import * as Mithril from 'mithril'
+import { Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
+import throttle from 'lodash-es/throttle'
 import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
-import { saveOfflineGameData, removeOfflineGameData } from '../../../utils/offlineGames'
 import { hasNetwork, boardOrientation, handleXhrError } from '../../../utils'
 import * as sleepUtils from '../../../utils/sleep'
 import session from '../../../session'
@@ -77,6 +78,8 @@ export default class OnlineRound implements OnlineRoundInterface {
   private clockIntervId!: number
   private clockTimeoutId!: number
   private blur: boolean
+
+  private appStateListener: PluginListenerHandle
 
   public constructor(
     goingBack: boolean,
@@ -172,7 +175,9 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.makeCorrespondenceClock()
     if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick, 6000)
 
-    document.addEventListener('resume', this.onResume)
+    this.appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
+      if (state.isActive) this.onResume()
+    })
 
     redraw()
   }
@@ -342,7 +347,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     } else {
       this.socketSendMoveOrDrop(move, isPremove, sendBlur)
       if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
-        window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center')
+        Plugins.Toast.show({ text: 'You need to be connected to Internet to send your move.', duration: 'short' })
       }
     }
   }
@@ -387,7 +392,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         this.socketSendMoveOrDrop(this.vm.dropToSubmit)
       }
       if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
-        window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center')
+        Plugins.Toast.show({ text: 'You need to be connected to Internet to send your move.', duration: 'short' })
       }
       this.vm.moveToSubmit = null
       this.vm.dropToSubmit = null
@@ -549,7 +554,6 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     if (this.data.game.speed === 'correspondence') {
       session.refresh()
-      saveOfflineGameData(this.id, this.data)
     }
   }
 
@@ -592,9 +596,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
     if (this.clock && o.clock) this.clock.setClock(d, o.clock.wc * .01, o.clock.bc * .01)
 
-    if (this.data.game.speed === 'correspondence') {
-      removeOfflineGameData(this.data.url.round.substr(1))
-    }
     if (d.game.turns > 1) {
       sound.dong()
       vibrate.quick()
@@ -602,7 +603,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (!this.data.player.spectator) {
       session.backgroundRefresh()
       sleepUtils.allowSleepAgain()
-      window.plugins.toast.show(this.gameStatus(), 'short', 'center')
+      Plugins.Toast.show({ text: this.gameStatus(), duration: 'short' })
     }
     this.score === undefined
   }
@@ -636,9 +637,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public unload() {
     clearTimeout(this.clockTimeoutId)
     clearInterval(this.clockIntervId)
-    document.removeEventListener('resume', this.onResume)
-    if (this.chat) this.chat.unload()
-    if (this.notes) this.notes.unload()
+    this.appStateListener.remove()
   }
 
   private makeCorrespondenceClock() {

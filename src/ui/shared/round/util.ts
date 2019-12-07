@@ -1,7 +1,6 @@
 import { OnlineGameData, GameStep } from '../../../lichess/interfaces/game'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import * as helper from '../../helper'
-import { Bounds } from '../Board'
 import { RoundInterface } from '.'
 
 export function firstPly(d: OnlineGameData): number {
@@ -43,13 +42,4 @@ export function onReplayTap(ctrl: RoundInterface, e: Event) {
   if (el && el.dataset.ply) {
     ctrl.jump(Number(el.dataset.ply))
   }
-}
-
-function remainingSpace(vd: helper.ViewportDim, bounds: Bounds): number {
-  // vh - headerHeight - boardHeight - footerHeight
-  return vd.vh - bounds.height - 56 - 45
-}
-
-export function hasSpaceForInlineReplay(vd: helper.ViewportDim, bounds: Bounds): boolean {
-  return remainingSpace(vd, bounds) - 110 >= 25
 }

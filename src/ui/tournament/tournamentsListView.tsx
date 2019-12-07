@@ -1,4 +1,4 @@
-import * as h from 'mithril/hyperscript'
+import h from 'mithril/hyperscript'
 import i18n from '../../i18n'
 import router from '../../router'
 import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize } from '../../utils'
@@ -57,7 +57,7 @@ export function renderTournamentsList(ctrl: TournamentsListCtrl) {
 export function renderFooter() {
   return (
     <div className="actions_bar">
-      <button key="createTournament" className="action_create_button" oncreate={helper.ontap(newTournamentForm.open)}>
+      <button className="action_create_button" oncreate={helper.ontap(newTournamentForm.open)}>
         <span className="fa fa-plus-circle" />
         {i18n('createANewTournament')}
       </button>

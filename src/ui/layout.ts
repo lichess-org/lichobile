@@ -1,6 +1,9 @@
-import * as Hammer from 'hammerjs'
-import * as h from 'mithril/hyperscript'
+import { Capacitor } from '@capacitor/core'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import settings from '../settings'
+import Gesture from '../utils/Gesture'
+import { viewportDim } from './helper'
 import * as menu from './menu'
 import MenuView from './menu/menuView'
 import gamesMenu from './gamesMenu'
@@ -11,7 +14,7 @@ import loginModal from './loginModal'
 import signupModal from './signupModal'
 import friendsPopup from './friendsPopup'
 import lobby from './lobby'
-import EdgeOpenHandler, { HammerHandlers } from './shared/sideMenu/EdgeOpenHandler'
+import EdgeOpenHandler, { Handlers } from './shared/sideMenu/EdgeOpenHandler'
 import MainBoard from './shared/layout/MainBoard'
 
 let background: string
@@ -26,12 +29,12 @@ export default {
     header: Mithril.Children,
     content: Mithril.Children,
     overlay?: Mithril.Children,
-    hammerHandlers?: HammerHandlers,
+    handlers?: Handlers,
     color?: string
   ) {
     background = background || settings.general.theme.background()
     return h('div.view-container', containerOpts(background), [
-      h(MainBoard, { header, color, hammerHandlers }, content),
+      h(MainBoard, { header, color, handlers }, content),
       h(MenuView),
       gamesMenu.view(),
       loginModal.view(),
@@ -83,19 +86,15 @@ export default {
   }
 }
 
-function handleMenuOpen({ dom }: Mithril.DOMNode) {
+function handleMenuOpen({ dom }: Mithril.VnodeDOM<any, any>) {
   const mainEl = dom as HTMLElement
-  const mc = new Hammer.Manager(mainEl, {
-    inputClass: Hammer.TouchInput
+  const gesture = new Gesture(mainEl, viewportDim(), {
+    passiveMove: Capacitor.platform !== 'ios'
   })
-  mc.add(new Hammer.Pan({
-    direction: Hammer.DIRECTION_HORIZONTAL,
-    threshold: 5
-  }))
 
-  const defaultHandlers: HammerHandlers = EdgeOpenHandler(menu.mainMenuCtrl)
+  const defaultHandlers: Handlers = EdgeOpenHandler(menu.mainMenuCtrl)
   for (const eventName in defaultHandlers) {
-    mc.on(eventName, defaultHandlers[eventName])
+    gesture.on(eventName, defaultHandlers[eventName](gesture))
   }
 }
 
@@ -105,6 +104,6 @@ function bgClass(bgTheme: string) {
 
 function containerOpts(bgTheme: string) {
   return {
-    className: bgClass(bgTheme) + (window.cordova.platformId === 'ios' ? ' ios' : ''),
+    className: bgClass(bgTheme)
   }
 }

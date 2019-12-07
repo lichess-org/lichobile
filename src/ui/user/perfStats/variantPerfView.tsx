@@ -1,3 +1,5 @@
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import { select } from 'd3-selection'
 import { scaleTime, scaleLinear } from 'd3-scale'
 import { line } from 'd3-shape'
@@ -9,7 +11,7 @@ import i18n from '../../../i18n'
 import * as helper from '../../helper'
 import { GraphPoint } from '../../../lichess/interfaces/user'
 
-import { State } from '.'
+import { State } from './perfStats'
 
 interface DateRating {
   date: Date
@@ -44,7 +46,7 @@ export function renderBody(ctrl: State) {
             height="230"
             id="variantPerf-graph"
             className="variantPerf-graph"
-            oncreate={({ dom }: Mithril.DOMNode) => delayDrawChart(graphData, dom as SVGElement)}
+            oncreate={({ dom }: Mithril.VnodeDOM<any, any>) => delayDrawChart(graphData, dom as SVGElement)}
             key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'}
           />
         </div> : null
@@ -76,7 +78,7 @@ export function renderBody(ctrl: State) {
         </tr>
         <tr> <td class="variantPerfSpacer" colspan="3"> </td> </tr>
         <tr>
-          <th class="variantPerfHeading" colspan="3"> Other {i18n('rating')} Statistics </th>
+          <th class="variantPerfHeading" colspan="3">{i18n('ratingStats')}</th>
         </tr>
         <tr>
           <th class="variantPerf"> Avg opponent {i18n('rating').toLowerCase()} </th>
@@ -107,7 +109,7 @@ export function renderBody(ctrl: State) {
           <td class="variantPerf"> <span class="progress positive"> {Math.round((data.stat.count.win / data.stat.count.all) * 100) + '%'} </span> </td>
         </tr>
         <tr>
-          <th class="variantPerf"> {toTitleCase(i18n('nbDraws', 0).split(' ')[1])} </th>
+          <th class="variantPerf"> {i18n('draws')} </th>
           <td class="variantPerf"> {data.stat.count.draw} </td>
           <td class="variantPerf"> {Math.round((data.stat.count.draw / data.stat.count.all) * 100) + '%'} </td>
         </tr>
@@ -188,12 +190,6 @@ function isEmpty(element: any) {
     return 'empty'
   else
     return ''
-}
-
-function toTitleCase(str: string) {
-  return str.replace(/\w\S*/g, txt =>
-    txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-  )
 }
 
 function delayDrawChart(graphData: GraphData, el: SVGElement) {

@@ -1,7 +1,7 @@
-import * as h from 'mithril/hyperscript'
-import * as Hammer from 'hammerjs'
-import { EDGE_SLIDE_THRESHOLD } from './sideMenu'
-import { viewportDim, findParentBySelector, headerHeight, isPortrait, is43Aspect } from '../helper'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
+import Gesture from '../../utils/Gesture'
+import { viewportDim, findParentBySelector, elSlideIn } from '../helper'
 
 interface Attrs {
   selectedIndex: number
@@ -14,86 +14,76 @@ interface Attrs {
 
 interface State {
   nbTabs: number
-  mc: HammerManager
+  gesture: Gesture
+  prevIndex: number
 }
 
 export default {
   oninit({ attrs }) {
     this.nbTabs = attrs.contentRenderers.length
+    this.prevIndex = attrs.selectedIndex
   },
 
   oncreate({ attrs, dom }) {
-    this.mc = new Hammer.Manager(dom, {
-      inputClass: Hammer.TouchInput
-    })
-    this.mc.add(new Hammer.Swipe({
-      direction: Hammer.DIRECTION_HORIZONTAL,
-      threshold: 10,
-      velocity: 0.4
-    }))
+    this.gesture = new Gesture(dom as HTMLElement, viewportDim())
 
-    this.mc.on('swiperight swipeleft', (e: HammerInput) => {
-      if (e.center.x - e.deltaX > EDGE_SLIDE_THRESHOLD) {
-        const tab = findParentBySelector(e.target, '.tab-content')
-        if (tab) {
-          const ds = tab.dataset as DOMStringMap
-          const index = Number(ds.index)
-          if (index !== undefined) {
-            if (e.direction === Hammer.DIRECTION_LEFT && index < this.nbTabs - 1) {
-              attrs.onTabChange(index + 1)
-            }
-            else if (e.direction === Hammer.DIRECTION_RIGHT && index > 0) {
-              attrs.onTabChange(index - 1)
-            }
+    this.gesture.on('swiperight', (e: TouchEvent) => {
+      const tab = findParentBySelector(e.target as HTMLElement, '.tab-content')
+      if (tab) {
+        const ds = tab.dataset as DOMStringMap
+        const index = Number(ds.index)
+        if (index !== undefined && index > 0) {
+          attrs.onTabChange(index - 1)
+        }
+      }
+    })
+
+    this.gesture.on('swipeleft', (e: TouchEvent) => {
+      const tab = findParentBySelector(e.target as HTMLElement, '.tab-content')
+      if (tab) {
+        const ds = tab.dataset as DOMStringMap
+        const index = Number(ds.index)
+        if (index !== undefined) {
+          if (index < this.nbTabs - 1) {
+            attrs.onTabChange(index + 1)
           }
         }
       }
     })
   },
 
-  onupdate({ attrs }) {
+  onupdate({ attrs, dom }) {
     this.nbTabs = attrs.contentRenderers.length
+
+    const el = dom.querySelector('.tab-content') as HTMLElement
+    if (attrs.selectedIndex > this.prevIndex) {
+      elSlideIn(el, 'left')
+    } else if (attrs.selectedIndex < this.prevIndex) {
+      elSlideIn(el, 'right')
+    }
+
+    this.prevIndex = attrs.selectedIndex
   },
 
   onremove() {
-    this.mc.destroy()
+    this.gesture.destroy()
   },
 
   view({ attrs }) {
     const {
       contentRenderers,
       selectedIndex,
-      boardView = false,
       withWrapper = false
     } = attrs
-    const vd = viewportDim()
-    const curIndex = selectedIndex
-    const tabWidth = isPortrait() || !boardView ?
-      vd.vw :
-        is43Aspect() ?
-          vd.vw - (vd.vh * 0.88) + headerHeight :
-          vd.vw - vd.vh + headerHeight
-
-    const width = contentRenderers.length * tabWidth
-    const shift = -(curIndex * tabWidth)
-
-    const style = {
-      width: `${width}px`,
-      transform: `translateX(${shift}px)`
-    }
+    const renderer = contentRenderers[selectedIndex]
 
     const view = h('div.tabs-view', {
-      style,
       className: attrs.className
-    }, contentRenderers.map((_: any, index: number) =>
+    }, [
       h('div.tab-content', {
-        style: {
-          width: `${tabWidth}px`,
-        },
-        'data-index': index,
-        className: selectedIndex === index ? 'current' : '',
-      },  selectedIndex === index ? contentRenderers[index]() : null)
-    ))
+        'data-index': selectedIndex,
+      },  renderer())
+    ])
 
     return withWrapper ? h('div.tabs-view-wrapper', view) : view
   }

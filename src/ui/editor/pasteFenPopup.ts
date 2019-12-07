@@ -1,12 +1,12 @@
 import i18n from '../../i18n'
 import popupWidget from '../shared/popup'
 import router from '../../router'
-import * as h from 'mithril/hyperscript'
-import Editor, { MenuInterface } from './Editor'
+import h from 'mithril/hyperscript'
+import EditorCtrl, { MenuInterface } from './EditorCtrl'
 
 export default {
 
-  controller: function(root: Editor) {
+  controller: function(root: EditorCtrl) {
     let isOpen = false
 
     function open() {
@@ -44,7 +44,7 @@ export default {
           }
         }, [
           h('input[type=text]', {
-            placeholder: 'Paste FEN position'
+            placeholder: i18n('pasteTheFenStringHere'),
           }),
           h('button[data-icon=E].withIcon.popupAction', i18n('loadPosition'))
         ])

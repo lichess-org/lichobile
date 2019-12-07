@@ -1,3 +1,4 @@
+import h from 'mithril/hyperscript'
 import settings from '../../../settings'
 import popupWidget from '../../shared/popup'
 import i18n from '../../../i18n'
@@ -48,7 +49,7 @@ function renderForm() {
         </div>
       </fieldset>
       <div className="popupActionWrapper">
-        <button key="join" className="popupAction" type="submit">
+        <button className="popupAction" type="submit">
           <span className="fa fa-check" />
           {i18n('join')}
         </button>

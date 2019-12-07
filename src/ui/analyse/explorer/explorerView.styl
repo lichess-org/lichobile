@@ -6,8 +6,6 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
   position relative
   overflow-x: hidden;
   white-space: nowrap;
-  > div
-    width 100%
   .empty
     flex 1 1 auto
     display flex
@@ -28,8 +26,9 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
       width initial
       height initial
       font-size 25px
-  tbody, > .message
-    transition: opacity 0.13s;
+  // disable bc of iOS bug
+  // tbody, > .message
+  //   transition: opacity 0.13s;
   thead
     > tr
       background-color explorerHeaderBg
@@ -48,7 +47,6 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
     &.explorerMove-result
       padding-left 15px
   tr
-    transition: background-color 0.13s
     &:nth-child(even)
       background-color: lighten(bgdark, 15%)
   td
@@ -109,7 +107,6 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
     opacity: 0.7;
   .message
     text-align: center;
-    font-size 0.9em
     font-style: italic;
     > h3
       > i
@@ -128,7 +125,6 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
 
 .explorer-data
   overflow-y auto
-  -webkit-overflow-scrolling touch
 
 .explorer-fixedTitle
   flex 0 0 23px
@@ -194,7 +190,7 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
     border-radius: 3px;
     font-size: 0.9em;
 
-.moves.displayPieces
+.displayPieces
   .explorerMove-move
     font-family ChessSansPiratf
 

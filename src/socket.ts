@@ -1,12 +1,10 @@
+import { Plugins } from '@capacitor/core'
 import router from './router'
 import globalConfig from './config'
 import redraw from './utils/redraw'
 import signals from './signals'
 import storage from './storage'
 import { SESSION_ID_KEY, ErrorResponse } from './http'
-import * as xorWith from 'lodash/xorWith'
-import * as isEqual from 'lodash/isEqual'
-import * as cloneDeep from 'lodash/cloneDeep'
 import { newSri, autoredraw, hasNetwork } from './utils'
 import { tellWorker, askWorker } from './utils/worker'
 import * as xhr from './xhr'
@@ -109,18 +107,11 @@ const defaultHandlers: MessageHandlers = {
 }
 
 function handleFollowingOnline(data: Array<string>, payload: FollowingOnlinePayload) {
-  // We clone the friends online before we update it for comparison later
-  const oldFriendList = cloneDeep(friendsApi.list())
-
   const friendsPlaying = payload.playing
   const friendsPatrons = payload.patrons
   friendsApi.set(data, friendsPlaying, friendsPatrons)
 
-  const newFriendList = friendsApi.list()
-
-  if (xorWith(oldFriendList, newFriendList, isEqual).length > 0) {
-    redraw()
-  }
+  redraw()
 }
 
 function setupConnection(setup: SocketSetup, socketHandlers: SocketHandlers) {
@@ -215,7 +206,7 @@ function createGame(
         xhr.game(gameUrl.substring(1))
         .catch((err: ErrorResponse) => {
           if (err.status === 401) {
-            window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center')
+            Plugins.Toast.show({ text: i18n('unauthorizedError'), duration: 'short' })
             router.set('/')
           }
         })

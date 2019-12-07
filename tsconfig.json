@@ -1,14 +1,18 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "module": "commonjs",
-    "target": "es6",
+    "target": "es2017",
     "suppressImplicitAnyIndexErrors": false,
+    "allowSyntheticDefaultImports": true,
+    "module": "esnext",
+    "moduleResolution": "node",
     "strict": true,
     "strictFunctionTypes": false,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "jsx": "preserve"
+    "jsx": "react",
+    "jsxFactory": "h",
+    "types": ["lodash-es", "mithril", "d3"]
   },
   "include": [
     "src/**/*.js",

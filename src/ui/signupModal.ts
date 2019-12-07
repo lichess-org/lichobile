@@ -1,5 +1,6 @@
-import * as h from 'mithril/hyperscript'
-import * as debounce from 'lodash/debounce'
+import { Plugins } from '@capacitor/core'
+import h from 'mithril/hyperscript'
+import debounce from 'lodash-es/debounce'
 import session, { SignupData, EmailConfirm } from '../session'
 import socket from '../socket'
 import redraw from '../utils/redraw'
@@ -67,7 +68,7 @@ function renderForm() {
       'By registering, you agree to be bound by our ',
       h('a', {
         oncreate: helper.ontap(() =>
-        window.open('https://lichess.org/terms-of-service', '_blank', 'location=no')
+          Plugins.Browser.open({ url: 'https://lichess.org/terms-of-service' })
         )},
         'Terms of Service'
       ), '.'
@@ -135,7 +136,7 @@ function renderForm() {
         })
       ]),
       h('div.submit', [
-        h('button.submitButton[data-icon=F]', i18n('signUp'))
+        h('button.defaultButton', i18n('signUp'))
       ])
     ])
   ]
@@ -157,7 +158,7 @@ function submit(form: HTMLFormElement) {
   const email = (form[1] as HTMLInputElement).value.trim()
   const pass = (form[2] as HTMLInputElement).value.trim()
   if (!login || !email || !pass) return
-  window.cordova.plugins.Keyboard.close()
+  Plugins.Keyboard.hide()
   loading = true
   formError = null
   redraw()
@@ -169,7 +170,7 @@ function submit(form: HTMLFormElement) {
       checkEmail = true
       redraw()
     } else {
-      window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center')
+      Plugins.Toast.show({ text: i18n('loginSuccessful'), duration: 'short' })
       socket.reconnectCurrent()
       redraw()
       loginModal.close()
@@ -200,7 +201,7 @@ function open() {
 
 function close(fromBB?: string) {
   if (checkEmail === true) loginModal.close()
-  window.cordova.plugins.Keyboard.close()
+  Plugins.Keyboard.hide()
   if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
   isOpen = false
 }

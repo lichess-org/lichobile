@@ -1,5 +1,10 @@
 npm-debug.log
 
+/build
+
+/appconfig.*.json
+!/appconfig.dev.json
+
 /app.js.map
 /*.mobileprovision
 /*.keystore
@@ -9,10 +14,11 @@ npm-debug.log
 /platforms
 /plugins
 
-/www/app.js
+/www/*.js
+/www/*.js.map
 /www/index.html
 /www/css/compiled
-/www/locale
+/www/i18n/date
 
 /node_modules
 /env.json

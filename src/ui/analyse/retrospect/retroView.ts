@@ -1,4 +1,5 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import h from 'mithril/hyperscript'
 import i18n from '../../../i18n'
 import { oppositeColor } from '../../../utils'
 import spinner from '../../../spinner'
@@ -8,7 +9,7 @@ import { renderIndexAndMove } from '../view/moveView'
 import { Feedback, IRetroCtrl } from './RetroCtrl'
 import AnalyseCtrl from '../AnalyseCtrl'
 
-export default function retroView(root: AnalyseCtrl): Mithril.BaseNode | undefined {
+export default function retroView(root: AnalyseCtrl): Mithril.Vnode<any, any> | undefined {
   const ctrl = root.retro
   if (!ctrl) return
   const fb = ctrl.vm.feedback
@@ -43,7 +44,7 @@ function jumpToNext(ctrl: IRetroCtrl) {
 const minDepth = 8
 const maxDepth = 18
 
-function renderEvalProgress(node: Tree.Node): Mithril.BaseNode {
+function renderEvalProgress(node: Tree.Node): Mithril.Vnode<any, any> {
   return h('div.retro-progress', h('div', {
     style: {
       width: `${node.ceval ? (100 * Math.max(0, node.ceval.depth - minDepth) / (maxDepth - minDepth)) + '%' : 0}`
@@ -52,7 +53,7 @@ function renderEvalProgress(node: Tree.Node): Mithril.BaseNode {
 }
 
 const feedback = {
-  find(ctrl: IRetroCtrl): Mithril.BaseNode[] {
+  find(ctrl: IRetroCtrl): Mithril.Vnode<any, any>[] {
     return [
       h('div.retro-player', [
         h('div.piece-no-square', {
@@ -74,7 +75,7 @@ const feedback = {
     ]
   },
   // user has browsed away from the move to solve
-  offTrack(ctrl: IRetroCtrl): Mithril.BaseNode[] {
+  offTrack(ctrl: IRetroCtrl): Mithril.Vnode<any, any>[] {
     return [
       h('div.retro-player', [
         h('div.retro-icon.off', '!'),
@@ -89,7 +90,7 @@ const feedback = {
       ])
     ]
   },
-  fail(ctrl: IRetroCtrl): Mithril.BaseNode[] {
+  fail(ctrl: IRetroCtrl): Mithril.Vnode<any, any>[] {
     return [
       h('div.retro-player', [
         h('div.retro-icon', '✗'),
@@ -101,7 +102,7 @@ const feedback = {
       ])
     ]
   },
-  win(ctrl: IRetroCtrl): Mithril.BaseNode[] {
+  win(ctrl: IRetroCtrl): Mithril.Vnode<any, any>[] {
     return [
       h('div.retro-half.top',
         h('div.retro-player', [
@@ -112,7 +113,7 @@ const feedback = {
       jumpToNext(ctrl)
     ]
   },
-  view(ctrl: IRetroCtrl): Mithril.BaseNode[] {
+  view(ctrl: IRetroCtrl): Mithril.Vnode<any, any>[] {
     return [
       h('div.retro-half.top',
         h('div.retro-player', [
@@ -133,7 +134,7 @@ const feedback = {
       jumpToNext(ctrl)
     ]
   },
-  eval(ctrl: IRetroCtrl): Mithril.BaseNode[] {
+  eval(ctrl: IRetroCtrl): Mithril.Vnode<any, any>[] {
     return [
       h('div.retro-half.top',
         h('div.retro-player.center', [
@@ -145,7 +146,7 @@ const feedback = {
       )
     ]
   },
-  end(ctrl: IRetroCtrl, hasFullComputerAnalysis: () => boolean): Mithril.BaseNode[] {
+  end(ctrl: IRetroCtrl, hasFullComputerAnalysis: () => boolean): Mithril.Vnode<any, any>[] {
     if (!hasFullComputerAnalysis()) return [
       h('div.retro-half.top',
         h('div.retro-player', [
@@ -191,7 +192,7 @@ function renderFeedback(root: AnalyseCtrl, fb: Feedback) {
   return feedback[fb](ctrl)
 }
 
-function renderTitle(ctrl: IRetroCtrl): Mithril.BaseNode {
+function renderTitle(ctrl: IRetroCtrl): Mithril.Vnode<any, any> {
   const completion = ctrl.completion()
   return h('div.title', [
     h('span', 'Learn from your mistakes'),

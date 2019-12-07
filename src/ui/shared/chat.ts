@@ -1,4 +1,6 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import { Plugins } from '@capacitor/core'
+import h from 'mithril/hyperscript'
 import * as helper from '../helper'
 import redraw from '../../utils/redraw'
 import i18n from '../../i18n'
@@ -8,8 +10,6 @@ import { ChatMsg } from '../../lichess/interfaces/chat'
 import router from '../../router'
 import { SocketIFace } from '../../socket'
 import { closeIcon } from '../shared/icons'
-
-let chatHeight: number
 
 export class Chat {
   public showing: boolean
@@ -35,9 +35,6 @@ export class Chat {
     this.nbUnread = 0
 
     this.checkUnreadFromStorage()
-
-    window.addEventListener('native.keyboardhide', onKeyboardHide)
-    window.addEventListener('native.keyboardshow', onKeyboardShow)
   }
 
   public open = () => {
@@ -47,7 +44,7 @@ export class Chat {
   }
 
   public close = (fromBB?: string) => {
-    window.cordova.plugins.Keyboard.close()
+    Plugins.Keyboard.hide()
     if (fromBB !== 'backbutton' && this.showing) router.backbutton.stack.pop()
     this.showing = false
     this.nbUnread = 0
@@ -83,11 +80,6 @@ export class Chat {
     return ls
   }
 
-  public unload = () => {
-    document.removeEventListener('native.keyboardhide', onKeyboardHide)
-    document.removeEventListener('native.keyboardshow', onKeyboardShow)
-  }
-
   // --
 
   private isLegitMsg = (msg: ChatMsg) => {
@@ -99,7 +91,7 @@ export class Chat {
   }
 
   private checkUnreadFromStorage() {
-    asyncStorage.getItem<number>(this.storageId)
+    asyncStorage.get<number>(this.storageId)
     .then(data => {
       const storedNb = data || 0
       const actualNb = this.nbLines()
@@ -113,7 +105,7 @@ export class Chat {
   private storeNbLinesRead() {
     const linesRead = this.nbLines()
     if (linesRead > 0) {
-      asyncStorage.setItem(this.storageId, linesRead)
+      asyncStorage.set(this.storageId, linesRead)
     }
   }
 }
@@ -131,8 +123,8 @@ export function chatView(ctrl: Chat, header?: string) {
     ]),
     h('div#chat_content.modal_content.chat_content', [
       h('div.chat_scroller.native_scroller', {
-        oncreate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement),
-        onupdate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement)
+        oncreate: ({ dom }: Mithril.VnodeDOM<any, any>) => scrollChatToBottom(dom as HTMLElement),
+        onupdate: ({ dom }: Mithril.VnodeDOM<any, any>) => scrollChatToBottom(dom as HTMLElement)
       }, [
         h('ul.chat_messages', ctrl.selectLines().map((msg: ChatMsg, i: number, all: ChatMsg[]) => {
           if (ctrl.player !== undefined) return renderPlayerMsg(ctrl.player, msg, i, all)
@@ -232,24 +224,6 @@ function renderSpectatorMsg(msg: ChatMsg) {
 
 function scrollChatToBottom(el: HTMLElement) {
   el.scrollTop = el.scrollHeight
-}
-
-function onKeyboardShow(e: Ionic.KeyboardEvent) {
-  if (window.cordova.platformId === 'ios') {
-    const chat = document.getElementById('chat_content')
-    if (!chat) return
-    chatHeight = chat.offsetHeight
-    chat.style.height = (chatHeight - e.keyboardHeight) + 'px'
-  }
-}
-
-function onKeyboardHide() {
-  if (window.cordova.platformId === 'ios') {
-    const chat = document.getElementById('chat_content')
-    if (chat) chat.style.height = chatHeight + 'px'
-  }
-  const input = document.getElementById('chat_input')
-  if (input) input.blur()
 }
 
 function calculateContentHeight(ta: HTMLElement, scanAmount: number): number {

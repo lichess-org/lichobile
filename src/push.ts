@@ -1,175 +1,103 @@
-import * as h from 'mithril/hyperscript'
-import settings from './settings'
-import session from './session'
-import router from './router'
-import challengesApi from './lichess/challenges'
-import { noop } from './utils'
-import promptDialog from './prompt'
+import {
+  Capacitor,
+  Plugins,
+  PushNotification,
+  PushNotificationToken,
+  PushNotificationActionPerformed
+} from '@capacitor/core'
 import { fetchText } from './http'
-import * as helper from './ui/helper'
+import challengesApi from './lichess/challenges'
+import router from './router'
+import session from './session'
+import settings from './settings'
+import { handleXhrError } from './utils'
+import { isForeground } from './utils/appMode'
 
-interface Payload {
-  title: string
-  body: string
-  additionalData: any
-}
-
-interface NotificationReceivedData {
-  isAppInFocus: boolean
-  payload: Payload
-}
-
-interface NotificationOpenedData {
-  isAppInFocus: boolean
-  notification: {
-    payload: Payload
-  }
-}
+const { PushNotifications, FCM } = Plugins
 
 export default {
   init() {
-    // will delay initialization of the SDK until the user provides consent
-    window.plugins.OneSignal.setRequiresUserPrivacyConsent(true)
+    PushNotifications.addListener('registration',
+      (token: PushNotificationToken) => {
 
-    window.plugins.OneSignal
-    .startInit('2d12e964-92b6-444e-9327-5b2e9a419f4c')
-    .handleNotificationOpened(notificationOpenedCallback)
-    .handleNotificationReceived(notificationReceivedCallback)
-    .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.Notification)
-    .endInit()
+        const tokenPromise = Capacitor.platform === 'ios' ?
+          FCM.getToken() : Promise.resolve(token)
 
-    window.plugins.OneSignal.enableVibrate(settings.general.notifications.vibrate())
-    window.plugins.OneSignal.enableSound(settings.general.notifications.sound())
+        tokenPromise.then(({ value }: PushNotificationToken) => {
+          console.debug('Push registration success, FCM token: ' + value)
+
+          fetchText(`/mobile/register/firebase/${value}`, {
+            method: 'POST'
+          })
+          .catch(handleXhrError)
+        })
+      }
+    )
+
+    PushNotifications.addListener('registrationError',
+      (error: any) => {
+        console.error('Error on registration: ' + JSON.stringify(error))
+      }
+    )
+
+    PushNotifications.addListener('pushNotificationReceived',
+      (notification: PushNotification) => {
+        if (isForeground()) {
+          switch (notification.data['lichess.type']) {
+            case 'challengeAccept':
+              session.refresh()
+              break
+            case 'corresAlarm':
+            case 'gameTakebackOffer':
+            case 'gameDrawOffer':
+            case 'gameFinish':
+              session.refresh()
+              break
+            case 'gameMove':
+              session.refresh()
+              break
+          }
+        }
+      }
+    )
+
+    PushNotifications.addListener('pushNotificationActionPerformed',
+      (action: PushNotificationActionPerformed) => {
+        if (action.actionId === 'tap') {
+          switch (action.notification.data['lichess.type']) {
+            case 'challengeAccept':
+              challengesApi.refresh()
+              router.set(`/game/${action.notification.data['lichess.challengeId']}`)
+              break
+            case 'challengeCreate':
+              router.set(`/challenge/${action.notification.data['lichess.challengeId']}`)
+              break
+            case 'corresAlarm':
+            case 'gameMove':
+            case 'gameFinish':
+            case 'gameTakebackOffer':
+            case 'gameDrawOffer':
+              router.set(`/game/${action.notification.data['lichess.fullId']}`)
+              break
+            case 'newMessage':
+              router.set(`/inbox/${action.notification.data['lichess.threadId']}`)
+              break
+          }
+        }
+      }
+    )
   },
 
-  showConsentDialog,
-  provideUserConsent,
+  register(): Promise<void> {
+    if (settings.general.notifications.allow()) {
+      return PushNotifications.register()
+    }
 
-  register,
+    return Promise.resolve()
+  },
 
   unregister(): Promise<string> {
     return fetchText('/mobile/unregister', { method: 'POST' })
   }
 }
 
-function provideUserConsent(consent: boolean): void {
-  window.plugins.OneSignal.provideUserConsent(consent)
-}
-
-function showConsentDialog(): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const content = h('div', [
-      h('p', [
-        'Push notifications may be sent to you when it\'s your turn in a correspondence game, or when you receive a private message. This service is provided to you by ',
-        h('a[href=#]', {
-          oncreate: helper.ontap(() => {
-            window.open('https://onesignal.com', '_system')
-          })
-        }, 'OneSignal.'),
-        ' When enabled, it automatically collects application usage data such as session times, IP address, app version.'
-      ]),
-      h('p', [
-        'You can learn more about what data is collected ',
-        h('a[href=#]', {
-          oncreate: helper.ontap(() => {
-            window.open('https://documentation.onesignal.com/docs/data-collected-by-the-onesignal-sdk', '_system')
-          })
-        }, 'here.'),
-        ' Please note that we never explicitely send any data to OneSignal.'
-      ]),
-      h('p', [
-        'You can also refer to our ',
-        h('a[href=#]', {
-          oncreate: helper.ontap(() => {
-            window.open('https://lichess.org/privacy', '_system')
-          })
-        }, 'privacy policy.')
-      ]),
-      h('p', 'Would you like to use push notifications and are you willing to share this information with OneSignal?'),
-      h('div.buttons', [
-        h('button', {
-          oncreate: helper.ontap(() => {
-            settings.general.notifications.allow(true)
-            provideUserConsent(true)
-            promptDialog.hide()
-            resolve()
-          })
-        }, 'Yes'),
-        h('button', {
-          oncreate: helper.ontap(() => {
-            settings.general.notifications.allow(false)
-            provideUserConsent(false)
-            promptDialog.hide()
-            reject()
-          })
-        }, 'No'),
-      ]),
-      h('p', 'You can change this choice any time on the settings screen.'),
-    ])
-    promptDialog.show(content, 'Consent required')
-  })
-}
-
-function register() {
-  window.plugins.OneSignal.userProvidedPrivacyConsent((providedConsent: boolean) => {
-    const allowed = settings.general.notifications.allow()
-    if (providedConsent && allowed) {
-      window.plugins.OneSignal.getIds(({ userId }) => {
-        fetchText(`/mobile/register/onesignal/${userId}`, {
-          method: 'POST'
-        })
-      })
-    } else if (!providedConsent && allowed) {
-      showConsentDialog().catch(noop)
-    }
-  })
-}
-
-function notificationReceivedCallback(data: NotificationReceivedData) {
-  const additionalData = data.payload.additionalData
-  if (additionalData && additionalData.userData) {
-    if (data.isAppInFocus) {
-      switch (additionalData.userData.type) {
-        case 'challengeAccept':
-          session.refresh()
-          break
-        case 'corresAlarm':
-        case 'gameTakebackOffer':
-        case 'gameDrawOffer':
-        case 'gameFinish':
-          session.refresh()
-          break
-        case 'gameMove':
-          session.refresh()
-          break
-      }
-    }
-  }
-}
-
-function notificationOpenedCallback(data: NotificationOpenedData) {
-  const additionalData = data.notification.payload.additionalData
-  if (additionalData && additionalData.userData) {
-    if (!data.isAppInFocus) {
-      switch (additionalData.userData.type) {
-        case 'challengeAccept':
-          challengesApi.refresh()
-          router.set(`/game/${additionalData.userData.challengeId}`)
-          break
-        case 'challengeCreate':
-          router.set(`/challenge/${additionalData.userData.challengeId}`)
-          break
-        case 'corresAlarm':
-        case 'gameMove':
-        case 'gameFinish':
-        case 'gameTakebackOffer':
-        case 'gameDrawOffer':
-          router.set(`/game/${additionalData.userData.fullId}`)
-          break
-        case 'newMessage':
-          router.set(`/inbox/${additionalData.userData.threadId}`)
-          break
-      }
-    }
-  }
-}

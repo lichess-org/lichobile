@@ -1,8 +1,8 @@
-import * as h from 'mithril/hyperscript'
+import * as Mithril from 'mithril'
+import { Plugins } from '@capacitor/core'
+import h from 'mithril/hyperscript'
 import * as menu from '../menu'
 import router from '../../router'
-import * as utils from '../../utils'
-import { hasOfflineGames } from '../../utils/offlineGames'
 import settings from '../../settings'
 import * as helper from '../helper'
 import gamesMenu from '../gamesMenu'
@@ -17,13 +17,12 @@ import { BaseUser } from '../../lichess/interfaces/user'
 
 export function menuButton() {
   return h('button.fa.fa-navicon.main_header_button.menu_button', {
-    key: 'main-menu',
     oncreate: helper.ontap(menu.mainMenuCtrl.toggle)
   })
 }
 
 export function backButton(title?: Mithril.Children): Mithril.Children {
-  return h('div.back_button', { key: 'default-history-backbutton' }, [
+  return h('div.back_button', [
     h('button', { oncreate: helper.ontap(router.backHistory) }, backArrow),
     title !== undefined ? typeof title === 'string' ? h('div.main_header_title', title) : title : null
   ])
@@ -33,9 +32,8 @@ export function bookmarkButton(action: () => void, flag: boolean): Mithril.Child
   return session.isConnected() ? h('button.main_header_button.bookmarkButton', {
     oncreate: helper.ontap(
       action,
-      () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'top')
+      () => Plugins.Toast.show({ text: i18n('bookmarkThisGame'), duration: 'short' })
     ),
-    key: 'bookmark',
   }, h('span', {
     'data-icon': flag ? 't' : 's'
   })) : null
@@ -43,11 +41,10 @@ export function bookmarkButton(action: () => void, flag: boolean): Mithril.Child
 
 export function friendsButton() {
   const nbFriends = friendsApi.count()
-  const longAction = () => window.plugins.toast.show(i18n('onlineFriends'), 'short', 'top')
 
   return (
-    <button className="main_header_button friends_button" key="friends" data-icon="f"
-      oncreate={helper.ontap(friendsPopup.open, longAction)}
+    <button className="main_header_button friends_button" data-icon="f"
+      data-button="friends"
     >
     {nbFriends > 0 ?
       <span className="chip nb_friends">{nbFriends}</span> : null
@@ -61,30 +58,18 @@ export function onBoardThemeChange(theme: string) {
   boardTheme = theme
 }
 function gamesButton() {
-  let key: string, action: () => void
-  const nbChallenges = challengesApi.all().length
-  const nbIncomingChallenges = challengesApi.incoming().length
-  const withOfflineGames = !utils.hasNetwork() && hasOfflineGames()
   boardTheme = boardTheme || settings.general.theme.board()
-  if (session.nowPlaying().length || nbChallenges || withOfflineGames) {
-    key = 'games-menu'
-    action = () => gamesMenu.open()
-  } else {
-    key = 'new-game-form'
-    action = () => newGameForm.open()
-  }
   const myTurns = session.myTurnGames().length
+  const nbIncomingChallenges = challengesApi.incoming().length
   const className = [
     'main_header_button',
     'game_menu_button',
     boardTheme,
     nbIncomingChallenges ? 'new_challenge' : '',
-    !utils.hasNetwork() && !hasOfflineGames() ? 'invisible' : ''
   ].join(' ')
-  const longAction = () => window.plugins.toast.show(i18n('nbGamesInPlay', session.nowPlaying().length), 'short', 'top')
 
   return (
-    <button key={key} className={className} oncreate={helper.ontap(action, longAction)}>
+    <button className={className} data-button="games">
       {!nbIncomingChallenges && myTurns ?
         <span className="chip nb_playing">{myTurns}</span> : null
       }
@@ -95,23 +80,34 @@ function gamesButton() {
   )
 }
 
+function onHeaderBtnTap(e: Event) {
+  const el = helper.getByClass('main_header_button')(e)
+  const ds = el.dataset
+  const button = ds.button
+  if (el && button) {
+    if (button === 'games') {
+      const nbChallenges = challengesApi.all().length
+      if (session.nowPlaying().length || nbChallenges) {
+        gamesMenu.open()
+      } else {
+        newGameForm.open()
+      }
+    } else if (button === 'friends') {
+      friendsPopup.open()
+    }
+  }
+}
+
 export function headerBtns() {
-  if (utils.hasNetwork() && session.isConnected() && friendsApi.count()) {
+  const handler = helper.ontap(
+    onHeaderBtnTap,
+    undefined,
+    undefined,
+    helper.getByClass('main_header_button')
+  )
+  if (session.isConnected() && friendsApi.count()) {
     return (
-      <div key="buttons" className="buttons">
-        {friendsButton()}
-        {gamesButton()}
-      </div>
-    )
-  } else if (utils.hasNetwork() && session.isConnected()) {
-    return (
-      <div key="buttons" className="buttons">
-        {gamesButton()}
-      </div>
-    )
-  } else if (utils.hasNetwork() && session.isConnected() && friendsApi.count()) {
-    return (
-      <div key="buttons" className="buttons">
+      <div className="buttons" oncreate={handler}>
         {friendsButton()}
         {gamesButton()}
       </div>
@@ -119,7 +115,7 @@ export function headerBtns() {
   }
   else {
     return (
-      <div key="buttons" className="buttons">
+      <div className="buttons" oncreate={handler}>
         {gamesButton()}
       </div>
     )
@@ -127,13 +123,11 @@ export function headerBtns() {
 }
 
 // TODO refactor this
-export function header(title: Mithril.BaseNode | string | null, leftButton?: Mithril.Children): Mithril.Children {
+export function header(title: Mithril.Vnode<any, any> | string | null, leftButton?: Mithril.Children): Mithril.Children {
   return h('nav', [
     leftButton ? leftButton : menuButton(),
     typeof title === 'string' ?
-      h('div.main_header_title', {
-        key: title
-      }, title) : title,
+      h('div.main_header_title', title) : title,
     headerBtns()
   ])
 }
@@ -142,7 +136,7 @@ export function dropShadowHeader(title: Mithril.Children, leftButton?: Mithril.C
   return [
     h('nav', [
       leftButton ? leftButton : menuButton(),
-      title ? <div className="main_header_title" key="title">{title}</div> : null,
+      title ? <div className="main_header_title">{title}</div> : null,
       headerBtns()
     ]),
   ]
@@ -158,7 +152,7 @@ export function connectingHeader(title?: string) {
   return (
     <nav>
       {menuButton()}
-      <div key="connecting-title" className={'main_header_title reconnecting' + (title ? 'withTitle' : '')}>
+      <div className={'main_header_title reconnecting' + (title ? 'withTitle' : '')}>
         {title ? <span>{title}</span> : null}
         {loader}
       </div>
@@ -173,9 +167,8 @@ export function connectingDropShadowHeader(title?: string) {
       menuButton(),
       h('div.main_header_title.reconnecting', {
         className: title ? 'withTitle' : '',
-        key: 'connecting-title',
       }),
-      title ? h('div.main_header_title', { key: 'title' }, title) : null,
+      title ? h('div.main_header_title', title) : null,
       headerBtns()
     ]),
   ]
@@ -186,7 +179,7 @@ export function loadingBackbutton(title?: string) {
   return (
     <nav>
       {backButton(
-        <div key="connecting-backbutton" className={'main_header_title reconnecting' + (title ? 'withTitle' : '')}>
+        <div className={'main_header_title reconnecting' + (title ? 'withTitle' : '')}>
           {title ? <span>{title}</span> : null}
           {loader}
         </div>

@@ -85,17 +85,6 @@
         "build-copy": "npm run build && npx cap copy",
         "run-android": "npm run build-copy && cd android && ./gradlew installDebug"
     },
-    "cordova": {
-        "platforms": [],
-        "plugins": {
-            "cordova-plugin-insomnia": {},
-            "cordova-plugin-fullscreen": {},
-            "onesignal-cordova-plugin": {},
-            "com.rjfun.cordova.plugin.lowlatencyaudio": {},
-            "cordova-plugin-stockfish": {},
-            "cordova-plugin-webview-checker": {}
-        }
-    },
     "jest": {
         "moduleFileExtensions": [
             "ts",

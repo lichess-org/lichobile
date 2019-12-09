@@ -3,8 +3,12 @@
 # And the CLI then renames it
 
 App/build
-App/Pods
 App/public
+
+App/Pods/*
+!App/Pods/Pods.xcodeproj/
+!App/Pods/Pods.xcodeproj/project.pbxproj
+
 xcuserdata
 
 # Cordova plugins for Capacitor

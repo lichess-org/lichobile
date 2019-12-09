@@ -23,7 +23,6 @@ before_script:
 script:
   - npm run lint
   - npm run test
-  - npx cap copy
   - cd android && ./gradlew assembleDebug
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock

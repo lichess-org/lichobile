@@ -8,11 +8,7 @@ npm-debug.log
 /app.js.map
 /*.mobileprovision
 /*.keystore
-/build.json
 /scripts/deploy-stage.sh
-
-/platforms
-/plugins
 
 /www/*.js
 /www/*.js.map
@@ -21,9 +17,6 @@ npm-debug.log
 /www/i18n/date
 
 /node_modules
-/env.json
-/env-*.json
-!/env-stage.json
 
 .DS_Store
 .tags

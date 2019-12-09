@@ -118,24 +118,12 @@ function renderUserInfosOffline(user: OfflineUser, ctrl: IMenuCtrl) {
 }
 
 function renderUserInfosOnline(user: PuzzleUserData) {
-  const { vw } = helper.viewportDim()
-  let width: number
-  // see overlay-popup.styl for popup width
-  if (vw >= 900) width = vw * 0.4
-  else if (vw >= 800) width = vw * 0.45
-  else if (vw >= 700) width = vw * 0.5
-  else if (vw >= 600) width = vw * 0.55
-  else if (vw >= 500) width = vw * 0.6
-  else width = vw * 0.85
-  const height = 200
   const rating = user.rating
   return [
     h('p.trainingRatingHeader', h.trust(i18n('yourPuzzleRatingX', `<strong>${rating}</strong>`))),
-    user.recent ? h('svg#training-graph', {
-      width,
-      height,
-      oncreate() {
-        drawChart(user)
+    user.recent ? h('div#training-graph', {
+      oncreate({ dom }) {
+        drawChart(dom as HTMLElement, user)
       }
     }) : null,
     renderRecent(user),
@@ -158,17 +146,20 @@ function renderRecent(user: PuzzleUserData) {
   )
 }
 
-function drawChart(user: PuzzleUserData) {
+function drawChart(element: HTMLElement, user: PuzzleUserData) {
   const history = Array.from(user.recent.map(x => x[2]))
   const rating = user.rating
   if (rating !== undefined) {
     history.push(rating)
   }
+  const rect = element.getBoundingClientRect()
   const data = history.map((x, i) => [i + 1, x])
-  const graph = select('#training-graph')
-  const margin = {top: 5, right: 20, bottom: 5, left: 35}
-  const width = +graph.attr('width') - margin.left - margin.right
-  const height = +graph.attr('height') - margin.top - margin.bottom
+  const margin = {top: 5, right: 5, bottom: 5, left: 35}
+  const width = rect.width - margin.left - margin.right
+  const height = rect.height - margin.top - margin.bottom
+  const graph = select(element)
+  .append('svg')
+  .attr('viewBox', `0 0 ${rect.width} ${rect.height}`)
   const g = graph.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
   const xvalues = data.map(d => d[0])

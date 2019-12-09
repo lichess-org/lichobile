@@ -483,8 +483,8 @@
     max-width 60px
     max-height 60px
   @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
-    width 'calc((100vw - (100vh - %s - 6vh) - 9vh) / 5)' % headerHeight
-    height 'calc((100vw - (100vh - %s - 6vh) - 9vh) / 5)' % headerHeight
+    width 'calc((100vw - (100vh - %s - 6vh - env(safe-area-inset-top)) - 9vh) / 5)' % headerHeight
+    height 'calc((100vw - (100vh - %s - 6vh - env(safe-area-inset-top)) - 9vh) / 5)' % headerHeight
     max-width 120px
     max-height 120px
   @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)

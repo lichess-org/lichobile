@@ -75,9 +75,6 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
         ctrl.menu.s.showShareMenu = true
       })
     }, [h('span.fa.fa-share'), i18n('shareAndExport')]),
-    h('button[data-icon=B]', {
-      oncreate: helper.ontap(ctrl.settings.flip)
-    }, i18n('flipBoard')),
     ctrl.isOfflineOrNotPlayable() ? h('button[data-icon=U]', {
       oncreate: helper.ontap(() => {
         ctrl.menu.close()

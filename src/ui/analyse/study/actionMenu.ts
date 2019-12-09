@@ -86,6 +86,9 @@ function renderStudyMenu(ctrl: AnalyseCtrl) {
       }),
       `Like (${ctrl.study!.data.likes})`
     ]),
+    ctrl.study && ctrl.study.chat ? h('button[data-icon=B]', {
+      oncreate: helper.ontap(ctrl.settings.flip)
+    }, i18n('flipBoard')) : null,
      h('button[data-icon=U]', {
       oncreate: helper.ontap(() => {
         ctrl.menu.close()

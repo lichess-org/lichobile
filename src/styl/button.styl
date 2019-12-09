@@ -100,13 +100,14 @@ button, .li-button
 
 .action_bar_button
   flex 1 1 25%
-  text-align center
+  display flex
+  align-items center
+  justify-content center
   background transparent
   padding 0
   outline none
   border none
   color: buttonGray
-  width 25%
   &:only-child
     text-align: right;
     padding-right: 15px;
@@ -136,7 +137,9 @@ button, .li-button
     height 21px
     width 21px
     border-color bgdark
-    right 6px
+    right 6%
+    @media only screen and (min-width 768px) and (min-height 768px)
+      right 25%
 
 .action_create_button
   flex 1 1 25%

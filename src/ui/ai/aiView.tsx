@@ -44,13 +44,11 @@ export function renderContent(ctrl: AiRound) {
   } else {
     return [
       board,
-      <section className="table">
-        <section className="playersTable offline">
-          {renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent')}
-          {renderReplay(ctrl)}
-          {renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player')}
-        </section>
+      <section className="table offline">
+        {renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent')}
+        {renderReplay(ctrl)}
         {renderGameActionsBar(ctrl)}
+        {renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player')}
       </section>
     ]
   }

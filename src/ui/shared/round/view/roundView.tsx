@@ -220,14 +220,12 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   } else {
     return [
       board,
-      h('section.table',
-        h('section.playersTable', [
-          flip ? player : opponent,
-          renderReplay(ctrl),
-          flip ? opponent : player,
-        ]),
+      h('section.table', [
+        flip ? player : opponent,
+        renderReplay(ctrl),
         renderGameActionsBar(ctrl),
-      ),
+        flip ? opponent : player,
+      ]),
     ]
   }
 }
@@ -560,7 +558,7 @@ function renderGameActionsBar(ctrl: OnlineRound) {
     'fa-mail-reply'
   ] : [
     'fa',
-    'fa-ellipsis-v'
+    'fa-list'
   ]).concat([
     'action_bar_button',
     answerRequired ? 'glow' : ''

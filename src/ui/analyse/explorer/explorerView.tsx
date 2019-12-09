@@ -22,6 +22,11 @@ export default function renderExplorer(ctrl: AnalyseCtrl) {
       { data && data.opening ?
       <div className="explorer-fixedTitle">
         { opening ? opening.eco + ' ' + opening.name : '' }
+        { configOpened || (data && data.opening) ?
+          <span className="toconf" data-icon={configOpened ? 'L' : '%'}
+            oncreate={helper.ontap(config.toggleOpen)}
+          /> : null
+        }
       </div> : null
       }
       { loading ? <div className="spinner_overlay">
@@ -31,11 +36,6 @@ export default function renderExplorer(ctrl: AnalyseCtrl) {
       { configOpened ? showConfig(ctrl) : null }
       { !configOpened && ctrl.explorer.failing() ? failing() : null }
       { !configOpened && !ctrl.explorer.failing() ? show(ctrl) : null }
-      { configOpened || (data && data.opening) ?
-        <span className="toconf" data-icon={configOpened ? 'L' : '%'}
-          oncreate={helper.ontap(config.toggleOpen)}
-        /> : null
-      }
     </div>
   )
 }

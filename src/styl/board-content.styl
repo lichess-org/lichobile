@@ -15,9 +15,6 @@
     display flex
     flex-flow row nowrap
 
-.table
-  flex 1 1 auto
-
 .playable_board_wrapper, .board_wrapper
   flex-shrink 0
   flex-grow 0
@@ -100,35 +97,21 @@
   overflow hidden
   display flex
   flex-flow column nowrap
-  > header
-    flex 0 0 auto
-  > .playersTable
-    min-height 0 // fix chrome 73 regression
-    padding 0 10px
-    flex 1 1 auto
-    display flex
-    flex-flow column nowrap
-    justify-content space-around
+  min-height 0 // fix chrome 73 regression
+  padding 0 1em
+  flex 1 1 auto
+  justify-content space-around
   @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
     margin 3vh
-    > .playersTable
-      padding 0
-  @media only screen and (max-height 400px) and (orientation landscape)
-    > .playersTable
-      justify-content space-around
-    .playTable
-      padding-left 0
-    .clock
-      font-size 20px
-      &.correspondence
-        font-size 15px
-  @media only screen and (orientation: landscape) and (min-width 801px)
-    .clock
-      font-size 25px
-      max-width initial
-  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
-    .clock
-      max-width 180px
-  @media only screen and (orientation: landscape) and (min-width 1025px)
-    .clock
-      font-size 35px
+    padding 0
+    > .actions_bar
+      flex 0 0 110px
+      flex-flow row wrap
+      > .action_bar_button
+        flex 1 1 33%
+        &:nth-child(1):nth-last-child(4),
+        &:nth-child(2):nth-last-child(3),
+        &:nth-child(3):nth-last-child(2),
+        &:nth-child(4):nth-last-child(1) {
+          flex 1 1 50%
+        }

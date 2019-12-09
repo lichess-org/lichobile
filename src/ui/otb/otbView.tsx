@@ -64,13 +64,11 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
     return [
       board,
       <section className="table">
-        <section className="playersTable offline">
-          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', flip, pieceTheme, clock)}
-          {replayTable}
-          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', flip, pieceTheme, clock)}
-        </section>
+        {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', flip, pieceTheme, clock)}
+        {replayTable}
         {renderGameActionsBar(ctrl)}
-      </section>
+        {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', flip, pieceTheme, clock)}
+        </section>
     ]
 }
 

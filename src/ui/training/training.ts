@@ -102,7 +102,7 @@ export default {
               orientation: attrs.initColor || 'white',
             })
           ]),
-          h('div.training-tableWrapper')
+          h('div.table.training-tableWrapper')
         ]
       )
     }

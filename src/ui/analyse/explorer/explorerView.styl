@@ -3,7 +3,6 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
 .explorerTable
   display flex
   flex-flow column nowrap
-  position relative
   overflow-x: hidden;
   white-space: nowrap;
   .empty
@@ -95,16 +94,13 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
       font-family: monospace;
       font-size: 0.9em;
   .toconf
-    color #ccc
-    position: absolute;
-    top: 1px;
-    right: 0;
-    display: block;
+    margin-left auto
+    display flex
+    align-items center
+    justify-content center
     font-size: 16px
     width 30px
-    height 22px
-    text-align: center;
-    opacity: 0.7;
+    height 23px
   .message
     text-align: center;
     font-style: italic;
@@ -128,16 +124,20 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
 
 .explorer-fixedTitle
   flex 0 0 23px
+  display flex
+  flex-flow row nowrap
   font-size 12px
-  line-height 23px
   overflow hidden
   white-space nowrap
   text-overflow ellipsis
   background-color explorerHeaderBg
   padding 0 7px
-  padding-right 28px
 
 .explorerConfig
+  flex-grow 1
+  display flex
+  flex-flow column nowrap
+  justify-content center
   font-size 0.75em
   section
     padding: 8px 10px 0 10px;

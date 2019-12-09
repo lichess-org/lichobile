@@ -56,9 +56,9 @@ export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean) {
     h('div.analyse-tableWrapper', [
       ctrl.data.game.variant.key === 'crazyhouse' ? renderCrazy(ctrl) : null,
       renderAnalyseTable(ctrl, availTabs),
-      !isPortrait ? renderActionsBar(ctrl) : null,
+      !isPortrait ? renderActionsBar(ctrl, isPortrait) : null,
     ]),
-    isPortrait ? renderActionsBar(ctrl) : null,
+    isPortrait ? renderActionsBar(ctrl, isPortrait) : null,
   ])
 }
 

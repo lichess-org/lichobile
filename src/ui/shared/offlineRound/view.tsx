@@ -178,7 +178,7 @@ export function renderInlineReplay(ctrl: OfflineRoundInterface) {
 
 
 export function renderBackwardButton(ctrl: OfflineRoundInterface) {
-  return h('button.action_bar_button.fa.fa-step-backward', {
+  return h('button.action_bar_button.fa.fa-chevron-left', {
     oncreate: helper.ontap(ctrl.jumpPrev, ctrl.jumpFirst),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply > ctrl.firstPly())
@@ -187,7 +187,7 @@ export function renderBackwardButton(ctrl: OfflineRoundInterface) {
 }
 
 export function renderForwardButton(ctrl: OfflineRoundInterface) {
-  return h('button.action_bar_button.fa.fa-step-forward', {
+  return h('button.action_bar_button.fa.fa-chevron-right', {
     oncreate: helper.ontap(ctrl.jumpNext, ctrl.jumpLast),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply < ctrl.lastPly())

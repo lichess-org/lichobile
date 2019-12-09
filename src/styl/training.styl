@@ -1,19 +1,17 @@
 .training-tableWrapper
-  flex: 1 1 auto;
-  display: flex;
-  flex-flow: column nowrap;
-  min-width: 0;
+  padding 0
   @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
-    margin 3vh
     > .training-table > .training-explanation
       padding 0
 
 .training-table
+  background lighten(bgdark, 5%)
   height initial
   flex 1 1 auto
   display flex
   flex-flow column nowrap
   font-size 0.9em
+  padding 1em
   @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
     margin 0 3vw
     > .training-explanation
@@ -28,6 +26,7 @@
   align-items center
   > .player
     display flex
+    flex-flow row wrap
     justify-content center
     align-items center
     > .piece-no-square
@@ -64,6 +63,11 @@
   flex-flow column nowrap
   > strong
     font-size 1.1em
+  @media only screen and (orientation: landscape)
+    margin-top 1em
+    align-items center
+    > p
+      text-align center
 
 .training-icon
   display: block;
@@ -89,7 +93,6 @@
   display flex
   justify-content center
   align-items center
-  padding 0.5em 0
 
 .trainingPlayer
   .player

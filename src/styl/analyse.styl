@@ -32,6 +32,8 @@
   flex-flow row nowrap
   align-items center
   align-content center
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
+    flex 0 0 40px
 
 .analyse-tabs
   flex 1 1 auto
@@ -101,11 +103,15 @@
   height 150px
 
 .analyse_actions_bar
-  order 3
   flex 0 0 40px
   padding 0
   width 100%
   overflow hidden
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
+    flex 0 0 110px
+    flex-flow row wrap
+    > .action_bar_button
+      flex 1 1 33%
 
 .analyse-infosBox
   flex 1 1 40%

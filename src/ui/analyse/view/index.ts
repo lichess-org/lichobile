@@ -6,6 +6,7 @@ import settings from '../../../settings'
 import * as utils from '../../../utils'
 import { emptyFen } from '../../../utils/fen'
 import continuePopup from '../../shared/continuePopup'
+import { isTablet } from '../../helper'
 import spinner from '../../../spinner'
 import { view as renderPromotion } from '../../shared/offlineRound/promotion'
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard'
@@ -24,7 +25,7 @@ import { Tab } from '../tabs'
 import AnalyseCtrl from '../AnalyseCtrl'
 import renderCeval, { EvalBox } from '../ceval/cevalView'
 import renderExplorer, { getTitle as getExplorerTitle } from '../explorer/explorerView'
-import renderCrazy from '../crazy/crazyView'
+import renderCrazy, { renderPlayer as renderCrazyPlayer, renderOpponent as renderCrazyOpponent } from '../crazy/crazyView'
 import { view as renderContextMenu } from '../contextMenu'
 import Replay from './Replay'
 import retroView from '../retrospect/retroView'
@@ -48,15 +49,18 @@ export function loadingScreen(isPortrait: boolean, color?: Color, curFen?: strin
 
 export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean) {
   const availTabs = ctrl.availableTabs()
+  const tablet = isTablet()
 
   return h.fragment({
     key: 'boardPos' + ctrl.settings.s.boardPosition + 'size' + ctrl.settings.s.smallBoard,
   }, [
     renderBoard(ctrl),
     h('div.analyse-tableWrapper', [
-      ctrl.data.game.variant.key === 'crazyhouse' ? renderCrazy(ctrl) : null,
+      ctrl.data.game.variant.key === 'crazyhouse' && (isPortrait || !tablet) ? renderCrazy(ctrl) : null,
+      !isPortrait && tablet ? renderCrazyPlayer(ctrl) : null,
       renderAnalyseTable(ctrl, availTabs),
       !isPortrait ? renderActionsBar(ctrl, isPortrait) : null,
+      !isPortrait && tablet ? renderCrazyOpponent(ctrl) : null,
     ]),
     isPortrait ? renderActionsBar(ctrl, isPortrait) : null,
   ])

@@ -83,7 +83,7 @@ export function renderAntagonist(
 export function renderGameActionsBar(ctrl: OfflineRoundInterface) {
   return (
     <section className="actions_bar">
-      <button className="action_bar_button fa fa-ellipsis-v"
+      <button className="action_bar_button fa fa-list"
         oncreate={helper.ontap(ctrl.actions.open)}
       />
       <button className="action_bar_button fa fa-plus-circle"
@@ -98,20 +98,8 @@ export function renderGameActionsBar(ctrl: OfflineRoundInterface) {
           () => Plugins.Toast.show({ text: i18n('sharePGN'), duration: 'short' })
         )}
       />
-      {renderBackwardButton(ctrl)}
-      {renderForwardButton(ctrl)}
-    </section>
-  )
-}
-
-export function renderGameActionsBarTablet(ctrl: OfflineRoundInterface) {
-  return (
-    <section className="actions_bar">
-      <button className="action_bar_button" data-icon="U"
-        oncreate={helper.ontap(ctrl.newGameMenu.open, () => Plugins.Toast.show({ text: i18n('createAGame'), duration: 'short' }))}
-      />
-      <button className="fa fa-share-alt action_bar_button"
-        oncreate={helper.ontap(ctrl.actions.sharePGN, () => Plugins.Toast.show({ text: i18n('sharePGN'), duration: 'short' }))}
+      <button className="action_bar_button" data-icon="A"
+        oncreate={helper.ontap(ctrl.goToAnalysis)}
       />
       {renderBackwardButton(ctrl)}
       {renderForwardButton(ctrl)}

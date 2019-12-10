@@ -1,6 +1,7 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import router from '../../router'
+import socket from '../../socket'
 import { emptyFen } from '../../utils/fen'
 import { hasNetwork } from '../../utils'
 import i18n, { plural, formatNumber, fromNow } from '../../i18n'
@@ -87,15 +88,19 @@ function online(ctrl: HomeCtrl) {
 
 const Stats = {
   oncreate() {
-    const nbUserEl = document.querySelector('#nb_connected_players > strong')
-    const nbGameEl = document.querySelector('#nb_games_in_play > strong')
+    const nbRoundSpread = spreadNumber(
+      document.querySelector('#nb_games_in_play > strong'),
+      8,
+      socket.getCurrentPingInterval
+    )
+    const nbUserSpread = spreadNumber(
+      document.querySelector('#nb_connected_players > strong'),
+      10,
+      socket.getCurrentPingInterval
+    )
     this.render = (pong: PongMessage) => {
-      if (nbGameEl) {
-        nbGameEl.textContent = formatNumber(pong.r)
-      }
-      if (nbUserEl) {
-        nbUserEl.textContent = formatNumber(pong.d)
-      }
+      nbUserSpread(pong.d)
+      setTimeout(() => nbRoundSpread(pong.r), socket.getCurrentPingInterval() / 2)
     }
     signals.homePong.add(this.render)
   },
@@ -272,4 +277,28 @@ function renderPlayban(endsAt: Date) {
       </p>
     </div>
   )
+}
+
+function spreadNumber(el: HTMLElement | null, nbSteps: number, getDuration: () => number) {
+  let previous: number
+  let displayed: string
+  function display(prev: number, cur: number, it: number) {
+    const val = formatNumber(Math.round(((prev * (nbSteps - 1 - it)) + (cur * (it + 1))) / nbSteps))
+    if (el && val !== displayed) {
+      el.textContent = val
+      displayed = val
+    }
+  }
+  let timeouts: Array<number> = []
+  return function(nb: number, overrideNbSteps?: number) {
+    if (!el || (!nb && nb !== 0)) return
+    if (overrideNbSteps) nbSteps = Math.abs(overrideNbSteps)
+    timeouts.forEach(clearTimeout)
+    timeouts = []
+    let prev = previous === 0 ? 0 : (previous || nb)
+    previous = nb
+    let interv = Math.abs(getDuration() / nbSteps)
+    for (let i = 0; i < nbSteps; i++)
+      timeouts.push(setTimeout(() => display(prev, nb, i), Math.round(i * interv)))
+  }
 }

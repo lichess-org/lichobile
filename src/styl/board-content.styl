@@ -115,3 +115,45 @@
         &:nth-child(4):nth-last-child(1) {
           flex 1 1 50%
         }
+
+.mini_board_container
+  > .vsbloc
+    font-size 0.8em
+    background: linear-gradient(to bottom,rgba(40,40,40,1),rgba(34,34,34,1) 100%);
+    padding 5px
+    overflow hidden
+    text-align center
+    > .antagonists
+      display flex
+      flex-flow row nowrap
+      justify-content space-between
+      > .player, > .opponent
+        max-width 49%
+        overflow hidden
+        text-overflow ellipsis
+    > .ratingAndTime
+      display flex
+      flex-flow row nowrap
+      justify-content space-between
+      > .time
+        display flex
+        justify-content center
+        align-items center
+      .berserk
+        margin-left 0.5em
+
+.mini_board
+  position: relative;
+  height: 0;
+  padding-bottom: 100%;
+  width: 100%;
+  > .mini_board_helper
+    position: absolute;
+    width: 12.5%;
+    padding-bottom: 12.5%;
+    bottom: 0;
+    > .mini_board_wrapper
+      position: absolute;
+      width: 800%;
+      height: 800%;
+      bottom: 0;

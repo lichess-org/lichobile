@@ -44,10 +44,12 @@ export default class HomeCtrl {
     }
 
     this.networkListener = Plugins.Network.addListener('networkStatusChange', (s: NetworkStatus) => {
+      console.debug('networkStatusChange')
       if (s.connected) this.init()
     })
 
     this.appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
+      console.debug('appStateChange')
       if (state.isActive) this.init()
     })
   }
@@ -118,6 +120,9 @@ export default class HomeCtrl {
       window.history.replaceState(window.history.state, '', loc + '?tab=' + i)
     } catch (e) { console.error(e) }
     this.selectedTab = i
+    if (this.selectedTab === 1) {
+      this.reloadCorresPool()
+    }
     redraw()
   }
 
@@ -135,13 +140,13 @@ export default class HomeCtrl {
   }
 
   private reloadCorresPool = () => {
-    corresSeeksXhr(false)
-    .then(d => {
-      this.corresPool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1)
-      if (this.selectedTab === 1) {
+    if (this.selectedTab === 1) {
+      corresSeeksXhr(false)
+      .then(d => {
+        this.corresPool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1)
         redraw()
-      }
-    })
+      })
+    }
   }
 }
 

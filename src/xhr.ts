@@ -118,7 +118,11 @@ export function lobby(feedback?: boolean): Promise<LobbyData> {
 }
 
 export function seeks(feedback: boolean): Promise<CorrespondenceSeek[]> {
-  return fetchJSON('/lobby/seeks', undefined, feedback)
+  return fetchJSON('/lobby/seeks', {
+    query: {
+      _: Date.now()
+    }
+  }, feedback)
 }
 
 export function game(id: string, color?: string): Promise<OnlineGameData> {

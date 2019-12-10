@@ -1,22 +1,49 @@
 .home
   padding-top 5px
-  >.stats
-    margin-top 1em
-    padding 0px 10px
-    font-size 1em
-    width 100%
-    display flex
-    flex-flow row nowrap
-    justify-content space-between
-    > div
-      flex 0 1 auto
-  .tabs-view-wrapper
-    height calc(((100vw - 40px) * 0.28) * 3 + 40px)
-    @media only screen and (min-width 600px)
-      height calc(((100vw - 40px) * 0.2) * 3 + 40px)
-    background-image url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMy41MjkgMzMuNTA0Ij48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNS4yNS02LjI0NikiIG9wYWNpdHk9Ii4xIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIxLjUiPjxnIGZpbGw9IiMwMDAiPjxwYXRoIGQ9Im0yMiAxMGMxMC41IDEgMTYuNSA4IDE2IDI5aC0yM2MwLTkgMTAtNi41IDgtMjEiLz48cGF0aCBkPSJtMjQgMThjLjM4IDIuOTEtNS41NSA3LjM3LTggOS0zIDItMi44MiA0LjM0LTUgNC0xLjA0Mi0uOTQgMS40MS0zLjA0IDAtMy0xIDAgLjE5IDEuMjMtMSAyLTEgMC00IDEtNC00IDAtMiA2LTEyIDYtMTIgMCAwIDEuODktMS45IDItMy41LS43My0uOTk0LS41LTItLjUtMyAxLTEgMyAyLjUgMyAyLjVoMmMwIDAgLjc4LTEuOTkyIDIuNS0zIDEgMCAxIDMgMSAzIi8+PC9nPjxnIGZpbGw9IiNmZmYiPjxwYXRoIGQ9Im05LjUgMjUuNWEuNSAuNSAwIDEgMSAtMSAwIC41IC41IDAgMSAxIDEgMHoiLz48cGF0aCBkPSJtMTUgMTUuNWEuNSAxLjUgMCAxIDEgLTEgMCAuNSAxLjUgMCAxIDEgMSAweiIgdHJhbnNmb3JtPSJtYXRyaXgoLjg2Ni41LS41Ljg2NiA5LjY5My01LjE3MykiLz48L2c+PC9nPjwvc3ZnPg==")
-    background-repeat no-repeat
-    background-size 100% 100%
+  display: grid
+
+  grid-template-areas:
+    'lobby'\
+    'start'\
+    'stats'\
+    'tours'\
+    'tv'\
+    'puzzle'\
+    'timeline'\
+    '.'
+  grid-gap: 2vmin
+
+  @media only screen and (min-width 768px) and (min-height 768px)
+    grid-template-columns: repeat(2, 1fr)
+    grid-template-rows: auto repeat(3, fit-content(0))
+    grid-template-areas:
+      'start start'\
+      'stats stats'\
+      'lobby lobby'\
+      'tours tours' \
+      'timeline puzzle';
+
+.home__lobby
+  grid-area lobby
+
+.home__stats
+  grid-area stats
+  padding 1em 10px
+  font-size 1em
+  width 100%
+  display flex
+  flex-flow row nowrap
+  justify-content space-between
+  > div
+    flex 0 1 auto
+
+.home__setupTabView
+  height calc(((100vw - 40px) * 0.28) * 3 + 40px)
+  @media only screen and (min-width 600px)
+    height calc(((100vw - 40px) * 0.2) * 3 + 40px)
+  background-image url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMy41MjkgMzMuNTA0Ij48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNS4yNS02LjI0NikiIG9wYWNpdHk9Ii4xIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIxLjUiPjxnIGZpbGw9IiMwMDAiPjxwYXRoIGQ9Im0yMiAxMGMxMC41IDEgMTYuNSA4IDE2IDI5aC0yM2MwLTkgMTAtNi41IDgtMjEiLz48cGF0aCBkPSJtMjQgMThjLjM4IDIuOTEtNS41NSA3LjM3LTggOS0zIDItMi44MiA0LjM0LTUgNC0xLjA0Mi0uOTQgMS40MS0zLjA0IDAtMy0xIDAgLjE5IDEuMjMtMSAyLTEgMC00IDEtNC00IDAtMiA2LTEyIDYtMTIgMCAwIDEuODktMS45IDItMy41LS43My0uOTk0LS41LTItLjUtMyAxLTEgMyAyLjUgMyAyLjVoMmMwIDAgLjc4LTEuOTkyIDIuNS0zIDEgMCAxIDMgMSAzIi8+PC9nPjxnIGZpbGw9IiNmZmYiPjxwYXRoIGQ9Im05LjUgMjUuNWEuNSAuNSAwIDEgMSAtMSAwIC41IC41IDAgMSAxIDEgMHoiLz48cGF0aCBkPSJtMTUgMTUuNWEuNSAxLjUgMCAxIDEgLTEgMCAuNSAxLjUgMCAxIDEgMSAweiIgdHJhbnNmb3JtPSJtYXRyaXgoLjg2Ni41LS41Ljg2NiA5LjY5My01LjE3MykiLz48L2c+PC9nPjwvc3ZnPg==")
+  background-repeat no-repeat
+  background-size 100% 100%
   .newGame-pools
     padding 10px
     > .newGame-pool
@@ -38,17 +65,16 @@
   > .tab-button
     text-transform initial
 
-.homeCreate
-  margin-bottom 0.5em
-
-.homeTournament
+.home__tournament
+  grid-area tours
   margin-top 1em
   padding 0px
   >.tournamentList
     >.tournament_item
       padding 10px
 
-.home_start
+.home__start
+  grid-area start
   display flex
   flex-flow column nowrap
   justify-content stretch
@@ -88,18 +114,21 @@
   > .fatButton
     margin 1em
 
-.miniPuzzle
+.home__miniPuzzle
+  grid-area puzzle
   display flex
   flex-flow column nowrap
-  justify-content flex-start
-  align-items center
-  margin 1em 0
 
-#timeline
-  padding 0px
+.home__timeline
+  grid-area timeline
   .timelineEntry
-    padding 10px
+    padding 0.5em 0
     font-size 0.9em
+    &:first-child
+      padding-top 0
+  @media only screen and (min-width 768px) and (min-height 768px)
+    > ul, > .moreButton
+      margin 0 1vmin
 
 .home-playbanInfo
   padding 1em

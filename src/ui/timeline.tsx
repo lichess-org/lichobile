@@ -99,7 +99,7 @@ function renderForum(entry: TimelineEntry) {
     key: 'forum-post' + data.postId,
     'data-external': `/forum/redirect/post/${data.postId}`,
   }, [
-    h.trust(i18n('xPostedInForumY', `<strong>${data.userId}</strong>`, data.topicName)),
+    h.trust(i18n('xPostedInForumY', `<strong>${data.userId}</strong>`, `<strong>${data.topicName}</strong>`)),
     ' ',
     h('small', h('em', entry.fromNow)),
   ])

@@ -34,9 +34,13 @@ const MiniBoard: Mithril.Component<Attrs, State> = {
     const { gameObj, boardTitle } = attrs
 
     return (
-      <div className="mini_board" oncreate={helper.ontapY(() => this.link())}>
-        <div className="board_wrapper">
-          {h(ViewOnlyBoard, attrs)}
+      <div className="mini_board_container">
+        <div className="mini_board" oncreate={helper.ontapY(() => this.link())}>
+          <div className="mini_board_helper">
+            <div className="mini_board_wrapper">
+              {h(ViewOnlyBoard, attrs)}
+            </div>
+          </div>
         </div>
         { gameObj ?
           renderVsBloc(gameObj) : boardTitle ?

@@ -128,15 +128,16 @@ export interface MiniUser {
 
 export interface FeaturedGame {
   black: FeaturedPlayer
-  clock: FeaturedClock
+  clock?: FeaturedClock
+  correspondence?: any // yolo
   color: Color
   fen: string
   id: string
-  lastMove: string
+  lastMove?: string
   white: FeaturedPlayer
 }
 
-interface FeaturedPlayer {
+export interface FeaturedPlayer {
   readonly name: string
   readonly rating: number
   readonly ratingDiff: number

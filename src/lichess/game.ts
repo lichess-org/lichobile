@@ -4,6 +4,7 @@ import settings from '../settings'
 import gameStatus from './status'
 import getVariant from './variant'
 import { shortPerfTitle } from './perfs'
+import { FeaturedGame } from './interfaces'
 import { UserGame } from './interfaces/user'
 import { GameData, OnlineGameData, Player } from './interfaces/game'
 import { AnalyseData, OnlineAnalyseData } from './interfaces/analyse'
@@ -136,7 +137,7 @@ export function result(data: GameData) {
 }
 
 // FIXME
-export function time(data: GameData | UserGame | AnalyseData) {
+export function time(data: GameData | UserGame | AnalyseData | FeaturedGame) {
   if (data.clock) {
     const min = secondsToMinutes(data.clock.initial)
     const t = min === 0.25 ? '¼' : min === 0.5 ? '½' : min === 0.75 ? '¾' : min.toString()

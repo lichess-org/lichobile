@@ -127,20 +127,16 @@
       display flex
       flex-flow row nowrap
       justify-content space-between
+      > .time
+        align-self center
       > .player, > .opponent
         max-width 49%
         overflow hidden
         text-overflow ellipsis
-    > .ratingAndTime
-      display flex
-      flex-flow row nowrap
-      justify-content space-between
-      > .time
-        display flex
-        justify-content center
-        align-items center
-      .berserk
-        margin-left 0.5em
+      > .player
+        text-align left
+      > .opponent
+        text-align right
 
 .mini_board
   position: relative;

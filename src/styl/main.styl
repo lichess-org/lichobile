@@ -41,7 +41,7 @@ main
   padding-top: env(safe-area-inset-top);
   background headerBgDark
   width 100%
-  height headerHeight
+  height 'calc(%s + env(safe-area-inset-top))' % headerHeight
   color headerBgDarkColor
   > nav
     height 100%
@@ -243,7 +243,7 @@ main
 
 .content
   width 100%
-  height 'calc(100% - %s)' % headerHeight
+  height 'calc(100% - %s - env(safe-area-inset-top))' % headerHeight
   display flex
   flex-flow column nowrap
   &.fullScreen

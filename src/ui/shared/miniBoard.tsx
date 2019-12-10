@@ -3,6 +3,7 @@ import * as helper from '../helper'
 import ViewOnlyBoard from './ViewOnlyBoard'
 import { noop } from '../../utils'
 import { FeaturedGame } from '../../lichess/interfaces'
+import { time as renderTime } from '../../lichess/game'
 import h from 'mithril/hyperscript'
 
 export interface Attrs {
@@ -15,7 +16,6 @@ export interface Attrs {
   readonly customPieceTheme?: string
   readonly variant?: VariantKey
   readonly fixed?: boolean
-  readonly delay?: Millis
 }
 
 interface State {
@@ -63,19 +63,20 @@ function renderVsBloc(gameObj: FeaturedGame) {
           {player.rank ? `#${player.rank} ` : ''}
           {player.title ? <span className="userTitle">{player.title}&nbsp;</span> : null}
           {player.name}
+          <br/>
+          {player.rating}
+          {player.berserk ? <span className="berserk" data-icon="`" /> : null }
         </div>
+        { gameObj.clock ?
+          <div className="time">
+            {renderTime(gameObj)}
+          </div> : null
+        }
         <div className="opponent">
           {opponent.rank ? `#${opponent.rank} ` : ''}
           {opponent.title ? <span className="userTitle">{opponent.title}&nbsp;</span> : null}
           {opponent.name}
-        </div>
-      </div>
-      <div className="ratingAndTime">
-        <div>
-          {player.rating}
-          {player.berserk ? <span className="berserk" data-icon="`" /> : null }
-        </div>
-        <div>
+          <br/>
           {opponent.rating}
           {opponent.berserk ? <span className="berserk" data-icon="`" /> : null }
         </div>

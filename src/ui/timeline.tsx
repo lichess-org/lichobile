@@ -82,7 +82,7 @@ export function renderTimelineEntry(e: TimelineEntry) {
 
 function renderBlog(entry: TimelineEntry) {
   const data = entry.data
-  return h('li.list_item.timelineEntry', {
+  return h('li.list_item.timelineEntry.blogEntry', {
     key: 'blog-post' + data.id,
     'data-external': `/blog/${data.id}/${data.slug}`,
   }, [

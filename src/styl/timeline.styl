@@ -2,7 +2,11 @@
   height 100%
 
 .timelineEntry
-  color textMediumGray
+  color darken(textDarkBg, 20%)
+  em
+    color darken(textDarkBg, 20%)
+  &.blogEntry
+    color textDarkBg
   > strong
     color textDarkBg
     font-weight normal
@@ -11,8 +15,13 @@
 .view-container.light
   .timelineEntry
     color darken(textLightGray, 10%)
+    em
+      color darken(textLightGray, 10%)
+    &.blogEntry
+      color themeBgLightText
     > strong
       color themeBgLightText
+      font-weight bold
 
 // .view-container.transp
 //   .timelineEntry

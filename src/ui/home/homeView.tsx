@@ -7,6 +7,7 @@ import { hasNetwork } from '../../utils'
 import i18n, { plural, formatNumber, fromNow } from '../../i18n'
 import session from '../../session'
 import { PongMessage, CorrespondenceSeek } from '../../lichess/interfaces'
+import spinner from '../../spinner'
 import * as helper from '../helper'
 import { renderTimelineEntry, timelineOnTap } from '../timeline'
 import signals from '../../signals'
@@ -80,6 +81,7 @@ function online(ctrl: HomeCtrl) {
       </div>
       {h(Stats)}
       {renderFeaturedTournaments(ctrl)}
+      {renderFeatured(ctrl)}
       {renderDailyPuzzle(ctrl)}
       {renderTimeline(ctrl)}
     </div>
@@ -203,6 +205,30 @@ function renderFeaturedTournaments(ctrl: HomeCtrl) {
     return null
 }
 
+function renderFeatured(ctrl: HomeCtrl) {
+  const featured = ctrl.featured
+  const boardConf = featured ? {
+    fixed: false,
+    fen: featured.fen,
+    orientation: featured.color,
+    lastMove: featured.lastMove,
+    link: () => {
+      router.set('/tv?channel=best')
+    },
+    gameObj: featured,
+  } : {
+    fixed: false,
+    orientation: 'white' as Color,
+    fen: emptyFen,
+  }
+
+  return (
+    <section className="home__featured">
+      {h(MiniBoard, boardConf)}
+    </section>
+  )
+}
+
 function renderDailyPuzzle(ctrl: HomeCtrl) {
   const puzzle = ctrl.dailyPuzzle
   const boardConf = puzzle ? {
@@ -230,7 +256,19 @@ function renderDailyPuzzle(ctrl: HomeCtrl) {
 
 function renderTimeline(ctrl: HomeCtrl) {
   const timeline = ctrl.timeline
-  if (!timeline || timeline.length === 0) return null
+
+  if (timeline === undefined) {
+    return (
+      <section className="home__timeline loading">
+        {spinner.getVdom('monochrome')}
+      </section>
+    )
+  }
+
+  if (timeline.length === 0) {
+    <section className="home__timeline">
+    </section>
+  }
 
   return (
     <section className="home__timeline">

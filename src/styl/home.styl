@@ -20,7 +20,8 @@
       'start start'\
       'stats stats'\
       'lobby lobby'\
-      'tours tours' \
+      'tours tours'\
+      'timeline tv'\
       'timeline puzzle';
 
 .home__lobby
@@ -80,6 +81,29 @@
   justify-content stretch
   margin 0 1em
 
+.home__miniPuzzle
+  grid-area puzzle
+  display flex
+  flex-flow column nowrap
+
+.home__featured
+  grid-area tv
+  display flex
+  flex-flow column nowrap
+
+.home__timeline
+  grid-area timeline
+  &.loading
+    padding-top 2em
+  .timelineEntry
+    padding 0.5em 0
+    font-size 0.9em
+    &:first-child
+      padding-top 0
+  @media only screen and (min-width 768px) and (min-height 768px)
+    > ul, > .moreButton
+      margin 0 1vmin
+
 .homeTitle
   font-weight bold
   text-align center
@@ -113,22 +137,6 @@
   margin-top 1em
   > .fatButton
     margin 1em
-
-.home__miniPuzzle
-  grid-area puzzle
-  display flex
-  flex-flow column nowrap
-
-.home__timeline
-  grid-area timeline
-  .timelineEntry
-    padding 0.5em 0
-    font-size 0.9em
-    &:first-child
-      padding-top 0
-  @media only screen and (min-width 768px) and (min-height 768px)
-    > ul, > .moreButton
-      margin 0 1vmin
 
 .home-playbanInfo
   padding 1em

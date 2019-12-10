@@ -1,6 +1,6 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
-import i18n from '../../../i18n'
+import i18n, { plural } from '../../../i18n'
 import * as helper from '../../helper'
 import explorerConfig from './explorerConfig'
 import { Move, isTablebaseData } from './interfaces'
@@ -89,26 +89,26 @@ function winner(stm: string, move: Move) {
 
 function showDtm(stm: string, move: Move) {
   if (move.dtm) return h('result.' + winner(stm, move), {
-    title: 'Mate in ' + Math.abs(move.dtm) + ' half-moves (Depth To Mate)'
+    title: plural('mateInXHalfMoves', Math.abs(move.dtm), Math.abs(move.dtm)),
   }, 'DTM ' + Math.abs(move.dtm))
   else return null
 }
 
 function showDtz(stm: string, move: Move) {
-  if (move.checkmate) return h('result.' + winner(stm, move), 'Checkmate')
-  else if (move.stalemate) return h('result.draws', 'Stalemate')
-  else if (move.variant_win) return h('result.' + winner(stm, move), 'Variant loss')
-  else if (move.variant_loss) return h('result.' + winner(stm, move), 'Variant win')
-  else if (move.insufficient_material) return h('result.draws', 'Insufficient material')
+  if (move.checkmate) return h('result.' + winner(stm, move), i18n('checkmate'))
+  else if (move.stalemate) return h('result.draws', i18n('stalemate'))
+  else if (move.variant_win) return h('result.' + winner(stm, move), i18n('variantWin'))
+  else if (move.variant_loss) return h('result.' + winner(stm, move), i18n('variantLoss'))
+  else if (move.insufficient_material) return h('result.draws', i18n('insufficientMaterial'))
   else if (move.dtz === null) return null
-  else if (move.dtz === 0) return h('result.draws', 'Draw')
+  else if (move.dtz === 0) return h('result.draws', i18n('draw'))
   else if (move.zeroing) {
     let capture = move.san.indexOf('x') !== -1
-    if (capture) return h('result.' + winner(stm, move), 'Capture')
-    else return h('result.' + winner(stm, move), 'Pawn move')
+    if (capture) return h('result.' + winner(stm, move), i18n('capture'))
+    else return h('result.' + winner(stm, move), i18n('pawnMove'))
   }
   else return h('result.' + winner(stm, move), {
-    title: 'Next capture or pawn move in ' + Math.abs(move.dtz) + ' half-moves (Distance To Zeroing of the 50 move counter)'
+    title: plural('nextCaptureOrPawnMoveInXHalfMoves', Math.abs(move.dtz), Math.abs(move.dtz))
   }, 'DTZ ' + Math.abs(move.dtz))
 }
 
@@ -133,18 +133,18 @@ function show(ctrl: AnalyseCtrl) {
     if (moves.length) {
       return (
         <div className="explorer-data">
-          {showTablebase(ctrl, 'Winning', moves.filter((move: Move) => move.wdl === -2), data.fen)}
-          {showTablebase(ctrl, 'Unknown', moves.filter((move: Move) => move.wdl === null), data.fen)}
-          {showTablebase(ctrl, 'Win prevented by 50-move rule', moves.filter((move: Move) => move.wdl === -1), data.fen)}
-          {showTablebase(ctrl, 'Drawn', moves.filter((move: Move) => move.wdl === 0), data.fen)}
-          {showTablebase(ctrl, 'Loss saved by 50-move rule', moves.filter((move: Move) => move.wdl === 1), data.fen)}
-          {showTablebase(ctrl, 'Losing', moves.filter((move: Move) => move.wdl === 2), data.fen)}
+          {showTablebase(ctrl, i18n('winning'), moves.filter((move: Move) => move.wdl === -2), data.fen)}
+          {showTablebase(ctrl, i18n('unknown'), moves.filter((move: Move) => move.wdl === null), data.fen)}
+          {showTablebase(ctrl, i18n('winPreventedBy50MoveRule'), moves.filter((move: Move) => move.wdl === -1), data.fen)}
+          {showTablebase(ctrl, i18n('drawn'), moves.filter((move: Move) => move.wdl === 0), data.fen)}
+          {showTablebase(ctrl, i18n('lossSavedBy50MoveRule'), moves.filter((move: Move) => move.wdl === 1), data.fen)}
+          {showTablebase(ctrl, i18n('losing'), moves.filter((move: Move) => move.wdl === 2), data.fen)}
         </div>
       )
     }
-    else if (data.checkmate) return showGameEnd('Checkmate')
-    else if (data.stalemate) return showGameEnd('Stalemate')
-    else if (data.variant_win || data.variant_loss) return showGameEnd('Variant end')
+    else if (data.checkmate) return showGameEnd(i18n('checkmate'))
+    else if (data.stalemate) return showGameEnd(i18n('stalemate'))
+    else if (data.variant_win || data.variant_loss) return showGameEnd(i18n('variantEnding'))
     else return showEmpty(ctrl)
   }
   return <div />

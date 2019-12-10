@@ -20,35 +20,40 @@ import { renderTournamentList } from '../tournament/tournamentsListView'
 import HomeCtrl from './HomeCtrl'
 
 export function body(ctrl: HomeCtrl) {
-  const playbanEndsAt = session.currentBan()
+  if (hasNetwork()) return online(ctrl)
+  else return offline(ctrl)
+}
 
-  if (!hasNetwork()) {
-    const puzzleData = ctrl.offlinePuzzle
-    const boardConf = puzzleData ? {
-      fixed: true,
-      fen: puzzleData.puzzle.fen,
-      orientation: puzzleData.puzzle.color,
-      link: () => router.set('/training'),
-    } : null
+function offline(ctrl: HomeCtrl) {
+  const puzzleData = ctrl.offlinePuzzle
+  const boardConf = puzzleData ? {
+    fixed: true,
+    fen: puzzleData.puzzle.fen,
+    orientation: puzzleData.puzzle.color,
+    link: () => router.set('/training'),
+  } : null
 
-    return (
-      <div className={'homeOfflineWrapper' + (boardConf ? ' withBoard' : '')}>
-        <div className="home homeOffline">
-          <section className="playOffline">
-            <h2>{i18n('playOffline')}</h2>
-            <button className="fatButton" oncreate={helper.ontapY(() => router.set('/ai'))}>{i18n('playOfflineComputer')}</button>
-            <button className="fatButton" oncreate={helper.ontapY(() => router.set('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
-          </section>
-          { boardConf ?
-          <section className="miniPuzzle">
-            <h2 className="homeTitle">{i18n('training')}</h2>
-            {h(MiniBoard, boardConf)}
-          </section> : undefined
-          }
-        </div>
+  return (
+    <div className={'homeOfflineWrapper' + (boardConf ? ' withBoard' : '')}>
+      <div className="home homeOffline">
+        <section className="playOffline">
+          <h2>{i18n('playOffline')}</h2>
+          <button className="fatButton" oncreate={helper.ontapY(() => router.set('/ai'))}>{i18n('playOfflineComputer')}</button>
+          <button className="fatButton" oncreate={helper.ontapY(() => router.set('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
+        </section>
+        { boardConf ?
+        <section className="miniPuzzle">
+          <h2 className="homeTitle">{i18n('training')}</h2>
+          {h(MiniBoard, boardConf)}
+        </section> : undefined
+        }
       </div>
-    )
-  }
+    </div>
+  )
+}
+
+function online(ctrl: HomeCtrl) {
+  const playbanEndsAt = session.currentBan()
 
   return (
     <div className="home">

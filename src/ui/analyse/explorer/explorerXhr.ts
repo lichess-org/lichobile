@@ -43,6 +43,7 @@ export function tablebaseXhr(variant: VariantKey, fen: string): Promise<Explorer
     headers: {
       'Accept': 'application/json, text/*',
       'X-Requested-With': '__delete',
+      [SESSION_ID_KEY]: '__delete',
     },
     credentials: 'omit',
     query: {

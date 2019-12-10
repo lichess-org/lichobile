@@ -39,7 +39,7 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
     line-height: 25px;
     background-color explorerHeaderBg
     text-align: left;
-    padding-left: 7px;
+    padding-left: 0.5em
   th
     &.explorerMove-games
       padding-left 15px
@@ -50,18 +50,18 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
       background-color: lighten(bgdark, 15%)
   td
     vertical-align middle
-    padding-left: 7px;
+    padding-left: 0.5em
     &.explorerMove-move
       font-size: 14px;
       line-height: 30px;
-      padding-left: 7px;
+      padding-left: 0.5em
     &.explorerMove-games
       font-size: 11px;
       text-align: right;
       padding-left 10px
     &.explorerMove-result
       width: 100%;
-      padding-right: 7px;
+      padding-right: 0.5em
       padding-left 15px
   .white
     background-color: #bbb;
@@ -94,13 +94,12 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
       font-family: monospace;
       font-size: 0.9em;
   .toconf
+    flex 0 0 30px
     margin-left auto
     display flex
     align-items center
     justify-content center
     font-size: 16px
-    width 30px
-    height 23px
   .message
     text-align: center;
     font-style: italic;
@@ -126,12 +125,15 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
   flex 0 0 23px
   display flex
   flex-flow row nowrap
+  align-items center
   font-size 12px
   overflow hidden
   white-space nowrap
-  text-overflow ellipsis
   background-color explorerHeaderBg
-  padding 0 7px
+  padding-left 0.5em
+  > span
+    overflow hidden
+    text-overflow ellipsis
 
 .explorerConfig
   flex-grow 1
@@ -180,9 +182,9 @@ explorerHeaderBg = lighten(headerBgDark, 2%)
     font-family: 'ChessSansPiratf', sans-serif;
     font-size: 14px;
     line-height: 30px;
-    padding-left: 7px;
+    padding-left: 0.5em
   td:last-child
-    padding-right: 7px;
+    padding-right: 0.5em
     text-align: right;
   result
     padding: 3px 5px;

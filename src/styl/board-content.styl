@@ -1,5 +1,6 @@
 .content_round
-  flex 1 1 auto
+  width 100%
+  height 'calc(100% - %s - env(safe-area-inset-top))' % headerHeight
   display flex
   flex-flow column nowrap
   justify-content center

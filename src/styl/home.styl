@@ -27,9 +27,7 @@
 
 .home__stats
   grid-area stats
-  padding 1em 10px
-  font-size 1em
-  width 100%
+  padding 1vmin 10px
   display flex
   flex-flow row nowrap
   justify-content space-between
@@ -69,17 +67,22 @@
   display flex
   flex-flow column nowrap
   justify-content stretch
-  margin 0 1em
+  margin 0 2vmin
+  @media only screen and (min-width 768px) and (min-height 768px)
+    margin-top 1em
 
 .home__miniPuzzle
   grid-area puzzle
-  display flex
-  flex-flow column nowrap
 
 .home__featured
   grid-area tv
+
+.home__featured, .home__miniPuzzle
   display flex
   flex-flow column nowrap
+  margin 0 1vmin
+  @media only screen and (min-width 768px) and (min-height 768px)
+    margin 0 1vmin 0 0
 
 .home__side
   grid-area side
@@ -93,14 +96,28 @@
 .home__timeline
   &.loading
     padding-top 2em
+  > .more
+    color darken(textDarkBg, 20%)
+    font-size 0.9em
+    text-align right
   .timelineEntry
+    color darken(textDarkBg, 20%)
+    em
+      color darken(textDarkBg, 20%)
+    &.blogEntry
+      color textDarkBg
+    > strong
+      color textDarkBg
+      font-weight normal
+    text-shadow 0 1px 1px rgba(0,0,0,0.5)
     padding 0.5em 0
     font-size 0.9em
   @media only screen and (min-width 768px) and (min-height 768px)
+    margin-bottom 1em
     .timelineEntry
       &:first-child
         padding-top 0
-    > ul, > .moreButton
+    > ul, .more
       margin 0 1vmin
 
 .homeTitle
@@ -196,6 +213,20 @@
     background rgba(gold, 0.3)
 
 .view-container.light
+
+  .home__timeline
+    > .more
+      color darken(textLightGray, 10%)
+    .timelineEntry
+      color darken(textLightGray, 10%)
+      em
+        color darken(textLightGray, 10%)
+      &.blogEntry
+        color themeBgLightText
+      > strong
+        color themeBgLightText
+        font-weight bold
+
   .tabs-navigation.homeSetup
     background-color inherit
 
@@ -223,6 +254,9 @@
 
   .corres_seek > td
     border-color transpWhite01
+
+  .home__setupTabView
+    background-color transpBlack02
 
   .home
     .newGame-pool

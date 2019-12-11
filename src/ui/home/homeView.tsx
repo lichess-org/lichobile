@@ -303,14 +303,14 @@ function renderTimeline(ctrl: HomeCtrl) {
 
   return (
     <section className="home__timeline">
-      <ul className="items_list_block"
+      <ul
         oncreate={helper.ontapY(timelineOnTap, undefined, helper.getLI)}
       >
         { timeline.map(renderTimelineEntry)}
       </ul>
-      <div className="moreButton">
+      <div className="more">
         <button oncreate={helper.ontapY(() => router.set('/timeline'))}>
-          {i18n('more')}
+          {i18n('more')} »
         </button>
       </div>
     </section>

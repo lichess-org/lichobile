@@ -79,17 +79,44 @@ function online(ctrl: HomeCtrl) {
           {i18n('playWithTheMachine')}
         </button>
       </div>
-      {h(Stats)}
-      {renderFeaturedTournaments(ctrl)}
+      {h(Stats, { ctrl })}
+      <div className="home__side">
+        {renderFeaturedTournaments(ctrl)}
+        {renderTimeline(ctrl)}
+      </div>
       {renderFeatured(ctrl)}
       {renderDailyPuzzle(ctrl)}
-      {renderTimeline(ctrl)}
     </div>
   )
 }
 
 const Stats = {
-  oncreate() {
+  oncreate({ attrs }) {
+    function spreadNumber(el: HTMLElement | null, nbSteps: number, getDuration: () => number) {
+      let previous: number
+      let displayed: string
+      function display(prev: number, cur: number, it: number) {
+        const val = formatNumber(Math.round(((prev * (nbSteps - 1 - it)) + (cur * (it + 1))) / nbSteps))
+        if (el && val !== displayed) {
+          if (!attrs.ctrl.isScrolling) {
+            el.textContent = val
+            displayed = val
+          }
+        }
+      }
+      let timeouts: Array<number> = []
+      return function(nb: number, overrideNbSteps?: number) {
+        if (!el || (!nb && nb !== 0)) return
+        if (overrideNbSteps) nbSteps = Math.abs(overrideNbSteps)
+        timeouts.forEach(clearTimeout)
+        timeouts = []
+        let prev = previous === 0 ? 0 : (previous || nb)
+        previous = nb
+        let interv = Math.abs(getDuration() / nbSteps)
+        for (let i = 0; i < nbSteps; i++)
+          timeouts.push(setTimeout(() => display(prev, nb, i), Math.round(i * interv)))
+      }
+    }
     const nbRoundSpread = spreadNumber(
       document.querySelector('#nb_games_in_play > strong'),
       8,
@@ -102,7 +129,9 @@ const Stats = {
     )
     this.render = (pong: PongMessage) => {
       nbUserSpread(pong.d)
-      setTimeout(() => nbRoundSpread(pong.r), socket.getCurrentPingInterval() / 2)
+      setTimeout(() => {
+        nbRoundSpread(pong.r)
+      }, socket.getCurrentPingInterval() / 2)
     }
     signals.homePong.add(this.render)
   },
@@ -115,7 +144,7 @@ const Stats = {
       h('div#nb_games_in_play', h.trust(i18n('nbGames:other', '<strong>?</strong>'))),
     ])
   }
-} as Mithril.Component<{}, { render: (p: PongMessage) => void }>
+} as Mithril.Component<{ ctrl: HomeCtrl }, { render: (p: PongMessage) => void }>
 
 function renderLobby(ctrl: HomeCtrl) {
   const tabsContent = [
@@ -266,8 +295,10 @@ function renderTimeline(ctrl: HomeCtrl) {
   }
 
   if (timeline.length === 0) {
-    <section className="home__timeline">
-    </section>
+    return (
+      <section className="home__timeline">
+      </section>
+    )
   }
 
   return (
@@ -317,26 +348,3 @@ function renderPlayban(endsAt: Date) {
   )
 }
 
-function spreadNumber(el: HTMLElement | null, nbSteps: number, getDuration: () => number) {
-  let previous: number
-  let displayed: string
-  function display(prev: number, cur: number, it: number) {
-    const val = formatNumber(Math.round(((prev * (nbSteps - 1 - it)) + (cur * (it + 1))) / nbSteps))
-    if (el && val !== displayed) {
-      el.textContent = val
-      displayed = val
-    }
-  }
-  let timeouts: Array<number> = []
-  return function(nb: number, overrideNbSteps?: number) {
-    if (!el || (!nb && nb !== 0)) return
-    if (overrideNbSteps) nbSteps = Math.abs(overrideNbSteps)
-    timeouts.forEach(clearTimeout)
-    timeouts = []
-    let prev = previous === 0 ? 0 : (previous || nb)
-    previous = nb
-    let interv = Math.abs(getDuration() / nbSteps)
-    for (let i = 0; i < nbSteps; i++)
-      timeouts.push(setTimeout(() => display(prev, nb, i), Math.round(i * interv)))
-  }
-}

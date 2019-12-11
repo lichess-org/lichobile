@@ -6,10 +6,9 @@
     'lobby'\
     'start'\
     'stats'\
-    'tours'\
+    'side'\
     'tv'\
     'puzzle'\
-    'timeline'\
     '.'
   grid-gap: 2vmin
 
@@ -20,9 +19,8 @@
       'start start'\
       'stats stats'\
       'lobby lobby'\
-      'tours tours'\
-      'timeline tv'\
-      'timeline puzzle';
+      'side tv'\
+      'side puzzle';
 
 .home__lobby
   grid-area lobby
@@ -66,14 +64,6 @@
   > .tab-button
     text-transform initial
 
-.home__tournament
-  grid-area tours
-  margin-top 1em
-  padding 0px
-  >.tournamentList
-    >.tournament_item
-      padding 10px
-
 .home__start
   grid-area start
   display flex
@@ -91,16 +81,25 @@
   display flex
   flex-flow column nowrap
 
+.home__side
+  grid-area side
+
+.home__tournament
+  padding 0px
+  > .tournamentList
+    > .tournament_item
+      padding 10px
+
 .home__timeline
-  grid-area timeline
   &.loading
     padding-top 2em
   .timelineEntry
     padding 0.5em 0
     font-size 0.9em
-    &:first-child
-      padding-top 0
   @media only screen and (min-width 768px) and (min-height 768px)
+    .timelineEntry
+      &:first-child
+        padding-top 0
     > ul, > .moreButton
       margin 0 1vmin
 

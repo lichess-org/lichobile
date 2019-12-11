@@ -52,13 +52,20 @@ export default {
     header: Mithril.Children,
     content: Mithril.Children,
     footer?: Mithril.Children,
-    overlay?: Mithril.Children
+    overlay?: Mithril.Children,
+    scrollListener?: (e: Event) => void
   ) {
     background = background || settings.general.theme.background()
     return h('div.view-container', containerOpts(background), [
       h('main#page', { oncreate: handleMenuOpen }, [
         h('header.main_header', header),
-        h('div#free_content.content.native_scroller', content),
+        h('div#free_content.content.native_scroller', {
+          oncreate: ({ dom }) => {
+            if (scrollListener) {
+              dom.addEventListener('scroll', scrollListener)
+            }
+          }
+        }, content),
         footer ? h('footer.main_footer', footer) : null,
         h('div#menu-close-overlay.menu-backdrop', { oncreate: menu.backdropCloseHandler })
       ]),

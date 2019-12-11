@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core'
 import * as Mithril from 'mithril'
 import socket from '../../socket'
 import signals from '../../signals'
@@ -35,6 +36,12 @@ export default {
   view() {
     const header = dropShadowHeader('lichess.org')
 
-    return layout.free(header, body(this.ctrl))
+    return layout.free(
+      header,
+      body(this.ctrl),
+      undefined,
+      undefined,
+      Capacitor.platform === 'ios' ? this.ctrl.onScroll : undefined,
+    )
   }
 } as Mithril.Component<Attrs, State>

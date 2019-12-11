@@ -61,9 +61,9 @@ function renderVsBloc(gameObj: FeaturedGame) {
       <div className="antagonists">
         <div className="player">
           {player.rank ? `#${player.rank} ` : ''}
-          {player.title ? <span className="userTitle">{player.title}&nbsp;</span> : null}
           {player.name}
           <br/>
+          {player.title ? <span className="userTitle">{player.title}&nbsp;</span> : null}
           {player.rating}
           {player.berserk ? <span className="berserk" data-icon="`" /> : null }
         </div>
@@ -74,9 +74,9 @@ function renderVsBloc(gameObj: FeaturedGame) {
         }
         <div className="opponent">
           {opponent.rank ? `#${opponent.rank} ` : ''}
-          {opponent.title ? <span className="userTitle">{opponent.title}&nbsp;</span> : null}
           {opponent.name}
           <br/>
+          {opponent.title ? <span className="userTitle">{opponent.title}&nbsp;</span> : null}
           {opponent.rating}
           {opponent.berserk ? <span className="berserk" data-icon="`" /> : null }
         </div>

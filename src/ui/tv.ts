@@ -37,7 +37,13 @@ const TV: Mithril.Component<TVAttrs, State> = {
       d.tv = settings.tv.channel()
       this.round = new OnlineRound(false, vnode.attrs.id, d, vnode.attrs.flip, onFeatured, onChannelChange)
     })
-    .catch(handleXhrError)
+    .catch(error => {
+      handleXhrError(error)
+      if (error.status === 404) {
+        settings.tv.channel('best')
+        router.set('/tv/', true)
+      }
+    })
   },
 
   oncreate: helper.viewFadeIn,

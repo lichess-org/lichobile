@@ -62,7 +62,21 @@ function online(ctrl: HomeCtrl) {
       {playbanEndsAt && ((playbanEndsAt.valueOf() - Date.now()) / 1000) > 1 ?
         renderPlayban(playbanEndsAt) : renderLobby(ctrl)
       }
-      <div className="home__start">
+      {renderStart(ctrl)}
+      <div className="home__side">
+        {renderFeaturedTournaments(ctrl)}
+        {renderTimeline(ctrl)}
+      </div>
+      {renderFeatured(ctrl)}
+      {renderDailyPuzzle(ctrl)}
+    </div>
+  )
+}
+
+function renderStart(ctrl: HomeCtrl) {
+  return (
+    <div className="home__start">
+      <div className="home__buttons">
         <button className="buttonMetal"
           oncreate={helper.ontapY(() => newGameForm.openRealTime('custom'))}
         >
@@ -80,12 +94,6 @@ function online(ctrl: HomeCtrl) {
         </button>
       </div>
       {h(Stats, { ctrl })}
-      <div className="home__side">
-        {renderFeaturedTournaments(ctrl)}
-        {renderTimeline(ctrl)}
-      </div>
-      {renderFeatured(ctrl)}
-      {renderDailyPuzzle(ctrl)}
     </div>
   )
 }

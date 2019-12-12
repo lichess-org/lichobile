@@ -5,28 +5,36 @@
   grid-template-areas:
     'lobby'\
     'start'\
-    'stats'\
     'side'\
     'tv'\
     'puzzle'\
     '.'
   grid-gap: 2vmin
 
-  @media only screen and (min-width 768px) and (min-height 768px)
+  @media only screen and (min-width 601px)
     grid-template-columns: repeat(2, 1fr)
     grid-template-rows: auto repeat(3, fit-content(0))
     grid-template-areas:
       'start start'\
-      'stats stats'\
       'lobby lobby'\
       'side tv'\
       'side puzzle';
+
+  @media only screen and (min-width 800px)
+
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 12em repeat(2, fit-content(0));
+
+    grid-template-areas:
+      'start lobby lobby'\
+      'start lobby lobby'\
+      'side side tv'\
+      'side side puzzle';
 
 .home__lobby
   grid-area lobby
 
 .home__stats
-  grid-area stats
   padding 1vmin 10px
   display flex
   flex-flow row nowrap
@@ -36,7 +44,7 @@
 
 .home__setupTabView
   height calc(((100vw - 40px) * 0.28) * 3 + 40px)
-  @media only screen and (min-width 600px)
+  @media only screen and (min-width 601px)
     height calc(((100vw - 40px) * 0.2) * 3 + 40px)
   background-image url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMy41MjkgMzMuNTA0Ij48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNS4yNS02LjI0NikiIG9wYWNpdHk9Ii4xIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIxLjUiPjxnIGZpbGw9IiMwMDAiPjxwYXRoIGQ9Im0yMiAxMGMxMC41IDEgMTYuNSA4IDE2IDI5aC0yM2MwLTkgMTAtNi41IDgtMjEiLz48cGF0aCBkPSJtMjQgMThjLjM4IDIuOTEtNS41NSA3LjM3LTggOS0zIDItMi44MiA0LjM0LTUgNC0xLjA0Mi0uOTQgMS40MS0zLjA0IDAtMy0xIDAgLjE5IDEuMjMtMSAyLTEgMC00IDEtNC00IDAtMiA2LTEyIDYtMTIgMCAwIDEuODktMS45IDItMy41LS43My0uOTk0LS41LTItLjUtMyAxLTEgMyAyLjUgMyAyLjVoMmMwIDAgLjc4LTEuOTkyIDIuNS0zIDEgMCAxIDMgMSAzIi8+PC9nPjxnIGZpbGw9IiNmZmYiPjxwYXRoIGQ9Im05LjUgMjUuNWEuNSAuNSAwIDEgMSAtMSAwIC41IC41IDAgMSAxIDEgMHoiLz48cGF0aCBkPSJtMTUgMTUuNWEuNSAxLjUgMCAxIDEgLTEgMCAuNSAxLjUgMCAxIDEgMSAweiIgdHJhbnNmb3JtPSJtYXRyaXgoLjg2Ni41LS41Ljg2NiA5LjY5My01LjE3MykiLz48L2c+PC9nPjwvc3ZnPg==")
   background-repeat no-repeat
@@ -47,7 +55,7 @@
       fluid-type(16px, 35px)
       box-shadow none
       height calc((100vw - 40px) * 0.28)
-      @media only screen and (min-width 600px)
+      @media only screen and (min-width 601px)
         height calc((100vw - 40px) * 0.2)
       background-color transpWhite01
       border 1px solid lighten(#3d3d3d, 20%)
@@ -64,11 +72,13 @@
 
 .home__start
   grid-area start
+
+.home__buttons
   display flex
   flex-flow column nowrap
   justify-content stretch
   margin 0 2vmin
-  @media only screen and (min-width 768px) and (min-height 768px)
+  @media only screen and (min-width 601px)
     margin-top 1em
 
 .home__miniPuzzle
@@ -81,7 +91,7 @@
   display flex
   flex-flow column nowrap
   margin 0 1vmin
-  @media only screen and (min-width 768px) and (min-height 768px)
+  @media only screen and (min-width 601px)
     margin 0 1vmin 0 0
 
 .home__side
@@ -112,7 +122,7 @@
     text-shadow 0 1px 1px rgba(0,0,0,0.5)
     padding 0.5em 0
     font-size 0.9em
-  @media only screen and (min-width 768px) and (min-height 768px)
+  @media only screen and (min-width 601px)
     margin-bottom 1em
     .timelineEntry
       &:first-child

@@ -167,7 +167,9 @@ const perfIconsMap: {[index: string]: string} = {
   fromPosition: '*',
   racingKings: '',
   crazyhouse: '',
-  ultraBullet: '{'
+  ultraBullet: '{',
+  computer: 'n',
+  bot: 'n',
 }
 
 export function gameIcon(perf?: PerfKey): string {

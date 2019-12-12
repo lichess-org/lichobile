@@ -136,8 +136,10 @@ function renderTitle(ctrl: OnlineRound) {
     const isCorres = !data.player.spectator && data.game.speed === 'correspondence'
     if (ctrl.data.tv) {
       return h('div.main_header_title.withSub', [
-        h('h1.header-gameTitle', [h('span.withIcon[data-icon=1]'), 'Lichess TV']),
-        h('h2.header-subTitle', tvChannelSelector(ctrl))
+        h('h1.header-gameTitle', [
+          tvChannelSelector(ctrl)
+        ]),
+        h('h2.header-subTitle', gameApi.title(ctrl.data)),
       ])
     }
     else if (ctrl.data.userTV) {
@@ -390,6 +392,7 @@ function renderPlayTable(
 function tvChannelSelector(ctrl: OnlineRound) {
   const channels = perfApi.perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]])
   channels.unshift(['Top rated', 'best'])
+  channels.push(['Bot', 'bot'])
   channels.push(['Computer', 'computer'])
   const channel = settings.tv.channel() as PerfKey
   const icon = utils.gameIcon(channel)
@@ -398,7 +401,11 @@ function tvChannelSelector(ctrl: OnlineRound) {
     h('div.select_input.main_header-selector.round-tvChannelSelector', [
       h('label', {
         'for': 'channel_selector'
-      }, h(`i[data-icon=${icon}]`)),
+      }, [
+        h(`i[data-icon=${icon}]`),
+        h('span', h.trust('&nbsp;')),
+        h('span', 'Lichess TV')
+      ]),
       h('select#channel_selector', {
         value: channel,
         onchange(e: Event) {
@@ -511,15 +518,6 @@ function renderGameEndedActions(ctrl: OnlineRound) {
   )
 }
 
-function renderPopupTitle(ctrl: OnlineRound) {
-  return [
-    h('span.withIcon', {
-      'data-icon': utils.gameIcon(ctrl.data.game.perf)
-    }),
-    gameApi.title(ctrl.data)
-  ]
-}
-
 function renderStatus(ctrl: OnlineRound) {
   const result = gameApi.result(ctrl.data)
   const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner)
@@ -531,10 +529,8 @@ function renderStatus(ctrl: OnlineRound) {
 }
 
 function renderGamePopup(ctrl: OnlineRound) {
-  const header = ctrl.data.tv ?
-    () => renderPopupTitle(ctrl) :
-    !gameApi.playable(ctrl.data) ?
-      () => renderStatus(ctrl) : undefined
+  const header = !gameApi.playable(ctrl.data) ?
+    () => renderStatus(ctrl) : undefined
 
   return popupWidget(
     'player_controls',

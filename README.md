@@ -40,10 +40,10 @@ Update capacitor:
 
 You need to start a web server at `http://localhost:8080`. For instance:
 
-    $ npm install -g http-server
-    $ http-server .
+    $ npm run serve
 
-Once the server is running, browse to `http://localhost:8080/www
+Will serve assets at `http://localhost:8080`.
+Once the server is running, browse to [http://localhost:8080/www](http://localhost:8080/www).
 
 Be sure to [Toggle Device Mode](https://developers.google.com/web/tools/chrome-devtools/device-mode/) in your browser, or else you won't be able to click on anything.
 

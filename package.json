@@ -58,6 +58,7 @@
         "d3-time": "1.0.7",
         "d3-time-format": "2.0.5",
         "date-fns": "2.4.1",
+        "http-server": "0.12.0",
         "lodash": "4.17.15",
         "lodash-es": "4.17.15",
         "mithril": "2.0.4",
@@ -66,7 +67,8 @@
         "signals": "1.0.0"
     },
     "scripts": {
-        "start": "npm run compile && npm run watch",
+        "start": "npm run compile && concurrently 'npm run watch' 'npm run serve'",
+        "serve": "http-server -s -g -c-1 .",
         "version": "node scripts/bump-version.js",
         "lint": "tslint --project tsconfig.json -e '**/dts/**' -e '**/*.js'",
         "test": "jest",

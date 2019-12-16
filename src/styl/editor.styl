@@ -7,7 +7,6 @@
     margin 3vh
 
 .editor-table
-  background lighten(bgdark, 6%)
   flex 1 1 auto
   display: flex
   flex-flow: column nowrap
@@ -67,8 +66,6 @@
   .form-multipleChoice
     margin-bottom 3px
     color textGray
-    span
-      border-color #eee
 
 .continueFromHere
   h2
@@ -76,7 +73,7 @@
   .sep
     margin-top 10px
     padding-left 10px
-    color textLightBg
+    color darken(modalDarkColor, 35%)
 
 .pasteFenPopup
   .popup_content
@@ -94,6 +91,10 @@
 .view-container.light
   .editor-piecesDrawer
     background #aaa
+  .continueFromHere
+    .sep
+      color textLightBg
+
 
 .view-container.transp
   .editor-piecesDrawer

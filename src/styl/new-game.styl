@@ -1,6 +1,8 @@
 .game_form_popup
   > .popup_content
     padding 0
+    display flex
+    flex-flow column nowrap
   .select_input
     margin-top 10px
 
@@ -56,19 +58,17 @@
   font-weight 300
   fluid-type(14px, 30px)
   background rgba(255,255,255,0.7)
-  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.2);
+  background-color transpWhite01
+  border 1px solid lighten(#3d3d3d, 20%)
+  padding 1em 0
+  &.active
+    background-color rgba(gold, 0.1)
   display flex
   flex-flow column
   justify-content center
   align-items center
-  color themeBgLightText
   opacity 1
   transition opacity 0.5s
-  &.active
-    background #fff
-    box-shadow 0 2px 5px rgba(0,0,0,0.3)
-  &.transp
-    opacity 0.6
 
 .newGame-clock
   font-size 1.5em
@@ -77,3 +77,17 @@
 
 .newGame-perf
   text-transform capitalize
+
+.view-container.light
+  .newGame-pool
+    background-color transpWhite04
+    border-color borderLightGray
+    &.active
+      background-color rgba(gold, 0.1)
+
+.view-container.transp
+  .newGame-pool
+    border-color transpWhite02
+    background-color transpWhite005
+    &.active
+      background-color rgba(gold, 0.1)

@@ -104,7 +104,7 @@ function renderContent() {
     conf.preset(val)
   })
 
-  return h('div', [
+  return [
     h('div.newGame-preset_switch', [
       h('div.nice-radio', formWidgets.renderRadio(
         i18n('quickPairing'),
@@ -136,7 +136,7 @@ function renderContent() {
         return e[1] === '1' || session.isConnected()
       })
     ),
-  ])
+  ]
 }
 
 export function renderQuickSetup(onCustom: () => void) {

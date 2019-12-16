@@ -8,7 +8,8 @@
   top 0
   left 0
   display flex
-  align-items center
+  flex-flow column nowrap
+  justify-content center
 
 .popup_overlay_close
   position absolute
@@ -22,14 +23,13 @@
   width 90%
   max-height 80%
   z-index 12
-  background-color bglight
-  color textDarkGray
+  background-color modalDarkBg
+  color modalDarkColor
   box-shadow 0 0 35px 10px rgba(0,0,0,0.5)
   &.native_scroller
     height initial
   button
     min-height 45px
-    color textDarkGray
   .defaultButton
     color #fff
   > header
@@ -40,7 +40,7 @@
     white-space nowrap
     overflow hidden
     text-overflow ellipsis
-    border-bottom solid 1px #E1E1E1
+    border-bottom solid 1px modalDarkBorder
     > div
       overflow hidden
       text-overflow ellipsis
@@ -54,20 +54,11 @@
   .loader:before, .loader:after
     background-color #fff
   .list_item.active
-    background-color darken(#fff, 5%)
-  @media only screen and (min-width 500px)
-    width 60%
+    background-color lighten(modalDarkBg, 5%)
   @media only screen and (min-width 600px)
-    width 55%
-  @media only screen and (min-width 700px)
-    width 50%
+    width 60%
   @media only screen and (max-height 400px)
     max-height 85%
-
-.popup_content
-  .form-multipleChoice
-    span
-      border-color #ddd
 
 .offline_actions, .player_controls, .editorMenu, .continueFromHere, .go_or_cancel, .analyse_menu, .new_offline_game, .analyse-cm, .mini_user_actions_wrapper
   button:not(.defaultButton)
@@ -75,8 +66,8 @@
     margin 0
     padding 10px
     min-height 45px
-    background #fff
-    color textDarkGray
+    &.active
+      background-color lighten(modalDarkBg, 5%)
     &.binary_choice
       float left
       width 50%
@@ -91,8 +82,6 @@
         &:before
           color red
         border-radius 0 3px 3px 0
-    &.active
-      background darken(#fff, 5%)
     &:before
       margin-right 5px
     &:last-child
@@ -121,3 +110,27 @@
       &:before
         color green
 
+.view-container.light
+  .overlay_popup
+    background-color bglight
+    color textDarkGray
+    > header
+      border-color #E1E1E1
+  .list_item.active
+    background-color darken(#fff, 5%)
+  .offline_actions, .player_controls, .editorMenu, .continueFromHere, .go_or_cancel, .analyse_menu, .new_offline_game, .analyse-cm, .mini_user_actions_wrapper
+    button:not(.defaultButton)
+      background #fff
+      color textDarkGray
+      &.active
+        background darken(#fff, 5%)
+
+
+.view-container.transp
+  .overlay_popup
+    color modalTranspColor
+    background-color modalTranspBg
+    > header
+      border-color transpWhite02
+    .select_input
+      background transpWhite01

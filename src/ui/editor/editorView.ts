@@ -27,7 +27,7 @@ export default function view(ctrl: EditorCtrl) {
     [
       board,
       h('div.editor-wrapper', [
-        h('div#boardEditor.editor-table', {
+        h('div#boardEditor.editor-table.box', {
           className: settings.general.theme.piece(),
           oncreate: ctrl.editorOnCreate,
           onremove: ctrl.editorOnRemove

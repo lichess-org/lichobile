@@ -7,7 +7,7 @@ import session from '../../../../session'
 import router from '../../../../router'
 import gameStatus from '../../../../lichess/status'
 import { OnlineGameData } from '../../../../lichess/interfaces/game'
-import i18n from '../../../../i18n'
+import i18n, { plural } from '../../../../i18n'
 import spinner from '../../../../spinner'
 import lobby from '../../../lobby'
 import * as helper from '../../../helper'
@@ -220,7 +220,7 @@ export default {
   moretime(ctrl: OnlineRound) {
     if (gameApi.moretimeable(ctrl.data)) return h('button[data-icon=O]', {
       oncreate: helper.ontap(throttle(() => { ctrl.socketIface.send('moretime') }, 600))
-    }, i18n('giveNbSeconds', 15))
+    }, plural('giveNbSeconds', 15, 15))
     return null
   },
   flipBoard(ctrl: OnlineRound) {

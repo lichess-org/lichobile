@@ -49,10 +49,10 @@ input[type='checkbox']:checked:after
 
 // select
 .select_input
-  background #fff
+  background lighten(modalDarkBg, 10%)
+  color modalDarkColor
   height 40px
   line-height 40px
-  color textDarkGray
   padding 0 10px
   font-size 0.85em
   position relative
@@ -103,10 +103,8 @@ input[type='checkbox']:checked:after
   width 50%
   label
     width 100%
-    background #fff
-    color textGray
     height 40px
-    border-bottom 2px solid #ddd
+    border-bottom 2px solid modalDarkBorder
   input.radio:empty
     display: none
   input.radio:empty + label
@@ -222,7 +220,7 @@ button.fat
     padding: 5px 10px
     text-align: center;
     transition: background 0.13s;
-    border: 1px solid #3d3d3d;
+    border: 1px solid modalDarkBorder
     border-width: 1px 0 1px 1px;
     &:first-child
       border-radius: 3px 0 0 3px;
@@ -234,21 +232,6 @@ button.fat
       color: #fff
       box-shadow: 0 1px 3px rgba(0,0,0,0.1) inset
 
-.view-container.light
-  input[type='checkbox'], input[type='checkbox']:before
-    background-color #ccc
-  input[type='checkbox']:checked, input[type='checkbox']:checked:before
-    background-color gold
-
-  .form-multipleChoice
-    span
-      border-color #ddd
-
-.view-container.transp
-  .form-multipleChoice
-    span
-      border-color transpWhite015
-
 .no_arrow_after
   label:after
     content: ''
@@ -258,3 +241,28 @@ button.fat
 
 input.form-error
   box-shadow inset 0px 0px 5px 1px #f00
+
+
+.view-container.light
+  input[type='checkbox'], input[type='checkbox']:before
+    background-color #ccc
+  input[type='checkbox']:checked, input[type='checkbox']:checked:before
+    background-color gold
+  .form-multipleChoice
+    span
+      border-color #ddd
+  .select_input
+    background #fff
+    color textDarkGray
+  .nice-radio
+    label
+      background #fff
+      color textGray
+      border-color #ddd
+
+
+.view-container.transp
+  .form-multipleChoice
+    span
+      border-color transpWhite015
+

@@ -112,11 +112,9 @@
   justify-content: center;
 
 .study-pagerItem
+  position initial
   display flex
   flex-flow column nowrap
-  padding 10px
-  &.even
-    background-color lighten(bgdark, 2%)
 
 .study-pagerItemTitle
   display flex
@@ -284,8 +282,6 @@
       color rgba(textLightBg, 0.8)
     &:nth-child(even)
       background-color darken(#fff, 3%)
-  .study-pagerItem.even
-    background-color bglightEven
   .study-pagerSearchWrapper
     > .inputWrapper > input
       background-color darken(themeBgLight, 3%)
@@ -314,8 +310,6 @@
       background-color transpWhite01
   .study-pagerSubHeader
     background transpBlack06
-  .study-pagerItem.even
-    background-color transpWhite005
   .study-pagerSearchWrapper
     > .inputWrapper > input
       background-color transpWhite01

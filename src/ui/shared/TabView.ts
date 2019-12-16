@@ -77,13 +77,10 @@ export default {
     } = attrs
     const renderer = contentRenderers[selectedIndex]
 
-    const view = h('div.tabs-view', {
+    const view = h('div.tab-content.box', {
+      'data-index': selectedIndex,
       className: attrs.className
-    }, [
-      h('div.tab-content', {
-        'data-index': selectedIndex,
-      },  renderer())
-    ])
+    },  renderer())
 
     return withWrapper ? h('div.tabs-view-wrapper', view) : view
   }

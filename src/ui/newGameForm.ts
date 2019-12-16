@@ -140,7 +140,9 @@ function renderContent() {
 }
 
 export function renderQuickSetup(onCustom: () => void) {
-  return h('div.newGame-pools', xhr.cachedPools.length ?
+  return h('div.newGame-pools', {
+    className: xhr.cachedPools.length ? '' : 'loading'
+  }, xhr.cachedPools.length ?
     xhr.cachedPools
       .map(p => renderPool(p))
       .concat(h('div.newGame-pool', {

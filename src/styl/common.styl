@@ -92,6 +92,9 @@ span.fa
   top 50%
   transform translateY(-50%)
 
+.box
+  background-color lighten(bgdark, 6%)
+
 /* lists */
 .items_list_block
   > .list_item
@@ -114,8 +117,8 @@ span.fa
     margin-right 10px
   &:last-child
     border-bottom none
-  &.even
-    background-color lighten(bgdark, 2%)
+  &.odd
+    background-color lighten(bgdark, 10%)
   &.active
     background lighten(bgdark, 5%)
   &.bglight

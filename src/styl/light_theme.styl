@@ -32,10 +32,12 @@
   .chip, .main_header.board .chip
     color themeBgLightHeader
     border-color themeBgLightHeader
-    background-color goldDark
 
   .main_header-selector
     color lighten(textLightBg, 5%)
+
+  .box
+    background-color #fff
 
   #games_menu
     background rgba(0,0,0,0.6)
@@ -76,8 +78,8 @@
 
   .list_item
     border-bottom-color themeBgLightBorder
-    &.even
-      background-color bglightEven
+    &.odd
+      background-color #f7f6f5
     &.active
       background-color themeBgLightActive
 
@@ -141,10 +143,7 @@
     margin-top -1px
 
   .userGame
-    background-color themeBgLight
     color textLightBg
-    &.even
-      background-color bglightEven
 
   .rankingPlayer
     &.active

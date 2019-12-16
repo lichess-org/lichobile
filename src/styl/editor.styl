@@ -7,10 +7,12 @@
     margin 3vh
 
 .editor-table
+  background lighten(bgdark, 6%)
   flex 1 1 auto
   display: flex
   flex-flow: column nowrap
   justify-content: center
+  padding 0 1vmin
   @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
     justify-content space-evenly
 
@@ -42,8 +44,8 @@
     width calc(100vw / 14)
     height calc(100vw / 14)
   @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
-    width "calc((100vh - %s - 18vh - env(safe-area-inset-top)) / 12)" % headerHeight
-    height "calc((100vh - %s - 18vh - env(safe-area-inset-top)) / 12)" % headerHeight
+    width "calc((100vh - %s - 18vh - 4vmin - env(safe-area-inset-top)) / 12)" % headerHeight
+    height "calc((100vh - %s - 18vh - 4vmin - env(safe-area-inset-top)) / 12)" % headerHeight
 
 .editorMenu
   > .popup_content

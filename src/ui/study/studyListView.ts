@@ -88,7 +88,7 @@ const orders: ReadonlyArray<[PagerOrder, string]> = [
 function studyList(ctrl: StudyListCtrl) {
   const studies = ctrl.state ? ctrl.state.studies : []
 
-  return h('div#scroller-wrapper.native_scroller.study-pagerScroller', {
+  return h('div#scroller-wrapper.native_scroller.study-pagerScroller.box', {
     onscroll: throttle(ctrl.onScroll, 30),
     oncreate: helper.ontapY(e => onTap(ctrl, e!), undefined, helper.getByClass('study-pagerItem'))
   },
@@ -98,7 +98,7 @@ function studyList(ctrl: StudyListCtrl) {
           oncreate: ctrl.afterLoad,
         }, [...studies.map((study, index) =>
           h(Item, { study, index })
-        ), ctrl.state.isLoading ? h('li.study-pagerItem', 'loading...') : []]) :
+        ), ctrl.state.isLoading ? h('li.list_item.study-pagerItem', 'loading...') : []]) :
           h('div.study-pagerEmpty', 'None yet') :
     h('div.study-pagerLoader', spinner.getVdom('monochrome'))
   )
@@ -120,7 +120,7 @@ const Item = {
     const { study, index } = attrs
     const ownerName = study.owner ? playerApi.lightPlayerName(study.owner) : '?'
 
-    return h('li.study-pagerItem', {
+    return h('li.list_item.study-pagerItem', {
       className: index % 2 === 0 ? 'even' : 'odd',
       'data-id': study.id
     }, [

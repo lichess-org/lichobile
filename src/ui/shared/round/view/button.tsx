@@ -199,7 +199,7 @@ export default {
           }, i18n('joinTheGame')),
           h('button.binary_choice[data-icon=L]', {
             oncreate: helper.ontap(() => { ctrl.socketIface.send('rematch-no') })
-          }, i18n('declineInvitation'))
+          }, i18n('decline'))
         ])
       ])
     } else if (ctrl.data.player.offeringRematch) {

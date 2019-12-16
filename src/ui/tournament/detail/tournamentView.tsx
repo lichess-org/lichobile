@@ -207,10 +207,10 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
       }
 
       <ul
-        className={'tournamentStandings' + (ctrl.isLoadingPage ? ' loading' : '')}
+        className={'tournamentStandings box' + (ctrl.isLoadingPage ? ' loading' : '')}
         oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e!), undefined, undefined, getLeaderboardItemEl)}
       >
-        {players.map(p => renderPlayerEntry(userName, p))}
+        {players.map((p, i) => renderPlayerEntry(userName, p, i))}
       </ul>
       <div className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
         {renderNavButton('W', !ctrl.isLoadingPage && backEnabled, ctrl.first)}
@@ -239,10 +239,11 @@ function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
   })
 }
 
-function renderPlayerEntry(userName: string, player: StandingPlayer) {
+function renderPlayerEntry(userName: string, player: StandingPlayer, i: number) {
+  const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
   const isMe = player.name === userName
   return (
-    <li key={player.name} data-player={player.name} className={'list_item tournament-list-player' + (isMe ? ' tournament-me' : '')} >
+    <li key={player.name} data-player={player.name} className={`list_item tournament-list-player ${evenOrOdd}` + (isMe ? ' tournament-me' : '')} >
       <div className="tournamentPlayer">
         <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '. ')} </span>
         <span> {player.name + ' (' + player.rating + ') '} </span>

@@ -178,7 +178,7 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
       if (mePlaying && playerId !== undefined) {
         router.set(`/game/${id}${playerId}?goingBack=1`)
       } else {
-        router.set(`/analyse/online/${id}/${userColor}?curFen=${g.fen}`)
+        router.set(`/analyse/online/${id}/${userColor}?curFen=${g.fen}&slide=1`)
       }
     }
   }

@@ -26,14 +26,14 @@
   &.active
     background-color lighten(bgdark, 10%)
   &.selected
-    color gold
+    color tabsActive
 
 .tabIndicator
   position absolute
   bottom 0
   left 0
   height 2px
-  background-color gold
+  background-color tabsActive
   transition transform ease-out 200ms
 
 
@@ -42,12 +42,6 @@
   overflow-x hidden // now needed by chrome 73
   flex 1 1 auto
   display flex
-
-.tabs-view
-  flex 1 1 auto
-  display flex
-  flex-flow column nowrap
-  min-height 0 // chrome 73
 
 .tab-content
   flex 1 1 auto
@@ -61,9 +55,7 @@
     &.active
       background-color darken(themeBgLight, 5%)
     &.selected
-      color goldDark
+      color tabsActive
   .tabs-navigation
     &.withBorder
       border-color darken(themeBgLight, 15%)
-  .tabIndicator
-    background-color goldDark

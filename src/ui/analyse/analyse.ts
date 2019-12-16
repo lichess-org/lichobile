@@ -30,6 +30,7 @@ export interface Attrs {
   // fen used for placeholder board while loading
   curFen?: string
   goBack?: string
+  slide?: string
   fallback?: boolean
 }
 
@@ -118,7 +119,7 @@ export default {
   },
 
   oncreate(vnode) {
-    if (vnode.attrs.source) {
+    if (vnode.attrs.slide === '1') {
       helper.pageSlideIn(vnode.dom as HTMLElement)
     } else {
       helper.elFadeIn(vnode.dom as HTMLElement)

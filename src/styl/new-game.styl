@@ -41,25 +41,26 @@
 
 .newGame-pools
   flex-grow 1
-  display flex
-  flex-flow row wrap
-  justify-content space-between
-  align-items center
-  padding 1em
+  display: grid
+  grid-template-columns: repeat(3, 1fr)
+  grid-template-rows: repeat(3, 1fr)
+  grid-gap: 0.8em
+  padding: 0.8em
+  &.loading
+    display flex
+    align-items center
+    justify-content center
 
 .newGame-pool
   font-family 'Roboto'
   font-weight 300
   fluid-type(14px, 30px)
-  height calc((100vw * 0.85 - 40px) * 0.31)
-  flex 0 0 31%
   background rgba(255,255,255,0.7)
   box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.2);
   display flex
   flex-flow column
   justify-content center
   align-items center
-  margin-bottom 10px
   color themeBgLightText
   opacity 1
   transition opacity 0.5s
@@ -68,12 +69,6 @@
     box-shadow 0 2px 5px rgba(0,0,0,0.3)
   &.transp
     opacity 0.6
-  @media only screen and (min-width 500px)
-    height calc((60vw - 40px) * 0.31)
-  @media only screen and (min-width 600px)
-    height calc((55vw - 40px) * 0.31)
-  @media only screen and (min-width 700px)
-    height calc((50vw - 40px) * 0.31)
 
 .newGame-clock
   font-size 1.5em

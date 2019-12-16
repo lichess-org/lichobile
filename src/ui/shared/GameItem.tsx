@@ -40,7 +40,7 @@ export default {
     const player = g.players[perspectiveColor]
 
     return (
-      <li data-id={g.id} data-pid={player.id} className={`userGame ${evenOrOdd}${withStar}`}>
+      <li data-id={g.id} data-pid={player.id} className={`list_item userGame ${evenOrOdd}${withStar}`}>
         {renderBoard(g.fen, perspectiveColor, boardTheme)}
         <div className="userGame-infos">
           <div className="userGame-header">

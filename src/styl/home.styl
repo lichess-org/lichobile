@@ -35,7 +35,7 @@
   grid-area lobby
 
 .home__stats
-  padding 1vmin 10px
+  padding 1vmin 2vmin
   display flex
   flex-flow row nowrap
   justify-content space-between
@@ -46,22 +46,18 @@
   height calc(((100vw - 40px) * 0.28) * 3 + 40px)
   @media only screen and (min-width 601px)
     height calc(((100vw - 40px) * 0.2) * 3 + 40px)
+  background-color #262421
   background-image url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMy41MjkgMzMuNTA0Ij48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNS4yNS02LjI0NikiIG9wYWNpdHk9Ii4xIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIxLjUiPjxnIGZpbGw9IiMwMDAiPjxwYXRoIGQ9Im0yMiAxMGMxMC41IDEgMTYuNSA4IDE2IDI5aC0yM2MwLTkgMTAtNi41IDgtMjEiLz48cGF0aCBkPSJtMjQgMThjLjM4IDIuOTEtNS41NSA3LjM3LTggOS0zIDItMi44MiA0LjM0LTUgNC0xLjA0Mi0uOTQgMS40MS0zLjA0IDAtMy0xIDAgLjE5IDEuMjMtMSAyLTEgMC00IDEtNC00IDAtMiA2LTEyIDYtMTIgMCAwIDEuODktMS45IDItMy41LS43My0uOTk0LS41LTItLjUtMyAxLTEgMyAyLjUgMyAyLjVoMmMwIDAgLjc4LTEuOTkyIDIuNS0zIDEgMCAxIDMgMSAzIi8+PC9nPjxnIGZpbGw9IiNmZmYiPjxwYXRoIGQ9Im05LjUgMjUuNWEuNSAuNSAwIDEgMSAtMSAwIC41IC41IDAgMSAxIDEgMHoiLz48cGF0aCBkPSJtMTUgMTUuNWEuNSAxLjUgMCAxIDEgLTEgMCAuNSAxLjUgMCAxIDEgMSAweiIgdHJhbnNmb3JtPSJtYXRyaXgoLjg2Ni41LS41Ljg2NiA5LjY5My01LjE3MykiLz48L2c+PC9nPjwvc3ZnPg==")
   background-repeat no-repeat
   background-size 100% 100%
   .newGame-pools
-    padding 10px
+    padding 2vmin
     > .newGame-pool
       fluid-type(16px, 35px)
       box-shadow none
-      height calc((100vw - 40px) * 0.28)
-      @media only screen and (min-width 601px)
-        height calc((100vw - 40px) * 0.2)
       background-color transpWhite01
       border 1px solid lighten(#3d3d3d, 20%)
       color inherit
-      &:nth-child(7), &:nth-child(8), &:nth-child(9)
-        margin-bottom 0
       &.active
         background-color rgba(gold, 0.3)
 
@@ -80,6 +76,8 @@
   margin 0 2vmin
   @media only screen and (min-width 601px)
     margin-top 1em
+  @media only screen and (min-width 800px)
+    margin-top 33px
 
 .home__miniPuzzle
   grid-area puzzle
@@ -101,9 +99,10 @@
   padding 0px
   > .tournamentList
     > .tournament_item
-      padding 10px
+      padding 2vmin
 
 .home__timeline
+  margin 0 2vmin
   &.loading
     padding-top 2em
   > .more
@@ -133,7 +132,7 @@
 .homeTitle
   font-weight bold
   text-align center
-  margin 10px 0 5px
+  margin 2vmin 0 5px
 
 .homeOfflineWrapper
   flex-grow 1
@@ -242,20 +241,19 @@
 
   .home
     background themeBgLightHeader
-    .tabs-view-wrapper
-      background-color bglight
-      background-image url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMy41MjkgMzMuNTA0Ij48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNS4yNS02LjI0NikiIG9wYWNpdHk9Ii4xIiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIxLjUiPjxnIGZpbGw9IiNmZmYiPjxwYXRoIGQ9Im0yMiAxMGMxMC41IDEgMTYuNSA4IDE2IDI5aC0yM2MwLTkgMTAtNi41IDgtMjEiLz48cGF0aCBkPSJtMjQgMThjLjM4IDIuOTEtNS41NSA3LjM3LTggOS0zIDItMi44MiA0LjM0LTUgNC0xLjA0Mi0uOTQgMS40MS0zLjA0IDAtMy0xIDAgLjE5IDEuMjMtMSAyLTEgMC00IDEtNC00IDAtMiA2LTEyIDYtMTIgMCAwIDEuODktMS45IDItMy41LS43My0uOTk0LS41LTItLjUtMyAxLTEgMyAyLjUgMyAyLjVoMmMwIDAgLjc4LTEuOTkyIDIuNS0zIDEgMCAxIDMgMSAzIi8+PC9nPjxnIGZpbGw9IiMwMDAiPjxwYXRoIGQ9Im05LjUgMjUuNWEuNSAuNSAwIDEgMSAtMSAwIC41IC41IDAgMSAxIDEgMHoiLz48cGF0aCBkPSJtMTUgMTUuNWEuNSAxLjUgMCAxIDEgLTEgMCAuNSAxLjUgMCAxIDEgMSAweiIgdHJhbnNmb3JtPSJtYXRyaXgoLjg2Ni41LS41Ljg2NiA5LjY5My01LjE3MykiLz48L2c+PC9nPjwvc3ZnPg==")
 
+  .home__setupTabView
+    background-color bglight
+    background-image url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMy41MjkgMzMuNTA0Ij48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNS4yNS02LjI0NikiIG9wYWNpdHk9Ii4xIiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIxLjUiPjxnIGZpbGw9IiNmZmYiPjxwYXRoIGQ9Im0yMiAxMGMxMC41IDEgMTYuNSA4IDE2IDI5aC0yM2MwLTkgMTAtNi41IDgtMjEiLz48cGF0aCBkPSJtMjQgMThjLjM4IDIuOTEtNS41NSA3LjM3LTggOS0zIDItMi44MiA0LjM0LTUgNC0xLjA0Mi0uOTQgMS40MS0zLjA0IDAtMy0xIDAgLjE5IDEuMjMtMSAyLTEgMC00IDEtNC00IDAtMiA2LTEyIDYtMTIgMCAwIDEuODktMS45IDItMy41LS43My0uOTk0LS41LTItLjUtMyAxLTEgMyAyLjUgMyAyLjVoMmMwIDAgLjc4LTEuOTkyIDIuNS0zIDEgMCAxIDMgMSAzIi8+PC9nPjxnIGZpbGw9IiMwMDAiPjxwYXRoIGQ9Im05LjUgMjUuNWEuNSAuNSAwIDEgMSAtMSAwIC41IC41IDAgMSAxIDEgMHoiLz48cGF0aCBkPSJtMTUgMTUuNWEuNSAxLjUgMCAxIDEgLTEgMCAuNSAxLjUgMCAxIDEgMSAweiIgdHJhbnNmb3JtPSJtYXRyaXgoLjg2Ni41LS41Ljg2NiA5LjY5My01LjE3MykiLz48L2c+PC9nPjwvc3ZnPg==")
     .newGame-pool
       background-color transpWhite04
       border-color borderLightGray
       color inherit
       &.active
         background-color rgba(gold, 0.3)
-
-  .corres_seek
-    > td
-      border-color borderLightGray
+    .corres_seek
+      > td
+        border-color borderLightGray
 
 
 .view-container.transp

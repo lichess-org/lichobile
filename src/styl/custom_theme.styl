@@ -6,6 +6,9 @@
     a
       text-shadow none
 
+  .box
+    background-color transparent
+
   > main
     background-color transparent
     background-position center center
@@ -53,7 +56,7 @@
   .tab-button
     color rgba(textTransp, 0.9)
     &.selected
-      color gold
+      color tabsActive
 
   .subHeader
     background transparent
@@ -83,7 +86,7 @@
     background transpBlack06
 
   .tabs-navigation, .select_games_filter
-    background-color rgba(0,0,0,0.45)
+    background-color rgba(0,0,0,0.55)
 
   #free_content
     background-color transpBlack01
@@ -126,7 +129,7 @@
       border-bottom-color darken(bglight, 15%)
       &.active
         background-color darken(bglight, 5%)
-    &.even
+    &.odd
       background transpWhite005
     &.active
       background-color transpWhite01

@@ -200,7 +200,7 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Vno
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
-  return h('div.analyse-table', [
+  return h('div.analyse-table.box', [
     renderAnalyseTabs(ctrl, availTabs),
     h(TabView, {
       className: 'analyse-tabsContent',

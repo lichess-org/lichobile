@@ -202,9 +202,6 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
 
   return (
     <div className="tournamentLeaderboard">
-      { data.nbPlayers > 0 ?
-        <p className="tournamentTitle"> {i18n('leaderboard')} ({i18n('nbConnectedPlayers', data.nbPlayers)})</p> : null
-      }
 
       <ul
         className={'tournamentStandings box' + (ctrl.isLoadingPage ? ' loading' : '')}

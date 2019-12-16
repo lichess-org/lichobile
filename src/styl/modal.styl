@@ -7,7 +7,7 @@
   height 100%
   min-height 100%
   overflow hidden
-  background-color #fff
+  color modalDarkColor
   > header
     position absolute
     z-index 112
@@ -17,9 +17,8 @@
     left 0
     width 100%
     height headerHeight
-    background #fff
-    border-bottom solid 1px #E1E1E1
-    color textDarkGray
+    background modalDarkHeader
+    // color textDarkGray
     > h2
       font-size 1.1em
       text-align center
@@ -36,8 +35,8 @@
   height headerHeight
 
 .modal_content
-  background bglight
-  color textDarkGray
+  background-color modalDarkBg
+  color modalDarkColor
   height 100%
   padding-top headerHeight
   overflow-y auto
@@ -56,3 +55,20 @@
     font-weight bold
     &.active,&:active
       background linear-gradient(to bottom, #f6f6f6 0%, #e6e6e6 100%)
+
+
+.view-container.light
+  .modal
+    color #353535
+    > header
+      background #fff
+      border-bottom solid 1px #E1E1E1
+  .modal_content
+    background-color bglight
+
+.view-container.transp
+  .modal
+    > header
+      background modalTranspHeader
+  .modal_content
+    background-color modalTranspBg

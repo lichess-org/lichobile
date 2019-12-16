@@ -122,15 +122,15 @@ export function chatView(ctrl: Chat, header?: string) {
       h('h2', header || i18n('chatRoom'))
     ]),
     h('div#chat_content.modal_content.chat_content', [
-      h('div.chat_scroller.native_scroller', {
+      h('ul.chat_scroller.native_scroller', {
         oncreate: ({ dom }: Mithril.VnodeDOM<any, any>) => scrollChatToBottom(dom as HTMLElement),
         onupdate: ({ dom }: Mithril.VnodeDOM<any, any>) => scrollChatToBottom(dom as HTMLElement)
-      }, [
-        h('ul.chat_messages', ctrl.selectLines().map((msg: ChatMsg, i: number, all: ChatMsg[]) => {
+      },
+        ctrl.selectLines().map((msg: ChatMsg, i: number, all: ChatMsg[]) => {
           if (ctrl.player !== undefined) return renderPlayerMsg(ctrl.player, msg, i, all)
           else return renderSpectatorMsg(msg)
-        }))
-      ]),
+        })
+      ),
       h('form.chat_form', {
         onsubmit(e: Event) {
           e.preventDefault()

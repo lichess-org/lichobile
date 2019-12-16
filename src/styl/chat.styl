@@ -1,13 +1,20 @@
 #chat
-  color #353535
+  @media only screen and (orientation: landscape)
+    width calc(100vw - var(--board-side-land) - 3vh)
+    left initial
+    right 0
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
+    width calc(100vw - var(--board-side-land-tablet) - 3vh)
 
 .chat_content
   display flex
   flex-flow column nowrap
 
-.chat_messages
-  position relative
-  padding 10px
+.chat_scroller
+  flex 1 1 auto
+  display flex
+  flex-flow column nowrap
+  padding 2vmin
 
 .spectator_chat_msg
   line-height 1.2em
@@ -26,76 +33,49 @@
 .chat_msg
   font-weight normal
   padding 15px
-  background #fff
-  margin-top 20px
-  border-top-left-radius: 8px
-  border-top-right-radius: 8px
-  line-height 1.2em
   color textDarkGray
-  width 90%
+  background rgba(#d8d8d8, 80%)
+  margin-top 20px
+  border-radius 8px
+  line-height 1.2em
   word-wrap break-word
-  &:before
-    content ''
-    display block
-    position absolute
-    left 5px
-    height 10px
-    width 10px
-    transform: rotate(45deg);
-    background #fff
+  align-self flex-start
+  margin-right 10%
   &:first-child
     margin-top 0
-  &:last-child
-    border-bottom-left-radius: 8px
-    border-bottom-right-radius: 8px
-  &.close_balloon
-    border-bottom-left-radius: 8px
-    border-bottom-right-radius: 8px
   &.player
-    background #d8d8d8
+    margin-right 0
     margin-left 10%
+    color darken(#fff, 20%)
+    background rgba(blue, 35%)
+    align-self flex-end
     & + .chat_msg.player
-      margin-top -10px
-      padding-top 0
-      border-top-left-radius: 0
-      border-top-right-radius: 0
-      &:before
-        display none
-    &:before
-      background #d8d8d8
-      left auto
-      right 5px
+      margin-top 2px
   &.opponent
     & + .chat_msg.opponent
-      margin-top -10px
-      padding-top 0
-      border-top-left-radius: 0
-      border-top-right-radius: 0
-      &:before
-        display none
+      margin-top 2px
   &.system
     background transparent
+    color darken(modalDarkColor, 25%)
     border 0
     border-radius 0
     width 100%
     text-align right
     font-style italic
     font-size 0.8em
-    &:before
-      display none
     & + .chat_msg.system
       margin-top -10px
       padding-top 0
-
-.chat_scroller
-  flex 1 1 auto
 
 .chat_form
   flex 0 1 auto
   display flex
   flex-flow row nowrap
   min-height 50px
-  background-color #fff
+  background-color darken(modalDarkBg, 10%)
+  border-top 1px #4c4c4c solid
+  > textarea
+    background-color darken(modalDarkBg, 10%)
   // iphone X support
   margin-bottom: constant(safe-area-inset-bottom);
   margin-bottom: env(safe-area-inset-bottom);
@@ -117,3 +97,25 @@
   &:before
     display block
     transform rotate(50deg)
+
+
+.view-container.light
+  .chat_msg
+    color textDarkGray
+  .chat_form
+    background-color #fff
+    border-color borderLightGray
+    &.player
+      color darken(blue, 40%)
+    > textarea
+      background-color #fff
+
+
+.view-container.transp
+  .chat_msg
+    &.player
+      background rgba(blue, 55%)
+  .chat_form
+    background-color lighten(modalTranspBg, 2%)
+    > textarea
+      background-color lighten(modalTranspBg, 2%)

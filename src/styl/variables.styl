@@ -1,0 +1,16 @@
+
+headerHeight = 56px
+footerHeight = 45px
+
+footerHeightBigScreens = 55px
+
+:root
+  --sat env(safe-area-inset-top)
+  --sar env(safe-area-inset-right)
+  --sab env(safe-area-inset-bottom)
+  --sal env(safe-area-inset-left)
+
+  --content-height 'calc(100vh - %s - env(safe-area-inset-top))' % headerHeight
+
+  --board-side-land 'calc(100vh - %s - env(safe-area-inset-top))' % headerHeight
+  --board-side-land-tablet 'calc(100vh - %s - 6vh - env(safe-area-inset-top))' % headerHeight

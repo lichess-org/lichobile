@@ -55,11 +55,10 @@ export default {
   onupdate({ attrs, dom }) {
     this.nbTabs = attrs.contentRenderers.length
 
-    const el = dom.querySelector('.tab-content') as HTMLElement
     if (attrs.selectedIndex > this.prevIndex) {
-      elSlideIn(el, 'left')
+      elSlideIn(dom as HTMLElement, 'left')
     } else if (attrs.selectedIndex < this.prevIndex) {
-      elSlideIn(el, 'right')
+      elSlideIn(dom as HTMLElement, 'right')
     }
 
     this.prevIndex = attrs.selectedIndex

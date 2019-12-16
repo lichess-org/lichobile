@@ -96,7 +96,6 @@
   overflow hidden
 
 .analyse-tabsContent
-  background lighten(bgdark, 5%)
   flex 1 1 auto
   min-height 0 // fix chrome 73 regression
   > .tab-content
@@ -294,7 +293,7 @@ comment
     background-color bglight
 
   .analyse-header
-    background-color inherit
+    background-color themeBgLightHeader
     border-bottom 1px solid borderLightGray
     .tab-button
       color textGray
@@ -341,7 +340,7 @@ comment
   .analyse-header
     background-color transpBlack06
 
-  .analyse-tabsContent
+  .analyse-tabsContent.box
     background-color transpBlack05
 
   .tabs-navigation.analyse

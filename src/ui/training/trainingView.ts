@@ -40,7 +40,7 @@ export function renderContent(ctrl: TrainingCtrl, key: string) {
   return h.fragment({ key }, [
     board,
     h('div.table.training-tableWrapper', [
-      h('div.training-table.native_scroller',
+      h('div.training-table.native_scroller.box',
         ctrl.vm.mode === 'view' ? renderResult(ctrl) : renderFeedback(ctrl)
       ),
       renderActionsBar(ctrl)

@@ -60,6 +60,7 @@ export default {
       h('main#page', { oncreate: handleMenuOpen }, [
         h('header.main_header', header),
         h('div#free_content.content.native_scroller', {
+          className: footer ? 'withFooter' : '',
           oncreate: ({ dom }) => {
             if (scrollListener) {
               dom.addEventListener('scroll', scrollListener)

@@ -1,6 +1,6 @@
 .content_round
   width 100%
-  height 'calc(100% - %s - env(safe-area-inset-top))' % headerHeight
+  height var(--content-height)
   display flex
   flex-flow column nowrap
   justify-content center
@@ -23,19 +23,19 @@
     height 100vw
     width 100vw
     &.halfsize
-      height 'calc((100vh - %s) / 2)' % headerHeight
-      width 'calc((100vh - %s) / 2)' % headerHeight
+      height calc(var(--content-height) / 2)
+      width calc(var(--content-height) / 2)
       align-self center
   @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
     height 94vw
     width 94vw
     margin auto
   @media only screen and (orientation: landscape)
-    height 'calc(100vh - %s - env(safe-area-inset-top))' % headerHeight
-    width 'calc(100vh - %s - env(safe-area-inset-top))' % headerHeight
+    height var(--board-side-land)
+    width var(--board-side-land)
   @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
-    height 'calc(100vh - %s - 6vh - env(safe-area-inset-top))' % headerHeight
-    width 'calc(100vh - %s - 6vh - env(safe-area-inset-top))' % headerHeight
+    height var(--board-side-land-tablet)
+    width var(--board-side-land-tablet)
     margin auto
     margin-left 3vh
 

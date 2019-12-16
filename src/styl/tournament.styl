@@ -1,3 +1,23 @@
+
+.tournamentContainer
+  display: grid
+
+  grid-template-areas:
+    'infos'\
+    'leaderboard'\
+    'games'\
+    '.'
+  grid-gap: 2vmin
+
+  @media only screen and (min-width 800px)
+    grid-template-columns: repeat(2, 1fr)
+    grid-template-rows: auto repeat(3, fit-content(0))
+    grid-template-areas:
+      'infos infos'\
+      'leaderboard games'\
+      'leaderboard .';
+
+
 .header-subTitle.tournament-subtTitle
   font-size 1em
 
@@ -44,10 +64,13 @@
   text-align center
 
 .tournamentStandings
+  margin-top 1em
   width 100%
   transition opacity 100ms
   &.loading
     opacity 0.8
+  @media only screen and (min-width 800px)
+    margin-top 0
 
 .on-fire
   &:before
@@ -63,7 +86,6 @@
   display flex
   flex-flow row nowrap
   justify-content space-between
-  padding 15px 0
   > .tournamentPoints
     flex 0 0 20%
     text-align right
@@ -88,6 +110,7 @@
   font-weight: bold
 
 .tournamentHeader
+  grid-area infos
   padding 10px 10px 0px 10px
 
 .tournamentConditions, .tournamentCreatorInfo, .tournamentPositionInfo, .tournamentTimeInfo, .tournamentSpotlightInfo
@@ -218,9 +241,13 @@
     letter-spacing -1px
 
 .tournamentLeaderboard
+  grid-area leaderboard
   display flex
   flex-flow column nowrap
   padding 0 10px
+
+.tournamentGames
+  grid-area games
 
 .flagRank
   &:before

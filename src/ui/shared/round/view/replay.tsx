@@ -10,7 +10,7 @@ let pieceNotation: boolean
 
 export function renderReplay(ctrl: OnlineRound) {
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
-  return h('div.replay', {
+  return h('div.replay.box', {
     className: helper.classSet({
       displayPieces: !!pieceNotation,
     }),

@@ -136,7 +136,7 @@ export function renderClaimDrawButton(ctrl: OfflineRoundInterface) {
 
 export function renderReplay(ctrl: OfflineRoundInterface) {
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
-  return h('div.replay', {
+  return h('div.replay.box', {
     className: pieceNotation ? ' displayPieces' : '',
     oncreate: (vnode: Mithril.VnodeDOM<any, any>) => {
       setTimeout(() => autoScroll(vnode.dom as HTMLElement), 100)

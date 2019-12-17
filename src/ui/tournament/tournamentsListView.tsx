@@ -31,9 +31,9 @@ export function renderTournamentsList(ctrl: TournamentsListCtrl) {
   if (!ctrl.tournaments) return null
 
   const tabsContent = [
-    () => ctrl.tournaments ? renderTournamentList(ctrl.tournaments['started']) : null,
-    () => ctrl.tournaments ? renderTournamentList(ctrl.tournaments['created']) : null,
-    () => ctrl.tournaments ? renderTournamentList(ctrl.tournaments['finished']) : null
+    { id: 'started', f: () => ctrl.tournaments ? renderTournamentList(ctrl.tournaments['started']) : null },
+    { id: 'created', f: () => ctrl.tournaments ? renderTournamentList(ctrl.tournaments['created']) : null },
+    { id: 'finished', f: () => ctrl.tournaments ? renderTournamentList(ctrl.tournaments['finished']) : null },
   ]
 
   return [
@@ -47,9 +47,8 @@ export function renderTournamentsList(ctrl: TournamentsListCtrl) {
     h(TabView, {
       className: 'tournamentTabsWrapper',
       selectedIndex: ctrl.currentTab,
-      contentRenderers: tabsContent,
+      tabs: tabsContent,
       onTabChange: ctrl.onTabChange,
-      withWrapper: true,
     })
   ]
 }

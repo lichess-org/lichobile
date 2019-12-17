@@ -118,7 +118,6 @@
     > strong
       color textDarkBg
       font-weight normal
-    text-shadow 0 1px 1px rgba(0,0,0,0.5)
     padding 0.5em 0
     font-size 0.9em
   @media only screen and (min-width 601px)
@@ -225,11 +224,11 @@
 
   .home__timeline
     > .more
-      color darken(textLightGray, 10%)
+      color darken(textLightGray, 20%)
     .timelineEntry
-      color darken(textLightGray, 10%)
+      color darken(textLightGray, 20%)
       em
-        color darken(textLightGray, 10%)
+        color darken(textLightGray, 20%)
       &.blogEntry
         color themeBgLightText
       > strong
@@ -265,6 +264,19 @@
 
   .home__setupTabView
     background-color transpBlack02
+
+  .home__timeline
+    .timelineEntry
+      text-shadow 0 1px 1px rgba(0,0,0,0.5)
+      color inherit
+      em
+        color inherit
+      &.blogEntry
+        color inherit
+      > strong
+        color inherit
+        font-weight bold
+
 
   .home
     .newGame-pool

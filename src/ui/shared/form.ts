@@ -153,14 +153,18 @@ export default {
     max: number,
     step: number,
     prop: Prop<number>,
-    onChange: (v: number) => void
+    onChange: (v: number) => void,
+    disabled?: boolean,
   ) {
     const value = prop()
-    return h('div.forms-rangeSlider', [
+    return h('div.forms-rangeSlider', {
+      className: disabled ? 'disabled' : ''
+    }, [
       h('label', { 'for': name }, label),
       h('input[type=range]', {
         id: name,
         value,
+        disabled,
         min,
         max,
         step,

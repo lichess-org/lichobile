@@ -148,7 +148,6 @@ export default {
     showBestMove: prop('analyse.showBestMove', true),
     showComments: prop('analyse.showComments', true),
     smallBoard: prop<boolean>('analyse.smallBoard', true),
-    boardPosition: prop<'1' | '2'>('analyse.boardPosition', '1'),
     explorer: {
       db: prop('analyse.explorer.db', 'lichess'),
       availableRatings: [1600, 1800, 2000, 2200, 2500],

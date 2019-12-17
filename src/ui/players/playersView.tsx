@@ -25,8 +25,8 @@ export function header(ctrl: PlayersCtrl) {
 
 export function body(ctrl: PlayersCtrl) {
   const tabsContent = [
-    () => renderLeaderboard(ctrl),
-    () => onlinePlayers(ctrl),
+    { id: 'leaderboard', f: () => renderLeaderboard(ctrl) },
+    { id: 'players', f: () => onlinePlayers(ctrl) },
   ]
 
   return [
@@ -42,9 +42,8 @@ export function body(ctrl: PlayersCtrl) {
     ),
     h(TabView, {
       selectedIndex: ctrl.currentTab,
-      contentRenderers: tabsContent,
+      tabs: tabsContent,
       onTabChange: ctrl.onTabChange,
-      withWrapper: true,
     })
   ]
 }

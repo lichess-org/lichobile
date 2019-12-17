@@ -5,11 +5,10 @@ import { viewportDim, findParentBySelector, elSlideIn } from '../helper'
 
 interface Attrs {
   selectedIndex: number
-  contentRenderers: ReadonlyArray<() => Mithril.Children>
+  tabs: ReadonlyArray<{ id: string, f: () => Mithril.Children }>
   onTabChange: (i: number) => void
   className?: string
   boardView?: boolean
-  withWrapper?: boolean
 }
 
 interface State {
@@ -20,7 +19,7 @@ interface State {
 
 export default {
   oninit({ attrs }) {
-    this.nbTabs = attrs.contentRenderers.length
+    this.nbTabs = attrs.tabs.length
     this.prevIndex = attrs.selectedIndex
   },
 
@@ -53,12 +52,14 @@ export default {
   },
 
   onupdate({ attrs, dom }) {
-    this.nbTabs = attrs.contentRenderers.length
+    this.nbTabs = attrs.tabs.length
 
     if (attrs.selectedIndex > this.prevIndex) {
-      elSlideIn(dom as HTMLElement, 'left')
+      const el = dom.querySelector('.tab-content') || dom
+      elSlideIn(el as HTMLElement, 'left')
     } else if (attrs.selectedIndex < this.prevIndex) {
-      elSlideIn(dom as HTMLElement, 'right')
+      const el = dom.querySelector('.tab-content') || dom
+      elSlideIn(el as HTMLElement, 'right')
     }
 
     this.prevIndex = attrs.selectedIndex
@@ -70,17 +71,15 @@ export default {
 
   view({ attrs }) {
     const {
-      contentRenderers,
+      tabs,
       selectedIndex,
-      withWrapper = false
     } = attrs
-    const renderer = contentRenderers[selectedIndex]
+    const tab = tabs[selectedIndex]
 
-    const view = h('div.tab-content.box', {
+    return h('div.tabs-view-wrapper', h('div.tab-content.box', {
       'data-index': selectedIndex,
+      key: tab.id,
       className: attrs.className
-    },  renderer())
-
-    return withWrapper ? h('div.tabs-view-wrapper', view) : view
+    },  tab.f()))
   }
 } as Mithril.Component<Attrs, State>

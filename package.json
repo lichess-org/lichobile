@@ -68,7 +68,7 @@
     },
     "scripts": {
         "start": "npm run compile && concurrently 'npm run watch' 'npm run serve'",
-        "serve": "http-server -s -g -c-1 .",
+        "serve": "http-server -p 8080 -s -g -c-1 .",
         "version": "node scripts/bump-version.js",
         "lint": "tslint --project tsconfig.json -e '**/dts/**' -e '**/*.js'",
         "test": "jest",

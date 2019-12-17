@@ -44,9 +44,7 @@ export default function renderBoard(
     ...pastBestShape, ...curBestShapes, ...badMoveShape
   ]
 
-  return h('div.analyse-boardWrapper', {
-    className: 'pos' + ctrl.settings.s.boardPosition,
-  }, [
+  return h('div.analyse-boardWrapper', [
     playerBar(ctrl, ctrl.topColor()),
     h(Board, {
       variant: ctrl.data.game.variant.key,

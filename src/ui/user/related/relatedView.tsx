@@ -13,8 +13,8 @@ import RelatedCtrl from './RelatedCtrl'
 
 export function renderBody(ctrl: RelatedCtrl) {
   const tabsContent = [
-    () => renderContent(ctrl, ctrl.followers, ctrl.followersPaginator),
-    () => renderContent(ctrl, ctrl.following, ctrl.followingPaginator),
+    { id: 'followers', f: () => renderContent(ctrl, ctrl.followers, ctrl.followersPaginator) },
+    { id: 'following', f: () => renderContent(ctrl, ctrl.following, ctrl.followingPaginator) },
   ]
 
   const nbFollowers = ctrl.followersPaginator ?
@@ -35,9 +35,8 @@ export function renderBody(ctrl: RelatedCtrl) {
     ),
     h(TabView, {
       selectedIndex: ctrl.currentTab,
-      contentRenderers: tabsContent,
+      tabs: tabsContent,
       onTabChange: ctrl.onTabChange,
-      withWrapper: true,
     })
   ]
 }

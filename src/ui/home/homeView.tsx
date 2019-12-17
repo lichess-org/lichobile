@@ -156,8 +156,8 @@ const Stats = {
 
 function renderLobby(ctrl: HomeCtrl) {
   const tabsContent = [
-    () => renderQuickSetup(() => newGameForm.openRealTime('custom')),
-    () => renderCorresPool(ctrl),
+    { id: 'quick', f: () => renderQuickSetup(() => newGameForm.openRealTime('custom')) },
+    { id: 'corres', f: () => renderCorresPool(ctrl) },
   ]
 
   return h('div.home__lobby', [
@@ -177,10 +177,9 @@ function renderLobby(ctrl: HomeCtrl) {
     }),
     h(TabView, {
       selectedIndex: ctrl.selectedTab,
-      contentRenderers: tabsContent,
+      tabs: tabsContent,
       onTabChange: ctrl.onTabChange,
       className: 'home__setupTabView',
-      withWrapper: true,
     }),
   ])
 }

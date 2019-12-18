@@ -104,18 +104,11 @@ function renderBody(ctrl: State) {
           ),
           selected && ctrl.progress ? h('div.theme-progressBarContainer', [
             h('div.theme-progressBar', { style: { transform: `translateX(-${100 - progressPercent(ctrl.progress)}%)` }}),
-            h('div.theme-progressInner', progressAmount(ctrl.progress))
           ]) : null
         ])
       }))
     ])
   ]
-}
-
-function progressAmount(p: Progress) {
-  const loaded = (p.loaded / 1000).toFixed(2)
-  const total = (p.total / 1000).toFixed(2)
-  return `${loaded}k/${total}k`
 }
 
 function progressPercent(p: Progress) {

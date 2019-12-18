@@ -18,11 +18,9 @@
 
 .spectator_chat_msg
   line-height 1.2em
-  color textDarkGray
   word-wrap break-word
   padding .4em 0
   > strong
-    color lighten(textDarkGray, 25%)
     letter-spacing -1px
   &.system
     width 100%
@@ -119,3 +117,5 @@
     background-color lighten(modalTranspBg, 2%)
     > textarea
       background-color lighten(modalTranspBg, 2%)
+  .spectator_chat_msg
+    text-shadow 0 1px 1px rgba(0,0,0,0.5)

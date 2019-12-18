@@ -495,6 +495,19 @@
   &:after
     content none
 
+.action_bar_button
+  &[data-icon='2']:before
+    display inline-block
+    transform rotate(-90deg)
+
+.main_header-selector.round-tvChannelSelector
+  height initial
+  line-height initial
+  font-size 0.9em
+  > select
+    line-height initial
+    color transparent
+
 .view-container.light
   .antagonistUser
     color textDarkGray
@@ -516,6 +529,8 @@
       &.offline
         background-color themeBgLight
         color #707070
+  .main_header-selector.round-tvChannelSelector
+    background-color inherit
 
 
 .view-container.transp
@@ -533,16 +548,5 @@
         color #fff
   .replay
     background transpBlack04
-
-.action_bar_button
-  &[data-icon='2']:before
-    display inline-block
-    transform rotate(-90deg)
-
-.main_header-selector.round-tvChannelSelector
-  height initial
-  line-height initial
-  font-size 0.9em
-  > select
-    line-height initial
-    color transparent
+  .antagonistInfos
+    text-shadow 0 1px 1px rgba(0,0,0,0.5)

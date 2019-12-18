@@ -15,8 +15,12 @@ settingsInit()
   })
 
   if (theme !== 'dark' && theme !== 'light') {
-    getLocalFile(getThemeFilename(theme)).then(r => {
+    const fn = getThemeFilename(theme)
+    getLocalFile(fn).then(r => {
       createStylesheetRule(theme, r)
+    })
+    .catch(() => {
+      settings.general.theme.background('dark')
     })
   }
 })

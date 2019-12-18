@@ -16,9 +16,9 @@
     top 0
     left 0
     width 100%
-    height headerHeight
+    height 'calc(%s + env(safe-area-inset-top))' % headerHeight
     background modalDarkHeader
-    // color textDarkGray
+    padding-top: env(safe-area-inset-top);
     > h2
       font-size 1.1em
       text-align center
@@ -27,7 +27,7 @@
 .modal_close
   position absolute
   right 0
-  top 0
+  top env(safe-area-inset-top)
   padding 10px
   background transparent
   font-size 24px
@@ -38,7 +38,7 @@
   background-color modalDarkBg
   color modalDarkColor
   height 100%
-  padding-top headerHeight
+  padding-top 'calc(%s + env(safe-area-inset-top))' % headerHeight
   overflow-y auto
   p
     margin 1em 15px 0

@@ -15,8 +15,8 @@
   &.full
     flex 0 0 100%
   input[type=text]
-    background transparent
-    border 1px solid #444
+    background modalDarkBg
+    border 1px solid lighten(#444, 10%)
     width 100%
     margin-right 5px
   > .check_container
@@ -32,8 +32,8 @@
 
 .game_search_select
   font-size 0.9em
-  background transparent
-  border 1px solid #444
+  background modalDarkBg
+  border 1px solid lighten(#444, 10%)
   position relative
   flex 0 0 49.5%
   height 25px
@@ -72,15 +72,24 @@
 .view-container.light
   .game_search_input
     input[type=text]
+      background #fff
       border-color borderLightGray
   .game_search_select
+    background #fff
     border-color borderLightGray
 
 .view-container.transp
   .game_search_input
     input[type=text]
+      background transpWhite005
       border-color transpWhite02
 
   .game_search_select
+    background transpWhite005
+    border-color transpWhite02
     select
-      color labelText
+      color inherit
+    label
+      color transpWhite05
+      &:after
+        color transpWhite02

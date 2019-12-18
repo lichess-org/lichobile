@@ -4,5 +4,6 @@
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
-  "backgroundColor": "ff000000"
+  "backgroundColor": "ff000000",
+  "appendUserAgent": "Lichobile/7.0.0"
 }

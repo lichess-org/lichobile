@@ -1,10 +1,10 @@
 PODS:
-  - Capacitor (1.3.0):
-    - CapacitorCordova (= 1.3.0)
-  - CapacitorCordova (1.3.0)
+  - Capacitor (1.4.0):
+    - CapacitorCordova (= 1.4.0)
+  - CapacitorCordova (1.4.0)
   - CapacitorSoundEffect (0.0.1):
     - Capacitor
-  - CordovaPlugins (1.3.0):
+  - CordovaPlugins (1.4.0):
     - CapacitorCordova
   - Firebase/CoreOnly (6.9.0):
     - FirebaseCore (= 6.3.0)
@@ -96,10 +96,10 @@ EXTERNAL SOURCES:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: 8be26c1099c8fb157a4eee9feaa6aa05e466d272
-  CapacitorCordova: 8aeaad82ad344af66b02f4660dcf544eec79face
+  Capacitor: e548fe61e71fa160367a36387f54483647ca20f6
+  CapacitorCordova: 17c1ed13e5303aa5153fb405adb4196cc56b40d5
   CapacitorSoundEffect: 31a36e64d0220c6d0e1621a61744b5d8c1e7738d
-  CordovaPlugins: 9ecd16dcbdb2403fe89edf71740e2e8d1a2a86a8
+  CordovaPlugins: 09646df41fa28a002ad22e78c5571589b0f0e24e
   Firebase: 2d750c54cda57d5a6ae31212cfe5cc813c6be7e4
   FirebaseAnalyticsInterop: d48b6ab67bcf016a05e55b71fc39c61c0cb6b7f3
   FirebaseCore: 8b2765c445d40db7137989b7146a3aa3f91b5529

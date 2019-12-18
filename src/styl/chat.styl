@@ -1,10 +1,8 @@
 #chat
-  @media only screen and (orientation: landscape)
-    width calc(100vw - var(--board-side-land) - 3vh)
-    left initial
-    right 0
   @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
     width calc(100vw - var(--board-side-land-tablet) - 3vh)
+    left initial
+    right 0
 
 .chat_content
   display flex
@@ -83,7 +81,6 @@
   padding 0
   border none
   outline none
-  color textLightBg
 
 .chat_send
   flex 0 0 50px
@@ -107,7 +104,8 @@
       color darken(blue, 40%)
     > textarea
       background-color #fff
-
+  .chat_input
+    color textLightBg
 
 .view-container.transp
   .chat_msg

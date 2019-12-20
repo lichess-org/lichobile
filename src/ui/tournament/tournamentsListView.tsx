@@ -45,7 +45,6 @@ export function renderTournamentsList(ctrl: TournamentsListCtrl) {
       }),
     ),
     h(TabView, {
-      className: 'tournamentTabsWrapper',
       selectedIndex: ctrl.currentTab,
       tabs: tabsContent,
       onTabChange: ctrl.onTabChange,

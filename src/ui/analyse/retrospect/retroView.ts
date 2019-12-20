@@ -13,7 +13,7 @@ export default function retroView(root: AnalyseCtrl): Mithril.Vnode<any, any> | 
   const ctrl = root.retro
   if (!ctrl) return
   const fb = ctrl.vm.feedback
-  return h('div.analyse-retro_box', {
+  return h('div.analyse-retro_box.box', {
     className: ctrl.vm.minimized ? 'minimized' : ''
   }, [
     renderTitle(ctrl),

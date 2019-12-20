@@ -6,7 +6,6 @@
   width 100%
   display flex
   flex-flow column nowrap
-  background lighten(bgdark, 5%)
   &.minimized
     height 28px
   > .title
@@ -31,10 +30,14 @@
 
 .retro-player
   display flex
+  flex-flow row wrap
   align-items center
-  margin-left 10px
   > .piece-no-square
     flex 0 0 64px
+  @media only screen and (orientation: landscape)
+    flex-flow column nowrap
+    > .piece-no-square
+      margin-bottom 2vmin
 
 
 .retro-instruction
@@ -101,13 +104,15 @@
 .view-container.light
   .analyse-retro_box
     background #fff
+    > .title
+      background-color blue
+      color #fff
 
 .view-container.transp
   .analyse-retro_box
-    background transparent
-    > .title
-      background-color rgba(#000, 0.9)
-
-  .retro-feedback
     background-color #f5f5f5
     color textDarkGray
+    > .title
+      background-color rgba(#000, 0.9)
+    index
+     color textDarkGray

@@ -325,7 +325,6 @@ const untranslated: StringMap = {
   playerisInvitingYou: '%s is inviting you',
   toATypeGame: 'To a %s game',
   unsupportedVariant: 'Variant %s is not supported in this version',
-  language: 'Language',
   notesSynchronizationHasFailed: 'Notes synchronization with lichess has failed, please try later.',
   returnToHome: 'Return to home',
   localEvalCaution: 'Caution: intensive usage will drain battery.',

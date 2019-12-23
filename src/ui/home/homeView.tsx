@@ -190,10 +190,10 @@ function renderCorresPool(ctrl: HomeCtrl) {
       h('thead', [
         h('tr', [
           h('th', ''),
-          h('th', 'Player'),
-          h('th', 'Rating'),
-          h('th', 'Time'),
-          h('th', 'Mode'),
+          h('th', i18n('player')),
+          h('th', i18n('rating')),
+          h('th', i18n('time')),
+          h('th', i18n('mode')),
         ]),
       ]),
       h('tbody', ctrl.corresPool.map(s => renderSeek(ctrl, s)))

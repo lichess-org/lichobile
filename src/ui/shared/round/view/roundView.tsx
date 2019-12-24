@@ -145,11 +145,11 @@ function renderTitle(ctrl: OnlineRound) {
     else if (ctrl.data.userTV) {
       return h('div.main_header_title.withSub', [
         h('h1.header-gameTitle', [
-          h(`span.withIcon[data-icon=${utils.gameIcon(ctrl.data.game.perf)}]`),
-          gameApi.title(ctrl.data)
+          h('span.withIcon[data-icon=1]'), ctrl.data.userTV,
         ]),
         h('h2.header-subTitle', [
-          h('span.withIcon[data-icon=1]'), ctrl.data.userTV,
+          h(`span.withIcon[data-icon=${utils.gameIcon(ctrl.data.game.perf)}]`),
+          gameApi.title(ctrl.data),
         ].concat(tournament ? [
           ' • ',
           h('span.fa.fa-trophy'),

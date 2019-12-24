@@ -99,6 +99,7 @@ export default {
         window.removeEventListener('resize', this.onResize)
       }
     }, [
+      vnode.children,
       h('div', {
         className: boardClass,
         oncreate: this.boardOnCreate,

@@ -19,7 +19,7 @@
     font-size 0.8em
 
 .round-expiration
-  position: absolute;
+  position: absolute
   left: 0
   width: 100%
   text-align: center
@@ -27,9 +27,9 @@
   color: #fff
   z-index: 50
   &.player
-    top: 0
-  &.opponent
     bottom 0
+  &.opponent
+    top: 0
   > .countdown-timer
     padding: 5px
     font-weight normal
@@ -340,15 +340,9 @@
     &.on
       background-color darken(#fff, 15%)
   .negotiation, .force_resign_zone, .claim_draw_zone
-    background-color selectBg
     text-align center
     padding 10px
     button
-      background-color #fff
-      &.active
-        background-color darken(#fff, 3%)
-      &.binary_choice[data-icon=E]
-        border-right 1px solid selectBg
       &:not(.binary_choice):last-child
         width 50%
         margin 0 auto
@@ -534,7 +528,18 @@
         color #707070
   .main_header-selector.round-tvChannelSelector
     background-color inherit
-
+  .player_controls
+    button
+      &.on
+        background-color darken(#fff, 15%)
+    .negotiation, .force_resign_zone, .claim_draw_zone
+      background-color selectBg
+      button
+        background-color #fff
+        &.active
+          background-color darken(#fff, 3%)
+        &.binary_choice[data-icon=E]
+          border-right 1px solid selectBg
 
 .view-container.transp
   .pocket

@@ -201,6 +201,10 @@
   font-size 1.2em
   white-space nowrap
   color textLightGray
+  > .berserk
+    margin-left 0.5em
+    &::before
+      vertical-align middle
   > h2
     overflow hidden
     text-overflow ellipsis
@@ -263,6 +267,8 @@
     height 18px
     background-size cover
     display inline-block
+    @media only screen and (min-width 768px) and (min-height 768px)
+      margin-top 2px
   .pawn
     background-image url(../../images/pieces/mono/P.svg)
   .bishop
@@ -514,12 +520,9 @@
   .clock
     color lighten(themeBgLightText, 5%)
     background-color themeBgLight
-    border-color #ccc
     &.running
       background-color palerGreen
       color #000
-    &.berserk
-      border-color #dc322f
     &.emerg
       background-color #f2cccc
       &.running

@@ -1,3 +1,4 @@
+import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
 import { Locale } from 'date-fns'
 import formatDistanceStrict from 'date-fns/esm/formatDistanceStrict'
@@ -26,6 +27,11 @@ export default function i18n(key: string, ...args: Array<string | number>): stri
   return str ? format(str, ...args) : key
 }
 
+export function i18nVdom(key: string, ...args: Array<Mithril.Child>): Mithril.Children {
+  const str = messages[key] || untranslated[key]
+  return str ? formatVdom(str, ...args) : key
+}
+
 export function plural(key: string, count: number, ...args: Array<string | number>): string {
   const pluralKey = key + ':' + quantity(currentLocale, count)
   const str = messages[pluralKey] || messages[key]
@@ -45,6 +51,20 @@ function format(message: string, ...args: Array<string | number>): string {
     })
   }
   return str
+}
+
+function formatVdom(str: string, ...args: Array<Mithril.Child>): Mithril.Children {
+  const segments: Array<any> = str.split(/(%(?:\d\$)?s)/g)
+  for (let i = 1; i <= args.length; i++) {
+    const pos = segments.indexOf('%' + i + '$s')
+    if (pos !== -1) segments[pos] = args[i - 1]
+  }
+  for (let i = 0; i < args.length; i++) {
+    const pos = segments.indexOf('%s')
+    if (pos === -1) break
+    segments[pos] = args[i]
+  }
+  return segments
 }
 
 export function formatNumber(n: number): string {

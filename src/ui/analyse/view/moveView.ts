@@ -16,7 +16,7 @@ function plyToTurn(ply: Ply): number {
 
 export function renderGlyphs(glyphs: Tree.Glyph[]): Mithril.Vnode<any, any>[] {
   return glyphs.map(glyph => h('glyph', {
-    attrs: { title: glyph.name }
+    title: glyph.name,
   }, glyph.symbol))
 }
 
@@ -43,7 +43,7 @@ export function renderMove(ctx: Ctx, node: Tree.Node): Mithril.Vnode<any, any>[]
     ) : [])
 }
 
-export function renderIndexAndMove(ctx: Ctx, node: Tree.Node): Mithril.Vnode<any, any>[] {
+export function renderIndexAndMove(ctx: Ctx, node: Tree.Node): Mithril.Child[] {
   return node.uci ?
   [renderIndex(node.ply, ctx.withDots)].concat(renderMove(ctx, node)) :
   [h('span.init', 'Initial position')]

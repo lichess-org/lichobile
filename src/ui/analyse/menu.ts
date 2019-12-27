@@ -90,7 +90,7 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
         ctrl.toggleRetro()
       }),
       disabled: !!ctrl.retro
-    }, [h('span.fa.fa-play'), 'Learn from your mistakes']) : null,
+    }, [h('span.fa.fa-play'), i18n('learnFromYourMistakes')]) : null,
     ctrl.notes ? h('button', {
       oncreate: helper.ontap(() => {
         if (ctrl.notes) {

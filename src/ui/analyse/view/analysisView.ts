@@ -17,7 +17,7 @@ import AnalyseCtrl from '../AnalyseCtrl'
 import drawAcplChart from '../charts/acpl'
 import drawMoveTimesChart from '../charts/moveTimes'
 
-export default function renderAnalysis(ctrl: AnalyseCtrl): Mithril.Vnode<any, any> {
+export default function renderAnalysis(ctrl: AnalyseCtrl): Mithril.Child {
   const d = ctrl.data
 
   return h('div.analyse-gameAnalysis.native_scroller', [

@@ -123,7 +123,7 @@ export function headerBtns() {
 }
 
 // TODO refactor this
-export function header(title: Mithril.Vnode<any, any> | string | null, leftButton?: Mithril.Children): Mithril.Children {
+export function header(title: Mithril.Child | string | null, leftButton?: Mithril.Children): Mithril.Children {
   return h('nav', [
     leftButton ? leftButton : menuButton(),
     typeof title === 'string' ?

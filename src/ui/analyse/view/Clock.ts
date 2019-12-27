@@ -32,7 +32,7 @@ export default {
   }
 } as Mithril.Component<{ ctrl: AnalyseCtrl, color: Color }, {}>
 
-function clockContent(centis: number): Mithril.Vnode<any, any> {
+function clockContent(centis: number): Mithril.Child {
   if (centis === undefined) return h('span.time', ['-'])
   const date = new Date(centis * 10),
   millis = date.getUTCMilliseconds(),

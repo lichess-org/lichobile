@@ -8,21 +8,28 @@
   flex-flow column nowrap
   &.minimized
     height 28px
-  > .title
+  > .titleWrapper
     flex 0 0 28px
     background-color darkBlue
     color headerBgDarkColor
     display flex
+    flex-flow row nowrap
     justify-content space-between
     align-items center
     padding-left 10px
+    > div
+      white-space nowrap
+      overflow hidden
+      text-overflow ellipsis
+    > .mistakeNb
+      flex 0 0 50px
+      text-align center
 
 .retro-feedback
   height initial
   flex 1 1 auto
   display flex
   flex-flow column nowrap
-  align-items center
   justify-content center
   &.fail
     .retro-icon:not(.off)
@@ -32,6 +39,7 @@
   display flex
   flex-flow row wrap
   align-items center
+  margin 0 1em
   > .piece-no-square
     flex 0 0 64px
   @media only screen and (orientation: landscape)
@@ -61,6 +69,7 @@
   flex 1 1 50%
   display flex
   justify-content center
+  align-items center
 
 .retro-continue
   display flex
@@ -104,7 +113,7 @@
 .view-container.light
   .analyse-retro_box
     background #fff
-    > .title
+    > .titleWrapper
       background-color blue
       color #fff
 
@@ -112,7 +121,7 @@
   .analyse-retro_box
     background-color #f5f5f5
     color textDarkGray
-    > .title
+    > .titleWrapper
       background-color rgba(#000, 0.9)
     index
      color textDarkGray

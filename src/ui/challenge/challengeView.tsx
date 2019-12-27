@@ -27,7 +27,7 @@ function gameInfos(challenge: Challenge) {
 }
 
 export function joinPopup(ctrl: ChallengeState, challenge: Challenge) {
-  let joinDom: Mithril.Vnode<any, any>
+  let joinDom: Mithril.Child
   if (challenge.rated && !session.isConnected()) {
     joinDom = h('div.error', [
       i18n('thisGameIsRated'), h('br'), h('br'), i18n('mustSignInToJoin'),

@@ -10,7 +10,7 @@ import { plyToTurn, empty } from '../util'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 
-type MaybeVNode = Mithril.Vnode<any, any> | null
+type MaybeVNode = Mithril.Child | null
 
 export interface Ctx {
   ctrl: AnalyseCtrl
@@ -125,7 +125,7 @@ function renderInlined(ctx: Ctx, nodes: Tree.Node[], opts: Opts): MaybeVNode[] |
   })
 }
 
-function renderLines(ctx: Ctx, nodes: Tree.Node[], opts: Opts): Mithril.Vnode<any, any> {
+function renderLines(ctx: Ctx, nodes: Tree.Node[], opts: Opts): Mithril.Child {
   return h('lines', nodes.map(n => {
     return h('line', renderMoveAndChildrenOf(ctx, n, {
       parentPath: opts.parentPath,
@@ -153,7 +153,7 @@ function renderMoveAndChildrenOf(ctx: Ctx, node: Tree.Node, opts: Opts): MaybeVN
     }) || [])
 }
 
-function renderInline(ctx: Ctx, node: Tree.Node, opts: Opts): Mithril.Vnode<any, any> {
+function renderInline(ctx: Ctx, node: Tree.Node, opts: Opts): Mithril.Child {
   return h('inline', renderMoveAndChildrenOf(ctx, node, {
     withIndex: true,
     parentPath: opts.parentPath,
@@ -170,7 +170,7 @@ function nodeClasses(c: AnalyseCtrl, path: Tree.Path): NodeClasses {
   }
 }
 
-function renderGlyphs(glyphs: Glyph[]): Mithril.Vnode<any, any>[] {
+function renderGlyphs(glyphs: Glyph[]): Mithril.Child[] {
   return glyphs.map(glyph => h('glyph', glyph.symbol))
 }
 
@@ -182,7 +182,7 @@ function renderIndex(ply: Ply, withDots?: boolean): Mithril.Children {
   return h('index', renderIndexText(ply, withDots))
 }
 
-function renderMoveOf(ctx: Ctx, node: Tree.Node, opts: Opts): Mithril.Vnode<any, any> {
+function renderMoveOf(ctx: Ctx, node: Tree.Node, opts: Opts): Mithril.Child {
   const path = opts.parentPath + node.id
   const content: Mithril.Children = [
     opts.withIndex || node.ply & 1 ? renderIndex(node.ply, true) : null,

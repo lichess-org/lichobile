@@ -95,7 +95,7 @@ const AcplSummary: Mithril.Component<{
 function renderGameAnalysisRequest(ctrl: AnalyseCtrl) {
   return h('div.analyse-computerAnalysis.request', [
     ctrl.analysisProgress ? h('div.analyse-requestProgress', [
-      h('span', 'Analysis in progress'),
+      h('span', i18n('waitingForAnalysis')),
       spinner.getVdom('monochrome')
     ]) : h('button.fatButton', {
       oncreate: helper.ontapXY(() => {
@@ -119,7 +119,7 @@ function renderStudyAnalysisRequest(ctrl: AnalyseCtrl) {
           'Make sure the chapter is complete, for you can only request analysis once.'
         ]),
         ctrl.analysisProgress ? h('div.analyse-requestProgress', [
-          h('span', 'Analysis in progress'),
+          h('span', i18n('waitingForAnalysis')),
           spinner.getVdom('monochrome')
         ]) : h('button.fatButton', {
           oncreate: helper.ontapXY(() => {

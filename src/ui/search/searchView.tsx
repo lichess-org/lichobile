@@ -129,7 +129,7 @@ function renderResult(ctrl: ISearchCtrl) {
   const children = ctrl.searchState.searching ?  spinner.getVdom('monochrome') :
     ctrl.searchState.paginator === undefined ? null :
       ctrl.searchState.games.length === 0 ?
-        h('div.search-empty', 'No game found') :
+        h('div.search-empty', i18n('noGameFound')) :
           h.fragment({ oncreate: ctrl.onGamesLoaded }, [
             ctrl.searchState.games.map((g: UserGameWithDate, index: number) =>
               h(GameItem, { key: g.id, g, index, boardTheme: ctrl.boardTheme })

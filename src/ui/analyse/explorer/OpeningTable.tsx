@@ -50,13 +50,11 @@ export function showEmpty(ctrl: AnalyseCtrl) {
       <div className="message">
         <h3>
           <i className="withIcon" data-icon="" />
-          No game found
+          {i18n('noGameFound')}
         </h3>
-        <p>{
-          ctrl.explorer.config.fullHouse() ?
-          'Already searching through all available games.' :
-          'Maybe include more games from the preferences menu?'
-        }</p>
+        { !ctrl.explorer.config.fullHouse() ?
+        <p>{i18n('maybeIncludeMoreGamesFromThePreferencesMenu')}</p> : null
+        }
       </div>
     </div>
   )

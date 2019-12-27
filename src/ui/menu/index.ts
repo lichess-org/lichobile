@@ -54,12 +54,14 @@ export function action(f: () => void) {
 
 export function toggleHeader() {
   const open = !profileMenuOpen()
-  if (open) inboxXhr.unreadCount()
-  .then(nb => {
-    inboxUnreadCount(nb)
-    redraw()
-  })
-  return profileMenuOpen(open)
+  if (open) {
+    inboxXhr.unreadCount()
+    .then(nb => {
+      inboxUnreadCount(nb)
+      redraw()
+    })
+  }
+  profileMenuOpen(open)
 }
 
 export function getServerLags() {
@@ -76,6 +78,7 @@ export function getServerLags() {
   }
 }
 
-export const backdropCloseHandler = ontap(() => {
+export const backdropCloseHandler = ontap((e: TouchEvent) => {
+  e.stopPropagation()
   mainMenuCtrl.close()
 })

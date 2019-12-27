@@ -101,6 +101,8 @@ export default class Gesture {
     if (event.changedTouches.length > 1) return
     this.touchStartX = event.changedTouches[0].pageX
     this.touchStartY = event.changedTouches[0].pageY
+    this.velocityX = 0
+    this.velocityY = 0
     this.touchMoveX = 0
     this.touchMoveY = 0
     this.touchEndX = null

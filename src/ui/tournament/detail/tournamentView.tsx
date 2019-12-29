@@ -32,7 +32,9 @@ export function tournamentBody(ctrl: TournamentCtrl) {
   const data = ctrl.tournament
   if (!data) return null
 
-  return h('div.tournamentContainer.native_scroller.page', [
+  return h('div.tournamentContainer.native_scroller.page', {
+    className: data.podium ? 'finished' : '',
+  }, [
     tournamentHeader(data, ctrl),
     data.podium ? tournamentPodium(data.podium) : null,
     tournamentLeaderboard(ctrl),
@@ -298,6 +300,14 @@ function renderPlace(data: PodiumPlace) {
       <table className="stats">
         <tr>
           <td className="statName">
+            {i18n('performance')}
+          </td>
+          <td className="statData">
+            {data.performance}
+          </td>
+        </tr>
+        <tr>
+          <td className="statName">
             {i18n('gamesPlayed')}
           </td>
           <td className="statData">
@@ -306,7 +316,7 @@ function renderPlace(data: PodiumPlace) {
         </tr>
         <tr>
           <td className="statName">
-            Win Rate
+            {i18n('winRate')}
           </td>
           <td className="statData">
             {((data.nb.win / data.nb.game) * 100).toFixed(0) + '%'}
@@ -314,18 +324,10 @@ function renderPlace(data: PodiumPlace) {
         </tr>
         <tr>
           <td className="statName">
-            Berserk Rate
+            {i18n('berserkRate')}
           </td>
           <td className="statData">
             {((data.nb.berserk / data.nb.game) * 100).toFixed(0) + '%'}
-          </td>
-        </tr>
-        <tr>
-          <td className="statName">
-            Performance
-          </td>
-          <td className="statData">
-            {data.performance}
           </td>
         </tr>
       </table>

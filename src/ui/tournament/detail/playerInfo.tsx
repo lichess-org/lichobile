@@ -65,7 +65,7 @@ export default {
     const avgOpRating = pairings.length ? (pairings.reduce((prev, x) => prev + x.op.rating, 0) / pairings.length).toFixed(0) : '0'
 
 
-    function renderPlayerGame(game: PlayerInfoPairing, index: number, gameArray: Array<PlayerInfoPairing>) {
+    function renderPlayerGame(game: PlayerInfoPairing, index: number) {
       let outcome: string | number
       let outcomeClass = 'oppOutcome'
       if (game.score === undefined || game.score === null) {
@@ -83,7 +83,7 @@ export default {
       }
       return (
         <tr className="list_item bglight" data-id={game.id} data-color={game.color} key={game.id}>
-          <td className="oppRank"> {gameArray.length - index} </td>
+          <td className="oppRank"> {player.nb.game - index} </td>
           <td className="oppName"> {game.op.name} </td>
           <td className="oppRating"> {game.op.rating} </td>
           <td className="oppColor"> <span className={'color-icon ' + game.color}> </span> </td>
@@ -109,14 +109,6 @@ export default {
             <table className="playerStats">
               <tr>
                 <td className="statName">
-                  Score
-                </td>
-                <td className="statData">
-                  <span className={player.fire ? 'on-fire' : 'off-fire'} data-icon="Q">{player.score}</span>
-                </td>
-              </tr>
-              <tr>
-                <td className="statName">
                   {i18n('gamesPlayed')}
                 </td>
                 <td className="statData">
@@ -125,7 +117,7 @@ export default {
               </tr>
               <tr>
                 <td className="statName">
-                  Win Rate
+                  {i18n('winRate')}
                 </td>
                 <td className="statData">
                   {player.nb.game ? ((player.nb.win / player.nb.game) * 100).toFixed(0) + '%' : '0%'}
@@ -133,7 +125,7 @@ export default {
               </tr>
               <tr>
                 <td className="statName">
-                  Berserk Rate
+                  {i18n('berserkRate')}
                 </td>
                 <td className="statData">
                   {player.nb.game ? ((player.nb.berserk / player.nb.game) * 100).toFixed(0) + '%' : '0%'}
@@ -149,7 +141,7 @@ export default {
               </tr>
               <tr className={player.performance ? '' : 'invisible'}>
                 <td className="statName">
-                  Performance
+                  {i18n('performance')}
                 </td>
                 <td className="statData">
                   {player.performance}

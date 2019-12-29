@@ -17,6 +17,19 @@
       'leaderboard games'\
       'leaderboard .';
 
+  &.finished
+    grid-template-areas:
+      'infos'\
+      'podium'\
+      'leaderboard'\
+      'games'\
+      '.'
+    @media only screen and (min-width 800px)
+      grid-template-areas:
+        'infos infos'\
+        'podium podium'\
+        'leaderboard games'\
+        'leaderboard .';
 
 .header-subTitle.tournament-subtTitle
   font-size 1em
@@ -171,6 +184,7 @@
   margin-bottom 1em
 
 .podium
+  grid-area podium
   display flex
   flex-flow row nowrap
   font-size 0.75em
@@ -287,7 +301,8 @@
   > header
     box-sizing content-box
     > .playerModalHeader
-      padding 0 40px
+      padding-left 40px
+      padding-right 40px
       overflow hidden
       white-space nowrap
       text-overflow ellipsis

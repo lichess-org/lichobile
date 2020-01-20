@@ -1,5 +1,5 @@
 /// <reference path="dts/index.d.ts" />
-import { Plugins, AppState, DeviceInfo, NetworkStatus } from '@capacitor/core'
+import { Capacitor, Plugins, AppState, DeviceInfo, NetworkStatus } from '@capacitor/core'
 import debounce from 'lodash-es/debounce'
 import { hasNetwork } from './utils'
 import redraw from './utils/redraw'
@@ -27,6 +27,10 @@ export default function appInit(info: DeviceInfo) {
     platform: info.platform,
     uuid: info.uuid,
     appVersion: info.appVersion,
+  }
+
+  if (Capacitor.platform === 'ios') {
+    Plugins.Keyboard.setAccessoryBarVisible({ isVisible: true })
   }
 
   routes.init()

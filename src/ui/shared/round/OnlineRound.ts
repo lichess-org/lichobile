@@ -558,6 +558,9 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     if (this.data.game.speed === 'correspondence') {
       session.refresh()
+      .then(() => {
+        Plugins.Badge.setNumber({ badge: session.myTurnGames().length })
+      })
     }
   }
 

@@ -108,7 +108,7 @@ function onOnline() {
         }
         push.register()
         challengesApi.refresh()
-        Plugins.Badge.setNumber({ badge: session.corresPlaying().length })
+        Plugins.Badge.setNumber({ badge: session.myTurnGames().length })
         redraw()
 
         // TODO remove in next version (from 7.0.0)

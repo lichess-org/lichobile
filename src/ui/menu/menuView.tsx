@@ -248,7 +248,7 @@ function networkStatus(user?: Session) {
   const server = menu.mlat()
   return (
     <div className="pingServer"
-      oncreate={helper.ontapXY(() => Plugins.Toast.show({ text: pingHelp, duration: 'long' }))}
+      oncreate={helper.ontapXY(() => Plugins.LiToast.show({ text: pingHelp, duration: 'long', position: 'top' }))}
     >
       { signalBars(hasNetwork() ? ping : undefined)}
       { hasNetwork() ? (

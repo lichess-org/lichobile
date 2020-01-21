@@ -94,7 +94,7 @@ export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedi
       ctrl.data.player.offeringRematch = by === ctrl.data.player.color
       const fromOp = ctrl.data.opponent.offeringRematch = by === ctrl.data.opponent.color
       if (fromOp) {
-        Plugins.Toast.show({ text: i18n('yourOpponentWantsToPlayANewGameWithYou'), duration: 'short' })
+        Plugins.LiToast.show({ text: i18n('yourOpponentWantsToPlayANewGameWithYou'), duration: 'short' })
       }
       redraw()
     },
@@ -106,7 +106,7 @@ export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedi
       ctrl.data.player.offeringDraw = by === ctrl.data.player.color
       const fromOp = ctrl.data.opponent.offeringDraw = by === ctrl.data.opponent.color
       if (fromOp) {
-        Plugins.Toast.show({ text: i18n('yourOpponentOffersADraw'), duration: 'short' })
+        Plugins.LiToast.show({ text: i18n('yourOpponentOffersADraw'), duration: 'short' })
       }
       redraw()
     },

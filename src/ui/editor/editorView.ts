@@ -75,22 +75,22 @@ function renderActionsBar(ctrl: EditorCtrl) {
     h('button.action_bar_button[data-icon=U]', {
       oncreate: helper.ontap(() => {
         ctrl.continuePopup.open(ctrl.computeFen(), 'standard')
-      }, () => Plugins.Toast.show({ text: i18n('continueFromHere'), duration: 'short' }))
+      }, () => Plugins.LiToast.show({ text: i18n('continueFromHere'), duration: 'short', position: 'bottom' }))
     }),
     h('button.action_bar_button[data-icon=A]', {
       oncreate: helper.ontap(() => {
         const fen = encodeURIComponent(ctrl.computeFen())
         router.set(`/analyse/fen/${fen}`)
-      }, () => Plugins.Toast.show({ text: i18n('analysis'), duration: 'short' }))
+      }, () => Plugins.LiToast.show({ text: i18n('analysis'), duration: 'short', position: 'bottom' }))
     }),
     h('button.action_bar_button.fa.fa-upload', {
       oncreate: helper.ontap(ctrl.pasteFenPopup.open,
-        () => Plugins.Toast.show({ text: i18n('Load position from FEN'), duration: 'short' }))
+        () => Plugins.LiToast.show({ text: i18n('Load position from FEN'), duration: 'short', position: 'bottom' }))
     }),
     h('button.action_bar_button.fa.fa-share-alt', {
       oncreate: helper.ontap(
         () => Plugins.Share.share({ text: ctrl.computeFen() }),
-        () => Plugins.Toast.show({ text: 'Share FEN', duration: 'short' })
+        () => Plugins.LiToast.show({ text: 'Share FEN', duration: 'short', position: 'bottom' })
       )
     })
   ])

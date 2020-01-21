@@ -23,7 +23,7 @@ export function threadBody(ctrl: IThreadCtrl) {
             if (body.length >= 3)
               return ctrl.sendResponse(form)
             else
-              Plugins.Toast.show({ text: 'Minimum length is 3', duration: 'short' })
+              Plugins.LiToast.show({ text: 'Minimum length is 3', duration: 'short' })
           }}
         >
           <input id="id" value={ctrl.id()} type="hidden" />

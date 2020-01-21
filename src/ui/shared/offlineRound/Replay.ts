@@ -77,7 +77,7 @@ export default class Replay {
       if (resp.threefoldRepetition) {
         this.onThreefoldRepetition(resp.status)
       } else {
-        Plugins.Toast.show({ text: i18n('incorrectThreefoldClaim'), duration: 'short' })
+        Plugins.LiToast.show({ text: i18n('incorrectThreefoldClaim'), duration: 'short' })
       }
     })
     .catch(console.error.bind(console))

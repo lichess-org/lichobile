@@ -20,7 +20,7 @@ export function studyHeader(study: Study) {
     }, [
       h('h1.header-gameTitle', {
         oncreate: helper.ontap(() => {
-          Plugins.Toast.show({ text: `${title}: ${subTitle}`, duration: 'long' })
+          Plugins.LiToast.show({ text: `${title}: ${subTitle}`, duration: 'long', position: 'top' })
         })
       }, title),
       h('h2.header-subTitle', subTitle)

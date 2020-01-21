@@ -174,7 +174,7 @@ export default class EditorCtrl {
     if (validateFen(newFen))
       router.set(`/editor/${encodeURIComponent(newFen)}`, true)
     else
-      Plugins.Toast.show({ text: 'Invalid FEN', duration: 'short' })
+      Plugins.LiToast.show({ text: 'Invalid FEN', duration: 'short' })
   }
 
   private fenMetadatas() {

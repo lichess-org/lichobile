@@ -33,6 +33,7 @@ public class MainActivity extends BridgeActivity {
     // Initializes the Bridge
     this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
       // Additional plugins you've installed go here
+      add(LiToast.class);
       add(SoundEffect.class);
     }});
 
@@ -100,7 +101,7 @@ public class MainActivity extends BridgeActivity {
   }
 
   private void openGooglePlayPage(String packageName) throws android.content.ActivityNotFoundException {
-    
+
     String pName =
             packageName.equals("com.android.webview") ? "com.google.android.webview" : packageName;
 

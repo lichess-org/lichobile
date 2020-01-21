@@ -14,6 +14,8 @@
 		504EC30F1FED79650016851F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
+		961A8D8323D705E500229D0D /* LiToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961A8D8223D705E500229D0D /* LiToast.swift */; };
+		961A8D8523D7063900229D0D /* LiToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 961A8D8423D7063900229D0D /* LiToast.m */; };
 		961EFD34239AA9B60078A80B /* FCM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961EFD33239AA9B60078A80B /* FCM.swift */; };
 		961EFD36239AAD430078A80B /* FCM.m in Sources */ = {isa = PBXBuildFile; fileRef = 961EFD35239AAD430078A80B /* FCM.m */; };
 		961EFD3C239E968C0078A80B /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961EFD3B239E968C0078A80B /* Badge.swift */; };
@@ -33,6 +35,8 @@
 		504EC3111FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = SOURCE_ROOT; };
+		961A8D8223D705E500229D0D /* LiToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiToast.swift; sourceTree = "<group>"; };
+		961A8D8423D7063900229D0D /* LiToast.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiToast.m; sourceTree = "<group>"; };
 		961EFD33239AA9B60078A80B /* FCM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCM.swift; sourceTree = "<group>"; };
 		961EFD35239AAD430078A80B /* FCM.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCM.m; sourceTree = "<group>"; };
 		961EFD3B239E968C0078A80B /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
@@ -103,6 +107,8 @@
 				961EFD35239AAD430078A80B /* FCM.m */,
 				961EFD3B239E968C0078A80B /* Badge.swift */,
 				961EFD3D239E97D70078A80B /* Badge.m */,
+				961A8D8223D705E500229D0D /* LiToast.swift */,
+				961A8D8423D7063900229D0D /* LiToast.m */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -239,8 +245,10 @@
 				961EFD3C239E968C0078A80B /* Badge.swift in Sources */,
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				961EFD3E239E97D70078A80B /* Badge.m in Sources */,
+				961A8D8523D7063900229D0D /* LiToast.m in Sources */,
 				961EFD36239AAD430078A80B /* FCM.m in Sources */,
 				961EFD34239AA9B60078A80B /* FCM.swift in Sources */,
+				961A8D8323D705E500229D0D /* LiToast.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

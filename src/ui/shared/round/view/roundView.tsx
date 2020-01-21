@@ -282,7 +282,7 @@ function userInfos(user: User, player: Player, playerName: string) {
   } else {
     title = playerName
   }
-  Plugins.Toast.show({ text: title, duration: 'short' })
+  Plugins.LiToast.show({ text: title, duration: 'short' })
 }
 
 function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Material, position: Position, isCrazy: boolean) {
@@ -291,7 +291,7 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
   const togglePopup = user ? () => ctrl.openUserPopup(position, user.id) : utils.noop
   const vConf = user ?
     helper.ontap(togglePopup, () => userInfos(user, player, playerName)) :
-    helper.ontap(utils.noop, () => Plugins.Toast.show({ text: playerName, duration: 'short' }))
+    helper.ontap(utils.noop, () => Plugins.LiToast.show({ text: playerName, duration: 'short' }))
 
   const checksNb = getChecksCount(ctrl, player.color)
 

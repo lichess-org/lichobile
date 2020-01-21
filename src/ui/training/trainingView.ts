@@ -61,14 +61,14 @@ function renderActionsBar(ctrl: TrainingCtrl) {
       oncreate: helper.ontap(ctrl.menu.open)
     }),
     h('button.action_bar_button.training_action.fa.fa-share-alt', {
-      oncreate: helper.ontap(ctrl.share, () => Plugins.Toast.show({ text: 'Share this puzzle', duration: 'short' }))
+      oncreate: helper.ontap(ctrl.share, () => Plugins.LiToast.show({ text: 'Share this puzzle', duration: 'short', position: 'bottom' }))
     }),
     h('button.action_bar_button.training_action[data-icon=A]', {
-      oncreate: helper.ontap(ctrl.goToAnalysis, () => Plugins.Toast.show({ text: i18n('analysis'), duration: 'short' })),
+      oncreate: helper.ontap(ctrl.goToAnalysis, () => Plugins.LiToast.show({ text: i18n('analysis'), duration: 'short', position: 'bottom' })),
       disabled: ctrl.vm.mode !== 'view'
     }),
     session.isConnected() ? h('button.action_bar_button.training_action.fa.fa-refresh', {
-      oncreate: helper.ontap(ctrl.resync, () => Plugins.Toast.show({ text: 'Sync and refresh saved puzzles', duration: 'short' }))
+      oncreate: helper.ontap(ctrl.resync, () => Plugins.LiToast.show({ text: 'Sync and refresh saved puzzles', duration: 'short', position: 'bottom' }))
     }) : null,
     h('button.action_bar_button.training_action.fa.fa-backward', {
       oncreate: helper.ontap(ctrl.rewind, undefined, ctrl.rewind),

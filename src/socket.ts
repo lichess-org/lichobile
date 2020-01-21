@@ -206,7 +206,7 @@ function createGame(
         xhr.game(gameUrl.substring(1))
         .catch((err: ErrorResponse) => {
           if (err.status === 401) {
-            Plugins.Toast.show({ text: i18n('unauthorizedError'), duration: 'short' })
+            Plugins.LiToast.show({ text: i18n('unauthorizedError'), duration: 'short' })
             router.set('/')
           }
         })

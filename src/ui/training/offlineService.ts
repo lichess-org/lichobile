@@ -105,9 +105,9 @@ export function syncAndClearCache(database: Database, user: Session): Promise<Pu
 
 export function puzzleLoadFailure(reason: any) {
   if (typeof reason === 'string') {
-    Plugins.Toast.show({ text: reason, duration: 'long' })
+    Plugins.LiToast.show({ text: reason, duration: 'long' })
   } else {
-    Plugins.Toast.show({ text: 'Could not load puzzle', duration: 'short' })
+    Plugins.LiToast.show({ text: 'Could not load puzzle', duration: 'short' })
   }
   router.set('/')
 }

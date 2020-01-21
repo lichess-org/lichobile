@@ -89,13 +89,13 @@ export function renderGameActionsBar(ctrl: OfflineRoundInterface) {
       <button className="action_bar_button fa fa-plus-circle"
         oncreate={helper.ontap(
           ctrl.newGameMenu.open,
-          () => Plugins.Toast.show({ text: i18n('createAGame'), duration: 'short' })
+          () => Plugins.LiToast.show({ text: i18n('createAGame'), duration: 'short', position: 'bottom' })
         )}
       />
       <button className="fa fa-share-alt action_bar_button"
         oncreate={helper.ontap(
           ctrl.sharePGN,
-          () => Plugins.Toast.show({ text: i18n('sharePGN'), duration: 'short' })
+          () => Plugins.LiToast.show({ text: i18n('sharePGN'), duration: 'short', position: 'bottom' })
         )}
       />
       <button className="action_bar_button" data-icon="A"

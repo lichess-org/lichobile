@@ -36,7 +36,7 @@ export default function renderActionsBar(ctrl: AnalyseCtrl, isPortrait: boolean)
         <button className={'action_bar_button fa fa-' + (ctrl.settings.s.smallBoard ? 'expand' : 'compress')}
           oncreate={helper.ontap(
             ctrl.settings.toggleBoardSize,
-            () => Plugins.Toast.show({ text: 'Expand/compress board', duration: 'short' })
+            () => Plugins.LiToast.show({ text: 'Expand/compress board', duration: 'short', position: 'bottom' })
           )}
         /> : null
       }

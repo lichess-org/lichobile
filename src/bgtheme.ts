@@ -37,7 +37,7 @@ export function loadImage(
 
 export function handleError(err: any) {
   console.error(err)
-  Plugins.Toast.show({ text: 'Cannot load theme file', duration: 'long' })
+  Plugins.LiToast.show({ text: 'Cannot load theme file', duration: 'long' })
 }
 
 export function createStylesheetRule(theme: string, { data }: FileReadResult): void {

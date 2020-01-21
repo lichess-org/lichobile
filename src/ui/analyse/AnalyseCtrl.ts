@@ -102,7 +102,7 @@ export default class AnalyseCtrl {
     this._currentTabIndex = (!this.study || this.study.data.chapter.tags.length === 0) && this.synthetic ? 0 : 1
 
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
-      Plugins.Toast.show({ text: `Analysis board does not support ${this.data.game.variant.name} variant.`, duration: 'short' })
+      Plugins.LiToast.show({ text: `Analysis board does not support ${this.data.game.variant.name} variant.`, duration: 'short' })
       router.set('/')
     }
 

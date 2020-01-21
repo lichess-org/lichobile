@@ -131,7 +131,7 @@ export function handleXhrError(error: ErrorResponse): void {
   else if (data.global && data.global.constructor === Array) {
     message += ` ${i18n(data.global[0])}`
   }
-  Plugins.Toast.show({ text: message, duration: 'short' })
+  Plugins.LiToast.show({ text: message, duration: 'short' })
 }
 
 export function serializeQueryParameters(obj: StringMap): string {

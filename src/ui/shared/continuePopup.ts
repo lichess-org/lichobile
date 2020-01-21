@@ -85,7 +85,7 @@ export default {
                 if (validateFen(f, v) && positionLooksLegit(f)) {
                   router.set(`/ai/variant/${v}/fen/${encodeURIComponent(f)}/color/${c}`)
                 } else {
-                  Plugins.Toast.show({ text: 'Invalid FEN', duration: 'short' })
+                  Plugins.LiToast.show({ text: 'Invalid FEN', duration: 'short' })
                 }
               }
             })
@@ -99,7 +99,7 @@ export default {
                 if (validateFen(f, v) && positionLooksLegit(f)) {
                   router.set(`/otb/variant/${v}/fen/${encodeURIComponent(f)}`)
                 } else {
-                  Plugins.Toast.show({ text: 'Invalid FEN', duration: 'short' })
+                  Plugins.LiToast.show({ text: 'Invalid FEN', duration: 'short' })
                 }
               }
             })

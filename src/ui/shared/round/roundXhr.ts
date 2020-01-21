@@ -31,7 +31,7 @@ export function syncNote(gameId: string, notes: string) {
     body: serializeQueryParameters({ text: notes })
   }, false)
   .catch(err => {
-    Plugins.Toast.show({ text: i18n('notesSynchronizationHasFailed'), duration: 'short' })
+    Plugins.LiToast.show({ text: i18n('notesSynchronizationHasFailed'), duration: 'short' })
     throw err
   })
 }

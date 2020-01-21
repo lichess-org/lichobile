@@ -45,7 +45,7 @@
 //           signupModal.close()
 //           router.set(`/@/${data.id}`)
 //           setTimeout(() => {
-//             Plugins.Toast.show({ text: i18n('loginSuccessful'), duration: 'long' })
+//             Plugins.LiToast.show({ text: i18n('loginSuccessful'), duration: 'long' })
 //           }, 1000)
 //         })
 //         .catch(handleXhrError)

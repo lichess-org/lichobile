@@ -100,7 +100,7 @@ function submit(form: HTMLFormElement) {
   session.login(username, password, token)
   .then(() => {
     close()
-    Plugins.Toast.show({ text: i18n('loginSuccessful'), duration: 'short' })
+    Plugins.LiToast.show({ text: i18n('loginSuccessful'), duration: 'short' })
     signals.afterLogin.dispatch()
     redraw()
     // reconnect socket to refresh friends...

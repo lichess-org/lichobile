@@ -33,7 +33,7 @@ export class NotesCtrl {
     .catch(() => {
       this.syncing = false
       redraw()
-      Plugins.Toast.show({ text: 'Could not read notes from server.', duration: 'short' })
+      Plugins.LiToast.show({ text: 'Could not read notes from server.', duration: 'short' })
     })
 
   }

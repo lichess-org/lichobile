@@ -170,7 +170,7 @@ function submit(form: HTMLFormElement) {
       checkEmail = true
       redraw()
     } else {
-      Plugins.Toast.show({ text: i18n('loginSuccessful'), duration: 'short' })
+      Plugins.LiToast.show({ text: i18n('loginSuccessful'), duration: 'short' })
       socket.reconnectCurrent()
       redraw()
       loginModal.close()

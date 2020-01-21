@@ -294,7 +294,7 @@ export default {
       <button className="action_bar_button fa fa-pencil"
         oncreate={helper.ontap(
           () => ctrl.notes && ctrl.notes.open(),
-          () => Plugins.Toast.show({ text: i18n('notes'), duration: 'short' })
+          () => Plugins.LiToast.show({ text: i18n('notes'), duration: 'short', position: 'bottom' })
         )} />
     )
   },

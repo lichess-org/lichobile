@@ -73,7 +73,7 @@ function renderForm() {
         'Terms of Service'
       ), '.'
     ]),
-    h('form.login', {
+    h('form.defaultForm.login', {
       onsubmit: function(e: Event) {
         e.preventDefault()
         return submit((e.target as HTMLFormElement))

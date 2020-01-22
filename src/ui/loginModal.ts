@@ -31,7 +31,7 @@ export default {
         h('h2', i18n('signIn'))
       ]),
       h('div.modal_content', [
-        h('form.login', {
+        h('form.defaultForm.login', {
           onsubmit: (e: Event) => {
             e.preventDefault()
             submit((e.target as HTMLFormElement))

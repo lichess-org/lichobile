@@ -125,11 +125,16 @@ function showSavedPrefToast(data: string): string {
   return data
 }
 
-function setKidMode(): Promise<string> {
-  return fetchText('/account/kid?v=' + isKidMode(), {
-    method: 'POST'
-  })
-  .then(showSavedPrefToast)
+function setKidMode(v: boolean, data: Record<string, string>): Promise<void> {
+  return fetchText(`/account/kid?v=${v}`, {
+    method: 'POST',
+    body: new URLSearchParams(data),
+    headers: {
+      'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'Accept': 'application/json, text/*'
+    },
+  }, true)
+  .then(refresh)
 }
 
 function numValue(v: string | boolean | number): string {

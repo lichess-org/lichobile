@@ -39,7 +39,7 @@ const TV: Mithril.Component<TVAttrs, State> = {
     })
     .catch(error => {
       handleXhrError(error)
-      if (error.status === 404) {
+      if (error.status === 404 && settings.tv.channel() !== 'best') {
         settings.tv.channel('best')
         router.set('/tv/', true)
       }

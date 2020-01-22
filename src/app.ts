@@ -108,7 +108,9 @@ function onOnline() {
         }
         push.register()
         challengesApi.refresh()
-        Plugins.Badge.setNumber({ badge: session.myTurnGames().length })
+        if (Capacitor.platform === 'ios') {
+          Plugins.Badge.setNumber({ badge: session.myTurnGames().length })
+        }
         redraw()
 
         // TODO remove in next version (from 7.0.0)
@@ -118,7 +120,9 @@ function onOnline() {
       })
       .catch(() => {
         console.log('connected as anonymous')
-        Plugins.Badge.setNumber({ badge: 0 })
+        if (Capacitor.platform === 'ios') {
+          Plugins.Badge.setNumber({ badge: 0 })
+        }
       })
 
     } else {

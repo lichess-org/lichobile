@@ -108,7 +108,7 @@ function tournamentPositionInfo(position: Opening) {
   return (
     <div className={'tournamentPositionInfo' + (position.wikiPath ? ' withLink' : '')}
       oncreate={helper.ontapY(() => position && position.wikiPath &&
-        Plugins.Browser.open({ url: `https://en.wikipedia.org/wiki/${position.wikiPath}` })
+        window.open(`https://en.wikipedia.org/wiki/${position.wikiPath}`, '_blank')
       )}
     >
       {position.eco + ' ' + position.name}

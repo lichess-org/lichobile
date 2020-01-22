@@ -82,7 +82,7 @@ export default {
             oncreate: helper.ontap(signupModal.open)
           }, [i18n('signUp')]),
           h('a', {
-            oncreate: helper.ontap(() => Plugins.Browser.open({ url: `https://lichess.org/password/reset` }))
+            href: 'https://lichess.org/password/reset'
           }, [i18n('passwordReset')])
         ]),
       ])

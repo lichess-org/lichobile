@@ -237,12 +237,12 @@ function createToken() {
 
 export function openWebsiteAuthPage(path: string) {
   const openAnon = () => {
-    Plugins.Browser.open({ url: `${globalConfig.apiEndPoint}${path}` })
+    window.open(`${globalConfig.apiEndPoint}${path}`, '_blank')
   }
   if (session.isConnected()) {
     createToken()
     .then((data: {url: string}) => {
-      Plugins.Browser.open({ url: data.url + `?referrer=${encodeURIComponent(path)}` })
+      window.open(data.url + `?referrer=${encodeURIComponent(path)}`, '_blank')
     })
     .catch(openAnon)
   } else {

@@ -68,7 +68,7 @@ function renderForm() {
       'By registering, you agree to be bound by our ',
       h('a', {
         oncreate: helper.ontap(() =>
-          Plugins.Browser.open({ url: 'https://lichess.org/terms-of-service' })
+          window.open('https://lichess.org/terms-of-service', '_blank')
         )},
         'Terms of Service'
       ), '.'

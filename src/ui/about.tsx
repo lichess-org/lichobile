@@ -1,5 +1,4 @@
 import * as Mithril from 'mithril'
-import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
 import router from '../router'
 import socket from '../socket'
@@ -61,7 +60,7 @@ export default {
 function externalLink(text: string, url: string): Mithril.Child {
   return h('a', {
     className: 'external_link',
-    onclick: () => Plugins.Browser.open({ url }),
+    onclick: () => window.open(url, '_blank'),
   }, text)
 }
 

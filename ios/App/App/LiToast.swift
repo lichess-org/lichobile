@@ -12,7 +12,7 @@ public class LiToast : CAPPlugin {
     }
     let durationStyle = call.get("durationStyle", String.self, "long")!
     let duration = durationStyle == "short" ? 1500 : 3000
-    let position = call.get("position", String.self, "bottom")
+    let position = call.get("position", String.self, "center")
     
     DispatchQueue.main.async {
       let vc = self.bridge!.viewController

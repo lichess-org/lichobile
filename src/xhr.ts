@@ -236,16 +236,20 @@ function createToken() {
 }
 
 export function openWebsiteAuthPage(path: string) {
-  const openAnon = () => {
-    window.open(`${globalConfig.apiEndPoint}${path}`, '_blank')
-  }
-  if (session.isConnected()) {
+  const anonUrl = `${globalConfig.apiEndPoint}${path}`
+  // we use the Browser plugin to open authenticated pages because window.open
+  // doesn't work inside a promise
+  // we don't want to open a internal browser in kid mode since it is not
+  // protected like the device browser can be
+  if (session.isConnected() && !session.isKidMode()) {
     createToken()
     .then((data: {url: string}) => {
-      window.open(data.url + `?referrer=${encodeURIComponent(path)}`, '_blank')
+      Plugins.Browser.open({ url: data.url + `?referrer=${encodeURIComponent(path)}` })
     })
-    .catch(openAnon)
+    .catch(() => {
+      Plugins.Browser.open({ url: anonUrl })
+    })
   } else {
-    openAnon()
+    window.open(anonUrl, '_blank')
   }
 }

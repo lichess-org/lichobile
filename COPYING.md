@@ -50,6 +50,7 @@ www/images/pieces/fantasy | [Maurizio Monge](http://poisson.phc.unipi.it/~monge/
 www/images/pieces/spatial | [Maurizio Monge](http://poisson.phc.unipi.it/~monge/chess_art.php) | "give credit in a suitable way"
 www/images/pieces/reilly | [Reilly Craig](https://instagram.com/fader_) |
 www/images/pieces/riohacha |
+www/images/pieces/neo | [denguitarist](https://userstyles.org/styles/135464/lichess-pieces-neo-modified) |
 Lichess icon font in www/fonts |
 
 External services

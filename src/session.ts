@@ -164,7 +164,7 @@ function savePreferences(): Promise<string> {
     'coords',
     'replay',
     'blindfold'
-  ])).reduce(makeReducer('display.'), {})
+  ])).reduce(makeReducer('display.'), {}) as StringMap
 
   const behavior = Object.entries(pick(prefs, [
     'premove',
@@ -174,7 +174,7 @@ function savePreferences(): Promise<string> {
     'submitMove',
     'confirmResign',
     'moretime'
-  ])).reduce(makeReducer('behavior.'), {})
+  ])).reduce(makeReducer('behavior.'), {}) as StringMap
 
   const rest = Object.entries(pick(prefs, [
     'clockTenths',
@@ -184,7 +184,7 @@ function savePreferences(): Promise<string> {
     'challenge',
     'message',
     'insightShare'
-  ])).reduce(makeReducer(''), {})
+  ])).reduce(makeReducer(''), {}) as StringMap
 
   return fetchText('/account/preferences', {
     method: 'POST',

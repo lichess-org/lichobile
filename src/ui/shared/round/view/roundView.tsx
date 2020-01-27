@@ -548,8 +548,8 @@ function renderGamePopup(ctrl: OnlineRound) {
 }
 
 function renderGameActionsBar(ctrl: OnlineRound) {
-  const answerRequired = ctrl.data.opponent.proposingTakeback ||
-    ctrl.data.opponent.offeringDraw ||
+  const answerRequired = ((ctrl.data.opponent.proposingTakeback ||
+    ctrl.data.opponent.offeringDraw) && !gameStatusApi.finished(ctrl.data)) ||
     gameApi.forceResignable(ctrl.data) ||
     ctrl.data.opponent.offeringRematch
 

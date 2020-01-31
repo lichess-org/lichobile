@@ -243,12 +243,12 @@ main
   display flex
   flex-flow column nowrap
   &.withFooter
-    height 'calc(var(--content-height) - %s)' % footerHeight
+    height 'calc(var(--content-height) - %s - env(safe-area-inset-bottom))' % footerHeight
   &.fullScreen
     height 100%
   @media only screen and (orientation portrait) and (min-width 768px) and (min-height 768px)
     &.withFooter
-      height 'calc(var(--content-height) - %s)' % footerHeightBigScreens
+      height 'calc(var(--content-height) - %s - env(safe-area-inset-bottom))' % footerHeightBigScreens
 
 .main_footer
   flex 0 0 footerHeight
@@ -257,3 +257,5 @@ main
   // iphone X support
   margin-bottom: constant(safe-area-inset-bottom);
   margin-bottom: env(safe-area-inset-bottom);
+  @media only screen and (orientation portrait) and (min-width 768px) and (min-height 768px)
+    flex 0 0 footerHeightBigScreens

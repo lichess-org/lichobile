@@ -44,17 +44,20 @@ export default {
       (notification: PushNotification) => {
         if (isForeground()) {
           switch (notification.data['lichess.type']) {
-            case 'challengeAccept':
-              session.refresh()
-              break
             case 'corresAlarm':
             case 'gameTakebackOffer':
             case 'gameDrawOffer':
-            case 'gameFinish':
               session.refresh()
               break
+            case 'challengeAccept':
             case 'gameMove':
+            case 'gameFinish':
               session.refresh()
+              .then(() => {
+                if (Capacitor.platform === 'ios') {
+                  Plugins.Badge.setNumber({ badge: session.myTurnGames().length })
+                }
+              })
               break
           }
         }

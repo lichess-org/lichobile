@@ -255,7 +255,7 @@ function renderCarouselIndicators() {
       Math.ceil(scroller.innerElements.length / 2) :
       scroller.innerElements.length
     return h('div.carouselIndicators',
-      Array.from(Array(elsNb).keys()).map(i =>
+      Array(elsNb).fill(1).map((_, i) =>
         h('i.indicator', {
           className: i === scroller.currentSlide ? 'current' : ''
         })

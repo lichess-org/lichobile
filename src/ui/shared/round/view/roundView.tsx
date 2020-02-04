@@ -575,7 +575,7 @@ function renderGameActionsBar(ctrl: OnlineRound) {
   return (
     <section className="actions_bar">
       {gmButton}
-      {ctrl.chat ?
+      {ctrl.chat && !ctrl.isZen() ?
         <button className="action_bar_button fa fa-comments withChip"
           oncreate={helper.ontap(ctrl.chat.open)}
         >

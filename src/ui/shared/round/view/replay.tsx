@@ -8,10 +8,9 @@ import OnlineRound from '../OnlineRound'
 
 let pieceNotation: boolean
 
-export function renderReplay(ctrl: OnlineRound, key?: string) {
+export function renderReplay(ctrl: OnlineRound) {
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
   return h('div.replay.box', {
-    key,
     className: helper.classSet({
       displayPieces: !!pieceNotation,
     }),
@@ -23,7 +22,7 @@ export function renderReplay(ctrl: OnlineRound, key?: string) {
   }, renderMoves(ctrl))
 }
 
-export function renderInlineReplay(ctrl: OnlineRound, key?: string) {
+export function renderInlineReplay(ctrl: OnlineRound) {
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
 
   if (!ctrl.vm.moveList || ctrl.isZen()) {
@@ -31,7 +30,6 @@ export function renderInlineReplay(ctrl: OnlineRound, key?: string) {
   }
 
   return h('div.replay_inline', {
-    key,
     className: helper.classSet({
       displayPieces: !!pieceNotation,
     }),

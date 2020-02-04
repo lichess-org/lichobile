@@ -210,7 +210,6 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessground: ctrl.chessground,
-    key: isPortrait ? 'board' : undefined,
   }, playable ? [
     !myTurn ? renderExpiration(ctrl, 'opponent', myTurn) : null,
     myTurn ? renderExpiration(ctrl, 'player', myTurn) : null,
@@ -219,26 +218,20 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const flip = !ctrl.data.tv && ctrl.vm.flip
 
   if (isPortrait) {
-    // !! caution here
-    // every element in the array must have a mithril key
     return [
-      helper.hasSpaceForInlineReplay(vd, isPortrait) ?
-        renderInlineReplay(ctrl, 'replay') :
-        null,
+      helper.hasSpaceForInlineReplay(vd, isPortrait) ? renderInlineReplay(ctrl) : null,
       flip ? player : opponent,
       board,
       flip ? opponent : player,
-      renderGameActionsBar(ctrl, 'actions_bar')
+      renderGameActionsBar(ctrl)
     ]
   } else {
     return [
       board,
-      // !! caution here
-      // every element in the array must have a mithril key
       h('section.table', [
         flip ? player : opponent,
-        renderReplay(ctrl, 'replay'),
-        renderGameActionsBar(ctrl, 'actions_bar'),
+        renderReplay(ctrl),
+        renderGameActionsBar(ctrl),
         flip ? opponent : player,
       ]),
     ]
@@ -374,7 +367,7 @@ function renderPlayTable(
   })
 
   return (
-    <section className={classN} key={'table' + position}>
+    <section className={classN}>
       {renderAntagonistInfo(ctrl, player, material, position, isCrazy)}
       { !!step.crazy ?
         h(CrazyPocket, {
@@ -555,7 +548,7 @@ function renderGamePopup(ctrl: OnlineRound) {
   )
 }
 
-function renderGameActionsBar(ctrl: OnlineRound, key?: string) {
+function renderGameActionsBar(ctrl: OnlineRound) {
   const answerRequired = ((ctrl.data.opponent.proposingTakeback ||
     ctrl.data.opponent.offeringDraw) && !gameStatusApi.finished(ctrl.data)) ||
     gameApi.forceResignable(ctrl.data) ||
@@ -577,19 +570,25 @@ function renderGameActionsBar(ctrl: OnlineRound, key?: string) {
     <button className={gmClass} data-icon={gmDataIcon} oncreate={helper.ontap(ctrl.showActions)} /> :
     <button className={gmClass} oncreate={helper.ontap(ctrl.showActions)} />
 
-  return h('section.actions_bar', {
-    key
-  }, [
-    gmButton,
-    ctrl.chat ?
-      h('button.action_bar_button.fa.fa-comments.withChip', {
-        oncreate: helper.ontap(ctrl.chat.open),
-      }, ctrl.chat.nbUnread > 0 ? h('span.chip', ctrl.chat.nbUnread <= 99 ? ctrl.chat.nbUnread : 99) : null
-      ) : null,
-    ctrl.notes ? gameButton.notes(ctrl) : null,
-    gameButton.flipBoard(ctrl),
-    gameApi.playable(ctrl.data) ? null : gameButton.analysisBoardIconOnly(ctrl),
-    gameButton.backward(ctrl),
-    gameButton.forward(ctrl),
-  ])
+  return (
+    <section className="actions_bar">
+      {gmButton}
+      {ctrl.chat ?
+        <button className="action_bar_button fa fa-comments withChip"
+          oncreate={helper.ontap(ctrl.chat.open)}
+        >
+         { ctrl.chat.nbUnread > 0 ?
+          <span className="chip">
+            { ctrl.chat.nbUnread <= 99 ? ctrl.chat.nbUnread : 99 }
+          </span> : null
+         }
+        </button> : null
+      }
+      {ctrl.notes ? gameButton.notes(ctrl) : null}
+      {gameButton.flipBoard(ctrl)}
+      {gameApi.playable(ctrl.data) ? null : gameButton.analysisBoardIconOnly(ctrl)}
+      {gameButton.backward(ctrl)}
+      {gameButton.forward(ctrl)}
+    </section>
+  )
 }

@@ -65,7 +65,7 @@ export default {
       ])
     ])
   },
-  resign: function(ctrl: OnlineRound) {
+  resign(ctrl: OnlineRound) {
     return gameApi.resignable(ctrl.data) && !ctrl.vm.confirmResign ? h('button', {
       className: 'resign',
       'data-icon': 'b',
@@ -112,6 +112,31 @@ export default {
         oncreate: helper.ontap(() => { ctrl.socketIface.send('draw-claim') })
       }, i18n('claimADraw'))
     ]) : null
+  },
+  offerDraw(ctrl: OnlineRound) {
+    return ctrl.canOfferDraw() && !ctrl.vm.confirmDraw ? h('button', {
+      className: 'draw-yes',
+      'data-icon': '2',
+      oncreate: helper.ontap(() => { ctrl.vm.confirmDraw = true })
+    }, i18n('offerDraw')) : null
+  },
+  drawConfirmation(ctrl: OnlineRound) {
+    return ctrl.canOfferDraw() && ctrl.vm.confirmDraw ? (
+      <div className="negotiation">
+        <div className="binary_choice_wrapper">
+          <button className="binary_choice" data-icon="E"
+            oncreate={helper.ontap(() => { ctrl.offerDraw() })}
+          >
+            {i18n('offerDraw')}
+          </button>
+          <button className="binary_choice" data-icon="L"
+            oncreate={helper.ontap(() => { ctrl.vm.confirmDraw = false })}
+          >
+            {i18n('cancel')}
+          </button>
+        </div>
+      </div>
+    ) : null
   },
   cancelDrawOffer(ctrl: OnlineRound) {
     if (ctrl.data.player.offeringDraw) return h('div.negotiation', [

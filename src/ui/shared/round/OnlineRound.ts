@@ -41,6 +41,7 @@ interface VM {
   showingActions: boolean
   showingShareActions: boolean
   confirmResign: boolean
+  confirmDraw: boolean
   goneBerserk: {
     [index: string]: boolean
   },
@@ -124,6 +125,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       showingActions: false,
       showingShareActions: false,
       confirmResign: false,
+      confirmDraw: false,
       goneBerserk: {
         [this.data.player.color]: !!this.data.player.berserk,
         [this.data.opponent.color]: !!this.data.opponent.berserk

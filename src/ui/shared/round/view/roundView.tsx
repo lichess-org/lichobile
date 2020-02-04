@@ -452,7 +452,8 @@ function renderGameRunningActions(ctrl: OnlineRound) {
 
   const gameControls = gameButton.forceResign(ctrl) || [
     gameButton.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
-    gameButton.standard(ctrl, ctrl.canOfferDraw, '2', 'offerDraw', 'draw-yes', ctrl.offerDraw),
+    gameButton.offerDraw(ctrl),
+    gameButton.drawConfirmation(ctrl),
     gameButton.threefoldClaimDraw(ctrl),
     gameButton.resign(ctrl),
     gameButton.resignConfirmation(ctrl),

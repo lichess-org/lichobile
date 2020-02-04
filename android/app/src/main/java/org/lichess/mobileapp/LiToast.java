@@ -13,7 +13,7 @@ public class LiToast extends Plugin {
   private static final int GRAVITY_CENTER = Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL;
   private static final int GRAVITY_BOTTOM = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
 
-  private static final int BASE_TOP_BOTTOM_OFFSET = 20;
+  private static final int BASE_TOP_BOTTOM_OFFSET = 40;
 
   @PluginMethod()
   public void show(PluginCall call) {

@@ -36,7 +36,7 @@ public class LiToast : CAPPlugin {
       let minHeight = min(maxSizeTitle.height, expectedSizeTitle.height)
       expectedSizeTitle = CGSize(width: minWidth, height: minHeight)
         
-      let topBottomOffset: CGFloat = 20
+      let topBottomOffset: CGFloat = 40
       let height = expectedSizeTitle.height+32
       let y: CGFloat
       if (position == "top") {

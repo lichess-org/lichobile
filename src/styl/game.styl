@@ -1,3 +1,37 @@
+.content_round.roundView
+  @media only screen and (orientation: portrait)
+    > .replay_inline
+      order 1
+    > .playable_board_wrapper
+      order 3
+    > .playTable
+      &.player
+        order 4
+        &.flip
+          order 2
+      &.opponent
+        order 2
+        &.flip
+          order 4
+    > .actions_bar
+      order 5
+  @media only screen and (orientation: landscape)
+    > .table
+      > .replay
+        order 2
+      > .actions_bar
+        order 3
+      > .playTable
+        &.opponent
+          order 1
+          &.flip
+            order 4
+        &.player
+          order 4
+          &.flip
+            order 1
+
+
 .header-gameTitle
   width 100%
   overflow hidden

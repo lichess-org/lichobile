@@ -10,6 +10,7 @@ interface Attrs {
   header: Mithril.Children
   color?: string
   handlers?: Handlers
+  klass?: string
 }
 
 interface State {
@@ -45,7 +46,9 @@ export default {
       className: color,
     }, [
       h('header.main_header.board', header),
-      h('div.content_round', children),
+      h('div.content_round', {
+        className: attrs.klass || ''
+      }, children),
       h('div#menu-close-overlay.menu-backdrop', { oncreate: menu.backdropCloseHandler })
     ])
   }

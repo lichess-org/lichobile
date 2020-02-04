@@ -40,7 +40,10 @@ export default function view(ctrl: OnlineRound) {
   return layout.board(
     renderHeader(ctrl),
     renderContent(ctrl, isPortrait),
-    overlay(ctrl)
+    overlay(ctrl),
+    undefined,
+    undefined,
+    'roundView'
   )
 }
 
@@ -215,24 +218,22 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
     myTurn ? renderExpiration(ctrl, 'player', myTurn) : null,
   ] : [])
 
-  const flip = !ctrl.data.tv && ctrl.vm.flip
-
   if (isPortrait) {
     return [
       helper.hasSpaceForInlineReplay(vd, isPortrait) ? renderInlineReplay(ctrl) : null,
-      flip ? player : opponent,
+      opponent,
       board,
-      flip ? opponent : player,
+      player,
       renderGameActionsBar(ctrl)
     ]
   } else {
     return [
       board,
       h('section.table', [
-        flip ? player : opponent,
+        opponent,
         renderReplay(ctrl),
         renderGameActionsBar(ctrl),
-        flip ? opponent : player,
+        player,
       ]),
     ]
   }
@@ -364,10 +365,11 @@ function renderPlayTable(
     playTable: true,
     crazy: isCrazy,
     clockOnLeft: ctrl.vm.clockPosition === 'left',
+    flip: !ctrl.data.tv && ctrl.vm.flip,
   })
 
   return (
-    <section className={classN}>
+    <section className={classN + ' ' + position}>
       {renderAntagonistInfo(ctrl, player, material, position, isCrazy)}
       { !!step.crazy ?
         h(CrazyPocket, {

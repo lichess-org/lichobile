@@ -30,11 +30,12 @@ export default {
     content: Mithril.Children,
     overlay?: Mithril.Children,
     handlers?: Handlers,
-    color?: string
+    color?: string,
+    klass?: string,
   ) {
     background = background || settings.general.theme.background()
     return h('div.view-container', containerOpts(background), [
-      h(MainBoard, { header, color, handlers }, content),
+      h(MainBoard, { header, color, handlers, klass }, content),
       h(MenuView),
       gamesMenu.view(),
       loginModal.view(),

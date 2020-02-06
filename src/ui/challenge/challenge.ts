@@ -1,6 +1,5 @@
 import * as Mithril from 'mithril'
 import Stream from 'mithril/stream'
-import throttle from 'lodash-es/throttle'
 import socket, { SocketIFace } from '../../socket'
 import redraw from '../../utils/redraw'
 import * as helper from '../helper'
@@ -17,12 +16,11 @@ import { header as headerWidget } from '../shared/common'
 import { joinPopup, awaitChallengePopup, awaitInvitePopup } from './challengeView'
 import { ChallengeState } from './interfaces'
 
-
 interface Attrs {
   id: string
 }
 
-const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
+export default {
   oncreate: helper.viewFadeIn,
 
   onremove() {
@@ -33,10 +31,6 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
 
   oninit(vnode) {
     let socketIface: SocketIFace
-
-    const throttledPing = throttle((): void => {
-      if (socketIface) socketIface.send('ping')
-    }, 1000)
 
     const challenge: Stream<Challenge | undefined> = Stream(undefined)
 
@@ -61,8 +55,9 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
     }
 
     const pingNow = () => {
-      throttledPing()
+      clearTimeout(this.pingTimeoutId)
       this.pingTimeoutId = setTimeout(pingNow, 2000)
+      if (socketIface) socketIface.send('ping')
     }
 
     const onSocketOpen = () => {
@@ -89,7 +84,10 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
       const c = challenge()
       if (c) {
         return acceptChallenge(c.id)
-        .then(d => router.set('/game' + d.url.round, true))
+        .then(d => {
+          clearTimeout(this.pingTimeoutId)
+          router.set('/game' + d.url.round, true)
+        })
         .then(() => challengesApi.remove(c.id))
       }
       return Promise.reject('no challenge')
@@ -99,7 +97,10 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
       const c = challenge()
       if (c) {
         return declineChallenge(c.id)
-        .then(() => challengesApi.remove(c.id))
+        .then(() => {
+          clearTimeout(this.pingTimeoutId)
+          challengesApi.remove(c.id)
+        })
         .then(router.backHistory)
       }
       return Promise.reject('no challenge')
@@ -109,7 +110,10 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
       const c = challenge()
       if (c) {
         return cancelChallenge(c.id)
-        .then(() => challengesApi.remove(c.id))
+        .then(() => {
+          clearTimeout(this.pingTimeoutId)
+          challengesApi.remove(c.id)
+        })
         .then(router.backHistory)
       }
       return Promise.reject('no challenge')
@@ -143,6 +147,4 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
 
     return layout.board(header, board, overlay)
   }
-}
-
-export default ChallengeScreen
+} as Mithril.Component<Attrs, ChallengeState>

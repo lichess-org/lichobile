@@ -603,6 +603,10 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.userJump(this.lastPly())
     this.chessground.stop()
 
+    if (this.vm.submitFeedback) {
+      this.vm.submitFeedback = undefined
+    }
+
     if (o.ratingDiff) {
       d.player.ratingDiff = o.ratingDiff[d.player.color]
       d.opponent.ratingDiff = o.ratingDiff[d.opponent.color]

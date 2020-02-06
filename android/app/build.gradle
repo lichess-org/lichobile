@@ -40,6 +40,11 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':capacitor-cordova-android-plugins')
+    implementation('com.google.firebase:firebase-messaging:18.0.0') {
+      exclude group: 'com.google.firebase', module: 'firebase-core'
+      exclude group: 'com.google.firebase', module: 'firebase-analytics'
+      exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
+    }
 }
 
 apply from: 'capacitor.build.gradle'

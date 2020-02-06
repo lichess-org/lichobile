@@ -122,15 +122,18 @@ export function handleXhrError(error: ErrorResponse): void {
 
   message = i18n(message)
 
-  if (typeof data === 'string') {
-    message += ` ${data}`
+  if (data) {
+    if (typeof data === 'string') {
+      message += ` ${data}`
+    }
+    else if (typeof data.error === 'string') {
+      message += ` ${data.error}`
+    }
+    else if (data.global && data.global.constructor === Array) {
+      message += ` ${i18n(data.global[0])}`
+    }
   }
-  else if (typeof data.error === 'string') {
-    message += ` ${data.error}`
-  }
-  else if (data.global && data.global.constructor === Array) {
-    message += ` ${i18n(data.global[0])}`
-  }
+
   Plugins.LiToast.show({ text: message, duration: 'short' })
 }
 

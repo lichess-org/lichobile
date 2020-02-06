@@ -1,10 +1,10 @@
 declare namespace Rlite {
-  interface RouteParams<T> {
+  interface RouteParams {
     url: string
-    params: T
+    params: any
   }
   interface Rlite {
-    add<T>(route: string, handler: (params: RouteParams<T>) => void): void
+    add(route: string, handler: (params: RouteParams) => void): void
     run(url: string): boolean
     exists(url: string): boolean
   }

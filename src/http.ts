@@ -10,7 +10,7 @@ const baseUrl = globalConfig.apiEndPoint
 export interface ErrorResponse {
   status: number
   // body is either json or text
-  body: any
+  body?: any
 }
 
 export interface RequestOpts {

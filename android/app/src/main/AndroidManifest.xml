@@ -37,7 +37,48 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/custom_url_scheme" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPattern="/........" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPattern="/......../black" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPattern="/......../white" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPrefix="/analysis" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPrefix="/editor" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPrefix="/challenge" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPrefix="/inbox" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPrefix="/@" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPrefix="/player" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPrefix="/tournament" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPrefix="/training" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPrefix="/tv" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPrefix="/signup/confirm" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPrefix="/study" />
             </intent-filter>
 
         </activity>

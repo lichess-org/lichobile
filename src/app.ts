@@ -10,6 +10,7 @@ import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
 import * as helper from './ui/helper'
 import lobby from './ui/lobby'
+import deepLinks from './deepLinks'
 import push from './push'
 import router from './router'
 import sound from './sound'
@@ -35,8 +36,7 @@ export default function appInit(info: DeviceInfo) {
 
   routes.init()
 
-  // TODO
-  // deepLinks.init()
+  deepLinks.init()
   push.init()
 
   requestIdleCallback(() => {

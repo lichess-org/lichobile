@@ -8,6 +8,10 @@ import OnlineRound from '../OnlineRound'
 
 let pieceNotation: boolean
 
+export function onPieceNotationChange(pn: boolean) {
+  pieceNotation = pn
+}
+
 export function renderReplay(ctrl: OnlineRound) {
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
   return h('div.replay.box', {

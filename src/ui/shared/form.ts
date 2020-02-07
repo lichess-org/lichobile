@@ -104,7 +104,7 @@ export default {
         name: name,
         disabled,
         checked: isOn,
-        onchange: function() {
+        onchange: () => {
           const newVal = !isOn
           settingsProp(newVal)
           if (callback) callback(newVal)

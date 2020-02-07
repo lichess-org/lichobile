@@ -1,6 +1,7 @@
 import * as helper from '../helper'
 import { dropShadowHeader, backButton } from '../shared/common'
 import formWidgets from '../shared/form'
+import { onPieceNotationChange } from '../shared/round/view/replay'
 import layout from '../layout'
 import i18n from '../../i18n'
 import settings from '../../settings'
@@ -24,7 +25,9 @@ function renderBody() {
             { label: i18n('chessPieceSymbol'), value: true },
             { label: i18n('pgnLetter'), value: false },
           ],
-          settings.game.pieceNotation
+          settings.game.pieceNotation,
+          false,
+          onPieceNotationChange,
         )
       ),
       h('li.list_item',

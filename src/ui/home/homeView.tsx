@@ -266,16 +266,17 @@ function renderFeatured(ctrl: HomeCtrl) {
 }
 
 function renderDailyPuzzle(ctrl: HomeCtrl) {
-  const puzzle = ctrl.dailyPuzzle
-  const boardConf = puzzle ? {
+  const daily = ctrl.dailyPuzzle
+  const boardConf = daily && daily.puzzle && daily.game && daily.game.treeParts ? {
     fixed: true,
-    fen: puzzle.fen,
-    orientation: puzzle.color,
-    link: () => router.set(`/training/${puzzle.id}?initFen=${puzzle.fen}&initColor=${puzzle.color}`),
+    fen: daily.game.treeParts.fen,
+    lastMove: daily.game.treeParts.uci,
+    orientation: daily.puzzle.color,
+    link: () => router.set(`/training/${daily.puzzle.id}?initFen=${daily.puzzle.fen}&initColor=${daily.puzzle.color}`),
     boardTitle: [
       h('span', i18n('puzzleOfTheDay')),
       h('br'),
-      h('span', puzzle.color === 'white' ? i18n('whitePlays') : i18n('blackPlays')),
+      h('span', daily.puzzle.color === 'white' ? i18n('whitePlays') : i18n('blackPlays')),
     ]
   } : {
     fixed: true,

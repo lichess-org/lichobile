@@ -10,7 +10,7 @@ import { timeline as timelineXhr, seeks as corresSeeksXhr, lobby as lobbyXhr, fe
 import { hasNetwork, noop } from '../../utils'
 import { fromNow } from '../../i18n'
 import { isForeground } from '../../utils/appMode'
-import { PongMessage, TimelineEntry, DailyPuzzle, CorrespondenceSeek, FeaturedGame, FeaturedPlayer } from '../../lichess/interfaces'
+import { PongMessage, TimelineEntry, CorrespondenceSeek, FeaturedGame, FeaturedPlayer } from '../../lichess/interfaces'
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
 import { Player } from '../../lichess/interfaces/game'
 import { PuzzleData } from '../../lichess/interfaces/training'
@@ -31,7 +31,7 @@ export default class HomeCtrl {
 
   public featured?: FeaturedGame
   public corresPool: ReadonlyArray<CorrespondenceSeek>
-  public dailyPuzzle?: DailyPuzzle
+  public dailyPuzzle?: PuzzleData
   public featuredTournaments?: ReadonlyArray<TournamentListItem>
   public timeline?: ReadonlyArray<TimelineEntry>
   public offlinePuzzle?: PuzzleData | undefined
@@ -130,7 +130,7 @@ export default class HomeCtrl {
       ])
       .then(results => {
         const [dailyData, featuredTournamentsData] = results
-        this.dailyPuzzle = dailyData.puzzle
+        this.dailyPuzzle = dailyData
         this.featuredTournaments = featuredTournamentsData.featured
         redraw()
       })

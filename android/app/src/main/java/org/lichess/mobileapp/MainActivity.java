@@ -2,6 +2,7 @@ package org.lichess.mobileapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -17,7 +18,9 @@ import com.getcapacitor.Dialogs;
 import com.getcapacitor.Plugin;
 
 import org.lichess.plugin.SoundEffect;
+import org.lichess.mobileapp.BuildConfig;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -36,6 +39,8 @@ public class MainActivity extends BridgeActivity {
       add(LiToast.class);
       add(SoundEffect.class);
     }});
+
+    this.versionUpdateActions();
 
     PackageInfo pInfo = getCurrentWebViewPackageInfo();
     if (pInfo != null) {
@@ -115,6 +120,37 @@ public class MainActivity extends BridgeActivity {
       startActivity(intent);
     } catch (Exception e) {
       Log.e(LOGTAG, "Cannot open Google Play. (" + e.getMessage() + ")");
+    }
+  }
+
+  private void versionUpdateActions() {
+    // fix home quick setup loading bug when going from 6.x to 7.x
+    if (BuildConfig.VERSION_CODE == 7000019) {
+      SharedPreferences prefs = getSharedPreferences("LiVersionCheck", Context.MODE_PRIVATE);
+      SharedPreferences.Editor editor = prefs.edit();
+      int previousVersionCode = prefs.getInt("LAST_VERSION_CODE", 0);
+      if (BuildConfig.VERSION_CODE > previousVersionCode) {
+        deleteDir(getApplicationContext().getCacheDir());
+        editor.putInt("LAST_VERSION_CODE", BuildConfig.VERSION_CODE);
+        editor.apply();
+      }
+    }
+  }
+
+  private static boolean deleteDir(File dir) {
+    if (dir != null && dir.isDirectory()) {
+      String[] children = dir.list();
+      for (int i = 0; i < children.length; i++) {
+        boolean success = deleteDir(new File(dir, children[i]));
+        if (!success) {
+          return false;
+        }
+      }
+      return dir.delete();
+    } else if(dir!= null && dir.isFile()) {
+      return dir.delete();
+    } else {
+      return false;
     }
   }
 }

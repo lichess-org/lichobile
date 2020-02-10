@@ -155,7 +155,7 @@ function renderLinks(user?: Session) {
         <span className="fa fa-trophy"/>{i18n('tournaments')}
       </li> : null
       }
-      <li className="sep_link">{i18n('learn')}</li>
+      <li className="sep_link">{i18n('learnMenu')}</li>
       {online ?
         <li className="side_link" data-route="/training">
           <span data-icon="-"/>{i18n('training')}

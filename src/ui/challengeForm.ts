@@ -52,7 +52,7 @@ function doChallenge() {
       data.challenge.timeControl.type === 'unlimited')) {
 
       // see gamesMenu.ts, sending challenges are right after incoming challenges
-      gamesMenu.open(challengesApi.incoming().length + 2)
+      gamesMenu.open(challengesApi.incoming().length)
     }
     if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {
       router.set(`/challenge/${data.challenge.id}`)

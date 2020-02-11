@@ -25,7 +25,7 @@ let lastJoined: NowPlayingGame | undefined
 export interface GamesMenu {
   lastJoined(): NowPlayingGame | undefined
   resetLastJoined(): void
-  open(): void
+  open(page?: number): void
   close(fromBB?: string): void
   view(): Mithril.Child
 }
@@ -185,7 +185,9 @@ function renderIncomingChallenge(c: Challenge) {
   const mark = c.challenger.provisional ? '?' : ''
   const playerName = `${c.challenger.id} (${c.challenger.rating}${mark})`
 
-  return h('div.card.standard.challenge', [
+  return h('div.card.standard.challenge', {
+    key: 'incomingChallenge' + c.id,
+  }, [
     renderViewOnlyBoard(c.initialFen || standardFen, 'white', undefined, c.variant.key),
     h('div.infos', [
       h('div.icon-game', { 'data-icon': c.perf.icon }),
@@ -223,7 +225,9 @@ function renderSendingChallenge(c: Challenge) {
   const mark = c.destUser.provisional ? '?' : ''
   const playerName = `${c.destUser.id} (${c.destUser.rating}${mark})`
 
-  return h('div.card.standard.challenge.sending', [
+  return h('div.card.standard.challenge.sending', {
+    key: 'sendingChallenges' + c.id,
+  }, [
     renderViewOnlyBoard(c.initialFen || standardFen, 'white', undefined, c.variant.key),
     h('div.infos', [
       h('div.icon-game', { 'data-icon': c.perf.icon }),

@@ -204,7 +204,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public sharePGN = () => {
     this.replay.pgn('White', 'Black')
     .then((data: chess.PgnDumpResponse) =>
-      Plugins.Share.share({ text: data.pgn })
+      Plugins.LiShare.share({ text: data.pgn })
     )
   }
 

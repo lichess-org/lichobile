@@ -116,7 +116,7 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
     ctrl.study!.actionMenu.s.loadingChapterPGN = false
     ctrl.study!.actionMenu.s.loadingStudyPGN = false
     redraw()
-    Plugins.Share.share({ text: pgn })
+    Plugins.LiShare.share({ text: pgn })
   }
 
   function onPgnError(e: ErrorResponse) {
@@ -130,13 +130,13 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
     h('button', {
       oncreate: helper.ontap(() => {
         const url = baseUrl + `study/${ctrl.study!.data.id}`
-        Plugins.Share.share({ url })
+        Plugins.LiShare.share({ url })
       })
     }, [i18n('Study URL')]),
     h('button', {
       oncreate: helper.ontap(() => {
         const url = baseUrl + `study/${ctrl.study!.data.id}/${ctrl.study!.data.chapter.id}`
-        Plugins.Share.share({ url })
+        Plugins.LiShare.share({ url })
       })
     }, [i18n('Current chapter URL')]),
     h('button', {

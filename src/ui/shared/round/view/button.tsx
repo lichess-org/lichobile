@@ -32,7 +32,7 @@ export default {
   shareLink(ctrl: OnlineRound) {
     return h('button', {
       oncreate: helper.ontap(() => {
-        Plugins.Share.share({ url: gameApi.publicUrl(ctrl.data) })
+        Plugins.LiShare.share({ url: gameApi.publicUrl(ctrl.data) })
       })
     }, [i18n('shareGameURL')])
   },
@@ -43,7 +43,7 @@ export default {
         handleXhrError(err)
         throw err
       })
-      .then((PGN: string) => Plugins.Share.share({ text: PGN }))
+      .then((PGN: string) => Plugins.LiShare.share({ text: PGN }))
     }
     return (
       <button oncreate={helper.ontap(handler)}>

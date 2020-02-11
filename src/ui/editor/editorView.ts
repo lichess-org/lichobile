@@ -89,7 +89,7 @@ function renderActionsBar(ctrl: EditorCtrl) {
     }),
     h('button.action_bar_button.fa.fa-share-alt', {
       oncreate: helper.ontap(
-        () => Plugins.Share.share({ text: ctrl.computeFen() }),
+        () => Plugins.LiShare.share({ text: ctrl.computeFen() }),
         () => Plugins.LiToast.show({ text: 'Share FEN', duration: 'short', position: 'bottom' })
       )
     })

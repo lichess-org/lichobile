@@ -53,7 +53,7 @@ export function renderFooter(ctrl: TournamentCtrl) {
         <span className="fa fa-question-circle" />
         FAQ
       </button>
-      <button className="action_bar_button" oncreate={helper.ontap(() => Plugins.Share.share({ url: tUrl }))}>
+      <button className="action_bar_button" oncreate={helper.ontap(() => Plugins.LiShare.share({ url: tUrl }))}>
         <span className="fa fa-share-alt" />
         Share
       </button>

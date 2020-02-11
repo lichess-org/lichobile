@@ -97,7 +97,7 @@ export function awaitInvitePopup(ctrl: ChallengeState, challenge: Challenge) {
         h('div.go_or_cancel.clearfix', [
           h('button.binary_choice[data-icon=E].withIcon', {
             oncreate: helper.ontap(function() {
-              Plugins.Share.share({ url: publicUrl(challenge) })
+              Plugins.LiShare.share({ url: publicUrl(challenge) })
             })
           }, i18n('shareGameURL')),
           h('button.binary_choice[data-icon=L].withIcon', {

@@ -39,8 +39,11 @@ export default {
   sharePGN(ctrl: OnlineRound) {
     function handler() {
       getPGN(ctrl.data.game.id)
+      .catch(err => {
+        handleXhrError(err)
+        throw err
+      })
       .then((PGN: string) => Plugins.Share.share({ text: PGN }))
-      .catch(handleXhrError)
     }
     return (
       <button oncreate={helper.ontap(handler)}>

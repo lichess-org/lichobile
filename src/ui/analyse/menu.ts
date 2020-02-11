@@ -23,6 +23,7 @@ export interface IMainMenuCtrl {
   s: {
     showShareMenu: boolean
     computingPGN: boolean
+    computingPGNAnnotated: boolean
   }
 }
 
@@ -44,7 +45,8 @@ export default {
 
     const s = {
       showShareMenu: false,
-      computingPGN: false
+      computingPGN: false,
+      computingPGNAnnotated: false,
     }
 
     return {
@@ -69,7 +71,7 @@ export default {
 
 function renderAnalyseMenu(ctrl: AnalyseCtrl) {
 
-  return h('div.analyseMenu', [
+  return h('div.analyseMenu', h.fragment({ key: 'analyseMenu' }, [
     h('button', {
       oncreate: helper.ontap(() => {
         ctrl.menu.s.showShareMenu = true
@@ -99,11 +101,11 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
         }
       })
     }, [h('span.fa.fa-pencil'), i18n('notes')]) : null
-  ])
+  ]))
 }
 
 function renderShareMenu(ctrl: AnalyseCtrl) {
-  return h('div.analyseMenu', [
+  return h('div.analyseMenu', h.fragment({ key: 'shareMenu' }, [
     isOnlineAnalyseData(ctrl.data) ? h('button', {
       oncreate: helper.ontap(() => {
         ctrl.menu.close()
@@ -119,7 +121,7 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
       oncreate: helper.ontap(() => {
         onlinePGNExport(ctrl, false)
       }),
-    }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : 'Share annotated PGN') : null,
+    }, ctrl.menu.s.computingPGNAnnotated ? spinner.getVdom('monochrome') : 'Share annotated PGN') : null,
     ctrl.source === 'online' && !gameApi.playable(ctrl.data) ? h('button', {
       oncreate: helper.ontap(() => {
         onlinePGNExport(ctrl, true)
@@ -131,21 +133,24 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
         Plugins.Share.share({ text: ctrl.node.fen })
       }),
     }, 'Share current FEN') : null,
-  ])
+  ]))
 }
 
 function onlinePGNExport(ctrl: AnalyseCtrl, raw: boolean) {
-  if (!ctrl.menu.s.computingPGN) {
-    ctrl.menu.s.computingPGN = true
+  if ((raw && !ctrl.menu.s.computingPGN) || (!raw && !ctrl.menu.s.computingPGNAnnotated)) {
+    if (raw) ctrl.menu.s.computingPGN = true
+    else ctrl.menu.s.computingPGNAnnotated = true
     getPGN(ctrl.data.game.id, raw)
     .then((pgn: string) => {
       ctrl.menu.s.computingPGN = false
+      ctrl.menu.s.computingPGNAnnotated = false
       ctrl.menu.close()
       redraw()
       Plugins.Share.share({ text: pgn })
     })
     .catch(e => {
       ctrl.menu.s.computingPGN = false
+      ctrl.menu.s.computingPGNAnnotated = false
       redraw()
       handleXhrError(e)
     })

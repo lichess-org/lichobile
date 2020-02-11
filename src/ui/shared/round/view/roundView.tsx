@@ -467,17 +467,12 @@ function renderGameRunningActions(ctrl: OnlineRound) {
 }
 
 function renderGameEndedActions(ctrl: OnlineRound) {
-  const result = gameApi.result(ctrl.data)
-  const resultDom = gameStatusApi.aborted(ctrl.data) ? [] : [
-    h('strong', result), h('br')
-  ]
-  resultDom.push(h('em.resultStatus', ctrl.gameStatus()))
   let buttons: Mithril.Children
   const tournamentId = ctrl.data.game.tournamentId
 
   const shareActions = h('button', {
     oncreate: helper.ontap(ctrl.showShareActions),
-  }, [h('span.fa.fa-share'), 'Share'])
+  }, [h('span.fa.fa-share'), i18n('shareAndExport')])
 
   if (ctrl.vm.showingShareActions) {
     buttons = [
@@ -518,11 +513,9 @@ function renderGameEndedActions(ctrl: OnlineRound) {
       ]
     }
   }
-  return (
-    <div className="game_controls">
-      <div className="control buttons">{buttons}</div>
-    </div>
-  )
+  return h('div.game_controls', h.fragment({
+    key: ctrl.vm.showingShareActions ? 'shareMenu' : 'menu'
+  }, buttons))
 }
 
 function renderStatus(ctrl: OnlineRound) {

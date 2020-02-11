@@ -96,7 +96,7 @@ export default {
   forceResign(ctrl: OnlineRound) {
     return gameApi.forceResignable(ctrl.data) ?
       h('div.force_resign_zone', [
-        h('div.notice', i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim')),
+        h('div.notice', i18n('opponentLeftChoices')),
         h('div.binary_choice_wrapper', [
           h('button.binary_choice.left', {
             oncreate: helper.ontap(() => { ctrl.socketIface.send('resign-force') })

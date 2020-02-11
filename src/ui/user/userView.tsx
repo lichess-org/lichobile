@@ -1,4 +1,3 @@
-import { Capacitor } from '@capacitor/core'
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import router from '../../router'
@@ -137,7 +136,7 @@ function renderWebsiteLinks(ctrl: IUserCtrl, user: ProfileUser) {
           </a>
         </p>
       }
-      { Capacitor.platform !== 'ios' && user.patron ?
+      { user.patron ?
       <p>
         <a className="external_link"
           oncreate={helper.ontapY(() => xhr.openWebsiteAuthPage('/patron'))}

@@ -1,4 +1,3 @@
-import { Capacitor } from '@capacitor/core'
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import router from '../router'
@@ -33,7 +32,7 @@ export default {
 
           <li>Lichess would not exist without the thousands of hours of time from volunteers, both from {externalLink('website devs', 'https://github.com/ornicar/lila/graphs/contributors')} and {externalLink('mobile devs', 'https://github.com/veloce/lichobile/graphs/contributors')}, who create new features and/or bugs, as well as our administrative team, who police the site and help with long-term vision.</li>
 
-          <li>{Capacitor.platform === 'ios' ? 'Patrons' : externalLink('Patrons', 'https://lichess.org/patron')} provide a steady stream of income to our site, sufficient to run our servers and handle expenses.</li>
+          <li>{externalLink('Patrons', 'https://lichess.org/patron')} provide a steady stream of income to our site, sufficient to run our servers and handle expenses.</li>
 
           <li>Finally, the players who come to Lichess to have fun, relax and learn, without whom this would all be pointless!</li>
 
@@ -44,14 +43,12 @@ export default {
           <ul className="about_links">
             <li>{externalLink('Github', 'https://github.com/veloce/lichobile')}</li>
             <li>{externalLink('Contribute', 'https://lichess.org/help/contribute')}</li>
-            { Capacitor.platform === 'ios' ?
-              null :
-              <li>{externalLink('Donate', 'https://lichess.org/patron')}</li>
-            }
+            <li>{externalLink('Donate', 'https://lichess.org/patron')}</li>
             <li>{externalLink('Contact', 'https://lichess.org/contact')}</li>
             <li>{externalLink('Terms of Service', 'https://lichess.org/terms-of-service')}</li>
             <li>{externalLink('Privacy Policy', 'https://lichess.org/privacy')}</li>
             <li>{externalLink('Database', 'https://database.lichess.org/')}</li>
+            <li>{externalLink('lichess.org/about', 'https://lichess.org/about')}</li>
           </ul>
 
       </div>

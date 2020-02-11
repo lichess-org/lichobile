@@ -430,34 +430,29 @@ function tvChannelSelector(ctrl: OnlineRound) {
 }
 
 function renderGameRunningActions(ctrl: OnlineRound) {
-  if (ctrl.data.player.spectator) {
-    return h('div.game_controls', [
-      gameButton.shareLink(ctrl),
-    ])
-  }
-
-  const gameControls = gameButton.forceResign(ctrl) || [
-    gameButton.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
-    gameButton.cancelTakebackProposition(ctrl),
-    gameButton.offerDraw(ctrl),
-    gameButton.drawConfirmation(ctrl),
-    gameButton.cancelDrawOffer(ctrl),
-    gameButton.threefoldClaimDraw(ctrl),
-    gameButton.resign(ctrl),
-    gameButton.resignConfirmation(ctrl),
-    gameButton.goBerserk(ctrl)
-  ]
-
-  return h('div.gameControls', [
+  return h('div.gameControls', {
+    key: 'gameRunningActions'
+  }, ctrl.data.player.spectator ? [
+    gameButton.shareLink(ctrl),
+  ] : [
     gameButton.analysisBoard(ctrl),
     gameButton.moretime(ctrl),
     gameButton.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort'),
-    gameControls,
-    h('div.answers', [
+  ].concat(
+    gameApi.forceResignable(ctrl.data) ? [gameButton.forceResign(ctrl)] : [
+      gameButton.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
+      gameButton.cancelTakebackProposition(ctrl),
+      gameButton.offerDraw(ctrl),
+      gameButton.drawConfirmation(ctrl),
+      gameButton.cancelDrawOffer(ctrl),
+      gameButton.threefoldClaimDraw(ctrl),
+      gameButton.resign(ctrl),
+      gameButton.resignConfirmation(ctrl),
+      gameButton.goBerserk(ctrl),
       gameButton.answerOpponentDrawOffer(ctrl),
-      gameButton.answerOpponentTakebackProposition(ctrl)
-    ])
-  ])
+      gameButton.answerOpponentTakebackProposition(ctrl),
+    ]
+  ))
 }
 
 function renderGameEndedActions(ctrl: OnlineRound) {
@@ -507,7 +502,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
       ]
     }
   }
-  return h('div.game_controls', h.fragment({
+  return h('div.game_controls', { key: 'gameEndedActions' }, h.fragment({
     key: ctrl.vm.showingShareActions ? 'shareMenu' : 'menu'
   }, buttons))
 }

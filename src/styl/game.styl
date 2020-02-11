@@ -375,9 +375,13 @@
     &.on
       background-color darken(#fff, 15%)
   .negotiation, .force_resign_zone, .claim_draw_zone
+    background-color lighten(modalDarkBg, 10%)
     text-align center
     padding 10px
     button
+      &[data-icon=L]
+        &:before
+          color red
       &:not(.binary_choice):last-child
         width 50%
         margin 0 auto
@@ -593,3 +597,6 @@
     background transpBlack04
   .antagonistInfos
     text-shadow 0 1px 1px rgba(0,0,0,0.5)
+  .player_controls
+    .negotiation, .force_resign_zone, .claim_draw_zone
+      background-color transpWhite015

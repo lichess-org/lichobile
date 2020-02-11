@@ -431,39 +431,33 @@ function tvChannelSelector(ctrl: OnlineRound) {
 
 function renderGameRunningActions(ctrl: OnlineRound) {
   if (ctrl.data.player.spectator) {
-    let controls = [
+    return h('div.game_controls', [
       gameButton.shareLink(ctrl),
-    ]
-
-    return <div className="game_controls">{controls}</div>
+    ])
   }
-
-  const answerButtons = [
-    gameButton.cancelDrawOffer(ctrl),
-    gameButton.answerOpponentDrawOffer(ctrl),
-    gameButton.cancelTakebackProposition(ctrl),
-    gameButton.answerOpponentTakebackProposition(ctrl)
-  ]
 
   const gameControls = gameButton.forceResign(ctrl) || [
     gameButton.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
+    gameButton.cancelTakebackProposition(ctrl),
     gameButton.offerDraw(ctrl),
     gameButton.drawConfirmation(ctrl),
+    gameButton.cancelDrawOffer(ctrl),
     gameButton.threefoldClaimDraw(ctrl),
     gameButton.resign(ctrl),
     gameButton.resignConfirmation(ctrl),
     gameButton.goBerserk(ctrl)
   ]
 
-  return (
-    <div className="game_controls">
-      {gameButton.analysisBoard(ctrl)}
-      {gameButton.moretime(ctrl)}
-      {gameButton.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort')}
-      {gameControls}
-      {answerButtons ? <div className="answers">{answerButtons}</div> : null}
-    </div>
-  )
+  return h('div.gameControls', [
+    gameButton.analysisBoard(ctrl),
+    gameButton.moretime(ctrl),
+    gameButton.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort'),
+    gameControls,
+    h('div.answers', [
+      gameButton.answerOpponentDrawOffer(ctrl),
+      gameButton.answerOpponentTakebackProposition(ctrl)
+    ])
+  ])
 }
 
 function renderGameEndedActions(ctrl: OnlineRound) {

@@ -117,10 +117,11 @@ export default {
     ]) : null
   },
   offerDraw(ctrl: OnlineRound) {
-    return ctrl.canOfferDraw() && !ctrl.vm.confirmDraw ? h('button', {
+    return !ctrl.vm.confirmDraw ? h('button', {
       className: 'draw-yes',
       'data-icon': '2',
-      oncreate: helper.ontap(() => { ctrl.vm.confirmDraw = true })
+      oncreate: helper.ontap(() => { ctrl.vm.confirmDraw = true }),
+      disabled: !ctrl.canOfferDraw()
     }, i18n('offerDraw')) : null
   },
   drawConfirmation(ctrl: OnlineRound) {
@@ -128,7 +129,10 @@ export default {
       <div className="negotiation">
         <div className="binary_choice_wrapper">
           <button className="binary_choice" data-icon="E"
-            oncreate={helper.ontap(() => { ctrl.offerDraw() })}
+            oncreate={helper.ontap(() => {
+              ctrl.vm.confirmDraw = false
+              ctrl.offerDraw()
+            })}
           >
             {i18n('offerDraw')}
           </button>

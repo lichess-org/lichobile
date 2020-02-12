@@ -20,6 +20,8 @@
 		961EFD36239AAD430078A80B /* FCM.m in Sources */ = {isa = PBXBuildFile; fileRef = 961EFD35239AAD430078A80B /* FCM.m */; };
 		961EFD3C239E968C0078A80B /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961EFD3B239E968C0078A80B /* Badge.swift */; };
 		961EFD3E239E97D70078A80B /* Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = 961EFD3D239E97D70078A80B /* Badge.m */; };
+		964169A123F40DBC00027DDE /* LiShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964169A023F40DBC00027DDE /* LiShare.swift */; };
+		964169A323F40E2C00027DDE /* LiShare.m in Sources */ = {isa = PBXBuildFile; fileRef = 964169A223F40E2C00027DDE /* LiShare.m */; };
 		9669431E234B79A000145494 /* SoundEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 9669431D234B79A000145494 /* SoundEffect.m */; };
 		969B609A236B2E9500DB0383 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 969B6099236B2E9500DB0383 /* GoogleService-Info.plist */; };
 		A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */; };
@@ -41,6 +43,8 @@
 		961EFD35239AAD430078A80B /* FCM.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCM.m; sourceTree = "<group>"; };
 		961EFD3B239E968C0078A80B /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
 		961EFD3D239E97D70078A80B /* Badge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Badge.m; sourceTree = "<group>"; };
+		964169A023F40DBC00027DDE /* LiShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiShare.swift; sourceTree = "<group>"; };
+		964169A223F40E2C00027DDE /* LiShare.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiShare.m; sourceTree = "<group>"; };
 		9669431C234B79A000145494 /* App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "App-Bridging-Header.h"; sourceTree = "<group>"; };
 		9669431D234B79A000145494 /* SoundEffect.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SoundEffect.m; sourceTree = "<group>"; };
 		969B6099236B2E9500DB0383 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -109,6 +113,8 @@
 				961EFD3D239E97D70078A80B /* Badge.m */,
 				961A8D8223D705E500229D0D /* LiToast.swift */,
 				961A8D8423D7063900229D0D /* LiToast.m */,
+				964169A023F40DBC00027DDE /* LiShare.swift */,
+				964169A223F40E2C00027DDE /* LiShare.m */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -244,6 +250,8 @@
 				9669431E234B79A000145494 /* SoundEffect.m in Sources */,
 				961EFD3C239E968C0078A80B /* Badge.swift in Sources */,
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
+				964169A123F40DBC00027DDE /* LiShare.swift in Sources */,
+				964169A323F40E2C00027DDE /* LiShare.m in Sources */,
 				961EFD3E239E97D70078A80B /* Badge.m in Sources */,
 				961A8D8523D7063900229D0D /* LiToast.m in Sources */,
 				961EFD36239AAD430078A80B /* FCM.m in Sources */,

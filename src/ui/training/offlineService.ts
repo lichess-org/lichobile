@@ -2,6 +2,7 @@ import { Plugins } from '@capacitor/core'
 import router from '../../router'
 import { Session } from '../../session'
 import settings from '../../settings'
+import { hasNetwork } from '../../utils'
 import { PuzzleData, PuzzleOutcome } from '../../lichess/interfaces/training'
 
 import * as xhr from './xhr'
@@ -131,32 +132,36 @@ function syncPuzzles(database: Database, user: Session): Promise<UserOfflineData
     const unsolved = stored ? stored.unsolved : []
     const solved = stored ? stored.solved : []
 
-    const puzzleDeficit = Math.max(
-      settings.training.puzzleBufferLen - unsolved.length,
-      0
-    )
+    if (hasNetwork()) {
+      const puzzleDeficit = Math.max(
+        settings.training.puzzleBufferLen - unsolved.length,
+        0
+      )
 
-    const solvePromise =
+      const solvePromise =
       solved.length > 0 ? xhr.solvePuzzlesBatch(solved) : Promise.resolve()
 
-    const allIds = unsolved.map(p => p.puzzle.id)
-    const lastId = allIds.length > 0 ? Math.max(...allIds) : undefined
+      const allIds = unsolved.map(p => p.puzzle.id)
+      const lastId = allIds.length > 0 ? Math.max(...allIds) : undefined
 
-    return solvePromise
-    .then(() => !stored || puzzleDeficit > 0 ?
-      xhr.newPuzzlesBatch(puzzleDeficit, lastId) : Promise.resolve({
-        puzzles: [],
-        user: stored.user,
+      return solvePromise
+      .then(() => !stored || puzzleDeficit > 0 ?
+        xhr.newPuzzlesBatch(puzzleDeficit, lastId) : Promise.resolve({
+          puzzles: [],
+          user: stored.user,
+        })
+      )
+      .then(newData => {
+        return database.save(user.id, {
+          user: newData.user,
+          unsolved: unsolved.concat(newData.puzzles),
+          solved: []
+        })
       })
-    )
-    .then(newData => {
-      return database.save(user.id, {
-        user: newData.user,
-        unsolved: unsolved.concat(newData.puzzles),
-        solved: []
-      })
-    })
-    // when offline, sync cannot be done so we return same stored data
-    .catch(() => stored)
+      .catch(() => stored)
+
+    } else {
+      return stored
+    }
   })
 }

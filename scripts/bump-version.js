@@ -25,8 +25,8 @@ const newVersionCode =
 
 // capacitor
 let newCapacitorText = capacitorConfText.replace(
-  /("Lichobile\/)([^"]+)/,
-  '$1' + newVersion + '"'
+  /(Lichobile\/)([^"]+)/,
+  '$1' + newVersion
 )
 fs.writeFileSync(capacitorConfPath, newCapacitorText)
 

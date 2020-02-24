@@ -5,9 +5,7 @@
 App/build
 App/public
 
-App/Pods/*
-!App/Pods/Pods.xcodeproj/
-!App/Pods/Pods.xcodeproj/project.pbxproj
+App/Pods
 
 xcuserdata
 

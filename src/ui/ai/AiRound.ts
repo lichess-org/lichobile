@@ -73,6 +73,8 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
       if (setupVariant) {
         settings.ai.variant(setupVariant)
       }
+
+      redraw()
     }
 
     this.engine.init()

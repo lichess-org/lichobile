@@ -21,7 +21,7 @@ const newVersionParts = newVersion.split('.')
 const newVersionCode =
   newVersionParts[0].padEnd(2, 0) +
   newVersionParts.slice(1).map(p => p.padStart(2, 0)).join('') +
-  '9'
+  '0'
 
 // capacitor
 let newCapacitorText = capacitorConfText.replace(

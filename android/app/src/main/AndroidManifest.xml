@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="org.lichess.mobileapp"
-  android:versionCode="7000039"
-  android:versionName="7.0.3"
+  android:versionCode="7000040"
+  android:versionName="7.0.4"
   android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />

@@ -125,16 +125,16 @@ public class MainActivity extends BridgeActivity {
   }
 
   private void versionUpdateActions() {
-    // fix home quick setup loading bug when going from 6.x to 7.x
-    if (BuildConfig.VERSION_CODE == 7000019) {
-      SharedPreferences prefs = getSharedPreferences("LiVersionCheck", Context.MODE_PRIVATE);
-      SharedPreferences.Editor editor = prefs.edit();
-      int previousVersionCode = prefs.getInt("LAST_VERSION_CODE", 0);
-      if (BuildConfig.VERSION_CODE > previousVersionCode) {
+    SharedPreferences prefs = getSharedPreferences("LiVersionCheck", Context.MODE_PRIVATE);
+    int previousVersionCode = prefs.getInt("LAST_VERSION_CODE", 0);
+    if (BuildConfig.VERSION_CODE > previousVersionCode) {
+      // fix home quick setup loading bug when going from 6.x to 7.x
+      if (previousVersionCode == 0) {
         deleteDir(getApplicationContext().getCacheDir());
-        editor.putInt("LAST_VERSION_CODE", BuildConfig.VERSION_CODE);
-        editor.apply();
       }
+      SharedPreferences.Editor editor = prefs.edit();
+      editor.putInt("LAST_VERSION_CODE", BuildConfig.VERSION_CODE);
+      editor.apply();
     }
   }
 

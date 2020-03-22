@@ -26,6 +26,8 @@
   background-color modalDarkBg
   color modalDarkColor
   box-shadow 0 0 35px 10px rgba(0,0,0,0.5)
+  // ios 12 zindex issue
+  transform translateZ(0)
   &.native_scroller
     height initial
   button

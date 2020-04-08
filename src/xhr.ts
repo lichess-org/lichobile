@@ -112,7 +112,6 @@ export let cachedPools: ReadonlyArray<Pool> = []
 export function lobby(feedback?: boolean): Promise<LobbyData> {
   return fetchJSON('/', undefined, feedback)
   .then((d: LobbyData) => {
-    console.log(d)
     if (d.lobby.pools !== undefined) cachedPools = d.lobby.pools
     return d
   })

@@ -27,6 +27,7 @@ export interface Tournament {
   readonly standing: StandingPage
   readonly startsAt: string
   readonly system: string
+  readonly teamBattle?: TeamBattle
   readonly variant: VariantKey
   readonly verdicts: Verdicts
 }
@@ -191,4 +192,11 @@ interface Conditions {
 
 export interface TournamentCreateResponse {
   readonly id: string
+}
+
+interface TeamBattle {
+  joinswith: ReadonlyArray<string>
+  teams: {
+    [teamKey: string]: string
+  }
 }

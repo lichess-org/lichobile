@@ -13,7 +13,7 @@ import CountdownTimer from '../../shared/CountdownTimer'
 
 import faq from '../faq'
 import playerInfo from './playerInfo'
-import passwordForm from './passwordForm'
+import joinInfoForm from './joinInfoForm'
 import TournamentCtrl from './TournamentCtrl'
 
 export function renderFAQOverlay(ctrl: TournamentCtrl) {
@@ -30,6 +30,7 @@ export function renderPlayerInfoOverlay(ctrl: TournamentCtrl) {
 
 export function tournamentBody(ctrl: TournamentCtrl) {
   const data = ctrl.tournament
+  console.log(data)
   if (!data) return null
 
   return h('div.tournamentContainer.native_scroller.page', {
@@ -79,6 +80,7 @@ function tournamentHeader(data: Tournament, ctrl: TournamentCtrl) {
       {tournamentCreatorInfo(data, ctrl.startsAt!)}
       {data.position ? tournamentPositionInfo(data.position) : null}
       {data.verdicts.list.length > 0 ? tournamentConditions(data.verdicts) : null}
+      {data.teamBattle && data.teamBattle.joinswith === 0 ? teamBattleNoTeam() : null}
    </div>
   )
 }
@@ -138,6 +140,16 @@ function tournamentConditions(verdicts: Verdicts) {
   )
 }
 
+function teamBattleNoTeam() {
+  return (
+    <div className="no_team_warning">
+      <p className={'condition ' + (o.verdict === 'ok' ? 'accepted' : 'rejected')}>
+        {o.condition}
+      </p>
+    </div>
+  )
+}
+
 function tournamentSpotlightInfo(spotlight: Spotlight) {
   return (
     <div className="tournamentSpotlightInfo">
@@ -153,9 +165,10 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
     !t.verdicts.accepted) {
     return null
   }
-
-  const action = ctrl.tournament.private ?
-    () => passwordForm.open(ctrl) :
+  console.log(ctrl)
+  console.log(t)
+  const action = t.private || t.teamBattle ?
+    () => joinInfoForm.open(ctrl) :
     () => ctrl.join()
 
   return (

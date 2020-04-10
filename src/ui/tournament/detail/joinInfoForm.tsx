@@ -1,9 +1,10 @@
 import h from 'mithril/hyperscript'
-import settings from '../../../settings'
 import popupWidget from '../../shared/popup'
 import i18n from '../../../i18n'
 import router from '../../../router'
 import TournamentCtrl from './TournamentCtrl'
+import formWidgets from '../../shared/form'
+import settings from '../../../settings'
 
 let isOpen = false
 let tournamentCtrl: TournamentCtrl
@@ -13,7 +14,7 @@ export default {
   close,
   view() {
     return popupWidget(
-      'tournament_password_popup',
+      'tournament_addtl_info_popup',
       undefined,
       () => renderForm(),
       isOpen,
@@ -34,6 +35,12 @@ function close(fromBB?: string) {
 }
 
 function renderForm() {
+  const t = tournamentCtrl.tournament
+  const teamList = t.teamBattle ? t.teamBattle.joinswith.map((x:string) => [x, t.teamBattle ? t.teamBattle.teams[x] : '']) : []
+  if (t.teamBattle && !t.teamBattle.joinswith.includes(settings.tournament.join.lastTeam())) {
+    if (t.teamBattle.joinswith.length > 0)
+      settings.tournament.join.lastTeam(t.teamBattle.joinswith[0])
+  }
   return (
     <form id="tournamentPasswordForm"
     onsubmit={function(e: Event) {
@@ -41,11 +48,14 @@ function renderForm() {
       return join(e.target as HTMLFormElement)
     }}>
       <fieldset>
-        <div className={'select_input no_arrow_after' + (settings.tournament.private() ? '' : ' notVisible')}>
+        <div className={'select_input no_arrow_after' + (t.private ? '' : ' notVisible')}>
           <div className="text_input_container">
             <label>Password: </label>
             <input type="text" id="tournamentPassword" className="passwordField" />
           </div>
+        </div>
+        <div className={'select_input no_arrow_after' + (t.teamBattle ? '' : ' notVisible')}>
+          {formWidgets.renderSelect('Team', 'team', teamList, settings.tournament.join.lastTeam, false)}
         </div>
       </fieldset>
       <div className="popupActionWrapper">
@@ -61,6 +71,7 @@ function renderForm() {
 function join(form: HTMLFormElement) {
   const elements: HTMLCollection = (form[0] as HTMLFieldSetElement).elements as HTMLCollection
   const password = (elements[0] as HTMLInputElement).value
-  tournamentCtrl.join(password)
+  const team = (elements[1] as HTMLTextAreaElement).value
+  tournamentCtrl.join(password, team)
   close()
 }

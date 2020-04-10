@@ -358,7 +358,10 @@ export default {
     duration: prop('tournament.duration', '45'),
     timeToStart: prop('tournament.timeToStart', '15'),
     position: prop('tournament.timeToStart', '15'),
-    private: prop('tournament.private', false)
+    private: prop('tournament.private', false),
+    join: {
+      lastTeam: prop('tournament.join.lastTeam', '')
+    },
   },
 
   tv: {

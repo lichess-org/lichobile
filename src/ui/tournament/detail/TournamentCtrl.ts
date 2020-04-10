@@ -65,8 +65,8 @@ export default class TournamentCtrl {
     redraw()
   }
 
-  join = throttle((password?: string) => {
-    xhr.join(this.tournament.id, password)
+  join = throttle((password?: string, team?: string) => {
+    xhr.join(this.tournament.id, password, team)
     .then(() => {
       this.hasJoined = true
       this.focusOnMe = true

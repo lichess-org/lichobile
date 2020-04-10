@@ -10,6 +10,7 @@ import { Tournament, StandingPlayer, StandingPage } from '../../../lichess/inter
 import * as xhr from '../tournamentXhr'
 import faq, { FaqCtrl } from '../faq'
 import playerInfo, { PlayerInfoCtrl } from './playerInfo'
+import teamInfo, { TeamInfoCtrl } from './playerInfo'
 import socketHandler from './socketHandler'
 
 const MAX_PER_PAGE = 10
@@ -32,6 +33,7 @@ export default class TournamentCtrl {
 
   public faqCtrl: FaqCtrl
   public playerInfoCtrl: PlayerInfoCtrl
+  public teamInfoCtrl: TeamInfoCtrl
 
   private pagesCache: PagesCache = {}
 
@@ -42,6 +44,7 @@ export default class TournamentCtrl {
 
     this.faqCtrl = faq.controller(this)
     this.playerInfoCtrl = playerInfo.controller(this)
+    this.teamInfoCtrl = teamInfo.controller(this)
 
     this.tournament = data
     this.startsAt = fromNow(new Date(data.startsAt))

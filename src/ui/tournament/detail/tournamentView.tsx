@@ -3,7 +3,7 @@ import h from 'mithril/hyperscript'
 import router from '../../../router'
 import session from '../../../session'
 import i18n from '../../../i18n'
-import { Tournament, StandingPlayer, PodiumPlace, Spotlight, Verdicts } from '../../../lichess/interfaces/tournament'
+import { Tournament, StandingPlayer, PodiumPlace, Spotlight, Verdicts, TeamStanding } from '../../../lichess/interfaces/tournament'
 import { Opening } from '../../../lichess/interfaces/game'
 import { formatTournamentDuration, formatTournamentTimeControl } from '../../../utils'
 import * as helper from '../../helper'
@@ -28,6 +28,12 @@ export function renderPlayerInfoOverlay(ctrl: TournamentCtrl) {
   ]
 }
 
+export function renderTeamInfoOverlay(ctrl: TournamentCtrl) {
+  return [
+    teamInfo.view(ctrl.teamInfoCtrl)
+  ]
+}
+
 export function tournamentBody(ctrl: TournamentCtrl) {
   const data = ctrl.tournament
   console.log(data)
@@ -38,6 +44,7 @@ export function tournamentBody(ctrl: TournamentCtrl) {
   }, [
     tournamentHeader(data, ctrl),
     data.podium ? tournamentPodium(data.podium) : null,
+    data.teamBattle ? tournamentTeamLeaderboard(ctrl) : null,
     tournamentLeaderboard(ctrl),
     data.featured ? tournamentFeaturedGame(ctrl) : null
   ])
@@ -80,7 +87,7 @@ function tournamentHeader(data: Tournament, ctrl: TournamentCtrl) {
       {tournamentCreatorInfo(data, ctrl.startsAt!)}
       {data.position ? tournamentPositionInfo(data.position) : null}
       {data.verdicts.list.length > 0 ? tournamentConditions(data.verdicts) : null}
-      {data.teamBattle && data.teamBattle.joinswith === 0 ? teamBattleNoTeam() : null}
+      {data.teamBattle && data.teamBattle.joinWith.length === 0 ? teamBattleNoTeam() : null}
    </div>
   )
 }
@@ -142,9 +149,10 @@ function tournamentConditions(verdicts: Verdicts) {
 
 function teamBattleNoTeam() {
   return (
-    <div className="no_team_warning">
-      <p className={'condition ' + (o.verdict === 'ok' ? 'accepted' : 'rejected')}>
-        {o.condition}
+    <div className="tournamentNoTeam">
+      <span className="withIcon" data-icon="7" />
+      <p>
+        You must join one of these teams to participate!
       </p>
     </div>
   )
@@ -162,7 +170,8 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
   if (!session.isConnected() ||
     t.isFinished ||
     settings.game.supportedVariants.indexOf(t.variant) < 0 ||
-    !t.verdicts.accepted) {
+    !t.verdicts.accepted ||
+    (t.teamBattle && t.teamBattle.joinWith.length === 0)) {
     return null
   }
   console.log(ctrl)
@@ -346,4 +355,51 @@ function renderPlace(data: PodiumPlace) {
       </table>
     </div>
   )
+}
+
+function tournamentTeamLeaderboard(ctrl: TournamentCtrl) {
+  const t = ctrl.tournament
+  if(!t.teamBattle)
+    return null
+  const tb = t.teamBattle
+  const standings = t.teamStanding
+
+  return (
+    <div className="tournamentTeamLeaderboard">
+
+      <ul
+        className={'tournamentTeamStandings box'}
+        oncreate={helper.ontap(e => handleTeamInfoTap(ctrl, e!), undefined, undefined, getTeamLeaderboardItemEl)}
+      >
+        {standings.map((team, i) => renderTeamEntry(tb.teams[team.id], team, i))}
+      </ul>
+    </div>
+  )
+}
+
+function renderTeamEntry(teamName: string, team: TeamStanding, i: number) {
+  const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
+  return (
+    <li key={team.id} data-team={team.id} className={`list_item tournament-list-team ${evenOrOdd}`} >
+      <div className="tournamentTeam">
+        <span> {teamName} </span>
+      </div>
+      <span className={'tournamentTeamPoints'}>
+        {team.score}
+      </span>
+    </li>
+  )
+}
+
+function getTeamLeaderboardItemEl(e: Event) {
+  const target = e.target as HTMLElement
+  return (target as HTMLElement).classList.contains('list_item') ? target :
+    helper.findParentBySelector(target, '.list_item')
+}
+
+function handleTeamInfoTap(ctrl: TournamentCtrl, e: Event) {
+  const el = getTeamLeaderboardItemEl(e)
+  const teamId = el.dataset['team']
+
+  if (teamId) ctrl.teamInfoCtrl.open(teamId)
 }

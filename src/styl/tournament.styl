@@ -7,7 +7,6 @@
     'leaderboard'\
     'games'\
     '.'
-  grid-gap: 2vmin
 
   @media only screen and (min-width 800px)
     grid-template-columns: repeat(2, 1fr)
@@ -126,7 +125,7 @@
   grid-area infos
   padding 10px 10px 0px 10px
 
-.tournamentConditions, .tournamentCreatorInfo, .tournamentPositionInfo, .tournamentTimeInfo, .tournamentSpotlightInfo
+.tournamentConditions, .tournamentCreatorInfo, .tournamentPositionInfo, .tournamentTimeInfo, .tournamentSpotlightInfo, .tournamentNoTeam
   margin-bottom 0.4em
   padding-bottom 0.4em
 
@@ -154,8 +153,16 @@
   &.anonymous
     color inherit
 
-.tournamentCreatorInfo, .tournamentPositionInfo, .tournamentConditions
+.tournamentCreatorInfo, .tournamentPositionInfo, .tournamentConditions, .tournamentNoTeam
   font-size 0.9em
+
+.tournamentNoTeam
+  display flex
+  color red
+  > .withIcon
+    align-self center
+    font-size 16px
+    line-height 1em
 
 .tournamentNotFound
   padding 1em

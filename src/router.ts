@@ -166,6 +166,7 @@ function doSet(path: string, replace = false) {
 // existing one
 // making router.set async makes it safe everywhere
 function set(path: string, replace = false): void {
+  console.log(path)
   setTimeout(() => doSet(path, replace), 0)
 }
 

@@ -274,6 +274,12 @@ export default {
         })
       })
 
+      router.add('teams', ({ params }) => {
+        import('./ui/teams/teams').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
       router.add('training', ({ params }) => {
         import('./ui/training/training').then(m => {
           onRouteMatch(m.default, params)

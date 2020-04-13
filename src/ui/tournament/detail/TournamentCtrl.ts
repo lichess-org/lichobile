@@ -202,7 +202,7 @@ export default class TournamentCtrl {
     }
 
     this.teamColorMap = data.teamBattle ? this.createTeamColorMap (data.teamBattle) : {}
-    
+
     redraw()
   }
 
@@ -211,7 +211,7 @@ export default class TournamentCtrl {
     tColorMap = Object.keys(tb.teams).reduce(function (acc, team, i) {
       acc[team] = i
       return acc
-    },tColorMap)
+    }, tColorMap)
     return tColorMap
   }
 }

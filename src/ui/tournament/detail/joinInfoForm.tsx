@@ -36,7 +36,7 @@ function close(fromBB?: string) {
 
 function renderForm() {
   const t = tournamentCtrl.tournament
-  const teamList = t.teamBattle ? t.teamBattle.joinWith.map((x:string) => [x, t.teamBattle ? t.teamBattle.teams[x] : '']) : []
+  const teamList = t.teamBattle ? t.teamBattle.joinWith.map((x: string) => [x, t.teamBattle ? t.teamBattle.teams[x] : '']) : []
   if (t.teamBattle && !t.teamBattle.joinWith.includes(settings.tournament.join.lastTeam())) {
     if (t.teamBattle.joinWith.length > 0)
       settings.tournament.join.lastTeam(t.teamBattle.joinWith[0])

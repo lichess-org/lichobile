@@ -29,7 +29,7 @@ export default {
 
     function open(tId: string) {
       router.backbutton.stack.push(helper.slidesOutRight(close, 'tournamentTeamInfoModal'))
-      teamId(tId)  
+      teamId(tId)
       isOpen = true
       redraw()
     }
@@ -52,7 +52,7 @@ export default {
   },
 
   view: function(ctrl: TeamInfoCtrl) {
-    return ctrl ? null : null;
+    return ctrl ? null : null
     /*
     if (!ctrl.isOpen()) return null
 

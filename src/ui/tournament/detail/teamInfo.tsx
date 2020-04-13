@@ -1,15 +1,16 @@
-import h from 'mithril/hyperscript'
 import Stream from 'mithril/stream'
 import router from '../../../router'
-import * as utils from '../../../utils'
 import redraw from '../../../utils/redraw'
 import * as helper from '../../helper'
 import { TeamStanding } from '../../../lichess/interfaces/tournament'
+import TournamentCtrl from './TournamentCtrl'
+/*
+import h from 'mithril/hyperscript'
+import * as utils from '../../../utils'
 import i18n from '../../../i18n'
 import { closeIcon } from '../../shared/icons'
+*/
 
-import * as xhr from '../tournamentXhr'
-import TournamentCtrl from './TournamentCtrl'
 
 export interface TeamInfoCtrl {
   open: (playerId: string) => void
@@ -17,15 +18,18 @@ export interface TeamInfoCtrl {
   isOpen: () => boolean
   root: TournamentCtrl
   teamData: Stream<TeamStanding>
+  teamId: Stream<string>
 }
 
 export default {
   controller(root: TournamentCtrl): TeamInfoCtrl {
     let isOpen = false
     const teamData = Stream<TeamStanding>()
+    const teamId = Stream<string>()
 
-    function open(playerId: string) {
+    function open(tId: string) {
       router.backbutton.stack.push(helper.slidesOutRight(close, 'tournamentTeamInfoModal'))
+      teamId(tId)  
       isOpen = true
       redraw()
     }
@@ -42,11 +46,14 @@ export default {
         return isOpen
       },
       root,
-      teamData
+      teamData,
+      teamId
     }
   },
 
   view: function(ctrl: TeamInfoCtrl) {
+    return ctrl ? null : null;
+    /*
     if (!ctrl.isOpen()) return null
 
     const tournament = ctrl.root.tournament
@@ -55,7 +62,7 @@ export default {
     const teamData = ctrl.teamData()
     if (!teamData) return null
 
-    const player = playerData.player
+    const player = teamData.player
     const pairings = playerData.pairings
     const avgOpRating = pairings.length ? (pairings.reduce((prev, x) => prev + x.op.rating, 0) / pairings.length).toFixed(0) : '0'
 
@@ -161,5 +168,6 @@ export default {
         </div>
       </div>
     )
+    */
   }
 }

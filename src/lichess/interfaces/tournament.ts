@@ -219,3 +219,7 @@ interface TeamStandingPlayerUser {
   name: string
   patron?: boolean
 }
+
+export interface TeamColorMap {
+  [teamKey: string]: number
+}

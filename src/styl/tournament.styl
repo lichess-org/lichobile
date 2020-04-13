@@ -4,6 +4,7 @@
 
   grid-template-areas:
     'infos'\
+    'teamLeaderboard'\
     'leaderboard'\
     'games'\
     '.'
@@ -13,13 +14,14 @@
     grid-template-rows: auto repeat(3, fit-content(0))
     grid-template-areas:
       'infos infos'\
-      'leaderboard games'\
-      'leaderboard .';
+      'leaderboard teamLeaderboard'\
+      'games games';
 
   &.finished
     grid-template-areas:
       'infos'\
       'podium'\
+      'teamLeaderboard'\
       'leaderboard'\
       'games'\
       '.'
@@ -27,8 +29,8 @@
       grid-template-areas:
         'infos infos'\
         'podium podium'\
-        'leaderboard games'\
-        'leaderboard .';
+        'leaderboard teamLeaderboard'\
+        'games games';
 
 .header-subTitle.tournament-subtTitle
   font-size 1em
@@ -117,6 +119,20 @@
     color green
   &.negative
     color red
+
+.tournament-list-team
+  position initial
+  display flex
+  flex-flow row nowrap
+  justify-content space-between
+  > .tournamentTeamPoints
+    flex 0 0 20%
+    text-align right
+  > .tournamentTeam
+    flex-grow 1
+    text-overflow: ellipsis
+    white-space: nowrap
+    overflow hidden
 
 .timeArrow
   font-weight: bold
@@ -266,6 +282,42 @@
   display flex
   flex-flow column nowrap
   padding 0 10px
+
+.tournamentTeamLeaderboard
+  grid-area teamLeaderboard
+  display flex
+  flex-flow column nowrap
+  padding 0 10px
+
+.ttc-0
+  color: hsl(274, 100%, 59%)
+
+.ttc-1
+  color: hsl(240, 100%, 67%)
+
+.ttc-2
+  color: #008000
+
+.ttc-3
+  color: #b22222
+
+.ttc-4
+  color: hsl(16, 80%, 62%)
+
+.ttc-5
+  color: #9acd32
+
+.ttc-6
+  color: #ff4500
+
+.ttc-7
+  color: #2e8b57
+
+.ttc-8
+  color: #daa520
+
+.ttc-9
+  color: hsl(32, 75%, 47%)
 
 .tournamentGames
   grid-area games

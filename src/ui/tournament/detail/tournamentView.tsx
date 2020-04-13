@@ -3,7 +3,7 @@ import h from 'mithril/hyperscript'
 import router from '../../../router'
 import session from '../../../session'
 import i18n from '../../../i18n'
-import { Tournament, StandingPlayer, PodiumPlace, Spotlight, Verdicts, TeamStanding } from '../../../lichess/interfaces/tournament'
+import { Tournament, StandingPlayer, PodiumPlace, Spotlight, Verdicts, TeamStanding, TeamColorMap } from '../../../lichess/interfaces/tournament'
 import { Opening } from '../../../lichess/interfaces/game'
 import { formatTournamentDuration, formatTournamentTimeControl } from '../../../utils'
 import * as helper from '../../helper'
@@ -13,6 +13,7 @@ import CountdownTimer from '../../shared/CountdownTimer'
 
 import faq from '../faq'
 import playerInfo from './playerInfo'
+import teamInfo from './teamInfo'
 import joinInfoForm from './joinInfoForm'
 import TournamentCtrl from './TournamentCtrl'
 
@@ -43,7 +44,7 @@ export function tournamentBody(ctrl: TournamentCtrl) {
     className: data.podium ? 'finished' : '',
   }, [
     tournamentHeader(data, ctrl),
-    data.podium ? tournamentPodium(data.podium) : null,
+    data.podium && !data.teamBattle ? tournamentPodium(data.podium) : null,
     data.teamBattle ? tournamentTeamLeaderboard(ctrl) : null,
     tournamentLeaderboard(ctrl),
     data.featured ? tournamentFeaturedGame(ctrl) : null
@@ -87,7 +88,7 @@ function tournamentHeader(data: Tournament, ctrl: TournamentCtrl) {
       {tournamentCreatorInfo(data, ctrl.startsAt!)}
       {data.position ? tournamentPositionInfo(data.position) : null}
       {data.verdicts.list.length > 0 ? tournamentConditions(data.verdicts) : null}
-      {data.teamBattle && data.teamBattle.joinWith.length === 0 ? teamBattleNoTeam() : null}
+      {teamBattleNoTeam(data)}
    </div>
   )
 }
@@ -147,15 +148,20 @@ function tournamentConditions(verdicts: Verdicts) {
   )
 }
 
-function teamBattleNoTeam() {
-  return (
-    <div className="tournamentNoTeam">
-      <span className="withIcon" data-icon="7" />
-      <p>
-        You must join one of these teams to participate!
-      </p>
-    </div>
-  )
+function teamBattleNoTeam(t: Tournament) {
+  if (t.isFinished || !t.teamBattle || t.teamBattle.joinWith.length > 0) {
+    return null
+  }
+  else {
+    return (
+      <div className="tournamentNoTeam">
+        <span className="withIcon" data-icon="7" />
+        <p>
+          You must join one of these teams to participate!
+        </p>
+      </div>
+    )
+  }
 }
 
 function tournamentSpotlightInfo(spotlight: Spotlight) {
@@ -359,30 +365,37 @@ function renderPlace(data: PodiumPlace) {
 
 function tournamentTeamLeaderboard(ctrl: TournamentCtrl) {
   const t = ctrl.tournament
-  if(!t.teamBattle)
-    return null
   const tb = t.teamBattle
   const standings = t.teamStanding
-
+  if(!tb || !standings)
+    return null
+  
+  let teamColorMap: TeamColorMap = {}
+  teamColorMap = Object.keys(tb.teams).reduce(function (acc, team, i) {
+    acc[team] = i
+    return acc
+  },teamColorMap)
+  console.log(teamColorMap)
+  
   return (
     <div className="tournamentTeamLeaderboard">
-
       <ul
         className={'tournamentTeamStandings box'}
         oncreate={helper.ontap(e => handleTeamInfoTap(ctrl, e!), undefined, undefined, getTeamLeaderboardItemEl)}
       >
-        {standings.map((team, i) => renderTeamEntry(tb.teams[team.id], team, i))}
+        {standings.map((team, i) => renderTeamEntry(tb.teams[team.id], teamColorMap[team.id], team, i))}
       </ul>
     </div>
   )
 }
 
-function renderTeamEntry(teamName: string, team: TeamStanding, i: number) {
+function renderTeamEntry(teamName: string, teamColor: number, team: TeamStanding, i: number) {
   const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
   return (
     <li key={team.id} data-team={team.id} className={`list_item tournament-list-team ${evenOrOdd}`} >
       <div className="tournamentTeam">
-        <span> {teamName} </span>
+        <span> {team.rank + '. '} </span>
+        <span className={'ttc-' + teamColor}> {teamName} </span>
       </div>
       <span className={'tournamentTeamPoints'}>
         {team.score}

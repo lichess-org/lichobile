@@ -10,7 +10,7 @@ import { Tournament, StandingPlayer, StandingPage } from '../../../lichess/inter
 import * as xhr from '../tournamentXhr'
 import faq, { FaqCtrl } from '../faq'
 import playerInfo, { PlayerInfoCtrl } from './playerInfo'
-import teamInfo, { TeamInfoCtrl } from './playerInfo'
+import teamInfo, { TeamInfoCtrl } from './teamInfo'
 import socketHandler from './socketHandler'
 
 const MAX_PER_PAGE = 10

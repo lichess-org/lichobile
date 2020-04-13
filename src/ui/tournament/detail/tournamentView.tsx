@@ -3,7 +3,7 @@ import h from 'mithril/hyperscript'
 import router from '../../../router'
 import session from '../../../session'
 import i18n from '../../../i18n'
-import { Tournament, StandingPlayer, PodiumPlace, Spotlight, Verdicts, TeamStanding, TeamColorMap } from '../../../lichess/interfaces/tournament'
+import { Tournament, StandingPlayer, PodiumPlace, Spotlight, Verdicts, TeamStanding } from '../../../lichess/interfaces/tournament'
 import { Opening } from '../../../lichess/interfaces/game'
 import { formatTournamentDuration, formatTournamentTimeControl } from '../../../utils'
 import * as helper from '../../helper'
@@ -237,7 +237,7 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
         className={'tournamentStandings box' + (ctrl.isLoadingPage ? ' loading' : '')}
         oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e!), undefined, undefined, getLeaderboardItemEl)}
       >
-        {players.map((p, i) => renderPlayerEntry(userName, p, i))}
+        {players.map((p, i) => renderPlayerEntry(userName, p, i, p.team ? ctrl.teamColorMap[p.team] : 0))}
       </ul>
       <div className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
         {renderNavButton('W', !ctrl.isLoadingPage && backEnabled, ctrl.first)}
@@ -266,14 +266,18 @@ function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
   })
 }
 
-function renderPlayerEntry(userName: string, player: StandingPlayer, i: number) {
+function renderPlayerEntry(userName: string, player: StandingPlayer, i: number, teamColor: number) {
   const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
   const isMe = player.name === userName
+  //<span className={'playerTeam ttc-' + teamColor}> {player.team ? player.team : '' } </span>
+  if (teamColor && !teamColor)
+     return null
   return (
     <li key={player.name} data-player={player.name} className={`list_item tournament-list-player ${evenOrOdd}` + (isMe ? ' tournament-me' : '')} >
       <div className="tournamentPlayer">
         <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '. ')} </span>
-        <span> {player.name + ' (' + player.rating + ') '} </span>
+        <span> {player.name + ' (' + player.rating + ') '} {player.team ? player.team : '' } </span>
+        
       </div>
       <span className={'tournamentPoints ' + (player.sheet.fire ? 'on-fire' : 'off-fire')} data-icon="Q">
         {player.score}
@@ -370,20 +374,13 @@ function tournamentTeamLeaderboard(ctrl: TournamentCtrl) {
   if(!tb || !standings)
     return null
   
-  let teamColorMap: TeamColorMap = {}
-  teamColorMap = Object.keys(tb.teams).reduce(function (acc, team, i) {
-    acc[team] = i
-    return acc
-  },teamColorMap)
-  console.log(teamColorMap)
-  
   return (
     <div className="tournamentTeamLeaderboard">
       <ul
         className={'tournamentTeamStandings box'}
         oncreate={helper.ontap(e => handleTeamInfoTap(ctrl, e!), undefined, undefined, getTeamLeaderboardItemEl)}
       >
-        {standings.map((team, i) => renderTeamEntry(tb.teams[team.id], teamColorMap[team.id], team, i))}
+        {standings.map((team, i) => renderTeamEntry(tb.teams[team.id], ctrl.teamColorMap[team.id], team, i))}
       </ul>
     </div>
   )

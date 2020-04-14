@@ -1,5 +1,6 @@
 import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
+import m from 'mithril'
 import router from '../../../router'
 import session from '../../../session'
 import i18n from '../../../i18n'
@@ -58,11 +59,11 @@ export function renderFooter(ctrl: TournamentCtrl) {
 
   return (
     <div className="actions_bar">
-      <button className="action_bar_button" oncreate={helper.ontap(ctrl.faqCtrl.open)}>
+      <button key="faqButton" className="action_bar_button" oncreate={helper.ontap(ctrl.faqCtrl.open)}>
         <span className="fa fa-question-circle" />
         FAQ
       </button>
-      <button className="action_bar_button" oncreate={helper.ontap(() => Plugins.LiShare.share({ url: tUrl }))}>
+      <button key="shareButton" className="action_bar_button" oncreate={helper.ontap(() => Plugins.LiShare.share({ url: tUrl }))}>
         <span className="fa fa-share-alt" />
         Share
       </button>
@@ -178,16 +179,16 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
     settings.game.supportedVariants.indexOf(t.variant) < 0 ||
     !t.verdicts.accepted ||
     (t.teamBattle && t.teamBattle.joinWith.length === 0)) {
-    return null
+    return m.fragment({key: 'noJoinButton'}, [])
   }
   console.log(ctrl)
   console.log(t)
-  const action = t.private || t.teamBattle ?
+  const action = (t.private || t.teamBattle) ?
     () => joinInfoForm.open(ctrl) :
     () => ctrl.join()
 
   return (
-    <button className="action_bar_button" oncreate={helper.ontap(action)}>
+    <button key="joinButton" className="action_bar_button" oncreate={helper.ontap(action)}>
       <span className="fa fa-play" />
       {i18n('join')}
     </button>
@@ -196,10 +197,10 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
 
 function withdrawButton(ctrl: TournamentCtrl, t: Tournament) {
   if (t.isFinished || settings.game.supportedVariants.indexOf(t.variant) < 0) {
-    return null
+    return m.fragment({key: 'noWithdrawButton'}, [])
   }
   return (
-    <button className="action_bar_button" oncreate={helper.ontap(ctrl.withdraw)}>
+    <button key="withdrawButton" className="action_bar_button" oncreate={helper.ontap(ctrl.withdraw)}>
       <span className="fa fa-flag" />
       {i18n('withdraw')}
     </button>

@@ -108,8 +108,6 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
   }
 
   const fullUrl = url.indexOf('http') > -1 ? url : baseUrl + url
-  console.log(fullUrl)
-  console.log(init.body)
   const timeoutPromise = new Promise((_, reject) => {
     timeoutId = setTimeout(
       () => reject(new Error('Request timeout.')),

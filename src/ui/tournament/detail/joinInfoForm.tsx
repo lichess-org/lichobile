@@ -37,7 +37,7 @@ function close(fromBB?: string) {
 function renderForm() {
   const t = tournamentCtrl.tournament
   const teamList = t.teamBattle ? t.teamBattle.joinWith.map((x: string) => [t.teamBattle ? t.teamBattle.teams[x] : '', x]) : []
-  console.log(teamList)
+
   if (t.teamBattle && !t.teamBattle.joinWith.includes(settings.tournament.join.lastTeam())) {
     if (t.teamBattle.joinWith.length > 0)
       settings.tournament.join.lastTeam(t.teamBattle.joinWith[0])
@@ -73,8 +73,7 @@ function join(form: HTMLFormElement) {
   const elements: HTMLCollection = (form[0] as HTMLFieldSetElement).elements as HTMLCollection
   const password = (elements[0] as HTMLInputElement).value
   const team = (elements[1] as HTMLTextAreaElement).value
-  console.log(team)
-  console.log(settings.tournament.join.lastTeam)
+
   tournamentCtrl.join(password, team)
   close()
 }

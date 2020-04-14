@@ -63,7 +63,6 @@ export default {
         </tr>
       )
     }
-    console.log('displaying')
 
     return (
       <div className="modal tournamentInfoModal" id="tournamentTeamInfoModal" oncreate={helper.slidesInLeft}>

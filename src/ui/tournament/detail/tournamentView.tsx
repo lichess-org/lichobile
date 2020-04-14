@@ -38,7 +38,7 @@ export function renderTeamInfoOverlay(ctrl: TournamentCtrl) {
 
 export function tournamentBody(ctrl: TournamentCtrl) {
   const data = ctrl.tournament
-  console.log(data)
+
   if (!data) return null
 
   return h('div.tournamentContainer.native_scroller.page', {
@@ -181,8 +181,6 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
     (t.teamBattle && t.teamBattle.joinWith.length === 0)) {
     return m.fragment({key: 'noJoinButton'}, [])
   }
-  console.log(ctrl)
-  console.log(t)
   const action = (t.private || t.teamBattle) ?
     () => joinInfoForm.open(ctrl) :
     () => ctrl.join()

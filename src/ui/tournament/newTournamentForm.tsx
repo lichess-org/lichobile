@@ -38,7 +38,6 @@ function close(fromBB?: string) {
 
 
 function renderForm(ctrl: TournamentsListCtrl) {
-  console.log (settings.tournament.availableIncrements.map((x: string) => utils.tupleOf(Number(x))))
   return (
     <form id="tournamentCreateForm" class="tournamentForm"
     onsubmit={(e: Event) => {

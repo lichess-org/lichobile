@@ -93,20 +93,20 @@ export default {
     }
 
     return (
-      <div className="modal" id="tournamentPlayerInfoModal" oncreate={helper.slidesInLeft}>
+      <div className="modal tournamentInfoModal" id="tournamentPlayerInfoModal" oncreate={helper.slidesInLeft}>
         <header>
           <button className="modal_close"
             oncreate={helper.ontap(helper.slidesOutRight(ctrl.close, 'tournamentPlayerInfoModal'))}
           >
             { closeIcon }
           </button>
-          <h2 className="playerModalHeader">
+          <h2 className="tournamentModalHeader">
             {player.rank + '. ' + player.name + ' (' + player.rating + ') '}
           </h2>
         </header>
         <div className="modal_content">
           <div className="tournamentPlayerInfo">
-            <table className="playerStats">
+            <table className="tournamentModalStats">
               <tr>
                 <td className="statName">
                   {i18n('gamesPlayed')}
@@ -150,7 +150,7 @@ export default {
             </table>
           </div>
           <div className="tournamentPlayerGames">
-            <table className="playerGames"
+            <table className="tournamentModalTable"
               oncreate={helper.ontapY(e => {
                 const el = helper.getTR(e)
                 if (el) {

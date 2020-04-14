@@ -352,7 +352,7 @@
   .streak
     color: #759900;
 
-.playerStats
+.tournamentModalStats
   font-size 1em
   margin 0 auto
   border-spacing 10px 0px
@@ -360,28 +360,29 @@
   > .invisible
     display none
 
-.playerGames
-  width 100%
-  >.list_item
-    >td
-      vertical-align  middle
-
-#tournamentPlayerInfoModal
+.tournamentInfoModal
   > header
     box-sizing content-box
-    > .playerModalHeader
+    > .tournamentModalHeader
       padding-left 40px
       padding-right 40px
       overflow hidden
       white-space nowrap
       text-overflow ellipsis
-  .playerGames
+  .tournamentModalTable
+    width 100%
+    >.list_item
+      >td
+        vertical-align  middle
     td
       overflow hidden
       text-overflow ellipsis
       white-space nowrap
   .oppName
     max-width 160px
+  .teamPlayerScore
+    width 20%
+    text-align center
 
 .tournamentPlayerInfo
   padding 5px

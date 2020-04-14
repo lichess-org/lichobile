@@ -2,29 +2,22 @@ import Stream from 'mithril/stream'
 import router from '../../../router'
 import redraw from '../../../utils/redraw'
 import * as helper from '../../helper'
-import { TeamStanding } from '../../../lichess/interfaces/tournament'
+import { TeamStandingPlayer } from '../../../lichess/interfaces/tournament'
 import TournamentCtrl from './TournamentCtrl'
-/*
 import h from 'mithril/hyperscript'
-import * as utils from '../../../utils'
-import i18n from '../../../i18n'
 import { closeIcon } from '../../shared/icons'
-*/
-
 
 export interface TeamInfoCtrl {
   open: (playerId: string) => void
   close: (fromBB?: string) => void
   isOpen: () => boolean
   root: TournamentCtrl
-  teamData: Stream<TeamStanding>
   teamId: Stream<string>
 }
 
 export default {
   controller(root: TournamentCtrl): TeamInfoCtrl {
     let isOpen = false
-    const teamData = Stream<TeamStanding>()
     const teamId = Stream<string>()
 
     function open(tId: string) {
@@ -46,128 +39,54 @@ export default {
         return isOpen
       },
       root,
-      teamData,
       teamId
     }
   },
 
   view: function(ctrl: TeamInfoCtrl) {
-    return ctrl ? null : null
-    /*
     if (!ctrl.isOpen()) return null
 
-    const tournament = ctrl.root.tournament
-    if (!tournament) return null
+    const t = ctrl.root.tournament
+    const teamId = ctrl.teamId()
+    if (!t || !t.teamBattle || !t.teamStanding || !teamId) return null
 
-    const teamData = ctrl.teamData()
-    if (!teamData) return null
+    const teamName = t.teamBattle.teams[teamId]
+    const teamStanding = t.teamStanding.find(a => a.id === teamId)
+    if (!teamName || !teamStanding) return null
 
-    const player = teamData.player
-    const pairings = playerData.pairings
-    const avgOpRating = pairings.length ? (pairings.reduce((prev, x) => prev + x.op.rating, 0) / pairings.length).toFixed(0) : '0'
-
-
-    function renderPlayerGame(game: PlayerInfoPairing, index: number) {
-      let outcome: string | number
-      let outcomeClass = 'oppOutcome'
-      if (game.score === undefined || game.score === null) {
-        outcome = '*'
-      }
-      else if (Array.isArray(game.score)) {
-        outcome = game.score[0]
-        if (game.score[1] === 2)
-          outcomeClass += ' streak'
-        else if (game.score[1] === 3)
-          outcomeClass += ' double'
-      }
-      else {
-        outcome = game.score
-      }
+    function renderPlayer(player: TeamStandingPlayer, index: number) {
       return (
-        <tr className="list_item bglight" data-id={game.id} data-color={game.color} key={game.id}>
-          <td className="oppRank"> {player.nb.game - index} </td>
-          <td className="oppName"> {game.op.name} </td>
-          <td className="oppRating"> {game.op.rating} </td>
-          <td className="oppColor"> <span className={'color-icon ' + game.color}> </span> </td>
-          <td className={outcomeClass}> {outcome} </td>
+        <tr className="list_item bglight" key={player.user.id}>
+          <td className="teamPlayerRank"> {index + 1} </td>
+          <td className="teamPlayerName"> {player.user.name} </td>
+          <td className="teamPlayerScore"> {player.score} </td>
         </tr>
       )
     }
+    console.log('displaying')
 
     return (
-      <div className="modal" id="tournamentPlayerInfoModal" oncreate={helper.slidesInLeft}>
+      <div className="modal tournamentInfoModal" id="tournamentTeamInfoModal" oncreate={helper.slidesInLeft}>
         <header>
           <button className="modal_close"
-            oncreate={helper.ontap(helper.slidesOutRight(ctrl.close, 'tournamentPlayerInfoModal'))}
+            oncreate={helper.ontap(helper.slidesOutRight(ctrl.close, 'tournamentTeamInfoModal'))}
           >
             { closeIcon }
           </button>
-          <h2 className="playerModalHeader">
-            {player.rank + '. ' + player.name + ' (' + player.rating + ') '}
+          <h2 className="tournamentModalHeader">
+            <span> {teamStanding.rank + '.' } &thinsp; </span>
+            <span class={'ttc-' + ctrl.root.teamColorMap[teamId]}> {teamName} &thinsp; </span>
+            <span> {'(' + teamStanding.score + ')'} </span>
           </h2>
         </header>
         <div className="modal_content">
-          <div className="tournamentPlayerInfo">
-            <table className="playerStats">
-              <tr>
-                <td className="statName">
-                  {i18n('gamesPlayed')}
-                </td>
-                <td className="statData">
-                  {player.nb.game}
-                </td>
-              </tr>
-              <tr>
-                <td className="statName">
-                  {i18n('winRate')}
-                </td>
-                <td className="statData">
-                  {player.nb.game ? ((player.nb.win / player.nb.game) * 100).toFixed(0) + '%' : '0%'}
-                </td>
-              </tr>
-              <tr>
-                <td className="statName">
-                  {i18n('berserkRate')}
-                </td>
-                <td className="statData">
-                  {player.nb.game ? ((player.nb.berserk / player.nb.game) * 100).toFixed(0) + '%' : '0%'}
-                </td>
-              </tr>
-              <tr>
-                <td className="statName">
-                  Average Opponent
-                </td>
-                <td className="statData">
-                  {avgOpRating}
-                </td>
-              </tr>
-              <tr className={player.performance ? '' : 'invisible'}>
-                <td className="statName">
-                  {i18n('performance')}
-                </td>
-                <td className="statData">
-                  {player.performance}
-                </td>
-              </tr>
-            </table>
-          </div>
-          <div className="tournamentPlayerGames">
-            <table className="playerGames"
-              oncreate={helper.ontapY(e => {
-                const el = helper.getTR(e)
-                if (el) {
-                  const id = el.dataset.id
-                  const color = el.dataset.color
-                  router.set(`/game/${id}?color=${color}&goingBack=1`)
-                }
-              }, undefined, helper.getTR)}
-            >
-              {pairings.map(renderPlayerGame)}
+          <div className="tournamentTeamPlayers">
+            <table className="tournamentModalTable">
+              {teamStanding.players.map(renderPlayer)}
             </table>
           </div>
         </div>
       </div>
     )
-    */
   }
 }

@@ -11,7 +11,7 @@ import layout from '../../layout'
 
 import * as xhr from '../tournamentXhr'
 import { tournamentBody, renderPlayerInfoOverlay, renderTeamInfoOverlay, renderFAQOverlay, renderFooter, timeInfo } from './tournamentView'
-import joinInfoForm from './joinInfoForm'
+import joinForm from './joinForm'
 import TournamentCtrl from './TournamentCtrl'
 
 interface Attrs {
@@ -89,7 +89,7 @@ export default {
       faqOverlay,
       playerInfoOverlay,
       teamInfoOverlay,
-      joinInfoForm.view()
+      joinForm.view()
     ]
 
     return layout.free(header, body, footer, overlay)

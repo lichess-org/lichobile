@@ -15,7 +15,7 @@ import CountdownTimer from '../../shared/CountdownTimer'
 import faq from '../faq'
 import playerInfo from './playerInfo'
 import teamInfo from './teamInfo'
-import joinInfoForm from './joinInfoForm'
+import joinForm from './joinForm'
 import TournamentCtrl from './TournamentCtrl'
 
 export function renderFAQOverlay(ctrl: TournamentCtrl) {
@@ -38,11 +38,10 @@ export function renderTeamInfoOverlay(ctrl: TournamentCtrl) {
 
 export function tournamentBody(ctrl: TournamentCtrl) {
   const data = ctrl.tournament
-
   if (!data) return null
 
   return h('div.tournamentContainer.native_scroller.page', {
-    className: data.podium ? 'finished' : '',
+    className: (data.podium ? 'finished ' : '') + (data.teamBattle ? 'teamBattle' : ''),
   }, [
     tournamentHeader(data, ctrl),
     data.podium && !data.teamBattle ? tournamentPodium(data.podium) : null,
@@ -182,7 +181,7 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
     return m.fragment({key: 'noJoinButton'}, [])
   }
   const action = (t.private || t.teamBattle) ?
-    () => joinInfoForm.open(ctrl) :
+    () => joinForm.open(ctrl) :
     () => ctrl.join()
 
   return (
@@ -228,6 +227,7 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
   const forwardEnabled = page < data.nbPlayers / 10
   const user = session.get()
   const userName = user ? user.username : ''
+  const tb = data.teamBattle
 
   return (
     <div className="tournamentLeaderboard">
@@ -236,7 +236,7 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
         className={'tournamentStandings box' + (ctrl.isLoadingPage ? ' loading' : '')}
         oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e!), undefined, undefined, getLeaderboardItemEl)}
       >
-        {players.map((p, i) => renderPlayerEntry(userName, p, i, p.team ? ctrl.teamColorMap[p.team] : 0))}
+        {players.map((p, i) => renderPlayerEntry(userName, p, i, p.team ? ctrl.teamColorMap[p.team] : 0, p.team && tb ? tb.teams[p.team] : ''))}
       </ul>
       <div className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
         {renderNavButton('W', !ctrl.isLoadingPage && backEnabled, ctrl.first)}
@@ -265,16 +265,16 @@ function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
   })
 }
 
-function renderPlayerEntry(userName: string, player: StandingPlayer, i: number, teamColor: number) {
+function renderPlayerEntry(userName: string, player: StandingPlayer, i: number, teamColor: number, teamName?: string) {
   const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
   const isMe = player.name === userName
 
   return (
-    <li key={player.name} data-player={player.name} className={`list_item tournament-list-player ${evenOrOdd}` + (isMe ? ' tournament-me' : '')} >
-      <div className="tournamentPlayer">
+    <li key={player.name} data-player={player.name} className={`list_item tournament-list-item ${evenOrOdd}` + (isMe ? ' tournament-me' : '')} >
+      <div className="tournamentIdentity">
         <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '.')} &thinsp; </span>
         <span className="playerName"> {player.name + ' (' + player.rating + ') '}</span>
-        <span className={'playerTeam ttc-' + teamColor}> {player.team ? player.team : '' } </span>
+        <span className={'playerTeam ttc-' + teamColor}> {teamName ? teamName : '' } </span>
       </div>
       <div className={'tournamentPoints ' + (player.sheet.fire ? 'on-fire' : 'off-fire')} data-icon="Q">
         {player.score}
@@ -386,8 +386,8 @@ function tournamentTeamLeaderboard(ctrl: TournamentCtrl) {
 function renderTeamEntry(teamName: string, teamColor: number, team: TeamStanding, i: number) {
   const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
   return (
-    <li key={team.id} data-team={team.id} className={`list_item tournament-list-team ${evenOrOdd}`} >
-      <div className="tournamentTeam">
+    <li key={team.id} data-team={team.id} className={`list_item tournament-list-item ${evenOrOdd}`} >
+      <div className="tournamentIdentity">
         <span> {team.rank + '.'} &thinsp; </span>
         <span className={'ttc-' + teamColor}> {teamName} </span>
       </div>

@@ -207,11 +207,9 @@ export default class TournamentCtrl {
   }
 
   private createTeamColorMap (tb: TeamBattle) {
-    let tColorMap: TeamColorMap = {}
-    tColorMap = Object.keys(tb.teams).reduce(function (acc, team, i) {
+    return Object.keys(tb.teams).reduce(function (acc, team, i) {
       acc[team] = i
       return acc
-    }, tColorMap)
-    return tColorMap
+    }, {} as TeamColorMap)
   }
 }

@@ -391,9 +391,9 @@ function renderTeamEntry(teamName: string, teamColor: number, team: TeamStanding
         <span> {team.rank + '.'} &thinsp; </span>
         <span className={'ttc-' + teamColor}> {teamName} </span>
       </div>
-      <span className={'tournamentTeamPoints'}>
+      <div className={'tournamentPoints'}>
         {team.score}
-      </span>
+      </div>
     </li>
   )
 }

@@ -1,5 +1,5 @@
 import { fetchJSON } from '../../http'
 
 export function getTeams(): Promise<ReadonlyArray<string>> {
-  return fetchJSON('/team')
+  return fetchJSON('/api/team/all')
 }

@@ -1,6 +1,6 @@
+import redraw from '../../utils/redraw'
 /*
 import throttle from 'lodash-es/throttle'
-import redraw from '../../utils/redraw'
 
 import router from '../../router'
 import { User, Rankings } from '../../lichess/interfaces/user'
@@ -22,7 +22,7 @@ export default class TeamsCtrl {
     console.log("construction")
     xhr.getTeams()
     .then(data => {
-      console.log(data)
+      console.log(data)  
     })
     .catch(e => console.log(e))
     /*
@@ -41,7 +41,7 @@ export default class TeamsCtrl {
     .catch(utils.handleXhrError)
     */
   }
-  /*
+  
   public onTabChange = (tabIndex: number) => {
     const loc = window.location.search.replace(/\?tab\=\w+$/, '')
     try {
@@ -50,7 +50,7 @@ export default class TeamsCtrl {
     this.currentTab = tabIndex
     redraw()
   }
-
+/*
   public closeSearch = (fromBB?: string) => {
     if (fromBB !== 'backbutton' && this.isSearchOpen) router.backbutton.stack.pop()
       this.isSearchOpen = false

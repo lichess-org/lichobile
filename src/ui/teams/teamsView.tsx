@@ -1,18 +1,20 @@
-/*
+
 import h from 'mithril/hyperscript'
+/*
 import * as utils from '../../utils'
 import router from '../../router'
 import * as helper from '../helper'
 import { header as mainHeader, userStatus } from '../shared/common'
 import { backArrow } from '../shared/icons'
 import settings from '../../settings'
-import i18n from '../../i18n'
+
 import spinner from '../../spinner'
 import { perfTitle } from '../../lichess/perfs'
 import { User, RankingKey, RankingUser, Rankings } from '../../lichess/interfaces/user'
+*/
+import i18n from '../../i18n'
 import TabNavigation from '../shared/TabNavigation'
 import TabView from '../shared/TabView'
-*/
 import TeamsCtrl from './TeamsCtrl'
 
 export function header(ctrl: TeamsCtrl) {
@@ -33,18 +35,18 @@ export function body(ctrl: TeamsCtrl) {
   if (ctrl)
     return null
   return null
-  /*
+  
   const tabsContent = [
-    { id: 'leaderboard', f: () => renderLeaderboard(ctrl) },
-    { id: 'players', f: () => onlinePlayers(ctrl) },
+    { id: 'allTeams', f: () => renderAllTeams(ctrl) },
+    { id: 'myTeams', f: () => renderMyTeams(ctrl) },
   ]
 
   return [
     h('div.tabs-nav-header.subHeader',
       h(TabNavigation, {
         buttons: [
-          { label: i18n('leaderboard') },
-          { label: i18n('onlinePlayers') },
+          { label: i18n('allTeams') },
+          { label: i18n('myTeams') },
         ],
         selectedIndex: ctrl.currentTab,
         onTabChange: ctrl.onTabChange
@@ -56,14 +58,14 @@ export function body(ctrl: TeamsCtrl) {
       onTabChange: ctrl.onTabChange,
     })
   ]
-  */
 }
 
+/*
 export function searchModal(ctrl: TeamsCtrl) {
   if (ctrl)
     return null
   return null
-  /*
+  
   if (!ctrl.isSearchOpen)
     return null
 
@@ -100,9 +102,9 @@ export function searchModal(ctrl: TeamsCtrl) {
       </ul>
     </div>
   )
-  */
+  
 }
-
+*/
 /*
 function onlinePlayers(ctrl: PlayersCtrl) {
   return ctrl.players ?

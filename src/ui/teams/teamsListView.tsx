@@ -15,7 +15,7 @@ import { User, RankingKey, RankingUser, Rankings } from '../../lichess/interface
 import i18n from '../../i18n'
 import TabNavigation from '../shared/TabNavigation'
 import TabView from '../shared/TabView'
-import TeamsCtrl from './TeamsCtrl'
+import TeamsCtrl from './TeamsListCtrl'
 
 export function header(ctrl: TeamsCtrl) {
   return mainHeader(h('div.teams_main_header', [
@@ -167,9 +167,9 @@ function renderRankingCategory(ranking: Rankings, key: PerfKey) {
   )
 }
 
-function renderTeam(team: Team) {
+function renderTeam(user: RankingUser, key: RankingKey) {
   return (
-    <li key={team.id} className="list_item team_list" oncreate={helper.ontapY(() => router.set('/team/' + team.id))}>
+    <li className="list_item leaderboard_player" oncreate={helper.ontapY(() => router.set('/team/' + user.id))}>
       {userStatus(user)}
       <span className="rating">
         {user.perfs[key].rating}

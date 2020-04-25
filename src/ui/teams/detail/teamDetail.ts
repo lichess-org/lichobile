@@ -1,3 +1,4 @@
+/*
 import * as Mithril from 'mithril'
 import socket from '../../socket'
 import * as helper from '../helper'
@@ -5,19 +6,19 @@ import layout from '../layout'
 import { safeStringToNum } from '../../utils'
 import TeamsCtrl from './TeamsCtrl'
 import { header, body, searchModal } from './teamsView'
+*/
 
 interface Attrs {
-  tab?: string
+  id: string
 }
 
 interface State {
-  ctrl: TeamsCtrl
+  ctrl: TeamCtrl
 }
 
 export default {
   oninit({ attrs }) {
     socket.createDefault()
-    console.log("init!")
     this.ctrl = new TeamsCtrl(safeStringToNum(attrs.tab))
   },
 

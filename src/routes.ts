@@ -275,7 +275,13 @@ export default {
       })
 
       router.add('teams', ({ params }) => {
-        import('./ui/teams/teams').then(m => {
+        import('./ui/teams/teamsList').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('teams/:id', ({ params }) => {
+        import('./ui/teams/detail/teamDetail').then(m => {
           onRouteMatch(m.default, params)
         })
       })

@@ -27,6 +27,7 @@
         "autoprefixer-stylus": "1.0.0",
         "concurrently": "5.0.0",
         "jest": "24.7.1",
+        "jetifier": "1.6.5",
         "mustache": "3.1.0",
         "rollup": "1.23.1",
         "rollup-plugin-commonjs": "10.1.0",
@@ -40,10 +41,10 @@
         "whatwg-fetch": "3.0.0"
     },
     "dependencies": {
-        "@capacitor/android": "1.5.0",
-        "@capacitor/cli": "1.5.0",
-        "@capacitor/core": "1.5.0",
-        "@capacitor/ios": "1.5.0",
+        "@capacitor/android": "2.0.1",
+        "@capacitor/cli": "2.0.1",
+        "@capacitor/core": "2.0.1",
+        "@capacitor/ios": "2.0.1",
         "@types/d3": "4.5.0",
         "@types/lodash-es": "4.17.3",
         "@types/mithril": "2.0.0",

@@ -87,6 +87,14 @@ export default {
 
   register(): Promise<void> {
     if (settings.general.notifications.allow()) {
+      PushNotifications.requestPermission().then(result => {
+        if (result.granted) {
+          return PushNotifications.register()
+        } else {
+          return Promise.reject('Permission to use push denied')
+        }
+      })
+
       return PushNotifications.register()
     }
 

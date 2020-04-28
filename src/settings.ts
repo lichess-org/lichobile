@@ -106,6 +106,7 @@ export default {
         ['chess7' ],
         ['riohacha' ],
         ['symmetric' ],
+	['chips'],
       ],
       background: prop('bgTheme', 'dark'),
       board: prop('theme.board', 'brown'),

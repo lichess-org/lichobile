@@ -99,6 +99,7 @@ export default {
         ['companion' ],
         ['kosal' ],
         ['leipzig' ],
+        ['libra' ],
         ['fantasy' ],
         ['shapes' ],
         ['letter' ],

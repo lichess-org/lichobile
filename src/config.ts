@@ -8,7 +8,7 @@ export interface Config {
 
 const defaults = {
   apiVersion: 4,
-  fetchTimeoutMs: 10000
+  fetchTimeoutMs: 15000
 }
 
 const config = Object.assign({}, defaults, window.lichess)

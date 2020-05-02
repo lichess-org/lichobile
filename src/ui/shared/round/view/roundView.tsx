@@ -195,6 +195,7 @@ function renderHeader(ctrl: OnlineRound) {
   children.push(headerBtns())
 
   return h('nav', {
+    key: 'roundHeader', // workaround to avoid mithril error
     className: socket.isConnected() ? '' : 'reconnecting'
   }, children)
 }

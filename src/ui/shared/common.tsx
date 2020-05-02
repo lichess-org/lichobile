@@ -176,17 +176,13 @@ export function connectingDropShadowHeader(title?: string) {
 
 
 export function loadingBackbutton(title?: string) {
-  return (
-    <nav>
-      {backButton(
-        <div className={'main_header_title reconnecting' + (title ? 'withTitle' : '')}>
-          {title ? <span>{title}</span> : null}
-          {loader}
-        </div>
-      )}
-      {headerBtns()}
-    </nav>
-  )
+  return h('nav', [
+    backButton([
+      title ? h('span', title) : null,
+      loader,
+    ]),
+    headerBtns()
+  ])
 }
 
 export function empty(): Mithril.Children {

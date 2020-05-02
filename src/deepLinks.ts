@@ -6,6 +6,13 @@ import session, { Session } from './session'
 import signupModal from './ui/signupModal'
 import { handleXhrError } from './utils'
 
+const fenParams = ':r1/:r2/:r3/:r4/:r5/:r6/:r7/:r8'
+function fenFromParams(params: any): string {
+  return params.r1 + '/' + params.r2 + '/' + params.r3 + '/' + params.r4 + '/' +
+    params.r5 + '/' + params.r6 + '/' + params.r7 + '/' +
+    params.r8.split('_').join(' ')
+}
+
 export default {
   init() {
     Plugins.App.addListener('appUrlOpen', ({ url }) => {
@@ -33,7 +40,15 @@ const links = new Rlite()
 const gamePattern = /^\/(\w{8})(\/black|white)?$/
 
 links.add('analysis', () => router.set('/analyse'))
+links.add(`analysis/${fenParams}`, ({ params }) => {
+  const fen = encodeURIComponent(fenFromParams(params))
+  router.set(`/analyse/fen/${fen}`)
+})
 links.add('editor', () => router.set('/editor'))
+links.add(`editor/${fenParams}`, ({ params }) => {
+  const fen = encodeURIComponent(fenFromParams(params))
+  router.set(`/editor/${fen}`)
+})
 links.add('inbox', () => router.set('/inbox'))
 links.add('inbox/new', () => router.set('/inbox/new'))
 links.add('challenge/:id', ({ params }) => router.set(`/challenge/${params.id}`))

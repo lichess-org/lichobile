@@ -39,15 +39,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                   android:host="lichess.org" android:scheme="https"
-                  android:pathPattern="/........" />
-                <data
-                  android:host="lichess.org" android:scheme="https"
-                  android:pathPattern="/......../black" />
-                <data
-                  android:host="lichess.org" android:scheme="https"
-                  android:pathPattern="/......../white" />
-                <data
-                  android:host="lichess.org" android:scheme="https"
                   android:pathPrefix="/analysis" />
                 <data
                   android:host="lichess.org" android:scheme="https"
@@ -79,6 +70,15 @@
                 <data
                   android:host="lichess.org" android:scheme="https"
                   android:pathPrefix="/study" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPattern="/........" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPattern="/......../black" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPattern="/......../white" />
             </intent-filter>
 
         </activity>

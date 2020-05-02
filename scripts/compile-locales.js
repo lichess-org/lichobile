@@ -30,13 +30,21 @@ async function sequential(iterable, action) {
   }
 }
 
-console.log(`Compiling date-fns locales...`)
+function execute() {
+  console.log('Compiling date-fns locales...')
 
-console.time('compile-locales')
-Promise.all(
-  fs.readdirSync(source, { withFileTypes: true })
-  .filter(e => e.isDirectory() && !e.name.startsWith('_'))
-  .map(compile)
-).then(() => {
-  console.timeEnd('compile-locales')
-})
+  console.time('compile-locales')
+  Promise.all(
+    fs.readdirSync(source, { withFileTypes: true })
+    .filter(e => e.isDirectory() && !e.name.startsWith('_'))
+      .map(compile)
+  ).then(() => {
+    console.timeEnd('compile-locales')
+  })
+}
+
+if (!fs.existsSync(destDir)) {
+  execute()
+} else {
+  console.log('locales already compiled: skipping...')
+}

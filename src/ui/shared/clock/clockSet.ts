@@ -32,27 +32,27 @@ export default {
     Number(settings.clock.handicapInc.bottomTime()) * MINUTE_MILLIS,
     Number(settings.clock.handicapInc.bottomIncrement()) * MILLIS,
     onFlag,
-    false
+    true
   ),
 
   delay: (onFlag: (color: Color) => void) => DelayClock(
     Number(settings.clock.delay.time()) * MINUTE_MILLIS,
     Number(settings.clock.delay.increment()) * MILLIS,
     onFlag,
-    false
+    true
   ),
 
   bronstein: (onFlag: (color: Color) => void) => BronsteinClock(
     Number(settings.clock.bronstein.time()) * MINUTE_MILLIS,
     Number(settings.clock.bronstein.increment()) * MILLIS,
     onFlag,
-    false
+    true
   ),
 
   hourglass: (onFlag: (color: Color) => void) => HourglassClock(
     Number(settings.clock.hourglass.time()) * MINUTE_MILLIS,
     onFlag,
-    false
+    true
   ),
 
   stage: (onFlag: (color: Color) => void) => StageClock(
@@ -64,6 +64,6 @@ export default {
     }),
     Number(settings.clock.stage.increment()) * MILLIS,
     onFlag,
-    false
+    true
   )
 }

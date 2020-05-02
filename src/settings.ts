@@ -105,6 +105,7 @@ export default {
         ['chessnut' ],
         ['chess7' ],
         ['riohacha' ],
+        ['staunty' ],
         ['symmetric' ],
         ['pixel'],
       ],

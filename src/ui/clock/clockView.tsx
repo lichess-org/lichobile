@@ -42,10 +42,20 @@ export function clockBody(ctrl: IChessClockCtrl) {
     clock.whiteTime() >= 3600 ? 'long' : ''
   ].join(' ')
 
+  const whiteClockTimeShortClass = [
+    'clockTime',
+    clock.whiteTime() < 60000 && !whiteFlagged ? 'short' : 'noshort'
+  ].join(' ')
+
   const blackClockTimeClass = [
     'clockTime',
     blackFlagged ? 'flagged' : '',
     clock.blackTime() >= 3600 ? 'long' : ''
+  ].join(' ')
+
+  const blackClockTimeShortClass = [
+    'clockTime',
+    clock.blackTime() < 60000 && !blackFlagged ? 'short' : 'noshort'
   ].join(' ')
 
   return (
@@ -55,6 +65,9 @@ export function clockBody(ctrl: IChessClockCtrl) {
         <div className="clockTapAreaContent">
           <span className={whiteClockTimeClass}>
             { whiteFlagged ? 'b' : formatTime(ctrl.clockType(), clock.whiteTime() / 1000) }
+          </span>
+          <span className={whiteClockTimeShortClass}>
+            { '.' + Math.trunc(clock.whiteTime() / 100 % 10) }
           </span>
         </div>
       </div>
@@ -68,6 +81,9 @@ export function clockBody(ctrl: IChessClockCtrl) {
         <div className="clockTapAreaContent">
           <span className={blackClockTimeClass}>
             { blackFlagged ? 'b' : formatTime(ctrl.clockType(), clock.blackTime() / 1000) }
+          </span>
+          <span className={blackClockTimeShortClass}>
+            { '.' + Math.trunc(clock.blackTime() / 100 % 10) }
           </span>
         </div>
         { isStageClock(clock) ? renderMoves(clock.blackMoves()) : null }

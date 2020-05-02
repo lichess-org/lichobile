@@ -23,6 +23,11 @@ export interface TimeControlCorrespondence extends TimeControl {
   readonly daysPerTurn: number
 }
 
+export interface ChallengeData {
+  challenge: Challenge
+  socketVersion: number
+}
+
 export interface Challenge {
   readonly id: string
   readonly direction: 'in' | 'out'

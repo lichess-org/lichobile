@@ -1,16 +1,49 @@
+import h from 'mithril/hyperscript'
 import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
 import router from '../../router'
 import session from '../../session'
 import loginModal from '../loginModal'
 import spinner from '../../spinner'
+import { standardFen } from '../../lichess/variant'
 import challengesApi from '../../lichess/challenges'
+import { Challenge, ChallengeUser } from '../../lichess/interfaces/challenge'
 import * as helper from '../helper'
 import popupWidget from '../shared/popup'
 import i18n from '../../i18n'
-import h from 'mithril/hyperscript'
-import { Challenge, ChallengeUser } from '../../lichess/interfaces/challenge'
-import { ChallengeState } from './interfaces'
+import layout from '../layout'
+import { viewOnlyBoardContent } from '../shared/round/view/roundView'
+import { header as headerWidget } from '../shared/common'
+import ChallengeCtrl from './ChallengeCtrl'
+
+
+export default function challengeView(ctrl: ChallengeCtrl) {
+  let overlay: Mithril.Children | undefined = undefined
+  let board = viewOnlyBoardContent(standardFen, 'white')
+
+  const challenge = ctrl.challenge
+
+  const header = headerWidget('lichess.org')
+
+  if (challenge) {
+    board = viewOnlyBoardContent(
+      challenge.initialFen || standardFen,
+      'white'
+    )
+
+    if (challenge.direction === 'in') {
+      overlay = joinPopup(ctrl, challenge)
+    } else if (challenge.direction === 'out') {
+      if (challenge.destUser) {
+        overlay = awaitChallengePopup(ctrl, challenge)
+      } else {
+        overlay = awaitInvitePopup(ctrl, challenge)
+      }
+    }
+  }
+
+  return layout.board(header, board, 'challenge', overlay)
+}
 
 function publicUrl(challenge: Challenge) {
   return 'https://lichess.org/' + challenge.id
@@ -26,7 +59,7 @@ function gameInfos(challenge: Challenge) {
   )
 }
 
-export function joinPopup(ctrl: ChallengeState, challenge: Challenge) {
+function joinPopup(ctrl: ChallengeCtrl, challenge: Challenge) {
   let joinDom: Mithril.Child
   if (challenge.rated && !session.isConnected()) {
     joinDom = h('div.error', [
@@ -77,7 +110,7 @@ export function joinPopup(ctrl: ChallengeState, challenge: Challenge) {
   )
 }
 
-export function awaitInvitePopup(ctrl: ChallengeState, challenge: Challenge) {
+function awaitInvitePopup(ctrl: ChallengeCtrl, challenge: Challenge) {
 
   const isPersistent = challengesApi.isPersistent(challenge)
 
@@ -121,7 +154,7 @@ function challengeUserFormat(user: ChallengeUser) {
   return `${user.name} (${ratingString})`
 }
 
-export function awaitChallengePopup(ctrl: ChallengeState, challenge: Challenge) {
+function awaitChallengePopup(ctrl: ChallengeCtrl, challenge: Challenge) {
 
   // destUser is there in await challenge
   // todo: discriminate in types

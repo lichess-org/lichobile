@@ -41,13 +41,13 @@ export default {
       })
 
       router.add('game/:id', ({ params }) => {
-        import('./ui/game').then(m => {
+        import('./ui/game/game').then(m => {
           onRouteMatch(m.default, params)
         })
       })
 
       router.add('tournament/:tournamentId/game/:id', ({ params }) => {
-        import('./ui/game').then(m => {
+        import('./ui/game/game').then(m => {
           onRouteMatch(m.default, params)
         })
       })
@@ -90,12 +90,6 @@ export default {
 
       router.add('importer', ({ params }) => {
         import('./ui/importer/importer').then(m => {
-          onRouteMatch(m.default, params)
-        })
-      })
-
-      router.add('challenge/:id', ({ params }) => {
-        import('./ui/challenge/challenge').then(m => {
           onRouteMatch(m.default, params)
         })
       })

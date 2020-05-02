@@ -99,6 +99,7 @@ export default {
       return layout.board(
         studyHeader(ctrl.study!.data),
         renderContent(ctrl, isPortrait),
+        undefined,
         [
           ...overlay(ctrl),
           h(RightSideMenu, { studyCtrl: ctrl.study! }),

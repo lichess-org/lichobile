@@ -40,6 +40,7 @@ export default function view(ctrl: OnlineRound) {
   return layout.board(
     renderHeader(ctrl),
     renderContent(ctrl, isPortrait),
+    'round',
     overlay(ctrl),
     undefined,
     undefined,
@@ -94,7 +95,8 @@ export const LoadingBoard = {
   view() {
     return layout.board(
       connectingHeader(),
-      viewOnlyBoardContent(emptyFen, 'white')
+      viewOnlyBoardContent(emptyFen, 'white'),
+      'roundView'
     )
   }
 }

@@ -59,6 +59,7 @@ export default {
     return layout.board(
       header,
       content,
+      undefined,
       this.round && overlay(this.round)
     )
   }

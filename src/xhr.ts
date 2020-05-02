@@ -7,7 +7,7 @@ import settings from './settings'
 import i18n, { formatDate } from './i18n'
 import session from './session'
 import { TimelineData, LobbyData, HookData, Pool, HumanSeekSetup, CorrespondenceSeek, ApiStatus } from './lichess/interfaces'
-import { ChallengesData, Challenge } from './lichess/interfaces/challenge'
+import { ChallengeData, ChallengesData, Challenge } from './lichess/interfaces/challenge'
 import { OnlineGameData } from './lichess/interfaces/game'
 
 interface GameSetup {
@@ -84,10 +84,6 @@ export function getChallenges(): Promise<ChallengesData> {
   return fetchJSON('/challenge')
 }
 
-interface ChallengeData {
-  challenge: Challenge
-  socketVersion: number
-}
 export function getChallenge(id: string): Promise<ChallengeData> {
   return fetchJSON(`/challenge/${id}`, {}, true)
 }
@@ -125,7 +121,7 @@ export function seeks(feedback: boolean): Promise<CorrespondenceSeek[]> {
   }, feedback)
 }
 
-export function game(id: string, color?: string): Promise<OnlineGameData> {
+export function game(id: string, color?: string): Promise<OnlineGameData | ChallengeData> {
   let url = '/' + id
   if (color) url += ('/' + color)
   return fetchJSON(url)

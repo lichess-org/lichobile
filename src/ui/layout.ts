@@ -28,13 +28,18 @@ export default {
   board(
     header: Mithril.Children,
     content: Mithril.Children,
+    key?: string,
     overlay?: Mithril.Children,
     handlers?: Handlers,
     color?: string,
     klass?: string,
   ) {
     background = background || settings.general.theme.background()
-    return h('div.view-container', containerOpts(background), [
+    const opts = key ? {
+      key,
+      ...containerOpts(background)
+    } : containerOpts(background)
+    return h('div.view-container', opts, [
       h(MainBoard, { header, color, handlers, klass }, content),
       h(MenuView),
       gamesMenu.view(),

@@ -160,6 +160,7 @@ export default {
       return layout.board(
         header(title, backButton),
         renderContent(this.ctrl!, isPortrait),
+        undefined,
         overlay(this.ctrl!)
       )
     } else {

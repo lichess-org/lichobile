@@ -55,7 +55,7 @@ function doChallenge() {
       gamesMenu.open(challengesApi.incoming().length)
     }
     if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {
-      router.set(`/challenge/${data.challenge.id}`)
+      router.set(`/game/${data.challenge.id}`)
     }
   })
   .catch(utils.handleXhrError)

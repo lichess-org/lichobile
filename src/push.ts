@@ -67,7 +67,7 @@ export default {
               router.set(`/game/${action.notification.data['lichess.challengeId']}`)
               break
             case 'challengeCreate':
-              router.set(`/challenge/${action.notification.data['lichess.challengeId']}`)
+              router.set(`/game/${action.notification.data['lichess.challengeId']}`)
               break
             case 'corresAlarm':
             case 'gameMove':

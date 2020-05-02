@@ -19,7 +19,7 @@ export default {
       const path = new URL(url).pathname
       const matched = links.run(path)
       if (!matched) {
-        // it can be a game but we want to do an exact regex match
+        // it can be a game or challenge but we want to do an exact regex match
         const found = path.match(gamePattern)
         if (found) {
           const color = found[2]
@@ -51,7 +51,7 @@ links.add(`editor/${fenParams}`, ({ params }) => {
 })
 links.add('inbox', () => router.set('/inbox'))
 links.add('inbox/new', () => router.set('/inbox/new'))
-links.add('challenge/:id', ({ params }) => router.set(`/challenge/${params.id}`))
+links.add('challenge/:id', ({ params }) => router.set(`/game/${params.id}`))
 links.add('study', () => router.set('/study'))
 links.add('study/:id', ({ params }) => router.set(`/study/${params.id}`))
 links.add('player', () => router.set('/players'))

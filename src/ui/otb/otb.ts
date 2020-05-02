@@ -60,6 +60,7 @@ export default {
     return layout.board(
       header,
       content,
+      undefined,
       this.round && overlay(this.round),
       undefined,
       this.round && this.round.data && this.round.data.player.color || 'white'

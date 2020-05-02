@@ -30,7 +30,8 @@ function makeConfig(data: OfflineGameData, sit: GameSituation): cg.InitConfig {
       free: false,
       color: gameApi.isPlayerPlaying(data) ? sit.player : null,
       showDests: settings.game.pieceDestinations(),
-      dests: sit.dests
+      dests: sit.dests,
+      rookCastle: settings.game.rookCastle() === 1,
     },
     animation: {
       enabled: settings.game.animations(),

@@ -21,7 +21,8 @@ export default function makeConfig(
     movable: {
       free: false,
       color: ctrl.data.puzzle.color,
-      showDests: settings.game.pieceDestinations()
+      showDests: settings.game.pieceDestinations(),
+      rookCastle: settings.game.rookCastle() === 1,
     },
     events: {
       move: userMove

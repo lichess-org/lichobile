@@ -212,9 +212,9 @@ function getKeyAtDomPos(state: State, pos: NumberPair, bounds: ClientRect): Key 
   }
   const asWhite = state.orientation === 'white'
   const x = Math.ceil(8 * ((pos[0] - bounds.left) / bounds.width))
-  const ox = (asWhite ? x : 9 - x) as cg.Coord
+  const ox = (asWhite ? x : 9 - x) as cg.Rank
   const y = Math.ceil(8 - (8 * ((pos[1] - bounds.top) / bounds.height)))
-  const oy = (asWhite ? y : 9 - y) as cg.Coord
+  const oy = (asWhite ? y : 9 - y) as cg.Rank
   if (ox > 0 && ox < 9 && oy > 0 && oy < 9) {
     return util.pos2key([ox, oy])
   }

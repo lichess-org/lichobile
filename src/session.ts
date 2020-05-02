@@ -173,7 +173,7 @@ function savePreferences(): Promise<string> {
     'autoThreefold',
     'submitMove',
     'confirmResign',
-    'moretime'
+    'moretime',
   ])).reduce(makeReducer('behavior.'), {}) as StringMap
 
   const rest = Object.entries(pick(prefs, [

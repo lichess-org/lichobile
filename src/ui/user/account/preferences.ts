@@ -11,6 +11,9 @@ function renderBody() {
   return [
     h('ul.native_scroller.page.settings_list.game', [
       h('li.list_item.nav', {
+        oncreate: helper.ontapY(() => router.set('/account/preferences/game-behavior'))
+      }, i18n('gameBehavior')),
+      h('li.list_item.nav', {
         oncreate: helper.ontapY(() => router.set('/account/preferences/privacy'))
       }, i18n('privacy')),
       h('li.list_item.nav', {

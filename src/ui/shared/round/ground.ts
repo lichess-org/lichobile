@@ -38,7 +38,8 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): c
       free: false,
       color: gameApi.isPlayerPlaying(data) ? data.player.color : null,
       dests: gameApi.isPlayerPlaying(data) ? gameApi.parsePossibleMoves(data.possibleMoves) : {},
-      showDests: settings.game.pieceDestinations()
+      showDests: settings.game.pieceDestinations(),
+      rookCastle: settings.game.rookCastle() === 1,
     },
     animation: {
       enabled: settings.game.animations(),

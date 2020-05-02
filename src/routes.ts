@@ -160,6 +160,12 @@ export default {
         })
       })
 
+      router.add('account/preferences/game-behavior', ({ params }) => {
+        import('./ui/user/account/gameBehavior').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
       router.add('account/preferences/privacy', ({ params }) => {
         import('./ui/user/account/privacy').then(m => {
           onRouteMatch(m.default, params)

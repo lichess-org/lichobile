@@ -34,6 +34,8 @@ export function configureBoard(state: State, config: cg.InitConfig): void {
   // no need for such short animations
   if (!state.animation.duration || state.animation.duration < 10)
     state.animation.enabled = false
+
+  setRookCastle(state)
 }
 
 export function setNewBoardState(d: State, config: cg.SetConfig): void {
@@ -63,6 +65,24 @@ export function setNewBoardState(d: State, config: cg.SetConfig): void {
   // fix move/premove dests
   if (d.selected) {
     board.setSelected(d, d.selected)
+  }
+
+  setRookCastle(d)
+}
+
+function setRookCastle(state: State): void {
+  if (!state.movable.rookCastle && state.movable.dests) {
+    const rank = state.movable.color === 'white' ? 1 : 8,
+    kingStartPos = 'e' + rank,
+    dests = state.movable.dests[kingStartPos],
+    king = state.pieces[kingStartPos]
+
+    if (!dests || !king || king.role !== 'king') return
+
+    state.movable.dests[kingStartPos] = dests.filter(d =>
+      !((d === 'a' + rank) && dests.indexOf('c' + rank as cg.Key) !== -1) &&
+      !((d === 'h' + rank) && dests.indexOf('g' + rank as cg.Key) !== -1)
+    )
   }
 }
 

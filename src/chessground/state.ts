@@ -36,6 +36,7 @@ export interface State {
       after?: (orig: Key, dest: Key, metadata: cg.MoveMetadata) => void // called after the move has been played
       afterNewPiece?: (role: Role, key: Key, metadata: cg.MoveMetadata) => void // called after a new piece is dropped on the board
     }
+    rookCastle?: boolean
   }
   premovable: {
     enabled: boolean // allow premoves for color that can not move
@@ -111,6 +112,7 @@ export function makeDefaults(): State {
       dests: null,
       dropped: null,
       showDests: true,
+      rookCastle: true,
       events: {}
     },
     premovable: {

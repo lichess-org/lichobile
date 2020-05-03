@@ -177,10 +177,12 @@ export function connectingDropShadowHeader(title?: string) {
 
 export function loadingBackbutton(title?: string) {
   return h('nav', [
-    backButton([
+    backButton(h('div.main_header_title.reconnecting', {
+      className: title ? 'withTitle' : '',
+    }, [
       title ? h('span', title) : null,
       loader,
-    ]),
+    ])),
     headerBtns()
   ])
 }

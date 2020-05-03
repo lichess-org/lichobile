@@ -1,5 +1,10 @@
+import { Plugins } from '@capacitor/core'
 import * as Mithril from 'mithril'
 import router from '../../router'
+import storage from '../../storage'
+import sound from '../../sound'
+import vibrate from '../../vibrate'
+import i18n from '../../i18n'
 import { handleXhrError } from '../../utils'
 import { positionsCache } from '../../utils/gamePosition'
 import { emptyFen } from '../../utils/fen'
@@ -7,15 +12,17 @@ import { game as gameXhr } from '../../xhr'
 import * as sleepUtils from '../../utils/sleep'
 import { isOnlineGameData, OnlineGameData } from '../../lichess/interfaces/game'
 import { ChallengeData } from '../../lichess/interfaces/challenge'
+import * as gameApi from '../../lichess/game'
+import variantApi from '../../lichess/variant'
 import socket from '../../socket'
 import * as helper from '../helper'
 import roundView, { viewOnlyBoardContent } from '../shared/round/view/roundView'
 import gamesMenu from '../gamesMenu'
 import layout from '../layout'
 import { connectingHeader, loadingBackbutton } from '../shared/common'
+import OnlineRound from '../shared/round/OnlineRound'
 import ChallengeCtrl from './ChallengeCtrl'
 import challengeView from './challengeView'
-import GameCtrl from './GameCtrl'
 
 interface Attrs {
   id: string
@@ -24,21 +31,21 @@ interface Attrs {
 }
 
 interface State {
-  game?: GameCtrl
+  round?: OnlineRound
   challenge?: ChallengeCtrl
 }
 
 export default {
-  oninit({ attrs }) {
+  oninit(vnode) {
     sleepUtils.keepAwake()
 
     const now = performance.now()
-    gameXhr(attrs.id, attrs.color)
+    gameXhr(vnode.attrs.id, vnode.attrs.color)
     .then(data => {
       if (isChallengeData(data)) {
-        this.challenge = new ChallengeCtrl(data)
+        vnode.state.challenge = new ChallengeCtrl(data)
       } else if (isOnlineGameData(data)) {
-        this.game = new GameCtrl(attrs.id, data, now, !!attrs.goingBack)
+        loadRound(vnode, now, data)
       }
     })
     .catch(error => {
@@ -58,8 +65,8 @@ export default {
   onremove() {
     sleepUtils.allowSleepAgain()
     socket.destroy()
-    if (this.game) {
-      this.game.unload()
+    if (this.round) {
+      this.round.unload()
     }
     if (this.challenge) {
       this.challenge.unload()
@@ -67,8 +74,8 @@ export default {
   },
 
   view({ attrs }) {
+    if (this.round) return roundView(this.round)
     if (this.challenge) return challengeView(this.challenge)
-    if (this.game && this.game.round) return roundView(this.game.round)
 
     const pov = gamesMenu.lastJoined()
     let board: Mithril.Child
@@ -91,6 +98,55 @@ export default {
   }
 } as Mithril.Component<Attrs, State>
 
+function loadRound(
+  vnode: Mithril.Vnode<Attrs, State>,
+  time: number,
+  data: OnlineGameData
+): void {
+  if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
+    Plugins.LiToast.show({ text: i18n('unsupportedVariant', data.game.variant.name), duration: 'short' })
+    router.set('/')
+  }
+  else {
+    if (
+      gameApi.isPlayerPlaying(data) &&
+      gameApi.nbMoves(data, data.player.color) === 0
+    ) {
+      sound.dong()
+      vibrate.quick()
+      const variant = variantApi(data.game.variant.key)
+      const storageKey = variantStorageKey(data.game.variant.key)
+      if (
+        variant.alert && [1, 3].indexOf(variant.id) === -1 &&
+        !storage.get(storageKey)
+      ) {
+        Plugins.Modals.alert({
+          title: 'Alert',
+          message: variant.alert
+        }).then(() => {
+          storage.set(storageKey, true)
+        })
+      }
+    }
+
+    const elapsed = performance.now() - time
+
+    setTimeout(() => {
+      vnode.state.round = new OnlineRound(!!vnode.attrs.goingBack, vnode.attrs.id, data)
+    }, Math.max(400 - elapsed, 0))
+
+    gamesMenu.resetLastJoined()
+
+    if (data.player.user === undefined) {
+      storage.set('lastPlayedGameURLAsAnon', data.url.round)
+    }
+  }
+}
+
 function isChallengeData(d: OnlineGameData | ChallengeData): d is ChallengeData {
   return (<ChallengeData>d).challenge !== undefined
+}
+
+function variantStorageKey(variant: string) {
+  return 'game.variant.prompt.' + variant
 }

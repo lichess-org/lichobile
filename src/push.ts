@@ -94,8 +94,6 @@ export default {
           return Promise.reject('Permission to use push denied')
         }
       })
-
-      return PushNotifications.register()
     }
 
     return Promise.resolve()

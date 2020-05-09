@@ -4,12 +4,13 @@ import router from '../../router'
 import { Team } from '../../lichess/interfaces/teams'
 import * as utils from '../../utils'
 import * as xhr from './teamsXhr'
+import session from '../../session'
 
-export default class TeamsCtrl {
+export default class TeamsListCtrl {
   public currentTab: number
   
   public isSearchOpen: boolean = false
-  public searchResults: readonly string[] = []
+  public searchResults?: ReadonlyArray<Team>
   
   public allTeams?: ReadonlyArray<Team>
   public myTeams?: ReadonlyArray<Team>
@@ -25,14 +26,16 @@ export default class TeamsCtrl {
     })
     .catch(utils.handleXhrError)
 
-    xhr.getMyTeams()
-    .then(data => {
-      console.log(data)
-      this.myTeams = data
-      redraw()
-    })
-    .catch(utils.handleXhrError)
-    
+    const user = session.getUserId()
+    if (user) {
+      xhr.getUserTeams(user)
+      .then(data => {
+        console.log(data)
+        this.myTeams = data
+        redraw()
+      })
+      .catch(utils.handleXhrError)
+    }
   }
   
   public onTabChange = (tabIndex: number) => {
@@ -63,8 +66,8 @@ export default class TeamsCtrl {
     this.isSearchOpen = true
   }
   
-  public goToTeam = (u: string) => {
-    //router.set('/@/' + u)
+  public goToTeam = (team: Team) => {
+    router.set('/teams/' + team.id)
   }
 
 }

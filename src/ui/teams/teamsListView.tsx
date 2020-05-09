@@ -26,10 +26,6 @@ export function header(ctrl: TeamsListCtrl) {
 }
 
 export function body(ctrl: TeamsListCtrl) {
-  if (ctrl)
-    return null
-  return null
-  
   const tabsContent = [
     { id: 'allTeams', f: () => renderAllTeams(ctrl) },
     { id: 'myTeams', f: () => renderMyTeams(ctrl) },
@@ -67,7 +63,7 @@ export function searchModal(ctrl: TeamsListCtrl) {
   ].join(' ')
 
   return (
-    <div id="searchPlayersModal" className={className}>
+    <div id="searchTeamsModal" className={className}>
       <header class="main_header">
         <button className="main_header_button" oncreate={helper.ontap(() => ctrl.closeSearch())}>
           {backArrow}
@@ -97,41 +93,44 @@ export function searchModal(ctrl: TeamsListCtrl) {
 }
 
 function renderAllTeams(ctrl: TeamsListCtrl) {
-  const allTeams = ctrl.allTeams
-  if (!allTeams) return (
-    <div className="loader_container">
-      {spinner.getVdom('monochrome')}
-    </div>
-  )
-
-  return (
-    <div className="native_scroller page leaderboard_wrapper">
-      {allTeams.map(renderTeam)}
-    </div>
-  )
+  return ctrl.allTeams ?
+  <ul className="teamsSuggestion native_scroller page"
+    oncreate={helper.ontapY(onTeamTap, undefined, helper.getLI)}
+  >
+    {ctrl.allTeams.currentPageResults.map(renderTeam)}
+  </ul> :
+  <div className="loader_container">
+    {spinner.getVdom('monochrome')}
+  </div>
 }
 
 function renderMyTeams(ctrl: TeamsListCtrl) {
-  const myTeams = ctrl.myTeams
-  if (!myTeams) return (
-    <div className="loader_container">
-      {spinner.getVdom('monochrome')}
-    </div>
-  )
-
-  return (
-    <div className="native_scroller page leaderboard_wrapper">
-      {myTeams.map(renderTeam)}
-    </div>
-  )
+  return ctrl.myTeams ?
+  <ul className="teamsSuggestion native_scroller page"
+    oncreate={helper.ontapY(onTeamTap, undefined, helper.getLI)}
+  >
+    {ctrl.myTeams.map(renderTeam)}
+  </ul> :
+  <div className="loader_container">
+    {spinner.getVdom('monochrome')}
+  </div>
 }
 
-function renderTeam(team: Team) {
+function onTeamTap(e: Event) {
+  const el = helper.getLI(e)
+  const ds = el.dataset as DOMStringMap
+  if (el && ds.id) {
+    router.set('/teams/' + ds.id)
+  }
+}
+
+function renderTeam(team: Team, i: number) {
+  const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
   return (
-    <li key={team.id} className="list_item team_list" oncreate={helper.ontapY(() => router.set('/team/' + team.id))}>
-      
-      <span className="">
-      
+    <li className={`list_item teamSuggestion nav ${evenOrOdd}`} data-id={team.id}>
+      {team.name}
+      <span className="nbMembers">
+        {team.nbMembers}
       </span>
     </li>
   )

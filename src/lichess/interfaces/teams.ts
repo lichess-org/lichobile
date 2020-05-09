@@ -1,25 +1,26 @@
+import {BaseUser} from './user'
+
 export interface Team {
   readonly description: string
   readonly id: string
-  readonly leader: TeamLeader
-  readonly leaders: ReadonlyArray<TeamLeader>
+  readonly leader: BaseUser
+  readonly leaders: ReadonlyArray<BaseUser>
   readonly location: string
   readonly name: string
   readonly nbMembers: number
   readonly open: boolean
 }
 
-interface TeamLeader {
-  readonly id: string
-  readonly name: string
-  readonly patron: boolean
-  readonly title: string
-}
-
-export interface TeamDetail {
-
-}
-
 export interface TeamJoinLeaveResponse {
   readonly ok: string
+}
+
+export interface TeamResults {
+  currentPage: number
+  currentPageResults: ReadonlyArray<Team>
+  maxPerPage: number
+  nbPages: number
+  nbResults: number
+  nextPage?: number
+  previousPage?: number
 }

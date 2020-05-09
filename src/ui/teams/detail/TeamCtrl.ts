@@ -1,17 +1,17 @@
 import redraw from '../../../utils/redraw'
-import { TeamDetail } from '../../../lichess/interfaces/teams'
+import { Team } from '../../../lichess/interfaces/teams'
 import * as utils from '../../../utils'
 import * as xhr from '../teamsXhr'
 
 export default class TeamCtrl {
 
-  public teamDetail?: TeamDetail
-  
+  public team?: Team
+
   constructor(teamId: string) {
     xhr.getTeam(teamId)
     .then(data => {
       console.log(data)
-      this.teamDetail = data
+      this.team = data
       redraw()
     })
     .catch(utils.handleXhrError)

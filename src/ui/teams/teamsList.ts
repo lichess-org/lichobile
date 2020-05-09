@@ -17,7 +17,6 @@ interface State {
 export default {
   oninit({ attrs }) {
     socket.createDefault()
-    console.log("init!")
     this.ctrl = new TeamsCtrl(safeStringToNum(attrs.tab))
   },
 

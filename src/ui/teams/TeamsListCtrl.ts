@@ -1,23 +1,23 @@
 import redraw from '../../utils/redraw'
 import throttle from 'lodash-es/throttle'
 import router from '../../router'
-import { Team } from '../../lichess/interfaces/teams'
+import { Team, TeamResults } from '../../lichess/interfaces/teams'
 import * as utils from '../../utils'
 import * as xhr from './teamsXhr'
 import session from '../../session'
 
 export default class TeamsListCtrl {
   public currentTab: number
-  
+
   public isSearchOpen: boolean = false
   public searchResults?: ReadonlyArray<Team>
-  
-  public allTeams?: ReadonlyArray<Team>
+
+  public allTeams?: TeamResults
   public myTeams?: ReadonlyArray<Team>
-  
+
   constructor(defaultTab?: number) {
     this.currentTab = defaultTab || 0
-    
+
     xhr.getPopularTeams()
     .then(data => {
       console.log(data)
@@ -37,7 +37,7 @@ export default class TeamsListCtrl {
       .catch(utils.handleXhrError)
     }
   }
-  
+
   public onTabChange = (tabIndex: number) => {
     const loc = window.location.search.replace(/\?tab\=\w+$/, '')
     try {
@@ -54,8 +54,10 @@ export default class TeamsListCtrl {
 
   public onInput = throttle((e: Event) => {
     const term = (e.target as HTMLInputElement).value.trim()
+    console.log(term)
     if (term.length >= 3)
       xhr.search(term).then(data => {
+        console.log(data)
         this.searchResults = data
         redraw()
       })
@@ -65,7 +67,7 @@ export default class TeamsListCtrl {
     router.backbutton.stack.push(this.closeSearch)
     this.isSearchOpen = true
   }
-  
+
   public goToTeam = (team: Team) => {
     router.set('/teams/' + team.id)
   }

@@ -1,7 +1,7 @@
 import { fetchJSON } from '../../http'
-import { Team, TeamDetail, TeamJoinLeaveResponse } from '../../lichess/interfaces/teams'
+import { Team, TeamResults, TeamJoinLeaveResponse } from '../../lichess/interfaces/teams'
 
-export function getTeam(id: string): Promise<TeamDetail> {
+export function getTeam(id: string): Promise<Team> {
   return fetchJSON('/api/team/' + id)
 }
 
@@ -19,7 +19,7 @@ export function leaveTeam(id: string): Promise<TeamJoinLeaveResponse> {
   }, true)
 }
 
-export function getPopularTeams(): Promise<ReadonlyArray<Team>> {
+export function getPopularTeams(): Promise<TeamResults> {
   return fetchJSON('/api/team/all')
 }
 

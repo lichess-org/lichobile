@@ -27,6 +27,6 @@ export function getUserTeams(userId: string): Promise<ReadonlyArray<Team>> {
   return fetchJSON('/api/team/of/' + userId)
 }
 
-export function search(term: string): Promise<ReadonlyArray<Team>> {
+export function search(term: string): Promise<TeamResults> {
   return fetchJSON('/api/team/search', { query: { text: term }})
 }

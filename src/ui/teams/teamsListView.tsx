@@ -52,7 +52,6 @@ export function body(ctrl: TeamsListCtrl) {
 
 
 export function searchModal(ctrl: TeamsListCtrl) {
-  
   if (!ctrl.isSearchOpen)
     return null
 
@@ -77,19 +76,13 @@ export function searchModal(ctrl: TeamsListCtrl) {
           />
         </div>
       </header>
-      <ul id="teamSearchResults" className="modal_content native_scroller">
-      {ctrl.searchResults ? ctrl.searchResults.map((u, i) => {
-        const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
-        return (
-          <li className={`list_item nav ${evenOrOdd}`} key={u} oncreate={helper.ontapY(() => ctrl.goToTeam(u))}>
-          {u}
-          </li>
-        )
-      }) : null}
+      <ul id="teamSearchResults" className="modal_content native_scroller"
+        oncreate={helper.ontapY(onTeamTap, undefined, helper.getLI)}
+      >
+        {ctrl.searchResults ? ctrl.searchResults.currentPageResults.map(renderTeam): null}
       </ul>
     </div>
   )
-  
 }
 
 function renderAllTeams(ctrl: TeamsListCtrl) {

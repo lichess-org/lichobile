@@ -10,7 +10,7 @@ export default class TeamsListCtrl {
   public currentTab: number
 
   public isSearchOpen: boolean = false
-  public searchResults?: ReadonlyArray<Team>
+  public searchResults?: TeamResults
 
   public allTeams?: TeamResults
   public myTeams?: ReadonlyArray<Team>

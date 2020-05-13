@@ -13,8 +13,8 @@ function renderBody() {
       h('ul#boardThemes', settings.general.theme.availableBoardThemes.map((t) => {
         return h('li.list_item', {}, [
           formWidgets.renderRadio(
-            t[0], 'board_theme', t[1],
-            settings.general.theme.board() === t[1],
+            t.name, 'board_theme', t.key,
+            settings.general.theme.board() === t.key,
             e => {
               settings.general.theme.board((e.target as HTMLInputElement).value)
               onBoardThemeChange((e.target as HTMLInputElement).value)
@@ -22,7 +22,7 @@ function renderBody() {
             }
           ),
           h('div.board_icon.vertical_align', {
-            className: t[1]
+            className: t.key
           })
         ])
       }))

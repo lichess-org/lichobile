@@ -2,37 +2,43 @@ import { Plugins, FilesystemDirectory, FileReadResult } from '@capacitor/core'
 import settings from './settings'
 
 const { Filesystem } = Plugins
+const baseUrl = 'https://veloce.github.io/lichobile-themes'
 
-const baseUrl = 'https://veloce.github.io/lichobile-themes/background'
-const imagePrefix = 'bg-'
 let styleEl: HTMLStyleElement
 
-export function getThemeFilename(key: string): string {
-  const t = settings.general.theme.availableBackgroundThemes.find(t => t.key === key)!
-  return t.key + '.' + t.ext
-}
+type Theme = 'bg' | 'board'
 
-export function getLocalFile(fileName: string): Promise<FileReadResult> {
+export function getLocalFile(theme: Theme, fileName: string): Promise<FileReadResult> {
   return Filesystem.readFile({
-    path: imagePrefix + fileName,
+    path: theme + '-' + fileName,
     directory: FilesystemDirectory.Data
   })
 }
 
+export function getThemeFilename(theme: Theme, key: string): string {
+  const avails = theme === 'bg' ?
+    settings.general.theme.availableBackgroundThemes :
+    settings.general.theme.availableBoardThemes
+
+  const t = avails.find(t => t.key === key)!
+
+  return t.key + '.' + t.ext
+}
+
 // either download it from server of get it from filesystem
 export function loadImage(
-  theme: string,
+  theme: Theme,
+  key: string,
   onProgress: (e: ProgressEvent) => void
 ): Promise<void> {
-  const fileName = getThemeFilename(theme)
-  const remoteFileUri = baseUrl + '/' + fileName
-  return getLocalFile(fileName)
+  const filename = getThemeFilename(theme, key)
+  return getLocalFile(theme, filename)
   .catch(() => {
     // if not found, download
-    return download(fileName, remoteFileUri, onProgress)
-    .then(() => getLocalFile(fileName))
+    return download(theme, filename, onProgress)
+    .then(() => getLocalFile(theme, filename))
   })
-  .then(r => createStylesheetRule(theme, r))
+  .then(r => createStylesheetRule(theme, key, filename, r))
 }
 
 export function handleError(err: any) {
@@ -40,29 +46,38 @@ export function handleError(err: any) {
   Plugins.LiToast.show({ text: 'Cannot load theme file', duration: 'long' })
 }
 
-export function createStylesheetRule(theme: string, { data }: FileReadResult): void {
+export function createStylesheetRule(
+  theme: Theme,
+  key: string,
+  filename: string,
+  { data }: FileReadResult
+): void {
   if (!styleEl) {
     styleEl = document.createElement('style')
+    styleEl.type = 'text/css'
     document.head.appendChild(styleEl)
   }
-  // FIXME should be fixed in capacitor
-  const cleanData = data.replace(/\n/g, '')
-  const mime = theme === 'checkerboard' ?
+  const cleanData = data.replace(/\n/g, '') // FIXME should be fixed in capacitor
+  const ext = filename.split('.').pop()
+  const mime = ext === 'png' ?
     'data:image/png;base64,' : 'data:image/jpeg;base64,'
   const dataUrl = mime + cleanData
-  const css =
-    `.view-container.transp.${theme} > main { background-image: url(${dataUrl}); }`
-  styleEl.type = 'text/css'
+  const css = theme === 'bg' ?
+    `.view-container.transp.${key} > main { background-image: url(${dataUrl}); }` :
+    `.${key} > .cg-board { background-image: url(${dataUrl}); }`
+
   styleEl.appendChild(document.createTextNode(css))
 }
 
 function download(
+  theme: Theme,
   fileName: string,
-  remoteURI: string,
   onProgress?: (e: ProgressEvent) => void
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     const client = new XMLHttpRequest()
+    const remotePath = theme === 'bg' ? '/background' : '/board'
+    const remoteURI = baseUrl + remotePath
     client.open('GET', remoteURI, true)
       client.responseType = 'blob'
       if (onProgress) {
@@ -76,7 +91,7 @@ function download(
           reader.onloadend = () => {
             const base64data = reader.result as string
             Filesystem.writeFile({
-              path: imagePrefix + fileName,
+              path: theme + '-' + fileName,
               data: base64data,
               directory: FilesystemDirectory.Data,
             })

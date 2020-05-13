@@ -8,7 +8,7 @@ import i18n from '../../i18n'
 import settings from '../../settings'
 import * as helper from '../helper'
 import h from 'mithril/hyperscript'
-import { loadImage, handleError } from '../../bgtheme'
+import { loadImage, handleError } from '../../theme'
 
 interface Progress {
   loaded: number
@@ -87,7 +87,7 @@ function renderBody(ctrl: State) {
                 redraw()
               } else {
                 ctrl.loading = true
-                loadImage(val, ctrl.onProgress)
+                loadImage('bg', val, ctrl.onProgress)
                 .then(() => {
                   layout.onBackgroundChange(val)
                   ctrl.stopLoading()

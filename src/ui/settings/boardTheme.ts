@@ -85,28 +85,22 @@ function renderBody(state: State) {
     if (key && filename) {
       const prevTheme = state.selected
       state.selected = key
-      if (state.isLocal({ key, filename })) {
+      state.loading = true
+      loadImage('board', key, state.onProgress)
+      .then(() => {
         themeSettings.board(key)
         onBoardThemeChange(key)
-        redraw()
-      } else {
-        state.loading = true
-        loadImage('board', key, state.onProgress)
-        .then(() => {
-          themeSettings.board(key)
-          onBoardThemeChange(key)
-          if (state.localFiles) {
-            state.localFiles['board-' + filename] = '1'
-          }
-          state.stopLoading()
-        })
-        .catch((err) => {
-          state.selected = prevTheme
-          state.stopLoading()
-          handleError(err)
-        })
-        redraw()
-      }
+        if (state.localFiles) {
+          state.localFiles['board-' + filename] = '1'
+        }
+        state.stopLoading()
+      })
+      .catch((err) => {
+        state.selected = prevTheme
+        state.stopLoading()
+        handleError(err)
+      })
+      redraw()
     }
   }
 

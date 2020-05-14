@@ -54,7 +54,9 @@ export function loadImage(
     return download(theme, filename, onProgress)
     .then(() => getLocalFile(theme, filename))
   })
-  .then(r => createStylesheetRule(theme, key, filename, r))
+  .then(res => {
+    createStylesheetRule(theme, key, filename, res)
+  })
 }
 
 export function handleError(err: any) {

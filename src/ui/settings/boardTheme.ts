@@ -85,21 +85,26 @@ function renderBody(state: State) {
     if (key && filename) {
       const prevTheme = state.selected
       state.selected = key
-      state.loading = true
-      loadImage('board', key, state.onProgress)
-      .then(() => {
+      if (themeSettings.bundledBoardThemes.includes(key)) {
         themeSettings.board(key)
         onBoardThemeChange(key)
-        if (state.localFiles) {
-          state.localFiles['board-' + filename] = '1'
-        }
-        state.stopLoading()
-      })
-      .catch((err) => {
-        state.selected = prevTheme
-        state.stopLoading()
-        handleError(err)
-      })
+      } else {
+        state.loading = true
+        loadImage('board', key, state.onProgress)
+        .then(() => {
+          themeSettings.board(key)
+          onBoardThemeChange(key)
+          if (state.localFiles) {
+            state.localFiles['board-' + filename] = '1'
+          }
+          state.stopLoading()
+        })
+        .catch((err) => {
+          state.selected = prevTheme
+          state.stopLoading()
+          handleError(err)
+        })
+      }
       redraw()
     }
   }

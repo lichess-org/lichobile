@@ -257,7 +257,7 @@ export default {
       })
 
       router.add('settings/themes/board', ({ params }) => {
-        import('./ui/settings/boardThemes').then(m => {
+        import('./ui/settings/boardTheme').then(m => {
           onRouteMatch(m.default, params)
         })
       })

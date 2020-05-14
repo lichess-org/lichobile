@@ -80,36 +80,77 @@
   flex-flow row wrap
   justify-content space-between
 
-.board_icon
+.list_item.board_theme
+  &.loading
+    > .name
+      opacity 0.8
+  > .name
+    margin-right 0.5em
+  > .fa-check
+    margin-left 0.5em
+  > .fa-cloud-download
+    font-size 0.9em
+    opacity: 0.7
+
+.board_thumbnail
   display inline-block
   position absolute
   right 15px
   width: 64px;
   height: 32px;
-  &.brown
-    background-image url('../../images/board/icons/brown.png')
   &.blue
-    background-image url('../../images/board/icons/blue.png')
-  &.green
-    background-image url('../../images/board/icons/green.png')
-  &.purple
-    background-image url('../../images/board/icons/purple.png')
-  &.wood
-    background-image url('../../images/board/icons/wood.png')
-  &.wood2
-    background-image url('../../images/board/icons/wood2.png')
-  &.wood3
-    background-image url('../../images/board/icons/wood3.png')
-  &.maple
-    background-image url('../../images/board/icons/maple.png')
+    background-image url('../../images/board/svg/blue.svg')
+    background-size 256px
+  &.blue2
+    background-image url('../../images/board/blue2.thumbnail.jpg')
   &.blue3
-    background-image url('../../images/board/icons/blue3.png')
+    background-image url('../../images/board/blue3.thumbnail.jpg')
+  &.blue-marble
+    background-image url('../../images/board/blue-marble.thumbnail.jpg')
   &.canvas
-    background-image url('../../images/board/icons/canvas.png')
+    background-image url('../../images/board/canvas.thumbnail.jpg')
+  &.wood
+    background-image url('../../images/board/wood.thumbnail.jpg')
+  &.wood2
+    background-image url('../../images/board/wood2.thumbnail.jpg')
+  &.wood3
+    background-image url('../../images/board/wood3.thumbnail.jpg')
+  &.wood4
+    background-image url('../../images/board/wood4.thumbnail.jpg')
+  &.maple
+    background-image url('../../images/board/maple.thumbnail.jpg')
+  &.maple2
+    background-image url('../../images/board/maple2.thumbnail.jpg')
+  &.brown
+    background-image url('../../images/board/svg/brown.svg')
+    background-size 256px
+  &.leather
+    background-image url('../../images/board/leather.thumbnail.jpg')
+  &.green
+    background-image url('../../images/board/svg/green.svg')
+    background-size 256px
+  &.marble
+    background-image url('../../images/board/marble.thumbnail.jpg')
+  &.green-plastic
+    background-image url('../../images/board/green-plastic.thumbnail.png')
   &.grey
-    background-image url('../../images/board/icons/grey.png')
+    background-image url('../../images/board/grey.thumbnail.jpg')
   &.metal
-    background-image url('../../images/board/icons/metal.png')
+    background-image url('../../images/board/metal.thumbnail.jpg')
+  &.olive
+    background-image url('../../images/board/olive.thumbnail.jpg')
+  &.newspaper
+    background-image url('../../images/board/newspaper.thumbnail.png')
+  &.purple
+    background-image url('../../images/board/svg/purple.svg')
+    background-size 256px
+  &.purple-diag
+    background-image url('../../images/board/purple-diag.thumbnail.png')
+  &.pink
+    background-image url('../../images/board/pink-pyramid.thumbnail.png')
+  &.ic
+    background-image url('../../images/board/svg/ic.svg')
+    background-size 256px
 
 .list_item.piece_theme
   line-height 60px

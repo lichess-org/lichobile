@@ -7,6 +7,11 @@ const baseUrl = 'https://veloce.github.io/lichobile-themes'
 let styleEl: HTMLStyleElement
 
 type Theme = 'bg' | 'board'
+interface ThemeEntry {
+  key: string
+  name: string
+  ext: string
+}
 
 export function getLocalFile(theme: Theme, fileName: string): Promise<FileReadResult> {
   return Filesystem.readFile({
@@ -15,14 +20,25 @@ export function getLocalFile(theme: Theme, fileName: string): Promise<FileReadRe
   })
 }
 
-export function getThemeFilename(theme: Theme, key: string): string {
+export function getLocalFiles(theme: Theme): Promise<readonly string[]> {
+  return Filesystem.readdir({
+    path: '',
+    directory: FilesystemDirectory.Data
+  }).then(({ files }) => files.filter(f => f.startsWith(theme)))
+}
+
+export function getFilenameFromKey(theme: Theme, key: string): string {
   const avails = theme === 'bg' ?
     settings.general.theme.availableBackgroundThemes :
     settings.general.theme.availableBoardThemes
 
   const t = avails.find(t => t.key === key)!
 
-  return t.key + '.' + t.ext
+  return filename(t)
+}
+
+export function filename(entry: ThemeEntry): string {
+  return entry.key + '.' + entry.ext
 }
 
 // either download it from server of get it from filesystem
@@ -31,7 +47,7 @@ export function loadImage(
   key: string,
   onProgress: (e: ProgressEvent) => void
 ): Promise<void> {
-  const filename = getThemeFilename(theme, key)
+  const filename = getFilenameFromKey(theme, key)
   return getLocalFile(theme, filename)
   .catch(() => {
     // if not found, download
@@ -72,33 +88,36 @@ export function createStylesheetRule(
 function download(
   theme: Theme,
   fileName: string,
-  onProgress?: (e: ProgressEvent) => void
+  onProgress: (e: ProgressEvent) => void
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     const client = new XMLHttpRequest()
-    const remotePath = theme === 'bg' ? '/background' : '/board'
-    const remoteURI = baseUrl + remotePath
-    client.open('GET', remoteURI, true)
+    const themePath = theme === 'bg' ? '/background' : '/board'
+    client.open('GET', `${baseUrl}${themePath}/${fileName}`, true)
       client.responseType = 'blob'
       if (onProgress) {
         client.onprogress = onProgress
       }
       client.onload = () => {
-        const blob = client.response
-        if (blob) {
-          const reader = new FileReader()
-          reader.readAsDataURL(blob)
-          reader.onloadend = () => {
-            const base64data = reader.result as string
-            Filesystem.writeFile({
-              path: theme + '-' + fileName,
-              data: base64data,
-              directory: FilesystemDirectory.Data,
-            })
-            .then(() => resolve())
+        if (client.status === 200) {
+          const blob = client.response
+          if (blob) {
+            const reader = new FileReader()
+            reader.readAsDataURL(blob)
+            reader.onloadend = () => {
+              const base64data = reader.result as string
+              Filesystem.writeFile({
+                path: theme + '-' + fileName,
+                data: base64data,
+                directory: FilesystemDirectory.Data,
+              })
+              .then(() => resolve())
+            }
+          } else {
+            reject('could not get file')
           }
         } else {
-          reject('could not get file')
+          reject(`Request returned ${client.status}`)
         }
       }
       client.send()

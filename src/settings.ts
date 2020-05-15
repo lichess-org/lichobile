@@ -104,6 +104,7 @@ export default {
         ['leipzig' ],
         ['fantasy' ],
         ['pixel'],
+        ['cardinal'],
         ['staunty' ],
         ['symmetric' ],
         ['shapes' ],

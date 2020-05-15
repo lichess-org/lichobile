@@ -4,7 +4,6 @@ import * as utils from '../utils'
 import router from '../router'
 import redraw from '../utils/redraw'
 import i18n from '../i18n'
-import challengesApi from '../lichess/challenges'
 import { challenge as challengeXhr } from '../xhr'
 import { validateFen } from '../utils/fen'
 import settings from '../settings'
@@ -12,7 +11,6 @@ import session from '../session'
 import formWidgets from './shared/form'
 import popupWidget from './shared/popup'
 import ViewOnlyBoard from './shared/ViewOnlyBoard'
-import gamesMenu from './gamesMenu'
 import * as helper from './helper'
 
 
@@ -46,17 +44,7 @@ function close(fromBB?: string) {
 function doChallenge() {
   return challengeXhr(userId!, setupFen)
   .then(data => {
-
-    if (session.isConnected() && (
-      data.challenge.timeControl.type === 'correspondence' ||
-      data.challenge.timeControl.type === 'unlimited')) {
-
-      // see gamesMenu.ts, sending challenges are right after incoming challenges
-      gamesMenu.open(challengesApi.incoming().length)
-    }
-    if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {
-      router.set(`/game/${data.challenge.id}`)
-    }
+    router.set(`/game/${data.challenge.id}`)
   })
   .catch(utils.handleXhrError)
 }

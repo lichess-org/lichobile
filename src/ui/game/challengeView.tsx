@@ -159,21 +159,25 @@ function awaitChallengePopup(ctrl: ChallengeCtrl, challenge: Challenge) {
   // destUser is there in await challenge
   // todo: discriminate in types
   function popupContent() {
-    return (
-      <div className="infos">
-        <div>{i18n('waitingForOpponent')}</div>
-        <br />
-        <div className="user">{challengeUserFormat(challenge.destUser!)}</div>
-        {gameInfos(challenge)}
-        <br />
-        {spinner.getVdom()}
-        <br />
-        <br />
-        <button className="withIcon" data-icon="L" oncreate={helper.ontap(ctrl.cancelChallenge)}>
-          {i18n('cancel')}
-        </button>
-      </div>
-    )
+    return h('div.infos', [
+      h('div', i18n('waitingForOpponent')),
+      h('br'),
+      h('div.user', challengeUserFormat(challenge.destUser!)),
+      gameInfos(challenge),
+      h('br'),
+      spinner.getVdom(),
+      h('br'),
+      h('br'),
+      h('button.withIcon[data-icon=L]', {
+        oncreate: helper.ontap(ctrl.cancelChallenge)
+      }, i18n('cancel')),
+      challengesApi.isPersistent(challenge) ? h('div', [
+        h('br'),
+        h('button', {
+          oncreate: helper.ontap(() => router.set('/'))
+        }, [h('span.fa.fa-home'), i18n('returnToHome')])
+      ]) : null
+    ])
   }
 
   return popupWidget('await_url_challenge', undefined, popupContent, true)

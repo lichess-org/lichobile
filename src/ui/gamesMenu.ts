@@ -7,7 +7,7 @@ import redraw from '../utils/redraw'
 import { positionsCache } from '../utils/gamePosition'
 import { playerName as liPlayerName } from '../lichess/player'
 import { NowPlayingGame } from '../lichess/interfaces'
-import { Challenge } from '../lichess/interfaces/challenge'
+import { Challenge, ChallengeUser } from '../lichess/interfaces/challenge'
 import challengesApi from '../lichess/challenges'
 import { standardFen } from '../lichess/variant'
 import router from '../router'
@@ -186,7 +186,7 @@ function renderIncomingChallenge(c: Challenge) {
   const playerName = `${c.challenger.id} (${c.challenger.rating}${mark})`
 
   return h('div.card.standard.challenge', {
-    key: 'incomingChallenge' + c.id,
+    key: 'incoming.' + c.id,
   }, [
     renderViewOnlyBoard(c.initialFen || standardFen, 'white', undefined, c.variant.key),
     h('div.infos', [
@@ -218,21 +218,22 @@ function renderIncomingChallenge(c: Challenge) {
 
 function renderSendingChallenge(c: Challenge) {
 
-  if (!c.destUser) return null
-
   const mode = c.rated ? i18n('rated') : i18n('casual')
   const timeAndMode = challengesApi.challengeTime(c) + ', ' + mode
-  const mark = c.destUser.provisional ? '?' : ''
-  const playerName = `${c.destUser.id} (${c.destUser.rating}${mark})`
+
+  function playerName(destUser: ChallengeUser) {
+    const mark = destUser.provisional ? '?' : ''
+    return `${destUser.id} (${destUser.rating}${mark})`
+  }
 
   return h('div.card.standard.challenge.sending', {
-    key: 'sendingChallenges' + c.id,
+    key: 'sending.' + c.id,
   }, [
     renderViewOnlyBoard(c.initialFen || standardFen, 'white', undefined, c.variant.key),
     h('div.infos', [
       h('div.icon-game', { 'data-icon': c.perf.icon }),
       h('div.description', [
-        h('h2.title', playerName),
+        h('h2.title', c.destUser ? playerName(c.destUser) : 'Open challenge'),
         h('p.variant', [
           h('span.variantName', i18n('toATypeGame', c.variant.name)),
           h('span.time-indication[data-icon=p]', timeAndMode)
@@ -240,14 +241,18 @@ function renderSendingChallenge(c: Challenge) {
       ]),
       h('div.actions', [
         h('button', {
+          oncreate: helper.ontapX(() => {
+            close()
+            router.set(`/game/${c.id}`)
+          })
+        }, i18n('viewInFullSize')),
+        h('button', {
           oncreate: helper.ontapX(
             (e: Event) => cancelChallenge(c.id).then(() => {
               helper.fadesOut(e, () => close(), '.card', 250)
             })
           )
-        },
-          i18n('cancel')
-        )
+        }, i18n('cancel')),
       ])
     ])
   ])
@@ -276,15 +281,15 @@ function renderAllGames() {
   const sendingChallenges = challengesApi.sending().filter(challengesApi.isPersistent)
   const challengesDom = challenges.map(c =>
     renderIncomingChallenge(c)
-  )
+  ).filter(utils.noNull)
   const sendingChallengesDom = sendingChallenges.map(c =>
     renderSendingChallenge(c)
   )
 
   let allCards = [
     ...challengesDom,
+    ...(nowPlaying.map(g => renderGame(g))),
     ...sendingChallengesDom,
-    ...(nowPlaying.map(g => renderGame(g)))
   ]
 
   return h('div.games_carousel', {

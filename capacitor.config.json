@@ -5,7 +5,7 @@
   "npmClient": "npm",
   "webDir": "www",
   "backgroundColor": "ff000000",
-  "appendUserAgent": "Lichobile/7.1.0",
+  "appendUserAgent": "Lichobile/7.1.1",
   "plugins": {
     "PushNotifications": {
       "presentationOptions": ["sound", "alert"]

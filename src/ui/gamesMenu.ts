@@ -4,6 +4,7 @@ import Siema from 'siema'
 import addSeconds from 'date-fns/esm/addSeconds'
 import * as utils from '../utils'
 import redraw from '../utils/redraw'
+import { batchRequestAnimationFrame } from '../utils/batchRAF'
 import { positionsCache } from '../utils/gamePosition'
 import { playerName as liPlayerName } from '../lichess/player'
 import { NowPlayingGame } from '../lichess/interfaces'
@@ -46,7 +47,7 @@ export default {
       onbeforeremove: menuOnBeforeRemove
     }, [
       h('div.wrapper_overlay_close', { oncreate: menuOnOverlayTap }),
-      renderCarouselIndicators(),
+      renderDotsWrapper(),
       h('div#wrapper_games', renderAllGames()),
     ])
   }
@@ -61,17 +62,25 @@ function menuOnBeforeRemove({ dom }: Mithril.VnodeDOM<any, any>) {
   })
 }
 
+let cardChangeTimeoutId: number
 function wrapperOnCreate({ dom }: Mithril.VnodeDOM<any, any>) {
   if (helper.isPortrait()) {
     scroller = new Siema({
       selector: dom as HTMLElement,
       duration: 150,
+      loop: true,
       easing: 'ease-out',
       perPage: helper.isTablet() ? 2 : 1,
       startIndex: 0,
       draggable: true,
-      onChange: () => redraw(),
+      onChange: () => {
+        clearTimeout(cardChangeTimeoutId)
+        cardChangeTimeoutId = setTimeout(() => {
+          batchRequestAnimationFrame(redrawDots)
+        }, 300)
+      },
     })
+    batchRequestAnimationFrame(redrawDots)
     redraw()
   }
 }
@@ -91,7 +100,7 @@ function open(page?: number) {
     if (scroller && !helper.isTablet()) {
       scroller.goTo(page !== undefined ? page : 0)
     }
-  }, 400)
+  }, 500)
 }
 
 function close(fromBB?: string) {
@@ -240,7 +249,7 @@ function renderSendingChallenge(c: Challenge) {
         ]),
       ]),
       h('div.actions', [
-        h('button', {
+        c.destUser ? null : h('button', {
           oncreate: helper.ontapX(() => {
             close()
             router.set(`/game/${c.id}`)
@@ -258,21 +267,49 @@ function renderSendingChallenge(c: Challenge) {
   ])
 }
 
-function renderCarouselIndicators() {
+function renderDotsWrapper() {
+  if (helper.isPortrait()) {
+    return h('div.#games_menu__dots')
+  }
+
+  return null
+}
+
+function redrawDots() {
   if (helper.isPortrait() && scroller) {
     const elsNb = helper.isTablet() ?
       Math.ceil(scroller.innerElements.length / 2) :
       scroller.innerElements.length
-    return h('div.carouselIndicators',
-      Array(elsNb).fill(1).map((_, i) =>
-        h('i.indicator', {
-          className: i === scroller.currentSlide ? 'current' : ''
-        })
-      )
-    )
-  }
 
-  return null
+    const wrapper = document.getElementById('games_menu__dots')
+    if (wrapper) {
+      const dotsNb = wrapper.childElementCount
+      const diff = elsNb - dotsNb
+      if (diff !== 0) {
+        for (let i = 0, len = Math.abs(diff); i < len; i++) {
+          if (diff > 0) {
+            const dot = document.createElement('i')
+            dot.className = 'dot'
+            wrapper.appendChild(dot)
+          } else {
+            const child = wrapper.firstChild
+            if (child) {
+              wrapper.removeChild(child)
+            }
+          }
+        }
+      }
+      const nodeList = wrapper.childNodes
+      for (let i = 0; i < nodeList.length; i++) {
+        const dot = nodeList[i] as HTMLElement
+        if (i === scroller.currentSlide) {
+          dot.className = 'dot current'
+        } else {
+          dot.className = 'dot'
+        }
+      }
+    }
+  }
 }
 
 function renderAllGames() {

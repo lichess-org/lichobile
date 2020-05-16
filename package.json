@@ -1,6 +1,6 @@
 {
     "name": "lichobile",
-    "version": "7.0.5",
+    "version": "7.1.0",
     "description": "lichess.org mobile application",
     "repository": {
         "type": "git",

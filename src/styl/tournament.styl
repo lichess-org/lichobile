@@ -35,28 +35,28 @@
   font-size 1em
 
 .tournament_item
+  position initial
   display flex
   flex-flow row nowrap
   align-items center
-  &.official:before
-    color gold
-  &:before
-    position absolute
-    left 10px
-    top 21px
-    font-size 28px
 
 .tournamentList
   flex-grow 1
+
+.tournamentListIcon
+  flex 0 0 28px
+  margin-right 0.5em
+  .tournament_item.official > &
+    color gold
+  &:before
+    font-size 28px
 
 .tournamentListName
   text-align: left
   text-overflow: ellipsis
   white-space: nowrap;
   overflow hidden
-  width 65%
-  &:first-child
-    padding-left 40px
+  flex-grow 1
   > .fullName
     overflow hidden
     text-overflow ellipsis
@@ -65,7 +65,9 @@
   > .time
     letter-spacing 0px
   text-align right
-  width 35%
+  flex 0 0 90px
+  @media only screen and (min-width 768px)
+    flex 0 0 110px
 
 .tournamentTitle
   text-align left
@@ -167,10 +169,6 @@
   display flex
   justify-content space-between
   align-items center
-
-.tournamentInfo
-  &:before
-    content: attr(data-icon)
 
 .timeInfo
   > strong

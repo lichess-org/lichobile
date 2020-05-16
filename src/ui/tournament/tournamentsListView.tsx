@@ -81,8 +81,8 @@ function renderTournamentListItem(tournament: TournamentListItem, index: number)
     <li key={tournament.id}
       className={'list_item tournament_item' + evenOrOdd + (tournament.createdBy === 'lichess' ? ' official' : '')}
       data-id={tournament.id}
-      data-icon={tournament.perf.icon}
     >
+      <i className="tournamentListIcon" data-icon={tournament.perf.icon} />
       <div className="tournamentListName">
         <div className="fullName">{tournament.fullName}</div>
         <small className="infos">{time} {variant} {mode} • {duration}</small>

@@ -16,22 +16,24 @@ function fenFromParams(params: any): string {
 export default {
   init() {
     Plugins.App.addListener('appUrlOpen', ({ url }) => {
-      const path = new URL(url).pathname
-      const matched = links.run(path)
-      if (!matched) {
-        // it can be a game or challenge but we want to do an exact regex match
-        const found = path.match(gamePattern)
-        if (found) {
-          const color = found[2]
-          if (color) {
-            router.set(`/game/${found[1]}?color=${color.substring(1)}`)
+      setTimeout(() => {
+        const path = new URL(url).pathname
+        const matched = links.run(path)
+        if (!matched) {
+          // it can be a game or challenge but we want to do an exact regex match
+          const found = path.match(gamePattern)
+          if (found) {
+            const color = found[2]
+            if (color) {
+              router.set(`/game/${found[1]}?color=${color.substring(1)}`)
+            } else {
+              router.set(`/game/${found[1]}`)
+            }
           } else {
-            router.set(`/game/${found[1]}`)
+            console.warn('Could not handle deep link', path)
           }
-        } else {
-          console.warn('Could not handle deep link', path)
         }
-      }
+      }, 100)
     })
   }
 }

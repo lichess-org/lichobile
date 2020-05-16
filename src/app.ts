@@ -9,12 +9,10 @@ import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
 import * as helper from './ui/helper'
 import lobby from './ui/lobby'
-import deepLinks from './deepLinks'
 import push from './push'
 import router from './router'
-import sound from './sound'
 import socket from './socket'
-import routes from './routes'
+import sound from './sound'
 import { isForeground, setForeground, setBackground } from './utils/appMode'
 
 let firstConnection = true
@@ -32,11 +30,6 @@ export default function appInit(info: DeviceInfo) {
   if (Capacitor.platform === 'ios') {
     Plugins.Keyboard.setAccessoryBarVisible({ isVisible: true })
   }
-
-  routes.init()
-
-  deepLinks.init()
-  push.init()
 
   requestIdleCallback(() => {
     // cache viewport dims

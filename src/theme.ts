@@ -1,4 +1,4 @@
-import { Plugins, FilesystemDirectory, FileReadResult } from '@capacitor/core'
+import { Plugins, StatusBarStyle, FilesystemDirectory, FileReadResult } from '@capacitor/core'
 import settings from './settings'
 
 const { Filesystem } = Plugins
@@ -13,6 +13,37 @@ interface ThemeEntry {
   ext: string
 }
 
+export function init() {
+  const bgTheme = settings.general.theme.background()
+  const boardTheme = settings.general.theme.board()
+
+  Plugins.StatusBar.setStyle({
+    style: bgTheme === 'light' ? StatusBarStyle.Light : StatusBarStyle.Dark
+  })
+
+  // load background theme
+  if (bgTheme !== 'dark' && bgTheme !== 'light') {
+    const filename = getFilenameFromKey('bg', bgTheme)
+    getLocalFile('bg', filename).then(r => {
+      createStylesheetRule('bg', bgTheme, filename, r)
+    })
+    .catch(() => {
+      settings.general.theme.background('dark')
+    })
+  }
+
+  // load board theme
+  if (!settings.general.theme.bundledBoardThemes.includes(boardTheme)) {
+    const filename = getFilenameFromKey('board', boardTheme)
+    getLocalFile('board', filename).then(r => {
+      createStylesheetRule('board', boardTheme, filename, r)
+    })
+    .catch(() => {
+      settings.general.theme.board('brown')
+    })
+  }
+}
+
 export function getLocalFile(theme: Theme, fileName: string): Promise<FileReadResult> {
   return Filesystem.readFile({
     path: theme + '-' + fileName,
@@ -25,16 +56,6 @@ export function getLocalFiles(theme: Theme): Promise<readonly string[]> {
     path: '',
     directory: FilesystemDirectory.Data
   }).then(({ files }) => files.filter(f => f.startsWith(theme)))
-}
-
-export function getFilenameFromKey(theme: Theme, key: string): string {
-  const avails = theme === 'bg' ?
-    settings.general.theme.availableBackgroundThemes :
-    settings.general.theme.availableBoardThemes
-
-  const t = avails.find(t => t.key === key)!
-
-  return filename(t)
 }
 
 export function filename(entry: ThemeEntry): string {
@@ -64,7 +85,7 @@ export function handleError(err: any) {
   Plugins.LiToast.show({ text: 'Cannot load theme file', duration: 'long' })
 }
 
-export function createStylesheetRule(
+function createStylesheetRule(
   theme: Theme,
   key: string,
   filename: string,
@@ -87,6 +108,16 @@ export function createStylesheetRule(
     `.game_menu_button.${key}::before { background-image: var(--board-background); background-size: 40px; }`
 
   styleEl.appendChild(document.createTextNode(css))
+}
+
+function getFilenameFromKey(theme: Theme, key: string): string {
+  const avails = theme === 'bg' ?
+    settings.general.theme.availableBackgroundThemes :
+    settings.general.theme.availableBoardThemes
+
+  const t = avails.find(t => t.key === key)!
+
+  return filename(t)
 }
 
 function download(

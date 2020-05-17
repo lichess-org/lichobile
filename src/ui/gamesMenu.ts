@@ -45,11 +45,11 @@ export default {
 
     return h('div#games_menu.overlay_popup_wrapper', {
       onbeforeremove: menuOnBeforeRemove
-    }, [
+    }, h.fragment({ key: helper.isPortrait() ? 'portrait' : 'landscape' }, [
       h('div.wrapper_overlay_close', { oncreate: menuOnOverlayTap }),
       renderDotsWrapper(),
       h('div#wrapper_games', renderAllGames()),
-    ])
+    ]))
   }
 }
 
@@ -68,7 +68,7 @@ function wrapperOnCreate({ dom }: Mithril.VnodeDOM<any, any>) {
     scroller = new Siema({
       selector: dom as HTMLElement,
       duration: 150,
-      loop: true,
+      loop: false,
       easing: 'ease-out',
       perPage: helper.isTablet() ? 2 : 1,
       startIndex: 0,

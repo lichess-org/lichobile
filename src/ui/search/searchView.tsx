@@ -97,6 +97,7 @@ export function renderSearchForm(ctrl: ISearchCtrl) {
         </button>
       </form>
       {renderResult(ctrl)}
+      {renderPaginator(ctrl)}
     </div>
   )
 }
@@ -126,7 +127,7 @@ function onTap (ctrl: ISearchCtrl, e: Event) {
 }
 
 function renderResult(ctrl: ISearchCtrl) {
-  const children = ctrl.searchState.searching ?  spinner.getVdom('monochrome') :
+  const children = ctrl.searchState.searching ? spinner.getVdom('monochrome') :
     ctrl.searchState.paginator === undefined ? null :
       ctrl.searchState.games.length === 0 ?
         h('div.search-empty', i18n('noGameFound')) :
@@ -134,20 +135,21 @@ function renderResult(ctrl: ISearchCtrl) {
             ctrl.searchState.games.map((g: UserGameWithDate, index: number) =>
               h(GameItem, { key: g.id, g, index, boardTheme: ctrl.boardTheme })
             ),
-            ctrl.searchState.paginator && ctrl.searchState.paginator.nextPage ?
-              h('li.moreButton', {
-                key: 'more',
-              }, [
-                h('button', {
-                  oncreate: helper.ontap(ctrl.more)
-                }, h('span.fa.fa-arrow-down'))
-              ]) : null
           ])
 
   return h('ul.searchGamesList', {
     className: ctrl.searchState.searching ? 'searching' : '',
     oncreate: helper.ontapY(e => onTap(ctrl, e!), undefined, e => helper.findElByClassName(e!, 'userGame'))
   }, children)
+}
+
+function renderPaginator(ctrl: ISearchCtrl) {
+  return ctrl.searchState.paginator && ctrl.searchState.paginator.nextPage ?
+    h('div.moreButton', [
+      h('button', {
+        oncreate: helper.ontap(ctrl.more)
+      }, h('span.fa.fa-arrow-down'))
+    ]) : null
 }
 
 function renderSelectRow(ctrl: ISearchCtrl, label: string, isDisplayed: boolean, select1: SearchSelect, select2?: SearchSelect) {

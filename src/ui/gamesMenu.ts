@@ -1,6 +1,5 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
-import Siema from 'siema'
 import addSeconds from 'date-fns/esm/addSeconds'
 import * as utils from '../utils'
 import redraw from '../utils/redraw'
@@ -16,6 +15,7 @@ import session from '../session'
 import i18n, { fromNow } from '../i18n'
 import * as xhr from '../xhr'
 import * as helper from './helper'
+import Siema from './helper/Siema'
 import ViewOnlyBoard from './shared/ViewOnlyBoard'
 
 let scroller: any | null = null

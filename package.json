@@ -63,7 +63,7 @@
         "http-server": "0.12.0",
         "lodash": "4.17.15",
         "lodash-es": "4.17.15",
-        "mithril": "2.0.4",
+        "mithril": "git+https://github.com/veloce/mithril.js.git#next",
         "rlite-router": "1.1.3",
         "siema": "1.5.1",
         "signals": "1.0.0"

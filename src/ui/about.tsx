@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core'
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import router from '../router'
@@ -43,7 +44,10 @@ export default {
           <ul className="about_links">
             <li>{externalLink('Github', 'https://github.com/veloce/lichobile')}</li>
             <li>{externalLink('Contribute', 'https://lichess.org/help/contribute')}</li>
-            <li>{externalLink('Donate', 'https://lichess.org/patron')}</li>
+            { Capacitor.platform !== 'ios' ?
+              <li>{externalLink('Donate', 'https://lichess.org/patron')}</li> :
+              null
+            }
             <li>{externalLink('Contact', 'https://lichess.org/contact')}</li>
             <li>{externalLink('Terms of Service', 'https://lichess.org/terms-of-service')}</li>
             <li>{externalLink('Privacy Policy', 'https://lichess.org/privacy')}</li>

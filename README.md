@@ -2,6 +2,9 @@
 --------------------
 
 [![Build Status](https://travis-ci.org/veloce/lichobile.svg?branch=master)](https://travis-ci.org/veloce/lichobile)
+![GitHub contributors](https://img.shields.io/github/contributors/veloce/lichobile?cacheSeconds=600)
+![GitHub All Releases](https://img.shields.io/github/downloads/veloce/lichobile/total?cacheSeconds=600)
+![GitHub](https://img.shields.io/badge/license-GPL--3.0-orange)
 
 ![lichess mobile screenshots](portfolio.png)
 

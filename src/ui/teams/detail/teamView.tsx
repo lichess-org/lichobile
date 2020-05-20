@@ -1,7 +1,7 @@
 import h from 'mithril/hyperscript'
 import { header as mainHeader } from '../../shared/common'
 import i18n from '../../../i18n'
-import {userStatus} from '../../shared/common'
+import { Leader } from '../../../lichess/interfaces/teams'
 /*
 import * as utils from '../../utils'
 import router from '../../router'
@@ -24,13 +24,29 @@ export function body(ctrl: TeamsCtrl) {
   const team = ctrl.team
   if (!team)
     return null
-  console.log(userStatus(team.leader))
+  console.log(team.leader)
   return (
     <section>
-      <div> {i18n('teamLeader') + ':'} {userStatus(team.leader)} </div>
-      <div> {team.nbMembers + ' ' + i18n('members')} </div>
-      <div> {team.description} </div>
+      <div className='teamInfos'>
+        <div> {userStatus(team.leader)} </div>
+        <div> {team.nbMembers + ' ' + i18n('members')} </div>
+        <div> {team.description} </div>
+      </div>
     </section>
   )
   
+}
+
+function userStatus(leader: Leader) {
+  return (
+    <div className="user">
+      <span> {i18n('teamLeader') + ':'} </span>
+      {leader.patron ?
+        <span className={'patron userStatus ' + status} data-icon="" /> :
+        <span className={'fa fa-circle userStatus ' + status} />
+      }
+      {leader.title ? <span className="userTitle">{leader.title}&nbsp;</span> : null}
+      {leader.name}
+    </div>
+  )
 }

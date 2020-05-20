@@ -265,16 +265,17 @@ function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
   })
 }
 
-function renderPlayerEntry(userName: string, player: StandingPlayer, i: number, teamColor: number, teamName?: string) {
+function renderPlayerEntry(userName: string, player: StandingPlayer, i: number, teamColor?: number, teamName?: string) {
   const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
   const isMe = player.name === userName
+  const ttc = teamColor ? teamColor : 0
 
   return (
     <li key={player.name} data-player={player.name} className={`list_item tournament-list-item ${evenOrOdd}` + (isMe ? ' tournament-me' : '')} >
       <div className="tournamentIdentity">
         <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '.')} &thinsp; </span>
         <span className="playerName"> {player.name + ' (' + player.rating + ')'}</span>
-        <span className={'playerTeam ttc-' + teamColor}> {teamName ? teamName : '' } </span>
+        <span className={'playerTeam ttc-' + ttc}> {teamName ? teamName : '' } </span>
       </div>
       <div className={'tournamentPoints ' + (player.sheet.fire ? 'on-fire' : 'off-fire')} data-icon="Q">
         {player.score}
@@ -383,13 +384,16 @@ function tournamentTeamLeaderboard(ctrl: TournamentCtrl) {
   )
 }
 
-function renderTeamEntry(teamName: string, teamColor: number, team: TeamStanding, i: number) {
+function renderTeamEntry(teamName: string | undefined, teamColor: number | undefined, team: TeamStanding, i: number) {
+  if (!teamName)
+    return null;
+  const ttc = teamColor ? teamColor : 0
   const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
   return (
     <li key={team.id} data-team={team.id} className={`list_item tournament-list-item ${evenOrOdd}`} >
       <div className="tournamentIdentity">
         <span> {team.rank + '.'} &thinsp; </span>
-        <span className={'ttc-' + teamColor}> {teamName} </span>
+        <span className={'ttc-' + ttc}> {teamName} </span>
       </div>
       <div className={'tournamentPoints'}>
         {team.score}

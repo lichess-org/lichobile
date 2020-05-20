@@ -36,12 +36,12 @@ function close(fromBB?: string) {
 
 function renderForm() {
   const t = tournamentCtrl.tournament
-  const teamList = t.teamBattle ? t.teamBattle.joinWith.map((x: string) => [t.teamBattle ? t.teamBattle.teams[x] : '', x]) : []
-
-  if (t.teamBattle && !t.teamBattle.joinWith.includes(settings.tournament.join.lastTeam())) {
-    if (t.teamBattle.joinWith.length > 0)
-      settings.tournament.join.lastTeam(t.teamBattle.joinWith[0])
-  }
+  const tb = t.teamBattle
+  const teamList: string[][] = tb ?
+    tb.joinWith.map(x => [tb.teams[x], x]).filter(x => x[0]) as string[][]
+    :
+    []
+    
   return (
     <form id="tournamentPasswordForm" class="tournamentForm"
     onsubmit={function(e: Event) {

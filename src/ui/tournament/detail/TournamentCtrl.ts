@@ -12,6 +12,7 @@ import faq, { FaqCtrl } from '../faq'
 import playerInfo, { PlayerInfoCtrl } from './playerInfo'
 import teamInfo, { TeamInfoCtrl } from './teamInfo'
 import socketHandler from './socketHandler'
+import settings from '../../../settings'
 
 const MAX_PER_PAGE = 10
 
@@ -203,13 +204,16 @@ export default class TournamentCtrl {
 
     this.teamColorMap = data.teamBattle ? this.createTeamColorMap (data.teamBattle) : {}
 
+    const tb = data.teamBattle
+    if (tb && !tb.joinWith.includes(settings.tournament.join.lastTeam())) {
+      if (tb.joinWith.length > 0)
+        settings.tournament.join.lastTeam(tb.joinWith[0])
+    }
+
     redraw()
   }
 
   private createTeamColorMap (tb: TeamBattle) {
-    return Object.keys(tb.teams).reduce(function (acc, team, i) {
-      acc[team] = i
-      return acc
-    }, {} as TeamColorMap)
+    return Object.keys(tb.teams).reduce((acc, team, i) => ({ ...acc, [team]: i }), {} as TeamColorMap)
   }
 }

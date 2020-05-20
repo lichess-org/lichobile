@@ -56,36 +56,40 @@ export default {
 
     function renderPlayer(player: TeamStandingPlayer, index: number) {
       return (
-        <tr className="list_item bglight" key={player.user.id}>
-          <td className="teamPlayerRank"> {index + 1} </td>
-          <td className="teamPlayerName"> {player.user.name} </td>
-          <td className="teamPlayerScore"> {player.score} </td>
-        </tr>
+        h('tr.list_item.bglight', {key: player.user.id}, [
+          h('td.teamPlayerRank', index + 1),
+          h('td.teamPlayerName', player.user.name),
+          h('td.teamPlayerScore', player.score)
+          ])
       )
     }
 
     return (
-      <div className="modal tournamentInfoModal" id="tournamentTeamInfoModal" oncreate={helper.slidesInLeft}>
-        <header>
-          <button className="modal_close"
-            oncreate={helper.ontap(helper.slidesOutRight(ctrl.close, 'tournamentTeamInfoModal'))}
-          >
-            { closeIcon }
-          </button>
-          <h2 className="tournamentModalHeader">
-            <span> {teamStanding.rank + '.' } &thinsp; </span>
-            <span class={'ttc-' + ctrl.root.teamColorMap[teamId]}> {teamName} &thinsp; </span>
-            <span> {'(' + teamStanding.score + ')'} </span>
-          </h2>
-        </header>
-        <div className="modal_content">
-          <div className="tournamentTeamPlayers">
-            <table className="tournamentModalTable">
-              {teamStanding.players.map(renderPlayer)}
-            </table>
-          </div>
-        </div>
-      </div>
+      h('div.modal.tournamentInfoModal', {id: 'tournamentTeamInfoModal', oncreate: helper.slidesInLeft}, [
+        h('header', [
+          h('buton.modal_close', {oncreate: helper.ontap(helper.slidesOutRight(ctrl.close, 'tournamentTeamInfoModal'))}, [
+            closeIcon
+          ]),
+          h('h2.tournamentModalHeader', [
+            h('span', [
+              teamStanding.rank + '. '
+            ]),
+            h('span.ttc-' + ctrl.root.teamColorMap[teamId], [
+              teamName + ' '
+            ]),
+            h('span', [
+              '(' + teamStanding.score + ')'
+            ])
+          ])
+        ]),
+        h('div.modal_content', [
+          h('div.tournamentTeamPlayers', [
+            h('table.tournamentModalTable', [
+              teamStanding.players.map(renderPlayer)
+            ])
+          ])
+        ])
+      ])
     )
   }
 }

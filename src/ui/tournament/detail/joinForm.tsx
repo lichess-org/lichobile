@@ -41,7 +41,7 @@ function renderForm() {
     tb.joinWith.map(x => [tb.teams[x], x]).filter(x => x[0]) as string[][]
     :
     []
-    
+
   return (
     <form id="tournamentPasswordForm" class="tournamentForm"
     onsubmit={function(e: Event) {

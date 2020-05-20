@@ -386,7 +386,7 @@ function tournamentTeamLeaderboard(ctrl: TournamentCtrl) {
 
 function renderTeamEntry(teamName: string | undefined, teamColor: number | undefined, team: TeamStanding, i: number) {
   if (!teamName)
-    return null;
+    return null
   const ttc = teamColor ? teamColor : 0
   const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
   return (

@@ -339,9 +339,24 @@
       margin-top 5px
 
 .tournament_form_popup
-  background bglight
   >.popup_content
     padding 0
+
+.view-container.light
+  #tournamentPlayerInfoModal
+    > header
+      background-color #fff
+      color textLightBg
+      border-bottom 1px solid borderLightGray
+      > .playerModalHeader
+        color textLightBg
+    > .modal_content
+      color textLightBg
+      background-color themeBgLight
+
+  #tournamentCreateForm
+    .textField
+      border 1px solid borderLightGray
 
 .view-container.transp
   .navigationButton.tournament-me

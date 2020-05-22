@@ -80,7 +80,7 @@ function renderGameActionsBar(ctrl: OtbRound) {
       />
       <button className="action_bar_button fa fa-plus-circle"
         oncreate={helper.ontap(
-          ctrl.newGameMenu.open,
+          () => { ctrl.saveClock(); ctrl.newGameMenu.open() },
           () => Plugins.LiToast.show({ text: i18n('createAGame'), duration: 'short', position: 'bottom' })
         )}
       />

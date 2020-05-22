@@ -24,13 +24,15 @@ export function body(ctrl: TeamsCtrl) {
   const team = ctrl.team
   if (!team)
     return null
-  console.log(team.leader)
+  console.log(team)
+  const curMember = true
   return (
     <section>
       <div className='teamInfos'>
         <div> {userStatus(team.leader)} </div>
         <div> {team.nbMembers + ' ' + i18n('members')} </div>
         <div> {team.description} </div>
+        {curMember ? renderLeave(ctrl) : renderJoin(ctrl)}
       </div>
     </section>
   )
@@ -49,4 +51,16 @@ function userStatus(leader: Leader) {
       {leader.name}
     </div>
   )
+}
+
+function renderJoin(ctrl: TeamsCtrl) {
+  return h('div.teamJoin', [
+    h('form', {id: 'joinForm', onSubmit: (e: Event) => {
+          e.preventDefault()
+          ctrl.join(e.target as HTMLFormElement)
+        }}, [
+        
+    ])
+  ])
+
 }

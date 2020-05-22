@@ -71,6 +71,7 @@
     width 100%
     font-size 46px
     color gold
+    margin-bottom 0.3em
   > .username
     white-space nowrap
     width 100%
@@ -78,9 +79,12 @@
     font-size 1.5rem
     display flex
     width 100%
-    justify-content flex-start
-    padding-left 15px
-    margin-top 0.2em
+    align-items center
+    padding 0 15px
+    margin-bottom 0.2em
+    > .fa
+      margin-left 0.5em
+      margin-top 0.15em
 
 .side_menu_scroller
   flex 0 1 auto
@@ -97,7 +101,7 @@
 
 .pingServer
   margin-left 15px
-  margin-bottom 0.5em
+  margin-bottom 0.2em
   display flex
   align-items center
   color darken(#fff, 40%)
@@ -111,6 +115,9 @@
     width 45px
   .pingValue
     font-family 'Roboto'
+  > .fa-question-circle-o
+    font-size 1.5em
+    margin-left 1em
 
 .side_links
   > .hr
@@ -122,6 +129,8 @@
   padding 10px 0 10px 15px
   line-height 19px
   letter-spacing -0.5px
+  > .patron
+    color green
   > span
     color darken(textLightGray, 15%)
     width 17px

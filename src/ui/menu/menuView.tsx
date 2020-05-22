@@ -6,7 +6,7 @@ import socket from '../../socket'
 import redraw from '../../utils/redraw'
 import session, { Session } from '../../session'
 import i18n, { plural } from '../../i18n'
-import { hasNetwork, noop } from '../../utils'
+import { hasNetwork } from '../../utils'
 import friendsApi from '../../lichess/friends'
 
 import loginModal from '../loginModal'
@@ -18,7 +18,7 @@ import CloseSlideHandler from '../shared/sideMenu/CloseSlideHandler'
 
 import * as menu from '.'
 
-const pingHelp = 'PING: Network lag between you and lichess; SERVER: Time to process a move on lichess server'
+const pingHelp = `PING: ${i18n('networkLagBetweenYouAndLichess')}; SERVER: ${i18n('timeToProcessAMoveOnLichessServer')}`
 
 export default {
   onbeforeupdate() {
@@ -43,26 +43,24 @@ export default {
 } as Mithril.Component<{}, {}>
 
 function renderHeader(user?: Session) {
-  const profileLink = user ? menu.route('/@/' + user.id) : noop
-
+  const caretClass = menu.profileMenuOpen() ? 'up' : 'down'
   return (
-    <header className="side_menu_header">
+    <header className="side_menu_header"
+      oncreate={helper.ontapXY(menu.toggleHeader)}
+    >
       { session.isKidMode() ? <div className="kiddo">😊</div> : null }
+      { networkStatus(user) }
       { hasNetwork() && !user ?
         <button className="signInButton" oncreate={helper.ontapXY(loginModal.open)}>
           {i18n('signIn')}
         </button> : null
       }
       { user ?
-        <h2 className="username" oncreate={helper.ontapXY(profileLink)}>
-          { user.patron ?
-            <div className="patron" data-icon="" /> : null
-          }
+        <h2 className="username">
           {user.username}
+          <i className={'fa fa-caret-' + caretClass} />
         </h2> : null
       }
-      { networkStatus(user) }
-      { hasNetwork() && user ? profileActionsToggle() : null }
     </header>
   )
 }
@@ -78,7 +76,11 @@ function renderProfileActions(user: Session) {
       oncreate={helper.ontapXY(onLinkTap, undefined, helper.getLI)}
     >
       <li className="side_link" data-route={`/@/${user.id}`}>
-        <span className="fa fa-user" />{i18n('profile')}
+        { user.patron ?
+          <span className="patron" data-icon="" /> :
+          <span className="fa fa-circle userStatus online" />
+        }
+        {i18n('profile')}
       </li>
       <li className="side_link" data-route={`/@/${user.id}/games?${utils.serializeQueryParameters(gamesRouteParams)}`}
       >
@@ -231,25 +233,15 @@ function renderLinks(user?: Session) {
   )
 }
 
-function profileActionsToggle() {
-
-  return (
-    <div className="menu-toggleButton side_link"
-      oncreate={helper.ontapXY(menu.toggleHeader)}
-    >
-      <span className="fa fa-exchange" />
-      {menu.profileMenuOpen() ? i18n('menu') : i18n('user')}
-    </div>
-  )
-}
-
 function networkStatus(user?: Session) {
   const ping = menu.ping()
   const server = menu.mlat()
+  const showToast = (e: Event) => {
+    e.stopPropagation()
+    Plugins.LiToast.show({ text: pingHelp, duration: 'long', position: 'top' })
+  }
   return (
-    <div className="pingServer"
-      oncreate={helper.ontapXY(() => Plugins.LiToast.show({ text: pingHelp, duration: 'long', position: 'top' }))}
-    >
+    <div className="pingServer">
       { signalBars(hasNetwork() ? ping : undefined)}
       { hasNetwork() ? (
           <div>
@@ -269,6 +261,11 @@ function networkStatus(user?: Session) {
             Offline
           </div>
         )
+      }
+      { hasNetwork() ?
+        <i className="fa fa-question-circle-o"
+          oncreate={helper.ontapXY(showToast)}
+        /> : null
       }
     </div>
   )

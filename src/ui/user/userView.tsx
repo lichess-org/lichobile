@@ -242,6 +242,22 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
           {plural('nbGames', user.count.all, user.count.all)}
         </div> : null
       }
+      { session.isConnected() && ctrl.isMe() ?
+      <div className="list_item"
+        oncreate={helper.ontapY(() => router.set('/inbox'))}
+      >
+        <span className="fa fa-envelope" />
+        {i18n('inbox')}
+      </div> : null
+      }
+      { session.isConnected() && ctrl.isMe() ?
+      <div className="list_item"
+        oncreate={helper.ontapY(() => router.set('/account/preferences'))}
+      >
+        <span className="fa fa-cog" />
+        {i18n('preferences')}
+      </div> : null
+      }
       <div className="list_item nav"
         oncreate={helper.ontapY(ctrl.followers)}
       >
@@ -293,6 +309,14 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
         oncreate={helper.ontapY(() => xhr.openWebsiteAuthPage(`/report?username=${user.username}`))}
       >
         {i18n('reportXToModerators', user.username)}
+      </div> : null
+      }
+      { session.isConnected() && ctrl.isMe() ?
+      <div className="list_item"
+        oncreate={helper.ontapY(session.logout)}
+      >
+        <span className="fa fa-power-off" />
+        {i18n('logOut')}
       </div> : null
       }
     </section>

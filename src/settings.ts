@@ -120,6 +120,7 @@ export default {
         ['cardinal'],
         ['staunty' ],
         ['symmetric' ],
+        ['dubrovny' ],
         ['shapes' ],
         ['letter' ],
       ],

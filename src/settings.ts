@@ -117,6 +117,7 @@ export default {
         ['leipzig' ],
         ['fantasy' ],
         ['pixel'],
+        ['maestro'],
         ['cardinal'],
         ['staunty' ],
         ['symmetric' ],

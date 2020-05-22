@@ -1,10 +1,1 @@
-<svg width="50mm" height="50mm" clip-rule="evenodd" fill-rule="evenodd" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" version="1.1" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
- <defs>
-  <linearGradient id="linearGradient876" x1="9.7469" x2="40.253" y1="26" y2="26" gradientTransform="translate(0 .0033997)" gradientUnits="userSpaceOnUse">
-   <stop stop-color="#968270" offset="0"/>
-   <stop stop-color="#342c22" offset="1"/>
-  </linearGradient>
- </defs>
- <path d="m12.949 39.284h24.168m-24.174-4.1049h24.114m-19.753-3.8049h15.392m-15.306-11.914h15.22m-20.192-4.1899h25.164m-25.164-6.8649v6.865l4.972 4.19-0.08581 11.914-4.3616 3.8048v4.105h-2.7957v4.3154h29.706v-4.3154h-2.7957v-4.105l-4.3616-3.8048-0.08571-11.914 4.9719-4.19v-6.865h-4.5665v2.6376h-5.1587v-2.6376h-5.7128v2.6376h-5.1587v-2.6376z" style="fill:url(#linearGradient876);stroke-linecap:round;stroke-linejoin:round;stroke-width:.8;stroke:#000000"/>
- <path d="m34.458 8.4062v7.3943l-4.9718 3.6608 0.08541 11.914 4.3611 3.8042 5.11e-4 5.15e-4v4.1049h2.7958v4.3154h3.1243v-4.3154h-2.7958v-4.1049l-5.12e-4 -5.15e-4 -4.3611-3.8042-0.08541-11.914 4.9718-3.6608v-7.3943z" style="opacity:.2"/>
-</svg>
+<svg width="50mm" height="50mm" clip-rule="evenodd" fill-rule="evenodd" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="a" x1="9.747" x2="40.253" y1="26" y2="26" gradientTransform="translate(0 .003)" gradientUnits="userSpaceOnUse"><stop stop-color="#968270" offset="0"/><stop stop-color="#342c22" offset="1"/></linearGradient></defs><path d="M12.949 39.284h24.168m-24.174-4.105h24.114m-19.753-3.805h15.392M17.39 19.46h15.22m-20.192-4.19h25.164M12.418 8.405v6.865l4.972 4.19-.086 11.914-4.361 3.805v4.105h-2.796V43.6h29.706v-4.316h-2.796V35.18l-4.361-3.805-.086-11.914 4.972-4.19V8.405h-4.567v2.638h-5.158V8.405h-5.713v2.638h-5.159V8.405z" fill="url(#a)" stroke-linecap="round" stroke-linejoin="round" stroke-width=".8" stroke="#000"/><path d="M34.458 8.406V15.8l-4.972 3.661.086 11.914 4.36 3.805h.001v4.105h2.796V43.6h3.124v-4.315h-2.795V35.18h-.001l-4.361-3.805-.086-11.914 4.972-3.66V8.406z" opacity=".2"/></svg>

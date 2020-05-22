@@ -72,6 +72,7 @@ function wrapperOnCreate({ dom }: Mithril.VnodeDOM<any, any>) {
       easing: 'ease-out',
       perPage: helper.isTablet() ? 2 : 1,
       startIndex: 0,
+      threshold: 100, // todo adapt depending on screen size
       draggable: true,
       onChange: () => {
         clearTimeout(cardChangeTimeoutId)

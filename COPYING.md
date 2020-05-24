@@ -38,6 +38,7 @@ www/images/pieces/kosal | [Philatype](https://www.philatype.com/) | [Creative Co
 www/images/pieces/merida | Armando Hernandez Marroquin | [GPLv2+](https://www.gnu.org/licenses/gpl-2.0.txt)
 www/images/pieces/maestro | [sadsnake1](https://github.com/sadsnake1) | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 www/images/pieces/cardinal | [sadsnake1](https://github.com/sadsnake1) | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+www/images/pieces/tatiana | [sadsnake1](https://github.com/sadsnake1) | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 www/images/pieces/staunty | [sadsnake1](https://github.com/sadsnake1) | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 www/images/pieces/dubrovny | [sadsnake1](https://github.com/sadsnake1) | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 

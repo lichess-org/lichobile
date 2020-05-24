@@ -1,18 +1,16 @@
 import { Plugins, AppState, NetworkStatus, PluginListenerHandle } from '@capacitor/core'
 import debounce from 'lodash-es/debounce'
 import Zanimo from '../../utils/zanimo'
-import globalConfig from '../../config'
 import socket, { SocketIFace } from '../../socket'
 import redraw from '../../utils/redraw'
 import signals from '../../signals'
 import settings from '../../settings'
-import { timeline as timelineXhr, seeks as corresSeeksXhr, lobby as lobbyXhr, featured as featuredXhr } from '../../xhr'
+import { timeline as timelineXhr, seeks as corresSeeksXhr, lobby as lobbyXhr } from '../../xhr'
 import { hasNetwork, noop } from '../../utils'
 import { fromNow } from '../../i18n'
 import { isForeground } from '../../utils/appMode'
-import { PongMessage, TimelineEntry, CorrespondenceSeek, FeaturedGame, FeaturedPlayer } from '../../lichess/interfaces'
+import { PongMessage, TimelineEntry, CorrespondenceSeek } from '../../lichess/interfaces'
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
-import { Player } from '../../lichess/interfaces/game'
 import { PuzzleData } from '../../lichess/interfaces/training'
 import session from '../../session'
 import { supportedTypes as supportedTimelineTypes } from '../timeline'
@@ -27,9 +25,7 @@ export default class HomeCtrl {
   public isScrolling: boolean = false
 
   public socketIface?: SocketIFace
-  public tvFeed?: EventSource
 
-  public featured?: FeaturedGame
   public corresPool: ReadonlyArray<CorrespondenceSeek>
   public dailyPuzzle?: PuzzleData
   public featuredTournaments?: ReadonlyArray<TournamentListItem>
@@ -57,9 +53,6 @@ export default class HomeCtrl {
     this.appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
       console.debug('appStateChange')
       if (state.isActive) this.init()
-      else {
-        if (this.tvFeed) this.tvFeed.close()
-      }
     })
   }
 
@@ -83,9 +76,6 @@ export default class HomeCtrl {
   public unload = () => {
     this.networkListener.remove()
     this.appStateListener.remove()
-    if (this.tvFeed) {
-      this.tvFeed.close()
-    }
   }
 
   public init = () => {
@@ -100,29 +90,6 @@ export default class HomeCtrl {
           signals.homePong.dispatch(d)
         }
       })
-
-      this.tvFeed = new EventSource(globalConfig.apiEndPoint + '/tv/feed')
-      this.tvFeed.onerror = () => {
-        if (this.tvFeed) this.tvFeed.close()
-      }
-      this.tvFeed.onmessage = (ev) => {
-        const data = JSON.parse(ev.data)
-        if (data.t === 'fen') {
-          if (this.featured) {
-            this.featured.fen = data.d.fen
-            this.featured.lastMove = data.d.lm
-            this.redrawIfNotScrolling()
-          }
-        }
-
-        if (data.t === 'featured') {
-          this.featured = undefined
-          // TODO use feed instead
-          this.getFeatured()
-        }
-      }
-
-      this.getFeatured()
 
       Promise.all([
         dailyPuzzleXhr(),
@@ -189,31 +156,6 @@ export default class HomeCtrl {
     this.socketSend('joinSeek', seekId)
   }
 
-  private getFeatured = () => {
-    featuredXhr('best', false)
-    .then((data) => {
-      const opp = playerToFeatured(data.opponent)
-      const player = playerToFeatured(data.player)
-
-      this.featured = {
-        black: data.game.player === 'white' ? opp : player,
-        color: data.orientation,
-        fen: data.game.fen,
-        id: data.game.id,
-        lastMove: data.game.lastMove,
-        white: data.game.player === 'white' ? player : opp,
-      }
-      if (data.clock) {
-        this.featured.clock = {
-          increment: data.clock.increment,
-          initial: data.clock.initial
-        }
-      }
-
-      this.redrawIfNotScrolling()
-    })
-  }
-
   private reloadCorresPool = () => {
     if (this.selectedTab === 1) {
       corresSeeksXhr(false)
@@ -246,14 +188,4 @@ function fixSeeks(seeks: CorrespondenceSeek[]): CorrespondenceSeek[] {
     .filter(([_, key], i, a) => a.map(e => e[1]).indexOf(key) === i)
     .map(([s]) => s)
   ] as CorrespondenceSeek[]
-}
-
-function playerToFeatured(p: Player): FeaturedPlayer {
-  return {
-    name: p.name || p.username || p.user && p.user.username || '',
-    rating: p.rating || 0,
-    ratingDiff: p.ratingDiff || 0,
-    berserk: p.berserk,
-    title: p.user && p.user.title,
-  }
 }

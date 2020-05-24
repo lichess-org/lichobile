@@ -5,8 +5,8 @@
   grid-template-areas:
     'lobby'\
     'start'\
-    'side'\
-    'tv'\
+    'tournament'\
+    'timeline'\
     'puzzle'\
     '.'
   grid-gap: 2vmin
@@ -17,8 +17,8 @@
     grid-template-areas:
       'start start'\
       'lobby lobby'\
-      'side tv'\
-      'side puzzle';
+      'timeline tournament'\
+      'timeline puzzle';
 
   @media only screen and (min-width 800px)
 
@@ -28,8 +28,8 @@
     grid-template-areas:
       'start lobby lobby'\
       'start lobby lobby'\
-      'side side tv'\
-      'side side puzzle';
+      'timeline timeline tournament'\
+      'timeline timeline puzzle';
 
 .home__lobby
   grid-area lobby
@@ -82,9 +82,6 @@
 .home__miniPuzzle
   grid-area puzzle
 
-.home__featured
-  grid-area tv
-
 .home__featured, .home__miniPuzzle
   display flex
   flex-flow column nowrap
@@ -92,17 +89,15 @@
   @media only screen and (min-width 601px)
     margin 0 1vmin 0 0
 
-.home__side
-  grid-area side
-  overflow hidden
-
 .home__tournament
+  grid-area tournament
   padding 0px
   > .tournamentList
     > .tournament_item
       padding 2vmin
 
 .home__timeline
+  grid-area timeline
   margin 0 2vmin
   margin-top 2vmin
   &:first-child

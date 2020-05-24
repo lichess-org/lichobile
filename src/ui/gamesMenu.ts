@@ -67,12 +67,11 @@ function wrapperOnCreate({ dom }: Mithril.VnodeDOM<any, any>) {
   if (helper.isPortrait()) {
     scroller = new Siema({
       selector: dom as HTMLElement,
-      duration: 150,
+      duration: 250,
       loop: false,
-      easing: 'ease-out',
       perPage: helper.isTablet() ? 2 : 1,
       startIndex: 0,
-      threshold: 100, // todo adapt depending on screen size
+      threshold: 50, // TODO adapt depending on screen size
       draggable: true,
       onChange: () => {
         clearTimeout(cardChangeTimeoutId)

@@ -202,7 +202,7 @@ export default {
     blackPlayer: prop('otb.blackPlayer', 'Black'),
     clockType: prop<ClockType | 'none'>('otb.clockType', 'none'),
     availableClocks: [
-      ['none', 'None']
+      ['None', 'none']
     ].concat(availableClocks)
   },
 

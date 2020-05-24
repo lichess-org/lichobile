@@ -1,13 +1,14 @@
-import resolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
-import json from 'rollup-plugin-json'
-import strip from 'rollup-plugin-strip'
+import resolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
+import json from '@rollup/plugin-json'
+import strip from '@rollup/plugin-strip'
 import { terser } from 'rollup-plugin-terser'
 
 const release = process.env.APP_MODE === 'release'
 
 export default {
   input: 'build/main.js',
+  preserveEntrySignatures: false,
   output: {
     dir: 'www',
     format: 'esm',

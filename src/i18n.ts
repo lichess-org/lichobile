@@ -176,7 +176,7 @@ function loadFile(code: string): Promise<string> {
 }
 
 // supported date-fns locales with region
-const supportedDateLocales = ['ar-DZ', 'ar-SA', 'en-CA', 'en-GB', 'en-US', 'fa-IR', 'fr-CH', 'nl-BE', 'pt-BR', 'zh-CN', 'zh-TW']
+const supportedDateLocales = ['ar-DZ', 'ar-MA', 'ar-SA', 'en-AU', 'en-CA', 'en-GB', 'en-IN', 'en-US', 'fa-IR', 'fr-CA', 'fr-CH', 'nl-BE', 'pt-BR', 'zh-CN', 'zh-TW']
 
 function loadDateLocale(code: string): Promise<string> {
   if (code === defaultCode) return Promise.resolve(code)

@@ -119,6 +119,7 @@ export default {
         ['pixel'],
         ['maestro'],
         ['cardinal'],
+        ['tatiana' ],
         ['staunty' ],
         ['symmetric' ],
         ['dubrovny' ],

@@ -231,7 +231,7 @@ function renderFeaturedTournaments(ctrl: HomeCtrl) {
   if (ctrl.featuredTournaments && ctrl.featuredTournaments.length)
     return (
       <div className="home__tournament">
-        <ul>
+        <ul className="tournamentList">
           {ctrl.featuredTournaments.map(renderTournamentListItem)}
         </ul>
       </div>

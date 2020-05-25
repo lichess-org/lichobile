@@ -312,7 +312,7 @@ export default {
   "berserkRate": "מתוכם ברזרק",
   "performance": "דירוג הביצוע",
   "tournamentComplete": "הטורניר הושלם",
-  "movesPlayed": "מהלים ששוחקו",
+  "movesPlayed": "מהלכים ששוחקו",
   "whiteWins": "לבן מנצח",
   "blackWins": "שחור מנצח",
   "draws": "תוצאות תיקו",

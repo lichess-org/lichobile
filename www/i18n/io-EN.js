@@ -117,10 +117,10 @@ export default {
   "teamRecentMembers": "Recenta membri di esquado",
   "averageElo": "Mezavalora Elo",
   "location": "Loko",
-  "settings": "Ajusti",
   "filterGames": "Filtrar ludi",
   "reset": "Ripozar",
   "apply": "Aplikar",
   "leaderboard": "Tabelo di maxim bona luderi",
+  "boardCoordinates": "Board coordinates (A-H, 1-8)",
   "zenMode": "Zen mode"
 }

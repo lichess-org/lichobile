@@ -163,7 +163,6 @@ export default {
   "spectators": "प्रेक्षक",
   "exportGames": "खेळ निर्यात करा",
   "ratingRange": "इलो श्रेणी",
-  "giveMoreTime": "अजून वेळ द्या",
   "thisPlayerUsesChessComputerAssistance": "हा खेळाडू संगणकाची मदत घेतो.",
   "takeback": "परत घ्या",
   "proposeATakeback": "Mage ghenyas vinanti",
@@ -196,7 +195,6 @@ export default {
   "teamRecentMembers": "अलीकडचे सदस्य",
   "averageElo": "सरासरी गुण",
   "location": "स्थळ",
-  "settings": "सेटिंग्ज",
   "filterGames": "चाळलेले खेळ",
   "reset": "पहिल्यासारखे करा",
   "apply": "लागू करा",
@@ -247,7 +245,6 @@ export default {
   "lastName": "आडनाव",
   "biography": "चरित्र",
   "country": "देश",
-  "preferences": "प्राधान्ये",
   "watchLichessTV": "Lichess दूरदर्शन पाहा",
   "previouslyOnLichessTV": "यापूर्वी लिचेस चित्रफलकावर",
   "onlinePlayers": "उपलब्ध खेळाडू",
@@ -294,7 +291,6 @@ export default {
   "tools": "साधने",
   "increment": "वाढ",
   "mobileApp": "भ्रमणध्वनी App",
-  "contact": "संपर्क",
   "nbPlayers:one": "%s खेळाडू जोडुन आहेत",
   "nbPlayers:other": "%s खेळाडू जोडुन आहेत",
   "nbGames:one": "सर्व %s डाव पाहा",
@@ -316,5 +312,7 @@ export default {
   "giveNbSeconds:one": "%s सेकंद द्या",
   "giveNbSeconds:other": "%s सेकंद द्या",
   "nbMembers:one": "%s सदस्य",
-  "nbMembers:other": "%s सदस्य"
+  "nbMembers:other": "%s सदस्य",
+  "preferences": "प्राधान्ये",
+  "giveMoreTime": "अजून वेळ द्या"
 }

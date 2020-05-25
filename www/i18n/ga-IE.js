@@ -145,7 +145,6 @@ export default {
   "troll": "Tochardán",
   "other": "Eile",
   "notes": "Nótaí",
-  "chessClock": "Clog fichille",
   "sound": "Fuaim",
   "always": "I gcónaí",
   "difficultyEasy": "Éasca",
@@ -170,5 +169,6 @@ export default {
   "nbDays:few": "%s lá",
   "nbDays:many": "%s lá",
   "nbDays:other": "%s lá",
-  "open": "Oscailte"
+  "open": "Oscailte",
+  "chessClock": "Clog fichille"
 }

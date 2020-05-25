@@ -57,6 +57,7 @@ export default {
   "promoteVariation": "Ipataas ang ranggo sa pagkalain-lain",
   "makeMainLine": "Maghimo ug unang linya",
   "deleteFromHere": "Tanggala gikan diri",
+  "forceVariation": "Pag-usab sa kusog",
   "move": "Lihok",
   "variantLoss": "Lahi-lahing pagkapildi",
   "variantWin": "Lahi-lahing pagkapildi",
@@ -106,6 +107,7 @@ export default {
   "flipBoard": "Baliha ang board",
   "threefoldRepetition": "Katulo nga pagbali-bali",
   "claimADraw": "Kuhaa nga tabla",
+  "offerDraw": "tanyag draw",
   "players": "Mga manuwaay",
   "minutesPerSide": "Minuto kada side",
   "variant": "Nagkalahi-lahi",
@@ -117,6 +119,8 @@ export default {
   "oneDay": "Usa ka adlaw",
   "mateInXHalfMoves:one": "Namate sa %s tunga nga lihok",
   "mateInXHalfMoves:other": "Namate sa %s tunga nga mga lihok",
+  "nextCaptureOrPawnMoveInXHalfMoves:one": "Sunod nga pagdakup o paglihok sa lakang sa %s tunga sa paglihok (Distansya Ngadto sa Zeroing sa 50 ka lakang sa pagbalhin)",
+  "nextCaptureOrPawnMoveInXHalfMoves:other": "Sunod nga pagdakup o paglihok sa lakang sa %s tunga-tunga nga paglihok (Distansya Ngadto sa Zeroing sa 50 move counter)",
   "nbDays:one": "%s adlaw",
   "nbDays:other": "%s mga adlaw"
 }

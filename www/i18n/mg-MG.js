@@ -147,7 +147,6 @@ export default {
   "xCreatedTeamY": "Namorona ny vondrona %1$s i %2$s",
   "averageElo": "Filaharana ankapobeny",
   "location": "Toerana",
-  "settings": "Kirakira ankapobeny",
   "filterGames": "Sivanina ny lalao",
   "reset": "Averina",
   "apply": "Ampiharo",
@@ -207,7 +206,6 @@ export default {
   "lastName": "Fanampin'anarana",
   "biography": "Biographie",
   "country": "Firenena",
-  "preferences": "Preferences",
   "watchLichessTV": "Mijereva Lichess TV",
   "previouslyOnLichessTV": "Teto amin'ny Lichess TV",
   "onlinePlayers": "Ny mpilalao connectés",
@@ -238,7 +236,6 @@ export default {
   "other": "Antony hafa",
   "questionsAndAnswers": "Fanontaniana & valiny",
   "notes": "Naoty",
-  "thisAccountIsClosed": "Mikatona io kaonty io.",
   "invalidUsernameOrPassword": "Anarana na teny miafina diso",
   "currentPassword": "Teny miafina ankehitriny",
   "newPassword": "Teny miafina vaovao",
@@ -297,5 +294,6 @@ export default {
   "playedXTimes:one": "Nanao andrana in-%s",
   "playedXTimes:other": "Nanao andrana in-%s",
   "nbGamesInPlay:one": "%s ireo lalao amin'izao fotoana izao",
-  "nbGamesInPlay:other": "%s ireo lalao amin'izao fotoana izao"
+  "nbGamesInPlay:other": "%s ireo lalao amin'izao fotoana izao",
+  "preferences": "Preferences"
 }

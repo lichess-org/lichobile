@@ -73,8 +73,8 @@
         "version": "node scripts/bump-version.js",
         "lint": "tslint --project tsconfig.json -e '**/dts/**' -e '**/*.js'",
         "test": "jest",
-        "i18n-update": "cd scripts && npm run i18n-fetch",
-        "compile-locales": "node scripts/compile-locales",
+        "i18n-update": "rimraf www/i18n/*.js && cd scripts && npm run i18n-fetch",
+        "compile-date-locales": "node scripts/compile-date-locales",
         "styles": "stylus -q -u autoprefixer-stylus src/styl/index.styl -c -o www/css/compiled/app.css",
         "styles-watch": "stylus -w -q -u autoprefixer-stylus src/styl/index.styl -o www/css/compiled/app.css",
         "compile": "tsc --outDir build/",
@@ -84,7 +84,7 @@
         "web-watch": "npm run web-clean && rollup -w -c",
         "watch": "node scripts/inject-conf && concurrently 'npm:compile-watch' 'npm:web-watch' 'npm:styles-watch'",
         "prebuild": "npm run web-clean",
-        "build": "node scripts/inject-conf && concurrently 'npm:compile-locales' 'npm:styles' 'npm:web-build' && npx cap copy",
+        "build": "node scripts/inject-conf && concurrently 'npm:compile-date-locales' 'npm:styles' 'npm:web-build' && npx cap copy",
         "run-android": "npm run build && cd android && ./gradlew installDebug"
     },
     "jest": {

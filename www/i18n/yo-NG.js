@@ -28,7 +28,6 @@ export default {
   "allTeams": "Gbogbo egbe",
   "newTeam": "Titun egbe",
   "myTeams": "Mi egbe",
-  "settings": "Eto",
   "apply": "Waye",
   "leaderboard": "Leaderboard",
   "more": "Diẹ",

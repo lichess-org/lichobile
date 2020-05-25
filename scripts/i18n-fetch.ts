@@ -43,13 +43,12 @@ function unescape(str: string) {
   return str.replace(/\\"/g, '"').replace(/\\'/g, '\'');
 }
 
-function transformTranslations(data: any, locale: string): Promise<StringMap> {
+function transformTranslations(data: any, locale: string, section: string): Promise<StringMap> {
   console.log(colors.blue(`Transforming translations for ${colors.bold(locale)}...`));
   const flattenedTranslations = {};
 
   if (!(data && data.resources && data.resources.string)) {
-    console.log(data);
-    return Promise.reject(`Malformed translations in locale: ${locale}`);
+    return Promise.reject(`Missing translations in section ${section} and locale ${locale}`);
   }
 
   data.resources.string.forEach((stringElement: any) => {
@@ -70,6 +69,20 @@ function writeTranslations(where: string, data: object) {
   writeFileSync(where, 'export default ' + JSON.stringify(data, null, 2));
 }
 
+async function loadXml(locales: readonly string[], section: string) {
+  const sectionXml = {}
+  for (const idx in locales) {
+    const locale = locales[idx]
+    console.log(colors.blue(`Loading translations for ${colors.bold(locale)}...`))
+    try {
+      sectionXml[locale] = await loadTranslations(section, locale)
+    } catch (_) {
+      console.warn(colors.yellow(`Could not load ${section} translations for locale: ${locale}`))
+    }
+  }
+  return sectionXml
+}
+
 async function main(args: string[]) {
   mkdirSync(`${baseDir}`, {recursive: true});
 
@@ -83,63 +96,24 @@ async function main(args: string[]) {
     const locales = readdirSync(`${baseDir}/master/translation/dest/site`)
     .map(fn => fn.split('.')[0])
 
-    // Load XML
-    const siteLocaleXml = {};
-    const studyLocaleXml = {};
-    const arenaLocaleXml = {};
-    for (const idx in locales) {
-      const locale = locales[idx];
-      console.log(colors.blue(`Loading translations for ${colors.bold(locale)}...`));
-      siteLocaleXml[locale] = await loadTranslations('site', locale);
-      try {
-        studyLocaleXml[locale] = await loadTranslations('study', locale);
-      } catch (_) {
-        console.warn(colors.yellow(`Could not load study translations for locale: ${locale}`));
-      }
-      try {
-        arenaLocaleXml[locale] = await loadTranslations('arena', locale);
-      } catch (_) {
-        console.warn(colors.yellow(`Could not load arena translations for locale: ${locale}`));
-      }
-    }
-
-    // Flatten plurals, etc.
-    const localeToFlattened = {};
-    for (const locale in siteLocaleXml) {
-      if (siteLocaleXml[locale]) {
+    // load and flatten translations in one object
+    const everything = {}
+    for (const section of ['site', 'study', 'arena', 'preferences']) {
+      const xml = await loadXml(locales, section)
+      for (const locale in xml) {
         try {
-          localeToFlattened[locale] = await transformTranslations(siteLocaleXml[locale], locale);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      if (studyLocaleXml[locale]) {
-        try {
-          const transStudy =
-            await transformTranslations(studyLocaleXml[locale], locale)
-          localeToFlattened[locale] = {
-            ...localeToFlattened[locale],
-            ...transStudy
+          const trans = await transformTranslations(xml[locale], locale, section)
+          everything[locale] = {
+            ...everything[locale],
+            ...trans
           }
         } catch (e) {
-          console.error(e);
-        }
-      }
-      if (arenaLocaleXml[locale]) {
-        try {
-          const transArena =
-            await transformTranslations(arenaLocaleXml[locale], locale)
-          localeToFlattened[locale] = {
-            ...localeToFlattened[locale],
-            ...transArena
-          }
-        } catch (e) {
-          console.error(e);
+          console.error(e)
         }
       }
     }
 
-    const allKeys = Object.keys(localeToFlattened);
+    const allKeys = Object.keys(everything)
 
     writeFileSync(`${i18nBaseDir}/refs.js`, 'export default ' + JSON.stringify(allKeys, null, 2));
     console.log(
@@ -148,7 +122,7 @@ async function main(args: string[]) {
 
     // Write flattened translation objects to file. Skip if it would remove one or more keys.
     allKeys.forEach(locale => {
-      const newData = localeToFlattened[locale];
+      const newData = everything[locale];
       try {
         writeTranslations(`${i18nBaseDir}/${locale}.js`, newData);
       } catch (e) {

@@ -120,6 +120,7 @@ export default {
         ['maestro'],
         ['fresca'],
         ['cardinal'],
+        ['tatiana' ],
         ['staunty' ],
         ['symmetric' ],
         ['dubrovny' ],

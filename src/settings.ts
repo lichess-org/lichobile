@@ -118,6 +118,7 @@ export default {
         ['fantasy' ],
         ['pixel'],
         ['maestro'],
+        ['fresca'],
         ['cardinal'],
         ['staunty' ],
         ['symmetric' ],

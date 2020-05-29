@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "i18n-fetch": "npx tsc i18n-fetch.ts && node i18n-fetch.js"
+    "i18n-update": "npx tsc i18n-update.ts && node i18n-update.js"
   },
   "devDependencies": {
     "colors": "^1.3.3",

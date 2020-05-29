@@ -20,6 +20,9 @@ export default {
   "createAGame": "ಒಂದು ಆಟ",
   "whiteIsVictorious": "ಬಿಳಿ ಜಯಶಾಲಿಯಾಗಿದ್ದಾರೆ",
   "blackIsVictorious": "ಕಪ್ಪು ಜಯಶಾಲಿಯಾಗಿದ್ದಾರೆ",
+  "youPlayTheWhitePieces": "ನೀವು ಬಿಳಿ ತುಂಡುಗಳನ್ನು ಆಡುತ್ತೀರಿ",
+  "youPlayTheBlackPieces": "ನೀವು ಕಪ್ಪು ತುಂಡುಗಳನ್ನು ಆಡುತ್ತೀರಿ",
+  "itsYourTurn": "ಈಗ ನಿನ್ನ ಸರದಿ!",
   "kingInTheCenter": "ರಾಜ ಮಧ್ಯದಲ್ಲಿ",
   "threeChecks": "ಮೂರು ಚೆಕ್",
   "raceFinished": "ಪಂದ್ಯವನ್ನು ಮುಗಿಸಿದವು",
@@ -57,6 +60,7 @@ export default {
   "promoteVariation": "ಭಿನ್ನತೆಯನ್ನು ತೇರ್ಗಡಿಸಿ",
   "makeMainLine": "ಮುಖ್ಯವಾಹಿನಿಗೆ ತನ್ನಿ",
   "deleteFromHere": "ಇಲ್ಲಿಂದ ಅಳಿಸಿ",
+  "forceVariation": "ಬಲ ವ್ಯತ್ಯಾಸ",
   "move": "ಸರಿಸಿ",
   "variantLoss": "ಭಿನ್ನತೆ ಸೋಲು",
   "variantWin": "ಭಿನ್ನತೆ ಗೆಲುವು",
@@ -73,5 +77,9 @@ export default {
   "averageRatingX": "ಸರಾಸರಿ ಮೌಲ್ಯ: %s",
   "recentGames": "ಇತ್ತೀಚಿನ ಆಟಗಳು",
   "topGames": "ಅತ್ಯುತ್ತಮ ಆಟಗಳು",
-  "masterDbExplanation": "%2$s ಇಂದ %3$s ವರೆಗಿನ %1$s+ FIDE ಮೌಲ್ಯ ಆಟಗಾರ ಇಪ್ಪತ್ತು ಲಕ್ಷ ಒ.ಟಿ.ಬಿ ಆಟಗಳು"
+  "masterDbExplanation": "%2$s ಇಂದ %3$s ವರೆಗಿನ %1$s+ FIDE ಮೌಲ್ಯ ಆಟಗಾರ ಇಪ್ಪತ್ತು ಲಕ್ಷ ಒ.ಟಿ.ಬಿ ಆಟಗಳು",
+  "opponentLeftCounter:one": "ನಿಮ್ಮ ಎದುರಾಳಿಯು ಆಟವನ್ನು ತೊರೆದನು. ನೀವು %s ಸೆಕೆಂಡಿನಲ್ಲಿ ವಿಜಯ ಸಾಧಿಸಬಹುದು.",
+  "opponentLeftCounter:other": "ನಿಮ್ಮ ಎದುರಾಳಿಯು ಆಟವನ್ನು ತೊರೆದನು. ನೀವು %s ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಗೆಲ್ಲಬಹುದು.",
+  "mateInXHalfMoves:one": "%s ಅರ್ಧ-ಚಲನೆಯಲ್ಲಿ ಸಂಗಾತಿ",
+  "mateInXHalfMoves:other": "%s ಅರ್ಧ-ಚಲನೆಗಳಲ್ಲಿ ಸಂಗಾತಿ"
 }

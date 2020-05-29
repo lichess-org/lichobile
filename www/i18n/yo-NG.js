@@ -21,19 +21,13 @@ export default {
   "rated": "Won won",
   "send": "Firanṣẹ",
   "spectators": "Ayé ti:",
-  "search": "àwárí",
   "tournament": "Figagbaga",
   "tournaments": "Awọn ere-idije",
-  "teams": "Egbe",
-  "allTeams": "Gbogbo egbe",
-  "newTeam": "Titun egbe",
-  "myTeams": "Mi egbe",
   "apply": "Waye",
   "leaderboard": "Leaderboard",
   "more": "Diẹ",
   "winner": "Olubori ọkunrin",
   "country": "Orilẹ-ede",
-  "training": "Ikẹkọ",
   "thankYou": "E dupe!",
   "victory": "Isegun!",
   "isItRated": "so jo ara won?",
@@ -50,5 +44,6 @@ export default {
   "howDoesItEnd": "bawo lose pari?",
   "howDoesItEndAnswer": "idije na ni agogo ti ka wakati.to ba si ti dori o do,igbelewon pari asi kede asegun.idije tin lo yo pari sugbon won si lara idije mo.",
   "otherRules": "awon ikilo to se pataki miiran",
-  "thisIsPrivate": "idije bonkele ni yi"
+  "thisIsPrivate": "idije bonkele ni yi",
+  "settings": "Eto"
 }

@@ -1,6 +1,7 @@
 export default [
   "af-ZA",
   "am-ET",
+  "an-ES",
   "ar-SA",
   "as-IN",
   "az-AZ",
@@ -62,10 +63,12 @@ export default [
   "mn-MN",
   "mr-IN",
   "ms-MY",
+  "my-MM",
   "nb-NO",
   "ne-NP",
   "nl-NL",
   "nn-NO",
+  "or-IN",
   "pa-IN",
   "pa-PK",
   "pi-IN",
@@ -79,6 +82,7 @@ export default [
   "si-LK",
   "sk-SK",
   "sl-SI",
+  "sn-ZW",
   "sq-AL",
   "sr-SP",
   "sv-SE",
@@ -100,5 +104,6 @@ export default [
   "yo-NG",
   "zh-CN",
   "zh-TW",
-  "zu-ZA"
+  "zu-ZA",
+  "mt-MT"
 ]

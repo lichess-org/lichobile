@@ -20,6 +20,8 @@ export default {
   "createAGame": "ක්‍රීඩාවක් නිර්මාණය කරන්න",
   "whiteIsVictorious": "සුදු ජයග්‍රාහී වේ",
   "blackIsVictorious": "කළු ජයග්‍රාහී වේ",
+  "youPlayTheWhitePieces": "You play the white pieces",
+  "youPlayTheBlackPieces": "You play the white pieces",
   "kingInTheCenter": "රජු කෙන්ද්‍රයේය",
   "threeChecks": "වැටලුම් තුනක්",
   "raceFinished": "තරඟය අවසන්",

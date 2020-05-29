@@ -73,7 +73,7 @@
         "version": "node scripts/bump-version.js",
         "lint": "tslint --project tsconfig.json -e '**/dts/**' -e '**/*.js'",
         "test": "jest",
-        "i18n-update": "rimraf www/i18n/*.js && cd scripts && npm run i18n-fetch",
+        "i18n-update": "rimraf www/i18n/*.js && cd scripts && npm run i18n-update",
         "compile-date-locales": "node scripts/compile-date-locales",
         "styles": "stylus -q -u autoprefixer-stylus src/styl/index.styl -c -o www/css/compiled/app.css",
         "styles-watch": "stylus -w -q -u autoprefixer-stylus src/styl/index.styl -o www/css/compiled/app.css",

@@ -6,6 +6,7 @@ import socket from '../socket'
 import * as helper from './helper'
 import layout from './layout'
 import { dropShadowHeader, backButton } from './shared/common'
+import i18n from '../i18n'
 
 export default {
   oncreate: helper.viewSlideIn,
@@ -15,7 +16,7 @@ export default {
   },
 
   view() {
-    const header = dropShadowHeader(null, backButton('About'))
+    const header = dropShadowHeader(null, backButton(i18n('about')))
     return layout.free(
       header,
       <div class="aboutBody native_scroller">

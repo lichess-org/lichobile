@@ -198,57 +198,57 @@ function quantity(l: string, c: number): Quantity {
   const rem10 = c % 10
   switch (l) {
     // french
-    case 'fr':
+    case 'fr-FR':
     case 'ff':
-    case 'kab':
+    case 'kab-DZ':
       return c < 2 ? 'one' : 'other'
     // czech
-    case 'cs':
-    case 'sk':
+    case 'cs-CZ':
+    case 'sk-SK':
       if (c === 1) return 'one'
       else if (c >= 2 && c <= 4) return 'few'
       else return 'other'
     // balkan
-    case 'hr':
-    case 'ru':
-    case 'sr':
-    case 'uk':
-    case 'be':
-    case 'bs':
+    case 'hr-HR':
+    case 'ru-RU':
+    case 'sr-SP':
+    case 'uk-UA':
+    case 'be-BY':
+    case 'bs-BA':
     case 'sh':
       if (rem10 === 1 && rem100 !== 11) return 'one'
       else if (rem10 >= 2 && rem10 <= 4 && !(rem100 >= 12 && rem100 <= 14)) return 'few'
       else if (rem10 === 0 || (rem10 >= 5 && rem10 <= 9) || (rem100 >= 11 && rem100 <= 14)) return 'many'
       else return 'other'
     // latvian
-    case 'lv':
+    case 'lv-LV':
       if (c === 0) return 'zero'
       else if (c % 10 === 1 && c % 100 !== 11) return 'one'
       else return 'other'
     // lithuanian
-    case 'lt':
+    case 'lt-LT':
       if (rem10 === 1 && !(rem100 >= 11 && rem100 <= 19)) return 'one'
       else if (rem10 >= 2 && rem10 <= 9 && !(rem100 >= 11 && rem100 <= 19)) return 'few'
       else return 'other'
     // polish
-    case 'pl':
+    case 'pl-PL':
       if (c === 1) return 'one'
       else if (rem10 >= 2 && rem10 <= 4 && !(rem100 >= 12 && rem100 <= 14)) return 'few'
       else return 'other'
     // romanian
-    case 'ro':
+    case 'ro-RO':
     case 'mo':
       if (c === 1) return 'one'
       else if ((c === 0 || (rem100 >= 1 && rem100 <= 19))) return 'few'
       else return 'other'
     // slovenian
-    case 'sl':
+    case 'sl-SI':
       if (rem100 === 1) return 'one'
       else if (rem100 === 2) return 'two'
       else if (rem100 >= 3 && rem100 <= 4) return 'few'
       else return 'other'
     // arabic
-    case 'ar':
+    case 'ar-SA':
       if (c === 0) return 'zero'
       else if (c === 1) return 'one'
       else if (c === 2) return 'two'
@@ -256,11 +256,11 @@ function quantity(l: string, c: number): Quantity {
       else if (rem100 >= 11 && rem100 <= 99) return 'many'
       else return 'other'
     // macedonian
-    case 'mk':
+    case 'mk-MK':
       return (c % 10 === 1 && c !== 11) ? 'one' : 'other'
     // welsh
-    case 'cy':
-    case 'br':
+    case 'cy-GB':
+    case 'br-FR':
       if (c === 0) return 'zero'
       else if (c === 1) return 'one'
       else if (c === 2) return 'two'
@@ -274,7 +274,7 @@ function quantity(l: string, c: number): Quantity {
       else if (rem100 >= 11 && rem100 <= 19) return 'many'
       else return 'other'
     // two
-    case 'ga':
+    case 'ga-IE':
     case 'se':
     case 'sma':
     case 'smi':
@@ -286,49 +286,49 @@ function quantity(l: string, c: number): Quantity {
       else return 'other'
     // zero
     case 'ak':
-    case 'am':
+    case 'am-ET':
     case 'bh':
     case 'fil':
-    case 'tl':
+    case 'tl-PH':
     case 'guw':
-    case 'hi':
+    case 'hi-IN':
     case 'ln':
-    case 'mg':
+    case 'mg-MG':
     case 'nso':
     case 'ti':
     case 'wa':
       return (c === 0 || c === 1) ? 'one' : 'other'
     // none
-    case 'az':
+    case 'az-AZ':
     case 'bm':
-    case 'fa':
+    case 'fa-IR':
     case 'ig':
     case 'hu':
-    case 'ja':
+    case 'ja-JP':
     case 'kde':
     case 'kea':
-    case 'ko':
+    case 'ko-KR':
     case 'my':
     case 'ses':
     case 'sg':
     case 'to':
-    case 'tr':
-    case 'vi':
+    case 'tr-TR':
+    case 'vi-VN':
     case 'wo':
-    case 'yo':
-    case 'zh':
+    case 'yo-NG':
+    case 'zh-CN':
     case 'bo':
     case 'dz':
-    case 'id':
-    case 'jv':
-    case 'ka':
+    case 'id-ID':
+    case 'jv-ID':
+    case 'ka-GE':
     case 'km':
-    case 'kn':
-    case 'ms':
-    case 'th':
-    case 'tp':
-    case 'io':
-    case 'ia':
+    case 'kn-IN':
+    case 'ms-MY':
+    case 'th-TH':
+    case 'tp-TP':
+    case 'io-EN':
+    case 'ia-IA':
       return 'other'
     default:
       return c === 1 ? 'one' : 'other'

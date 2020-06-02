@@ -88,7 +88,7 @@ function renderMyTeams(ctrl: TeamsListCtrl) {
       spinner.getVdom('monochrome')
     ])
   }
-  
+
   return h('ul.teamsSuggestion.native_scroller.page',
     {'oncreate': helper.ontapY(onTeamTap, undefined, helper.getLI)},
     [ctrl.myTeams.map(renderTeam)])

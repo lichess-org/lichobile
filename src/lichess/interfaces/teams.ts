@@ -1,12 +1,14 @@
 export interface Team {
   readonly description: string
   readonly id: string
+  readonly joined: boolean
   readonly leader: Leader
   readonly leaders: ReadonlyArray<Leader>
   readonly location: string
   readonly name: string
   readonly nbMembers: number
   readonly open: boolean
+  readonly requested: boolean
 }
 
 export interface TeamJoinLeaveResponse {

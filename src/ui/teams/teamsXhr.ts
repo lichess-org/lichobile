@@ -5,15 +5,17 @@ export function getTeam(id: string): Promise<Team> {
   return fetchJSON('/api/team/' + id)
 }
 
-export function joinTeam(id: string): Promise<TeamJoinLeaveResponse> {
-  return fetchJSON('/api/team/' + id + '/join',
+export function joinTeam(id: string, message: string | null): Promise<TeamJoinLeaveResponse> {
+  return fetchJSON('/team/' + id + '/join',
   {
-    method: 'POST'
+    method: 'POST',
+    body: message ? JSON.stringify({message}) : null
   }, true)
 }
 
 export function leaveTeam(id: string): Promise<TeamJoinLeaveResponse> {
-  return fetchJSON('/api/team/' + id + '/quit',
+  console.log('leaving')
+  return fetchJSON('/team/' + id + '/quit',
   {
     method: 'POST'
   }, true)

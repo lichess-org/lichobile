@@ -21,9 +21,29 @@ export default class TeamCtrl {
   }
 
   join(form: HTMLFormElement) {
-    const message = (form[0] as HTMLInputElement).value
-    xhr.joinTeam(message)
+    const team = this.team
+    if (!team)
+      return null
+    
+    const message = team.open ? null : (form[0] as HTMLInputElement).value
+    xhr.joinTeam(team.id, message)
     .then((data: TeamJoinLeaveResponse) => {
+      if (!data.ok) {
+        Plugins.LiToast.show({ text: 'Join failed', duration: 'short' })
+      }
+      this.reload(this.teamId)
+    })
+    .catch(utils.handleXhrError)
+  }
+
+  leave() {
+    const team = this.team
+    if (!team)
+      return null
+    
+    xhr.leaveTeam(team.id)
+    .then((data: TeamJoinLeaveResponse) => {
+      console.log(data)
       if (!data.ok) {
         Plugins.LiToast.show({ text: 'Join failed', duration: 'short' })
       }
@@ -41,3 +61,4 @@ export default class TeamCtrl {
     })
     .catch(utils.handleXhrError)
   }
+}

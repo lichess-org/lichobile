@@ -103,6 +103,8 @@ export function hasNetwork(): boolean {
 }
 
 export function handleXhrError(error: ErrorResponse): void {
+  console.log(error)
+  return
   const status = error.status
   const data = error.body
   let message: string

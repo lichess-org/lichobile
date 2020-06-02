@@ -1,5 +1,5 @@
 import h from 'mithril/hyperscript'
-import { header as mainHeader } from '../../shared/common'
+import { dropShadowHeader as headerWidget, backButton} from '../../shared/common'
 import i18n from '../../../i18n'
 import { Leader } from '../../../lichess/interfaces/teams'
 /*
@@ -17,7 +17,12 @@ export function header(ctrl: TeamsCtrl) {
   if (!team)
     return null
   
-  return mainHeader(h('div.main_header_title', team.name))
+  return headerWidget(null,
+      backButton(h('div.main_header_title.withSub', [
+        h('h1', [
+          team.name
+        ])
+      ])))
 }
 
 export function body(ctrl: TeamsCtrl) {
@@ -25,18 +30,16 @@ export function body(ctrl: TeamsCtrl) {
   if (!team)
     return null
   console.log(team)
-  const curMember = true
-  return (
-    <section>
-      <div className='teamInfos'>
-        <div> {userStatus(team.leader)} </div>
-        <div> {team.nbMembers + ' ' + i18n('members')} </div>
-        <div> {team.description} </div>
-        {curMember ? renderLeave(ctrl) : renderJoin(ctrl)}
-      </div>
-    </section>
-  )
-  
+  return h('div.teamPage.native_scroller.page', [
+    h('section.teamInfos', [
+      h('div.teamLeader', [userStatus(team.leader)]),
+      h('div.teamMembers', [team.nbMembers + ' ' + i18n('members')]),
+      h('div.teamDescription', [team.description]),
+    ]),
+    h('section.teamJoinLeave', [
+      team.requested ? requestPending() : (team.joined ? renderLeave(ctrl) : renderJoin(ctrl))
+    ])
+  ])
 }
 
 function userStatus(leader: Leader) {
@@ -45,7 +48,7 @@ function userStatus(leader: Leader) {
       <span> {i18n('teamLeader') + ':'} </span>
       {leader.patron ?
         <span className={'patron userStatus ' + status} data-icon="" /> :
-        <span className={'fa fa-circle userStatus ' + status} />
+        null
       }
       {leader.title ? <span className="userTitle">{leader.title}&nbsp;</span> : null}
       {leader.name}
@@ -54,13 +57,50 @@ function userStatus(leader: Leader) {
 }
 
 function renderJoin(ctrl: TeamsCtrl) {
-  return h('div.teamJoin', [
-    h('form', {id: 'joinForm', onSubmit: (e: Event) => {
+  const team = ctrl.team
+  if (!team)
+    return null
+  const joinMessage = team.open ?
+    null
+    :
+    h('textarea.joinMessage', {id: 'message', minLength: 30, maxLength: 2000}, [
+      'Hello, I would like to join the team!'
+    ])
+
+  return h('div.teamJoinLeave', [
+    h('form', {id: 'joinForm', onsubmit: (e: Event) => {
           e.preventDefault()
           ctrl.join(e.target as HTMLFormElement)
         }}, [
-        
+        joinMessage,
+        h('button.fatButton.joinLeaveButton', {type: 'submit'}, [
+          h('span.fa.fa-check', {}, []),
+          i18n('joinTeam')
+        ])
     ])
   ])
+}
 
+function renderLeave(ctrl: TeamsCtrl) {
+  const team = ctrl.team
+  if (!team)
+    return null
+
+  return h('div.teamJoinLeave', [
+    h('form', {id: 'leaveForm', onsubmit: (e: Event) => {
+          e.preventDefault()
+          ctrl.leave()
+        }}, [
+        h('button.fatButton.joinLeaveButton', {type: 'submit'}, [
+          h('span.fa.fa-check', {}, []),
+          i18n('quitTeam')
+        ])
+    ])
+  ])
+}
+
+function requestPending() {
+  return h('div.teamRequestPending', {}, [
+    h('span', ['Your join request is being reviewed by the team leader.'])
+  ])
 }

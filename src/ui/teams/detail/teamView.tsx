@@ -2,21 +2,13 @@ import h from 'mithril/hyperscript'
 import { dropShadowHeader as headerWidget, backButton} from '../../shared/common'
 import i18n from '../../../i18n'
 import { Leader } from '../../../lichess/interfaces/teams'
-/*
-import * as utils from '../../utils'
-import router from '../../router'
-import * as helper from '../helper'
-import { backArrow } from '../shared/icons'
-import settings from '../../settings'
-*/
-
 import TeamsCtrl from './TeamCtrl'
 
 export function header(ctrl: TeamsCtrl) {
   const team = ctrl.team
   if (!team)
     return null
-  
+
   return headerWidget(null,
       backButton(h('div.main_header_title.withSub', [
         h('h1', [
@@ -29,7 +21,6 @@ export function body(ctrl: TeamsCtrl) {
   const team = ctrl.team
   if (!team)
     return null
-  console.log(team)
   return h('div.teamPage.native_scroller.page', [
     h('section.teamInfos', [
       h('div.teamLeader', [userStatus(team.leader)]),
@@ -43,17 +34,15 @@ export function body(ctrl: TeamsCtrl) {
 }
 
 function userStatus(leader: Leader) {
-  return (
-    <div className="user">
-      <span> {i18n('teamLeader') + ':'} </span>
-      {leader.patron ?
-        <span className={'patron userStatus ' + status} data-icon="" /> :
-        null
-      }
-      {leader.title ? <span className="userTitle">{leader.title}&nbsp;</span> : null}
-      {leader.name}
-    </div>
-  )
+  const patron = leader.patron ? h('span.patron.userStatus', {'data-icon': ''}, []) : null
+  const title = leader.title ? h('span.userTitle', [leader.title + ' ']) : null
+
+  return h('div.user', [
+    h('span', [i18n('teamLeader') + ': ']),
+    patron,
+    title,
+    leader.name
+  ])
 }
 
 function renderJoin(ctrl: TeamsCtrl) {

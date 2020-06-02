@@ -1,16 +1,11 @@
-
 import h from 'mithril/hyperscript'
-
-//import * as utils from '../../utils'
 import router from '../../router'
 import * as helper from '../helper'
 import { header as mainHeader } from '../shared/common'
 import { backArrow } from '../shared/icons'
 import settings from '../../settings'
-
 import spinner from '../../spinner'
 import { Team } from '../../lichess/interfaces/teams'
-
 import i18n from '../../i18n'
 import TabNavigation from '../shared/TabNavigation'
 import TabView from '../shared/TabView'
@@ -61,52 +56,42 @@ export function searchModal(ctrl: TeamsListCtrl) {
     settings.general.theme.background()
   ].join(' ')
 
-  return (
-    <div id="searchTeamsModal" className={className}>
-      <header class="main_header">
-        <button className="main_header_button" oncreate={helper.ontap(() => ctrl.closeSearch())}>
-          {backArrow}
-        </button>
-        <div className="search_input allow_select">
-          <input id="searchTeams" type="search"
-          placeholder="Search teams" oninput={ctrl.onInput}
-          autocapitalize="off"
-          autocomplete="off"
-          oncreate={helper.autofocus}
-          />
-        </div>
-      </header>
-      <ul id="teamSearchResults" className="modal_content native_scroller"
-        oncreate={helper.ontapY(onTeamTap, undefined, helper.getLI)}
-      >
-        {ctrl.searchResults ? ctrl.searchResults.currentPageResults.map(renderTeam): null}
-      </ul>
-    </div>
-  )
+  return h('div.' + className, {'id': 'searchTeamsModal'}, [
+    h('header.main_header', [
+      h('button.main_header_button', {'oncreate': helper.ontap(() => ctrl.closeSearch())}, [backArrow]),
+      h('div.search_input.allow_select', [
+        h('input', {'id': 'searchTeams', 'type': 'search', 'placeholder': i18n('search'), 'oninput': ctrl.onInput,
+          'autocapitalize': 'off', 'autocomplete': 'off', 'oncreate': helper.autofocus})
+      ])
+    ]),
+    h('ul.modal_content.native_scroller', {'oncreate': helper.ontapY(onTeamTap, undefined, helper.getLI)}, [
+      ctrl.searchResults ? ctrl.searchResults.currentPageResults.map(renderTeam) : null
+    ])
+  ])
 }
 
 function renderAllTeams(ctrl: TeamsListCtrl) {
-  return ctrl.allTeams ?
-  <ul className="teamsSuggestion native_scroller page"
-    oncreate={helper.ontapY(onTeamTap, undefined, helper.getLI)}
-  >
-    {ctrl.allTeams.currentPageResults.map(renderTeam)}
-  </ul> :
-  <div className="loader_container">
-    {spinner.getVdom('monochrome')}
-  </div>
+  if (!ctrl.allTeams) {
+    return h('div.loader_container', [
+      spinner.getVdom('monochrome')
+    ])
+  }
+
+  return h('ul.teamsSuggestion.native_scroller.page',
+    {'oncreate': helper.ontapY(onTeamTap, undefined, helper.getLI)},
+    [ctrl.allTeams.currentPageResults.map(renderTeam)])
 }
 
 function renderMyTeams(ctrl: TeamsListCtrl) {
-  return ctrl.myTeams ?
-  <ul className="teamsSuggestion native_scroller page"
-    oncreate={helper.ontapY(onTeamTap, undefined, helper.getLI)}
-  >
-    {ctrl.myTeams.map(renderTeam)}
-  </ul> :
-  <div className="loader_container">
-    {spinner.getVdom('monochrome')}
-  </div>
+  if (!ctrl.myTeams) {
+    return h('div.loader_container', [
+      spinner.getVdom('monochrome')
+    ])
+  }
+  
+  return h('ul.teamsSuggestion.native_scroller.page',
+    {'oncreate': helper.ontapY(onTeamTap, undefined, helper.getLI)},
+    [ctrl.myTeams.map(renderTeam)])
 }
 
 function onTeamTap(e: Event) {
@@ -119,12 +104,10 @@ function onTeamTap(e: Event) {
 
 function renderTeam(team: Team, i: number) {
   const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
-  return (
-    <li className={`list_item teamSuggestion nav ${evenOrOdd}`} data-id={team.id}>
-      {team.name}
-      <span className="nbMembers">
-        {team.nbMembers}
-      </span>
-    </li>
-  )
+  return h('li.list_item.teamSuggestion.nav.' + evenOrOdd, {'data-id': team.id}, [
+    team.name,
+    h('span.nbMembers', [
+      team.nbMembers
+    ])
+  ])
 }

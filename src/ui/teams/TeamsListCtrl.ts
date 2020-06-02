@@ -20,7 +20,6 @@ export default class TeamsListCtrl {
 
     xhr.getPopularTeams()
     .then(data => {
-      console.log(data)
       this.allTeams = data
       redraw()
     })
@@ -30,7 +29,6 @@ export default class TeamsListCtrl {
     if (user) {
       xhr.getUserTeams(user)
       .then(data => {
-        console.log(data)
         this.myTeams = data
         redraw()
       })
@@ -54,14 +52,12 @@ export default class TeamsListCtrl {
 
   public onInput = throttle((e: Event) => {
     const term = (e.target as HTMLInputElement).value.trim()
-    console.log(term)
     if (term.length >= 3)
       xhr.search(term).then(data => {
-        console.log(data)
         this.searchResults = data
         redraw()
       })
-  }, 250)
+  }, 1000)
 
   public goSearch = () => {
     router.backbutton.stack.push(this.closeSearch)

@@ -14,7 +14,6 @@ export function joinTeam(id: string, message: string | null): Promise<TeamJoinLe
 }
 
 export function leaveTeam(id: string): Promise<TeamJoinLeaveResponse> {
-  console.log('leaving')
   return fetchJSON('/team/' + id + '/quit',
   {
     method: 'POST'

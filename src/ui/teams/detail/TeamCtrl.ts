@@ -13,7 +13,6 @@ export default class TeamCtrl {
     this.teamId = teamId
     xhr.getTeam(teamId)
     .then(data => {
-      console.log(data)
       this.team = data
       redraw()
     })
@@ -24,7 +23,7 @@ export default class TeamCtrl {
     const team = this.team
     if (!team)
       return null
-    
+
     const message = team.open ? null : (form[0] as HTMLInputElement).value
     xhr.joinTeam(team.id, message)
     .then((data: TeamJoinLeaveResponse) => {
@@ -40,10 +39,9 @@ export default class TeamCtrl {
     const team = this.team
     if (!team)
       return null
-    
+
     xhr.leaveTeam(team.id)
     .then((data: TeamJoinLeaveResponse) => {
-      console.log(data)
       if (!data.ok) {
         Plugins.LiToast.show({ text: 'Join failed', duration: 'short' })
       }
@@ -55,7 +53,6 @@ export default class TeamCtrl {
   reload(teamId: string) {
     xhr.getTeam(teamId)
     .then(data => {
-      console.log(data)
       this.team = data
       redraw()
     })

@@ -43,7 +43,7 @@ export default class TeamCtrl {
     xhr.leaveTeam(team.id)
     .then((data: TeamJoinLeaveResponse) => {
       if (!data.ok) {
-        Plugins.LiToast.show({ text: 'Join failed', duration: 'short' })
+        Plugins.LiToast.show({ text: 'Leave failed', duration: 'short' })
       }
       this.reload(this.teamId)
     })

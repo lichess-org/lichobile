@@ -129,6 +129,7 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
     respOrTimeout
       .then((r: Response) => {
         onComplete()
+
         if (r.ok) {
           resolve(r[type]())
         }

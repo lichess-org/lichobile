@@ -23,7 +23,7 @@ export function body(ctrl: TeamsCtrl) {
     return null
   return h('div.teamPage.native_scroller.page', [
     h('section.teamInfos', [
-      h('div.teamLeader', [userStatus(team.leader)]),
+      h('div.teamLeader', [team.leaders.map(userStatus)]),
       h('div.teamMembers', [team.nbMembers + ' ' + i18n('members')]),
       h('div.teamDescription', [team.description]),
     ]),
@@ -63,7 +63,7 @@ function renderJoin(ctrl: TeamsCtrl) {
         }}, [
         joinMessage,
         h('button.fatButton.joinLeaveButton', {type: 'submit'}, [
-          h('span.fa.fa-check', {}, []),
+          h('span.fa.fa-check'),
           i18n('joinTeam')
         ])
     ])
@@ -81,7 +81,7 @@ function renderLeave(ctrl: TeamsCtrl) {
           ctrl.leave()
         }}, [
         h('button.fatButton.joinLeaveButton', {type: 'submit'}, [
-          h('span.fa.fa-check', {}, []),
+          h('span.fa.fa-check'),
           i18n('quitTeam')
         ])
     ])
@@ -89,7 +89,7 @@ function renderLeave(ctrl: TeamsCtrl) {
 }
 
 function requestPending() {
-  return h('div.teamRequestPending', {}, [
+  return h('div.teamRequestPending', [
     h('span', ['Your join request is being reviewed by the team leader.'])
   ])
 }

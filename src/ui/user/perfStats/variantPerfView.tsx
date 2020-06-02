@@ -150,7 +150,7 @@ export function renderBody(ctrl: State) {
         <tr class={isEmpty(data.stat.playStreak)}>
           <th class="variantPerf"> Playing streak </th>
           <td class="variantPerf"> {data.stat.playStreak.nb.max.v} </td>
-          <td class="variantPerf"> {data.stat.playStreak.lastDate && data.stat.playStreak.nb.max.from.at.substring(0, 10)} </td>
+          <td class="variantPerf"> {data.stat.playStreak.nb.max.from.at && data.stat.playStreak.nb.max.from.at.substring(0, 10)} </td>
         </tr>
         <tr class={isEmpty(data.stat.resultStreak.win.max.v)}>
           <th class="variantPerf"> {i18n('winStreak')} </th>

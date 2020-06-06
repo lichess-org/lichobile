@@ -840,5 +840,7 @@ export default {
   "settings": "Тохиргоо",
   "closeAccount": "Гишүүний данс хаах",
   "changedMindDoNotCloseAccount": "Би бодлоо өөрчиллөө. Миний гишүүнчлэлийн дансыг битгий хаа",
-  "thisAccountIsClosed": "Энэ гишүүний данс хаагдсан байна."
+  "thisAccountIsClosed": "Энэ гишүүний данс хаагдсан байна.",
+  "search": "Хайлт",
+  "advancedSearch": "Нарийвчилсан хайлт"
 }

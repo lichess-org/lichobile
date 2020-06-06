@@ -329,5 +329,7 @@ export default {
   "shareUrl": "Адамдар қосыла алатын URL мекенжайын бөлісіңіз: %s",
   "drawingWithinNbMoves:one": "Ойынның бірінші кезеңінде сурет салу %s бірде-бір ойыншыға ешқандай ұпай әкелмейді.",
   "drawingWithinNbMoves:other": "Ойынның бірінші кезеңінде сурет салу %s бірде-бір ойыншыға ешқандай ұпай әкелмейді.",
-  "giveMoreTime": "Kóp ýaqyt berińiz"
+  "giveMoreTime": "Kóp ýaqyt berińiz",
+  "search": "Izdeý",
+  "advancedSearch": "Көлемді іздеу"
 }

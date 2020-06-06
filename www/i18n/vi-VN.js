@@ -784,5 +784,22 @@ export default {
   "cantOpenSimilarAccount": "Bạn không được phép tạo tài khoản trùng tên, kể cả trường hợp khác chữ cái.",
   "changedMindDoNotCloseAccount": "Tôi đã đổi ý, đừng đóng tài khoản của tôi",
   "closeAccountExplanation": "Bạn có chắc muốn đóng tài khoản? Việc đóng tài khoản là quyết định vĩnh viễn. Bạn sẽ KHÔNG BAO GIỜ có thể đăng nhập lại.",
-  "thisAccountIsClosed": "Tài khoản này đã bị đóng"
+  "thisAccountIsClosed": "Tài khoản này đã bị đóng",
+  "search": "Tìm kiếm",
+  "advancedSearch": "Tìm kiến nâng cao",
+  "opponentName": "Tên đối thủ",
+  "loser": "Người thua cuộc",
+  "from": "Từ",
+  "to": "Đến",
+  "humanOrComputer": "Khi mà đối thủ người chơi là người hoặc máy tính",
+  "aiLevel": "Trình độ máy tính",
+  "source": "Nguồn",
+  "nbTurns": "Số nước đi",
+  "result": "Kết quả",
+  "winnerColor": "Màu người thắng",
+  "date": "Ngày",
+  "sortBy": "Sắp xếp theo",
+  "onlyAnalysed": "Chỉ những game mà máy tính phân tích sẵn sàng",
+  "searchInXGames:other": "Tìm kiếm trong %s ván cờ",
+  "xGamesFound:other": "%s ván đã thấy"
 }

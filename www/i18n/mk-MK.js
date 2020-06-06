@@ -494,5 +494,7 @@ export default {
   "settings": "Поставки",
   "closeAccount": "Затвори го профилот",
   "changedMindDoNotCloseAccount": "Се предомислив, не го затварај мојот профил",
-  "thisAccountIsClosed": "Овој профил е затворен."
+  "thisAccountIsClosed": "Овој профил е затворен.",
+  "search": "Барајте",
+  "advancedSearch": "Напредно пребарување"
 }

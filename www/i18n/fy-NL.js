@@ -138,5 +138,6 @@ export default {
   "nbGamesWithYou:one": "%s spullen mei jo",
   "nbGamesWithYou:other": "%s spullen mei jo",
   "availableInNbLanguages:one": "Beskikber yn %s tale!",
-  "availableInNbLanguages:other": "Beskikber yn %s tale!"
+  "availableInNbLanguages:other": "Beskikber yn %s tale!",
+  "search": "Sykje"
 }

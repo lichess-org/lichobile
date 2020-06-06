@@ -364,5 +364,7 @@ export default {
   "settings": "ante",
   "closeAccount": "o pini e lipu jan",
   "changedMindDoNotCloseAccount": "mi ante e lawa. o pini ala e lipu jan mi",
-  "thisAccountIsClosed": "lipu kan ni li pini."
+  "thisAccountIsClosed": "lipu kan ni li pini.",
+  "search": "alasa",
+  "advancedSearch": "alasa pi sona mute"
 }

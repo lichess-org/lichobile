@@ -688,5 +688,8 @@ export default {
   "closeAccount": "Serriñ ar gont",
   "changedMindDoNotCloseAccount": "Cheñchet em eus ma soñj, na serrit ket ma c'hont",
   "closeAccountExplanation": "Serret e vo ho kont, sur oc'h? Un diviz-pad an hini eo. NE c'halloc'h KET adkavout anezhi ken, BIKEN.",
-  "thisAccountIsClosed": "Serr eo ar gont-mañ."
+  "thisAccountIsClosed": "Serr eo ar gont-mañ.",
+  "search": "Klask",
+  "advancedSearch": "Enklask araokaet",
+  "date": "Deiziad"
 }

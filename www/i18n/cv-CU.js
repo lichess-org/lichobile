@@ -499,5 +499,7 @@ export default {
   "settings": "Ӗнерлев",
   "closeAccount": "Аккаунта хуп",
   "changedMindDoNotCloseAccount": "Шухӑшӑма улӑштартӑм, аккаунтӑма хупас ҫук",
-  "thisAccountIsClosed": "Ку аккаунт хупӑ."
+  "thisAccountIsClosed": "Ку аккаунт хупӑ.",
+  "search": "Шыра",
+  "advancedSearch": "Анлӑ шырасси"
 }

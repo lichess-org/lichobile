@@ -783,5 +783,7 @@ export default {
   "settings": "Настройки",
   "closeAccount": "Закриване на регистрацията",
   "changedMindDoNotCloseAccount": "Промених намерението си, не закривайте моята регистрация",
-  "thisAccountIsClosed": "Тази регистрация е закрита."
+  "thisAccountIsClosed": "Тази регистрация е закрита.",
+  "search": "Търсене",
+  "advancedSearch": "Разширено търсене"
 }

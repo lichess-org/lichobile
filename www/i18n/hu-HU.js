@@ -787,5 +787,7 @@ export default {
   "settings": "Beállítások",
   "closeAccount": "Fiók zárolása",
   "changedMindDoNotCloseAccount": "Meggondoltam magam, mégsem zárolom a fiókomat",
-  "thisAccountIsClosed": "Ez a fiók zárolva van."
+  "thisAccountIsClosed": "Ez a fiók zárolva van.",
+  "search": "Keresés",
+  "advancedSearch": "Bővített keresés"
 }

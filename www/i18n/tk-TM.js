@@ -766,5 +766,7 @@ export default {
   "settings": "Sazlamalar",
   "closeAccount": "Hasaby ýap",
   "changedMindDoNotCloseAccount": "Pikirimi üýtgetdim, hasabymy ýapma",
-  "thisAccountIsClosed": "Bu hasap ýapyldy."
+  "thisAccountIsClosed": "Bu hasap ýapyldy.",
+  "search": "Gözle",
+  "advancedSearch": "Çuňlaşdyrylan gözleg"
 }

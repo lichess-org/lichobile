@@ -947,5 +947,7 @@ export default {
   "closeAccount": "खाता बन्द गरौँ",
   "changedMindDoNotCloseAccount": "मैले विचार बदले, खाता बन्द नगरौं",
   "closeAccountExplanation": "के तपाइ साच्चै आफ्नो खाता बन्द गर्न चाहनुहुन्छ? खाता बन्द गर्नु एउटा स्थायी निर्णय हो। तपाइले फेरी कहिल्यै पनि लग इन गर्न सक्नुहुने छैन।",
-  "thisAccountIsClosed": "यो खाता बन्द गरिएको छ।"
+  "thisAccountIsClosed": "यो खाता बन्द गरिएको छ।",
+  "search": "खोजौं",
+  "advancedSearch": "विस्तृत खोजी"
 }

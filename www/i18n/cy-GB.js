@@ -699,5 +699,7 @@ export default {
   "settings": "Dewisiadau",
   "closeAccount": "Cau cyfrif",
   "changedMindDoNotCloseAccount": "Dw i wedi ailystyried, paid â chau fy nghyfrif",
-  "thisAccountIsClosed": "Mae'r cyfrif ma wedi'i gau."
+  "thisAccountIsClosed": "Mae'r cyfrif ma wedi'i gau.",
+  "search": "Chwilio",
+  "advancedSearch": "Chwilio uwch"
 }

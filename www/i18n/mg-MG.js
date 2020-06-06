@@ -280,5 +280,7 @@ export default {
   "nbGamesInPlay:other": "%s ireo lalao amin'izao fotoana izao",
   "preferences": "Preferences",
   "settings": "Kirakira ankapobeny",
-  "thisAccountIsClosed": "Mikatona io kaonty io."
+  "thisAccountIsClosed": "Mikatona io kaonty io.",
+  "search": "Fitadiavana",
+  "advancedSearch": "Fitadiavana"
 }

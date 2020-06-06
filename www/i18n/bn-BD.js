@@ -767,5 +767,7 @@ export default {
   "settings": "বিন্যাস",
   "closeAccount": "একাউন্ট বন্ধ করুন",
   "changedMindDoNotCloseAccount": "আমি নিজের মত পরিবর্তন করেছি এবং আমার একাউন্ট বন্ধ করতে চাই না",
-  "thisAccountIsClosed": "এই একাউন্টটি বন্ধ করা হয়েছে"
+  "thisAccountIsClosed": "এই একাউন্টটি বন্ধ করা হয়েছে",
+  "search": "অনুসন্ধান",
+  "advancedSearch": "উন্নত অনুসন্ধান"
 }

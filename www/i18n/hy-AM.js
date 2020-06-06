@@ -447,5 +447,7 @@ export default {
   "settings": "Կարգավորումներ",
   "closeAccount": "Փակել հաշիվը",
   "changedMindDoNotCloseAccount": "Ես փոխել իմ միտքը, մի փակեք իմ հաշիվը",
-  "thisAccountIsClosed": "Այս հաշիվը փակված է:"
+  "thisAccountIsClosed": "Այս հաշիվը փակված է:",
+  "search": "Փնտրել",
+  "advancedSearch": "Ընդլայնված որոնում"
 }

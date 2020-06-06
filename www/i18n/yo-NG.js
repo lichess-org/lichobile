@@ -45,5 +45,6 @@ export default {
   "howDoesItEndAnswer": "idije na ni agogo ti ka wakati.to ba si ti dori o do,igbelewon pari asi kede asegun.idije tin lo yo pari sugbon won si lara idije mo.",
   "otherRules": "awon ikilo to se pataki miiran",
   "thisIsPrivate": "idije bonkele ni yi",
-  "settings": "Eto"
+  "settings": "Eto",
+  "search": "àwárí"
 }

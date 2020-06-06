@@ -467,5 +467,7 @@ export default {
   "settings": "அமைப்புகள்",
   "closeAccount": "கணக்கு மூடவும்",
   "changedMindDoNotCloseAccount": "என் மனதை மாற்றிநேன் என் கணக்கு மூட வேண்டாம்",
-  "thisAccountIsClosed": "இந்த கணக்கு மூடப்பட்டுள்ளது."
+  "thisAccountIsClosed": "இந்த கணக்கு மூடப்பட்டுள்ளது.",
+  "search": "தேடு",
+  "advancedSearch": "மேம்படித் தேடல்"
 }

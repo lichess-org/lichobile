@@ -805,5 +805,7 @@ export default {
   "settings": "Configuración",
   "closeAccount": "Pechar conta",
   "changedMindDoNotCloseAccount": "Cambiei de opinión, non pechedes a miña conta",
-  "thisAccountIsClosed": "Esta conta está pechada."
+  "thisAccountIsClosed": "Esta conta está pechada.",
+  "search": "Buscar",
+  "advancedSearch": "Busca avanzada"
 }

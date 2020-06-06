@@ -951,5 +951,7 @@ export default {
   "cantOpenSimilarAccount": "Siz boshqa bunday nomli akkount yarata olmaysiz, hatto harflar katta-kichigi bilan farq qilsa ham.",
   "changedMindDoNotCloseAccount": "Men fikrimni o'zgartirdim, hisobni yopmang",
   "closeAccountExplanation": "Ishonchingiz komilmi hisobingizni yopishga? Hisobingizni yopish doimiyga bo'ladi. Siz boshqatdan tizimga KIRA OLMAYSIZ.",
-  "thisAccountIsClosed": "Bu hisob yopilgan."
+  "thisAccountIsClosed": "Bu hisob yopilgan.",
+  "search": "Qidirish",
+  "advancedSearch": "Qo'shimcha qidirish"
 }

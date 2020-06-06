@@ -160,17 +160,17 @@ function renderLinks(user?: Session) {
       <li className="sep_link">{i18n('learnMenu')}</li>
       {online ?
         <li className="side_link" data-route="/training">
-          <span data-icon="-"/>{i18n('training')}
+          <span data-icon="-"/>{i18n('puzzles')}
         </li> : null
       }
       {!online && user ?
         <li className="side_link" data-route="/training">
-          <span data-icon="-" />{i18n('training')}
+          <span data-icon="-" />{i18n('puzzles')}
         </li> : null
       }
       {online ?
         <li className="side_link" data-route="/study">
-          <span data-icon="4" />Study
+          <span data-icon="4" />{i18n('studyMenu')}
         </li> : null
       }
       {online ?

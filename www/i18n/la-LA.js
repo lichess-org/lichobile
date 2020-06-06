@@ -699,5 +699,7 @@ export default {
   "settings": "Optiones",
   "closeAccount": "Claude rationem",
   "changedMindDoNotCloseAccount": "Cor flexi, noli claudere rationem meam",
-  "thisAccountIsClosed": "Haec ratio clausa est."
+  "thisAccountIsClosed": "Haec ratio clausa est.",
+  "search": "Quaerere",
+  "advancedSearch": "Investigatio multiplex"
 }

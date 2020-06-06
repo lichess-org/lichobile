@@ -109,5 +109,6 @@ export default {
   "leaderboard": "Tabelo di maxim bona luderi",
   "boardCoordinates": "Board coordinates (A-H, 1-8)",
   "zenMode": "Zen mode",
-  "settings": "Ajusti"
+  "settings": "Ajusti",
+  "advancedSearch": "Promocata sercho"
 }

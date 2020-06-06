@@ -272,5 +272,7 @@ export default {
   "playedXTimes:other": "Urared %s n tikkelt",
   "preferences": "Isemnyafen",
   "settings": "Imsektayen",
-  "closeAccount": "Mdel amiḍan"
+  "closeAccount": "Mdel amiḍan",
+  "search": "Nadi",
+  "advancedSearch": "Nadi tasurift"
 }

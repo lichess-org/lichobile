@@ -745,5 +745,7 @@ export default {
   "settings": "Stillingar",
   "closeAccount": "Loka reikningi",
   "changedMindDoNotCloseAccount": "Ég skipti um skoðun, ekki loka aðgangnum",
-  "thisAccountIsClosed": "Þessi aðgangur er lokaður"
+  "thisAccountIsClosed": "Þessi aðgangur er lokaður",
+  "search": "Leita",
+  "advancedSearch": "Ítarleit"
 }

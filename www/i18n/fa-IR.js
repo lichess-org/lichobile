@@ -851,5 +851,7 @@ export default {
   "settings": "تنظیمات",
   "closeAccount": "بستن حساب",
   "changedMindDoNotCloseAccount": "نظرم را عوض کردم اکانتم را نمی بندم",
-  "thisAccountIsClosed": "این حساب بسته شده است"
+  "thisAccountIsClosed": "این حساب بسته شده است",
+  "search": "جستجو",
+  "advancedSearch": "جستجوی پیشرفته"
 }

@@ -808,5 +808,14 @@ export default {
   "cantOpenSimilarAccount": "대소문자가 다르더라도, 똑같은 이름으로 계정을 다시 열 수 없습니다.",
   "changedMindDoNotCloseAccount": "마음이 바뀌었습니다, 계정을 폐쇄하지 않곘습니다",
   "closeAccountExplanation": "정말로 계정을 닫고 싶으신가요? 게정 폐쇄는 되돌릴 수 없습니다. 절대로 다시 로그인 할 수 없습니다.",
-  "thisAccountIsClosed": "계정이 폐쇄됩니다."
+  "thisAccountIsClosed": "계정이 폐쇄됩니다.",
+  "search": "검색",
+  "advancedSearch": "고급 검색",
+  "opponentName": "상대 이름",
+  "aiLevel": "인공지능 레벨",
+  "source": "출처",
+  "result": "결과",
+  "date": "날짜",
+  "searchInXGames:other": "%s 체스 게임에서 검색한 결과",
+  "xGamesFound:other": "%s개의 게임을 찾았습니다"
 }

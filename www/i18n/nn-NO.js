@@ -963,5 +963,7 @@ export default {
   "settings": "Innstillingar",
   "closeAccount": "Steng konto",
   "changedMindDoNotCloseAccount": "Eg ombestemte meg, ikkje steng kontoen min",
-  "thisAccountIsClosed": "Denne kontoen er stengd."
+  "thisAccountIsClosed": "Denne kontoen er stengd.",
+  "search": "Søk",
+  "advancedSearch": "Avansert søk"
 }

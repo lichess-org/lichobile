@@ -1,6 +1,7 @@
 import * as Mithril from 'mithril'
 import socket from '../../socket'
 import { PagerCategory, PagerOrder } from '../../lichess/interfaces/study'
+import i18n from '../../i18n'
 import * as helper from '../helper'
 import { header } from '../shared/common'
 import layout from '../layout'
@@ -30,7 +31,7 @@ export default {
   view() {
     const ctrl = this.ctrl
 
-    return layout.free(header('Studies'), studyListView(ctrl))
+    return layout.free(header(i18n('studyMenu')), studyListView(ctrl))
   }
 
 } as Mithril.Component<Attrs, State>

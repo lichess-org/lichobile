@@ -646,5 +646,7 @@ export default {
   "settings": "პარამეტრები",
   "closeAccount": "ანგარიშის დახურვა",
   "changedMindDoNotCloseAccount": "გადავიფიქრე, არ დახუროთ ჩემი ანგარიში",
-  "thisAccountIsClosed": "აღნიშნული ანგარიში დახურულია."
+  "thisAccountIsClosed": "აღნიშნული ანგარიში დახურულია.",
+  "search": "ძებნა",
+  "advancedSearch": "გაფართოებული ძებნა"
 }

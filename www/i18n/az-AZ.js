@@ -708,5 +708,7 @@ export default {
   "cantOpenSimilarAccount": "Böyük kiçik hərf dəyişiklikləri etsəniz belə eyni istifadəçi adı ilə yeni hesab açmağınıza icazə verilməyəcək.",
   "changedMindDoNotCloseAccount": "Fikrimi dəyişdirdim, hesabımı bağlamaq istəmirəm",
   "closeAccountExplanation": "Hesabınızı bağlamaq istədiyinizə əminsiniz? Bu birdəfəlik əməliyyatdır. BİR DƏ HEÇ VAXT giriş edə bilməyəcəksiniz.",
-  "thisAccountIsClosed": "Hesab bağlanıldı."
+  "thisAccountIsClosed": "Hesab bağlanıldı.",
+  "search": "Axtar",
+  "advancedSearch": "Mütərəqqi axtarış"
 }

@@ -830,5 +830,18 @@ export default {
   "settings": "Seaded",
   "closeAccount": "Sulge konto",
   "changedMindDoNotCloseAccount": "Ma muutsin meelt, ärge sulgege kontot",
-  "thisAccountIsClosed": "See konto on suletud."
+  "thisAccountIsClosed": "See konto on suletud.",
+  "search": "Otsi",
+  "advancedSearch": "Täpsem otsing",
+  "opponentName": "Vastase nimi",
+  "loser": "Kaotaja",
+  "from": "Alates",
+  "to": "Kuni",
+  "aiLevel": "A.I. tase",
+  "source": "Allikas",
+  "nbTurns": "Käikude arv",
+  "result": "Tulemus",
+  "winnerColor": "Võitja värv",
+  "date": "Kuupäev",
+  "sortBy": "Sorteerimine"
 }

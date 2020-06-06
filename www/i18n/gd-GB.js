@@ -380,5 +380,7 @@ export default {
   "settings": "Roghainnean",
   "closeAccount": "Dùin an cunntas",
   "changedMindDoNotCloseAccount": "Chuir mi an caochladh romhamh, na dùinibh an cunntas agam",
-  "thisAccountIsClosed": "Chaidh an cunntas a dhùnadh."
+  "thisAccountIsClosed": "Chaidh an cunntas a dhùnadh.",
+  "search": "Lorg",
+  "advancedSearch": "Lorg adhartach"
 }

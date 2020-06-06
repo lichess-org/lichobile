@@ -829,5 +829,7 @@ export default {
   "settings": "Configuration",
   "closeAccount": "Terminar conto",
   "changedMindDoNotCloseAccount": "Io cambiava de idea, non termina mi conto",
-  "thisAccountIsClosed": "Iste conto ha essite claudite."
+  "thisAccountIsClosed": "Iste conto ha essite claudite.",
+  "search": "Recercar",
+  "advancedSearch": "Recerca avantiate"
 }

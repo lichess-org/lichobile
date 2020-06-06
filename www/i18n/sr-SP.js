@@ -1006,5 +1006,7 @@ export default {
   "closeAccount": "Затворите налог",
   "changedMindDoNotCloseAccount": "Предомислио сам се. Не мој затвор рачун",
   "closeAccountExplanation": "Јесте ли сигурни? Затварање рачуна је трајна одлука. Више нећете моћи да се пријавите на свој рачун и ваша страница профила више неће бити доступна.",
-  "thisAccountIsClosed": "Овај налог је затворен"
+  "thisAccountIsClosed": "Овај налог је затворен",
+  "search": "Претрага",
+  "advancedSearch": "Напредна претрага"
 }

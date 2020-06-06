@@ -771,5 +771,7 @@ export default {
   "settings": "Mga setting",
   "closeAccount": "Isara ang akawnt",
   "changedMindDoNotCloseAccount": "Nagbago ang akong isip, wag mong isara ang aking akawnt",
-  "thisAccountIsClosed": "Ang akawnt na ito ay sarado."
+  "thisAccountIsClosed": "Ang akawnt na ito ay sarado.",
+  "search": "Hanapin",
+  "advancedSearch": "Naunang paghanap"
 }

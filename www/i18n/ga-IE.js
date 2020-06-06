@@ -208,5 +208,6 @@ export default {
   "nbDays:other": "%s lá",
   "open": "Oscailte",
   "arenaTournaments": "Comórtais Airéine",
-  "chessClock": "Clog fichille"
+  "chessClock": "Clog fichille",
+  "search": "Cuardaigh"
 }

@@ -297,5 +297,7 @@ export default {
   "giveNbSeconds:other": "%s सेकंद द्या",
   "preferences": "प्राधान्ये",
   "giveMoreTime": "अजून वेळ द्या",
-  "settings": "सेटिंग्ज"
+  "settings": "सेटिंग्ज",
+  "search": "Shodha",
+  "advancedSearch": "प्रगत शोध"
 }

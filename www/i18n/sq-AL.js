@@ -762,5 +762,7 @@ export default {
   "settings": "Cilësimet",
   "closeAccount": "Mbyll llogarinë",
   "changedMindDoNotCloseAccount": "Ndryshova mendje, mos e mbyll llogarinë time",
-  "thisAccountIsClosed": "Kjo llogari është e mbyllur"
+  "thisAccountIsClosed": "Kjo llogari është e mbyllur",
+  "search": "Kërko",
+  "advancedSearch": "Kërkim i avancuar"
 }

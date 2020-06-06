@@ -469,5 +469,7 @@ export default {
   "closeAccount": "اکاؤنٹ بند کریں",
   "changedMindDoNotCloseAccount": "میرا ارادہ بدل گیا ہے، ‎اکاؤنٹ بند نہ کریں",
   "closeAccountExplanation": "کیا آپ واقعی اکاؤنٹ بند کرنا چاہتے ہیں؟ اکاؤنٹ ہمیشہ کیلیے بند کیے جاتے ہیں، آپ دوبارہ استعمال نہیں کر سکیں گے  اور آپکی معلومات بھی ضایع کر دی جائیں گی۔",
-  "thisAccountIsClosed": "اکاؤنٹ بند کردیا گیا ہے"
+  "thisAccountIsClosed": "اکاؤنٹ بند کردیا گیا ہے",
+  "search": "تلاش",
+  "advancedSearch": "اضافی تلاش"
 }

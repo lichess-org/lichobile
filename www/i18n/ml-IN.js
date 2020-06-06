@@ -923,5 +923,7 @@ export default {
   "settings": "ക്രമീകരണങ്ങള്‍",
   "closeAccount": "അക്കൗണ്ട് അവസാനിപ്പിക്കാം",
   "changedMindDoNotCloseAccount": "മനംമാറ്റം, അക്കൗണ്ട് അവസാനിപ്പിക്കേണ്ടതില്ല",
-  "thisAccountIsClosed": "ഈ അക്കൗണ്ട് അവസാനിപ്പിച്ചിരിക്കുന്നു."
+  "thisAccountIsClosed": "ഈ അക്കൗണ്ട് അവസാനിപ്പിച്ചിരിക്കുന്നു.",
+  "search": "തിരയുക",
+  "advancedSearch": "മികച്ച തിരച്ചില്‍"
 }

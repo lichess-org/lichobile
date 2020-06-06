@@ -529,5 +529,7 @@ export default {
   "settings": "lo konfigu",
   "closeAccount": "co'upli lo jaspu",
   "changedMindDoNotCloseAccount": "mi seljdicne .i na ku gau ko co'upli lo mi jaspu",
-  "thisAccountIsClosed": "co'upli ti poi jaspu"
+  "thisAccountIsClosed": "co'upli ti poi jaspu",
+  "search": "sisku",
+  "advancedSearch": "pluja ke sisku tutci"
 }

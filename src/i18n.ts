@@ -193,10 +193,11 @@ function loadDateLocale(code: string): Promise<string> {
   })
 }
 
-function quantity(l: string, c: number): Quantity {
+function quantity(locale: string, c: number): Quantity {
   const rem100 = c % 100
   const rem10 = c % 10
-  switch (l) {
+  const code = getIsoCodeFromLocale(locale)
+  switch (code) {
     // french
     case 'fr':
     case 'ff':

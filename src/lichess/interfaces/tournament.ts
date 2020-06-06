@@ -158,11 +158,13 @@ export interface TournamentLists {
 }
 
 export interface TournamentListItem {
+  readonly battle?: {}
   readonly clock: TournamentClock
   readonly conditions: Conditions
   readonly createdBy: string
   readonly finishesAt: number
   readonly fullName: string
+  readonly hasMaxRating?: boolean
   readonly id: string
   readonly minutes: number
   readonly nbPlayers: number

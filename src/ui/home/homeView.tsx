@@ -17,7 +17,7 @@ import TabView from '../shared/TabView'
 import newGameForm, { renderQuickSetup } from '../newGameForm'
 import challengeForm from '../challengeForm'
 import playMachineForm from '../playMachineForm'
-import { renderTournamentListItem } from '../tournament/tournamentsListView'
+import { renderTournamentList } from '../tournament/tournamentsListView'
 
 import HomeCtrl from './HomeCtrl'
 
@@ -231,9 +231,7 @@ function renderFeaturedTournaments(ctrl: HomeCtrl) {
   if (ctrl.featuredTournaments && ctrl.featuredTournaments.length)
     return (
       <div className="home__tournament">
-        <ul className="tournamentList">
-          {ctrl.featuredTournaments.map(renderTournamentListItem)}
-        </ul>
+        {renderTournamentList(ctrl.featuredTournaments)}
       </div>
     )
   else

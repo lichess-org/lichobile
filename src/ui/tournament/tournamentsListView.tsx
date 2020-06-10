@@ -63,13 +63,13 @@ export function renderFooter() {
   )
 }
 
-function renderTournamentList(list: ReadonlyArray<TournamentListItem>) {
+export function renderTournamentList(list: ReadonlyArray<TournamentListItem>) {
   return h('ul.native_scroller.tournamentList', {
     oncreate: helper.ontapXY(onTournamentTap, undefined, helper.getLI)
   }, list.map(renderTournamentListItem))
 }
 
-export function renderTournamentListItem(tournament: TournamentListItem, index: number) {
+function renderTournamentListItem(tournament: TournamentListItem, index: number) {
   const time = formatTournamentTimeControl(tournament.clock)
   const mode = tournament.rated ? i18n('rated') : i18n('casual')
   const duration = formatTournamentDuration(tournament.minutes)

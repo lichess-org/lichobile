@@ -927,6 +927,7 @@ export default {
   "boardHighlights": "Board highlights (last move and check)",
   "pieceDestinations": "Piece destinations (valid moves and premoves)",
   "boardCoordinates": "Board coordinates (A-H, 1-8)",
+  "squareCoordinates": "Square coordinates (every square)",
   "moveListWhilePlaying": "Move list while playing",
   "pgnPieceNotation": "Move notation",
   "chessPieceSymbol": "Chess piece symbol",

@@ -29,6 +29,7 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): c
     lastMove,
     check: lastStep.check,
     coordinates: settings.game.coords(),
+    squareCoordinates: settings.game.squareCoords(),
     autoCastle: data.game.variant.key === 'standard',
     highlight: {
       lastMove: settings.game.highlights(),

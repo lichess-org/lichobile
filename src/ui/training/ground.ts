@@ -13,6 +13,7 @@ export default function makeConfig(
     fen: ctrl.data.puzzle.fen,
     orientation: ctrl.data.puzzle.color,
     coordinates: settings.game.coords(),
+    squareCoordinates: settings.game.squareCoords(),
     turnColor: ctrl.node.ply % 2 === 0 ? 'white' : 'black',
     highlight: {
       lastMove: settings.game.highlights(),

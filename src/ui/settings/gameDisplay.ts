@@ -11,6 +11,7 @@ function renderBody() {
   return [
     h('ul.native_scroller.page.settings_list.game', [
       h('li.list_item', formWidgets.renderCheckbox(i18n('boardCoordinates'), 'coords', settings.game.coords)),
+      h('li.list_item', formWidgets.renderCheckbox(i18n('squareCoordinates'), 'squareCoords', settings.game.squareCoords)),
       h('li.list_item', formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations',
         settings.game.animations)),
       h('li.list_item', formWidgets.renderCheckbox('Magnified dragged piece', 'magnified',

@@ -19,6 +19,7 @@ function makeConfig(data: OfflineGameData, sit: GameSituation): cg.InitConfig {
     check: sit.check,
     otb: data.game.id === 'offline_otb',
     coordinates: settings.game.coords(),
+    squareCoordinates: settings.game.squareCoords(),
     otbMode: settings.otb.flipPieces() ? 'flip' : 'facing',
     symmetricCoordinates: data.game.id === 'offline_otb',
     autoCastle: data.game.variant.key === 'standard',

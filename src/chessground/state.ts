@@ -10,6 +10,7 @@ export interface State {
   lastMove: Key[] | null // squares part of the last move ["c3", "c4"]
   selected: Key | null // square currently selected "a1"
   coordinates: boolean // include coords attributes
+  squareCoordinates: boolean // include coords inside every square
   symmetricCoordinates: boolean // symmetric coords for otb
   autoCastle: boolean // immediately complete the castle by moving the rook after king move
   viewOnly: boolean // don't bind events: the user will never be able to move pieces around
@@ -90,6 +91,7 @@ export function makeDefaults(): State {
     lastMove: null,
     selected: null,
     coordinates: true,
+    squareCoordinates: false,
     symmetricCoordinates: false,
     otb: false,
     otbMode: 'facing' as cg.OtbMode,

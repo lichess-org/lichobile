@@ -16,6 +16,7 @@ export interface InitConfig {
   lastMove?: KeyPair | null
   selected?: Key
   coordinates?: boolean
+  squareCoordinates?: boolean
   symmetricCoordinates?: boolean
   autoCastle?: boolean
   viewOnly?: boolean

@@ -33,6 +33,12 @@ export default class Chessground {
     if (isViewOnly) board.className += ' view-only'
     else board.className += ' manipulable'
 
+    if (this.state.squareCoordinates) {
+      const overlayCoordinates = document.createElement('div')
+      overlayCoordinates.className = 'overlay-coordinates'
+      board.appendChild(overlayCoordinates)
+    }
+
     wrapper.appendChild(board)
 
     this.dom = {

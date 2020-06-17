@@ -1011,6 +1011,7 @@ export default {
   "boardHighlights": "Zvýraznenie šachovnice (posledný ťah a šach)",
   "pieceDestinations": "Zobrazovať dostupné polia  (možné ťahy a predťahy)",
   "boardCoordinates": "Šachovnicové súradnice (A-H, 1-8)",
+  "squareCoordinates": "Súradnice na každom štvorci",
   "moveListWhilePlaying": "Zobraziť šachovú notáciu počas hry",
   "pgnPieceNotation": "Označenie figúr v notácii",
   "chessPieceSymbol": "Symboly šachových figúr",

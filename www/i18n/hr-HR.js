@@ -969,6 +969,7 @@ export default {
   "boardHighlights": "Osvijetli zadnji potez i šah",
   "pieceDestinations": "Legalni potezi (važeći potezi i pretpotezi)",
   "boardCoordinates": "Oznake na ploči (A-H, 1-8)",
+  "squareCoordinates": "Koordinate na svakom kvadratu",
   "moveListWhilePlaying": "Popis poteza tijekom partije",
   "pgnPieceNotation": "Oznaka poteza",
   "chessPieceSymbol": "Simbol šahovske figure",

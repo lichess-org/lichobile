@@ -927,6 +927,7 @@ export default {
   "boardHighlights": "Segnalazioni sulla scacchiera (ultima mossa e scacco)",
   "pieceDestinations": "Destinazioni del pezzo (mosse e pre-mosse valide)",
   "boardCoordinates": "Coordinate della scacchiera (A-H, 1-8)",
+  "squareCoordinates": "Coordinate in tutta la scacchiera",
   "moveListWhilePlaying": "Lista delle mosse mentre giochi",
   "pgnPieceNotation": "Notazione mossa",
   "chessPieceSymbol": "Simbolo del pezzo",

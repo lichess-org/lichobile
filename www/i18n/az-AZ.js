@@ -667,6 +667,7 @@ export default {
   "boardHighlights": "Taxta xəbərdarlıqları (son həmlə və şah çəkmə)",
   "pieceDestinations": "Daş istiqamətlərə (qaydalara uyğun hücumlar)",
   "boardCoordinates": "Taxta kordinatları",
+  "squareCoordinates": "Hər meydanda koordinatlar",
   "moveListWhilePlaying": "Oynarken siyahısı keçin",
   "pgnPieceNotation": "Gediş qeydi",
   "chessPieceSymbol": "Şaxmat fiqur simvolu",

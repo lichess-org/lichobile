@@ -884,6 +884,7 @@ export default {
   "boardHighlights": "Tanda papan (langkah terakhir dan skak)",
   "pieceDestinations": "Jejak buah catur (langkah sah dan premove)",
   "boardCoordinates": "Koordinat Papan (A-H, 1-8)",
+  "squareCoordinates": "Koordinat di setiap kotak",
   "moveListWhilePlaying": "Daftar langkah ketika bermain",
   "pgnPieceNotation": "Catatan langkah",
   "chessPieceSymbol": "Simbol bidak catur",

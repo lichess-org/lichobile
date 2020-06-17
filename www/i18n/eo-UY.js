@@ -916,6 +916,7 @@ export default {
   "boardHighlights": "Emfazaj aperoj sur tabulo (lasta movo kaj ŝakoj)",
   "pieceDestinations": "Destinoj de ŝakpecoj (eblaj movoj kaj antaŭmovoj)",
   "boardCoordinates": "Tabulaj koordinatoj (A-H, 1-8)",
+  "squareCoordinates": "Koordinatoj en ĉiu kvadrato",
   "moveListWhilePlaying": "Listo de movoj dum ludado",
   "pgnPieceNotation": "Mova notado",
   "chessPieceSymbol": "Ŝakpecaj simboloj",

@@ -770,6 +770,7 @@ export default {
   "boardHighlights": "보드 하이라이트 (마지막 움직임 및 체크)",
   "pieceDestinations": "기물 착지점 (유효한 움직임 및 미리두기)",
   "boardCoordinates": "보드 좌표 (A-H, 1-8)",
+  "squareCoordinates": "모든 사각형의 좌표",
   "moveListWhilePlaying": "피스 움직임 기록",
   "pgnPieceNotation": "PGN 기물표기방식",
   "chessPieceSymbol": "체스 말 기호",

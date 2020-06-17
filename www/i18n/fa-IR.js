@@ -816,6 +816,7 @@ export default {
   "boardHighlights": "نشان دادن اتفاقات صفحه(حرکت قبلی و کیش)",
   "pieceDestinations": "مقصد مهره(حرکت معتبر و پیش حرکت )",
   "boardCoordinates": "مختصات صفحه(A-H، 1-8)",
+  "squareCoordinates": "مختصات در هر مربع",
   "moveListWhilePlaying": "لیست حرکات هنگام بازی کردن",
   "pgnPieceNotation": "نمایش حرکات",
   "chessPieceSymbol": "نماد مهره",

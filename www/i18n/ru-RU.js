@@ -1011,6 +1011,7 @@ export default {
   "boardHighlights": "Подсвечивать последний ход и шах",
   "pieceDestinations": "Показывать допустимые ходы",
   "boardCoordinates": "Координаты доски (A–H, 1–8)",
+  "squareCoordinates": "Координаты на каждой площади",
   "moveListWhilePlaying": "Показывать список ходов",
   "pgnPieceNotation": "Шахматная нотация",
   "chessPieceSymbol": "Символ шахматной фигуры",

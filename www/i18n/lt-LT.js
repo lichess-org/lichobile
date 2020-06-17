@@ -953,6 +953,7 @@ export default {
   "boardHighlights": "Lentos paryškinimai (paskutinis ėjimas ir šachas)",
   "pieceDestinations": "Leistini (galimi) ėjimai",
   "boardCoordinates": "Lentos koordinatės (A-H, 1-8)",
+  "squareCoordinates": "Koordinatės kiekvienoje aikštėje",
   "moveListWhilePlaying": "Ėjimų sąrašas žaidžiant",
   "pgnPieceNotation": "Ėjimų žymėjimas",
   "chessPieceSymbol": "Šachmatų figūrų simboliai",

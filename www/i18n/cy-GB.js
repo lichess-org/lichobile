@@ -663,6 +663,7 @@ export default {
   "boardHighlights": "Goleubwynt bwrdd (symudiad diwethaf a siach)",
   "pieceDestinations": "Cyrchfanau darnau (symudiadau dilys a symudiadau o flaen)",
   "boardCoordinates": "Cyfesurynnau bwrdd (A-H, 1-8)",
+  "squareCoordinates": "Cyfesurynnau ym mhob sgwâr",
   "moveListWhilePlaying": "Rhestr symudiadau wrth chwarae",
   "pgnPieceNotation": "Math o gofnod",
   "chessPieceSymbol": "Nodiad symbolau",

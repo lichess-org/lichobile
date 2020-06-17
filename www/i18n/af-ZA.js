@@ -916,6 +916,7 @@ export default {
   "boardHighlights": "Bord hoogtepunte (onlangste skuif en skaak)",
   "pieceDestinations": "Stuk bestemmings (geldige skuiwe en vooraf-skuiwe)",
   "boardCoordinates": "Bord koördinate (A-H, 1-8)",
+  "squareCoordinates": "Koördinate op elke vierkant",
   "moveListWhilePlaying": "Skuiflys tydens spel",
   "pgnPieceNotation": "Skuif Notasie",
   "chessPieceSymbol": "Skaakstuk simbool",

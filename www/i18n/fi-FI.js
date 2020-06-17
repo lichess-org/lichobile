@@ -927,6 +927,7 @@ export default {
   "boardHighlights": "Laudan korostukset (viimeisin siirto ja shakki)",
   "pieceDestinations": "Lailliset siirrot ja esisiirrot",
   "boardCoordinates": "Laudan koordinaatit (A-H, 1-8)",
+  "squareCoordinates": "Koordinaatit jokaisella neliöllä",
   "moveListWhilePlaying": "Siirtolista pelin aikana",
   "pgnPieceNotation": "Siirtojen merkintätapa",
   "chessPieceSymbol": "Shakkinappulasymbolit",

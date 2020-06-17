@@ -927,6 +927,7 @@ export default {
   "boardHighlights": "Destacar casas do tabuleiro (último movimento e xeque)",
   "pieceDestinations": "Destino das peças (movimentos válidos e antecipados)",
   "boardCoordinates": "Coordenadas do tabuleiro",
+  "squareCoordinates": "Coordenadas em todos os quadrados",
   "moveListWhilePlaying": "Lista de movimentos",
   "pgnPieceNotation": "Anotação de movimentos",
   "chessPieceSymbol": "Usar símbolo das peças",

@@ -912,6 +912,7 @@ export default {
   "boardHighlights": "Doskadagi rang bilan ajratsih (oxirgi yurish va shoh)",
   "pieceDestinations": "Mumkin bo'lgan yurishlani ko'rsatish",
   "boardCoordinates": "Doska koordinatalari (A-H, 1-8)",
+  "squareCoordinates": "Har bir maydonda koordinatalar",
   "moveListWhilePlaying": "O'yin davomida yurishlar ro'yhatini ko'rsatish",
   "pgnPieceNotation": "Yurishlarni qayd qilib borish",
   "chessPieceSymbol": "Sipoh belgisi",

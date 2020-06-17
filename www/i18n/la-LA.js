@@ -671,6 +671,7 @@ export default {
   "boardHighlights": "Designanda in tabula (motus ultimus et matus)",
   "pieceDestinations": "Destinationes scaccorum (motus et praemotus rati)",
   "boardCoordinates": "Coordinatae tabulae (A-H, 1-8)",
+  "squareCoordinates": "In omni platea Coordinata geographica:",
   "moveListWhilePlaying": "Index motuum",
   "chessPieceSymbol": "Signum scaccarii",
   "pgnLetter": "Ars (K, Q, R, B, N)",

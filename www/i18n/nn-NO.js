@@ -927,6 +927,7 @@ export default {
   "boardHighlights": "Feltmarkering (siste trekk og sjakk)",
   "pieceDestinations": "Brikkedestinasjonar (moglege trekk og førehandstrekk)",
   "boardCoordinates": "Brettkoordinatar (A-H, 1-8)",
+  "squareCoordinates": "Koordinater på hvert torg",
   "moveListWhilePlaying": "Vis liste over trekk medan partiet pågår",
   "pgnPieceNotation": "Notasjon",
   "chessPieceSymbol": "Brikkesymbol",

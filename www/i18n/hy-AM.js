@@ -432,6 +432,7 @@ export default {
   "materialDifference": "Ցուցադրել նյութական առավելությունը",
   "boardHighlights": "Խաղատախտակի բնութագիր (Վերջին քայլը եւ շախ)",
   "boardCoordinates": "Խաղատախտակի համակարգում (A-H, 1-8)",
+  "squareCoordinates": "Յուրաքանչյուր հրապարակում համակարգվում է",
   "moveListWhilePlaying": "քայլերի ցուցակը խաղի ժամանակ",
   "chessClock": "շախմատի ժամացույց",
   "tenthsOfSeconds": "ցուցադրել վայրկյանները",

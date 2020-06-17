@@ -1011,6 +1011,7 @@ export default {
   "boardHighlights": "Wyróżnienie pól szachownicy (ostatni ruch i szach)",
   "pieceDestinations": "Pola docelowe (ruchy poprawne i planowane)",
   "boardCoordinates": "Współrzędne pól (a-h, 1-8)",
+  "squareCoordinates": "Współrzędne na każdym kwadracie",
   "moveListWhilePlaying": "Lista ruchów podczas partii",
   "pgnPieceNotation": "Notacja ruchów",
   "chessPieceSymbol": "Za pomocą symboli figur",

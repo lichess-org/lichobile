@@ -736,6 +736,7 @@ export default {
   "boardHighlights": "Mga highlight ng board (huling galaw at suriin)",
   "pieceDestinations": "Destinasyon ng piraso ( saktong mga galaw at mga bago gumalaw)",
   "boardCoordinates": "Mga lokasyon ng Board (A-H, 1-8)",
+  "squareCoordinates": "Coordinates sa bawat parisukat",
   "moveListWhilePlaying": "Galawin ang listahan habang naglalaro",
   "pgnPieceNotation": "Notasyon ng Galaw",
   "chessPieceSymbol": "Simbolo ng piraso ng Chess",

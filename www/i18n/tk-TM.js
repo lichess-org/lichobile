@@ -731,6 +731,7 @@ export default {
   "boardHighlights": "Tagta indikatorlary (soňky göçüm we şah)",
   "pieceDestinations": "Çöpüň gidip biljek ýerleri (düzgün göçümler we öň-göçümler)",
   "boardCoordinates": "Tagta kordinatlary (A-H, 1-8)",
+  "squareCoordinates": "Her meýdanda koordinatlar",
   "moveListWhilePlaying": "Oýun dowamynda göçüm sanawy",
   "pgnPieceNotation": "Göçüm notasiýasy",
   "chessPieceSymbol": "Küşt çöpi nyşany",

@@ -727,6 +727,7 @@ export default {
   "boardHighlights": "Nënvizo fushën, (lëvizjen e fundit dhe shah)",
   "pieceDestinations": "Vendmbërritja e figurave (lëvizje të vlefshme dhe të paracaktuara)",
   "boardCoordinates": "Koordinatat e fushës (A-H, 1-8)",
+  "squareCoordinates": "Koordinatat në çdo katror",
   "moveListWhilePlaying": "Lista e lëvizjeve gjatë lojës",
   "pgnPieceNotation": "Shenimet e levizjeve",
   "chessPieceSymbol": "Simboli i figures se shahut",

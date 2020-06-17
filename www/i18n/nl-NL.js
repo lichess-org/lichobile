@@ -927,6 +927,7 @@ export default {
   "boardHighlights": "Bord laten oplichten (laatste zet en schaak)",
   "pieceDestinations": "Bestemming van het stuk (geldige zetten en premoves)",
   "boardCoordinates": "Bordcoördinaten (A-H, 1-8)",
+  "squareCoordinates": "Coördinaten in elk vierkant",
   "moveListWhilePlaying": "Zetnotatie zichtbaar tijdens partij",
   "pgnPieceNotation": "Stuknotatie in PGN",
   "chessPieceSymbol": "Schaakstuksymbool",

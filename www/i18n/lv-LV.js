@@ -968,6 +968,7 @@ export default {
   "boardHighlights": "Lauciņu izcelšana (pēdējais gājiens vai piesakot šahu)",
   "pieceDestinations": "Figūru galamērķi (atļauti gājieni vai priekšgājieni)",
   "boardCoordinates": "Galdiņa koordinātas (A-H, 1-8)",
+  "squareCoordinates": "Koordinātas katrā kvadrātā",
   "moveListWhilePlaying": "Gājienu saraksts spēles laikā",
   "pgnPieceNotation": "Gājienu notācija",
   "chessPieceSymbol": "Šaha figūras simbols",

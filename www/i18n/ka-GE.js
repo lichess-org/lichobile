@@ -617,6 +617,7 @@ export default {
   "boardHighlights": "აღმნიშვნელები დაფაზე (უკანასკნელი სვლა და ქიში)",
   "pieceDestinations": "ფიგურათა დასაშვები სვლები",
   "boardCoordinates": "დაფის კოორდინატები",
+  "squareCoordinates": "კოორდინატებია ყველა კვადრატში",
   "moveListWhilePlaying": "სვლათა სია",
   "chessPieceSymbol": "ფიგურის სიმბოლო",
   "blindfoldChess": "ბრმად თამაში (უხილავი ფიგურები)",

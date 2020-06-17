@@ -885,6 +885,7 @@ export default {
   "boardHighlights": "Падсвечваць апошні ход і шах",
   "pieceDestinations": "Паказваць дапушчальныя хады",
   "boardCoordinates": "Каардынаты дошкі",
+  "squareCoordinates": "Каардынаты ў кожным квадраце",
   "moveListWhilePlaying": "Паказваць спіс хадоў",
   "pgnPieceNotation": "Пазнака фігуры ў натацыі",
   "chessPieceSymbol": "Знак шахматнай фігуры",

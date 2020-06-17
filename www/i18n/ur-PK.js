@@ -448,6 +448,7 @@ export default {
   "boardHighlights": "آخری چال اور شہ بساط پر نمایاں کریں",
   "pieceDestinations": "مہروں کے ممکنہ گھر (صحیح اور خودکار چالوں کے لیے)۔",
   "boardCoordinates": "خانہ جات  (A-H, 1-8)",
+  "squareCoordinates": "ہر مربع میں کوآرڈینیٹ",
   "moveListWhilePlaying": "دوران کھیل چالوں کی فہرست",
   "blindfoldChess": "نابینا شطرنج (مہرے نظر نہیں آئیں کے)۔",
   "chessClock": "گھڑی سے متعلق",

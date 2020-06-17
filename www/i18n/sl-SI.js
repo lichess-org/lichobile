@@ -1008,6 +1008,7 @@ export default {
   "boardHighlights": "Osvetlitev šahovnice (zadnja poteza in kralj v šahu)",
   "pieceDestinations": "Možne poteze (legalne in vnaprej določene)",
   "boardCoordinates": "Koordinate na šahovnici (A-H, 1-8)",
+  "squareCoordinates": "Koordinate v vsakem kvadratu",
   "moveListWhilePlaying": "Seznam potez med igro",
   "pgnPieceNotation": "Zapis potez",
   "chessPieceSymbol": "Simbol figur",

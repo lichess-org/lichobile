@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 8 1" shape-rendering="crispEdges">
+  <text x="0.15" y="0.7" font-family="Arial" fill="white" font-size="0.6" font-weight="bold">A1</text>
+  <text x="2.15" y="0.7" font-family="Arial" fill="white" font-size="0.6" font-weight="bold">C1</text>
+  <text x="4.15" y="0.7" font-family="Arial" fill="white" font-size="0.6" font-weight="bold">E1</text>
+  <text x="6.15" y="0.7" font-family="Arial" fill="white" font-size="0.6" font-weight="bold">G1</text>
+</svg>

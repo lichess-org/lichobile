@@ -10,16 +10,18 @@
 .overlay-coordinates
   background-size cover
   opacity 0.05
-  position relative
+  position absolute
   width 100%
   height 100%
 
-.orientation-black .cg-board .overlay-coordinates
-  background-image url('../../images/board/svg/overlay_square_coordinates_black.svg')
-.orientation-white .cg-board .overlay-coordinates
-  background-image url('../../images/board/svg/overlay_square_coordinates_white.svg')
-
-
+.orientation-white .cg-board .overlay-coordinates.oc-white-squares
+  background-image url('../../images/squarecoords/square_coordinates_white_side_white_squares.svg')
+.orientation-white .cg-board .overlay-coordinates.oc-black-squares
+  background-image url('../../images/squarecoords/square_coordinates_white_side_black_squares.svg')
+.orientation-black .cg-board .overlay-coordinates.oc-white-squares
+  background-image url('../../images/squarecoords/square_coordinates_black_side_white_squares.svg')
+.orientation-black .cg-board .overlay-coordinates.oc-black-squares
+  background-image url('../../images/squarecoords/square_coordinates_black_side_black_squares.svg')
 
 square
   position absolute

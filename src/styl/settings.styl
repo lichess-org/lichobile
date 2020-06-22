@@ -280,7 +280,8 @@
   position: relative;
   display: flex;
   align-items: center;
-  margin: 10px 0 25px;
+  margin: 25px 0;
+  width 99%
 
 .overlay-coordinates-sample
   position absolute
@@ -293,9 +294,20 @@
   &.black-squares
     background-image url('../../images/squarecoords/square_coordinates_sample_black_squares.svg')
   &.board
-    background-image url('../../images/board/svg/brown.svg')
+    background-image var(--board-background)
     background-position bottom
 
 .square-coords-opacity-setting .forms-rangeSlider > .forms-sliderValue {
   flex: 0 0 70px;
+}
+
+#square-coords-settings-list {
+  overflow hidden
+  transition max-height 0.4s
+  &.open {
+    max-height 500px
+  }
+  &.closed {
+    max-height 0
+  }
 }

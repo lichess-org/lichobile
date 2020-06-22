@@ -927,7 +927,6 @@ export default {
   "boardHighlights": "Marcar caselles (últim moviment i escac)",
   "pieceDestinations": "Destinacions de la peça (moviments vàlids i moviments anticipats)",
   "boardCoordinates": "Coordenades del tauler (A-H, 1-8)",
-  "squareCoordinates": "Coordenades a tots els escacs",
   "moveListWhilePlaying": "Llista de moviments durant la partida",
   "pgnPieceNotation": "Notació de les jugades",
   "chessPieceSymbol": "Símbol de la peça",

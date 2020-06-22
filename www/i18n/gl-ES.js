@@ -769,7 +769,6 @@ export default {
   "boardHighlights": "Resaltar no taboleiro (última xogada e xaque)",
   "pieceDestinations": "Destino das pezas (xogadas válidas e premovementos)",
   "boardCoordinates": "Coordenadas do taboleiro (A-H, 1-8)",
-  "squareCoordinates": "Coordenadas en todo o taboleiro",
   "moveListWhilePlaying": "Lista de xogadas mentres xogas",
   "pgnPieceNotation": "Notación das xogadas",
   "chessPieceSymbol": "Símbolo da peza de xadrez",

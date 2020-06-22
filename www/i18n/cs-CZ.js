@@ -1010,7 +1010,6 @@ export default {
   "boardHighlights": "Zvýraznění na šachovnici (poslední tah a šach)",
   "pieceDestinations": "Možnosti figur (možné tahy a předtahy)",
   "boardCoordinates": "Souřadnice šachovnice (A-H, 1-8)",
-  "squareCoordinates": "Souřadnice na každém čtverci",
   "moveListWhilePlaying": "Seznam tahů během hry",
   "pgnPieceNotation": "Označení figur v notaci",
   "chessPieceSymbol": "Symbol šachových figur",

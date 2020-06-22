@@ -944,7 +944,6 @@ export default {
   "boardHighlights": "Označi na ploči zadnji potez i šah",
   "pieceDestinations": "Dostupna polja (mogući potezi i predpotezi)",
   "boardCoordinates": "Oznake na ploči (A-H, 1-8)",
-  "squareCoordinates": "Koordinate na svakom kvadratu",
   "moveListWhilePlaying": "Popis poteza za vrijeme partije",
   "pgnPieceNotation": "PGN notacija figura",
   "chessPieceSymbol": "Simbol šahovske figure",

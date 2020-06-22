@@ -910,7 +910,6 @@ export default {
   "boardHighlights": "बोर्डमा हाइलाइट (अन्तिम चाल र चेक)",
   "pieceDestinations": "गोटीको गन्तब्य (मान्य चाल र प्रिमुभ)",
   "boardCoordinates": "बोर्ड समकक्षहरु (A-H, १-८)",
-  "squareCoordinates": "प्रत्येक वर्गमा निर्देशांक",
   "moveListWhilePlaying": "खेल्ने क्रममा चालको सुची",
   "pgnPieceNotation": "चाल नोटेशन",
   "chessPieceSymbol": "गोटीको चिन्ह",

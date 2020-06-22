@@ -1032,7 +1032,6 @@ export default {
   "boardHighlights": "تميز معالم الرقعة (آخر نقلة والكش)",
   "pieceDestinations": "نقلات القطعة ( النقلات المتاحة والنقلات الاستباقية)",
   "boardCoordinates": "إحداثيات الرقعة (A-H, 1-8)",
-  "squareCoordinates": "إحداثيات في كل مربع",
   "moveListWhilePlaying": "قائمة النقلات خلال المباراة",
   "pgnPieceNotation": "تدوين النقلة",
   "chessPieceSymbol": "رمز قطعة الشطرنج",

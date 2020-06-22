@@ -912,7 +912,6 @@ export default {
   "boardHighlights": "बोर्ड का हाइलाइट (आख़िरी चाल और सह)",
   "pieceDestinations": "मोहरों का गंतव्य (मान्य चालें और पहले से चुनी आई चालें)",
   "boardCoordinates": "बोर्ड का निर्देशांक (A-H, 1-8)",
-  "squareCoordinates": "हर वर्ग में समन्वय",
   "moveListWhilePlaying": "खेलते समय चालों की सूची",
   "pgnPieceNotation": "चाल नोटेशन",
   "chessPieceSymbol": "शतरंज टुकड़ा प्रतीक",

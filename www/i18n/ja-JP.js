@@ -885,7 +885,6 @@ export default {
   "boardHighlights": "盤上のハイライト表示（最後の手、チェック）",
   "pieceDestinations": "駒の行き先（ルール上動けるマス、プリムーブ）",
   "boardCoordinates": "マスの座標（A-H, 1-8）",
-  "squareCoordinates": "すべての正方形の座標",
   "moveListWhilePlaying": "プレイ中の棋譜記録",
   "pgnPieceNotation": "PGN 駒表示方法",
   "chessPieceSymbol": "チェス駒シンボル",

@@ -927,7 +927,6 @@ export default {
   "boardHighlights": "Markierungen auf dem Brett (letzter Zug und Schach)",
   "pieceDestinations": "Zielfelder markieren (gültige Züge und Vorauszüge)",
   "boardCoordinates": "Brettkoordinaten (A-H, 1-8)",
-  "squareCoordinates": "Koordinaten in jedem Quadrat",
   "moveListWhilePlaying": "Notation während des Spiels anzeigen",
   "pgnPieceNotation": "Zugnotation",
   "chessPieceSymbol": "Schachfigurensymbol",

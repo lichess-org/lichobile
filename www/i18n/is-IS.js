@@ -715,7 +715,6 @@ export default {
   "boardHighlights": "Upplýsa borð (á síðasta leik og skák)",
   "pieceDestinations": "Áningarstaðir (leyfilegir leikir)",
   "boardCoordinates": "Borðahnit (A-H, 1-8)",
-  "squareCoordinates": "Hnit á hverju veldi",
   "moveListWhilePlaying": "Leikjalisti meðan skák er í gangi",
   "pgnPieceNotation": "Tákn fyrir leiki",
   "chessPieceSymbol": "Taflmannatákn",

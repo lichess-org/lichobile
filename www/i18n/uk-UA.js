@@ -900,7 +900,6 @@ export default {
   "boardHighlights": "Підсвітлення кольором (останнього ходу та шаху)",
   "pieceDestinations": "Поля для ходів (можливі ходи та ходи на випередження)",
   "boardCoordinates": "Координати (A-H, 1-8)",
-  "squareCoordinates": "Координати в кожному квадраті",
   "moveListWhilePlaying": "Список ходів під час гри",
   "chessPieceSymbol": "Символ шахової фігури",
   "zenMode": "Режим Дзен",

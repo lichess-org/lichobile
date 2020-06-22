@@ -752,7 +752,6 @@ export default {
   "boardHighlights": "Kiemelések a táblán (utolsó lépés és sakk)",
   "pieceDestinations": "A figurák érkezési mezői (érvényes lépések és előre bevitt lépések)",
   "boardCoordinates": "Tábla koordináták (A-H, 1-8)",
-  "squareCoordinates": "Koordináták minden téren",
   "moveListWhilePlaying": "Lépéslista játék közben",
   "pgnPieceNotation": "Lépés jelölése",
   "chessPieceSymbol": "Sakkbábu ikonja",

@@ -927,7 +927,6 @@ export default {
   "boardHighlights": "Fremhævninger på brættet (af sidste træk og skak)",
   "pieceDestinations": "Brikdestinationer (gyldige træk og forhånds-træk)",
   "boardCoordinates": "Brætkoordinater (A-H, 1-8)",
-  "squareCoordinates": "Koordinater i hver firkant",
   "moveListWhilePlaying": "Trækliste mens der spilles",
   "pgnPieceNotation": "Notation",
   "chessPieceSymbol": "Skakbrik-symbol",

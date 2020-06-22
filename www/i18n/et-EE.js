@@ -792,7 +792,6 @@ export default {
   "boardHighlights": "Laual rõhutatakse (viimast käiku ja tuld)",
   "pieceDestinations": "malendi sihtkoht (kehtib käies ja ennetaval käigul)",
   "boardCoordinates": "Laua koordinaadid (A-H, 1-8)",
-  "squareCoordinates": "Koordinaadid igas ruudus",
   "moveListWhilePlaying": "käikude loend mängides",
   "pgnPieceNotation": "Käikude notatsioon",
   "chessPieceSymbol": "Malendi sümbol",

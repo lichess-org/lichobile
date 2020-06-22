@@ -927,7 +927,6 @@ export default {
   "boardHighlights": "Mettre en évidence les cases (dernier coup et échec)",
   "pieceDestinations": "Cases de destination (coups et pré-coups légaux)",
   "boardCoordinates": "Coordonnées (a-h, 1-8)",
-  "squareCoordinates": "Coordonnées dans chaque carré",
   "moveListWhilePlaying": "Liste des coups durant la partie",
   "pgnPieceNotation": "Notation des coups",
   "chessPieceSymbol": "Figurine de la pièce",

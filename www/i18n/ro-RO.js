@@ -954,7 +954,6 @@ export default {
   "boardHighlights": "Evidențiază pe tablă (ultima mutare și șahul)",
   "pieceDestinations": "Destinația piesei (mutări valide și premutări)",
   "boardCoordinates": "Coordonatele tablei (A-H, 1-8)",
-  "squareCoordinates": "Coordonate în fiecare pătrat",
   "moveListWhilePlaying": "Lista de mutări în timpul jocului",
   "pgnPieceNotation": "Notația mutării",
   "chessPieceSymbol": "Simbolul piesei de șah",

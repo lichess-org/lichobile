@@ -1007,7 +1007,6 @@ export default {
   "boardHighlights": "הדגשת המשבצות בלוח: המהלך האחרון ושח",
   "pieceDestinations": "יעדי הכלים: מהלכים וקדם-מהלכים מותרים",
   "boardCoordinates": "קואורדינטות לוח (A-H, 1-8)",
-  "squareCoordinates": "קואורדינטות בכל ריבוע",
   "moveListWhilePlaying": "רשימת מהלכים במהלך המשחק",
   "pgnPieceNotation": "תיאור המהלכים",
   "chessPieceSymbol": "סימן הכלי",

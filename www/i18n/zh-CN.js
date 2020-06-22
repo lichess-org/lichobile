@@ -885,7 +885,6 @@ export default {
   "boardHighlights": "棋盘高亮（最后一步与将军）",
   "pieceDestinations": "棋子走到位置（有效着与预先走棋）",
   "boardCoordinates": "棋盘坐标（A-H, 1-8）",
-  "squareCoordinates": "每个正方形的坐标",
   "moveListWhilePlaying": "对局进行时显示可走着",
   "pgnPieceNotation": "使用PGN字母(K,Q,R,B,N)或棋子图标来显示PGN棋谱",
   "chessPieceSymbol": "国际象棋件符号",

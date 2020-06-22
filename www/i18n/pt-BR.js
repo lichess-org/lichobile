@@ -927,7 +927,6 @@ export default {
   "boardHighlights": "Luzes do tabuleiro (último movimento e xeque)",
   "pieceDestinations": "Destino das peças (movimentos válidos e pré-movimentos)",
   "boardCoordinates": "Coordenadas do tabuleiro",
-  "squareCoordinates": "Coordenadas em todos os quadrados",
   "moveListWhilePlaying": "Lista de movimentos",
   "pgnPieceNotation": "Modo de notação das jogadas",
   "chessPieceSymbol": "Símbolo da peça",

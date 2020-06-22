@@ -732,7 +732,6 @@ export default {
   "boardHighlights": "বোর্ডের বৈশিষ্ট সমূহ (শেষ চাল এবং পরীক্ষা)",
   "pieceDestinations": "টুকরো গন্তব্যস্থল (বৈধ চাল ও আবার চাল)",
   "boardCoordinates": "বোর্ডের স্থানাংকর (A-H, 1-8)",
-  "squareCoordinates": "প্রতিটি স্কোয়ারে সমন্বয় করে",
   "moveListWhilePlaying": "খেলার সময় তালিকা সরান",
   "pgnPieceNotation": "প্রতীক চিহ্ন সরান",
   "chessPieceSymbol": "দাবার টুকরোর ধরন",

@@ -969,7 +969,6 @@ export default {
   "boardHighlights": "Осветли последњи потез и шах",
   "pieceDestinations": "Bажећи потези (важећи помаци и претпотези)",
   "boardCoordinates": "Прикажи координате табле (A-H, 1-8)",
-  "squareCoordinates": "Координате у сваком квадрату",
   "moveListWhilePlaying": "Листа потеза током партије",
   "pgnPieceNotation": "Нотација",
   "chessPieceSymbol": "симболи фигура",

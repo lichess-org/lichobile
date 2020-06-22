@@ -887,7 +887,6 @@ export default {
   "boardHighlights": "പലകയിലെ മുഖ്യ ആകർഷണങ്ങൾ (അവസാന നീക്കവും അടിയറവും)",
   "pieceDestinations": "കരുവിന്റെ ശരിയായ സ്ഥാനം ( ന്യായമായ നീക്കങ്ങളും premoves-ഉം)",
   "boardCoordinates": "പലകയിലെ സ്ഥാനാങ്കങ്ങൾ (A-H, 1-8)",
-  "squareCoordinates": "എല്ലാ സ്ക്വയറിലും കോർഡിനേറ്റുകൾ",
   "moveListWhilePlaying": "കളിയുടെ നീക്ക-ശ്രേണി",
   "pgnPieceNotation": "നീക്കങ്ങൾ എങ്ങനെ രേഖപ്പെടുത്തണം",
   "chessPieceSymbol": "ചെസ്സ് കരുവിന്റെ അടയാളം",

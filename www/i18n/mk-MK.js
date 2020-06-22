@@ -472,7 +472,6 @@ export default {
   "materialDifference": "Материјална разлика",
   "boardHighlights": "Нагласени полиња (последен потег и шах)",
   "boardCoordinates": "Координати на таблата (А-H, 1-8)",
-  "squareCoordinates": "Координати на секој плоштад",
   "moveListWhilePlaying": "Листа на потези за време на партијата",
   "pgnPieceNotation": "Запишување на потезите",
   "chessPieceSymbol": "Симбол на фигурата",

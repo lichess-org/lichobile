@@ -927,7 +927,6 @@ export default {
   "boardHighlights": "Taulan markak erakutsi (azken jokaldia eta xakea)",
   "pieceDestinations": "Piezen norakoak (jokaldi zuzenak eta aurre-jokaldiak)",
   "boardCoordinates": "Taularen koordinatutak (A-H, 1-8)",
-  "squareCoordinates": "Koordenatuak plaza guztietan",
   "moveListWhilePlaying": "Jokaldi-zerrenda partidan zehar",
   "pgnPieceNotation": "Jokaldien idazketa",
   "chessPieceSymbol": "Xake piezen ikurra",

@@ -911,7 +911,6 @@ export default {
   "boardHighlights": "Φωτισμός σκακιέρας (τελευταία κίνηση και σαχ)",
   "pieceDestinations": "Προορισμοί κομματιών (έγκυρες κινήσεις και προκινήσεις)",
   "boardCoordinates": "Συντεταγμένες σκακιέρας (A-H, 1-8)",
-  "squareCoordinates": "Συντεταγμένες σε κάθε πλατεία",
   "moveListWhilePlaying": "Λίστα κινήσεων κατά τη διάρκεια της παρτίδας",
   "pgnPieceNotation": "Εμφάνιση κινήσεων",
   "chessPieceSymbol": "Σύμβολο πιονιού στο σκάκι",

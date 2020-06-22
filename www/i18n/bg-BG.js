@@ -747,7 +747,6 @@ export default {
   "boardHighlights": "Осветяване на дъската (последен ход и шах)",
   "pieceDestinations": "Обозначение на ходовете (позволени ходове и предварително задаване)",
   "boardCoordinates": "Координати на дъската (A-H, 1-8)",
-  "squareCoordinates": "Координати във всеки квадрат",
   "moveListWhilePlaying": "Списък на ходовете докато играя",
   "pgnPieceNotation": "Нотация",
   "chessPieceSymbol": "Символ",

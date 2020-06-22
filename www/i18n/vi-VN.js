@@ -743,7 +743,6 @@ export default {
   "boardHighlights": "Đánh dấu trên bàn cờ (nước đi mới nhất và nước chiếu)",
   "pieceDestinations": "Các điểm đến của quân cờ (các nước đi hợp lý và nước đi trước)",
   "boardCoordinates": "Tạo độ bàn cờ (A-H, 1-8)",
-  "squareCoordinates": "Tọa độ trong mỗi hình vuông",
   "moveListWhilePlaying": "Biên bản ván đấu",
   "pgnPieceNotation": "Kí hiệu di chuyển",
   "chessPieceSymbol": "Biểu tượng quân cờ",

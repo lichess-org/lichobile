@@ -861,7 +861,6 @@ export default {
   "boardHighlights": "สีเน้นบนกระดาน (ตาเดินล่าสุด และการรุก)",
   "pieceDestinations": "เส้นทางของหมาก (ช่องที่เดินได้ และการเดินล่วงหน้า)",
   "boardCoordinates": "พิกัดกระดาน",
-  "squareCoordinates": "พิกัดในทุกตาราง",
   "moveListWhilePlaying": "แสดงรายชื่อตาที่เดินในขณะที่เล่น",
   "pgnPieceNotation": "สัญกรณ์การเดิน",
   "chessPieceSymbol": "สัญลักษณ์ตัวหมากรุก",

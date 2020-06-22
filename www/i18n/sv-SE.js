@@ -927,7 +927,6 @@ export default {
   "boardHighlights": "Brädmarkeringar (föregående drag och schack)",
   "pieceDestinations": "Möjliga drag (giltiga drag och premoves)",
   "boardCoordinates": "Brädkoordinater (A-H, 1-8)",
-  "squareCoordinates": "Koordinater på varje torg",
   "moveListWhilePlaying": "Lista med drag under spelets gång",
   "pgnPieceNotation": "Dragnotation",
   "chessPieceSymbol": "Schackpjäs-symbol",

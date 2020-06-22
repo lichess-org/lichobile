@@ -366,7 +366,6 @@ export default {
   "boardHighlights": "Soillseachadh am bòrd (an gluasachd mu dheireadh agus caisg)",
   "pieceDestinations": "Ceann-uidhe nam pìosan (gluasachdan dligheach agus ro-ghluasachdan)",
   "boardCoordinates": "Co-chomharran na  bùird (A-H, 1-8)",
-  "squareCoordinates": "Co-chomharran anns a h-uile ceàrnag",
   "moveListWhilePlaying": "Liosta na gluasachdan fhad 's a tha thu a' cluich",
   "chessClock": "Uaireadair tàileisg",
   "tenthsOfSeconds": "Deicheamhan de dhiogan",

@@ -807,7 +807,6 @@ export default {
   "boardHighlights": "棋盘高亮（最后一步与将军）",
   "pieceDestinations": "棋子目的地（有效着法与预先走棋）",
   "boardCoordinates": "棋盘坐标（A-H, 1-8）",
-  "squareCoordinates": "每个正方形的坐标",
   "moveListWhilePlaying": "遊戲進行時顯示棋譜",
   "zenMode": "禪意模式",
   "blindfoldChess": "蒙眼象棋 (看不见棋子)",

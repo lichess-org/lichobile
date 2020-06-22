@@ -927,7 +927,6 @@ export default {
   "boardHighlights": "Tahta uyarıları (son hamle ve şah çekme)",
   "pieceDestinations": "Taşın gidebileceği kareler (kurallara uygun hamleler)",
   "boardCoordinates": "Tahta kordinatları",
-  "squareCoordinates": "Her karedeki koordinatlar",
   "moveListWhilePlaying": "Oyun sırasında notasyonu göster",
   "pgnPieceNotation": "Notasyon tut",
   "chessPieceSymbol": "Satranç taşı sembolü",

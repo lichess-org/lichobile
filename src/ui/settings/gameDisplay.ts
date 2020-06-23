@@ -20,16 +20,16 @@ function renderBody() {
     h('ul.native_scroller.page.settings_list.game', [
       h('li.list_item', formWidgets.renderCheckbox(i18n('boardCoordinates'), 'coords', settings.game.coords)),
       h('li.list_item', [
-          formWidgets.renderCheckbox(i18n('squareCoordinates'), 'squareCoords', settings.game.squareCoords.enabled, toggleSquareCoordSettings),
+          formWidgets.renderCheckbox('Coordinates on every square', 'squareCoords', settings.game.squareCoords.enabled, toggleSquareCoordSettings),
           h('ul#square-coords-settings-list', {class: settings.game.squareCoords.enabled() ? 'open' : 'closed'}, [
               h('li.list_item.square-coords-opacity-setting', [
                   formWidgets.renderSlider(
-                      'white opacity', 'whiteOpacity', 0, 100, 1, settings.game.squareCoords.whiteSquaresOpacity,
+                      'White opacity', 'whiteOpacity', 0, 100, 1, settings.game.squareCoords.whiteSquaresOpacity,
                       redraw
                   )]),
               h('li.list_item.square-coords-opacity-setting', [
                   formWidgets.renderSlider(
-                      'black opacity', 'blackOpacity', 0, 100, 1, settings.game.squareCoords.blackSquaresOpacity,
+                      'Black opacity', 'blackOpacity', 0, 100, 1, settings.game.squareCoords.blackSquaresOpacity,
                       redraw
                   )]),
               h('li.list_item.square-coords-opacity-setting', [

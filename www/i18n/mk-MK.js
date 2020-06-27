@@ -496,5 +496,19 @@ export default {
   "changedMindDoNotCloseAccount": "Се предомислив, не го затварај мојот профил",
   "thisAccountIsClosed": "Овој профил е затворен.",
   "search": "Барајте",
-  "advancedSearch": "Напредно пребарување"
+  "advancedSearch": "Напредно пребарување",
+  "teams": "Тимови",
+  "allTeams": "Сите тимови",
+  "newTeam": "Нов тим",
+  "myTeams": "Мои тимови",
+  "noTeamFound": "Не е пронајден тим",
+  "joinTeam": "Приклучете се на тимот",
+  "quitTeam": "Откажете се од тимот",
+  "anyoneCanJoin": "Секој смее да се приклучи",
+  "aConfirmationIsRequiredToJoin": "Потребна е потврда за приклучување",
+  "joiningPolicy": "Правила за приклучување",
+  "teamBestPlayers": "Најдобри играчи во тимот",
+  "teamRecentMembers": "Нови членови на тимот",
+  "nbMembers:one": "%s членови",
+  "nbMembers:other": "%s членови"
 }

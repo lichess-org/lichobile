@@ -449,5 +449,19 @@ export default {
   "changedMindDoNotCloseAccount": "Ես փոխել իմ միտքը, մի փակեք իմ հաշիվը",
   "thisAccountIsClosed": "Այս հաշիվը փակված է:",
   "search": "Փնտրել",
-  "advancedSearch": "Ընդլայնված որոնում"
+  "advancedSearch": "Ընդլայնված որոնում",
+  "teams": "Թիմեր",
+  "allTeams": "Բոլոր թիմերը",
+  "newTeam": "Նոր թիմ",
+  "myTeams": "Իմ թիմերը",
+  "noTeamFound": "Թիմ գտնված չէ",
+  "joinTeam": "Միանալ թիմին",
+  "quitTeam": "Լքել թիմը",
+  "anyoneCanJoin": "Ցանկացածը կարող է միանալ",
+  "aConfirmationIsRequiredToJoin": "Միանալու համար հարկավոր է հաստատել",
+  "joiningPolicy": "Միանալու պայմանները",
+  "teamBestPlayers": "Թիմի լավագույն խաղացողները",
+  "teamRecentMembers": "Թիմի անդամները",
+  "nbMembers:one": "%s անդամ",
+  "nbMembers:other": "%s անդամներ"
 }

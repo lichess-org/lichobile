@@ -648,5 +648,19 @@ export default {
   "changedMindDoNotCloseAccount": "გადავიფიქრე, არ დახუროთ ჩემი ანგარიში",
   "thisAccountIsClosed": "აღნიშნული ანგარიში დახურულია.",
   "search": "ძებნა",
-  "advancedSearch": "გაფართოებული ძებნა"
+  "advancedSearch": "გაფართოებული ძებნა",
+  "teams": "გუნდები",
+  "allTeams": "ყველა გუნდი",
+  "newTeam": "ახალი გუნდი",
+  "myTeams": "ჩემი გუნდები",
+  "noTeamFound": "გუნდი არ მოდიძებნა",
+  "joinTeam": "შეუერთდით გუნდს",
+  "quitTeam": "დატოვეთ გუნდი",
+  "anyoneCanJoin": "ყველას შეუძლია შეუერთდეს",
+  "aConfirmationIsRequiredToJoin": "დასტური სჩირდება შესაერთებლად",
+  "joiningPolicy": "დაკავშირების პირობა",
+  "teamBestPlayers": "გუნდის საუკეთესო მოთამაშე",
+  "teamRecentMembers": "გუნდის ბოლო წევრები",
+  "nbMembers:one": "%s წევრი",
+  "nbMembers:other": "%s წევრი"
 }

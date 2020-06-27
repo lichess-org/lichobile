@@ -843,5 +843,19 @@ export default {
   "result": "Tulemus",
   "winnerColor": "Võitja värv",
   "date": "Kuupäev",
-  "sortBy": "Sorteerimine"
+  "sortBy": "Sorteerimine",
+  "teams": "Võistkonnad",
+  "allTeams": "Kõik võistkonnad",
+  "newTeam": "Uus võistkond",
+  "myTeams": "Minu võistkond",
+  "noTeamFound": "Võistkonda ei leitud",
+  "joinTeam": "Ühine võistkonnaga",
+  "quitTeam": "Lahku võistkonnast",
+  "anyoneCanJoin": "Vaba liituvusega",
+  "aConfirmationIsRequiredToJoin": "Et liituda, on vajalik kinnitus",
+  "joiningPolicy": "Ühinemisreeglid",
+  "teamBestPlayers": "Võistkonna parimad mängijad",
+  "teamRecentMembers": "Võistkonna värsked liikmed",
+  "nbMembers:one": "%s liiget",
+  "nbMembers:other": "%s liiget"
 }

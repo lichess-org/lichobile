@@ -949,5 +949,17 @@ export default {
   "closeAccountExplanation": "के तपाइ साच्चै आफ्नो खाता बन्द गर्न चाहनुहुन्छ? खाता बन्द गर्नु एउटा स्थायी निर्णय हो। तपाइले फेरी कहिल्यै पनि लग इन गर्न सक्नुहुने छैन।",
   "thisAccountIsClosed": "यो खाता बन्द गरिएको छ।",
   "search": "खोजौं",
-  "advancedSearch": "विस्तृत खोजी"
+  "advancedSearch": "विस्तृत खोजी",
+  "teams": "टोलीहरू",
+  "allTeams": "सबै टोलीहरु",
+  "newTeam": "नयाँ टोली",
+  "myTeams": "मेरा टोलीहरु",
+  "noTeamFound": "कुनैपनि टोली भेट्टिएनन्",
+  "joinTeam": "टोलीमा सम्मिलित होऔं",
+  "quitTeam": "टोली छोडौं",
+  "anyoneCanJoin": "सबैको लागि खुल्ला",
+  "aConfirmationIsRequiredToJoin": "सामेल हुन प्रमाणिकरण गरिएको हुनु पर्नेछ",
+  "joiningPolicy": "सामेल हुने प्रणाली",
+  "teamBestPlayers": "सर्वोत्कृष्ट खेलाडीहरु",
+  "teamRecentMembers": "पछिल्ला सदस्हयरु"
 }

@@ -274,5 +274,19 @@ export default {
   "settings": "Imsektayen",
   "closeAccount": "Mdel amiḍan",
   "search": "Nadi",
-  "advancedSearch": "Nadi tasurift"
+  "advancedSearch": "Nadi tasurift",
+  "teams": "Igrawen",
+  "allTeams": "Yal tiɣlamin",
+  "newTeam": "Taɣlamt tamaynut",
+  "myTeams": "Tiɣlamin-iw",
+  "noTeamFound": "Ulac taɣlamt",
+  "joinTeam": "Ddukkel ed taɣlamt",
+  "quitTeam": "Eǧǧ taɣlamt",
+  "anyoneCanJoin": "Yal yiwen izmer ad ikki",
+  "aConfirmationIsRequiredToJoin": "Teḥwajed aragag i wakken a-tddukkeled",
+  "joiningPolicy": "Alugen n ussekcam",
+  "teamBestPlayers": "Aqaru n taɣlamt",
+  "teamRecentMembers": "Imaslaḍen imaynuten",
+  "nbMembers:one": "%s imedrawen",
+  "nbMembers:other": "%s imedrawen"
 }

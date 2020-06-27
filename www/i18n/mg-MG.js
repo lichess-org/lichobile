@@ -282,5 +282,19 @@ export default {
   "settings": "Kirakira ankapobeny",
   "thisAccountIsClosed": "Mikatona io kaonty io.",
   "search": "Fitadiavana",
-  "advancedSearch": "Fitadiavana"
+  "advancedSearch": "Fitadiavana",
+  "teams": "vondrona",
+  "allTeams": "Ny vondrona rehetra",
+  "newTeam": "vondrona vaovao",
+  "myTeams": "Ny vondroko",
+  "noTeamFound": "Tsy misy vondrona hita",
+  "joinTeam": "Miditra amin'ny vondrona",
+  "quitTeam": "Miala amin'ny vondrona",
+  "anyoneCanJoin": "Afaka miditra ny rehetra",
+  "aConfirmationIsRequiredToJoin": "Mila fanekena ny fidirana ao amin'ny vondrona",
+  "joiningPolicy": "Lalàna mamehy ny fidirana",
+  "teamBestPlayers": "Ny mpilalao mendrika indrindra",
+  "teamRecentMembers": "Mpilalao vao niditra",
+  "nbMembers:one": "mpiray vondrona %s",
+  "nbMembers:other": "mpiray vondrona %s"
 }

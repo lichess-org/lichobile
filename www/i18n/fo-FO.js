@@ -144,5 +144,6 @@ export default {
   "playOffline": "Spæl offline",
   "onlyFriends": "Bert vinir",
   "castling": "Leyp umborg",
-  "checkYourEmail": "Kannað tín teldupost"
+  "checkYourEmail": "Kannað tín teldupost",
+  "teamBestPlayers": "Bestu telvarar"
 }

@@ -209,5 +209,9 @@ export default {
   "open": "Oscailte",
   "arenaTournaments": "Comórtais Airéine",
   "chessClock": "Clog fichille",
-  "search": "Cuardaigh"
+  "search": "Cuardaigh",
+  "teams": "Foirne",
+  "allTeams": "Na foirne go léir",
+  "newTeam": "Foireann nua",
+  "myTeams": "M'fhoirne"
 }

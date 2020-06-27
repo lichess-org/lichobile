@@ -382,5 +382,21 @@ export default {
   "changedMindDoNotCloseAccount": "Chuir mi an caochladh romhamh, na dùinibh an cunntas agam",
   "thisAccountIsClosed": "Chaidh an cunntas a dhùnadh.",
   "search": "Lorg",
-  "advancedSearch": "Lorg adhartach"
+  "advancedSearch": "Lorg adhartach",
+  "teams": "Sgiobaidhean",
+  "allTeams": "A h-uile sgioba",
+  "newTeam": "Sgioba ùr",
+  "myTeams": "Na sgiobaidhean agam",
+  "noTeamFound": "Cha deach sgioba a lorg",
+  "joinTeam": "Gabh pàirt san sgioba",
+  "quitTeam": "Fàg an sgioba",
+  "anyoneCanJoin": "Faodaidh duine sam bith pàirt a ghabhail ann",
+  "aConfirmationIsRequiredToJoin": "Tha feum air dearbhadh gus pàirt a ghabhail ann",
+  "joiningPolicy": "Poileasaidh na ballrachd",
+  "teamBestPlayers": "Na cluicheadairean as fhearr",
+  "teamRecentMembers": "Na buill as ùire",
+  "nbMembers:one": "%s ball",
+  "nbMembers:two": "%s ball",
+  "nbMembers:few": "%s ball",
+  "nbMembers:other": "%s ball"
 }

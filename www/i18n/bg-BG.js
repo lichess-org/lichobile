@@ -785,5 +785,19 @@ export default {
   "changedMindDoNotCloseAccount": "Промених намерението си, не закривайте моята регистрация",
   "thisAccountIsClosed": "Тази регистрация е закрита.",
   "search": "Търсене",
-  "advancedSearch": "Разширено търсене"
+  "advancedSearch": "Разширено търсене",
+  "teams": "Отбори",
+  "allTeams": "Всички отбори",
+  "newTeam": "Нов отбор",
+  "myTeams": "Моите отбори",
+  "noTeamFound": "Не са намерени отбори",
+  "joinTeam": "Присъедини се към отбора",
+  "quitTeam": "Напусни отбора",
+  "anyoneCanJoin": "Отворен за всички",
+  "aConfirmationIsRequiredToJoin": "Изисква се потвърждаване, за да се присъедините",
+  "joiningPolicy": "Условия за присъединяване",
+  "teamBestPlayers": "Най-добри играчи",
+  "teamRecentMembers": "Скорошни членове",
+  "nbMembers:one": "%s членове",
+  "nbMembers:other": "%s членове"
 }

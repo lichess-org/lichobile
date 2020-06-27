@@ -531,5 +531,18 @@ export default {
   "changedMindDoNotCloseAccount": "mi seljdicne .i na ku gau ko co'upli lo mi jaspu",
   "thisAccountIsClosed": "co'upli ti poi jaspu",
   "search": "sisku",
-  "advancedSearch": "pluja ke sisku tutci"
+  "advancedSearch": "pluja ke sisku tutci",
+  "teams": "lo bende",
+  "allTeams": "lo ro bende",
+  "newTeam": "zbasu su'o bende",
+  "myTeams": "lo bende pe mi",
+  "noTeamFound": "no bende do se cmima",
+  "joinTeam": "co'a cmima",
+  "quitTeam": "co'u cmima",
+  "anyoneCanJoin": "ro da cu .e'a co'a cmima",
+  "aConfirmationIsRequiredToJoin": "lo jatna cu jdice lo du'u ma kau co'a cmima",
+  "joiningPolicy": "lo javni co nu cmibi'o zo'u",
+  "teamBestPlayers": "lo certu cmima",
+  "teamRecentMembers": "lo pu zi cmibi'o",
+  "nbMembers:other": "%s da cmima"
 }

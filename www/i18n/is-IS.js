@@ -747,5 +747,19 @@ export default {
   "changedMindDoNotCloseAccount": "Ég skipti um skoðun, ekki loka aðgangnum",
   "thisAccountIsClosed": "Þessi aðgangur er lokaður",
   "search": "Leita",
-  "advancedSearch": "Ítarleit"
+  "advancedSearch": "Ítarleit",
+  "teams": "Lið",
+  "allTeams": "Öll lið",
+  "newTeam": "Nýtt lið",
+  "myTeams": "Liðin mín",
+  "noTeamFound": "Ekkert lið fannst",
+  "joinTeam": "Ganga í lið",
+  "quitTeam": "Ganga úr liði",
+  "anyoneCanJoin": "Allir geta verið með",
+  "aConfirmationIsRequiredToJoin": "Staðfesting er nauðsynleg, til að vera með",
+  "joiningPolicy": "Þáttökureglur",
+  "teamBestPlayers": "Bestu liðsmenn",
+  "teamRecentMembers": "Nýjustu liðsmenn",
+  "nbMembers:one": "%s meðlimir",
+  "nbMembers:other": "%s meðlimir"
 }

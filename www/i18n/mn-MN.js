@@ -842,5 +842,19 @@ export default {
   "changedMindDoNotCloseAccount": "Би бодлоо өөрчиллөө. Миний гишүүнчлэлийн дансыг битгий хаа",
   "thisAccountIsClosed": "Энэ гишүүний данс хаагдсан байна.",
   "search": "Хайлт",
-  "advancedSearch": "Нарийвчилсан хайлт"
+  "advancedSearch": "Нарийвчилсан хайлт",
+  "teams": "Баг",
+  "allTeams": "Бүх багууд",
+  "newTeam": "Шинэ баг",
+  "myTeams": "Миний багууд",
+  "noTeamFound": "Баг олдсонгүй",
+  "joinTeam": "Багт нэгдэх",
+  "quitTeam": "Багаас гарах",
+  "anyoneCanJoin": "Дурын гишүүн нэгдэж болно",
+  "aConfirmationIsRequiredToJoin": "Гишүүнээр нэгдэхэд багийн удирдагчаас зөвшөөрөл авах шаардлагатай",
+  "joiningPolicy": "Гишүүнээр элсэх дүрэм",
+  "teamBestPlayers": "Шилдэг тоглогчид",
+  "teamRecentMembers": "Сүүлд элссэн гишүүд",
+  "nbMembers:one": "%s гишүүд",
+  "nbMembers:other": "%s гишүүд"
 }

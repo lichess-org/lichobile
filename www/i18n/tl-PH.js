@@ -773,5 +773,19 @@ export default {
   "changedMindDoNotCloseAccount": "Nagbago ang akong isip, wag mong isara ang aking akawnt",
   "thisAccountIsClosed": "Ang akawnt na ito ay sarado.",
   "search": "Hanapin",
-  "advancedSearch": "Naunang paghanap"
+  "advancedSearch": "Naunang paghanap",
+  "teams": "Mga Koponan",
+  "allTeams": "Lahat ng mga koponan",
+  "newTeam": "Bagong Team",
+  "myTeams": "Ang mga Teams mo",
+  "noTeamFound": "Walang koponan na nakita",
+  "joinTeam": "Sumali sa koponan",
+  "quitTeam": "Umalis sa koponan",
+  "anyoneCanJoin": "Libre para sa lahat",
+  "aConfirmationIsRequiredToJoin": "Isang kompirmasyon ang kailangan para makasali",
+  "joiningPolicy": "Patakaran ng Pagsali",
+  "teamBestPlayers": "Pinakamagaling na mga manlalaro",
+  "teamRecentMembers": "Mga bagong miyembro",
+  "nbMembers:one": "%s miyembro",
+  "nbMembers:other": "%s mga miyembro"
 }

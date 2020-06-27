@@ -471,5 +471,19 @@ export default {
   "closeAccountExplanation": "کیا آپ واقعی اکاؤنٹ بند کرنا چاہتے ہیں؟ اکاؤنٹ ہمیشہ کیلیے بند کیے جاتے ہیں، آپ دوبارہ استعمال نہیں کر سکیں گے  اور آپکی معلومات بھی ضایع کر دی جائیں گی۔",
   "thisAccountIsClosed": "اکاؤنٹ بند کردیا گیا ہے",
   "search": "تلاش",
-  "advancedSearch": "اضافی تلاش"
+  "advancedSearch": "اضافی تلاش",
+  "teams": "ٹیمیں",
+  "allTeams": "تمام ٹیمیں",
+  "newTeam": "نئی ٹیم تشکیل کریں",
+  "myTeams": "میری ٹیمیں",
+  "noTeamFound": "آپ کسی ٹیم کے میں شامل نہیں",
+  "joinTeam": "ٹیم میں شامل ہوں",
+  "quitTeam": "ٹیم چھوڑ دیں",
+  "anyoneCanJoin": "غیر مشروط شرکت",
+  "aConfirmationIsRequiredToJoin": "شرکت کی تکمیل کے لیے منتظم کا متفق ہونا ضروری ہے",
+  "joiningPolicy": "شرکت کی شرائط",
+  "teamBestPlayers": "بہترین کھلاڑی",
+  "teamRecentMembers": "حالیہ اراکین",
+  "nbMembers:one": "%s اراکین",
+  "nbMembers:other": "%s اراکین"
 }

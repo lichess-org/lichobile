@@ -469,5 +469,19 @@ export default {
   "changedMindDoNotCloseAccount": "என் மனதை மாற்றிநேன் என் கணக்கு மூட வேண்டாம்",
   "thisAccountIsClosed": "இந்த கணக்கு மூடப்பட்டுள்ளது.",
   "search": "தேடு",
-  "advancedSearch": "மேம்படித் தேடல்"
+  "advancedSearch": "மேம்படித் தேடல்",
+  "teams": "அணிகள்",
+  "allTeams": "எல்லா அணிகளும்",
+  "newTeam": "புது அணி",
+  "myTeams": "என் அணிகள்",
+  "noTeamFound": "எந்த அணியும் கிட்டவில்லை",
+  "joinTeam": "அணியோடு சேர்",
+  "quitTeam": "அணியை விட்டுவிலகு",
+  "anyoneCanJoin": "யாரும் சேரலாம்",
+  "aConfirmationIsRequiredToJoin": "சேர உறுதிப்பாடு தேவை",
+  "joiningPolicy": "சேர்க்கை நெறிமுறைகள்",
+  "teamBestPlayers": "அணியின் சிறந்த விளையாடிகள்",
+  "teamRecentMembers": "அணியின் அண்மை உறுப்பினர்கள்",
+  "nbMembers:one": "%s உறுப்பினர்கள்",
+  "nbMembers:other": "%s உறுப்பினர்கள்"
 }

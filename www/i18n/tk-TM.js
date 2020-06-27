@@ -768,5 +768,21 @@ export default {
   "changedMindDoNotCloseAccount": "Pikirimi üýtgetdim, hasabymy ýapma",
   "thisAccountIsClosed": "Bu hasap ýapyldy.",
   "search": "Gözle",
-  "advancedSearch": "Çuňlaşdyrylan gözleg"
+  "advancedSearch": "Çuňlaşdyrylan gözleg",
+  "teams": "Toparlar",
+  "allTeams": "Ähli toparlar",
+  "newTeam": "Täze topar",
+  "myTeams": "Toparlarym",
+  "noTeamFound": "Topar ýok",
+  "joinTeam": "Topara goşul",
+  "quitTeam": "Topary terk et",
+  "anyoneCanJoin": "Hemmelere mugt",
+  "aConfirmationIsRequiredToJoin": "Goşulmak üçin tassyklanmaly",
+  "joiningPolicy": "Goşulma düzgünleri",
+  "teamBestPlayers": "Iň gowy oýunçylar",
+  "teamRecentMembers": "Täze agzalar",
+  "teamBattleOverview": "Birnäçe toparyň göreşi, her küştçi topary üçin utuk gazanýar",
+  "teamTournament": "Topar bäsleşigi",
+  "nbMembers:one": "%s agza",
+  "nbMembers:other": "%s agza"
 }

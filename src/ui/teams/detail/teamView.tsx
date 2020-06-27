@@ -1,6 +1,6 @@
 import h from 'mithril/hyperscript'
 import { dropShadowHeader as headerWidget, backButton} from '../../shared/common'
-import i18n from '../../../i18n'
+import i18n, { plural } from '../../../i18n'
 import { Leader } from '../../../lichess/interfaces/teams'
 import TeamsCtrl from './TeamCtrl'
 
@@ -23,7 +23,7 @@ export function body(ctrl: TeamsCtrl) {
     return null
   return h('div.teamPage.native_scroller.page', [
     h('section.teamInfos', [
-      h('div.teamLeader', [team.leaders.map(userStatus)]),
+      h('div.teamLeader', team.leaders.map(userStatus)),
       h('div.teamMembers', [team.nbMembers + ' ' + i18n('members')]),
       h('div.teamDescription', [team.description]),
     ]),
@@ -38,7 +38,7 @@ function userStatus(leader: Leader) {
   const title = leader.title ? h('span.userTitle', [leader.title + ' ']) : null
 
   return h('div.user', [
-    h('span', [i18n('teamLeader') + ': ']),
+    h('span', [plural('teamLeaders', 1) + ': ']),
     patron,
     title,
     leader.name

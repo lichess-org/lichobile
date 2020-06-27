@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import strip from '@rollup/plugin-strip'
 import { terser } from 'rollup-plugin-terser'
+import visualizer from 'rollup-plugin-visualizer'
 
 const release = process.env.APP_MODE === 'release'
 
@@ -23,6 +24,7 @@ export default {
       sourceMap: false,
     }),
     release && terser(),
+    visualizer(),
   ],
   onwarn(warning, warn) {
     if (warning.code === 'CIRCULAR_DEPENDENCY') return

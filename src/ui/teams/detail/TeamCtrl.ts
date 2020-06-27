@@ -51,7 +51,7 @@ export default class TeamCtrl {
   }
 
   reload(teamId: string) {
-    xhr.getTeam(teamId)
+    xhr.getTeam(teamId, true)
     .then(data => {
       this.team = data
       redraw()

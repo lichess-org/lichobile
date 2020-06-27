@@ -1,8 +1,8 @@
 import { fetchJSON } from '../../http'
 import { Team, TeamResults, TeamJoinLeaveResponse } from '../../lichess/interfaces/teams'
 
-export function getTeam(id: string): Promise<Team> {
-  return fetchJSON('/api/team/' + id)
+export function getTeam(id: string, disableCache?: boolean): Promise<Team> {
+  return fetchJSON('/api/team/' + id, disableCache ? { cache: 'reload' } : undefined)
 }
 
 export function joinTeam(id: string, message: string | null): Promise<TeamJoinLeaveResponse> {

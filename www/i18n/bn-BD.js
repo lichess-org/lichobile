@@ -769,5 +769,19 @@ export default {
   "changedMindDoNotCloseAccount": "আমি নিজের মত পরিবর্তন করেছি এবং আমার একাউন্ট বন্ধ করতে চাই না",
   "thisAccountIsClosed": "এই একাউন্টটি বন্ধ করা হয়েছে",
   "search": "অনুসন্ধান",
-  "advancedSearch": "উন্নত অনুসন্ধান"
+  "advancedSearch": "উন্নত অনুসন্ধান",
+  "teams": "দল",
+  "allTeams": "সকল দল",
+  "newTeam": "নতুন দল",
+  "myTeams": "আমার দলগুলো",
+  "noTeamFound": "কোন দল পাওয়া যায় নি",
+  "joinTeam": "দলে যোগ দিন",
+  "quitTeam": "দল ত্যাগ করুন",
+  "anyoneCanJoin": "যে কেউ যোগ দিতে পারে",
+  "aConfirmationIsRequiredToJoin": "যোগ দেওয়ার জন্য অনুমোদন প্রয়োজন",
+  "joiningPolicy": "যোগ দেওয়ার নিয়ম",
+  "teamBestPlayers": "দলের সেরা খেলোয়াড়",
+  "teamRecentMembers": "দলের নবীন সদস্যগণ",
+  "nbMembers:one": "%s জন সদস্য",
+  "nbMembers:other": "%s জন সদস্য"
 }

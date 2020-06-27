@@ -1,0 +1,109 @@
+#searchTeamsModal
+  color textDarkBg
+  > header
+    background headerBgDark
+    border-bottom-style none
+    display flex
+    justify-content space-between
+    > .main_header_drop_shadow
+      bottom -2px
+    > button
+      color lighten(textDarkBg, 25%)
+      > .svg-icon-wrapper
+        width 24px
+        height 24px
+        position relative
+      margin 0
+      &.active
+        background lighten(bgdark, 8%)
+  > .modal_content
+    color textDarkBg
+    background bgdark
+
+.teams_main_header
+  flex 1 1 auto
+  display flex
+  justify-content space-between
+  > .main_header_button
+    padding-right 10px
+
+.search_input
+  position relative
+  width calc(100% - 70px)
+  margin 0 auto
+  height headerHeight
+  > input
+    background transparent
+    color textDarkBg
+    width 100%
+    height 100%
+    border none
+    outline none
+    margin 0
+    padding 0
+    &::placeholder
+      opacity 0.6
+
+.teamSuggestion
+  display flex
+  justify-content space-between
+  padding-right 35px
+  > .rating:before
+    font-size 1.2em
+    vertical-align bottom
+    margin-right 1px
+
+.view-container.light
+  #searchTeamsModal
+    > header
+      background-color themeBgLight
+      color textLightBg
+      > button
+        color lighten(textLightBg, 25%)
+    > .modal_content
+      color textLightBg
+      background-color themeBgLight
+    .list_item
+      border-bottom-color themeBgLightBorder
+      &.active
+        background-color darken(bglight, 5%)
+
+  .search_input > input
+    color textMediumGray
+
+.view-container.transp
+  .ranking
+    border-bottom-color transpWhite01
+
+  #searchTeamsModal
+    background-color transpBlack08
+    > .modal_content
+      color textTransp
+      background-color transpBlack05
+    .list_item
+      border-bottom-color transpWhite01
+      &.active
+        background-color transpWhite02
+
+.teamInfos
+  margin-left 10px
+  padding-bottom 5px
+  > div
+    margin-bottom 5px
+  .teamDescription
+    font-size 0.9em
+
+#joinForm
+  .joinMessage
+    width 90%
+    margin-left 5%
+    margin-right 5%
+
+.teamJoinLeave
+  .joinLeaveButton
+    margin 5px auto 10px auto
+    color gold
+    width 50%
+  .teamRequestPending
+    text-align center
+    color gold

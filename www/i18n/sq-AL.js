@@ -764,5 +764,19 @@ export default {
   "changedMindDoNotCloseAccount": "Ndryshova mendje, mos e mbyll llogarinë time",
   "thisAccountIsClosed": "Kjo llogari është e mbyllur",
   "search": "Kërko",
-  "advancedSearch": "Kërkim i avancuar"
+  "advancedSearch": "Kërkim i avancuar",
+  "teams": "Ekipet",
+  "allTeams": "Të gjithë ekipet",
+  "newTeam": "Ekip i ri",
+  "myTeams": "Ekipet e mia",
+  "noTeamFound": "Nuk u gjet ekip",
+  "joinTeam": "Hyr në ekip",
+  "quitTeam": "Largohu nga ekipi",
+  "anyoneCanJoin": "I lirë për të gjithë",
+  "aConfirmationIsRequiredToJoin": "Nevojitet  konfirmim për të hyrë",
+  "joiningPolicy": "Rregullat e  hyrjes",
+  "teamBestPlayers": "Lojtarët më të mirë të ekipit",
+  "teamRecentMembers": "Anëtarët e rinj",
+  "nbMembers:one": "%s anëtarë",
+  "nbMembers:other": "%s anëtarë"
 }

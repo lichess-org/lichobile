@@ -139,5 +139,10 @@ export default {
   "nbGamesWithYou:other": "%s spullen mei jo",
   "availableInNbLanguages:one": "Beskikber yn %s tale!",
   "availableInNbLanguages:other": "Beskikber yn %s tale!",
-  "search": "Sykje"
+  "search": "Sykje",
+  "teams": "Teams",
+  "newTeam": "Nij team",
+  "noTeamFound": "Gjin team fûn",
+  "joinTeam": "Mei team meidwaan",
+  "quitTeam": "Team ferlette"
 }

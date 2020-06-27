@@ -501,5 +501,18 @@ export default {
   "changedMindDoNotCloseAccount": "Шухӑшӑма улӑштартӑм, аккаунтӑма хупас ҫук",
   "thisAccountIsClosed": "Ку аккаунт хупӑ.",
   "search": "Шыра",
-  "advancedSearch": "Анлӑ шырасси"
+  "advancedSearch": "Анлӑ шырасси",
+  "teams": "Ушкӑнсем",
+  "allTeams": "Мӗн пур ушкӑн",
+  "newTeam": "Ҫӗнӗ ушкӑн",
+  "myTeams": "Манӑн ушкӑнсем",
+  "noTeamFound": "Пӗр ушкӑн та ҫук",
+  "joinTeam": "Ушкӑна хутшӑн",
+  "quitTeam": "Ушкӑнтан тух",
+  "anyoneCanJoin": "Пуриншӗн те тӳлевсӗр",
+  "aConfirmationIsRequiredToJoin": "Ҫирӗплетмелӗх хутшӑнасси",
+  "joiningPolicy": "Хутшӑнасси шыв-йӗрки",
+  "teamBestPlayers": "Чи вӑйлӑ вӑйӑҫӑ",
+  "teamRecentMembers": "Тин хутшӑннӑ пайташсем",
+  "nbMembers:other": "%s пайташ"
 }

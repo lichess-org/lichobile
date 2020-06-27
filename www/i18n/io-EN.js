@@ -110,5 +110,17 @@ export default {
   "boardCoordinates": "Board coordinates (A-H, 1-8)",
   "zenMode": "Zen mode",
   "settings": "Ajusti",
-  "advancedSearch": "Promocata sercho"
+  "advancedSearch": "Promocata sercho",
+  "teams": "Esquadi",
+  "allTeams": "Omna esquadi",
+  "newTeam": "Nova esquado",
+  "myTeams": "Mea esquadi",
+  "noTeamFound": "Nula esquado trovita",
+  "joinTeam": "Partoprenar esquado",
+  "quitTeam": "Livar esquado",
+  "anyoneCanJoin": "Omni povas partoprenar",
+  "aConfirmationIsRequiredToJoin": "Ratifiko es necesa por partoprenar",
+  "joiningPolicy": "Partoprenodirekto",
+  "teamBestPlayers": "Maxim bona luderi di esquado",
+  "teamRecentMembers": "Recenta membri di esquado"
 }

@@ -953,5 +953,17 @@ export default {
   "closeAccountExplanation": "Ishonchingiz komilmi hisobingizni yopishga? Hisobingizni yopish doimiyga bo'ladi. Siz boshqatdan tizimga KIRA OLMAYSIZ.",
   "thisAccountIsClosed": "Bu hisob yopilgan.",
   "search": "Qidirish",
-  "advancedSearch": "Qo'shimcha qidirish"
+  "advancedSearch": "Qo'shimcha qidirish",
+  "teams": "Jamoalar",
+  "allTeams": "Barcha jamoalar",
+  "newTeam": "Yangi jamoa",
+  "myTeams": "Mening jamoam",
+  "noTeamFound": "Jamoa topilmadi",
+  "joinTeam": "Jamoaga qo'shilish",
+  "quitTeam": "Jamoani tark etish",
+  "anyoneCanJoin": "Xamma uchun ochiq",
+  "aConfirmationIsRequiredToJoin": "Qo'shilish uchun tasdiqlash talab qilingan",
+  "joiningPolicy": "Qo'shilish shartlari",
+  "teamBestPlayers": "Zo'r o'yinchilar",
+  "teamRecentMembers": "Yangi a'zolar"
 }

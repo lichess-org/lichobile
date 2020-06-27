@@ -817,5 +817,20 @@ export default {
   "result": "결과",
   "date": "날짜",
   "searchInXGames:other": "%s 체스 게임에서 검색한 결과",
-  "xGamesFound:other": "%s개의 게임을 찾았습니다"
+  "xGamesFound:other": "%s개의 게임을 찾았습니다",
+  "team": "팀",
+  "teams": "팀",
+  "allTeams": "모든 팀",
+  "newTeam": "팀 만들기",
+  "myTeams": "소속된 팀",
+  "noTeamFound": "팀을 찾지 못했습니다",
+  "joinTeam": "팀 가입",
+  "quitTeam": "팀 탈퇴",
+  "anyoneCanJoin": "승인 없이 아무나 가입할 수 있습니다",
+  "aConfirmationIsRequiredToJoin": "가입하기 위해선 승인이 필요합니다",
+  "joiningPolicy": "가입 정책",
+  "teamBestPlayers": "팀 내 최고 플레이어",
+  "teamRecentMembers": "최근 가입 멤버",
+  "teamBattle": "팀 배틀",
+  "nbMembers:other": "멤버 %s명"
 }

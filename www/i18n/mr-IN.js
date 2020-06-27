@@ -299,5 +299,18 @@ export default {
   "giveMoreTime": "अजून वेळ द्या",
   "settings": "सेटिंग्ज",
   "search": "Shodha",
-  "advancedSearch": "प्रगत शोध"
+  "advancedSearch": "प्रगत शोध",
+  "teams": "संघ",
+  "allTeams": "सर्व संघ",
+  "newTeam": "नवीन संघ",
+  "myTeams": "माझे  संघ",
+  "noTeamFound": "कुठलाच संघ सापडला नाही",
+  "joinTeam": "संघात सहभागी व्हा",
+  "quitTeam": "संघातून बाहेर पडा",
+  "anyoneCanJoin": "सर्वांसाठी मोफत",
+  "joiningPolicy": "सहभागी होण्याचे नियम",
+  "teamBestPlayers": "सर्वोत्कृष्ट खेळाडूंची यादी",
+  "teamRecentMembers": "अलीकडचे सदस्य",
+  "nbMembers:one": "%s सदस्य",
+  "nbMembers:other": "%s सदस्य"
 }

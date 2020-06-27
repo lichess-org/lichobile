@@ -46,5 +46,9 @@ export default {
   "otherRules": "awon ikilo to se pataki miiran",
   "thisIsPrivate": "idije bonkele ni yi",
   "settings": "Eto",
-  "search": "àwárí"
+  "search": "àwárí",
+  "teams": "Egbe",
+  "allTeams": "Gbogbo egbe",
+  "newTeam": "Titun egbe",
+  "myTeams": "Mi egbe"
 }

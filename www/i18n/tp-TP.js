@@ -366,5 +366,17 @@ export default {
   "changedMindDoNotCloseAccount": "mi ante e lawa. o pini ala e lipu jan mi",
   "thisAccountIsClosed": "lipu kan ni li pini.",
   "search": "alasa",
-  "advancedSearch": "alasa pi sona mute"
+  "advancedSearch": "alasa pi sona mute",
+  "teams": "kulupu",
+  "allTeams": "kulupu ale",
+  "newTeam": "kulupu sin",
+  "myTeams": "kulupu mi",
+  "noTeamFound": "kulupu li lon ala",
+  "joinTeam": "o lon kulupu",
+  "quitTeam": "o tawa tan kulupu",
+  "anyoneCanJoin": "jan ale li ken kama lon",
+  "aConfirmationIsRequiredToJoin": "jan lawa kulupu li wile ken e jan kama",
+  "joiningPolicy": "jan li ken kama lon kepeken nasin seme?",
+  "teamBestPlayers": "jan kulupu pi pona mute",
+  "teamRecentMembers": "jan kulupu sin"
 }

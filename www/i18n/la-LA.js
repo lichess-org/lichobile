@@ -701,5 +701,19 @@ export default {
   "changedMindDoNotCloseAccount": "Cor flexi, noli claudere rationem meam",
   "thisAccountIsClosed": "Haec ratio clausa est.",
   "search": "Quaerere",
-  "advancedSearch": "Investigatio multiplex"
+  "advancedSearch": "Investigatio multiplex",
+  "teams": "Legiones",
+  "allTeams": "Legiones omnes",
+  "newTeam": "Legio nova",
+  "myTeams": "Legiones meae",
+  "noTeamFound": "Nulla legio inventa",
+  "joinTeam": "In legionem convenire",
+  "quitTeam": "A legione perficere",
+  "anyoneCanJoin": "Omnibus licet convenire",
+  "aConfirmationIsRequiredToJoin": "Confirmatione data licet convenire",
+  "joiningPolicy": "Lex conveniendi",
+  "teamBestPlayers": "Meliores legionis lusores",
+  "teamRecentMembers": "Nuper conventi sodales",
+  "nbMembers:one": "%s sodales",
+  "nbMembers:other": "%s sodales"
 }

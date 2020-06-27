@@ -81,5 +81,11 @@ export default {
   "subscribe": "ရယူလိုပါသည်။",
   "unsubscribe": "မရယူလိုတော့ပါ။",
   "opponentLeftCounter:other": "သင့်ရဲ့ပြိုင်ဘက် ဂိမ်းမှထွက်ခွာသွားပါပြီ. %s တွင် သင့်ကို အနိုင််ပေးပါမည်.",
-  "lessThanNbMinutes:other": "Less than %s minute"
+  "lessThanNbMinutes:other": "Less than %s minute",
+  "messageAllMembersLongDescription": "အသင်းဝင် အားလုံးထံ လျှို့ဝှက် စာတို ပို့ရန်။\nပြိုင်ပွဲ သို့မဟုတ် အသင်းအချင်းချင်း ကစားပွဲ တစ်ခုတွင် ပါဝင်ကြရေး နိုးဆော်ရန် အသုံးပြုနိုင်ပါသည်။\nသင့်ထံမှ စာတို မရယူလိုသော အသင်းဝင်တို့ အသင်းမှ ထွက်ကောင်း ထွက်သွားနိုင်ပါသည်။",
+  "teamsIlead": "မိမိ ဦးဆောင်သော အသင်းများ",
+  "youWayWantToLinkOneOfTheseTournaments": "ကျင်းပရန် စီစဉ်ထားသော ဤပြိုင်ပွဲတို့သို့ ချိတ်ဆက်လိုပါသလား။",
+  "usersWhoCanManageThisTeam": "ဤအသင်းအား စီမံခန့်ခွဲနိုင်သည့် ယူဇာများ",
+  "leadersChat": "ခေါင်းဆောင်တို့ စကားပြောရန်",
+  "teamLeaders:other": "အသင်းခေါင်းဆောင်"
 }

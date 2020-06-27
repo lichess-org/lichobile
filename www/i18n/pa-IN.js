@@ -110,5 +110,13 @@ export default {
   "agreementNice": "ਮੈਂ ਸਹਿਮਤ ਹਾਂ ਕਿ ਮੈਂ ਹਮੇਸ਼ਾਂ ਦੂਜੇ ਖਿਡਾਰੀਆਂ ਦਾ ਸਤਿਕਾਰ ਕਰਾਂਗਾ.",
   "agreementAccount": "ਮੈਂ ਸਹਿਮਤ ਹਾਂ ਕਿ ਮੈਂ ਬਹੁਤੇ ਖਾਤੇ ਨਹੀਂ ਬਣਾਵਾਂਗਾ.",
   "giveMoreTime": "ਹੋਰ ਸਮਾਂ ਦਿਓ",
-  "settings": "ਸੈਟਿੰਗਜ਼"
+  "settings": "ਸੈਟਿੰਗਜ਼",
+  "teams": "ਟੀਮਾਂ",
+  "allTeams": "ਸਾਰੀਆਂ ਟੀਮਾਂ",
+  "newTeam": "ਨਵੀਂ ਟੀਮ",
+  "myTeams": "ਮੇਰੀਆਂ ਟੀਮਾਂ",
+  "noTeamFound": "ਕੋਈ ਟੀਮ ਨਹੀਂ ਮਿਲੀ",
+  "joinTeam": "ਟੀਮ ਵਿਚ ਸ਼ਾਮਲ ਹੋਵੋ",
+  "quitTeam": "ਟੀਮ ਛੱਡੋ",
+  "anyoneCanJoin": "ਸਾਰਿਆਂ ਵਾਸਤੇ ਖੁਲਾ"
 }

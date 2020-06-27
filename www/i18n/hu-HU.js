@@ -789,5 +789,19 @@ export default {
   "changedMindDoNotCloseAccount": "Meggondoltam magam, mégsem zárolom a fiókomat",
   "thisAccountIsClosed": "Ez a fiók zárolva van.",
   "search": "Keresés",
-  "advancedSearch": "Bővített keresés"
+  "advancedSearch": "Bővített keresés",
+  "teams": "Csapatok",
+  "allTeams": "Összes csapat",
+  "newTeam": "Új csapat",
+  "myTeams": "Csapataim",
+  "noTeamFound": "Nem található ilyen csapat",
+  "joinTeam": "Csapathoz csatlakozás",
+  "quitTeam": "Kilépés a csapatból",
+  "anyoneCanJoin": "Bárki csatlakozhat",
+  "aConfirmationIsRequiredToJoin": "A csatlakozáshoz visszaigazolás szükséges",
+  "joiningPolicy": "Csatlakozási irányelvek",
+  "teamBestPlayers": "Legjobb játékosok",
+  "teamRecentMembers": "Új tagok",
+  "nbMembers:one": "%s tag",
+  "nbMembers:other": "%s tagok"
 }

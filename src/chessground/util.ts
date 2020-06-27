@@ -3,10 +3,10 @@ import { State } from './state'
 
 export function noop() {}
 
-export const files: cg.File[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-export const invFiles: cg.File[] = files.slice().reverse()
-export const ranks: cg.Rank[] = [1, 2, 3, 4, 5, 6, 7, 8]
-export const invRanks: cg.Rank[] = [8, 7, 6, 5, 4, 3, 2, 1]
+export const files: readonly cg.File[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+export const invFiles: readonly cg.File[] = files.slice().reverse()
+export const ranks: readonly cg.Rank[] = [1, 2, 3, 4, 5, 6, 7, 8]
+export const invRanks: readonly cg.Rank[] = [8, 7, 6, 5, 4, 3, 2, 1]
 export const fileNumbers: { [i: string]: cg.Rank } = {
   a: 1,
   b: 2,
@@ -54,7 +54,7 @@ export function invertKey(k: Key): Key {
   return (files[8 - fileNumbers[k[0]]] + (9 - Number(k[1]))) as Key
 }
 
-export const allPos: cg.Pos[] = (() => {
+export const allPos: readonly cg.Pos[] = (() => {
   const ps: cg.Pos[] = []
   invRanks.forEach((y) => {
     ranks.forEach((x) => {
@@ -64,10 +64,10 @@ export const allPos: cg.Pos[] = (() => {
   return ps
 })()
 
-export const allKeys: Key[] =
+export const allKeys: readonly Key[] =
   Array.prototype.concat(...files.map(c => ranks.map(r => c + r)))
 
-export const invKeys: Key[] = allKeys.slice(0).reverse()
+export const invKeys: readonly Key[] = allKeys.slice(0).reverse()
 
 export function opposite(color: Color) {
   return color === 'white' ? 'black' : 'white'

@@ -21,11 +21,14 @@ export function loadPage(id: string, p: number): Promise<StandingPage> {
   return fetchJSON('/tournament/' + id + '/standing/' + p)
 }
 
-export function join(id: string, password?: string): Promise<{}> {
+export function join(id: string, password?: string, team?: string): Promise<{}> {
   return fetchJSON('/tournament/' + id + '/join',
   {
     method: 'POST',
-    body: password ? JSON.stringify({p: password}) : undefined
+    body: JSON.stringify({
+      p: password || null,
+      team: team || null
+    })
   }, true)
 }
 

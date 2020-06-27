@@ -5,12 +5,14 @@ import redraw from '../../../utils/redraw'
 import { fromNow } from '../../../i18n'
 import * as utils from '../../../utils'
 import * as tournamentApi from '../../../lichess/tournament'
-import { Tournament, StandingPlayer, StandingPage } from '../../../lichess/interfaces/tournament'
+import { Tournament, StandingPlayer, StandingPage, TeamBattle, TeamColorMap } from '../../../lichess/interfaces/tournament'
 
 import * as xhr from '../tournamentXhr'
 import faq, { FaqCtrl } from '../faq'
 import playerInfo, { PlayerInfoCtrl } from './playerInfo'
+import teamInfo, { TeamInfoCtrl } from './teamInfo'
 import socketHandler from './socketHandler'
+import settings from '../../../settings'
 
 const MAX_PER_PAGE = 10
 
@@ -32,6 +34,8 @@ export default class TournamentCtrl {
 
   public faqCtrl: FaqCtrl
   public playerInfoCtrl: PlayerInfoCtrl
+  public teamInfoCtrl: TeamInfoCtrl
+  public teamColorMap: TeamColorMap
 
   private pagesCache: PagesCache = {}
 
@@ -42,6 +46,7 @@ export default class TournamentCtrl {
 
     this.faqCtrl = faq.controller(this)
     this.playerInfoCtrl = playerInfo.controller(this)
+    this.teamInfoCtrl = teamInfo.controller(this)
 
     this.tournament = data
     this.startsAt = fromNow(new Date(data.startsAt))
@@ -62,11 +67,13 @@ export default class TournamentCtrl {
       if (state.isActive) this.reload()
     })
 
+    this.teamColorMap = data.teamBattle ? this.createTeamColorMap (data.teamBattle) : {}
+
     redraw()
   }
 
-  join = throttle((password?: string) => {
-    xhr.join(this.tournament.id, password)
+  join = throttle((password?: string, team?: string) => {
+    xhr.join(this.tournament.id, password, team)
     .then(() => {
       this.hasJoined = true
       this.focusOnMe = true
@@ -194,6 +201,19 @@ export default class TournamentCtrl {
     if (data.socketVersion) {
       socket.setVersion(data.socketVersion)
     }
+
+    this.teamColorMap = data.teamBattle ? this.createTeamColorMap (data.teamBattle) : {}
+
+    const tb = data.teamBattle
+    if (tb && !tb.joinWith.includes(settings.tournament.join.lastTeam())) {
+      if (tb.joinWith.length > 0)
+        settings.tournament.join.lastTeam(tb.joinWith[0])
+    }
+
     redraw()
+  }
+
+  private createTeamColorMap (tb: TeamBattle) {
+    return Object.keys(tb.teams).reduce((acc, team, i) => ({ ...acc, [team]: i }), {} as TeamColorMap)
   }
 }

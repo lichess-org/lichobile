@@ -4,32 +4,28 @@
 
   grid-template-areas:
     'infos'\
+    'podium'\
+    'teamLeaderboard'\
     'leaderboard'\
     'games'\
     '.'
-  grid-gap: 2vmin
 
   @media only screen and (min-width 800px)
     grid-template-columns: repeat(2, 1fr)
-    grid-template-rows: auto repeat(3, fit-content(0))
+    grid-template-rows: auto repeat(4, fit-content(0))
     grid-template-areas:
       'infos infos'\
+      'podium podium'\
       'leaderboard games'\
       'leaderboard .';
 
-  &.finished
-    grid-template-areas:
-      'infos'\
-      'podium'\
-      'leaderboard'\
-      'games'\
-      '.'
+  &.teamBattle
     @media only screen and (min-width 800px)
       grid-template-areas:
         'infos infos'\
         'podium podium'\
-        'leaderboard games'\
-        'leaderboard .';
+        'teamLeaderboard leaderboard'\
+        'games .';
 
 .header-subTitle.tournament-subtTitle
   font-size 1em
@@ -117,19 +113,26 @@
   &:before
     content: ''
 
-.tournament-list-player
+.tournament-list-item
   position initial
   display flex
   flex-flow row nowrap
   justify-content space-between
   > .tournamentPoints
-    flex 0 0 20%
+    flex 0 0 0
     text-align right
-  > .tournamentPlayer
+    padding-left 5px
+  > .tournamentIdentity
     flex-grow 1
     text-overflow: ellipsis
     white-space: nowrap
     overflow hidden
+    display inherit
+    > .playerName
+      display inline-block
+      padding-right 5px
+    > .playerTeam
+      font-size 0.6em
 
 .list_item.tournament-me
   > .tournamentPlayer
@@ -148,8 +151,9 @@
 .tournamentHeader
   grid-area infos
   padding 10px 10px 0px 10px
+  min-width 0
 
-.tournamentConditions, .tournamentCreatorInfo, .tournamentPositionInfo, .tournamentTimeInfo, .tournamentSpotlightInfo
+.tournamentConditions, .tournamentCreatorInfo, .tournamentPositionInfo, .tournamentTimeInfo, .tournamentSpotlightInfo, .tournamentNoTeam
   margin-bottom 0.4em
   padding-bottom 0.4em
 
@@ -177,8 +181,16 @@
   &.anonymous
     color inherit
 
-.tournamentCreatorInfo, .tournamentPositionInfo, .tournamentConditions
+.tournamentCreatorInfo, .tournamentPositionInfo, .tournamentConditions, .tournamentNoTeam
   font-size 0.9em
+
+.tournamentNoTeam
+  display flex
+  color red
+  > .withIcon
+    align-self center
+    font-size 16px
+    line-height 1em
 
 .tournamentNotFound
   padding 1em
@@ -278,6 +290,44 @@
   display flex
   flex-flow column nowrap
   padding 0 10px
+  min-width 0
+
+.tournamentTeamLeaderboard
+  grid-area teamLeaderboard
+  display flex
+  flex-flow column nowrap
+  padding 0 10px
+  min-width 0
+
+.ttc-0
+  color: hsl(274, 100%, 59%)
+
+.ttc-1
+  color: hsl(240, 100%, 67%)
+
+.ttc-2
+  color: #008000
+
+.ttc-3
+  color: #b22222
+
+.ttc-4
+  color: hsl(16, 80%, 62%)
+
+.ttc-5
+  color: #9acd32
+
+.ttc-6
+  color: #ff4500
+
+.ttc-7
+  color: #2e8b57
+
+.ttc-8
+  color: #daa520
+
+.ttc-9
+  color: hsl(32, 75%, 47%)
 
 .tournamentGames
   grid-area games
@@ -302,7 +352,7 @@
   .streak
     color: #759900;
 
-.playerStats
+.tournamentModalStats
   font-size 1em
   margin 0 auto
   border-spacing 10px 0px
@@ -310,28 +360,29 @@
   > .invisible
     display none
 
-.playerGames
-  width 100%
-  >.list_item
-    >td
-      vertical-align  middle
-
-#tournamentPlayerInfoModal
+.tournamentInfoModal
   > header
     box-sizing content-box
-    > .playerModalHeader
+    > .tournamentModalHeader
       padding-left 40px
       padding-right 40px
       overflow hidden
       white-space nowrap
       text-overflow ellipsis
-  .playerGames
+  .tournamentModalTable
+    width 100%
+    >.list_item
+      >td
+        vertical-align  middle
     td
       overflow hidden
       text-overflow ellipsis
       white-space nowrap
   .oppName
     max-width 160px
+  .teamPlayerScore
+    width 20%
+    text-align center
 
 .tournamentPlayerInfo
   padding 5px
@@ -350,14 +401,16 @@
         padding-left 100px
       &.no-margin
         margin-right 0px
-      &.notVisible
-        visibility hidden
-        position absolute
       .textField
         width 60%
     >.tournament_name_warning
       font-size .75em
       margin-top 5px
+
+.tournamentForm
+  .notVisible
+    visibility hidden
+    position absolute
 
 .tournament_form_popup
   >.popup_content

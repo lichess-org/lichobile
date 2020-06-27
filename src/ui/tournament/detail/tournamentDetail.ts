@@ -10,8 +10,8 @@ import * as helper from '../../helper'
 import layout from '../../layout'
 
 import * as xhr from '../tournamentXhr'
-import { tournamentBody, renderPlayerInfoOverlay, renderFAQOverlay, renderFooter, timeInfo } from './tournamentView'
-import passwordForm from './passwordForm'
+import { tournamentBody, renderPlayerInfoOverlay, renderTeamInfoOverlay, renderFAQOverlay, renderFooter, timeInfo } from './tournamentView'
+import joinForm from './joinForm'
 import TournamentCtrl from './TournamentCtrl'
 
 interface Attrs {
@@ -84,10 +84,12 @@ export default {
     const footer = renderFooter(this.ctrl)
     const faqOverlay = renderFAQOverlay(this.ctrl)
     const playerInfoOverlay = renderPlayerInfoOverlay(this.ctrl)
+    const teamInfoOverlay = renderTeamInfoOverlay(this.ctrl)
     const overlay = [
       faqOverlay,
       playerInfoOverlay,
-      passwordForm.view()
+      teamInfoOverlay,
+      joinForm.view()
     ]
 
     return layout.free(header, body, footer, overlay)

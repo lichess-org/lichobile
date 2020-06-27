@@ -1,9 +1,10 @@
 import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
+import m from 'mithril'
 import router from '../../../router'
 import session from '../../../session'
 import i18n from '../../../i18n'
-import { Tournament, StandingPlayer, PodiumPlace, Spotlight, Verdicts } from '../../../lichess/interfaces/tournament'
+import { Tournament, StandingPlayer, PodiumPlace, Spotlight, Verdicts, TeamStanding } from '../../../lichess/interfaces/tournament'
 import { Opening } from '../../../lichess/interfaces/game'
 import { formatTournamentDuration, formatTournamentTimeControl } from '../../../utils'
 import * as helper from '../../helper'
@@ -13,7 +14,8 @@ import CountdownTimer from '../../shared/CountdownTimer'
 
 import faq from '../faq'
 import playerInfo from './playerInfo'
-import passwordForm from './passwordForm'
+import teamInfo from './teamInfo'
+import joinForm from './joinForm'
 import TournamentCtrl from './TournamentCtrl'
 
 export function renderFAQOverlay(ctrl: TournamentCtrl) {
@@ -28,15 +30,22 @@ export function renderPlayerInfoOverlay(ctrl: TournamentCtrl) {
   ]
 }
 
+export function renderTeamInfoOverlay(ctrl: TournamentCtrl) {
+  return [
+    teamInfo.view(ctrl.teamInfoCtrl)
+  ]
+}
+
 export function tournamentBody(ctrl: TournamentCtrl) {
   const data = ctrl.tournament
   if (!data) return null
 
   return h('div.tournamentContainer.native_scroller.page', {
-    className: data.podium ? 'finished' : '',
+    className: (data.podium ? 'finished ' : '') + (data.teamBattle ? 'teamBattle' : ''),
   }, [
     tournamentHeader(data, ctrl),
-    data.podium ? tournamentPodium(data.podium) : null,
+    data.podium && !data.teamBattle ? tournamentPodium(data.podium) : null,
+    data.teamBattle ? tournamentTeamLeaderboard(ctrl) : null,
     tournamentLeaderboard(ctrl),
     data.featured ? tournamentFeaturedGame(ctrl) : null
   ])
@@ -49,11 +58,11 @@ export function renderFooter(ctrl: TournamentCtrl) {
 
   return (
     <div className="actions_bar">
-      <button className="action_bar_button" oncreate={helper.ontap(ctrl.faqCtrl.open)}>
+      <button key="faqButton" className="action_bar_button" oncreate={helper.ontap(ctrl.faqCtrl.open)}>
         <span className="fa fa-question-circle" />
         FAQ
       </button>
-      <button className="action_bar_button" oncreate={helper.ontap(() => Plugins.LiShare.share({ url: tUrl }))}>
+      <button key="shareButton" className="action_bar_button" oncreate={helper.ontap(() => Plugins.LiShare.share({ url: tUrl }))}>
         <span className="fa fa-share-alt" />
         Share
       </button>
@@ -79,6 +88,7 @@ function tournamentHeader(data: Tournament, ctrl: TournamentCtrl) {
       {tournamentCreatorInfo(data, ctrl.startsAt!)}
       {data.position ? tournamentPositionInfo(data.position) : null}
       {data.verdicts.list.length > 0 ? tournamentConditions(data.verdicts) : null}
+      {teamBattleNoTeam(data)}
    </div>
   )
 }
@@ -99,7 +109,7 @@ function tournamentCreatorInfo(data: Tournament, startsAt: string) {
   return (
     <div className="tournamentCreatorInfo">
       {data.createdBy === 'lichess' ? i18n('tournamentOfficial') : i18n('by', data.createdBy)}
-      &nbsp;•&nbsp;{startsAt}
+      &thinsp;•&thinsp;{startsAt}
     </div>
   )
 }
@@ -138,6 +148,22 @@ function tournamentConditions(verdicts: Verdicts) {
   )
 }
 
+function teamBattleNoTeam(t: Tournament) {
+  if (t.isFinished || !t.teamBattle || t.teamBattle.joinWith.length > 0) {
+    return null
+  }
+  else {
+    return (
+      <div className="tournamentNoTeam">
+        <span className="withIcon" data-icon="7" />
+        <p>
+          You must join one of these teams to participate!
+        </p>
+      </div>
+    )
+  }
+}
+
 function tournamentSpotlightInfo(spotlight: Spotlight) {
   return (
     <div className="tournamentSpotlightInfo">
@@ -150,16 +176,16 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
   if (!session.isConnected() ||
     t.isFinished ||
     settings.game.supportedVariants.indexOf(t.variant) < 0 ||
-    !t.verdicts.accepted) {
-    return null
+    !t.verdicts.accepted ||
+    (t.teamBattle && t.teamBattle.joinWith.length === 0)) {
+    return m.fragment({key: 'noJoinButton'}, [])
   }
-
-  const action = ctrl.tournament.private ?
-    () => passwordForm.open(ctrl) :
+  const action = (t.private || t.teamBattle) ?
+    () => joinForm.open(ctrl) :
     () => ctrl.join()
 
   return (
-    <button className="action_bar_button" oncreate={helper.ontap(action)}>
+    <button key="joinButton" className="action_bar_button" oncreate={helper.ontap(action)}>
       <span className="fa fa-play" />
       {i18n('join')}
     </button>
@@ -168,10 +194,10 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
 
 function withdrawButton(ctrl: TournamentCtrl, t: Tournament) {
   if (t.isFinished || settings.game.supportedVariants.indexOf(t.variant) < 0) {
-    return null
+    return m.fragment({key: 'noWithdrawButton'}, [])
   }
   return (
-    <button className="action_bar_button" oncreate={helper.ontap(ctrl.withdraw)}>
+    <button key="withdrawButton" className="action_bar_button" oncreate={helper.ontap(ctrl.withdraw)}>
       <span className="fa fa-flag" />
       {i18n('withdraw')}
     </button>
@@ -201,6 +227,7 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
   const forwardEnabled = page < data.nbPlayers / 10
   const user = session.get()
   const userName = user ? user.username : ''
+  const tb = data.teamBattle
 
   return (
     <div className="tournamentLeaderboard">
@@ -209,7 +236,7 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
         className={'tournamentStandings box' + (ctrl.isLoadingPage ? ' loading' : '')}
         oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e!), undefined, undefined, getLeaderboardItemEl)}
       >
-        {players.map((p, i) => renderPlayerEntry(userName, p, i))}
+        {players.map((p, i) => renderPlayerEntry(userName, p, i, p.team ? ctrl.teamColorMap[p.team] : 0, p.team && tb ? tb.teams[p.team] : ''))}
       </ul>
       <div className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
         {renderNavButton('W', !ctrl.isLoadingPage && backEnabled, ctrl.first)}
@@ -238,18 +265,21 @@ function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
   })
 }
 
-function renderPlayerEntry(userName: string, player: StandingPlayer, i: number) {
+function renderPlayerEntry(userName: string, player: StandingPlayer, i: number, teamColor?: number, teamName?: string) {
   const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
   const isMe = player.name === userName
+  const ttc = teamColor ? teamColor : 0
+
   return (
-    <li key={player.name} data-player={player.name} className={`list_item tournament-list-player ${evenOrOdd}` + (isMe ? ' tournament-me' : '')} >
-      <div className="tournamentPlayer">
-        <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '. ')} </span>
-        <span> {player.name + ' (' + player.rating + ') '} </span>
+    <li key={player.name} data-player={player.name} className={`list_item tournament-list-item ${evenOrOdd}` + (isMe ? ' tournament-me' : '')} >
+      <div className="tournamentIdentity">
+        <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '.')} &thinsp; </span>
+        <span className="playerName"> {player.name + ' (' + player.rating + ')'}</span>
+        <span className={'playerTeam ttc-' + ttc}> {teamName ? teamName : '' } </span>
       </div>
-      <span className={'tournamentPoints ' + (player.sheet.fire ? 'on-fire' : 'off-fire')} data-icon="Q">
+      <div className={'tournamentPoints ' + (player.sheet.fire ? 'on-fire' : 'off-fire')} data-icon="Q">
         {player.score}
-      </span>
+      </div>
     </li>
   )
 }
@@ -333,4 +363,54 @@ function renderPlace(data: PodiumPlace) {
       </table>
     </div>
   )
+}
+
+function tournamentTeamLeaderboard(ctrl: TournamentCtrl) {
+  const t = ctrl.tournament
+  const tb = t.teamBattle
+  const standings = t.teamStanding
+  if (!tb || !standings)
+    return null
+
+  return (
+    <div className="tournamentTeamLeaderboard">
+      <ul
+        className={'tournamentTeamStandings box'}
+        oncreate={helper.ontap(e => handleTeamInfoTap(ctrl, e!), undefined, undefined, getTeamLeaderboardItemEl)}
+      >
+        {standings.map((team, i) => renderTeamEntry(tb.teams[team.id], ctrl.teamColorMap[team.id], team, i))}
+      </ul>
+    </div>
+  )
+}
+
+function renderTeamEntry(teamName: string | undefined, teamColor: number | undefined, team: TeamStanding, i: number) {
+  if (!teamName)
+    return null
+  const ttc = teamColor ? teamColor : 0
+  const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
+  return (
+    <li key={team.id} data-team={team.id} className={`list_item tournament-list-item ${evenOrOdd}`} >
+      <div className="tournamentIdentity">
+        <span> {team.rank + '.'} &thinsp; </span>
+        <span className={'ttc-' + ttc}> {teamName} </span>
+      </div>
+      <div className={'tournamentPoints'}>
+        {team.score}
+      </div>
+    </li>
+  )
+}
+
+function getTeamLeaderboardItemEl(e: Event) {
+  const target = e.target as HTMLElement
+  return (target as HTMLElement).classList.contains('list_item') ? target :
+    helper.findParentBySelector(target, '.list_item')
+}
+
+function handleTeamInfoTap(ctrl: TournamentCtrl, e: Event) {
+  const el = getTeamLeaderboardItemEl(e)
+  const teamId = el.dataset['team']
+
+  if (teamId) ctrl.teamInfoCtrl.open(teamId)
 }

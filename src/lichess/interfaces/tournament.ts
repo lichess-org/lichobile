@@ -27,6 +27,8 @@ export interface Tournament {
   readonly standing: StandingPage
   readonly startsAt: string
   readonly system: string
+  readonly teamBattle?: TeamBattle
+  readonly teamStanding?: ReadonlyArray<TeamStanding>
   readonly variant: VariantKey
   readonly verdicts: Verdicts
 }
@@ -93,6 +95,7 @@ export interface StandingPlayer {
   readonly ratingDiff: number
   readonly score: number
   readonly sheet: Sheet
+  readonly team?: string
   readonly withdraw?: boolean
 }
 
@@ -193,4 +196,33 @@ interface Conditions {
 
 export interface TournamentCreateResponse {
   readonly id: string
+}
+
+export interface TeamBattle {
+  joinWith: ReadonlyArray<string>
+  teams: {
+    [teamKey: string]: string | undefined
+  }
+}
+
+export interface TeamStanding {
+  id: string
+  players: ReadonlyArray<TeamStandingPlayer>
+  rank: number
+  score: number
+}
+
+export interface TeamStandingPlayer {
+  score: number
+  user: TeamStandingPlayerUser
+}
+
+interface TeamStandingPlayerUser {
+  id: string
+  name: string
+  patron?: boolean
+}
+
+export interface TeamColorMap {
+  [teamKey: string]: number | undefined
 }

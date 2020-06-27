@@ -39,7 +39,7 @@ function close(fromBB?: string) {
 
 function renderForm(ctrl: TournamentsListCtrl) {
   return (
-    <form id="tournamentCreateForm"
+    <form id="tournamentCreateForm" class="tournamentForm"
     onsubmit={(e: Event) => {
       e.preventDefault()
       return create(e.target as HTMLFormElement)

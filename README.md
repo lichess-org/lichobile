@@ -41,8 +41,6 @@ Update capacitor:
 
 ## Run in a browser
 
-You need to start a web server at `http://localhost:8080`. For instance:
-
     $ npm run serve
 
 Will serve assets at `http://localhost:8080`.

@@ -112,7 +112,7 @@ export interface SetPremoveMetadata {
 
 export interface Exploding {
   stage: number
-  keys: Key[]
+  keys: readonly Key[]
 }
 
 export interface Drop {

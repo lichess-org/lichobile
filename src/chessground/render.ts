@@ -257,30 +257,43 @@ function addSquare(squares: Map<Key, string>, key: Key, klass: string) {
 
 function computeSquareClasses(d: State): Map<Key, string> {
   const squares = new Map()
-  if (d.lastMove && d.highlight.lastMove) d.lastMove.forEach((k) => {
-    if (k) addSquare(squares, k, 'last-move')
-  })
+  if (d.lastMove && d.highlight.lastMove) {
+    addSquare(squares, d.lastMove[0], 'last-move')
+    addSquare(squares, d.lastMove[1], 'last-move')
+  }
 
   if (d.check && d.highlight.check) addSquare(squares, d.check, 'check')
   if (d.selected) {
     addSquare(squares, d.selected, 'selected')
-    const dests = d.movable.dests && d.movable.dests[d.selected]
-    if (dests) dests.forEach((k) => {
-      if (d.movable.showDests) addSquare(squares, k, 'move-dest' + (d.pieces.has(k) ? ' occupied' : ''))
-    })
-    const pDests = d.premovable.dests
-    if (pDests) pDests.forEach((k) => {
-      if (d.movable.showDests) addSquare(squares, k, 'premove-dest' + (d.pieces.has(k) ? ' occupied' : ''))
-    })
+    if (d.movable.showDests) {
+      const dests = d.movable.dests && d.movable.dests[d.selected]
+      if (dests) {
+        for (let i = 0, len = dests.length; i < len; i++) {
+          const k = dests[i]
+          addSquare(squares, k, 'move-dest' + (d.pieces.has(k) ? ' occupied' : ''))
+        }
+      }
+      const pDests = d.premovable.dests
+      if (pDests) {
+        for (let j = 0, len = pDests.length; j < len; j++) {
+          const k = pDests[j]
+          addSquare(squares, k, 'premove-dest' + (d.pieces.has(k) ? ' occupied' : ''))
+        }
+      }
+    }
   }
   const premove = d.premovable.current
-  if (premove) premove.forEach((k) => {
-    addSquare(squares, k, 'current-premove')
-  })
+  if (premove) {
+    addSquare(squares, premove[0], 'current-premove')
+    addSquare(squares, premove[1], 'current-premove')
+  }
 
-  if (d.exploding) d.exploding.keys.forEach((k) => {
-    addSquare(squares, k, 'exploding' + d.exploding!.stage)
-  })
+  if (d.exploding) {
+    for (const k of d.exploding.keys) {
+      addSquare(squares, k, 'exploding' + d.exploding!.stage)
+    }
+  }
+
   return squares
 }
 

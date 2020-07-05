@@ -39,7 +39,7 @@ declare type Fen = string
 declare type Ply = number
 
 declare type DestsMap = {
-  [index: string]: Key[] | undefined
+  [index: string]: readonly Key[] | undefined
 }
 
 interface LichessOptions {

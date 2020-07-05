@@ -31,9 +31,9 @@ export function renderBody(ctrl: State) {
   const mins = Math.floor(data.stat.count.seconds / 60) - days * 24 * 60 - hours * 60
   const now = Date.now()
   const yearsAgo = now - (ONE_YEAR * 3)
-  const graphData = data.graph
+  const graphData = smoothGraphData(data.graph
     .map(normalizeGraphData)
-    .filter(d => d.date.getTime() > yearsAgo)
+    .filter(d => d.date.getTime() > yearsAgo))
 
   const { vw } = helper.viewportDim()
 
@@ -258,6 +258,23 @@ function drawChart(graphData: GraphData, el: SVGElement) {
 
 function normalizeGraphData(i: GraphPoint): DateRating {
   return { date: new Date(i[0], i[1], i[2]), rating: i[3] }
+}
+
+function smoothGraphData(graphData: GraphData): GraphData {
+  const copy = graphData.slice()
+  const reversed = graphData.slice().reverse()
+  const startDate = copy[0].date
+  const endDate = copy[copy.length-1].date
+
+  for (var allDates: Array<Date> = [], dt=new Date(startDate); dt<=endDate; dt.setDate(dt.getDate()+1)) {
+        allDates.push(new Date(dt))
+  }
+  const result: Array<DateRating> = []
+  allDates.forEach((dt) => {
+    const match = reversed.find((rev) => rev.date <= dt)
+    match && result.push({date: dt, rating: match.rating})
+  })
+  return result
 }
 
 const formatWeek = timeFormat('%b %d')

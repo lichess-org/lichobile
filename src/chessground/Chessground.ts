@@ -96,12 +96,11 @@ export default class Chessground {
       this.redrawSync()
     } else {
       const ease = util.easeInOutCubic(rest)
-      const anims = cur.plan.anims
-      const animsK = Object.keys(anims)
-      for (let i = 0, len = animsK.length; i < len; i++) {
-        const key = animsK[i]
-        const cfg = anims[key]
-        cfg[1] = [util.roundBy(cfg[0][0] * ease, 10), util.roundBy(cfg[0][1] * ease, 10)]
+      for (const vector of cur.plan.anims.values()) {
+        vector[1] = [
+          util.roundBy(vector[0][0] * ease, 10),
+          util.roundBy(vector[0][1] * ease, 10)
+        ]
       }
       this.redrawSync()
       batchRequestAnimationFrame(this.applyAnim)

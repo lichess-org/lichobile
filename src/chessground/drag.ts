@@ -241,7 +241,7 @@ function processDrag(ctrl: Chessground) {
       }
 
       // cancel animations while dragging
-      if (state.animation.current && state.animation.current.plan.anims[cur.orig]) {
+      if (state.animation.current && state.animation.current.plan.anims.get(cur.orig)) {
         state.animation.current = null
       }
 

@@ -10,14 +10,8 @@ export interface AnimVector {
   0: NumberPair // animation goal
   1: NumberPair // animation current status
 }
-
-export interface AnimVectors {
-  [key: string]: AnimVector
-}
-
-export interface AnimCaptured {
-  [key: string]: Piece
-}
+type AnimVectors = Map<Key, AnimVector>
+type AnimCaptured = Map<Key, Piece>
 
 export interface AnimPlan {
   anims: AnimVectors
@@ -36,9 +30,7 @@ interface AnimPiece {
   piece: Piece
 }
 
-interface AnimPieces {
-  [key: string]: AnimPiece
-}
+type AnimPieces = Map<Key, AnimPiece>
 
 export function anim<A>(mutation: Mutation<A>, ctrl: Chessground): A {
   return ctrl.state.animation.enabled ? animate(mutation, ctrl) : skip(mutation, ctrl)
@@ -72,22 +64,22 @@ function computePlan(prevPieces: cg.Pieces, state: State, dom: cg.DOM): AnimPlan
   const bounds = dom.bounds,
     width = bounds.width / 8,
     height = bounds.height / 8,
-    anims: AnimVectors = {},
+    anims: AnimVectors = new Map(),
     animedOrigs: Key[] = [],
-    capturedPieces: AnimCaptured = {},
+    capturedPieces: AnimCaptured = new Map(),
     missings: AnimPiece[] = [],
     news: AnimPiece[] = [],
-    prePieces: AnimPieces = {},
+    prePieces: AnimPieces = new Map(),
     white = state.orientation === 'white'
 
   for (const [k, p] of prevPieces) {
-    prePieces[k] = makePiece(k, p)
+    prePieces.set(k, makePiece(k, p))
   }
 
   for (let i = 0, ilen = util.allKeys.length; i < ilen; i++) {
     const key = util.allKeys[i]
     const curP = state.pieces.get(key)
-    const preP = prePieces[key]
+    const preP = prePieces.get(key)
     if (curP) {
       if (preP) {
         if (!samePiece(curP, preP.piece)) {
@@ -109,15 +101,15 @@ function computePlan(prevPieces: cg.Pieces, state: State, dom: cg.DOM): AnimPlan
       const orig = white ? nPreP.pos : newP.pos
       const dest = white ? newP.pos : nPreP.pos
       const pos: NumberPair = [(orig[0] - dest[0]) * width, (dest[1] - orig[1]) * height]
-      anims[newP.key] = [pos, pos]
+      anims.set(newP.key, [pos, pos])
       animedOrigs.push(nPreP.key)
     }
   })
-  missings.forEach((p) => {
+  for (const p of missings) {
     if (!util.containsX(animedOrigs, p.key)) {
-      capturedPieces[p.key] = p.piece
+      capturedPieces.set(p.key, p.piece)
     }
-  })
+  }
 
   return {
     anims,
@@ -131,9 +123,7 @@ function animate<A>(mutation: Mutation<A>, ctrl: Chessground): A {
   const result = mutation(state)
   const plan = ctrl.dom !== undefined ?
     computePlan(prevPieces, state, ctrl.dom) : undefined
-  if (plan !== undefined &&
-    (Object.keys(plan.anims).length > 0 || Object.keys(plan.captured).length > 0)
-  ) {
+  if (plan !== undefined && (plan.anims.size > 0 || plan.captured.size > 0)) {
     const alreadyRunning = state.animation.current && state.animation.current.start !== null
     state.animation.current = {
       start: null,

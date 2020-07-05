@@ -57,8 +57,8 @@ export function renderBoard(d: State, dom: cg.DOM) {
     let k = el.cgKey
     pieceAtKey = pieces.get(k)
     squareClassAtKey = squares.get(k)
-    anim = anims && anims[k]
-    captured = capturedPieces && capturedPieces[k]
+    anim = anims && anims.get(k)
+    captured = capturedPieces && capturedPieces.get(k)
     if (isPieceNode(el)) {
       // if piece not being dragged anymore, remove dragging style
       if (el.cgDragging && (!d.draggable.current || d.draggable.current.orig !== k)) {
@@ -149,7 +149,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
   // pieces or append new pieces
   for (const [k, p] of pieces) {
     const pieceClass = p.role + p.color
-    anim = anims && anims[k]
+    anim = anims && anims.get(k)
     if (!samePieces.has(k)) {
       mvdset = movedPieces.get(pieceClass)
       mvd = mvdset && mvdset.pop()

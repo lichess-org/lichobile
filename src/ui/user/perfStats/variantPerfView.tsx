@@ -264,16 +264,19 @@ function smoothGraphData(graphData: GraphData): GraphData {
   const copy = graphData.slice()
   const reversed = graphData.slice().reverse()
   const startDate = copy[0].date
-  const endDate = copy[copy.length-1].date
+  const endDate = copy[copy.length - 1].date
 
-  for (var allDates: Array<Date> = [], dt=new Date(startDate); dt<=endDate; dt.setDate(dt.getDate()+1)) {
+  const allDates: Array<Date> = []
+  for (let dt = new Date(startDate); dt <= endDate; dt.setDate(dt.getDate() + 1)) {
         allDates.push(new Date(dt))
   }
+
   const result: Array<DateRating> = []
   allDates.forEach((dt) => {
     const match = reversed.find((rev) => rev.date <= dt)
     match && result.push({date: dt, rating: match.rating})
   })
+
   return result
 }
 

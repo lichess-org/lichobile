@@ -32,7 +32,7 @@ export function dragNewPiece(ctrl: Chessground, piece: Piece, e: TouchEvent, for
   const s = ctrl.state
   const dom = ctrl.dom!
 
-  s.pieces[key] = piece
+  s.pieces.set(key, piece)
 
   // we need the new piece to be in DOM immediately
   ctrl.redrawSync()
@@ -89,13 +89,14 @@ export function start(ctrl: Chessground, e: TouchEvent) {
     board.selectSquare(state, orig)
   }
   const stillSelected = state.selected === orig
-  if (state.pieces[orig] && stillSelected && board.isDraggable(state, orig)) {
+  const origPiece = state.pieces.get(orig)
+  if (origPiece && stillSelected && board.isDraggable(state, orig)) {
     const squareBounds = util.computeSquareBounds(state.orientation, bounds, orig)
     const origPos = util.key2pos(orig)
     state.draggable.current = {
       previouslySelected,
       orig,
-      piece: state.pieces[orig],
+      piece: origPiece,
       rel: position,
       epos: position,
       pos: [0, 0],
@@ -176,12 +177,12 @@ export function end(ctrl: Chessground, e: TouchEvent) {
   }
   // board editor mode: delete any piece dropped off the board
   else if (cur.started && draggable.deleteOnDropOff) {
-    delete state.pieces[cur.orig]
+    state.pieces.delete(cur.orig)
     setTimeout(state.events.change || util.noop, 0)
   }
   // crazy invalid drop (no dest): delete the piece
   else if (cur.newPiece) {
-    delete state.pieces[cur.orig]
+    state.pieces.delete(cur.orig)
   }
 
   if (cur && cur.orig === cur.previouslySelected && (cur.orig === dest || !dest)) {
@@ -234,7 +235,7 @@ function processDrag(ctrl: Chessground) {
     cur.scheduledAnimationFrame = false
     if (cur.orig) {
       // if moving piece is gone, cancel
-      if (state.pieces[cur.orig] !== cur.piece) {
+      if (state.pieces.get(cur.orig) !== cur.piece) {
         cancel(ctrl)
         return
       }

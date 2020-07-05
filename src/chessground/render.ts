@@ -39,7 +39,6 @@ export function renderBoard(d: State, dom: cg.DOM) {
   const sameSquares: Set<Key> = new Set()
   const movedPieces: Map<string, cg.PieceNode[]> = new Map()
   const movedSquares: Map<string, cg.SquareNode[]> = new Map()
-  const piecesKeys = Object.keys(pieces) as Array<Key>
   let squareClassAtKey, pieceAtKey, anim, captured, translate
   let mvdset, mvd
 
@@ -56,7 +55,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
   let el = dom.board.firstChild as cg.KeyedNode
   while (el) {
     let k = el.cgKey
-    pieceAtKey = pieces[k]
+    pieceAtKey = pieces.get(k)
     squareClassAtKey = squares.get(k)
     anim = anims && anims[k]
     captured = capturedPieces && capturedPieces[k]
@@ -126,7 +125,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
 
   // walk over all squares in current state object, apply dom changes to moved
   // squares or append new squares
-  squares.forEach((squareClass: string, k: Key) => {
+  for (const [k, squareClass] of squares) {
     if (!sameSquares.has(k)) {
       mvdset = movedSquares.get(squareClass)
       mvd = mvdset && mvdset.pop()
@@ -144,13 +143,11 @@ export function renderBoard(d: State, dom: cg.DOM) {
         boardElement.insertBefore(se, boardElement.firstChild)
       }
     }
-  })
+  }
 
   // walk over all pieces in current state object, apply dom changes to moved
   // pieces or append new pieces
-  for (let j = 0, jlen = piecesKeys.length; j < jlen; j++) {
-    let k = piecesKeys[j] as Key
-    let p = pieces[k]
+  for (const [k, p] of pieces) {
     const pieceClass = p.role + p.color
     anim = anims && anims[k]
     if (!samePieces.has(k)) {
@@ -269,11 +266,11 @@ function computeSquareClasses(d: State): Map<Key, string> {
     addSquare(squares, d.selected, 'selected')
     const dests = d.movable.dests && d.movable.dests[d.selected]
     if (dests) dests.forEach((k) => {
-      if (d.movable.showDests) addSquare(squares, k, 'move-dest' + (d.pieces[k] ? ' occupied' : ''))
+      if (d.movable.showDests) addSquare(squares, k, 'move-dest' + (d.pieces.has(k) ? ' occupied' : ''))
     })
     const pDests = d.premovable.dests
     if (pDests) pDests.forEach((k) => {
-      if (d.movable.showDests) addSquare(squares, k, 'premove-dest' + (d.pieces[k] ? ' occupied' : ''))
+      if (d.movable.showDests) addSquare(squares, k, 'premove-dest' + (d.pieces.has(k) ? ' occupied' : ''))
     })
   }
   const premove = d.premovable.current

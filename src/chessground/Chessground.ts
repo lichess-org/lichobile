@@ -134,9 +134,7 @@ export default class Chessground {
       knight: 0,
       pawn: 0
     }
-    const piecesKeys = Object.keys(this.state.pieces)
-    for (let i = 0; i < piecesKeys.length; i++) {
-      const p = this.state.pieces[piecesKeys[i]]
+    for (const p of this.state.pieces.values()) {
       counts[p.role] += (p.color === 'white') ? 1 : -1
       score += pieceScores[p.role] * (p.color === 'white' ? 1 : -1)
     }
@@ -172,6 +170,18 @@ export default class Chessground {
 
   setPieces(pieces: cg.PiecesDiff): void {
     anim(state => board.setPieces(state, pieces), this)
+  }
+
+  promote(key: Key, role: Role): void {
+    const diff: cg.PiecesDiff = new Map()
+    const piece = this.state.pieces.get(key)
+    if (piece && piece.role === 'pawn') {
+      diff.set(key, {
+        color: piece.color,
+        role: role
+      })
+      this.setPieces(diff)
+    }
   }
 
   dragNewPiece(e: TouchEvent, piece: Piece, force = false): void {

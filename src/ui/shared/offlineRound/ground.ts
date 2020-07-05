@@ -80,18 +80,6 @@ function changeOTBMode(ground: Chessground, flip: boolean) {
   ground.setOtbMode(flip ? 'flip' : 'facing')
 }
 
-function promote(ground: Chessground, key: Key, role: Role) {
-  const pieces: {[k: string]: Piece } = {}
-  const piece = ground.state.pieces[key]
-  if (piece && piece.role === 'pawn') {
-    pieces[key] = {
-      color: piece.color,
-      role: role
-    }
-    ground.setPieces(pieces)
-  }
-}
-
 function end(ground: Chessground) {
   ground.stop()
 }
@@ -99,7 +87,6 @@ function end(ground: Chessground) {
 export default {
   make,
   reload,
-  promote,
   end,
   changeOTBMode
 }

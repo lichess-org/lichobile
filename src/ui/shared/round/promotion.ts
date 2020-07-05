@@ -2,13 +2,12 @@ import h from 'mithril/hyperscript'
 import redraw from '../../../utils/redraw'
 import settings from '../../../settings'
 import * as helper from '../../helper'
-import ground from './ground'
 import { OnlineRoundInterface } from '.'
 
 let promoting: KeyPair | null = null
 
 function start(ctrl: OnlineRoundInterface, orig: Key, dest: Key, isPremove: boolean) {
-  const piece = ctrl.chessground.state.pieces[dest]
+  const piece = ctrl.chessground.state.pieces.get(dest)
   if (piece && piece.role === 'pawn' && (
     (dest[1] === '8' && ctrl.data.player.color === 'white') ||
     (dest[1] === '1' && ctrl.data.player.color === 'black'))) {
@@ -22,7 +21,7 @@ function start(ctrl: OnlineRoundInterface, orig: Key, dest: Key, isPremove: bool
 
 function finish(ctrl: OnlineRoundInterface, role: Role) {
   if (promoting) {
-    ground.promote(ctrl.chessground, promoting[1], role)
+    ctrl.chessground.promote(promoting[1], role)
     ctrl.sendMove(promoting[0], promoting[1], role)
   }
   promoting = null

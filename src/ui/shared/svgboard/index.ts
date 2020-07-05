@@ -6,11 +6,10 @@ type BoardPos = [number, number]
 
 export function makeBoard(fen: string, orientation: Color) {
   const pieces = cgFen.read(fen)
-  const piecesKey = Object.keys(pieces)
   let b = '<svg xmlns="http://www.w3.org/2000/svg" width="360" height="360">'
-  for (let i = 0, len = piecesKey.length; i < len; i++) {
-    let pos = pos2px(orient(key2pos(piecesKey[i] as Key), orientation))
-    b += makePiece(pos, pieces[piecesKey[i]])
+  for (const [k, p] of pieces) {
+    let pos = pos2px(orient(key2pos(k), orientation))
+    b += makePiece(pos, p)
   }
   b += '</svg>'
   return b

@@ -4,9 +4,8 @@ export type Key = 'a0' | 'a1' | 'b1' | 'c1' | 'd1' | 'e1' | 'f1' | 'g1' | 'h1' |
 
 export type Pos = [Rank, Rank]
 
-export type Pieces = {[index: string]: Piece}
-
-export type PiecesDiff = {[index: string]: Piece | null}
+export type Pieces = Map<Key, Piece>
+export type PiecesDiff = Map<Key, Piece | null>
 
 export interface InitConfig {
   fen?: string

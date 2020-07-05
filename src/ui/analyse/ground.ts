@@ -61,17 +61,4 @@ export default {
   ) {
     return new Chessground(makeConfig(data, config, orientation, onMove, onNewPiece))
   },
-
-  promote(ground: Chessground, key: Key, role: Role) {
-    const pieces: {[i: string]: Piece } = {}
-    const piece = ground.state.pieces[key]
-    if (piece && piece.role === 'pawn') {
-      pieces[key] = {
-        color: piece.color,
-        role: role
-      }
-      ground.setPieces(pieces)
-    }
-  }
-
 }

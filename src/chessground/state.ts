@@ -7,7 +7,7 @@ export interface State {
   orientation: Color // board orientation. white | black
   turnColor: Color // turn to play. white | black
   check: Key | null // square currently in check "a2"
-  lastMove: Key[] | null // squares part of the last move ["c3", "c4"]
+  lastMove: KeyPair | null // squares part of the last move ["c3", "c4"]
   selected: Key | null // square currently selected "a1"
   coordinates: boolean // include coords attributes
   symmetricCoordinates: boolean // symmetric coords for otb
@@ -43,7 +43,7 @@ export interface State {
     showDests: boolean // whether to add the premove-dest class on squares
     castle: boolean // whether to allow king castle premoves
     current: KeyPair | null // keys of the current saved premove ["e2" "e4"]
-    dests: Key[] | null // premove destinations for the current selection
+    dests: readonly Key[] | null // premove destinations for the current selection
     events: {
       set?: (orig: Key, dest: Key, metadata?: cg.SetPremoveMetadata) => void // called after the premove has been set
       unset?: () => void // called after the premove has been unset
@@ -83,7 +83,7 @@ export interface State {
 
 export function makeDefaults(): State {
   return {
-    pieces: {},
+    pieces: new Map(),
     orientation: 'white' as Color,
     turnColor: 'white' as Color,
     check: null,

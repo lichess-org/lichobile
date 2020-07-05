@@ -461,28 +461,28 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (!this.replaying()) {
       this.vm.ply++
 
-      const enpassantPieces: cg.PiecesDiff = {}
+      const enpassantPieces: cg.PiecesDiff = new Map()
       if (o.enpassant) {
         const p = o.enpassant
-        enpassantPieces[p.key] = null
+        enpassantPieces.set(p.key, null)
       }
 
-      const castlePieces: cg.PiecesDiff = {}
+      const castlePieces: cg.PiecesDiff = new Map()
       if (o.castle && !this.chessground.state.autoCastle) {
         const c = o.castle
-        castlePieces[c.king[0]] = null
-        castlePieces[c.rook[0]] = null
-        castlePieces[c.king[1]] = {
+        castlePieces.set(c.king[0], null)
+        castlePieces.set(c.rook[0], null)
+        castlePieces.set(c.king[1], {
           role: 'king',
           color: c.color
-        }
-        castlePieces[c.rook[1]] = {
+        })
+        castlePieces.set(c.rook[1], {
           role: 'rook',
           color: c.color
-        }
+        })
       }
 
-      const pieces = Object.assign({}, enpassantPieces, castlePieces)
+      const pieces: cg.PiecesDiff = new Map([...enpassantPieces, ...castlePieces])
       const newConf = {
         turnColor: d.game.player,
         dests: playing ?
@@ -509,7 +509,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       }
 
       if (o.promotion) {
-        ground.promote(this.chessground, o.promotion.key, o.promotion.pieceClass)
+        this.chessground.promote(o.promotion.key, o.promotion.pieceClass)
       }
 
       if (o.enpassant) {

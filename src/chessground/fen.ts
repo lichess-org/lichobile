@@ -27,9 +27,9 @@ const letters = {
   king: 'k'
 }
 
-export function read(fen: string): { [k: string]: Piece } {
+export function read(fen: string): cg.Pieces {
   if (fen === 'start') fen = initial
-  const pieces: { [k: string]: Piece } = {}
+  const pieces: cg.Pieces = new Map()
   let row: number = 8
   let col: number = 0
   for (let i = 0; i < fen.length; i++) {
@@ -42,7 +42,12 @@ export function read(fen: string): { [k: string]: Piece } {
         col = 0
         break
       case '~':
-        pieces[util.pos2key([col, row] as cg.Pos)].promoted = true
+        const k = util.pos2key([col, row] as cg.Pos)
+        const p = pieces.get(k)
+        if (p) {
+          p.promoted = true
+          pieces.set(k, p)
+        }
         break
       default:
         const nb = ~~c
@@ -50,10 +55,10 @@ export function read(fen: string): { [k: string]: Piece } {
         else {
           ++col
           const role = c.toLowerCase()
-          pieces[util.pos2key([col, row] as cg.Pos)] = {
+          pieces.set(util.pos2key([col, row] as cg.Pos), {
             role: roles[role],
             color: (c === role ? 'black' : 'white') as Color
-          }
+          })
         }
     }
   }
@@ -65,9 +70,9 @@ function write(pieces: cg.Pieces) {
     function(str, nb) {
       return str.replace(new RegExp(Array(nb + 1).join('1'), 'g'), String(nb))
     },
-    util.invRanks.map(function(y) {
-      return util.ranks.map(function(x) {
-        const piece = pieces[util.pos2key([x, y])]
+    util.invRanks.map((y) => {
+      return util.ranks.map((x) => {
+        const piece = pieces.get(util.pos2key([x, y]))
         if (piece) {
           const letter = letters[piece.role]
           return piece.color === 'white' ? letter.toUpperCase() : letter

@@ -73,9 +73,9 @@ export function setNewBoardState(d: State, config: cg.SetConfig): void {
 function setRookCastle(state: State): void {
   if (!state.movable.rookCastle && state.movable.dests) {
     const rank = state.movable.color === 'white' ? 1 : 8,
-    kingStartPos = 'e' + rank,
+    kingStartPos = 'e' + rank as Key,
     dests = state.movable.dests[kingStartPos],
-    king = state.pieces[kingStartPos]
+    king = state.pieces.get(kingStartPos)
 
     if (!dests || !king || king.role !== 'king') return
 

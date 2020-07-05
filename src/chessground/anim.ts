@@ -80,13 +80,13 @@ function computePlan(prevPieces: cg.Pieces, state: State, dom: cg.DOM): AnimPlan
     prePieces: AnimPieces = {},
     white = state.orientation === 'white'
 
-  for (const pk in prevPieces) {
-    prePieces[pk] = makePiece(pk as Key, prevPieces[pk])
+  for (const [k, p] of prevPieces) {
+    prePieces[k] = makePiece(k, p)
   }
 
   for (let i = 0, ilen = util.allKeys.length; i < ilen; i++) {
     const key = util.allKeys[i]
-    const curP = state.pieces[key]
+    const curP = state.pieces.get(key)
     const preP = prePieces[key]
     if (curP) {
       if (preP) {
@@ -127,7 +127,7 @@ function computePlan(prevPieces: cg.Pieces, state: State, dom: cg.DOM): AnimPlan
 
 function animate<A>(mutation: Mutation<A>, ctrl: Chessground): A {
   const state = ctrl.state
-  const prevPieces: cg.Pieces = {...state.pieces}
+  const prevPieces: cg.Pieces = new Map(state.pieces)
   const result = mutation(state)
   const plan = ctrl.dom !== undefined ?
     computePlan(prevPieces, state, ctrl.dom) : undefined

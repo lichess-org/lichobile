@@ -15,20 +15,8 @@ interface Promoting {
 
 let promoting: Promoting | null = null
 
-function promote(ground: Chessground, key: Key, role: Role) {
-  const pieces: {[k: string]: Piece } = {}
-  const piece = ground.state.pieces[key]
-  if (piece && piece.role === 'pawn') {
-    pieces[key] = {
-      color: piece.color,
-      role: role
-    }
-    ground.setPieces(pieces)
-  }
-}
-
 function start(chessground: Chessground, orig: Key, dest: Key, callback: PromoteCallback) {
-  const piece = chessground.state.pieces[dest]
+  const piece = chessground.state.pieces.get(dest)
   if (piece && piece.role === 'pawn' && (
     (dest[1] === '1' && chessground.state.turnColor === 'white') ||
     (dest[1] === '8' && chessground.state.turnColor === 'black'))) {
@@ -43,8 +31,8 @@ function start(chessground: Chessground, orig: Key, dest: Key, callback: Promote
   return false
 }
 
-function finish(ground: Chessground, role: Role) {
-  if (promoting) promote(ground, promoting.dest, role)
+function finish(chessground: Chessground, role: Role) {
+  if (promoting) chessground.promote(promoting.dest, role)
   if (promoting && promoting.callback) promoting.callback(promoting.orig, promoting.dest, role)
   promoting = null
 }

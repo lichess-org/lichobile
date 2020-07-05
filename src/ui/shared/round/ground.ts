@@ -98,20 +98,7 @@ function reload(ground: Chessground, data: OnlineGameData, fen: string, flip: bo
   ground.reconfigure(makeConfig(data, fen, flip))
 }
 
-function promote(ground: Chessground, key: Key, role: Role) {
-  const pieces: cg.Pieces = {}
-  const piece = ground.state.pieces[key]
-  if (piece && piece.role === 'pawn') {
-    pieces[key] = {
-      color: piece.color,
-      role: role
-    }
-    ground.setPieces(pieces)
-  }
-}
-
 export default {
   make,
   reload,
-  promote
 }

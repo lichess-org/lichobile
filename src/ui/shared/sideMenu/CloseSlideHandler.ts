@@ -70,10 +70,10 @@ export default function CloseSlideHandler(el: HTMLElement, ctrl: SideMenuCtrl) {
     // we don't want to close menu accidentaly when scrolling thus it is important
     // to check X velocity only
     const velocity = gesture.velocityX
-    if (velocity !== null) {
+    if (velocity !== 0) {
       if (side === 'left') {
         if (
-          velocity <= 0 &&
+          velocity < 0 &&
           (gesture.touchMoveX < -(menuWidth - menuWidth * OPEN_AFTER_SLIDE_RATIO) || velocity < -0.4)
         ) {
           ctrl.close()
@@ -83,7 +83,7 @@ export default function CloseSlideHandler(el: HTMLElement, ctrl: SideMenuCtrl) {
         }
       } else {
         if (
-          velocity >= 0 &&
+          velocity > 0 &&
           (gesture.touchMoveX > (menuWidth - menuWidth * OPEN_AFTER_SLIDE_RATIO) || velocity > 0.4)
         ) {
           ctrl.close()

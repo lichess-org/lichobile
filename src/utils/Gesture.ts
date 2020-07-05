@@ -144,22 +144,22 @@ export default class Gesture {
       const swipedVertical = absY > absX && absY > this.swipeThresholdY
       if (swipedHorizontal) {
         if (x < 0) {
-          if (this.velocityX! < -this.opts.swipeVelocityThreshold) {
+          if (this.velocityX < -this.opts.swipeVelocityThreshold) {
             this.fire('swipeleft', event)
           }
         } else {
-          if (this.velocityX! > this.opts.swipeVelocityThreshold) {
+          if (this.velocityX > this.opts.swipeVelocityThreshold) {
             this.fire('swiperight', event)
           }
         }
       }
       if (swipedVertical) {
         if (y < 0) {
-          if (this.velocityY! < -this.opts.swipeVelocityThreshold) {
+          if (this.velocityY < -this.opts.swipeVelocityThreshold) {
             this.fire('swipeup', event)
           }
         } else {
-          if (this.velocityY! > this.opts.swipeVelocityThreshold) {
+          if (this.velocityY > this.opts.swipeVelocityThreshold) {
             this.fire('swipedown', event)
           }
         }

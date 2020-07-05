@@ -74,12 +74,12 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): Handlers {
 
     panend: (gesture: Gesture) => () => {
       const velocity = gesture.velocityX
-      if (state.canSlide && velocity !== null) {
+      if (state.canSlide && velocity !== 0) {
         state.canSlide = false
         const delta = gesture.touchMoveX
         if (side === 'left') {
           if (
-            velocity >= 0 &&
+            velocity > 0 &&
             (delta >= menuWidth * OPEN_AFTER_SLIDE_RATIO || velocity > 0.2)
           ) {
             ctrl.open()
@@ -88,7 +88,7 @@ export default function EdgeOpenHandler(ctrl: SideMenuCtrl): Handlers {
           }
         } else {
           if (
-            velocity <= 0 &&
+            velocity < 0 &&
             (delta <= -(menuWidth * OPEN_AFTER_SLIDE_RATIO) || velocity < -0.2)
           ) {
             ctrl.open()

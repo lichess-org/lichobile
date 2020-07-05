@@ -46,7 +46,7 @@ export default class SideMenuCtrl {
       )
     ])
     .then(redraw)
-    .catch(console.log.bind(console))
+    .catch(console.error.bind(console))
   }
 
   public readonly close = (fromBB?: string) => {
@@ -69,7 +69,7 @@ export default class SideMenuCtrl {
         Zanimo(bd, 'visibility', 'hidden', 0)
       ])
     )
-    .catch(console.log.bind(console))
+    .catch(console.error.bind(console))
   }
 
   public readonly toggle = (e: TouchEvent) => {

@@ -167,6 +167,11 @@ export default class EditorCtrl {
     }
   }
 
+  public setColor = (color: Color) => {
+    this.data.editor.color(color)
+    this.updateHref()
+  }
+
   public computeFen = () =>
     this.chessground.getFen() + ' ' + this.fenMetadatas()
 
@@ -174,7 +179,12 @@ export default class EditorCtrl {
     if (validateFen(newFen))
       router.set(`/editor/${encodeURIComponent(newFen)}`, true)
     else
-      Plugins.LiToast.show({ text: 'Invalid FEN', duration: 'short' })
+      Plugins.LiToast.show({ text: i18n('invalidFen'), duration: 'short' })
+  }
+
+  public goToAnalyse = () => {
+    const fen = encodeURIComponent(this.computeFen())
+    router.set(`/analyse/fen/${fen}`)
   }
 
   private fenMetadatas() {

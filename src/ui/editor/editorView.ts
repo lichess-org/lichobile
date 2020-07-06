@@ -1,6 +1,5 @@
 import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
-import router from '../../router'
 import settings from '../../settings'
 import { header } from '../shared/common'
 import Board from '../shared/Board'
@@ -79,10 +78,7 @@ function renderActionsBar(ctrl: EditorCtrl) {
       }, () => Plugins.LiToast.show({ text: i18n('continueFromHere'), duration: 'short', position: 'bottom' }))
     }),
     h('button.action_bar_button[data-icon=A]', {
-      oncreate: helper.ontap(() => {
-        const fen = encodeURIComponent(ctrl.computeFen())
-        router.set(`/analyse/fen/${fen}`)
-      }, () => Plugins.LiToast.show({ text: i18n('analysis'), duration: 'short', position: 'bottom' }))
+      oncreate: helper.ontap(ctrl.goToAnalyse, () => Plugins.LiToast.show({ text: i18n('analysis'), duration: 'short', position: 'bottom' }))
     }),
     h('button.action_bar_button.fa.fa-upload', {
       oncreate: helper.ontap(ctrl.pasteFenPopup.open,

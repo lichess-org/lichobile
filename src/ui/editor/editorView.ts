@@ -73,11 +73,11 @@ function renderActionsBar(ctrl: EditorCtrl) {
       oncreate: helper.ontap(ctrl.chessground.toggleOrientation)
     }),
     h('button.action_bar_button[data-icon=U]', {
-      oncreate: helper.ontap(() => {
-        ctrl.continuePopup.open(ctrl.computeFen(), 'standard')
-      }, () => Plugins.LiToast.show({ text: i18n('continueFromHere'), duration: 'short', position: 'bottom' }))
+      disabled: !ctrl.data.playable,
+      oncreate: helper.ontap(ctrl.continueFromHere, () => Plugins.LiToast.show({ text: i18n('continueFromHere'), duration: 'short', position: 'bottom' }))
     }),
     h('button.action_bar_button[data-icon=A]', {
+      disabled: !ctrl.data.playable,
       oncreate: helper.ontap(ctrl.goToAnalyse, () => Plugins.LiToast.show({ text: i18n('analysis'), duration: 'short', position: 'bottom' }))
     }),
     h('button.action_bar_button.fa.fa-upload', {

@@ -4,6 +4,7 @@ import { Plugins } from '@capacitor/core'
 import debounce from 'lodash-es/debounce'
 import Chessground from '../../chessground/Chessground'
 import * as cgDrag from '../../chessground/drag'
+import * as chess from '../../chess'
 import router from '../../router'
 import redraw from '../../utils/redraw'
 import settings from '../../settings'
@@ -38,6 +39,7 @@ interface Data {
       key: VariantKey
     }
   }
+  playable: boolean
 }
 
 export interface MenuInterface {
@@ -71,8 +73,11 @@ export default class EditorCtrl {
         variant: {
           key: 'standard'
         }
-      }
+      },
+      playable: true,
     }
+
+    this.setPlayable(initFen).then(redraw)
 
     this.positions = Stream([])
     this.endgamesPositions = Stream([])
@@ -128,19 +133,27 @@ export default class EditorCtrl {
           this.data.editor.enpassant('-')
           this.data.editor.halfmove('0')
           this.data.editor.moves('1')
-          this.updateHref()
+          this.updatePosition()
         }
       }
     })
   }
 
-  private updateHref = debounce(() => {
+  private setPlayable = (fen: string): Promise<void> => {
+    return chess.situation({ variant: 'standard', fen })
+    .then(({ situation }) => {
+      this.data.playable = situation.playable
+    })
+  }
+
+  private updatePosition = debounce(() => {
     const newFen = this.computeFen()
     if (validateFen(newFen)) {
       const path = `/editor/${encodeURIComponent(newFen)}`
       try {
         window.history.replaceState(window.history.state, '', '?=' + path)
       } catch (e) { console.error(e) }
+      this.setPlayable(newFen).then(redraw)
     }
   }, 250)
 
@@ -169,7 +182,7 @@ export default class EditorCtrl {
 
   public setColor = (color: Color) => {
     this.data.editor.color(color)
-    this.updateHref()
+    this.updatePosition()
   }
 
   public computeFen = () =>
@@ -183,8 +196,27 @@ export default class EditorCtrl {
   }
 
   public goToAnalyse = () => {
-    const fen = encodeURIComponent(this.computeFen())
-    router.set(`/analyse/fen/${fen}`)
+    const fen = this.computeFen()
+    chess.situation({ variant: 'standard', fen })
+    .then(({ situation }) => {
+      if (situation.playable) {
+        router.set(`/analyse/fen/${encodeURIComponent(fen)}`)
+      } else {
+        Plugins.LiToast.show({ text: i18n('invalidFen'), duration: 'short' })
+      }
+    })
+  }
+
+  public continueFromHere = () => {
+    const fen = this.computeFen()
+    chess.situation({ variant: 'standard', fen })
+    .then(({ situation }) => {
+      if (situation.playable) {
+        this.continuePopup.open(fen, 'standard')
+      } else {
+        Plugins.LiToast.show({ text: i18n('invalidFen'), duration: 'short' })
+      }
+    })
   }
 
   private fenMetadatas() {

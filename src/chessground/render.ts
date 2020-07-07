@@ -39,7 +39,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
   const sameSquares: Set<Key> = new Set()
   const movedPieces: Map<string, cg.PieceNode[]> = new Map()
   const movedSquares: Map<string, cg.SquareNode[]> = new Map()
-  let squareClassAtKey, pieceAtKey, anim, captured, translate
+  let squareClassAtKey, pieceAtKey, anim, captured, translate, elPieceName
   let mvdset, mvd
 
   let otbTurnFlipChange, otbModeChange, otbChange = false
@@ -55,11 +55,12 @@ export function renderBoard(d: State, dom: cg.DOM) {
   let el = dom.board.firstChild as cg.KeyedNode
   while (el) {
     let k = el.cgKey
-    pieceAtKey = pieces.get(k)
-    squareClassAtKey = squares.get(k)
-    anim = anims && anims.get(k)
-    captured = capturedPieces && capturedPieces.get(k)
     if (isPieceNode(el)) {
+      pieceAtKey = pieces.get(k)
+      squareClassAtKey = squares.get(k)
+      anim = anims && anims.get(k)
+      captured = capturedPieces && capturedPieces.get(k)
+      elPieceName = el.cgPiece
       // if piece not being dragged anymore, remove dragging style
       if (el.cgDragging && (!d.draggable.current || d.draggable.current.orig !== k)) {
         el.classList.remove('dragging')
@@ -78,7 +79,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
         const pieceAtKeyName = pieceNameOf(pieceAtKey)
         // continue animation if already animating and same color
         // (otherwise it could animate a captured piece)
-        if (anim && el.cgAnimating && el.cgPiece === pieceAtKeyName) {
+        if (anim && el.cgAnimating && elPieceName === pieceAtKeyName) {
           translate = posToTranslate(util.key2pos(k), asWhite)
           translate[0] += anim[1][0]
           translate[1] += anim[1][1]
@@ -91,22 +92,22 @@ export function renderBoard(d: State, dom: cg.DOM) {
           el.cgAnimating = false
         }
         // same piece, no change: flag as same
-        if (el.cgPiece === pieceAtKeyName && !allChange && !otbChange && (!captured || !el.cgCaptured)) {
+        if (elPieceName === pieceAtKeyName && !allChange && !otbChange && (!captured || !el.cgCaptured)) {
           samePieces.add(k)
         }
         // different piece: flag as moved unless it is a captured piece
         else {
-          if (captured && pieceNameOf(captured) === el.cgPiece) {
+          if (captured && pieceNameOf(captured) === elPieceName) {
             el.classList.add('captured')
             el.cgCaptured = true
           } else {
-            movedPieces.set(el.cgPiece, (movedPieces.get(el.cgPiece) || []).concat(el))
+            appendValue(movedPieces, elPieceName, el)
           }
         }
       }
       // no piece: flag as moved
       else {
-        movedPieces.set(el.cgPiece, (movedPieces.get(el.cgPiece) || []).concat(el))
+        appendValue(movedPieces, elPieceName, el)
       }
     }
     else if (isSquareNode(el)) {
@@ -114,10 +115,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
         sameSquares.add(k)
       }
       else {
-        movedSquares.set(
-          el.className,
-          (movedSquares.get(el.className) || []).concat(el)
-        )
+        appendValue(movedSquares, el.className, el)
       }
     }
     el = el.nextSibling as cg.KeyedNode
@@ -186,9 +184,8 @@ export function renderBoard(d: State, dom: cg.DOM) {
   }
 
   // remove from the board any DOM element that remains in the moved sets
-  const rmEl = (e: HTMLElement) => boardElement.removeChild(e)
-  movedPieces.forEach(els => els.forEach(rmEl))
-  movedSquares.forEach(els => els.forEach(rmEl))
+  for (const nodes of movedPieces.values()) removeNodes(dom, nodes)
+  for (const nodes of movedSquares.values()) removeNodes(dom, nodes)
 }
 
 export function makeCoords(el: HTMLElement, withSymm: boolean) {
@@ -251,6 +248,16 @@ function pieceNameOf(p: Piece) {
   return p.role + ' ' + p.color
 }
 
+function removeNodes(dom: cg.DOM, nodes: HTMLElement[]): void {
+  for (const node of nodes) dom.board.removeChild(node)
+}
+
+function appendValue<K, V>(map: Map<K, V[]>, key: K, value: V): void {
+  const arr = map.get(key)
+  if (arr) arr.push(value)
+  else map.set(key, [value])
+}
+
 function addSquare(squares: Map<Key, string>, key: Key, klass: string) {
   squares.set(key, (squares.get(key) || '') + ' ' + klass)
 }
@@ -290,7 +297,7 @@ function computeSquareClasses(d: State): Map<Key, string> {
 
   if (d.exploding) {
     for (const k of d.exploding.keys) {
-      addSquare(squares, k, 'exploding' + d.exploding!.stage)
+      addSquare(squares, k, 'exploding' + d.exploding.stage)
     }
   }
 

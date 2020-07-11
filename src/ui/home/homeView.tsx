@@ -45,7 +45,7 @@ function offline(ctrl: HomeCtrl) {
         </section>
         { boardConf ?
         <section className="home__miniPuzzle">
-          <h2 className="homeTitle">{i18n('training')}</h2>
+          <h2 className="homeTitle">{i18n('puzzles')}</h2>
           {h(MiniBoard, boardConf)}
         </section> : undefined
         }

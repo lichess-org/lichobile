@@ -95,7 +95,7 @@ function computePlan(prevPieces: cg.Pieces, state: State, dom: cg.DOM): AnimPlan
       missings.push(preP)
     }
   }
-  news.forEach((newP) => {
+  for (const newP of news) {
     const nPreP = closer(newP, missings.filter((p) => samePiece(newP.piece, p.piece)))
     if (nPreP) {
       const orig = white ? nPreP.pos : newP.pos
@@ -104,7 +104,7 @@ function computePlan(prevPieces: cg.Pieces, state: State, dom: cg.DOM): AnimPlan
       anims.set(newP.key, [pos, pos])
       animedOrigs.push(nPreP.key)
     }
-  })
+  }
   for (const p of missings) {
     if (!util.containsX(animedOrigs, p.key)) {
       capturedPieces.set(p.key, p.piece)
@@ -119,11 +119,12 @@ function computePlan(prevPieces: cg.Pieces, state: State, dom: cg.DOM): AnimPlan
 
 function animate<A>(mutation: Mutation<A>, ctrl: Chessground): A {
   const state = ctrl.state
+  // clone state before mutating it
   const prevPieces: cg.Pieces = new Map(state.pieces)
   const result = mutation(state)
   const plan = ctrl.dom !== undefined ?
     computePlan(prevPieces, state, ctrl.dom) : undefined
-  if (plan !== undefined && (plan.anims.size > 0 || plan.captured.size > 0)) {
+  if (plan !== undefined && (plan.anims.size || plan.captured.size)) {
     const alreadyRunning = state.animation.current && state.animation.current.start !== null
     state.animation.current = {
       start: null,

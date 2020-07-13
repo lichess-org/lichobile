@@ -193,6 +193,11 @@ function renderLinks(user?: Session) {
         <span className="fa fa-at"/>{i18n('players')}
       </li> : null
       }
+      {online ?
+      <li className="side_link" data-route="/teams">
+        <span className="fa fa-users"/>{i18n('teams')}
+      </li> : null
+      }
       <li className="sep_link">{i18n('tools')}</li>
       <li className="side_link" data-route="/analyse">
         <span data-icon="A" />{i18n('analysis')}

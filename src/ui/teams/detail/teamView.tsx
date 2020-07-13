@@ -3,6 +3,9 @@ import { dropShadowHeader as headerWidget, backButton} from '../../shared/common
 import i18n, { plural } from '../../../i18n'
 import { Leader } from '../../../lichess/interfaces/teams'
 import TeamsCtrl from './TeamCtrl'
+import { linkify } from '../../../utils/html'
+import * as helper from '../../helper'
+import * as xhr from '../../../xhr'
 
 export function header(ctrl: TeamsCtrl) {
   const team = ctrl.team
@@ -25,7 +28,8 @@ export function body(ctrl: TeamsCtrl) {
     h('section.teamInfos', [
       h('div.teamLeader', team.leaders.map(userStatus)),
       h('div.teamMembers', [team.nbMembers + ' ' + i18n('members')]),
-      h('div.teamDescription', [team.description]),
+      h('div.teamDescription', [h.trust(linkify(team.description).replace(/\n/g, '<br>'))]),
+      h('div.forumLink', [h('a.external_link', {oncreate: helper.ontapY(() => xhr.openWebsiteAuthPage(`/forum/team-` + team.id))}, 'Forum')])
     ]),
     h('section.teamJoinLeave', [
       team.requested ? requestPending() : (team.joined ? renderLeave(ctrl) : renderJoin(ctrl))

@@ -62,7 +62,7 @@
         "d3-time-format": "2.0.5",
         "date-fns": "2.14.0",
         "http-server": "0.12.0",
-        "lodash": "4.17.15",
+        "lodash": "4.17.19",
         "lodash-es": "4.17.15",
         "mithril": "git+https://github.com/veloce/mithril.js.git#next",
         "rlite-router": "1.1.3",

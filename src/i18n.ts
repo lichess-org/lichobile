@@ -34,7 +34,7 @@ export function i18nVdom(key: string, ...args: Array<Mithril.Child>): Mithril.Ch
 
 export function plural(key: string, count: number, ...args: Array<string | number>): string {
   const pluralKey = key + ':' + quantity(currentLocale, count)
-  const str = messages[pluralKey] || messages[key]
+  const str = messages[pluralKey] || messages[key + ':other'] || messages[key]
   return str ? format(str, ...args) : key
 }
 
@@ -46,9 +46,9 @@ function format(message: string, ...args: Array<string | number>): string {
         str = str.replace('%' + i + '$s', String(args[i - 1]))
       }
     }
-    args.forEach(arg => {
+    for (const arg of args) {
       str = str.replace('%s', String(arg))
-    })
+    }
   }
   return str
 }

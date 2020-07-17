@@ -17,10 +17,11 @@ export interface RequestOpts {
   method?: 'GET' | 'POST'
   body?: any
   query?: Object
-  headers?: StringMap
+  headers?: Record<string, string>
   cache?: RequestCache
   mode?: RequestMode
   credentials?: RequestCredentials
+  timeout?: number
 }
 
 function addQuerystring(url: string, querystring: string): string {
@@ -41,70 +42,62 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
     if (feedback) spinner.stop()
   }
 
-  if (opts && opts.query) {
-    const query = buildQueryString(opts.query)
-    if (query !== '') {
-      url = addQuerystring(url, query)
-    }
-    delete opts.query
-  }
+  const headers = new Headers({
+    'X-Requested-With': 'XMLHttpRequest',
+    'Accept': 'application/vnd.lichess.v' + globalConfig.apiVersion + '+json'
+  })
 
-  let cfg: RequestInit = {
+  const cfg: RequestInit = {
     method: 'GET',
     credentials: 'include',
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      'Accept': 'application/vnd.lichess.v' + globalConfig.apiVersion + '+json'
-    }
   }
 
-  const sid = storage.get<string>(SESSION_ID_KEY)
-  if (sid !== null) {
-    const h = <StringMap>cfg.headers!
-    h[SESSION_ID_KEY] = sid
-  }
-
+  let fetchTimeoutMs: number | undefined
 
   // merge opts if they are defined
   if (opts !== undefined) {
-    const { headers: optsHeaders, ...optsRest } = opts
-    cfg = {
-      ...cfg,
-      ...optsRest,
+    const { headers: optsHeaders, query, timeout, ...optsRest } = opts
+
+    fetchTimeoutMs = timeout
+
+    if (query) {
+      const qs = buildQueryString(query)
+      if (qs !== '') {
+        url = addQuerystring(url, qs)
+      }
     }
-    cfg.headers! = {
-      ...cfg.headers,
-      ...optsHeaders
-    } as HeadersInit
+
+    Object.assign(cfg, optsRest)
+
     // allow to remove header if caller specifically mark it as __delete
     // (important for cors)
-    cfg.headers = Object.keys(cfg.headers!)
-    .filter(k => {
-      const p = (<StringMap>cfg.headers!)[k]
-      return p !== '__delete'
-    })
-    .reduce((obj: StringMap, key: string) => {
-      obj[key] = (<StringMap>cfg.headers!)[key]
-      return obj
-    }, {}) as HeadersInit
+    if (optsHeaders) {
+      Object.keys(optsHeaders)
+      .forEach(k => {
+        const v = optsHeaders[k]
+        if (v !== '__delete') {
+          headers.set(k, v)
+        } else {
+          headers.delete(k)
+        }
+      })
+    }
   }
-
-  const init: RequestInit = {
-    ...cfg,
-    headers: new Headers(cfg.headers),
-  }
-
-  const headers: Headers = <Headers>init.headers
 
   // by default POST and PUT send json except if defined otherwise in caller
-  if ((init.method === 'POST' || init.method === 'PUT') &&
-    !headers.get('Content-Type')
+  if ((cfg.method === 'POST' || cfg.method === 'PUT') && !headers.has('Content-Type')
   ) {
-    headers.append('Content-Type', 'application/json; charset=UTF-8')
+    headers.set('Content-Type', 'application/json; charset=UTF-8')
     // always send a json body
-    if (!init.body) {
-      init.body = '{}'
+    if (!cfg.body) {
+      cfg.body = '{}'
     }
+  }
+
+  // append session id header if defined
+  const sid = storage.get<string>(SESSION_ID_KEY)
+  if (sid !== null) {
+    headers.append(SESSION_ID_KEY, sid)
   }
 
   const fullUrl = url.indexOf('http') > -1 ? url : baseUrl + url
@@ -112,12 +105,12 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
   const timeoutPromise = new Promise((_, reject) => {
     timeoutId = setTimeout(
       () => reject(new Error('Request timeout.')),
-      globalConfig.fetchTimeoutMs
+      fetchTimeoutMs || globalConfig.fetchTimeoutMs
     )
   })
 
   const respOrTimeout: Promise<Response> = Promise.race([
-    fetch(fullUrl, init),
+    fetch(fullUrl, { ...cfg, headers }),
     timeoutPromise as Promise<Response>
   ])
 

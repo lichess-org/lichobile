@@ -14,36 +14,18 @@ export function syncAndLoadNewPuzzle(
   database: Database,
   user: Session
 ): Promise<PuzzleData> {
-  return new Promise((resolve, reject) => {
-    syncPuzzles(database, user)
-    .then(data => {
-      if (data && data.unsolved.length > 0) {
-        resolve(data.unsolved[0])
-      }
-      else {
-        reject(`No additional offline puzzles available. Go online to get another ${settings.training.puzzleBufferLen}`)
-      }
-    })
-    .catch(reject)
-  })
+  // try loading first from DB to avoid any unnecessary loading time (spotty
+  // connection)
+  // if no puzzles available, sync and load
+  return loadNewPuzzle(database, user)
+  .catch(() => doLoadPuzzle(() => syncPuzzles(database, user)))
 }
 
 /*
  * Load a new puzzle from offline database.
  */
 export function loadNewPuzzle(database: Database, user: Session): Promise<PuzzleData> {
-  return new Promise((resolve, reject) => {
-    database.fetch(user.id)
-    .then(data => {
-      if (data && data.unsolved.length > 0) {
-        resolve(data.unsolved[0])
-      }
-      else {
-        reject(`No additional offline puzzle available. Go online to get another ${settings.training.puzzleBufferLen}`)
-      }
-    })
-    .catch(reject)
-  })
+  return doLoadPuzzle(() => database.fetch(user.id))
 }
 
 /*
@@ -98,7 +80,7 @@ export function syncAndClearCache(database: Database, user: Session): Promise<Pu
   return syncPuzzles(database, user)
   .then(() =>
     database.clean(user.id).then(() =>
-      syncAndLoadNewPuzzle(database, user)
+      loadNewPuzzle(database, user)
     )
   )
 }
@@ -158,5 +140,20 @@ function syncPuzzles(database: Database, user: Session): Promise<UserOfflineData
     })
     // when offline, sync cannot be done so we return same stored data
     .catch(() => stored)
+  })
+}
+
+function doLoadPuzzle(fetchFn: () => Promise<UserOfflineData | null>): Promise<PuzzleData> {
+  return new Promise((resolve, reject) => {
+    fetchFn()
+    .then(data => {
+      if (data && data.unsolved.length > 0) {
+        resolve(data.unsolved[0])
+      }
+      else {
+        reject(`No additional offline puzzle available. Go online to get another ${settings.training.puzzleBufferLen}`)
+      }
+    })
+    .catch(reject)
   })
 }

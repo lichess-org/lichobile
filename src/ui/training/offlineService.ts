@@ -80,7 +80,7 @@ export function syncAndClearCache(database: Database, user: Session): Promise<Pu
   return syncPuzzles(database, user)
   .then(() =>
     database.clean(user.id).then(() =>
-      loadNewPuzzle(database, user)
+      syncAndLoadNewPuzzle(database, user)
     )
   )
 }

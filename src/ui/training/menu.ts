@@ -98,12 +98,11 @@ function renderTrainingMenu(ctrl: IMenuCtrl) {
 function renderSigninBox() {
   return h('div.trainingMenuContent', [
     h('p', i18n('toTrackYourProgress')),
-    h('p',
-      h('button', {
+    h('p.signin',
+      h('button.defaultButton', {
         oncreate: helper.ontap(loginModal.open)
       }, [h('span.fa.fa-user'), i18n('signIn')])
     ),
-    h('p', i18n('trainingSignupExplanation'))
   ])
 }
 

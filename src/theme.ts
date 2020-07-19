@@ -13,16 +13,18 @@ interface ThemeEntry {
   ext: string
 }
 
+export function isTransparent(bgTheme: string) {
+  return bgTheme !== 'dark' && bgTheme !== 'light'
+}
+
 export function init() {
   const bgTheme = settings.general.theme.background()
   const boardTheme = settings.general.theme.board()
 
-  Plugins.StatusBar.setStyle({
-    style: bgTheme === 'light' ? StatusBarStyle.Light : StatusBarStyle.Dark
-  })
+  setStatusBarStyle(bgTheme)
 
   // load background theme
-  if (bgTheme !== 'dark' && bgTheme !== 'light') {
+  if (isTransparent(bgTheme)) {
     const filename = getFilenameFromKey('bg', bgTheme)
     getLocalFile('bg', filename).then(r => {
       createStylesheetRule('bg', bgTheme, filename, r)
@@ -158,3 +160,19 @@ function download(
       client.send()
   })
 }
+
+export function setStatusBarStyle(bgTheme: string): Promise<void> {
+  return Promise.all([
+    Plugins.StatusBar.setBackgroundColor({
+      color: bgTheme === 'light' ? '#edebe9' :
+        bgTheme === 'dark' ? '#161512' : '#000000'
+    }),
+    Plugins.StatusBar.setStyle({
+      style: bgTheme === 'light' ? StatusBarStyle.Light : StatusBarStyle.Dark
+    }),
+    // Plugins.StatusBar.setOverlaysWebView({
+    //   overlay: isTransparent(bgTheme)
+    // }),
+  ]).then(() => {})
+}
+

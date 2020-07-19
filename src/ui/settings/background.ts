@@ -1,4 +1,4 @@
-import { Plugins, StatusBarStyle } from '@capacitor/core'
+import h from 'mithril/hyperscript'
 import * as Mithril from 'mithril'
 import { dropShadowHeader, backButton } from '../shared/common'
 import redraw from '../../utils/redraw'
@@ -7,8 +7,7 @@ import layout from '../layout'
 import i18n from '../../i18n'
 import settings from '../../settings'
 import * as helper from '../helper'
-import h from 'mithril/hyperscript'
-import { loadImage, handleError } from '../../theme'
+import { loadImage, handleError, setStatusBarStyle, isTransparent } from '../../theme'
 
 interface Progress {
   loaded: number
@@ -79,26 +78,29 @@ function renderBody(ctrl: State) {
               const val = (e.target as HTMLInputElement).value
               const prevTheme = settings.general.theme.background()
               settings.general.theme.background(val)
-              Plugins.StatusBar.setStyle({
-                style: val === 'light' ? StatusBarStyle.Light : StatusBarStyle.Dark
-              })
-              if (val === 'dark' || val === 'light') {
-                layout.onBackgroundChange(val)
-                redraw()
-              } else {
-                ctrl.loading = true
-                loadImage('bg', val, ctrl.onProgress)
-                .then(() => {
+              new Promise((resolve) => {
+                if (isTransparent(val)) {
+                  ctrl.loading = true
+                  redraw()
+                  loadImage('bg', val, ctrl.onProgress)
+                  .then(() => {
+                    layout.onBackgroundChange(val)
+                    ctrl.stopLoading()
+                    resolve(val)
+                  })
+                  .catch((err) => {
+                    settings.general.theme.background(prevTheme)
+                    ctrl.stopLoading()
+                    handleError(err)
+                    resolve(prevTheme)
+                  })
+                } else {
                   layout.onBackgroundChange(val)
-                  ctrl.stopLoading()
-                })
-                .catch((err) => {
-                  settings.general.theme.background(prevTheme)
-                  ctrl.stopLoading()
-                  handleError(err)
-                })
-                redraw()
-              }
+                  redraw()
+                  resolve(val)
+                }
+              })
+              .then((t: string) => setStatusBarStyle(t))
             },
             ctrl.loading
           ),

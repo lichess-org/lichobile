@@ -311,19 +311,19 @@ export default {
       })
 
       router.add('study', ({ params }) => {
-        import('./ui/study/studyList').then(m => {
+        import('./ui/study/studyIndex').then(m => {
           onRouteMatch(m.default, params)
         })
       })
 
       router.add('study/:id', ({ params }) => {
-        import('./ui/study/study/study').then(m => {
+        import('./ui/study/study').then(m => {
           onRouteMatch(m.default, params)
         })
       })
 
       router.add('study/:id/chapter/:chapterId', ({ params }) => {
-        import('./ui/study/study/study').then(m => {
+        import('./ui/study/study').then(m => {
           onRouteMatch(m.default, params)
         })
       })

@@ -1,9 +1,9 @@
 import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
-import { Study } from '../../../../lichess/interfaces/study'
-import { header, backButton } from '../../../shared/common'
-import * as helper from '../../../helper'
-import layout from '../../../layout'
+import { Study } from '../../lichess/interfaces/study'
+import { header, backButton } from '../shared/common'
+import * as helper from '../helper'
+import layout from '../layout'
 
 export function notFound() {
   return layout.free(

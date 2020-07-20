@@ -1,20 +1,20 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
-import redraw from '../../../utils/redraw'
-import socket from '../../../socket'
-import * as sleepUtils from '../../../utils/sleep'
-import router from '../../../router'
-import * as utils from '../../../utils'
-import * as helper from '../../helper'
-import layout from '../../layout'
-import EdgeOpenHandler, { Handlers } from '../../shared/sideMenu/EdgeOpenHandler'
+import redraw from '../../utils/redraw'
+import socket from '../../socket'
+import * as sleepUtils from '../../utils/sleep'
+import router from '../../router'
+import * as utils from '../../utils'
+import * as helper from '../helper'
+import layout from '../layout'
+import EdgeOpenHandler, { Handlers } from '../shared/sideMenu/EdgeOpenHandler'
 
-import AnalyseCtrl from '../../analyse/AnalyseCtrl'
-import { renderContent, overlay, loadingScreen } from '../../analyse/view'
+import AnalyseCtrl from '../analyse/AnalyseCtrl'
+import { renderContent, overlay, loadingScreen } from '../analyse/view'
 
-import { load as loadStudy } from '../studyXhr'
-import { notFound, studyHeader } from './view/studyView'
-import RightSideMenu from './view/RightSideMenu'
+import { load as loadStudy } from './studyXhr'
+import { notFound, studyHeader } from './studyView'
+import RightSideMenu from './RightSideMenu'
 
 export interface Attrs {
   id: string

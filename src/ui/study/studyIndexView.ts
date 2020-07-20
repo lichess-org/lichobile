@@ -10,9 +10,9 @@ import { PagerCategory, PagerOrder } from '../../lichess/interfaces/study'
 import * as helper from '../helper'
 import { closeIcon } from '../shared/icons'
 
-import StudyListCtrl, { PagerDataWithDate } from './StudyListCtrl'
+import StudyIndexCtrl, { PagerDataWithDate } from './StudyIndexCtrl'
 
-export default function studyListView(ctrl: StudyListCtrl) {
+export default function studyIndexView(ctrl: StudyIndexCtrl) {
   return h('div.study-pagerWrapper', [
     h('div.study-pagerSubHeader.subHeader', [
       ctrl.state.showSearch ?
@@ -86,7 +86,7 @@ const orders: ReadonlyArray<[PagerOrder, string]> = [
   ['popular', i18n('mostPopular')],
 ]
 
-function studyList(ctrl: StudyListCtrl) {
+function studyList(ctrl: StudyIndexCtrl) {
   const studies = ctrl.state ? ctrl.state.studies : []
 
   return h('div#scroller-wrapper.native_scroller.study-pagerScroller.box', {
@@ -105,7 +105,7 @@ function studyList(ctrl: StudyListCtrl) {
   )
 }
 
-function onTap(ctrl: StudyListCtrl, e: Event) {
+function onTap(ctrl: StudyIndexCtrl, e: Event) {
   const el = helper.getByClass('study-pagerItem')(e)
   const id = el && el.dataset.id
   if (id) {
@@ -153,4 +153,3 @@ const Item = {
   study: PagerDataWithDate
   index: number
 }, {}>
-

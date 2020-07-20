@@ -6,8 +6,8 @@ import * as helper from '../helper'
 import { header } from '../shared/common'
 import layout from '../layout'
 
-import StudyListCtrl from './StudyListCtrl'
-import studyListView from './studyListView'
+import StudyIndexCtrl from './StudyIndexCtrl'
+import studyIndexView from './studyIndexView'
 
 interface Attrs {
   cat?: PagerCategory
@@ -16,7 +16,7 @@ interface Attrs {
 }
 
 interface State {
-  ctrl: StudyListCtrl
+  ctrl: StudyIndexCtrl
 }
 
 export default {
@@ -25,14 +25,13 @@ export default {
   oninit({ attrs }) {
     socket.createDefault()
 
-    this.ctrl = new StudyListCtrl(attrs.cat, attrs.order, attrs.q)
+    this.ctrl = new StudyIndexCtrl(attrs.cat, attrs.order, attrs.q)
   },
 
   view() {
     const ctrl = this.ctrl
 
-    return layout.free(header(i18n('studyMenu')), studyListView(ctrl))
+    return layout.free(header(i18n('studyMenu')), studyIndexView(ctrl))
   }
 
 } as Mithril.Component<Attrs, State>
-

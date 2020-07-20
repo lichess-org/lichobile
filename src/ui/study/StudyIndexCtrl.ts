@@ -23,7 +23,7 @@ interface State {
   readonly stateId: string
 }
 
-export default class StudyListCtrl {
+export default class StudyIndexCtrl {
   public state: State
 
   private cacheAvailable: boolean

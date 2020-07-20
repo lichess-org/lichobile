@@ -1,13 +1,13 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
-import router from '../../../../router'
-import { lightPlayerName } from '../../../../lichess/player'
-import { StudyMemberMap, StudyMember } from '../../../../lichess/interfaces/study'
-import * as helper from '../../../helper'
-import CloseSlideHandler from '../../../shared/sideMenu/CloseSlideHandler'
-import { expandMore, expandLess } from '../../../shared/icons'
+import router from '../../router'
+import { lightPlayerName } from '../../lichess/player'
+import { StudyMemberMap, StudyMember } from '../../lichess/interfaces/study'
+import * as helper from '../helper'
+import CloseSlideHandler from '../shared/sideMenu/CloseSlideHandler'
+import { expandMore, expandLess } from '../shared/icons'
 
-import StudyCtrl from '../../../analyse/study/StudyCtrl'
+import StudyCtrl from '../analyse/study/StudyCtrl'
 
 export interface Attrs {
   studyCtrl: StudyCtrl

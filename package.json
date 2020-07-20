@@ -35,7 +35,7 @@
         "rollup-plugin-visualizer": "4.0.4",
         "stylus": "0.54.7",
         "tslint": "5.8.0",
-        "typescript": "3.7.5",
+        "typescript": "3.9.7",
         "whatwg-fetch": "3.0.0"
     },
     "dependencies": {

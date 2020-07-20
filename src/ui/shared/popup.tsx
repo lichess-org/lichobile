@@ -4,7 +4,7 @@ import * as utils from '../../utils'
 import * as helper from '../helper'
 
 export default function popup(
-  classes: Object | string,
+  classes: object | string,
   headerF: (() => Mithril.Children) | undefined,
   contentF: () => Mithril.Children,
   isShowing: boolean,
@@ -22,7 +22,7 @@ export default function popup(
   let className: string
 
   if (typeof classes === 'object')
-    className = helper.classSet(Object.assign({}, defaultClasses, classes))
+    className = helper.classSet({ ...defaultClasses, ...classes })
   else if (typeof classes === 'string')
     className = helper.classSet(defaultClasses) + ' ' + classes
   else

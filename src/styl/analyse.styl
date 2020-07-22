@@ -278,6 +278,123 @@ comment
   overflow hidden
   text-overflow ellipsis
 
+.analyse-training_box
+  position absolute
+  bottom 0
+  left 0
+  height 100%
+  width 100%
+  display flex
+  flex-flow column nowrap
+  &.minimized
+    height 28px
+  > .titleWrapper
+    flex 0 0 28px
+    background-color darkBlue
+    color headerBgDarkColor
+    display flex
+    flex-flow row nowrap
+    justify-content space-between
+    align-items center
+    padding-left 10px
+    > .actions
+      flex 0 0 auto
+      display flex
+    > div
+      white-space nowrap
+      overflow hidden
+      text-overflow ellipsis
+    > .mistakeNb
+      flex 0 0 50px
+      text-align center
+
+.analyse-training_feedback
+  height initial
+  flex 1 1 auto
+  display flex
+  flex-flow column nowrap
+  justify-content center
+
+.analyse-training_player
+  display flex
+  flex-flow row wrap
+  align-items center
+  margin 0 1em
+  > .piece-no-square
+    flex 0 0 64px
+  @media only screen and (orientation: landscape)
+    flex-flow column nowrap
+    > .piece-no-square
+      margin-bottom 2vmin
+
+.analyse-training_box_instruction
+  display flex
+  flex-flow column nowrap
+
+  > strong
+    font-size 1.1em
+
+  > .choices
+    display flex
+    flex-flow column nowrap
+    align-items flex-start
+    margin-top 0.5em
+
+    > button
+      padding 0
+
+.analyse-practice_box
+  > .comment
+    flex: 0 0 30px;
+    display: flex;
+    align-items: stretch;
+    background: #302e2c
+    border-top: 1px solid 1px solid #d9d9d9;
+    white-space: nowrap;
+    line-height: 30px;
+    > move
+      padding 0
+      margin-left 0.5em
+  .verdict {
+    font-weight: bold;
+    margin-right: 10px;
+    display: flex;
+  }
+  .verdict::before {
+    width: 30px;
+    height: 100%;
+    color: #fff;
+    margin-right: 7px;
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: normal;
+  }
+  &.goodMove .verdict {
+    color: green
+  }
+  &.goodMove .verdict::before {
+    background: green
+    content: '✓';
+    font-size: 1.7em;
+  }
+  &.inaccuracy .verdict {
+    color: gold
+  }
+  &.inaccuracy .verdict::before {
+    background: gold
+    content: '?';
+  }
+  &.mistake .verdict,
+  &.blunder .verdict {
+    color: red
+  }
+  &.mistake .verdict::before,
+  &.blunder .verdict::before {
+    background: red
+    content: '✗';
+  }
+
+
 .view-container.light
 
   .analyse-fixedBar
@@ -322,6 +439,10 @@ comment
     background: themeBgLight
     text-shadow: 0 1px 0 #FFF;
     color: #848484;
+
+  .analyse-practice_box
+    > .comment
+      background #f7f6f5
 
 .view-container.transp
 

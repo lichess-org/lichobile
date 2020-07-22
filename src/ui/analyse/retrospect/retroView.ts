@@ -12,11 +12,11 @@ export default function retroView(root: AnalyseCtrl): Mithril.Child | undefined 
   const ctrl = root.retro
   if (!ctrl) return
   const fb = ctrl.vm.feedback
-  return h('div.analyse-retro_box.box', {
+  return h('div.analyse-training_box.analyse-retro_box.box', {
     className: ctrl.vm.minimized ? 'minimized' : ''
   }, [
     renderTitle(ctrl),
-    h('div.retro-feedback.native_scroller.' + fb, renderFeedback(root, fb))
+    h('div.analyse-training_feedback.native_scroller.' + fb, renderFeedback(root, fb))
   ])
 }
 
@@ -54,7 +54,7 @@ function renderEvalProgress(node: Tree.Node): Mithril.Child {
 const feedback = {
   find(ctrl: IRetroCtrl): Mithril.Child[] {
     return [
-      h('div.retro-player', [
+      h('div.analyse-training_player', [
         h('div.piece-no-square', {
           className: ctrl.pieceTheme
         }, h('piece.king.' + ctrl.vm.color)),
@@ -78,7 +78,7 @@ const feedback = {
   // user has browsed away from the move to solve
   offTrack(ctrl: IRetroCtrl): Mithril.Child[] {
     return [
-      h('div.retro-player', [
+      h('div.analyse-training_player', [
         h('div.retro-icon.off', '!'),
         h('div.retro-instruction', [
           h('strong', 'You browsed away'),
@@ -93,7 +93,7 @@ const feedback = {
   },
   fail(ctrl: IRetroCtrl): Mithril.Child[] {
     return [
-      h('div.retro-player', [
+      h('div.analyse-training_player', [
         h('div.retro-icon', '✗'),
         h('div.retro-instruction', [
           h('strong', i18n('youCanDoBetter')),
@@ -109,7 +109,7 @@ const feedback = {
   win(ctrl: IRetroCtrl): Mithril.Child[] {
     return [
       h('div.retro-half.top',
-        h('div.retro-player', [
+        h('div.analyse-training_player', [
           h('div.retro-icon', '✓'),
           h('div.retro-instruction', h('strong', i18n('goodMove')))
         ])
@@ -120,7 +120,7 @@ const feedback = {
   view(ctrl: IRetroCtrl): Mithril.Child[] {
     return [
       h('div.retro-half.top',
-        h('div.retro-player', [
+        h('div.analyse-training_player', [
           h('div.retro-icon', '✓'),
           h('div.retro-instruction', [
             h('strong', i18n('solution')),
@@ -139,7 +139,7 @@ const feedback = {
   eval(ctrl: IRetroCtrl): Mithril.Child[] {
     return [
       h('div.retro-half.top',
-        h('div.retro-player.center', [
+        h('div.analyse-training_player.center', [
           h('div.retro-instruction', [
             h('strong', i18n('evaluatingYourMove')),
             renderEvalProgress(ctrl.node())
@@ -151,7 +151,7 @@ const feedback = {
   end(ctrl: IRetroCtrl, hasFullComputerAnalysis: () => boolean): Mithril.Child[] {
     if (!hasFullComputerAnalysis()) return [
       h('div.retro-half.top',
-        h('div.retro-player', [
+        h('div.analyse-training_player', [
           h('div.retro-icon', spinner.getVdom()),
           h('div.retro-instruction', i18n('waitingForAnalysis'))
         ])
@@ -159,7 +159,7 @@ const feedback = {
     ]
     const nothing = !ctrl.completion()[1]
     return [
-      h('div.retro-player', [
+      h('div.analyse-training_player', [
         h('div.piece-no-square', {
           className: ctrl.pieceTheme
         }, h('piece.king.' + ctrl.vm.color)),
@@ -206,7 +206,7 @@ function renderTitle(ctrl: IRetroCtrl): Mithril.Child {
   return h('div.titleWrapper', [
     h('div.title', i18n('learnFromYourMistakes')),
     h('div.mistakeNb', Math.min(completion[0] + 1, completion[1]) + ' / ' + completion[1]),
-    h('div.retro-actions', [
+    h('div.actions', [
       h('button.window-button', {
         oncreate: helper.ontap(ctrl.toggleWindow)
       }, h('span.fa', {

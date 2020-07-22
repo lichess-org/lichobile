@@ -201,6 +201,9 @@ export default class AnalyseCtrl {
       this.debouncedExplorerSetStep()
     }
 
+    // TODO
+    this.togglePractice()
+
     setTimeout(this.debouncedScroll, 250)
     setTimeout(this.initCeval, 1000)
   }
@@ -237,7 +240,7 @@ export default class AnalyseCtrl {
     if (!this.synthetic) val = [tabs.gameInfos, ...val]
     // TODO enable only when study.canContribute() is false with write support
     if (this.study) val = [...val, tabs.comments]
-    if (!this.retro && this.ceval.enabled()) val = [...val, tabs.ceval]
+    if (!this.retro && !this.practice && this.ceval.enabled()) val = [...val, tabs.ceval]
     if (this.study || (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data))) {
       val = [...val, tabs.charts]
     }
@@ -308,7 +311,7 @@ export default class AnalyseCtrl {
 
   startCeval = () => {
     if (this.ceval.enabled() && this.canUseCeval()) {
-      this.ceval.start(this.path, this.nodeList, !!this.retro)
+      this.ceval.start(this.path, this.nodeList, !!this.retro || !!this.practice)
       this.evalCache.fetch(this.path, this.ceval.getMultiPv())
     }
   }

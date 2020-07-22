@@ -9,47 +9,13 @@ import Clock from './Clock'
 import { povDiff } from '../ceval/winningChances'
 import AnalyseCtrl from '../AnalyseCtrl'
 
-export default function renderBoard(
-  ctrl: AnalyseCtrl,
-) {
-  const player = ctrl.data.game.player
-  const ceval = ctrl.node && ctrl.node.ceval
-  const rEval = ctrl.node && ctrl.node.eval
-
-  let nextBest: string | undefined
-  let curBestShapes: Shape[] = []
-  if (!ctrl.retro && !ctrl.practice && ctrl.settings.s.showBestMove) {
-    nextBest = ctrl.nextNodeBest() || (ceval && ceval.best)
-    if (nextBest) {
-      curBestShapes = moveOrDropShape(nextBest, 'paleBlue', player)
-    }
-    if (ceval && ceval.pvs.length > 1) {
-      ceval.pvs.slice(1).forEach(pv => {
-        const shift = povDiff(player, ceval.pvs[0], pv)
-        if (shift >= 0 && shift < 0.2) {
-          const linewidth = Math.round(12 - shift * 50) // 12 to 2
-          curBestShapes = curBestShapes.concat(moveOrDropShape(pv.moves[0], 'paleBlue' + linewidth, player))
-        }
-      })
-    }
-  }
-  const pastBestShape: Shape[] = !ctrl.retro && rEval && rEval.best ?
-    moveOrDropShape(rEval.best, 'paleGreen', player) : []
-
-  const badNode = ctrl.retro && ctrl.retro.showBadNode()
-  const badMoveShape: Shape[] = badNode && badNode.uci ?
-    moveOrDropShape(badNode.uci, 'paleRed', player) : []
-
-  const shapes = [
-    ...pastBestShape, ...curBestShapes, ...badMoveShape
-  ]
-
+export default function renderBoard(ctrl: AnalyseCtrl) {
   return h('div.analyse-boardWrapper', [
     playerBar(ctrl, ctrl.topColor()),
     h(Board, {
       variant: ctrl.data.game.variant.key,
       chessground: ctrl.chessground,
-      shapes,
+      shapes: computeShapes(ctrl),
       clearableShapes: ctrl.node.shapes,
       wrapperClasses: ctrl.settings.s.smallBoard ? 'halfsize' : '',
       canClearShapes: true,
@@ -86,6 +52,51 @@ export function playerBar(ctrl: AnalyseCtrl, color: Color) {
       checkCount ? renderCheckCount(ctrl.bottomColor() === 'white', checkCount) : null
     ]) : null,
   ])
+}
+
+function computeShapes(ctrl: AnalyseCtrl): readonly Shape[] {
+  const player = ctrl.data.game.player
+  const ceval = ctrl.node && ctrl.node.ceval
+  const rEval = ctrl.node && ctrl.node.eval
+  let nextBest: string | undefined
+  let curBestShapes: readonly Shape[] = []
+
+  if (ctrl.practice) {
+    const hint = ctrl.practice.hinting()
+    if (hint) {
+      if (hint.mode === 'move') curBestShapes = moveOrDropShape(hint.uci, 'paleBlue', player)
+        else curBestShapes = [{
+          orig: chessFormat.uciToMoveOrDrop(hint.uci)[0],
+          brush: 'paleBlue'
+        }]
+    }
+  }
+
+  if (!ctrl.retro && !ctrl.practice && ctrl.settings.s.showBestMove) {
+    nextBest = ctrl.nextNodeBest() || (ceval && ceval.best)
+    if (nextBest) {
+      curBestShapes = moveOrDropShape(nextBest, 'paleBlue', player)
+    }
+    if (ceval && ceval.pvs.length > 1) {
+      ceval.pvs.slice(1).forEach(pv => {
+        const shift = povDiff(player, ceval.pvs[0], pv)
+        if (shift >= 0 && shift < 0.2) {
+          const linewidth = Math.round(12 - shift * 50) // 12 to 2
+          curBestShapes = curBestShapes.concat(moveOrDropShape(pv.moves[0], 'paleBlue' + linewidth, player))
+        }
+      })
+    }
+  }
+  const pastBestShape: Shape[] = !ctrl.retro && rEval && rEval.best ?
+  moveOrDropShape(rEval.best, 'paleGreen', player) : []
+
+  const badNode = ctrl.retro && ctrl.retro.showBadNode()
+  const badMoveShape: Shape[] = badNode && badNode.uci ?
+  moveOrDropShape(badNode.uci, 'paleRed', player) : []
+
+  return [
+    ...pastBestShape, ...curBestShapes, ...badMoveShape
+  ]
 }
 
 function renderCheckCount(whitePov: boolean, checkCount: { white: number, black: number }) {

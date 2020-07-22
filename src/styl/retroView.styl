@@ -1,52 +1,7 @@
-.analyse-retro_box
-  position absolute
-  bottom 0
-  left 0
-  height 100%
-  width 100%
-  display flex
-  flex-flow column nowrap
-  &.minimized
-    height 28px
-  > .titleWrapper
-    flex 0 0 28px
-    background-color darkBlue
-    color headerBgDarkColor
-    display flex
-    flex-flow row nowrap
-    justify-content space-between
-    align-items center
-    padding-left 10px
-    > div
-      white-space nowrap
-      overflow hidden
-      text-overflow ellipsis
-    > .mistakeNb
-      flex 0 0 50px
-      text-align center
-
-.retro-feedback
-  height initial
-  flex 1 1 auto
-  display flex
-  flex-flow column nowrap
-  justify-content center
+.analyse-training_feedback
   &.fail
     .retro-icon:not(.off)
       color red
-
-.retro-player
-  display flex
-  flex-flow row wrap
-  align-items center
-  margin 0 1em
-  > .piece-no-square
-    flex 0 0 64px
-  @media only screen and (orientation: landscape)
-    flex-flow column nowrap
-    > .piece-no-square
-      margin-bottom 2vmin
-
 
 .retro-instruction
   display flex
@@ -104,10 +59,6 @@
     height: 4px;
     transition: width 0.5s;
     max-width: 100%;
-
-.retro-actions
-  flex 0 0 auto
-  display flex
 
 
 .view-container.light

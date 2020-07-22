@@ -4,6 +4,7 @@ import { Position, PositionError } from 'chessops/chess'
 import { parseFen } from 'chessops/fen'
 import { Result } from '@badrap/result'
 import { setupPosition } from 'chessops/variant'
+import settings from '../../../settings'
 import redraw from '../../../utils/redraw'
 import { requestIdleCallback } from '../../../utils'
 import { altCastles, variantToRules } from '../../../utils/chessFormat'
@@ -38,8 +39,7 @@ export interface PracticeCtrl {
   isMyTurn(): boolean
   comment: Prop<Comment | null>
   running: any
-  hovering: any
-  hinting: any
+  hinting: Prop<Hinting | null>
   resume: any
   playableDepth: any
   reset(): void
@@ -47,10 +47,10 @@ export interface PracticeCtrl {
   postUserJump(from: Tree.Path, to: Tree.Path): void
   onUserMove(): void
   playCommentBest(): void
-  commentShape(enable: boolean): void
   hint(): void
   currentNode(): Tree.Node
   bottomColor(): Color
+  pieceTheme: string
 }
 
 export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCtrl {
@@ -58,7 +58,6 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
   const variant = root.data.game.variant.key,
   running = prop(true),
   comment = prop<Comment | null>(null),
-  hovering = prop<any>(null),
   hinting = prop<Hinting | null>(null),
   played = prop(false)
 
@@ -73,7 +72,6 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
   }
 
   function playable(node: Tree.Node): boolean {
-    console.log('playable', node.ceval)
     const ceval = node.ceval
     return ceval ? (
       ceval.depth >= Math.min(ceval.maxDepth || 99, playableDepth()) ||
@@ -203,7 +201,6 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
     isMyTurn,
     comment,
     running,
-    hovering,
     hinting,
     resume,
     playableDepth,
@@ -229,13 +226,6 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
       root.jump(treePath.init(c.path))
       if (c.best) root.playUci(c.best.uci)
     },
-    commentShape(enable: boolean) {
-      const c = comment()
-      if (!enable || !c || !c.best) hovering(null)
-      else hovering({
-        uci: c.best.uci
-      })
-    },
     hint() {
       const best = root.node.ceval ? root.node.ceval.pvs[0].moves[0] : null,
       prev = hinting()
@@ -244,8 +234,10 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
         mode: prev ? 'move' : 'piece',
         uci: best
       })
+      redraw()
     },
     currentNode: () => root.node,
     bottomColor: root.bottomColor,
+    pieceTheme: settings.general.theme.piece(),
   }
 }

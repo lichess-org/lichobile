@@ -63,9 +63,7 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
   played = prop(false)
 
   function ensureCevalRunning() {
-    // if (!root.showComputer()) root.toggleComputer()
     if (!root.ceval.enabled()) root.ceval.toggle()
-    // if (root.threatMode()) root.toggleThreatMode()
   }
 
   function commentable(node: Tree.Node, bonus: number = 0): boolean {
@@ -75,6 +73,7 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
   }
 
   function playable(node: Tree.Node): boolean {
+    console.log('playable', node.ceval)
     const ceval = node.ceval
     return ceval ? (
       ceval.depth >= Math.min(ceval.maxDepth || 99, playableDepth()) ||

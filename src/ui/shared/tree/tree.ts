@@ -16,7 +16,6 @@ export interface TreeWrapper {
   updateAt(path: Tree.Path, update: (node: Tree.Node) => void): MaybeNode
   addNode(node: Tree.Node, path: Tree.Path): Tree.Path | undefined
   addNodes(nodes: Tree.Node[], path: Tree.Path): Tree.Path | undefined
-  addDests(dests: string, path: Tree.Path, opening?: Tree.Opening): MaybeNode
   setShapes(shapes: ReadonlyArray<Tree.Shape>, path: Tree.Path): MaybeNode
   setCommentAt(comment: Tree.Comment, path: Tree.Path): MaybeNode
   deleteCommentAt(id: string, path: Tree.Path): MaybeNode
@@ -31,6 +30,7 @@ export interface TreeWrapper {
   merge(tree: Tree.Node): void
   removeCeval(): void
   removeComputerVariations(): void
+  parentNode(path: Tree.Path): Tree.Node
   getParentClock(node: Tree.Node, path: Tree.Path): Tree.Clock | undefined
 }
 
@@ -150,7 +150,7 @@ export function build(root: Tree.Node): TreeWrapper {
   }
 
   function deleteNodeAt(path: Tree.Path): void {
-    const parent = nodeAtPath(treePath.init(path))
+    const parent = parentNode(path)
     const id = treePath.last(path)
     ops.removeChild(parent, id)
   }
@@ -200,9 +200,13 @@ export function build(root: Tree.Node): TreeWrapper {
     })
   }
 
+  function parentNode(path: Tree.Path): Tree.Node {
+    return nodeAtPath(treePath.init(path))
+  }
+
   function getParentClock(node: Tree.Node, path: Tree.Path): Tree.Clock | undefined {
     if (!('parentClock' in node)) {
-      const parent = path && nodeAtPath(treePath.init(path))
+      const parent = path && parentNode(path)
       if (!parent) node.parentClock = node.clock
       else if (!('clock' in parent)) node.parentClock = undefined
       else node.parentClock = parent.clock
@@ -226,12 +230,6 @@ export function build(root: Tree.Node): TreeWrapper {
     updateAt,
     addNode,
     addNodes,
-    addDests(dests: string, path: Tree.Path, opening?: Tree.Opening): MaybeNode {
-      return updateAt(path, (node: Tree.Node) => {
-        node.dests = dests
-        if (opening) node.opening = opening
-      })
-    },
     setShapes(shapes: ReadonlyArray<Tree.Shape>, path: Tree.Path): MaybeNode {
       return updateAt(path, (node: Tree.Node) => {
         node.shapes = shapes
@@ -263,6 +261,7 @@ export function build(root: Tree.Node): TreeWrapper {
         n.children = n.children.filter(c => !c.comp)
       })
     },
+    parentNode,
     getParentClock
   }
 }

@@ -3,7 +3,7 @@ import h from 'mithril/hyperscript'
 import i18n, { plural } from '../../../i18n'
 import * as helper from '../../helper'
 import explorerConfig from './explorerConfig'
-import { Move, isTablebaseData } from './interfaces'
+import { isTablebaseData, isOpeningData, TablebaseMoveStats } from './interfaces'
 import AnalyseCtrl from '../AnalyseCtrl'
 import OpeningTable, { showEmpty, getTR } from './OpeningTable'
 
@@ -19,10 +19,10 @@ export default function renderExplorer(ctrl: AnalyseCtrl) {
   const opening = ctrl.tree.getOpening(ctrl.nodeList) || ctrl.data.game.opening
   return (
     <div id="explorerTable" className={className}>
-      { data && data.opening ?
+      { data && data.isOpening ?
       <div className="explorer-fixedTitle">
         <span>{ opening ? opening.eco + ' ' + opening.name : '' }</span>
-        { configOpened || (data && data.opening) ?
+        { configOpened || (data && data.isOpening) ?
           <span className="toconf" data-icon={configOpened ? 'L' : '%'}
             oncreate={helper.ontap(config.toggleOpen)}
           /> : null
@@ -52,10 +52,10 @@ export function getTitle(ctrl: AnalyseCtrl): Mithril.Children {
 function onTablebaseTap(ctrl: AnalyseCtrl, e: Event) {
   const el = getTR(e)
   const uci = el && el.dataset['uci']
-  if (uci) ctrl.uciMove(uci)
+  if (uci) ctrl.playUci(uci)
 }
 
-function showTablebase(ctrl: AnalyseCtrl, title: string, moves: Array<Move>, fen: string) {
+function showTablebase(ctrl: AnalyseCtrl, title: string, moves: readonly TablebaseMoveStats[], fen: string) {
   let stm = fen.split(/\s/)[1]
   if (!moves.length) return null
   return [
@@ -64,7 +64,7 @@ function showTablebase(ctrl: AnalyseCtrl, title: string, moves: Array<Move>, fen
       oncreate={helper.ontapXY(e => onTablebaseTap(ctrl, e!), undefined, getTR)}
     >
       <tbody>
-      {moves.map((move: Move) => {
+      {moves.map((move: TablebaseMoveStats) => {
         return <tr data-uci={move.uci} key={move.uci}>
           <td>{move.san}</td>
           <td>
@@ -78,23 +78,23 @@ function showTablebase(ctrl: AnalyseCtrl, title: string, moves: Array<Move>, fen
   ]
 }
 
-function winner(stm: string, move: Move) {
-  if ((stm[0] === 'w' && move.wdl < 0) || (stm[0] === 'b' && move.wdl > 0))
+function winner(stm: string, move: TablebaseMoveStats) {
+  if ((stm[0] === 'w' && Number(move.wdl) < 0) || (stm[0] === 'b' && Number(move.wdl) > 0))
     return 'white'
-  else if ((stm[0] === 'b' && move.wdl < 0) || (stm[0] === 'w' && move.wdl > 0))
+  else if ((stm[0] === 'b' && Number(move.wdl) < 0) || (stm[0] === 'w' && Number(move.wdl) > 0))
     return 'black'
   else
     return null
 }
 
-function showDtm(stm: string, move: Move) {
+function showDtm(stm: string, move: TablebaseMoveStats) {
   if (move.dtm) return h('result.' + winner(stm, move), {
     title: plural('mateInXHalfMoves', Math.abs(move.dtm), Math.abs(move.dtm)),
   }, 'DTM ' + Math.abs(move.dtm))
   else return null
 }
 
-function showDtz(stm: string, move: Move) {
+function showDtz(stm: string, move: TablebaseMoveStats) {
   if (move.checkmate) return h('result.' + winner(stm, move), i18n('checkmate'))
   else if (move.stalemate) return h('result.draws', i18n('stalemate'))
   else if (move.variant_win) return h('result.' + winner(stm, move), i18n('variantWin'))
@@ -125,7 +125,7 @@ function showGameEnd(title: string) {
 
 function show(ctrl: AnalyseCtrl) {
   const data = ctrl.explorer.current()
-  if (data && data.opening) {
+  if (data && isOpeningData(data)) {
     return h(OpeningTable, { data, ctrl })
   }
   else if (data && isTablebaseData(data)) {
@@ -133,12 +133,12 @@ function show(ctrl: AnalyseCtrl) {
     if (moves.length) {
       return (
         <div className="explorer-data">
-          {showTablebase(ctrl, i18n('winning'), moves.filter((move: Move) => move.wdl === -2), data.fen)}
-          {showTablebase(ctrl, i18n('unknown'), moves.filter((move: Move) => move.wdl === null), data.fen)}
-          {showTablebase(ctrl, i18n('winPreventedBy50MoveRule'), moves.filter((move: Move) => move.wdl === -1), data.fen)}
-          {showTablebase(ctrl, i18n('drawn'), moves.filter((move: Move) => move.wdl === 0), data.fen)}
-          {showTablebase(ctrl, i18n('lossSavedBy50MoveRule'), moves.filter((move: Move) => move.wdl === 1), data.fen)}
-          {showTablebase(ctrl, i18n('losing'), moves.filter((move: Move) => move.wdl === 2), data.fen)}
+          {showTablebase(ctrl, i18n('winning'), moves.filter((move) => move.wdl === -2), data.fen)}
+          {showTablebase(ctrl, i18n('unknown'), moves.filter((move) => move.wdl === null), data.fen)}
+          {showTablebase(ctrl, i18n('winPreventedBy50MoveRule'), moves.filter((move) => move.wdl === -1), data.fen)}
+          {showTablebase(ctrl, i18n('drawn'), moves.filter((move) => move.wdl === 0), data.fen)}
+          {showTablebase(ctrl, i18n('lossSavedBy50MoveRule'), moves.filter((move) => move.wdl === 1), data.fen)}
+          {showTablebase(ctrl, i18n('losing'), moves.filter((move) => move.wdl === 2), data.fen)}
         </div>
       )
     }

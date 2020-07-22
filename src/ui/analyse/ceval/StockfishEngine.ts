@@ -43,7 +43,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
   }
 
   /*
-   * Stop current command if not already stopped, then ddd a search command to
+   * Stop current command if not already stopped, then add a search command to
    * the queue.
    * The search will start when stockfish is ready (after reinit if it takes more
    * than 5s to stop current search)

@@ -1,5 +1,5 @@
 import { SESSION_ID_KEY, fetchJSON } from '../../../http'
-import { ExplorerData } from './interfaces'
+import { OpeningData, TablebaseData } from './interfaces'
 
 const explorerEndpoint = 'https://explorer.lichess.ovh'
 const tablebaseEndpoint = 'https://tablebase.lichess.ovh'
@@ -10,7 +10,7 @@ export interface OpeningConf {
   ratings?: number[]
 }
 
-export function openingXhr(variant: VariantKey, fen: string, config: OpeningConf, withGames: boolean): Promise<ExplorerData> {
+export function openingXhr(variant: VariantKey, fen: string, config: OpeningConf, withGames: boolean): Promise<OpeningData> {
   let url: string
   const params: any = {
     fen,
@@ -38,7 +38,7 @@ export function openingXhr(variant: VariantKey, fen: string, config: OpeningConf
   })
 }
 
-export function tablebaseXhr(variant: VariantKey, fen: string): Promise<ExplorerData> {
+export function tablebaseXhr(variant: VariantKey, fen: string): Promise<TablebaseData> {
   return fetchJSON(tablebaseEndpoint + '/' + variant, {
     headers: {
       'Accept': 'application/json, text/*',

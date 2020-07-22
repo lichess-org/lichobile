@@ -5,10 +5,8 @@ import StockfishEngine from './StockfishEngine'
 import { Opts, Work, ICevalCtrl } from './interfaces'
 
 export default function CevalCtrl(
-  variant: VariantKey,
-  allowed: boolean,
+  opts: Opts,
   emit: (path: string, res?: Tree.ClientEval) => void,
-  initOpts: Opts
 ): ICevalCtrl {
 
   let initialized = false
@@ -16,19 +14,13 @@ export default function CevalCtrl(
   const minDepth = 6
   const maxDepth = 22
 
-  const opts = {
-    multiPv: initOpts.multiPv,
-    cores: initOpts.cores,
-    infinite: initOpts.infinite
-  }
-
-  const engine = StockfishEngine(variant)
+  const engine = StockfishEngine(opts.variant)
 
   let started = false
   let isEnabled = settings.analyse.enableCeval()
 
   function enabled() {
-    return allowed && isEnabled
+    return opts.allowed && isEnabled
   }
 
   function onEmit(work: Work, res?: Tree.ClientEval) {
@@ -71,9 +63,11 @@ export default function CevalCtrl(
       engine.exit()
       .then(() => {
         initialized = false
+        started = false
       })
       .catch(() => {
         initialized = false
+        started = false
       })
     }
   }
@@ -108,7 +102,7 @@ export default function CevalCtrl(
     maxDepth,
     effectiveMaxDepth,
     minDepth,
-    variant,
+    variant: opts.variant,
     start,
     stop() {
       if (!enabled() || !started) return
@@ -116,7 +110,7 @@ export default function CevalCtrl(
       started = false
     },
     destroy,
-    allowed,
+    allowed: opts.allowed,
     enabled,
     toggle() {
       isEnabled = !isEnabled
@@ -132,7 +126,6 @@ export default function CevalCtrl(
     },
     toggleInfinite() {
       opts.infinite = !opts.infinite
-    },
-    opts
+    }
   }
 }

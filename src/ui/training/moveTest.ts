@@ -1,15 +1,8 @@
 import { path as treePath, Tree } from '../shared/tree'
-import { decomposeUci, sanToRole } from '../../utils/chessFormat'
+import { altCastles, decomposeUci, sanToRole } from '../../utils/chessFormat'
 import { Puzzle, Line, LineFeedback  } from '../../lichess/interfaces/training'
 import { MoveRequest } from '../../chess'
 import { Mode, Feedback } from './interfaces'
-
-const altCastles: StringMap = {
-  e1a1: 'e1c1',
-  e1h1: 'e1g1',
-  e8a8: 'e8c8',
-  e8h8: 'e8g8'
-}
 
 export default function moveTest(
   mode: Mode,

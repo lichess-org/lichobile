@@ -1,12 +1,14 @@
 import Stream from 'mithril/stream'
-import redraw from '../../../utils/redraw'
 import debounce from 'lodash-es/debounce'
+import redraw from '../../../utils/redraw'
+import { oppositeColor } from '../../../utils'
+import { colorOf } from '../../../utils/fen'
+import * as gameApi from '../../../lichess/game'
+import { isSynthetic } from '../util'
+import AnalyseCtrl from '../AnalyseCtrl'
 import explorerConfig from './explorerConfig'
 import { openingXhr, tablebaseXhr } from './explorerXhr'
-import { isSynthetic } from '../util'
-import * as gameApi from '../../../lichess/game'
-import { IExplorerCtrl, ExplorerData } from './interfaces'
-import AnalyseCtrl from '../AnalyseCtrl'
+import { IExplorerCtrl, ExplorerData, OpeningData, SimpleTablebaseHit, TablebaseData, TablebaseMoveStats } from './interfaces'
 
 export default function ExplorerCtrl(
   root: AnalyseCtrl,
@@ -55,8 +57,8 @@ export default function ExplorerCtrl(
       ratings: config.data.rating.selected()
     }
     return openingXhr(effectiveVariant, fen, conf, withGames)
-    .then((res: ExplorerData) => {
-      res.opening = true
+    .then((res: OpeningData) => {
+      res.isOpening = true
       res.fen = fen
       setResult(fen, res)
       loading(false)
@@ -85,7 +87,7 @@ export default function ExplorerCtrl(
   }
 
   const empty: ExplorerData = {
-    opening: true,
+    isOpening: true,
     moves: []
   }
 
@@ -117,8 +119,8 @@ export default function ExplorerCtrl(
     withGames,
     current,
     fetchMasterOpening: (function() {
-      const masterCache: {[fen: string]: ExplorerData } = {}
-      return function(fen: string) {
+      const masterCache: {[fen: string]: OpeningData } = {}
+      return function(fen: string): Promise<OpeningData> {
         if (masterCache[fen]) return Promise.resolve(masterCache[fen])
         return openingXhr('standard', fen, { db: 'masters' }, false)
         .then((res) => {
@@ -126,7 +128,20 @@ export default function ExplorerCtrl(
           return res
         })
       }
-    })()
+    })(),
+    fetchTablebaseHit(fen: string): Promise<SimpleTablebaseHit> {
+      return tablebaseXhr(effectiveVariant, fen).then((res: TablebaseData) => {
+        const move = res.moves[0]
+        if (move && move.dtz == null) throw 'unknown tablebase position'
+        return {
+          fen: fen,
+          best: move && move.uci,
+          winner: res.checkmate ? oppositeColor(colorOf(fen)) : (
+            res.stalemate ? undefined : winnerOf(fen, move!)
+          )
+        } as SimpleTablebaseHit
+      })
+    }
   }
 }
 
@@ -137,4 +152,12 @@ function tablebaseRelevant(variant: VariantKey, fen: string) {
   if (variant === 'standard' || variant === 'chess960') return pieceCount <= 8
   else if (variant === 'atomic' || variant === 'antichess') return pieceCount <= 7
   else return false
+}
+
+export function winnerOf(fen: Fen, move: TablebaseMoveStats): Color | undefined {
+  const stm = fen.split(' ')[1]
+  if ((stm[0] == 'w' && move.wdl! < 0) || (stm[0] == 'b' && move.wdl! > 0))
+    return 'white'
+  if ((stm[0] == 'b' && move.wdl! < 0) || (stm[0] == 'w' && move.wdl! > 0))
+    return 'black'
 }

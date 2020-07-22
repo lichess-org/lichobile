@@ -1,6 +1,7 @@
 import redraw from '../../../utils/redraw'
 import settings from '../../../settings'
 import { evalSwings } from '../nodeFinder'
+import { OpeningData } from '../explorer/interfaces'
 import * as winningChances from '../ceval/winningChances'
 import { path as treePath, Tree } from '../../shared/tree'
 import { empty } from '../util'
@@ -91,7 +92,7 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
     }
     // fetch opening explorer moves
     if (game.variant.key === 'standard' && game.division && (!game.division.middle || fault.node.ply < game.division.middle)) {
-      root.explorer.fetchMasterOpening(prev.node.fen).then((res) => {
+      root.explorer.fetchMasterOpening(prev.node.fen).then((res: OpeningData) => {
         const cur = vm.current
         const ucis: Uci[] = []
         res!.moves.forEach((m) => {

@@ -55,11 +55,11 @@ function formatTime(millis: number) {
 function onLineTap(ctrl: AnalyseCtrl, e: Event) {
   const el = helper.getLI(e)
   const uci = el && el.dataset['uci']
-  if (uci) ctrl.uciMove(uci)
+  if (uci) ctrl.playUci(uci)
 }
 
 function renderCevalPvs(ctrl: AnalyseCtrl) {
-  const multiPv = ctrl.ceval.opts.multiPv
+  const multiPv = ctrl.ceval.getMultiPv()
   const node = ctrl.node
   if (node.ceval && !ctrl.gameOver()) {
     const pvs = node.ceval.pvs

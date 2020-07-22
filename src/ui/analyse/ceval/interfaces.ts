@@ -11,6 +11,8 @@ export interface Eval {
 }
 
 export interface Opts {
+  allowed: boolean
+  variant: VariantKey
   multiPv: number
   cores: number
   infinite: boolean
@@ -43,7 +45,6 @@ export interface ICevalCtrl {
   minDepth: number
   maxDepth: number
   effectiveMaxDepth(): number
-  opts: Opts
   setCores(c: number): void
   setMultiPv(pv: number): void
   getMultiPv(): number

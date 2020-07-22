@@ -66,3 +66,48 @@ export function nodeFullName(node: Tree.Node) {
   ) + ' ' + fixCrazySan(node.san)
   return 'Initial position'
 }
+
+function pieceCount(fen: string) {
+  const parts = fen.split(/\s/)
+  return parts[0].split(/[nbrqkp]/i).length - 1
+}
+
+function tablebasePieces(variant: VariantKey) {
+  switch (variant) {
+    case 'standard':
+    case 'fromPosition':
+    case 'chess960':
+      return 7
+    case 'atomic':
+    case 'antichess':
+      return 6
+    default:
+      return 0
+  }
+}
+
+export function tablebaseGuaranteed(variant: VariantKey, fen: string) {
+  return pieceCount(fen) <= tablebasePieces(variant)
+}
+
+export function defined<A>(v: A | undefined): v is A {
+  return v !== undefined
+}
+
+export interface Prop<T> {
+  (): T
+  (v: T): T
+}
+
+export function prop<A>(initialValue: A): Prop<A> {
+  let value = initialValue
+  const fun = function(v: A | undefined) {
+    if (defined(v)) value = v
+    return value
+  }
+  return fun as Prop<A>
+}
+
+export function plyColor(ply: number): Color {
+  return (ply % 2 === 0) ? 'white' : 'black'
+}

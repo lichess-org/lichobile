@@ -1,4 +1,5 @@
 import isObject from 'lodash-es/isObject'
+import { Rules } from 'chessops/types'
 
 const uciRoleMap: {[k: string]: Role } = {
   P: 'pawn',
@@ -23,6 +24,13 @@ export const sanToRole: SanToRole = {
   B: 'bishop',
   R: 'rook',
   Q: 'queen'
+}
+
+export const altCastles: StringMap = {
+  e1a1: 'e1c1',
+  e1h1: 'e1g1',
+  e8a8: 'e8c8',
+  e8h8: 'e8g8'
 }
 
 export function uciToMove(uci: string): KeyPair {
@@ -142,4 +150,21 @@ export const piotr2key: {[i: string]: Key } = {
   '9': 'f8',
   '!': 'g8',
   '?': 'h8'
+}
+
+export function variantToRules(variant: VariantKey): Rules {
+  switch (variant) {
+    case 'standard':
+    case 'chess960':
+    case 'fromPosition':
+      return 'chess'
+    case 'threeCheck':
+      return '3check'
+    case 'kingOfTheHill':
+      return 'kingofthehill'
+    case 'racingKings':
+      return 'racingkings'
+    default:
+      return variant
+  }
 }

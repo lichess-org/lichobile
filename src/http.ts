@@ -47,6 +47,11 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
     'Accept': 'application/vnd.lichess.v' + globalConfig.apiVersion + '+json'
   })
 
+  const sid = storage.get<string>(SESSION_ID_KEY)
+  if (sid !== null) {
+    headers.append(SESSION_ID_KEY, sid)
+  }
+
   const cfg: RequestInit = {
     method: 'GET',
     credentials: 'include',
@@ -92,12 +97,6 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
     if (!cfg.body) {
       cfg.body = '{}'
     }
-  }
-
-  // append session id header if defined
-  const sid = storage.get<string>(SESSION_ID_KEY)
-  if (sid !== null) {
-    headers.append(SESSION_ID_KEY, sid)
   }
 
   const fullUrl = url.indexOf('http') > -1 ? url : baseUrl + url

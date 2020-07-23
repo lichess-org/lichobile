@@ -174,13 +174,17 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
   }
 
   function checkCevalOrTablebase() {
-    if (tablebaseGuaranteed(variant, root.node.fen)) root.explorer.fetchTablebaseHit(root.node.fen).then(hit => {
-      if (hit && root.node.fen === hit.fen) root.node.tbhit = hit
-      checkCeval()
-    }, () => {
-      if (!defined(root.node.tbhit)) root.node.tbhit = null
-      checkCeval()
-    })
+    if (tablebaseGuaranteed(variant, root.node.fen)) {
+      root.explorer.fetchTablebaseHit(root.node.fen)
+      .then(hit => {
+        if (hit && root.node.fen === hit.fen) root.node.tbhit = hit
+        checkCeval()
+      })
+      .catch(() => {
+        if (!defined(root.node.tbhit)) root.node.tbhit = null
+        checkCeval()
+      })
+    }
     else checkCeval()
   }
 

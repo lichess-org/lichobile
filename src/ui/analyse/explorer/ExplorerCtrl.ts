@@ -130,7 +130,7 @@ export default function ExplorerCtrl(
       }
     })(),
     fetchTablebaseHit(fen: string): Promise<SimpleTablebaseHit> {
-      return tablebaseXhr(effectiveVariant, fen).then((res: TablebaseData) => {
+      return tablebaseXhr(effectiveVariant, fen, 2000).then((res: TablebaseData) => {
         const move = res.moves[0]
         if (move && move.dtz == null) throw 'unknown tablebase position'
         return {

@@ -38,7 +38,7 @@ export function openingXhr(variant: VariantKey, fen: string, config: OpeningConf
   })
 }
 
-export function tablebaseXhr(variant: VariantKey, fen: string): Promise<TablebaseData> {
+export function tablebaseXhr(variant: VariantKey, fen: string, timeout?: number): Promise<TablebaseData> {
   return fetchJSON(tablebaseEndpoint + '/' + variant, {
     headers: {
       'Accept': 'application/json, text/*',
@@ -48,6 +48,7 @@ export function tablebaseXhr(variant: VariantKey, fen: string): Promise<Tablebas
     credentials: 'omit',
     query: {
       fen: fen
-    }
+    },
+    timeout
   })
 }

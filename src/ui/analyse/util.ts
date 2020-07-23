@@ -94,20 +94,6 @@ export function defined<A>(v: A | undefined): v is A {
   return v !== undefined
 }
 
-export interface Prop<T> {
-  (): T
-  (v: T): T
-}
-
-export function prop<A>(initialValue: A): Prop<A> {
-  let value = initialValue
-  const fun = function(v: A | undefined) {
-    if (defined(v)) value = v
-    return value
-  }
-  return fun as Prop<A>
-}
-
 export function plyColor(ply: number): Color {
   return (ply % 2 === 0) ? 'white' : 'black'
 }

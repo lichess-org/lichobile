@@ -1,3 +1,4 @@
+import Stream from 'mithril/stream'
 import { parseUci } from 'chessops/util'
 import { makeSan } from 'chessops/san'
 import { Position, PositionError } from 'chessops/chess'
@@ -10,7 +11,7 @@ import { requestIdleCallback } from '../../../utils'
 import { altCastles, variantToRules } from '../../../utils/chessFormat'
 import { path as treePath, Tree } from '../../shared/tree'
 import { detectThreefold } from '../nodeFinder'
-import { tablebaseGuaranteed, defined, prop, Prop } from '../util'
+import { tablebaseGuaranteed, defined } from '../util'
 import { povDiff } from '../ceval/winningChances'
 import { Eval } from '../ceval/interfaces'
 import AnalyseCtrl from '../AnalyseCtrl'
@@ -37,11 +38,11 @@ export interface PracticeCtrl {
   onCeval(): void
   onJump(): void
   isMyTurn(): boolean
-  comment: Prop<Comment | null>
-  running: any
-  hinting: Prop<Hinting | null>
-  resume: any
-  playableDepth: any
+  comment: Stream<Comment | null>
+  running: Stream<boolean>
+  hinting: Stream<Hinting | null>
+  resume(): void
+  playableDepth: () => number
   reset(): void
   preUserJump(from: Tree.Path, to: Tree.Path): void
   postUserJump(from: Tree.Path, to: Tree.Path): void
@@ -56,10 +57,10 @@ export interface PracticeCtrl {
 export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCtrl {
 
   const variant = root.data.game.variant.key,
-  running = prop(true),
-  comment = prop<Comment | null>(null),
-  hinting = prop<Hinting | null>(null),
-  played = prop(false)
+  running = Stream(true),
+  comment = Stream<Comment | null>(null),
+  hinting = Stream<Hinting | null>(null),
+  played = Stream(false)
 
   function ensureCevalRunning() {
     if (!root.ceval.enabled()) root.ceval.toggle()
@@ -186,6 +187,7 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
   function resume() {
     running(true)
     checkCevalOrTablebase()
+    redraw()
   }
 
   requestIdleCallback(checkCevalOrTablebase)

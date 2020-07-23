@@ -17,14 +17,15 @@ function commentBest(c: Comment, ctrl: PracticeCtrl): Mithril.Children {
   ) : []
 }
 
-function renderOffTrack(root: AnalyseCtrl, ctrl: PracticeCtrl): Mithril.Child {
-  console.log(root, ctrl)
+function renderOffTrack(ctrl: PracticeCtrl): Mithril.Child {
   return h('div.analyse-training_player.off', [
     h('div.icon.off', '!'),
     h('div.analyse-training_box_instruction', [
       h('strong', i18n('youBrowsedAway')),
       h('div.choices', [
-        h('button', {}, i18n('resumePractice'))
+        h('button', {
+          oncreate: helper.ontap(ctrl.resume)
+        }, i18n('resumePractice'))
       ])
     ])
   ])
@@ -98,7 +99,7 @@ export default function(root: AnalyseCtrl): Mithril.Child {
   const end = ctrl.currentNode().threefold ? 'threefoldRepetition' : root.gameOver()
   return h('div.analyse-practice_box.analyse-training_box.box.' + (comment ? comment.verdict : 'no-verdict'), [
     renderTitle(root),
-    h('div.analyse-training_feedback.native_scroller', !running ? renderOffTrack(root, ctrl) : (end ? renderEnd(root, ctrl, end) : renderRunning(root, ctrl))),
+    h('div.analyse-training_feedback.native_scroller', !running ? renderOffTrack(ctrl) : (end ? renderEnd(root, ctrl, end) : renderRunning(root, ctrl))),
     running ? h('div.comment', comment ? ([
       h('span.verdict', i18n(comment.verdict)),
       ' '

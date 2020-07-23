@@ -201,9 +201,6 @@ export default class AnalyseCtrl {
       this.debouncedExplorerSetStep()
     }
 
-    // TODO
-    this.togglePractice()
-
     setTimeout(this.debouncedScroll, 250)
     setTimeout(this.initCeval, 1000)
   }
@@ -311,8 +308,9 @@ export default class AnalyseCtrl {
 
   startCeval = () => {
     if (this.ceval.enabled() && this.canUseCeval()) {
-      this.ceval.start(this.path, this.nodeList, !!this.retro || !!this.practice)
-      this.evalCache.fetch(this.path, this.ceval.getMultiPv())
+      const forceMaxLv = !!this.retro || !!this.practice
+      this.ceval.start(this.path, this.nodeList, forceMaxLv)
+      this.evalCache.fetch(this.path, forceMaxLv ? 1 : this.ceval.getMultiPv())
     }
   }
 

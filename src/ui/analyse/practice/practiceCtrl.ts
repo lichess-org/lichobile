@@ -174,6 +174,10 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
   }
 
   function checkCevalOrTablebase() {
+    if (!root.ceval.enabled()) {
+      root.ceval.toggle()
+      root.initCeval()
+    }
     if (tablebaseGuaranteed(variant, root.node.fen)) {
       root.explorer.fetchTablebaseHit(root.node.fen)
       .then(hit => {

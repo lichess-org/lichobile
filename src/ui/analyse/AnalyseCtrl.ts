@@ -323,13 +323,18 @@ export default class AnalyseCtrl {
     if (this.retro) {
       if (fromBB !== 'backbutton') router.backbutton.stack.pop()
       this.retro = null
-      if (!this.ceval.enabled()) {
-        this.ceval.toggle()
+      // start ceval after retro close only if enabled by stored settings
+      if (settings.analyse.enableCeval()) {
         this.startCeval()
+      }
+      // else disable it
+      else {
+        this.ceval.disable()
       }
     }
     else {
       this.stopCevalImmediately()
+      if (this.practice) this.practice = null
       this.retro = RetroCtrl(this)
       router.backbutton.stack.push(this.toggleRetro)
       this.retro.jumpToNext()
@@ -339,7 +344,7 @@ export default class AnalyseCtrl {
   togglePractice = () => {
     if (this.practice || !this.ceval.allowed) this.practice = null
     else {
-      if (this.retro) this.toggleRetro()
+      if (this.retro) this.retro = null
       this.practice = makePractice(this, () => {
         return 18
       })
@@ -673,7 +678,7 @@ export default class AnalyseCtrl {
     }
   }
 
-  private debouncedStartCeval = debounce(this.startCeval, 800)
+  private debouncedStartCeval = debounce(this.startCeval, 800, { leading: true, trailing: true })
 
   private updateBoard() {
     const node = this.node

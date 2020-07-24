@@ -41,6 +41,7 @@ export interface ICevalCtrl {
   allowed: boolean
   enabled(): boolean
   toggle(): void
+  disable(): void
   variant: VariantKey
   minDepth: number
   maxDepth: number

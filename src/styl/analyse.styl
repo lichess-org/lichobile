@@ -339,6 +339,19 @@ comment
 .analyse-training_box_instruction
   display flex
   flex-flow column nowrap
+  .progress {
+    margin-top: 5px;
+    opacity: 0.8;
+    width: 100%;
+    height: 4px;
+    background: darken(textDarkBg, 30%)
+  }
+  .progress div {
+    background: green
+    height: 4px;
+    transition: width 50ms
+    max-width: 100%
+  }
 
   > strong
     font-size 1.1em
@@ -377,6 +390,22 @@ comment
     text-align: center;
     font-size: 1.4em;
     font-weight: normal;
+  }
+  .progress div {
+    background: darken(textDarkBg, 30%)
+  }
+  &.goodMove .progress div {
+    background: green
+    color: #fff;
+  }
+  &.inaccuracy .progress div {
+    background: gold
+    color: #fff;
+  }
+  &.mistake .progress div,
+  &.blunder .progress div {
+    background: red
+    color: #fff;
   }
   &.goodMove .verdict {
     color: green

@@ -50,11 +50,10 @@ function renderEnd(root: AnalyseCtrl, ctrl: PracticeCtrl, end: string): Mithril.
 const minDepth = 8
 
 function renderEvalProgress(node: Tree.Node, maxDepth: number): Mithril.Child {
-  return h('div.progress', h('div', {
-    attrs: {
-      style: `width: ${node.ceval ? (100 * Math.max(0, node.ceval.depth - minDepth) / (maxDepth - minDepth)) + '%' : 0}`
-    }
-  }))
+  const width = node.ceval ?
+    (100 * Math.max(0, node.ceval.depth - minDepth) / (maxDepth - minDepth)) + '%' :
+    0
+  return h('div.progress', h('div', { style: `width: ${width}` }))
 }
 
 function renderRunning(root: AnalyseCtrl, ctrl: PracticeCtrl): Mithril.Child {

@@ -115,6 +115,9 @@ export default function CevalCtrl(
     toggle() {
       isEnabled = !isEnabled
     },
+    disable() {
+      isEnabled = false
+    },
     setCores(c: number) {
       opts.cores = c
     },

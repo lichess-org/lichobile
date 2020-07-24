@@ -95,7 +95,7 @@ function replacePath(path: string) {
 }
 
 function setQueryParams(params: StringMap, newState = false) {
-  const path = get().replace(/\?.+$/, '')
+  const path = (window.location.search || '?=/').substring(2).replace(/\?.+$/, '')
   const newPath = path + `?${serializeQueryParameters(params)}`
   if (newState) {
     set(newPath, true)

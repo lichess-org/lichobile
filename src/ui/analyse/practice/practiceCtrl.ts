@@ -66,7 +66,10 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
   played = Stream(false)
 
   function ensureCevalRunning() {
-    if (!root.ceval.enabled()) root.ceval.toggle()
+    if (!root.ceval.enabled()) {
+      root.ceval.toggle()
+      root.initCeval()
+    }
   }
 
   function commentable(node: Tree.Node, bonus: number = 0): boolean {
@@ -177,10 +180,7 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
   }
 
   function checkCevalOrTablebase() {
-    if (!root.ceval.enabled()) {
-      root.ceval.toggle()
-      root.initCeval()
-    }
+    ensureCevalRunning()
     if (tablebaseGuaranteed(variant, root.node.fen)) {
       root.explorer.fetchTablebaseHit(root.node.fen)
       .then(hit => {

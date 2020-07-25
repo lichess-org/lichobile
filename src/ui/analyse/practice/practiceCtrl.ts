@@ -5,10 +5,11 @@ import { Position, PositionError } from 'chessops/chess'
 import { parseFen } from 'chessops/fen'
 import { Result } from '@badrap/result'
 import { setupPosition } from 'chessops/variant'
+import { lichessVariantRules } from 'chessops/compat'
 import settings from '../../../settings'
 import redraw from '../../../utils/redraw'
 import { requestIdleCallback } from '../../../utils'
-import { altCastles, variantToRules } from '../../../utils/chessFormat'
+import { altCastles } from '../../../utils/chessFormat'
 import { path as treePath, Tree } from '../../shared/tree'
 import { detectThreefold } from '../nodeFinder'
 import { tablebaseGuaranteed, defined } from '../util'
@@ -132,7 +133,7 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
 
   function position(node: Tree.Node): Result<Position, PositionError> {
     const setup = parseFen(node.fen).unwrap()
-    return setupPosition(variantToRules(root.data.game.variant.key), setup)
+    return setupPosition(lichessVariantRules(root.data.game.variant.key), setup)
   }
 
   function isMyTurn(): boolean {

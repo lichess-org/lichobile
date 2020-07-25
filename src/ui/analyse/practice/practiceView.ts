@@ -53,7 +53,7 @@ function renderEvalProgress(node: Tree.Node, maxDepth: number): Mithril.Child {
   const width = node.ceval ?
     (100 * Math.max(0, node.ceval.depth - minDepth) / (maxDepth - minDepth)) + '%' :
     0
-  return h('div.progress', h('div', { style: `width: ${width}` }))
+  return h('div.analyse-training_progress', h('div', { style: `width: ${width}` }))
 }
 
 function renderRunning(root: AnalyseCtrl, ctrl: PracticeCtrl): Mithril.Child {

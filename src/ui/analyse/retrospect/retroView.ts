@@ -44,7 +44,7 @@ const minDepth = 8
 const maxDepth = 18
 
 function renderEvalProgress(node: Tree.Node): Mithril.Child {
-  return h('div.retro-progress', h('div', {
+  return h('div.analyse-training_progress', h('div', {
     style: {
       width: `${node.ceval ? (100 * Math.max(0, node.ceval.depth - minDepth) / (maxDepth - minDepth)) + '%' : 0}`
     }

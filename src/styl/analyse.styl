@@ -336,21 +336,21 @@ comment
     > .piece-no-square
       margin-bottom 2vmin
 
+.analyse-training_progress
+  margin-top: 5px;
+  opacity: 0.8;
+  width: 100%;
+  height: 4px;
+  background: #ddd;
+  > div
+    background: #759900;
+    height: 4px;
+    transition: width 0.5s;
+    max-width: 100%;
+
 .analyse-training_box_instruction
   display flex
   flex-flow column nowrap
-  .progress {
-    margin-top: 5px;
-    opacity: 0.8;
-    width: 100%;
-    height: 4px;
-  }
-  .progress div {
-    background: green
-    height: 4px;
-    transition: width 500ms
-    max-width: 100%
-  }
 
   > strong
     font-size 1.1em
@@ -390,19 +390,19 @@ comment
     font-size: 1.4em;
     font-weight: normal;
   }
-  .progress div {
+  .analyse-training_progress div {
     background: darken(textDarkBg, 30%)
   }
-  &.goodMove .progress div {
+  &.goodMove .analyse-training_progress div {
     background: green
     color: #fff;
   }
-  &.inaccuracy .progress div {
+  &.inaccuracy .analyse-training_progress div {
     background: gold
     color: #fff;
   }
-  &.mistake .progress div,
-  &.blunder .progress div {
+  &.mistake .analyse-training_progress div,
+  &.blunder .analyse-training_progress div {
     background: red
     color: #fff;
   }
@@ -483,9 +483,6 @@ comment
   .analyse-practice_box
     > .comment
       background #f7f6f5
-    .progress div {
-      background: lighten(textLightBg, 30%)
-    }
 
 
 .view-container.transp

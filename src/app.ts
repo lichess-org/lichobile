@@ -1,7 +1,7 @@
 /// <reference path="dts/index.d.ts" />
 import { Capacitor, Plugins, AppState, DeviceInfo, NetworkStatus } from '@capacitor/core'
 import debounce from 'lodash-es/debounce'
-import { hasNetwork } from './utils'
+import { hasNetwork, requestIdleCallback } from './utils'
 import redraw from './utils/redraw'
 import session from './session'
 import { ensureLocaleIsAvailable, loadLanguage, getCurrentLocale } from './i18n'
@@ -16,8 +16,6 @@ import sound from './sound'
 import { isForeground, setForeground, setBackground } from './utils/appMode'
 
 let firstConnection = true
-const requestIdleCallback: (c: () => void) => void =
-  window.requestIdleCallback || window.setTimeout
 
 export default function appInit(info: DeviceInfo) {
 

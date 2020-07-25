@@ -28,6 +28,7 @@ import { NotesCtrl } from '../shared/round/notes'
 import * as util from './util'
 import CevalCtrl from './ceval/CevalCtrl'
 import RetroCtrl, { IRetroCtrl } from './retrospect/RetroCtrl'
+import { make as makePractice, PracticeCtrl } from './practice/practiceCtrl'
 import { ICevalCtrl } from './ceval/interfaces'
 import crazyValid from './crazy/crazyValid'
 import ExplorerCtrl from './explorer/ExplorerCtrl'
@@ -50,6 +51,7 @@ export default class AnalyseCtrl {
   chessground!: Chessground
   ceval: ICevalCtrl
   retro: IRetroCtrl | null
+  practice: PracticeCtrl | null
   explorer: IExplorerCtrl
   tree: TreeWrapper
   evalCache: EvalCache
@@ -115,17 +117,28 @@ export default class AnalyseCtrl {
     this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null
 
     this.retro = null
+    this.practice = null
 
-    this.ceval = CevalCtrl(
-      this.data.game.variant.key,
-      this.isCevalAllowed(),
-      this.onCevalMsg,
-      {
-        multiPv: this.settings.s.cevalMultiPvs,
-        cores: this.settings.s.cevalCores,
-        infinite: this.settings.s.cevalInfinite
+    const cevalAllowed = (() => {
+      const study = this.study && this.study.data
+
+      if (!gameApi.analysableVariants.includes(this.data.game.variant.key)) {
+        return false
       }
-    )
+
+      if (study && !(study.chapter.features.computer || study.chapter.practice)) {
+        return false
+      }
+
+      return this.isOfflineOrNotPlayable()
+    })()
+    this.ceval = CevalCtrl({
+      allowed: cevalAllowed,
+      variant: this.data.game.variant.key,
+      multiPv: this.settings.s.cevalMultiPvs,
+      cores: this.settings.s.cevalCores,
+      infinite: this.settings.s.cevalInfinite
+    }, this.onCevalMsg)
 
     const explorerAllowed = !this.study || this.study.data.chapter.features.explorer
     this.explorer = ExplorerCtrl(this, explorerAllowed)
@@ -211,6 +224,10 @@ export default class AnalyseCtrl {
     return this.settings.s.flip ? oppositeColor(this.data.orientation) : this.data.orientation
   }
 
+  turnColor(): Color {
+    return util.plyColor(this.node.ply)
+  }
+
   availableTabs = (): ReadonlyArray<tabs.Tab> => {
     let val: ReadonlyArray<tabs.Tab> = [tabs.moves]
 
@@ -218,7 +235,7 @@ export default class AnalyseCtrl {
     if (!this.synthetic) val = [tabs.gameInfos, ...val]
     // TODO enable only when study.canContribute() is false with write support
     if (this.study) val = [...val, tabs.comments]
-    if (!this.retro && this.ceval.enabled()) val = [...val, tabs.ceval]
+    if (!this.retro && !this.practice && this.ceval.enabled()) val = [...val, tabs.ceval]
     if (this.study || (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data))) {
       val = [...val, tabs.charts]
     }
@@ -289,8 +306,9 @@ export default class AnalyseCtrl {
 
   startCeval = () => {
     if (this.ceval.enabled() && this.canUseCeval()) {
-      this.ceval.start(this.path, this.nodeList, !!this.retro)
-      this.evalCache.fetch(this.path, this.ceval.getMultiPv())
+      const forceMaxLv = !!this.retro || !!this.practice
+      this.ceval.start(this.path, this.nodeList, forceMaxLv)
+      this.evalCache.fetch(this.path, forceMaxLv ? 1 : this.ceval.getMultiPv())
     }
   }
 
@@ -303,22 +321,37 @@ export default class AnalyseCtrl {
     if (this.retro) {
       if (fromBB !== 'backbutton') router.backbutton.stack.pop()
       this.retro = null
-      // retro toggle ceval only if not enabled
-      // we use stored settings to see if it was previously enabled or not
+      // start ceval after retro close only if enabled by stored settings
       if (settings.analyse.enableCeval()) {
         this.startCeval()
       }
-      // ceval not enabled if no moves were to review
-      else if (this.ceval.enabled()) {
-        this.ceval.toggle()
+      // else disable it
+      else {
+        this.ceval.disable()
       }
     }
     else {
       this.stopCevalImmediately()
+      if (this.practice) this.practice = null
       this.retro = RetroCtrl(this)
       router.backbutton.stack.push(this.toggleRetro)
       this.retro.jumpToNext()
     }
+  }
+
+  togglePractice = () => {
+    if (this.practice || !this.ceval.allowed) this.practice = null
+    else {
+      if (this.retro) this.retro = null
+      this.practice = makePractice(this, () => {
+        return 18
+      })
+    }
+  }
+
+  restartPractice() {
+    this.practice = null
+    this.togglePractice()
   }
 
   debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200)
@@ -338,14 +371,18 @@ export default class AnalyseCtrl {
     promotion.cancel(this.chessground, this.cgConfig)
     if (pathChanged) {
       if (this.retro) this.retro.onJump()
-      else {
-        this.debouncedStartCeval()
-      }
+      if (this.practice) this.practice.onJump()
+      this.debouncedStartCeval()
     }
   }
 
   userJump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
-    this.jump(path, direction)
+    if (this.practice) {
+      const prev = this.path
+      this.practice.preUserJump(prev, path)
+      this.jump(path, direction)
+      this.practice.postUserJump(prev, this.path)
+    } else this.jump(path, direction)
   }
 
   jumpToMain = (ply: number) => {
@@ -396,7 +433,7 @@ export default class AnalyseCtrl {
     .catch(handleXhrError)
   }
 
-  uciMove = (uci: string) => {
+  playUci = (uci: Uci): void => {
     const move = chessFormat.decomposeUci(uci)
     if (uci[1] === '@') {
       this.chessground.apiNewPiece({
@@ -439,20 +476,22 @@ export default class AnalyseCtrl {
     redraw()
   }
 
-  gameOver(): boolean {
-    if (!this.node) return false
-    // node.end boolean is fetched async for online games (along with the dests)
-    if (this.node.end === undefined) {
-      if (this.node.check) {
-        const san = this.node.san
+  gameOver(node?: Tree.Node): 'draw' | 'checkmate' | false {
+    const n = node || this.node
+    if (!n) return false
+    if (n.end === undefined) {
+      if (n.check) {
+        const san = n.san
         const checkmate = !!(san && san[san.length - 1] === '#')
-        return checkmate
+        if (checkmate) return 'checkmate'
+        else return false
       }
+      return false
     } else {
-      return this.node.end
+      if (!n.end) return false
+      else if (n.check) return 'checkmate'
+      else return 'draw'
     }
-
-    return false
   }
 
   canUseCeval = () => {
@@ -476,7 +515,9 @@ export default class AnalyseCtrl {
   }
 
   isOfflineOrNotPlayable = (): boolean => {
-    return this.source === 'offline' || !gameApi.playable(this.data)
+    return this.source === 'offline' ||
+      !!(this.study && this.study.data) ||
+      !gameApi.playable(this.data)
   }
 
   unload = () => {
@@ -530,6 +571,7 @@ export default class AnalyseCtrl {
       path: this.path
     }
     if (prom) move.promotion = prom
+    if (this.practice) this.practice.onUserMove()
     chess.move(move)
     .then(this.addNode)
     .catch(err => console.error('send move error', move, err))
@@ -593,20 +635,6 @@ export default class AnalyseCtrl {
     redraw()
   }
 
-  private isCevalAllowed(): boolean {
-    const study = this.study && this.study.data
-
-    if (!gameApi.analysableVariants.includes(this.data.game.variant.key)) {
-      return false
-    }
-
-    if (study && !(study.chapter.features.computer || study.chapter.practice)) {
-      return false
-    }
-
-    return this.isOfflineOrNotPlayable()
-  }
-
   private onCevalMsg = (path: string, ceval?: Tree.ClientEval) => {
     if (ceval) {
       this.tree.updateAt(path, (node: Tree.Node) => {
@@ -636,6 +664,7 @@ export default class AnalyseCtrl {
 
         if (path === this.path) {
           if (this.retro) this.retro.onCeval()
+          if (this.practice) this.practice.onCeval()
           if (ceval.cloud && ceval.depth >= this.ceval.effectiveMaxDepth()) {
             this.ceval.stop()
           }
@@ -649,7 +678,7 @@ export default class AnalyseCtrl {
     }
   }
 
-  private debouncedStartCeval = debounce(this.startCeval, 800)
+  private debouncedStartCeval = debounce(this.startCeval, 800, { leading: true, trailing: true })
 
   private updateBoard() {
     const node = this.node
@@ -658,13 +687,13 @@ export default class AnalyseCtrl {
       node.checkCount = util.readCheckCount(node.fen)
     }
 
-    const color: Color = node.ply % 2 === 0 ? 'white' : 'black'
+    const color: Color = util.plyColor(node.ply)
     const dests = chessFormat.readDests(node.dests)
     const config = {
       fen: node.fen,
       turnColor: color,
       orientation: this.settings.s.flip ? oppositeColor(this.orientation) : this.orientation,
-      movableColor: this.gameOver() ? null : color,
+      movableColor: Boolean(this.gameOver()) ? null : color,
       dests: dests || null,
       check: !!node.check,
       lastMove: node.uci ? chessFormat.uciToMoveOrDrop(node.uci) : null
@@ -697,7 +726,7 @@ export default class AnalyseCtrl {
         if (path === this.path) {
           this.updateBoard()
           redraw()
-          if (this.gameOver()) this.stopCevalImmediately()
+          if (Boolean(this.gameOver())) this.stopCevalImmediately()
         }
       })
       .catch(err => console.error('get dests error', err))

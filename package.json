@@ -39,6 +39,7 @@
         "whatwg-fetch": "3.0.0"
     },
     "dependencies": {
+        "@badrap/result": "0.2.6",
         "@capacitor/android": "2.1.2",
         "@capacitor/cli": "2.1.2",
         "@capacitor/core": "2.1.2",
@@ -52,6 +53,7 @@
         "@types/mithril": "2.0.0",
         "capacitor-cordova-plugin-stockfish": "git+https://github.com/veloce/cordova-plugin-stockfish.git#capacitor",
         "capacitor-sound-effect": "git+https://github.com/veloce/capacitor-sound-effect.git",
+        "chessops": "0.6.0",
         "cordova-plugin-fullscreen": "1.2.0",
         "cordova-plugin-insomnia": "4.2.0",
         "d3-axis": "1.0.8",

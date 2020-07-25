@@ -84,6 +84,8 @@ export default {
         root.chessground.set({
           orientation: s.flip ? oppositeColor(root.orientation) : root.orientation
         })
+        if (root.retro) root.toggleRetro()
+        if (root.practice) root.restartPractice()
       },
       cevalSetMultiPv(pv: number) {
         settings.analyse.cevalMultiPvs(pv)

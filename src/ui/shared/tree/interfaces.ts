@@ -39,14 +39,14 @@ export namespace Tree {
     readonly uci?: Uci
     readonly san?: San
     children: Node[]
-    drops?: string | ReadonlyArray<string> | undefined | null
     comments?: Comment[]
-    // TODO maybe don't keep both formats for dests & drops
-    dests?: string | DestsMap
+    dests?: DestsMap
+    drops?: string | ReadonlyArray<string> | undefined | null
     readonly check?: boolean
     threat?: ClientEval
     ceval?: ClientEval
     eval?: ServerEval
+    tbhit?: TablebaseHit | null
     opening?: Opening | null
     glyphs?: Glyph[]
     clock?: Clock
@@ -66,6 +66,11 @@ export namespace Tree {
     }
     // added locally by study gamebook ctrl
     gamebook?: Gamebook
+  }
+
+  export interface TablebaseHit {
+    winner: Color | undefined
+    best?: Uci
   }
 
   export interface Gamebook {

@@ -93,6 +93,12 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
       }),
       disabled: !!ctrl.retro
     }, [h('span.fa.fa-play'), i18n('learnFromYourMistakes')]) : null,
+    ctrl.ceval.allowed ? h('button', {
+      oncreate: helper.ontap(() => {
+        ctrl.menu.close()
+        ctrl.togglePractice()
+      }),
+    }, [h('span.fa.fa-bullseye'), i18n('practiceWithComputer')]) : null,
     ctrl.notes ? h('button', {
       oncreate: helper.ontap(() => {
         if (ctrl.notes) {

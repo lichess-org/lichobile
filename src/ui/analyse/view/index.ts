@@ -29,6 +29,7 @@ import renderCrazy, { renderPlayer as renderCrazyPlayer, renderOpponent as rende
 import { view as renderContextMenu } from '../contextMenu'
 import Replay from './Replay'
 import retroView from '../retrospect/retroView'
+import practiceView from '../practice/practiceView'
 import renderAnalysis from './analysisView'
 import renderBoard from './boardView'
 import renderGameInfos from './gameInfosView'
@@ -211,6 +212,7 @@ function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
       onTabChange: ctrl.onTabChange,
       boardView: true,
     }),
-    ctrl.retro ? retroView(ctrl) : null
+    ctrl.retro ? retroView(ctrl) : null,
+    ctrl.practice ? practiceView(ctrl) : null,
   ])
 }

@@ -74,15 +74,15 @@ function renderRunning(root: AnalyseCtrl, ctrl: PracticeCtrl): Mithril.Child {
   ])
 }
 
-function renderTitle(root: AnalyseCtrl): Mithril.Child {
+function renderTitle(root: AnalyseCtrl, ctrl: PracticeCtrl): Mithril.Child {
   return h('div.titleWrapper', [
     h('div.title', i18n('practiceWithComputer')),
     h('div.actions', [
-      // h('button.window-button', {
-      //   oncreate: helper.ontap(ctrl.toggleWindow)
-      // }, h('span.fa', {
-      //   className: ctrl.vm.minimized ? 'fa-window-maximize' : 'fa-window-minimize'
-      // })),
+      h('button.window-button', {
+        oncreate: helper.ontap(ctrl.toggleWindow)
+      }, h('span.fa', {
+        className: ctrl.minimized() ? 'fa-window-maximize' : 'fa-window-minimize'
+      })),
       h('button.window-button', {
         oncreate: helper.ontap(root.togglePractice)
       }, h('span.fa.fa-window-close'))
@@ -96,8 +96,10 @@ export default function(root: AnalyseCtrl): Mithril.Child {
   const comment: Comment | null = ctrl.comment()
   const running: boolean = ctrl.running()
   const end = ctrl.currentNode().threefold ? 'threefoldRepetition' : root.gameOver()
-  return h('div.analyse-practice_box.analyse-training_box.box.' + (comment ? comment.verdict : 'no-verdict'), [
-    renderTitle(root),
+  return h('div.analyse-practice_box.analyse-training_box.box.' + (comment ? comment.verdict : 'no-verdict'), {
+    className: ctrl.minimized() ? 'minimized' : ''
+  }, [
+    renderTitle(root, ctrl),
     h('div.analyse-training_feedback.native_scroller', !running ? renderOffTrack(ctrl) : (end ? renderEnd(root, ctrl, end) : renderRunning(root, ctrl))),
     running ? h('div.comment', comment ? ([
       h('span.verdict', i18n(comment.verdict)),

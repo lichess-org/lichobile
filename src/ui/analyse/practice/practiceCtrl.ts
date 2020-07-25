@@ -41,6 +41,7 @@ export interface PracticeCtrl {
   comment: Stream<Comment | null>
   running: Stream<boolean>
   hinting: Stream<Hinting | null>
+  minimized: Stream<boolean>
   resume(): void
   playableDepth: () => number
   reset(): void
@@ -51,12 +52,14 @@ export interface PracticeCtrl {
   hint(): void
   currentNode(): Tree.Node
   bottomColor(): Color
+  toggleWindow(): void
   pieceTheme: string
 }
 
 export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCtrl {
 
   const variant = root.data.game.variant.key,
+  minimized = Stream(false),
   running = Stream(true),
   comment = Stream<Comment | null>(null),
   hinting = Stream<Hinting | null>(null),
@@ -249,5 +252,9 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
     currentNode: () => root.node,
     bottomColor: root.bottomColor,
     pieceTheme: settings.general.theme.piece(),
+    minimized,
+    toggleWindow() {
+      minimized(!minimized())
+    },
   }
 }

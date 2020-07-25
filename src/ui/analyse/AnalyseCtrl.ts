@@ -119,28 +119,26 @@ export default class AnalyseCtrl {
     this.retro = null
     this.practice = null
 
-    this.ceval = CevalCtrl(
-      {
-        allowed: (() => {
-          const study = this.study && this.study.data
+    const cevalAllowed = (() => {
+      const study = this.study && this.study.data
 
-          if (!gameApi.analysableVariants.includes(this.data.game.variant.key)) {
-            return false
-          }
+      if (!gameApi.analysableVariants.includes(this.data.game.variant.key)) {
+        return false
+      }
 
-          if (study && !(study.chapter.features.computer || study.chapter.practice)) {
-            return false
-          }
+      if (study && !(study.chapter.features.computer || study.chapter.practice)) {
+        return false
+      }
 
-          return this.isOfflineOrNotPlayable()
-        })(),
-        variant: this.data.game.variant.key,
-        multiPv: this.settings.s.cevalMultiPvs,
-        cores: this.settings.s.cevalCores,
-        infinite: this.settings.s.cevalInfinite
-      },
-      this.onCevalMsg,
-    )
+      return this.isOfflineOrNotPlayable()
+    })()
+    this.ceval = CevalCtrl({
+      allowed: cevalAllowed,
+      variant: this.data.game.variant.key,
+      multiPv: this.settings.s.cevalMultiPvs,
+      cores: this.settings.s.cevalCores,
+      infinite: this.settings.s.cevalInfinite
+    }, this.onCevalMsg)
 
     const explorerAllowed = !this.study || this.study.data.chapter.features.explorer
     this.explorer = ExplorerCtrl(this, explorerAllowed)
@@ -517,7 +515,9 @@ export default class AnalyseCtrl {
   }
 
   isOfflineOrNotPlayable = (): boolean => {
-    return this.source === 'offline' || !gameApi.playable(this.data)
+    return this.source === 'offline' ||
+      !!(this.study && this.study.data) ||
+      !gameApi.playable(this.data)
   }
 
   unload = () => {

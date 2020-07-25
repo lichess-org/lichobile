@@ -95,6 +95,12 @@ function renderStudyMenu(ctrl: AnalyseCtrl) {
         ctrl.continuePopup.open(ctrl.node.fen, ctrl.data.game.variant.key, ctrl.data.player.color)
       })
     }, i18n('continueFromHere')),
+    ctrl.ceval.allowed ? h('button', {
+      oncreate: helper.ontap(() => {
+        ctrl.menu.close()
+        ctrl.togglePractice()
+      }),
+    }, [h('span.fa.fa-bullseye'), i18n('practiceWithComputer')]) : null,
     h('button', {
       oncreate: helper.ontap(() => router.set(`/editor/${encodeURIComponent(ctrl.node.fen)}`))
     }, [h('span.fa.fa-pencil'), i18n('boardEditor')]),

@@ -41,17 +41,6 @@ export interface InitResponse {
   readonly setup: GameSituation
 }
 
-export interface DestsRequest {
-  readonly variant: VariantKey
-  readonly fen: string
-  readonly path?: string
-}
-
-export interface DestsResponse {
-  readonly dests: DestsMap
-  readonly path: string
-}
-
 export interface SituationRequest {
   readonly variant: VariantKey
   readonly fen: string
@@ -113,26 +102,12 @@ export interface PgnDumpResponse {
   readonly pgn: string
 }
 
-export interface PgnReadRequest {
-  readonly pgn: string
-}
-
-export interface PgnReadResponse {
-  readonly variant: Variant
-  readonly setup: GameSituation
-  readonly replay: ReadonlyArray<GameSituation>
-}
-
 function uniqId() {
   return String(performance.now())
 }
 
 export function init(payload: InitRequest): Promise<InitResponse> {
   return askWorker(worker, { topic: 'init', payload })
-}
-
-export function dests(payload: DestsRequest): Promise<DestsResponse> {
-  return askWorker(worker, { topic: 'dests', payload, reqid: uniqId() })
 }
 
 export function situation(payload: SituationRequest): Promise<SituationResponse> {
@@ -153,8 +128,4 @@ export function threefoldTest(payload: ThreefoldTestRequest): Promise<ThreefoldT
 
 export function pgnDump(payload: PgnDumpRequest): Promise<PgnDumpResponse> {
   return askWorker(worker, { topic: 'pgnDump', payload })
-}
-
-export function pgnRead(payload: PgnReadRequest): Promise<PgnReadResponse> {
-  return askWorker(worker, { topic: 'pgnRead', payload })
 }

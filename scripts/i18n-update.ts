@@ -7,6 +7,7 @@ const colors = require('colors/safe');
 
 const baseDir = 'tmp/translations';
 const i18nBaseDir = '../www/i18n';
+const unzipMaxBufferSize = 1024 * 1024 * 10; // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
 type StringMap = {
   [i: string]: string | undefined
@@ -24,7 +25,7 @@ function downloadTranslationsTo(zipFile: WriteStream) {
 function unzipTranslations(zipFilePath: string) {
   console.log(colors.blue('Unzipping translations...'));
   return new Promise((resolve, reject) => {
-      exec(`unzip -o ${zipFilePath} -d ${baseDir}`, (err, stdout, stderr) => {
+      exec(`unzip -o ${zipFilePath} -d ${baseDir}`, {maxBuffer: unzipMaxBufferSize}, (err, stdout, stderr) => {
       if (err) {
         return reject('Unzip failed.');
       }

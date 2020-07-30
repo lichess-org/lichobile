@@ -15,6 +15,11 @@ export interface InitConfig {
   lastMove?: KeyPair | null
   selected?: Key
   coordinates?: boolean
+  squareCoordinates?: {
+    enabled: boolean,
+    whiteSquaresOpacity: number,
+    blackSquaresOpacity: number
+  },
   symmetricCoordinates?: boolean
   autoCastle?: boolean
   viewOnly?: boolean

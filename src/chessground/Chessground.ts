@@ -33,6 +33,17 @@ export default class Chessground {
     if (isViewOnly) board.className += ' view-only'
     else board.className += ' manipulable'
 
+    if (this.state.squareCoordinates.enabled) {
+      const overlayCoordinatesBS = document.createElement('div')
+      overlayCoordinatesBS.className = 'overlay-coordinates oc-black-squares'
+      overlayCoordinatesBS.style.opacity = (this.state.squareCoordinates.blackSquaresOpacity / 100).toString(10)
+      board.appendChild(overlayCoordinatesBS)
+      const overlayCoordinatesWS = document.createElement('div')
+      overlayCoordinatesWS.className = 'overlay-coordinates oc-white-squares'
+      overlayCoordinatesWS.style.opacity = (this.state.squareCoordinates.whiteSquaresOpacity / 100).toString(10)
+      board.appendChild(overlayCoordinatesWS)
+    }
+
     wrapper.appendChild(board)
 
     this.dom = {

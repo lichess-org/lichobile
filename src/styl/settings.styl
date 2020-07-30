@@ -275,3 +275,39 @@
       background-image url('../../images/pieces/pixel/wN.svg')
       @media only screen and (min-width 600px)
         background-image url('../../images/pieces/pixel/wP.svg'),url('../../images/pieces/pixel/wN.svg'),url('../../images/pieces/pixel/wB.svg'),url('../../images/pieces/pixel/wR.svg'),url('../../images/pieces/pixel/wQ.svg'),url('../../images/pieces/pixel/wK.svg')
+
+.overlay-coordinates-sample-wrapper
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 25px 0;
+  width 99%
+
+.overlay-coordinates-sample
+  position absolute
+  width 100%
+  height 0
+  padding-top 12.5%
+  background-size cover
+  &.white-squares
+    background-image url('../../images/squarecoords/square_coordinates_sample_white_squares.svg')
+  &.black-squares
+    background-image url('../../images/squarecoords/square_coordinates_sample_black_squares.svg')
+  &.board
+    background-image var(--board-background, url('../../images/board/svg/brown.svg'))
+    background-position bottom
+
+.square-coords-opacity-setting .forms-rangeSlider > .forms-sliderValue {
+  flex: 0 0 70px;
+}
+
+#square-coords-settings-list {
+  overflow hidden
+  transition max-height 0.4s
+  &.open {
+    max-height 500px
+  }
+  &.closed {
+    max-height 0
+  }
+}

@@ -147,6 +147,11 @@ export default {
     highlights: prop<boolean>('boardHighlights', true),
     pieceDestinations: prop<boolean>('pieceDestinations', true),
     coords: prop<boolean>('coords', true),
+    squareCoords: {
+      enabled: prop<boolean>('enabled', false),
+      whiteSquaresOpacity: prop<number>('whiteSquaresOpacity', 5),
+      blackSquaresOpacity: prop<number>('blackSquaresOpacity', 10)
+    },
     magnified: prop<boolean>('pieceMagnified', true),
     pieceNotation: prop<boolean>('pieceNotation', true),
     zenMode: prop<boolean>('zenMode', false),

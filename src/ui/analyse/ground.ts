@@ -19,6 +19,11 @@ function makeConfig(
     turnColor: config.turnColor,
     orientation,
     coordinates: settings.game.coords(),
+    squareCoordinates: {
+      enabled: settings.game.squareCoords.enabled(),
+      whiteSquaresOpacity: settings.game.squareCoords.whiteSquaresOpacity(),
+      blackSquaresOpacity: settings.game.squareCoords.blackSquaresOpacity()
+    },
     movable: {
       free: false,
       color: config.movableColor,

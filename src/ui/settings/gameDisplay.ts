@@ -1,16 +1,53 @@
 import * as helper from '../helper'
-import { dropShadowHeader, backButton } from '../shared/common'
+import {backButton, dropShadowHeader} from '../shared/common'
 import formWidgets from '../shared/form'
-import { onPieceNotationChange } from '../shared/round/view/replay'
+import {onPieceNotationChange} from '../shared/round/view/replay'
 import layout from '../layout'
 import i18n from '../../i18n'
 import settings from '../../settings'
 import h from 'mithril/hyperscript'
+import redraw from '../../utils/redraw'
+
+function toggleSquareCoordSettings(show: boolean) {
+    const el = document.getElementById('square-coords-settings-list')
+    if (el) {
+        el.className = show ? 'open' : 'closed'
+    }
+}
 
 function renderBody() {
   return [
     h('ul.native_scroller.page.settings_list.game', [
       h('li.list_item', formWidgets.renderCheckbox(i18n('boardCoordinates'), 'coords', settings.game.coords)),
+      h('li.list_item', [
+          formWidgets.renderCheckbox('Coordinates on every square', 'squareCoords', settings.game.squareCoords.enabled, toggleSquareCoordSettings),
+          h('ul#square-coords-settings-list', {class: settings.game.squareCoords.enabled() ? 'open' : 'closed'}, [
+              h('li.list_item.square-coords-opacity-setting', [
+                  formWidgets.renderSlider(
+                      'White opacity', 'whiteOpacity', 0, 100, 1, settings.game.squareCoords.whiteSquaresOpacity,
+                      redraw
+                  )]),
+              h('li.list_item.square-coords-opacity-setting', [
+                  formWidgets.renderSlider(
+                      'Black opacity', 'blackOpacity', 0, 100, 1, settings.game.squareCoords.blackSquaresOpacity,
+                      redraw
+                  )]),
+              h('li.list_item.square-coords-opacity-setting', [
+                  h('div', {className: 'overlay-coordinates-sample-wrapper'}, [
+                          h('div', {className: 'overlay-coordinates-sample board'}),
+                          h('div', {
+                              className: 'overlay-coordinates-sample white-squares',
+                              style: {opacity: (settings.game.squareCoords.whiteSquaresOpacity() / 100).toString(10)}
+                          }),
+                          h('div', {
+                              className: 'overlay-coordinates-sample black-squares',
+                              style: {opacity: (settings.game.squareCoords.blackSquaresOpacity() / 100).toString(10)}
+                          })
+                      ]
+                  )]
+              )]
+          )
+      ]),
       h('li.list_item', formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations',
         settings.game.animations)),
       h('li.list_item', formWidgets.renderCheckbox('Magnified dragged piece', 'magnified',
@@ -51,7 +88,6 @@ function renderBody() {
 
 export default {
   oncreate: helper.viewSlideIn,
-
   view() {
     const header = dropShadowHeader(null, backButton(i18n('gameDisplay')))
     return layout.free(header, renderBody())

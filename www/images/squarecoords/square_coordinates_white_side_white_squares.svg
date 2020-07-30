@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 8 8" shape-rendering="crispEdges">
+
+  <text x="0.15" y="0.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">A8</text>
+  <text x="2.15" y="0.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">C8</text>
+  <text x="4.15" y="0.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">E8</text>
+  <text x="6.15" y="0.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">G8</text>
+
+  <text x="1.15" y="1.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">B7</text>
+  <text x="3.15" y="1.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">D7</text>
+  <text x="5.15" y="1.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">F7</text>
+  <text x="7.15" y="1.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">H7</text>
+
+  <text x="0.15" y="2.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">A6</text>
+  <text x="2.15" y="2.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">C6</text>
+  <text x="4.15" y="2.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">E6</text>
+  <text x="6.15" y="2.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">G6</text>
+
+  <text x="1.15" y="3.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">B5</text>
+  <text x="3.15" y="3.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">D5</text>
+  <text x="5.15" y="3.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">F5</text>
+  <text x="7.15" y="3.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">H5</text>
+
+  <text x="0.15" y="4.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">A4</text>
+  <text x="2.15" y="4.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">C4</text>
+  <text x="4.15" y="4.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">E4</text>
+  <text x="6.15" y="4.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">G4</text>
+
+  <text x="1.15" y="5.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">B3</text>
+  <text x="3.15" y="5.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">D3</text>
+  <text x="5.15" y="5.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">F3</text>
+  <text x="7.15" y="5.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">H3</text>
+
+  <text x="0.15" y="6.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">A2</text>
+  <text x="2.15" y="6.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">C2</text>
+  <text x="4.15" y="6.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">E2</text>
+  <text x="6.15" y="6.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">G2</text>
+
+  <text x="1.15" y="7.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">B1</text>
+  <text x="3.15" y="7.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">D1</text>
+  <text x="5.15" y="7.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">F1</text>
+  <text x="7.15" y="7.7" font-family="Arial" fill="black" font-size="0.6" font-weight="bold">H1</text>
+</svg>

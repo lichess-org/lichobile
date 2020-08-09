@@ -269,11 +269,12 @@ function baseMove(state: State, orig: Key, dest: Key): boolean {
   setTimeout(() => {
     if (state.events.move) state.events.move(orig, dest, captured)
   }, 0)
-  state.pieces.set(dest, origPiece)
-  state.pieces.delete(orig)
+  if (!tryAutoCastle(state, orig, dest)) {
+    state.pieces.set(dest, origPiece)
+    state.pieces.delete(orig)
+  }
   state.lastMove = [orig, dest]
   state.check = null
-  tryAutoCastle(state, orig, dest)
   setTimeout(state.events.change || util.noop)
   return true
 }
@@ -305,34 +306,32 @@ function baseUserMove(state: State, orig: Key, dest: Key): boolean {
   return result
 }
 
-function tryAutoCastle(state: State, orig: Key, dest: Key): void {
-  if (!state.autoCastle) return
-  const king = state.pieces.get(dest)
-  if (!king || king.role !== 'king') return
+function tryAutoCastle(state: State, orig: Key, dest: Key): boolean {
+  if (!state.autoCastle) return false
+
+  const king = state.pieces.get(orig)
+  if (!king || king.role !== 'king') return false
+
   const origPos = util.key2pos(orig)
-  if (origPos[0] !== 5) return
-  if (origPos[1] !== 1 && origPos[1] !== 8) return
   const destPos = util.key2pos(dest)
-  let oldRookPos: Key, newRookPos: Key, newKingPos: Key
-  if (destPos[0] === 7 || destPos[0] === 8) {
-    oldRookPos = util.pos2key([8, origPos[1]])
-    newRookPos = util.pos2key([6, origPos[1]])
-    newKingPos = util.pos2key([7, origPos[1]])
-  } else if (destPos[0] === 3 || destPos[0] === 1) {
-    oldRookPos = util.pos2key([1, origPos[1]])
-    newRookPos = util.pos2key([4, origPos[1]])
-    newKingPos = util.pos2key([3, origPos[1]])
-  } else return
+  if ((origPos[1] !== 1 && origPos[1] !== 8) || origPos[1] !== destPos[1]) return false
+  if (origPos[0] === 5 && !state.pieces.has(dest)) {
+    if (destPos[0] === 7) dest = util.pos2key([8, destPos[1]])
+    else if (destPos[0] === 3) dest = util.pos2key([1, destPos[1]])
+  }
+  const rook = state.pieces.get(dest)
+  if (!rook || rook.color !== king.color || rook.role !== 'rook') return false
+
   state.pieces.delete(orig)
   state.pieces.delete(dest)
-  state.pieces.delete(oldRookPos)
-  state.pieces.set(newKingPos, {
-    role: 'king',
-    color: king.color
-  })
-  state.pieces.set(newRookPos, {
-    role: 'rook',
-    color: king.color
-  })
-}
 
+  if (origPos[0] < destPos[0]) {
+    state.pieces.set(util.pos2key([7, destPos[1]]), king)
+    state.pieces.set(util.pos2key([6, destPos[1]]), rook)
+  } else {
+    state.pieces.set(util.pos2key([3, destPos[1]]), king)
+    state.pieces.set(util.pos2key([4, destPos[1]]), rook)
+  }
+
+  return true
+}

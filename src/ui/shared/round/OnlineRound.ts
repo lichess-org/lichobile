@@ -468,6 +468,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       }
 
       const castlePieces: cg.PiecesDiff = new Map()
+      console.log(o.castle)
       if (o.castle && !this.chessground.state.autoCastle) {
         const c = o.castle
         castlePieces.set(c.king[0], null)

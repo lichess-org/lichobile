@@ -93,7 +93,7 @@ export function makeDefaults(): State {
     symmetricCoordinates: false,
     otb: false,
     otbMode: 'facing' as cg.OtbMode,
-    autoCastle: false,
+    autoCastle: true,
     viewOnly: false,
     fixed: false,
     exploding: null,

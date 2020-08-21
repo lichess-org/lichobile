@@ -460,43 +460,50 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     if (!this.replaying()) {
       this.vm.ply++
-
-      const enpassantPieces: cg.PiecesDiff = new Map()
-      if (o.enpassant) {
-        const p = o.enpassant
-        enpassantPieces.set(p.key, null)
-      }
-
-      const castlePieces: cg.PiecesDiff = new Map()
-      if (o.castle && !this.chessground.state.autoCastle) {
-        const c = o.castle
-        castlePieces.set(c.king[0], null)
-        castlePieces.set(c.rook[0], null)
-        castlePieces.set(c.king[1], {
-          role: 'king',
-          color: c.color
-        })
-        castlePieces.set(c.rook[1], {
-          role: 'rook',
-          color: c.color
-        })
-      }
-
-      const pieces: cg.PiecesDiff = new Map([...enpassantPieces, ...castlePieces])
       const newConf = {
         turnColor: d.game.player,
         dests: playing ?
-          gameApi.parsePossibleMoves(d.possibleMoves) : <DestsMap>{},
+        gameApi.parsePossibleMoves(d.possibleMoves) : <DestsMap>{},
         check: o.check
       }
+
       if (isMove(o)) {
+        const enpassantPieces: cg.PiecesDiff = new Map()
+        if (o.enpassant) {
+          const p = o.enpassant
+          enpassantPieces.set(p.key, null)
+        }
+
+        const castlePieces: cg.PiecesDiff = new Map()
+        if (o.castle && !this.chessground.state.autoCastle) {
+          const c = o.castle
+          castlePieces.set(c.king[0], null)
+          castlePieces.set(c.rook[0], null)
+          castlePieces.set(c.king[1], {
+            role: 'king',
+            color: c.color
+          })
+          castlePieces.set(c.rook[1], {
+            role: 'rook',
+            color: c.color
+          })
+        }
+
+        const pdiff: cg.PiecesDiff = new Map([...enpassantPieces, ...castlePieces])
         const move = chessFormat.uciToMove(o.uci)
-        this.chessground.apiMove(
-          move[0],
-          move[1],
-          pieces,
-          newConf
-        )
+        const pieces = this.chessground.state.pieces
+        if (
+          !o.castle ||
+          (pieces.get(o.castle.king[0])?.role === 'king' &&
+          pieces.get(o.castle.rook[0])?.role === 'rook')
+        ) {
+          this.chessground.apiMove(
+            move[0],
+            move[1],
+            pdiff,
+            newConf
+          )
+        }
       } else if (isDrop(o)) {
         this.chessground.apiNewPiece(
           {

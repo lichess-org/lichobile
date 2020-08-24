@@ -97,38 +97,15 @@ function renderStart(ctrl: HomeCtrl) {
 
 const Stats = {
   oncreate({ attrs }) {
-    function spreadNumber(el: HTMLElement | null, nbSteps: number, getDuration: () => number) {
-      let previous: number
-      let displayed: string
-      function display(prev: number, cur: number, it: number) {
-        const val = formatNumber(Math.round(((prev * (nbSteps - 1 - it)) + (cur * (it + 1))) / nbSteps))
-        if (el && val !== displayed) {
-          if (!attrs.ctrl.isScrolling) {
-            el.textContent = val
-            displayed = val
-          }
-        }
-      }
-      let timeouts: Array<number> = []
-      return function(nb: number, overrideNbSteps?: number) {
-        if (!el || (!nb && nb !== 0)) return
-        if (overrideNbSteps) nbSteps = Math.abs(overrideNbSteps)
-        timeouts.forEach(clearTimeout)
-        timeouts = []
-        let prev = previous === 0 ? 0 : (previous || nb)
-        previous = nb
-        let interv = Math.abs(getDuration() / nbSteps)
-        for (let i = 0; i < nbSteps; i++)
-          timeouts.push(setTimeout(() => display(prev, nb, i), Math.round(i * interv)))
-      }
-    }
     const nbRoundSpread = spreadNumber(
-      document.querySelector('#nb_games_in_play > strong'),
+      attrs.ctrl,
+      '#nb_games_in_play > strong',
       8,
       socket.getCurrentPingInterval
     )
     const nbUserSpread = spreadNumber(
-      document.querySelector('#nb_connected_players > strong'),
+      attrs.ctrl,
+      '#nb_connected_players > strong',
       10,
       socket.getCurrentPingInterval
     )
@@ -150,6 +127,41 @@ const Stats = {
     ])
   }
 } as Mithril.Component<{ ctrl: HomeCtrl }, { render: (p: PongMessage) => void }>
+
+function spreadNumber(
+  ctrl: HomeCtrl,
+  selector: string,
+  nbSteps: number,
+  getDuration: () => number
+): (nb: number, ons?: number) => void {
+  let previous: number
+  let displayed: string
+  function display(el: HTMLElement | null, prev: number, cur: number, it: number) {
+    const val = formatNumber(Math.round(((prev * (nbSteps - 1 - it)) + (cur * (it + 1))) / nbSteps))
+    if (el && val !== displayed) {
+      if (!ctrl.isScrolling) {
+        el.textContent = val
+        displayed = val
+      }
+    }
+  }
+  let timeouts: Array<number> = []
+  return function(nb: number, overrideNbSteps?: number) {
+    const el = document.querySelector(selector) as HTMLElement
+    if (!el || (!nb && nb !== 0)) return
+    if (overrideNbSteps) nbSteps = Math.abs(overrideNbSteps)
+    timeouts.forEach(clearTimeout)
+    timeouts = []
+    let prev = previous === 0 ? 0 : (previous || nb)
+    previous = nb
+    let interv = Math.abs(getDuration() / nbSteps)
+    for (let i = 0; i < nbSteps; i++) {
+      timeouts.push(
+        setTimeout(() => display(el, prev, nb, i), Math.round(i * interv))
+      )
+    }
+  }
+}
 
 function renderLobby(ctrl: HomeCtrl) {
   const tabsContent = [

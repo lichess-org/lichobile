@@ -132,7 +132,7 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
     handleXhrError(e)
   }
 
-  return h('div.analyseMenu', [
+  return h('div.analyseMenu', h.fragment({ key: 'shareMenu' }, [
     h('button', {
       oncreate: helper.ontap(() => {
         const url = baseUrl + `study/${ctrl.study!.data.id}`
@@ -161,5 +161,5 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
         .catch(onPgnError)
       })
     }, ctrl.study!.actionMenu.s.loadingChapterPGN ? spinner.getVdom('monochrome') : [i18n('Chapter PGN')]),
-  ])
+  ]))
 }

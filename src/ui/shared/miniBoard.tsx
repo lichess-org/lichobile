@@ -54,8 +54,8 @@ const MiniBoard: Mithril.Component<Attrs, State> = {
 }
 
 function renderVsBloc(gameObj: FeaturedGame) {
-  const player = gameObj.color === 'white' ? gameObj.white : gameObj.black
-  const opponent = gameObj.color === 'white' ? gameObj.black : gameObj.white
+  const player = gameObj.orientation === 'white' ? gameObj.white : gameObj.black
+  const opponent = gameObj.orientation === 'white' ? gameObj.black : gameObj.white
   return (
     <div className="vsbloc">
       <div className="antagonists">

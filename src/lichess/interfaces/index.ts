@@ -130,7 +130,7 @@ export interface FeaturedGame {
   black: FeaturedPlayer
   clock?: FeaturedClock
   correspondence?: any // yolo
-  color: Color
+  orientation: Color
   fen: string
   id: string
   lastMove?: string

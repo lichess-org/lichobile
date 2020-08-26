@@ -296,8 +296,8 @@ function tournamentFeaturedGame(ctrl: TournamentCtrl) {
           fixed: false,
           fen: featured.fen,
           lastMove: featured.lastMove,
-          orientation: featured.color,
-          link: () => router.set(`/tournament/${data.id}/game/${featured.id}?color=${featured.color}&goingBack=1`),
+          orientation: featured.orientation,
+          link: () => router.set(`/tournament/${data.id}/game/${featured.id}?color=${featured.orientation}&goingBack=1`),
           gameObj: featured,
         })}
       </div>

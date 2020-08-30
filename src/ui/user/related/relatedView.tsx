@@ -17,17 +17,15 @@ export function renderBody(ctrl: RelatedCtrl) {
     { id: 'following', f: () => renderContent(ctrl, ctrl.following, ctrl.followingPaginator) },
   ]
 
-  const nbFollowers = ctrl.followersPaginator ?
-    ctrl.followersPaginator.nbResults : 0
-  const nbFollowing = ctrl.followingPaginator ?
-    ctrl.followingPaginator.nbResults : 0
+  const nbFollowers = ctrl.followersPaginator && ctrl.followersPaginator.nbResults
+  const nbFollowing = ctrl.followingPaginator && ctrl.followingPaginator.nbResults
 
   return [
     h('div.tabs-nav-header.subHeader',
       h(TabNavigation, {
         buttons: [
-          { label: plural('nbFollowers', nbFollowers) },
-          { label: plural('nbFollowing', nbFollowing) },
+          { label: plural('nbFollowers', nbFollowers || 0, nbFollowers ? undefined : '') },
+          { label: plural('nbFollowing', nbFollowing || 0, nbFollowing ? undefined : '') },
         ],
         selectedIndex: ctrl.currentTab,
         onTabChange: ctrl.onTabChange

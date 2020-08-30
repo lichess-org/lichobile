@@ -17,7 +17,7 @@ export function renderBody(ctrl: IUserGamesCtrl) {
           {ctrl.scrollState.availableFilters.map(f => {
             return (
               <option value={f.key} selected={ctrl.scrollState.currentFilter === f.key}>
-                {plural(f.label, f.count, f.count)}
+                {plural(f.label, f.count)}
               </option>
             )
           })}

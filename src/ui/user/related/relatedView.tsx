@@ -26,8 +26,8 @@ export function renderBody(ctrl: RelatedCtrl) {
     h('div.tabs-nav-header.subHeader',
       h(TabNavigation, {
         buttons: [
-          { label: plural('nbFollowers', nbFollowers, ctrl.followersPaginator ? ctrl.followersPaginator.nbResults : '') },
-          { label: plural('nbFollowing', nbFollowing, ctrl.followingPaginator ? ctrl.followingPaginator.nbResults : '') },
+          { label: plural('nbFollowers', nbFollowers) },
+          { label: plural('nbFollowing', nbFollowing) },
         ],
         selectedIndex: ctrl.currentTab,
         onTabChange: ctrl.onTabChange

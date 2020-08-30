@@ -232,7 +232,7 @@ function renderSeek(ctrl: HomeCtrl, seek: CorrespondenceSeek) {
     h('td', h('span.color-icon.' + icon)),
     h('td', seek.username),
     h('td', seek.rating + (seek.provisional ? '?' : '')),
-    h('td', seek.days ? plural('nbDays', seek.days, seek.days) : '∞'),
+    h('td', seek.days ? plural('nbDays', seek.days) : '∞'),
     h('td', h('span.withIcon', {
       'data-icon': seek.perf.icon
     }, i18n(seek.mode === 1 ? 'rated' : 'casual'))),

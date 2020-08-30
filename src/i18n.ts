@@ -32,10 +32,10 @@ export function i18nVdom(key: string, ...args: Array<Mithril.Child>): Mithril.Ch
   return str ? formatVdom(str, ...args) : key
 }
 
-export function plural(key: string, count: number, ...args: Array<string | number>): string {
+export function plural(key: string, count: number, replaceWith?: string): string {
   const pluralKey = key + ':' + quantity(currentLocale, count)
   const str = messages[pluralKey] || messages[key + ':other'] || messages[key]
-  return str ? format(str, ...args) : key
+  return str ? format(str, replaceWith || count) : key
 }
 
 function format(message: string, ...args: Array<string | number>): string {

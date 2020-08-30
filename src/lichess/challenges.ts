@@ -54,7 +54,7 @@ export default {
     if (isTimeControlClock(c.timeControl)) {
       return c.timeControl.show
     } else if (isTimeControlCorrespondence(c.timeControl)) {
-      return plural('nbDays', c.timeControl.daysPerTurn, c.timeControl.daysPerTurn)
+      return plural('nbDays', c.timeControl.daysPerTurn)
     } else {
       return '∞'
     }

@@ -84,8 +84,8 @@ export default {
   view() {
 
     function content() {
-      const nbPlayersStr = plural('nbPlayers', nbPlayers, nbPlayers || '?')
-      const nbGamesStr = plural('nbGames', nbGames, nbGames || '?')
+      const nbPlayersStr = plural('nbPlayers', nbPlayers, nbPlayers ? undefined : '?')
+      const nbGamesStr = plural('nbGames', nbGames, nbGames ? undefined : '?')
 
       if (currentSetup === null) {
         return h('div.lobby-waitingPopup', 'Something went wrong. Please try again')
@@ -133,7 +133,7 @@ function renderCustomSetup(setup: HumanSeekSetup) {
   if (timeMode === 1) {
     time = utils.displayTime(String(minutes)) + '+' + setup.increment
   } else if (timeMode === 2) {
-    time = plural('nbDays', setup.days, setup.days)
+    time = plural('nbDays', setup.days)
   } else {
     time = '∞'
   }

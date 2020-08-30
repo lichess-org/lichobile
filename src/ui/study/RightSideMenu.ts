@@ -1,6 +1,7 @@
 import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import router from '../../router'
+import { plural } from '../../i18n'
 import { lightPlayerName } from '../../lichess/player'
 import { StudyMemberMap, StudyMember } from '../../lichess/interfaces/study'
 import * as helper from '../helper'
@@ -37,7 +38,6 @@ export default {
     const { studyCtrl } = attrs
     const study = studyCtrl.data
     const members = sortMembers(study.members)
-    const membPluralSuffix = members.length > 1 ? 's' : ''
     return h('aside#studyMenu', {
       oncreate: ({ dom }: Mithril.VnodeDOM<any, any>) => {
         CloseSlideHandler(dom as HTMLElement, studyCtrl.sideMenu)
@@ -47,7 +47,7 @@ export default {
         h('h2.study-menu-title.study-members', {
           oncreate: helper.ontapXY(() => this.showMembers = !this.showMembers)
         }, [
-          h('span', `${members.length} member${membPluralSuffix}`),
+          h('span', plural('nbMembers', members.length)),
           this.showMembers ? expandLess : expandMore
         ]),
         this.showMembers ? h('ul', members.map(memb =>
@@ -60,7 +60,7 @@ export default {
             h('span', memb.user ? lightPlayerName(memb.user) : '?')
           ])
         )) : null,
-        h('h2.study-menu-title.study-chapters', `${study.chapters.length} chapters`),
+        h('h2.study-menu-title.study-chapters', plural('nbChapters', study.chapters.length)),
         h('ol', {
           oncreate: helper.ontapXY(e => {
             const el = helper.getLI(e)

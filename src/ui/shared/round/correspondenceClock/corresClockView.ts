@@ -19,8 +19,8 @@ export function formatClockTime(time: number) {
     // days : hours
     const days = date.getUTCDate() - 1
     hours = date.getUTCHours()
-    str += plural('nbDays', days, days)
-    if (hours !== 0) str += ' ' + plural('nbHours', hours, hours)
+    str += plural('nbDays', days)
+    if (hours !== 0) str += ' ' + plural('nbHours', hours)
   } else if (time >= 3600 * 1000) {
     // hours : minutes
     hours = date.getUTCHours()

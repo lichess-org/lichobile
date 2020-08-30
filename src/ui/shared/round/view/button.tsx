@@ -252,7 +252,7 @@ export default {
   moretime(ctrl: OnlineRound) {
     if (gameApi.moretimeable(ctrl.data)) return h('button[data-icon=O]', {
       oncreate: helper.ontap(throttle(() => { ctrl.socketIface.send('moretime') }, 600))
-    }, plural('giveNbSeconds', 15, 15))
+    }, plural('giveNbSeconds', 15))
     return null
   },
   flipBoard(ctrl: OnlineRound) {

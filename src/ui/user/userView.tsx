@@ -239,7 +239,7 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
         <div className="list_item nav"
           oncreate={helper.ontapY(ctrl.goToGames)}
         >
-          {plural('nbGames', user.count.all, user.count.all)}
+          {plural('nbGames', user.count.all)}
         </div> : null
       }
       { session.isConnected() && ctrl.isMe() ?
@@ -261,7 +261,7 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
       <div className="list_item nav"
         oncreate={helper.ontapY(ctrl.followers)}
       >
-        {plural('nbFollowers', user.nbFollowers, user.nbFollowers)}
+        {plural('nbFollowers', user.nbFollowers)}
       </div>
       { !ctrl.isMe() ? <div className="list_item nav" data-icon="1"
         oncreate={helper.ontapY(ctrl.goToUserTV)}

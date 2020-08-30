@@ -75,7 +75,7 @@ export default {
 
             <h2>{i18n('otherRules')}</h2>
             <p>{i18n('thereIsACountdown')}</p>
-            <p>{plural('drawingWithinNbMoves', 10, 10)}</p>
+            <p>{plural('drawingWithinNbMoves', 10)}</p>
           </div>
         </div>
       </div>

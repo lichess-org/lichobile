@@ -95,11 +95,11 @@ function renderProfileActions(user: Session) {
       </li>
       <li className="side_link" data-action="friends">
         <span data-icon="f" />
-        {plural('nbFriendsOnline', friendsApi.count(), friendsApi.count())}
+        {plural('nbFriendsOnline', friendsApi.count())}
       </li>
       <li className="side_link" data-route={`/@/${user.id}/related`}>
         <span className="fa fa-arrow-circle-left" />
-        {plural('nbFollowers', user.nbFollowers || 0, user.nbFollowers || 0)}
+        {plural('nbFollowers', user.nbFollowers || 0)}
       </li>
       <li className="side_link" data-nocloseaction="logout">
         <span data-icon="w" />

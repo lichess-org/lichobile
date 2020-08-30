@@ -33,7 +33,8 @@ export default class StudyCtrl {
         data.chat.lines,
         undefined,
         data.chat.writeable,
-        session.isShadowban()
+        session.isShadowban(),
+        'Study'
       )
     }
 

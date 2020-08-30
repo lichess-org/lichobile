@@ -3,6 +3,8 @@ import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
 import * as helper from '../helper'
 import redraw from '../../utils/redraw'
+import LRUMap from '../../utils/lru'
+import { requestIdleCallback } from '../../utils'
 import i18n from '../../i18n'
 import asyncStorage from '../../asyncStorage'
 import { Player } from '../../lichess/interfaces/game'
@@ -11,13 +13,13 @@ import router from '../../router'
 import { SocketIFace } from '../../socket'
 import { closeIcon } from '../shared/icons'
 
+export type ChatStore = 'Corres' | 'Game' | 'Study'
+
 export class Chat {
   public showing: boolean
   public nbUnread: number
   public inputValue: string
   public lines: Array<ChatMsg>
-
-  private storageId: string
 
   constructor(
     readonly socketIface: SocketIFace,
@@ -26,10 +28,10 @@ export class Chat {
     readonly player: Player | undefined,
     readonly writeable: boolean,
     readonly isShadowban: boolean,
+    readonly storeKey: ChatStore,
   ) {
 
     this.showing = false
-    this.storageId = 'chat.' + id
     this.lines = lines
     this.inputValue = ''
     this.nbUnread = 0
@@ -91,9 +93,8 @@ export class Chat {
   }
 
   private checkUnreadFromStorage() {
-    asyncStorage.get<number>(this.storageId)
-    .then(data => {
-      const storedNb = data || 0
+    getReadCount(this.storeKey, this.id).then(nb => {
+      const storedNb = nb || 0
       const actualNb = this.nbLines()
       if (this.lines !== undefined && storedNb < actualNb) {
         this.nbUnread = this.nbUnread + (actualNb - storedNb)
@@ -105,7 +106,9 @@ export class Chat {
   private storeNbLinesRead() {
     const linesRead = this.nbLines()
     if (linesRead > 0) {
-      asyncStorage.set(this.storageId, linesRead)
+      requestIdleCallback(() => {
+        setReadCount(this.storeKey, this.id, linesRead)
+      })
     }
   }
 }
@@ -271,4 +274,56 @@ function compactableDeletedLines(l1: ChatMsg, l2: ChatMsg) {
 function validateMsg(msg: string): boolean {
   if (!msg) return false
   return msg.trim().length <= 140
+}
+
+interface Storage {
+  Corres: {
+    key: 'corresChat',
+    readCounts?: LRUMap<string, number>
+  },
+  Game: {
+    key: 'gameChat',
+    readCounts?: LRUMap<string, number>
+  },
+  Study: {
+    key: 'studyChat',
+    readCounts?: LRUMap<string, number>
+  },
+}
+const storage: Storage = {
+  Corres: {
+    key: 'corresChat',
+  },
+  Game: {
+    key: 'gameChat',
+  },
+  Study: {
+    key: 'studyChat',
+  },
+}
+
+function initStorage(storeKey: ChatStore): Promise<void> {
+  const store = storage[storeKey]
+  if (store.readCounts) return Promise.resolve()
+  else {
+    return asyncStorage.get<Array<[string, number]>>(store.key)
+    .then(data => {
+      if (data) store.readCounts = new LRUMap<string, number>(100, data)
+      else store.readCounts = new LRUMap<string, number>(100)
+    })
+  }
+}
+
+async function getReadCount(storeKey: ChatStore, id: string): Promise<number | undefined> {
+  await initStorage(storeKey)
+  return storage[storeKey].readCounts?.get(id)
+}
+
+async function setReadCount(storeKey: ChatStore, id: string, nb: number): Promise<void> {
+  await initStorage(storeKey)
+  const store = storage[storeKey]
+  if (store.readCounts) {
+    store.readCounts.set(id, nb)
+    asyncStorage.set(store.key, store.readCounts.toJSON())
+  }
 }

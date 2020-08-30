@@ -151,7 +151,8 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.data.chat || [],
       this.data.player.spectator ? undefined : this.data.player,
       session.isConnected() || this.data.game.source === 'friend',
-      session.isShadowban()
+      session.isShadowban(),
+      this.data.game.speed === 'correspondence' ? 'Corres' : 'Game',
     )
 
     this.notes = this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null

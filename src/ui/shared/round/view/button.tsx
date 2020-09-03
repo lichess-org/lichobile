@@ -119,10 +119,9 @@ export default {
   offerDraw(ctrl: OnlineRound) {
     return !ctrl.vm.confirmDraw ? h('button', {
       className: 'draw-yes',
-      'data-icon': '2',
       oncreate: helper.ontap(() => { ctrl.vm.confirmDraw = true }),
       disabled: !ctrl.canOfferDraw()
-    }, i18n('offerDraw')) : null
+    }, h('span', '½'), i18n('offerDraw')) : null
   },
   drawConfirmation(ctrl: OnlineRound) {
     return ctrl.canOfferDraw() && ctrl.vm.confirmDraw ? (

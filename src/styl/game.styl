@@ -369,9 +369,9 @@
     padding 10px
     white-space normal
   button
-    &.draw-yes:before
-      display inline-block
-      transform rotate(-90deg)
+    &.draw-yes
+      > span
+        margin-right 5px
     &.on
       background-color darken(#fff, 15%)
   .negotiation, .force_resign_zone, .claim_draw_zone

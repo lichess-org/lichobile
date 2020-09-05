@@ -15,6 +15,7 @@ import { closeIcon } from './shared/icons'
 import signupModal from './signupModal'
 
 let isOpen = false
+let loading = false
 let formError: string | null = null
 
 export default {
@@ -32,10 +33,7 @@ export default {
       ]),
       h('div.modal_content', [
         h('form.defaultForm.login', {
-          onsubmit: (e: Event) => {
-            e.preventDefault()
-            submit((e.target as HTMLFormElement))
-          }
+          onsubmit: onLogin
         }, [
           formError && !isTotpError(formError) ?  h('div.form-error', formError) : null,
           formError === 'InvalidTotpToken' ? h('div.form-error', i18n('invalidAuthenticationCode')) : null,
@@ -74,7 +72,9 @@ export default {
             ]),
           ] : null,
           h('div.submit', [
-            h('button.defaultButton', i18n('signIn'))
+            h('button.defaultButton', {
+              disabled: loading
+            }, i18n('signIn'))
           ])
         ]),
         h('div.loginActions', [
@@ -90,15 +90,20 @@ export default {
   }
 }
 
-function submit(form: HTMLFormElement) {
+function onLogin(e: Event) {
+  if (loading) return false
+  e.preventDefault()
+  const form = e.target as HTMLFormElement
   const username = form['username'].value
   const password = form['password'].value
   const token = form['token'] ? form['token'].value : null
   if (!username || !password) return
   redraw()
   Plugins.Keyboard.hide()
+  loading = true
   session.login(username, password, token)
   .then(() => {
+    loading = false
     close()
     Plugins.LiToast.show({ text: i18n('loginSuccessful'), duration: 'short' })
     signals.afterLogin.dispatch()
@@ -110,6 +115,7 @@ function submit(form: HTMLFormElement) {
     session.refresh()
   })
   .catch((err: ErrorResponse) => {
+    loading = false
     if (err.body.ipban) {
       close()
     } else {
@@ -131,6 +137,7 @@ function isTotpError(formError: string | null) {
 function open() {
   router.backbutton.stack.push(helper.slidesOutDown(close, 'loginModal'))
   isOpen = true
+  loading = false
   formError = null
 }
 

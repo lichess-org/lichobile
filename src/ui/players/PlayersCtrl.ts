@@ -1,4 +1,4 @@
-import throttle from 'lodash-es/throttle'
+import debounce from 'lodash-es/debounce'
 import redraw from '../../utils/redraw'
 import * as utils from '../../utils'
 import router from '../../router'
@@ -45,14 +45,18 @@ export default class PlayersCtrl {
       this.isSearchOpen = false
   }
 
-  public onInput = throttle((e: Event) => {
+  public onSearchInput = (e: Event) => {
     const term = (e.target as HTMLInputElement).value.trim()
-    if (term.length >= 3)
-      xhr.autocomplete(term).then(data => {
-        this.searchResults = data
-        redraw()
-      })
-  }, 250)
+    if (!term.match(/^[a-z0-9][\w-]{2,29}$/i)) return
+    if (term.length >= 3) this.searchXhr(term)
+  }
+
+  private searchXhr = debounce(term => {
+    xhr.autocomplete(term).then(data => {
+      this.searchResults = data
+      redraw()
+    })
+  }, 300)
 
   public goSearch = () => {
     router.backbutton.stack.push(this.closeSearch)

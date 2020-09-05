@@ -66,7 +66,7 @@ export function searchModal(ctrl: PlayersCtrl) {
         </button>
         <div className="search_input allow_select">
           <input id="searchPlayers" type="search"
-          placeholder="Search players" oninput={ctrl.onInput}
+          placeholder="Search players" oninput={ctrl.onSearchInput}
           autocapitalize="off"
           autocomplete="off"
           oncreate={helper.autofocus}

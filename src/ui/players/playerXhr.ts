@@ -2,7 +2,9 @@ import { fetchJSON } from '../../http'
 import { User, Rankings } from '../../lichess/interfaces/user'
 
 export function autocomplete(term: string): Promise<ReadonlyArray<string>> {
-  return fetchJSON('/player/autocomplete?friend=1', { query: { term }})
+  return fetchJSON('/player/autocomplete?friend=1', {
+    query: { term },
+  })
 }
 
 export function onlinePlayers(): Promise<ReadonlyArray<User>> {

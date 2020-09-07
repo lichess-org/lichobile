@@ -44,7 +44,6 @@ export default {
         h('h2', i18n('signUp'))
       ]),
       h('div#signupModalContent.modal_content', {
-        className: loading ? 'loading' : ''
       }, checkEmail ? renderCheckEmail() : renderForm())
     ])
   }
@@ -74,10 +73,7 @@ function renderForm() {
       ), '.'
     ]),
     h('form.defaultForm.login', {
-      onsubmit: function(e: Event) {
-        e.preventDefault()
-        return submit((e.target as HTMLFormElement))
-      }
+      onsubmit: onSignup,
     }, [
       h('div.field', [
         formError && formError.username ?
@@ -91,25 +87,7 @@ function renderForm() {
           spellcheck: false,
           required: true,
           onfocus: scrollToTop,
-          oninput: debounce((e: Event) => {
-            const val = (e.target as HTMLFormElement).value.trim()
-            if (val && val.length > 2) {
-              testUserName(val).then(exists => {
-                if (exists) {
-                  formError = {
-                    username: ['This username is already in use, please try another one.']
-                  }
-                }
-                else {
-                  formError = null
-                }
-                redraw()
-              })
-            } else {
-              formError = null
-              redraw()
-            }
-          }, 100)
+          oninput: debounce(oninput, 500),
         }),
       ]),
       h('div.field', [
@@ -136,10 +114,35 @@ function renderForm() {
         })
       ]),
       h('div.submit', [
-        h('button.defaultButton', i18n('signUp'))
+        h('button.defaultButton', {
+          disabled: loading
+        }, i18n('signUp'))
       ])
     ])
   ]
+}
+
+function oninput(e: Event) {
+  const val = (e.target as HTMLFormElement).value.trim()
+  if (val && val.match(/^[a-z0-9][\w-]{2,29}$/i)) {
+    testUserName(val).then(exists => {
+      setUserExistsFeedback(exists)
+    })
+  } else {
+    setUserExistsFeedback(false)
+  }
+}
+
+function setUserExistsFeedback(exists: boolean) {
+  if (exists) {
+    formError = {
+      username: ['This username is already in use, please try another one.']
+    }
+  }
+  else {
+    formError = null
+  }
+  redraw()
 }
 
 function scrollToTop(e: Event) {
@@ -153,20 +156,22 @@ function isConfirmMailData(d: SignupData): d is EmailConfirm {
   return (d as EmailConfirm).email_confirm !== undefined
 }
 
-function submit(form: HTMLFormElement) {
+function onSignup(e: Event) {
+  e.preventDefault()
+  const form: HTMLFormElement = e.target as HTMLFormElement
   const login = (form[0] as HTMLInputElement).value.trim()
   const email = (form[1] as HTMLInputElement).value.trim()
   const pass = (form[2] as HTMLInputElement).value.trim()
-  if (!login || !email || !pass) return
+  if (loading || !login || !email || !pass) return
   Plugins.Keyboard.hide()
   loading = true
   formError = null
   redraw()
   session.signup(login, email, pass)
   .then(d => {
+    loading = false
     if (d && isConfirmMailData(d)) {
       // should comfirm email
-      loading = false
       checkEmail = true
       redraw()
     } else {
@@ -178,8 +183,8 @@ function submit(form: HTMLFormElement) {
     }
   })
   .catch((error: any) => {
+    loading = false
     if (isSubmitError(error)) {
-      loading = false
       formError = error.body.error
       redraw()
     }
@@ -197,6 +202,7 @@ function open() {
   router.backbutton.stack.push(helper.slidesOutDown(close, 'signupModal'))
   formError = null
   isOpen = true
+  loading = false
 }
 
 function close(fromBB?: string) {
@@ -207,5 +213,7 @@ function close(fromBB?: string) {
 }
 
 function testUserName(term: string): Promise<boolean> {
-  return fetchJSON('/player/autocomplete?exists=1', { query: { term }})
+  return fetchJSON('/player/autocomplete?exists=1', {
+    query: { term },
+  })
 }

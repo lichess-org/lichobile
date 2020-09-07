@@ -33,7 +33,7 @@ export function withRouter(f: (r: Rlite.Rlite) => void): void {
   f(router)
 }
 
-export function onRouteMatch<T>(component: Mithril.Component<any, any>, params: T) {
+export function onRouteMatch<T>(component: Mithril.Component<any, any>, params: T): void {
 
   const RouteComponent = {view() {
     return Vnode(component, undefined, params)
@@ -57,7 +57,7 @@ export function onRouteMatch<T>(component: Mithril.Component<any, any>, params: 
   }
 }
 
-export function processQuerystring(e?: PopStateEvent) {
+export function processQuerystring(e?: PopStateEvent): void {
   if (e && e.state) {
     if (e.state.id < currentStateId) {
       viewSlideDirection = 'bwd'
@@ -104,7 +104,7 @@ function setQueryParams(params: StringMap, newState = false) {
   }
 }
 
-const backbutton = (() => {
+const backbutton: Backbutton = (() => {
   type BBHandler = (fromBB?: string) => void
 
   interface X {

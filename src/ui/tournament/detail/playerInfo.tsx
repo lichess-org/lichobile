@@ -83,7 +83,7 @@ export default {
       }
       return (
         <tr className="list_item bglight" data-id={game.id} data-color={game.color} key={game.id}>
-          <td className="oppRank"> {player.nb.game - index} </td>
+          <td className="oppRank"> {pairings.length - index} </td>
           <td className="oppName"> {game.op.name} </td>
           <td className="oppRating"> {game.op.rating} </td>
           <td className="oppColor"> <span className={'color-icon ' + game.color}> </span> </td>

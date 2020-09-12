@@ -70,7 +70,7 @@
         "signals": "1.0.0"
     },
     "scripts": {
-        "start": "npm run compile && concurrently 'npm run watch' 'npm run serve'",
+        "start": "concurrently 'npm run watch' 'npm run serve'",
         "serve": "http-server -p 8080 -s -g -c-1 .",
         "version": "node scripts/bump-version.js",
         "lint": "tslint --project tsconfig.json -e '**/dts/**' -e '**/*.js'",
@@ -81,12 +81,11 @@
         "styles-watch": "stylus -w -q -u autoprefixer-stylus src/styl/index.styl -o www/css/compiled/app.css",
         "compile": "tsc --outDir build/",
         "compile-watch": "tsc -w --outDir build/",
-        "web-clean": "rimraf www/*.js && rimraf www/*.js.map",
-        "web-build": "npm run web-clean && npm run compile && rollup -c",
-        "web-watch": "npm run web-clean && rollup -w -c",
-        "watch": "node scripts/inject-conf && concurrently 'npm:compile-watch' 'npm:web-watch' 'npm:styles-watch'",
-        "prebuild": "npm run web-clean",
-        "build": "node scripts/inject-conf && concurrently 'npm:compile-date-locales' 'npm:styles' 'npm:web-build' && npx cap copy",
+        "clean": "rimraf build/ && rimraf www/*.js && rimraf www/*.js.map",
+        "prewatch": "npm run compile",
+        "watch": "node scripts/inject-conf && concurrently 'npm:compile-watch' 'rollup -w -c' 'npm:styles-watch'",
+        "prebuild": "npm run clean && npm run compile",
+        "build": "node scripts/inject-conf && concurrently 'npm:compile-date-locales' 'npm:styles' 'rollup -c' && npx cap copy",
         "run-android": "npm run build && cd android && ./gradlew installDebug"
     },
     "jest": {

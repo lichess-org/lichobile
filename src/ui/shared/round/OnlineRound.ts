@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import { Capacitor, Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
 import throttle from 'lodash-es/throttle'
 import Chessground from '../../../chessground/Chessground'

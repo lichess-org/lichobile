@@ -1,6 +1,5 @@
 import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
-import m from 'mithril'
 import router from '../../../router'
 import session from '../../../session'
 import i18n from '../../../i18n'
@@ -178,7 +177,7 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
     settings.game.supportedVariants.indexOf(t.variant) < 0 ||
     !t.verdicts.accepted ||
     (t.teamBattle && t.teamBattle.joinWith.length === 0)) {
-    return m.fragment({key: 'noJoinButton'}, [])
+    return h.fragment({key: 'noJoinButton'}, [])
   }
   const action = (t.private || t.teamBattle) ?
     () => joinForm.open(ctrl) :
@@ -194,7 +193,7 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
 
 function withdrawButton(ctrl: TournamentCtrl, t: Tournament) {
   if (t.isFinished || settings.game.supportedVariants.indexOf(t.variant) < 0) {
-    return m.fragment({key: 'noWithdrawButton'}, [])
+    return h.fragment({key: 'noWithdrawButton'}, [])
   }
   return (
     <button key="withdrawButton" className="action_bar_button" oncreate={helper.ontap(ctrl.withdraw)}>

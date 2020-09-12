@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import socket from '../../../socket'
 import * as helper from '../../helper'
 import { dropShadowHeader as headerWidget, backButton } from '../../shared/common'
@@ -25,8 +24,9 @@ export default {
   },
 
   view() {
+    const thread = this.ctrl.thread()
     const header = headerWidget(null,
-      backButton(this.ctrl.thread() ? this.ctrl.thread().name : undefined)
+      backButton(thread ? thread.name : undefined)
     )
     const body = threadBody(this.ctrl)
     return layout.free(header, body)

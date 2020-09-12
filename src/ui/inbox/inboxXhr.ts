@@ -30,7 +30,7 @@ export function respond(id: string, response: string): Promise<ComposeResponse> 
   }, true)
 }
 
-export function newThread(username: string, subject: string, text: string) {
+export function newThread(username: string, subject: string, text: string): Promise<ComposeResponse> {
   return fetchJSON('/inbox/new', {
     method: 'POST',
     body: JSON.stringify({

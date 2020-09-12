@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
 import i18n, { plural } from '../../i18n'

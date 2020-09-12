@@ -1,4 +1,4 @@
-import Stream from 'mithril/stream'
+import { Prop, prop } from '~/utils'
 import router from '../../../router'
 import redraw from '../../../utils/redraw'
 import * as helper from '../../helper'
@@ -12,13 +12,13 @@ export interface TeamInfoCtrl {
   close: (fromBB?: string) => void
   isOpen: () => boolean
   root: TournamentCtrl
-  teamId: Stream<string>
+  teamId: Prop<string | null>
 }
 
 export default {
   controller(root: TournamentCtrl): TeamInfoCtrl {
     let isOpen = false
-    const teamId = Stream<string>()
+    const teamId = prop<string | null>(null)
 
     function open(tId: string) {
       router.backbutton.stack.push(helper.slidesOutRight(close, 'tournamentTeamInfoModal'))

@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import i18n from '../../i18n'
 import socket from '../../socket'
 import * as helper from '../helper'

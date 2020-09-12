@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import * as utils from '../../utils'
 import * as helper from '../helper'

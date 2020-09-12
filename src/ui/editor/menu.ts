@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import i18n from '../../i18n'
 import popupWidget from '../shared/popup'
 import router from '../../router'

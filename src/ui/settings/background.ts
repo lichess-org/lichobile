@@ -1,5 +1,4 @@
 import h from 'mithril/hyperscript'
-import * as Mithril from 'mithril'
 import { dropShadowHeader, backButton } from '../shared/common'
 import redraw from '../../utils/redraw'
 import formWidgets from '../shared/form'
@@ -78,7 +77,7 @@ function renderBody(ctrl: State) {
               const val = (e.target as HTMLInputElement).value
               const prevTheme = settings.general.theme.background()
               settings.general.theme.background(val)
-              new Promise((resolve) => {
+              new Promise<string>((resolve) => {
                 if (isTransparent(val)) {
                   ctrl.loading = true
                   redraw()

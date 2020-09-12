@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import i18n, { plural } from '../../../i18n'
 import * as helper from '../../helper'

@@ -15,8 +15,8 @@ interface Boundaries {
 
 export default function ButtonHandler(
   el: HTMLElement,
-  tapHandler: (e?: TouchEvent) => void,
-  holdHandler?: (e?: TouchEvent) => void,
+  tapHandler: (e: TouchEvent) => void,
+  holdHandler?: (e: TouchEvent) => void,
   repeatHandler?: () => boolean,
   scrollX?: boolean,
   scrollY?: boolean,
@@ -110,7 +110,8 @@ export default function ButtonHandler(
     }
   }
 
-  function onContextMenu(e: TouchEvent) {
+  // typescript doesn't like TouchEvent here
+  function onContextMenu(e: Event) {
     // just disable it since we handle manually holdHandler
     // because contextmenu does not work in iOS and chrome dev tools
     // (it fires a MouseEvent in the latter)

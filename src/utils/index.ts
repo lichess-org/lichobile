@@ -292,7 +292,7 @@ export function safeStringToNum(s: string | null | undefined): number | undefine
   return isNaN(n) ? undefined : n
 }
 
-export function hashCode(str: string) {
+export function hashCode(str: string): number {
   let hash = 0
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i)
@@ -304,3 +304,15 @@ export function hashCode(str: string) {
 
 export const requestIdleCallback: (c: () => void) => void =
   window.requestIdleCallback || window.setTimeout
+
+type PropParam<T> = Exclude<T, undefined>
+export interface Prop<T> {
+  (v?: PropParam<T>): T
+}
+export function prop<A>(initialValue: PropParam<A>): Prop<A> {
+  let value = initialValue
+  return (v?: PropParam<A>) => {
+    if (v !== undefined) value = v
+    return value
+  }
+}

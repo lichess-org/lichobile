@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import * as helper from '../helper'
 import { loadingBackbutton } from '../shared/common'
 import UserCtrl, { IUserCtrl } from './UserCtrl'

@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
 import redraw from '../../../../utils/redraw'
@@ -49,7 +48,7 @@ export default function view(ctrl: OnlineRound) {
 }
 
 export function renderMaterial(material: Material) {
-  const tomb = Object.keys(material.pieces).map((role: Role) =>
+  const tomb = Object.keys(material.pieces).map((role: string) =>
     h('div.tomb', Array.from(Array(material.pieces[role]).keys())
       .map(_ => h('piece', { className: role }))
     )

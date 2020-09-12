@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import * as helper from '../../../helper'
 import h from 'mithril/hyperscript'
 import ClockCtrl from './ClockCtrl'

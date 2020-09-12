@@ -25,7 +25,7 @@ export default function moveTest(
   .map(node => ({ uci: node.uci!, castle: (node.san!).startsWith('O-O') }))
 
   // search in puzzle lines with current progress
-  const curLine = progress.reduce((acc: Line, step: ProgressStep) => {
+  const curLine = progress.reduce<Line | undefined>((acc: Line | undefined, step: ProgressStep) => {
     if (!acc) return undefined
     if (isLineFeedback(acc)) return acc
     // trick typescript into thinking altCastles[step.uci] is defined to avoid

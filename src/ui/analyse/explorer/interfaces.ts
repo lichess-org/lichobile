@@ -1,14 +1,14 @@
-import Stream from 'mithril/stream'
+import { Prop } from '~/utils'
 
 export interface IExplorerCtrl {
   allowed: boolean
   setStep(): void
-  loading: Stream<boolean>
-  failing: Stream<boolean>
+  loading: Prop<boolean>
+  failing: Prop<boolean>
   config: any
   withGames: boolean
-  current: Stream<ExplorerData>
-  fetchMasterOpening: (fen: string) => Promise<ExplorerData>
+  current: Prop<ExplorerData>
+  fetchMasterOpening: (fen: string) => Promise<OpeningData>
   fetchTablebaseHit: (fen: string) => Promise<SimpleTablebaseHit>
 }
 

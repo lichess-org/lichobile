@@ -106,7 +106,7 @@ export function acceptChallenge(id: string): Promise<OnlineGameData> {
 
 export let cachedPools: ReadonlyArray<Pool> = []
 export function lobby(feedback?: boolean): Promise<LobbyData> {
-  return fetchJSON('/', undefined, feedback)
+  return fetchJSON<LobbyData>('/', undefined, feedback)
   .then((d: LobbyData) => {
     if (d.lobby.pools !== undefined) cachedPools = d.lobby.pools
     return d
@@ -165,7 +165,7 @@ export function timeline(): Promise<TimelineData> {
 
 export function status(): Promise<void> {
   const v = window.deviceInfo.appVersion || 'web-dev'
-  return fetchJSON('/api/status', {
+  return fetchJSON<ApiStatus>('/api/status', {
     query: {
       v
     }
@@ -227,7 +227,7 @@ export function status(): Promise<void> {
   })
 }
 
-function createToken() {
+function createToken(): Promise<{ url: string }> {
   return fetchJSON('/auth/token', {method: 'POST'}, true)
 }
 
@@ -240,7 +240,7 @@ export function openWebsiteAuthPage(path: string) {
   if (session.isConnected() && !session.isKidMode()) {
     createToken()
     .then((data: {url: string}) => {
-      Plugins.Browser.open({ url: data.url + `?referrer=${encodeURIComponent(path)}` })
+      Plugins.Browser.open({ url: `${data.url}?referrer=${encodeURIComponent(path)}` })
     })
     .catch(() => {
       Plugins.Browser.open({ url: anonUrl })

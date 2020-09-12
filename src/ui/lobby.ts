@@ -9,7 +9,7 @@ import spinner from '../spinner'
 import router from '../router'
 import * as xhr from '../xhr'
 import i18n, { plural } from '../i18n'
-import socket, { SocketIFace, SEEKING_SOCKET_NAME, RedirectObj } from '../socket'
+import socket, { SocketIFace, SEEKING_SOCKET_NAME, RedirectObj, MessageHandlers } from '../socket'
 import { PongMessage, PoolMember, HumanSeekSetup, isPoolMember, isSeekSetup } from '../lichess/interfaces'
 import { OnlineGameData } from '../lichess/interfaces/game'
 import { humanSetupFromSettings } from '../lichess/setup'
@@ -37,7 +37,7 @@ let poolInIntervalId: number
 
 let socketIface: SocketIFace
 
-const socketHandlers = {
+const socketHandlers: MessageHandlers = {
   redirect: (d: RedirectObj) => {
     stopAndClose()
     if (currentSetup !== null)  {
@@ -49,7 +49,7 @@ const socketHandlers = {
     }
     socket.redirectToGame(d)
   },
-  n: (_: never, d: PongMessage) => {
+  n: (_: any, d: PongMessage) => {
     nbPlayers = d.d
     nbGames = d.r
     redraw()

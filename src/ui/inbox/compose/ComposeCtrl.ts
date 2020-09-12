@@ -1,8 +1,7 @@
-import Stream from 'mithril/stream'
 import throttle from 'lodash-es/throttle'
 import { ErrorResponse } from '../../../http'
 import redraw from '../../../utils/redraw'
-import { handleXhrError } from '../../../utils'
+import { handleXhrError, prop, Prop } from '../../../utils'
 import * as xhr from './../inboxXhr'
 import { ComposeResponse } from '../interfaces'
 import router from '../../../router'
@@ -18,18 +17,18 @@ interface SendErrorResponse extends ErrorResponse {
 }
 
 export interface IComposeCtrl {
-  id: Stream<string>
-  errors: Stream<SendError>
+  id: Prop<string>
+  errors: Prop<SendError | null>
   send: (form: HTMLFormElement) => void
   onInput: (e: Event) => void
-  autocompleteResults: Stream<Array<string>>
+  autocompleteResults: Prop<Array<string>>
 }
 
 export default function ComposeCtrl(userId: string): IComposeCtrl {
 
-  const id = Stream<string>(userId)
-  const errors = Stream<SendError>()
-  const autocompleteResults = Stream<string[]>([])
+  const id = prop<string>(userId)
+  const errors = prop<SendError | null>(null)
+  const autocompleteResults = prop<string[]>([])
 
   function send(form: HTMLFormElement) {
     const recipient = (form[0] as HTMLInputElement).value

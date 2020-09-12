@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import throttle from 'lodash-es/throttle'
 import debounce from 'lodash-es/debounce'

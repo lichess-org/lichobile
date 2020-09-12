@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import debounce from 'lodash-es/debounce'
 import { fromNow } from '../../i18n'
 import { handleXhrError } from '../../utils'

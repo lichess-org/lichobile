@@ -6,6 +6,7 @@ import redraw from '../../../utils/redraw'
 import { IComposeCtrl } from './ComposeCtrl'
 
 export function composeBody(ctrl: IComposeCtrl) {
+  const errors = ctrl.errors()
   return (
     <div className="composeWrapper">
       <form id="composeForm"
@@ -25,16 +26,16 @@ export function composeBody(ctrl: IComposeCtrl) {
             })}
           </ul> : null
         }
-        {(ctrl.errors() && ctrl.errors().username) ? renderError(ctrl.errors().username[0]) : null}
+        {(errors && errors.username) ? renderError(errors.username[0]) : null}
 
         <input id="subject" type="text" className="composeInput"
         placeholder={i18n('subject')}
         oncreate={ctrl.id() ? helper.autofocus : null}
         />
-        {(ctrl.errors() && ctrl.errors().subject) ? renderError(ctrl.errors().subject[0]) : null}
+        {(errors && errors.subject) ? renderError(errors.subject[0]) : null}
 
         <textarea id="body" className="composeInput composeTextarea" />
-        {(ctrl.errors() && ctrl.errors().text) ? renderError(ctrl.errors().text[0]) : null}
+        {(errors && errors.text) ? renderError(errors.text[0]) : null}
         <button className="fatButton composeSend" type="submit">
           <span className="fa fa-check" />
           {i18n('send')}

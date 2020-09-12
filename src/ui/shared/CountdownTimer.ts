@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import { formatTimeInSecs } from '../../utils'
 import sound from '../../sound'

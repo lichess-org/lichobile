@@ -6,7 +6,4 @@
 /// <reference path="stockfish.d.ts" />
 /// <reference path="signals.d.ts" />
 /// <reference path="misc.d.ts" />
-
-
-declare module 'siema'
-declare module 'mithril/render/vnode'
+/// <reference path="mithril.d.ts" />

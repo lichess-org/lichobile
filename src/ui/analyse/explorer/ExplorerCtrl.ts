@@ -1,7 +1,6 @@
-import Stream from 'mithril/stream'
 import debounce from 'lodash-es/debounce'
 import redraw from '../../../utils/redraw'
-import { oppositeColor } from '../../../utils'
+import { oppositeColor, prop } from '../../../utils'
 import { colorOf } from '../../../utils/fen'
 import * as gameApi from '../../../lichess/game'
 import { isSynthetic } from '../util'
@@ -15,9 +14,9 @@ export default function ExplorerCtrl(
   allowed: boolean
 ): IExplorerCtrl {
 
-  const loading = Stream(true)
-  const failing = Stream(false)
-  const current: Stream<ExplorerData> = Stream({
+  const loading = prop(true)
+  const failing = prop(false)
+  const current = prop<ExplorerData>({
     moves: []
   })
 

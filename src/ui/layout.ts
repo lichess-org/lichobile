@@ -1,5 +1,4 @@
 import { Capacitor } from '@capacitor/core'
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import settings from '../settings'
 import Gesture from '../utils/Gesture'

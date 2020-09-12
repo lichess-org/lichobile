@@ -217,7 +217,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     }
   }
 
-  private onMove = (_: Key, dest: Key, capturedPiece: Piece) => {
+  private onMove = (_: Key, dest: Key, capturedPiece?: Piece) => {
     if (capturedPiece) {
       if (this.data.game.variant.key === 'atomic') {
         atomic.capture(this.chessground, dest)

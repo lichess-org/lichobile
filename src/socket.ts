@@ -36,11 +36,11 @@ interface SocketConfig {
 }
 
 type MessageHandler<D, P extends LichessMessage<D>> = (data?: D, payload?: P) => void
-type MessageHandlerGeneric = MessageHandler<{}, any>
+type MessageHandlerGeneric = MessageHandler<any, any>
 
 export interface SocketIFace {
   send: <D, O>(t: string, data?: D, opts?: O) => void
-  ask: <D, O, R>(t: string, listenTo: string, data?: D, opts?: O) => Promise<R>
+  ask: <R>(t: string, listenTo: string, data?: any, opts?: any) => Promise<R>
 }
 
 export interface MessageHandlers {

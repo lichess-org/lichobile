@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
 import router from '../../router'
 import redraw from '../../utils/redraw'

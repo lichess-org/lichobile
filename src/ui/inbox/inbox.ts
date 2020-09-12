@@ -1,9 +1,7 @@
-import * as Mithril from 'mithril'
-import Stream from 'mithril/stream'
 import throttle from 'lodash-es/throttle'
 import socket from '../../socket'
 import redraw from '../../utils/redraw'
-import { handleXhrError } from '../../utils'
+import { handleXhrError, prop, Prop } from '../../utils'
 import i18n from '../../i18n'
 import { dropShadowHeader } from '../shared/common'
 import * as helper from '../helper'
@@ -14,8 +12,8 @@ import { PagedThreads } from './interfaces'
 import * as xhr from './inboxXhr'
 
 export interface InboxCtrl {
-  threads: Stream<PagedThreads>
-  isLoading: Stream<boolean>
+  threads: Prop<PagedThreads | null>
+  isLoading: Prop<boolean>
   first: () => void
   prev: () => void
   next: () => void
@@ -28,8 +26,8 @@ export default {
   oninit() {
     socket.createDefault()
 
-    const threads = Stream<PagedThreads>()
-    const isLoading = Stream<boolean>(false)
+    const threads = prop<PagedThreads | null>(null)
+    const isLoading = prop<boolean>(false)
 
     const throttledReload = throttle((p: number) => {
       isLoading(true)
@@ -59,15 +57,15 @@ export default {
         if (!isLoading()) throttledReload(1)
       },
       prev() {
-        const prevPage = threads().previousPage
+        const prevPage = threads()?.previousPage
         if (!isLoading() && prevPage) throttledReload(prevPage)
       },
       next() {
-        const nextPage = threads().nextPage
+        const nextPage = threads()?.nextPage
         if (!isLoading() && nextPage) throttledReload(nextPage)
       },
       last() {
-        const lastPage = threads().nbPages
+        const lastPage = threads()?.nbPages
         if (!isLoading() && lastPage) throttledReload(lastPage)
       }
     }

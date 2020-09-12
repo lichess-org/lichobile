@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
 import { Locale } from 'date-fns'
 import formatDistanceStrict from 'date-fns/esm/formatDistanceStrict'
@@ -118,13 +117,14 @@ export async function init(): Promise<string> {
   })
 
   const fromSettings = settings.general.lang()
+
   if (fromSettings) {
     return englishPromise.then(() => loadLanguage(fromSettings))
+  } else {
+    return englishPromise
+    .then(() => Plugins.Device.getLanguageCode())
+    .then(({ value }) => loadLanguage(value))
   }
-
-  return englishPromise
-  .then(() => Plugins.Device.getLanguageCode())
-  .then(({ value }) => loadLanguage(value))
 }
 
 export function getAvailableLocales(): Promise<ReadonlyArray<string>> {
@@ -146,7 +146,7 @@ export function ensureLocaleIsAvailable(locale: string): Promise<string> {
 export function loadLanguage(lang: string): Promise<string> {
   return loadFile(lang)
   .then(settings.general.lang)
-  .then(loadDateLocale)
+  .then(() => loadDateLocale(lang))
 }
 
 function loadFile(code: string): Promise<string> {

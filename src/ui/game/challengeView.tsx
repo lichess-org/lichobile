@@ -1,5 +1,4 @@
 import h from 'mithril/hyperscript'
-import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
 import router from '../../router'
 import session from '../../session'

@@ -39,17 +39,18 @@ export default {
   view: function(ctrl: OnlineRoundInterface) {
     if (!promoting) return null
 
-    const pieces = ['queen', 'knight', 'rook', 'bishop']
+    const pieces: Role[] = ['queen', 'knight', 'rook', 'bishop']
+
     if (ctrl.data.game.variant.key === 'antichess') pieces.push('king')
 
     return h('div.overlay.open', {
-      oncreate: helper.ontap(cancel.bind(undefined, ctrl))
+      oncreate: helper.ontap(() => cancel(ctrl))
     }, [h('div#promotion_choice', {
       className: settings.general.theme.piece(),
       style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
-    }, pieces.map(function(role) {
+    }, pieces.map((role) => {
       return h('piece.' + role + '.' + ctrl.data.player.color, {
-        oncreate: helper.ontap(finish.bind(undefined, ctrl, role))
+        oncreate: helper.ontap(() => finish(ctrl, role))
       })
     }))])
   }

@@ -1,10 +1,10 @@
-import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
 import Rlite from 'rlite-router'
 import render from 'mithril/render'
 import Vnode from 'mithril/render/vnode'
-import signals from './signals'
 import isFunction from 'lodash-es/isFunction'
+
+import signals from './signals'
 import session from './session'
 import { serializeQueryParameters } from './utils'
 import redraw from './utils/redraw'
@@ -40,8 +40,7 @@ export function onRouteMatch<T>(component: Mithril.Component<any, any>, params: 
   }}
 
   function redraw() {
-    // temp hack because of @types/mithril
-    (render as any)(mountPoint, Vnode(RouteComponent))
+    render(mountPoint, Vnode(RouteComponent))
   }
 
   signals.redraw.removeAll()

@@ -87,26 +87,26 @@ export default function drawAcplChart(
   g.append('clipPath')
   .attr('id', 'clip-below')
   .append('path')
-  .attr('d', area.y0(d => y(d.acpl)))
+  .attr('d', area.y0(d => y(d.acpl)) as any)
 
   g.append('clipPath')
   .attr('id', 'clip-above')
   .append('path')
-  .attr('d', area.y0(y(0)))
+  .attr('d', area.y0(y(0)) as any)
 
   g.append('path')
   .attr('class', 'area above')
   .attr('clip-path', 'url(#clip-above)')
-  .attr('d', area)
+  .attr('d', area as any)
 
   g.append('path')
   .attr('class', 'area below')
   .attr('clip-path', 'url(#clip-below)')
-  .attr('d', area.y0(d => d.acpl <= 0 ? y(d.acpl) : y(0)))
+  .attr('d', area.y0(d => d.acpl <= 0 ? y(d.acpl) : y(0)) as any)
 
   g.append('path')
   .attr('class', 'line')
-  .attr('d', line)
+  .attr('d', line as any)
 
   if (division && (division.middle || division.end)) {
     addDivisionLine(x(0), 'Opening')

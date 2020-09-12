@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import i18n, { i18nVdom } from '../../../i18n'
 import { oppositeColor } from '../../../utils'

@@ -86,7 +86,7 @@ export default class HomeCtrl {
         resync: () => lobbyXhr().then(d => {
           socket.setVersion(d.lobby.version)
         }),
-        n: (_: never, d: PongMessage) => {
+        n: (_: any, d: PongMessage) => {
           signals.homePong.dispatch(d)
         }
       })

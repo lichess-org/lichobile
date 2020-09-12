@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import router from '../../router'
 import * as utils from '../../utils'
@@ -80,11 +79,11 @@ function content(mini: any, player: Player, opponent: Player, score?: Score) {
       }
       { mini.perfs ?
         <div className="mini_perfs">
-        {Object.keys(mini.perfs).map((p: PerfKey) => {
+        {Object.keys(mini.perfs).map((p: string) => {
           const perf = mini.perfs[p]
           return (
             <div className="perf">
-              <span data-icon={utils.gameIcon(p)} />
+              <span data-icon={utils.gameIcon(p as PerfKey)} />
               {perf.games > 0 ? perf.rating + (perf.prov ? '?' : '') : '-'}
             </div>
           )

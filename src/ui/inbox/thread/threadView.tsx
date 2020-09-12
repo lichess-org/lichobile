@@ -10,10 +10,11 @@ import { Post } from '../interfaces'
 import { IThreadCtrl } from './threadCtrl'
 
 export function threadBody(ctrl: IThreadCtrl) {
-  if (!ctrl.thread()) return null
+  const thread = ctrl.thread()
+  if (!thread) return null
   return (
     <div className="threadWrapper native_scroller">
-      {ctrl.thread().posts.map(renderPost)}
+      {thread.posts.map(renderPost)}
       <div className="responseWrapper">
         <form id="responseForm"
           onsubmit={(e: Event) => {

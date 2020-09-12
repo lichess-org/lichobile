@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import { fromNow } from '../../i18n'
 import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import { Paginator } from '../../lichess/interfaces'

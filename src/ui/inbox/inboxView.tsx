@@ -7,8 +7,8 @@ import { Thread } from './interfaces'
 import { InboxCtrl } from './inbox'
 
 export function inboxBody(ctrl: InboxCtrl) {
-  if (!ctrl.threads() || !ctrl.threads().currentPageResults) return null
   const threads = ctrl.threads()
+  if (!threads || !threads.currentPageResults) return null
   if (threads.nbResults === 0) {
     return <div className="emptyInbox"> {i18n('noNewMessages')} </div>
   }
@@ -25,10 +25,10 @@ export function inboxBody(ctrl: InboxCtrl) {
 }
 
 export function renderFooter(ctrl: InboxCtrl) {
-  if (!ctrl.threads()) {
+  const threads = ctrl.threads()
+  if (!threads) {
     return null
   }
-  const threads = ctrl.threads()
   const backEnabled = threads.currentPage > 1
   const forwardEnabled = threads.currentPage < threads.nbPages
 

@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import debounce from 'lodash-es/debounce'
 import { handleXhrError } from '../../../utils'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'

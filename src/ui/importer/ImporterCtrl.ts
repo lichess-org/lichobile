@@ -1,20 +1,19 @@
-import Stream from 'mithril/stream'
 import router from '../../router'
 import settings from '../../settings'
 import globalConfig from '../../config'
 import redraw from '../../utils/redraw'
-import { serializeQueryParameters, handleXhrError } from '../../utils'
+import { serializeQueryParameters, handleXhrError, prop, Prop } from '../../utils'
 import { fetchJSON } from '../../http'
 import { OnlineGameData } from '../../lichess/interfaces/game'
 
 export interface IImporterCtrl {
   importGame(pgn: string): void
-  importing: Stream<boolean>
+  importing: Prop<boolean>
 }
 
 export default function ImporterCtrl(): IImporterCtrl {
 
-  const importing = Stream(false)
+  const importing = prop(false)
 
   function submitOnline(pgn: string, analyse: boolean): Promise<OnlineGameData> {
     const data: {[i: string]: string } = { pgn }

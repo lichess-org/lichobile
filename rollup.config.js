@@ -1,3 +1,5 @@
+import path from 'path'
+import alias from '@rollup/plugin-alias'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
@@ -6,6 +8,7 @@ import { terser } from 'rollup-plugin-terser'
 import visualizer from 'rollup-plugin-visualizer'
 
 const release = process.env.APP_MODE === 'release'
+const projectRootDir = path.resolve(__dirname)
 
 export default {
   input: 'build/main.js',
@@ -16,6 +19,15 @@ export default {
     sourcemap: !release,
   },
   plugins: [
+    alias({
+      entries: [
+        {
+          // see path mapping in tsconfig.json
+          find: /^~/,
+          replacement: path.resolve(projectRootDir, 'build')
+        }
+      ],
+    }),
     resolve(),
     commonjs(),
     json(),

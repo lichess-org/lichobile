@@ -1,5 +1,4 @@
 import h from 'mithril/hyperscript'
-import stream from 'mithril/stream'
 import * as utils from '../utils'
 import router from '../router'
 import redraw from '../utils/redraw'
@@ -21,7 +20,7 @@ let userId: string | undefined
 let setupFen: string | undefined
 let setupFenError: string | undefined
 
-const isOpen = stream(false)
+const isOpen = utils.prop(false)
 
 function open(uid?: string) {
   if (uid) {

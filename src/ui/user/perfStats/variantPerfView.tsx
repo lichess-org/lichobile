@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import { select } from 'd3-selection'
 import { scaleTime, scaleLinear } from 'd3-scale'
@@ -220,7 +219,7 @@ function drawChart(graphData: GraphData, el: SVGElement) {
     const yAxis = axisLeft(scaleY)
     .tickFormat(d => String(d))
 
-    const xAxis = axisBottom(scaleX)
+    const xAxis = axisBottom<Date>(scaleX)
     .tickFormat(multiFormat)
 
     g.append('g')
@@ -284,7 +283,7 @@ const formatWeek = timeFormat('%b %d')
 const formatMonth = timeFormat('%b')
 const formatYear = timeFormat('%Y')
 
-function multiFormat(date: Date) {
+function multiFormat(date: Date): string {
  return (timeMonth(date) < date ? formatWeek
     : timeYear(date) < date ? formatMonth
     : formatYear)(date)

@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import addSeconds from 'date-fns/esm/addSeconds'
 import * as utils from '../utils'

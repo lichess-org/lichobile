@@ -48,7 +48,7 @@ function cancel(chessground: Chessground, cgConfig?: cg.SetConfig) {
 export function view(ctrl: PromotingInterface) {
   if (!promoting) return null
 
-  const pieces = ['queen', 'knight', 'rook', 'bishop']
+  const pieces: Role[] = ['queen', 'knight', 'rook', 'bishop']
   if (ctrl.data && ctrl.data.game.variant.key === 'antichess') {
     pieces.push('king')
   }

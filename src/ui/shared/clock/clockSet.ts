@@ -56,7 +56,7 @@ export default {
   ),
 
   stage: (onFlag: (color: Color) => void) => StageClock(
-    settings.clock.stage.stages().map((s: { time: string, moves: string }) => {
+    settings.clock.stage.stages().map(s => {
       return {
         time: Number(s.time),
         moves: s.moves !== null ? Number(s.moves) : null

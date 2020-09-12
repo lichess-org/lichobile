@@ -4,11 +4,10 @@ import * as xhr from './userXhr'
 import router from '../../router'
 import * as utils from '../../utils'
 import challengeForm from '../challengeForm'
-import Stream from 'mithril/stream'
 import { UserFullProfile } from '../../lichess/interfaces/user'
 
 export interface IUserCtrl {
-  user: Stream<ProfileUser | undefined>
+  user: utils.Prop<ProfileUser | null>
   isMe: () => boolean
   toggleFollowing: () => void
   toggleBlocking: () => void
@@ -23,7 +22,7 @@ export type ProfileUser = Session | UserFullProfile
 
 export default function UserCtrl(userId: string): IUserCtrl {
 
-  const user: Stream<ProfileUser | undefined> = Stream(undefined)
+  const user = utils.prop<ProfileUser | null>(null)
 
   function setNewUserState(newData: Partial<ProfileUser>) {
     Object.assign(user(), newData)

@@ -1,10 +1,8 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
-import Stream from 'mithril/stream'
 import router from '../router'
 import redraw from '../utils/redraw'
 import { timeline as timelineXhr, openWebsiteAuthPage } from '../xhr'
-import { gameIcon, handleXhrError } from '../utils'
+import { gameIcon, handleXhrError, prop, Prop } from '../utils'
 import { dropShadowHeader as headerWidget, backButton } from './shared/common'
 import * as helper from './helper'
 import layout from './layout'
@@ -14,12 +12,12 @@ import { TimelineEntry } from '../lichess/interfaces'
 export const supportedTypes = ['follow', 'game-end', 'tour-join', 'study-create', 'study-like', 'forum-post', 'blog-post']
 
 interface State {
-  timeline: Stream<ReadonlyArray<TimelineEntry>>
+  timeline: Prop<ReadonlyArray<TimelineEntry>>
 }
 
 export default {
   oninit() {
-    this.timeline = Stream([] as TimelineEntry[])
+    this.timeline = prop<ReadonlyArray<TimelineEntry>>([])
 
     timelineXhr()
     .then(data => {

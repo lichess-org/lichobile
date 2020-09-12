@@ -135,10 +135,10 @@ function renderLeaderboard(ctrl: PlayersCtrl) {
     </div>
   )
 
-  const keys = Object.keys(leaderboard) as readonly RankingKey[]
-  const categories = keys
-    .filter(k => k !== 'online')
-    .map((k: PerfKey) => renderRankingCategory(leaderboard, k))
+  const keys =
+    Object.keys(leaderboard).filter(k => k !== 'online') as readonly PerfKey[]
+  const categories =
+    keys.map((k: PerfKey) => renderRankingCategory(leaderboard, k))
   return (
     <div className="native_scroller page leaderboard_wrapper">
       {categories}

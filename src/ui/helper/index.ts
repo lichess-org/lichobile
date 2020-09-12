@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import Zanimo from '../../utils/zanimo'
 import * as utils from '../../utils'
@@ -232,7 +231,7 @@ type TapHandler = (e: TouchEvent) => void
 type RepeatHandler = () => boolean
 
 function createTapHandler(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: RepeatHandler, scrollX?: boolean, scrollY?: boolean, getElement?: (e: TouchEvent) => HTMLElement, preventEndDefault?: boolean) {
-  return function(vnode: Mithril.VnodeDOM<any, any>) {
+  return function(vnode: Mithril.VnodeDOMAny) {
     ButtonHandler(vnode.dom as HTMLElement,
       (e: TouchEvent) => {
         tapHandler(e)
@@ -249,7 +248,8 @@ function createTapHandler(tapHandler: TapHandler, holdHandler?: TapHandler, repe
 }
 
 export function ontouch(handler: TapHandler) {
-  return ({ dom }: Mithril.VnodeDOM<any, any>) => {
+  return (vnode: Mithril.VnodeDOMAny) => {
+    const dom = vnode.dom as HTMLElement
     dom.addEventListener('touchstart', handler)
   }
 }
@@ -365,7 +365,7 @@ export function hasSpaceForInlineReplay(
 }
 
 export function autofocus(vnode: Mithril.VnodeDOM<any, any>): void {
-  (vnode.dom as HTMLElement).focus()
+  vnode.dom.focus()
 }
 
 export function renderRatingDiff(player: Player | UserGamePlayer): Mithril.Children {

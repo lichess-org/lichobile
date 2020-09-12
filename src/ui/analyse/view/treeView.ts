@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import { fixCrazySan } from '../../../utils/chessFormat'
 import { linkify } from '../../../utils/html'

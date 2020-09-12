@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import { Plugins } from '@capacitor/core'
 import * as sleepUtils from '../../utils/sleep'
 import * as helper from '../helper'

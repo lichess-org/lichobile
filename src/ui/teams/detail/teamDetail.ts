@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import socket from '../../../socket'
 import TeamCtrl from './TeamCtrl'
 import * as helper from '../../helper'

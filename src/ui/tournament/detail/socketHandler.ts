@@ -10,7 +10,7 @@ interface FeaturedGameUpdate {
   lm: string
 }
 
-export default function(ctrl: TournamentCtrl) {
+export default function(ctrl: TournamentCtrl): MessageHandlers {
   return {
     reload: ctrl.reload,
     resync: ctrl.reload,

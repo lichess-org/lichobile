@@ -1,10 +1,8 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
-import Stream from 'mithril/stream'
 import * as helper from '../../helper'
 import * as xhr from '../userXhr'
 import socket from '../../../socket'
-import { handleXhrError, gameIcon } from '../../../utils'
+import { handleXhrError, gameIcon, prop, Prop } from '../../../utils'
 import redraw from '../../../utils/redraw'
 import spinner from '../../../spinner'
 import { header as headerWidget, backButton } from '../../shared/common'
@@ -19,8 +17,8 @@ interface Attrs {
 }
 
 export interface State {
-  user: Stream<User>
-  perfData: Stream<PerfStats>
+  user: Prop<User | null>
+  perfData: Prop<PerfStats | null>
 }
 
 export default {
@@ -30,8 +28,8 @@ export default {
     const userId = vnode.attrs.id
     const perf = vnode.attrs.perf
 
-    this.user = Stream()
-    this.perfData = Stream()
+    this.user = prop<User | null>(null)
+    this.perfData = prop<PerfStats | null>(null)
 
     socket.createDefault()
 

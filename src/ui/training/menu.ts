@@ -203,9 +203,9 @@ function drawChart(element: HTMLElement, user: PuzzleUserData) {
   .attr('stroke-linejoin', 'round')
   .attr('stroke-linecap', 'round')
   .attr('stroke-width', 0)
-  .attr('d', area)
+  .attr('d', area as any)
 
   g.append('path')
   .attr('class', 'line')
-  .attr('d', line)
+  .attr('d', line as any)
 }

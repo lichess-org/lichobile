@@ -1,5 +1,4 @@
-import stream from 'mithril/stream'
-import { hasNetwork } from '../../utils'
+import { hasNetwork, prop } from '../../utils'
 import redraw from '../../utils/redraw'
 import router from '../../router'
 import socket from '../../socket'
@@ -9,10 +8,10 @@ import SideMenuCtrl from '../shared/sideMenu/SideMenuCtrl'
 
 let pingsTimeoutID: number
 
-export const inboxUnreadCount = stream(0)
-export const profileMenuOpen = stream(false)
-export const mlat = stream(0)
-export const ping = stream(0)
+export const inboxUnreadCount = prop(0)
+export const profileMenuOpen = prop(false)
+export const mlat = prop(0)
+export const ping = prop(0)
 
 function onMenuOpen() {
   if (hasNetwork()) {

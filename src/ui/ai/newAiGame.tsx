@@ -1,8 +1,8 @@
-import Stream from 'mithril/stream'
 import h from 'mithril/hyperscript'
 import router from '../../router'
 import i18n from '../../i18n'
 import settings from '../../settings'
+import { prop, Prop } from '~/utils'
 import getVariant, { specialFenVariants } from '../../lichess/variant'
 import formWidgets from '../shared/form'
 import ViewOnlyBoard from '../shared/ViewOnlyBoard'
@@ -20,14 +20,14 @@ const colors = [
 export interface NewAiGameCtrl {
   open: () => void
   close: (fromBB?: string) => void
-  isOpen: Stream<boolean>
+  isOpen: Prop<boolean>
   root: AiRoundInterface
 }
 
 export default {
 
   controller(root: AiRoundInterface) {
-    const isOpen = Stream(false)
+    const isOpen = prop(false)
 
     function open() {
       router.backbutton.stack.push(close)

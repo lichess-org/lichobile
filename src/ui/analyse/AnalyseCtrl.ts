@@ -748,8 +748,8 @@ export default class AnalyseCtrl {
       this.tree.updateAt(this.path, (node: Tree.Node) => {
         // flag opening as null in any case to not request twice
         node.opening = null
-        this.socketIface.ask('opening', 'opening', msg)
-        .then((d: { opening: Opening, path: string }) => {
+        this.socketIface.ask<{ opening: Opening, path: string }>('opening', 'opening', msg)
+        .then(d => {
           if (d.opening && d.path) {
             node.opening = d.opening
             if (d.path === this.path) redraw()

@@ -1,5 +1,4 @@
 import { Plugins } from '@capacitor/core'
-import * as Mithril from 'mithril'
 import router from '../../router'
 import storage from '../../storage'
 import sound from '../../sound'

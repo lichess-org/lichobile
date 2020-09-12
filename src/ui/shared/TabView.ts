@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import Gesture from '../../utils/Gesture'
 import { viewportDim, findParentBySelector, elSlideIn } from '../helper'

@@ -1,27 +1,27 @@
-import Stream from 'mithril/stream'
 import h from 'mithril/hyperscript'
 import i18n from '../../../i18n'
 import router from '../../../router'
-import settings, { Prop } from '../../../settings'
+import { Prop, prop } from '~/utils'
+import settings, { Prop as StoredProp } from '../../../settings'
 import * as helper from '../../helper'
 
 interface Data {
   db: {
     available: string[]
-    selected: Prop<string>
+    selected: StoredProp<string>
   },
   rating: {
     available: number[]
-    selected: Prop<number[]>
+    selected: StoredProp<number[]>
   },
   speed: {
     available: string[]
-    selected: Prop<string[]>
+    selected: StoredProp<string[]>
   }
 }
 
 interface Controller {
-  open: Stream<boolean>
+  open: Prop<boolean>
   data: Data
   toggleOpen(): void
   toggleDb(db: string): void
@@ -39,7 +39,7 @@ export default {
       available.push('masters')
     }
 
-    const open = Stream(false)
+    const open = prop(false)
 
     const data = {
       db: {

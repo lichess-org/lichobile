@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import redraw from '../../utils/redraw'
 import popupWidget from '../shared/popup'

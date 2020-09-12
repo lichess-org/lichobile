@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import * as helper from '../../helper'
 import { header as headerWidget, backButton } from '../../shared/common'
 import layout from '../../layout'

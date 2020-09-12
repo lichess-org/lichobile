@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import * as helper from '../helper'
 import ViewOnlyBoard from './ViewOnlyBoard'
 import { noop } from '../../utils'

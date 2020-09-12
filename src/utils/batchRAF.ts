@@ -1,4 +1,4 @@
-type Callback = (ts?: number) => void
+type Callback = (ts: number) => void
 
 let callbacks: Set<Callback> = new Set()
 let batching = false

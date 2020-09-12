@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import i18n  from '../../../i18n'
 import { handleXhrError } from '../../../utils'
@@ -65,7 +64,8 @@ const AcplSummary: Mithril.Component<{
   view({ attrs }) {
     const { d, analysis, study } = attrs
 
-    return h('div.analyse-evalSummary', ['white', 'black'].map((color: Color) => {
+    const colors: [Color, Color] = ['white', 'black']
+    return h('div.analyse-evalSummary', colors.map((color: Color) => {
       const p = gameApi.getPlayer(d, color)
       const pName = study ? findTag(study, color) || 'Anonymous' : playerName(p)
 

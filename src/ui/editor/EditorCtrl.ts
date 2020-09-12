@@ -1,17 +1,15 @@
-import * as Mithril from 'mithril'
-import Stream from 'mithril/stream'
 import { Plugins } from '@capacitor/core'
 import debounce from 'lodash-es/debounce'
 import Chessground from '../../chessground/Chessground'
 import * as cgDrag from '../../chessground/drag'
 import * as chess from '../../chess'
 import router from '../../router'
+import { loadLocalJsonFile, prop, Prop } from '../../utils'
 import redraw from '../../utils/redraw'
 import settings from '../../settings'
 import menu from './menu'
 import pasteFenPopup from './pasteFenPopup'
 import { validateFen } from '../../utils/fen'
-import { loadLocalJsonFile } from '../../utils'
 import continuePopup, { Controller as ContinuePopupCtrl } from '../shared/continuePopup'
 import i18n from '../../i18n'
 import drag from './drag'
@@ -19,17 +17,17 @@ import drag from './drag'
 const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
 interface EditorData {
-  color: Stream<Color>
+  color: Prop<Color>
   castles: {
-    K: Stream<boolean>
-    Q: Stream<boolean>
-    k: Stream<boolean>
-    q: Stream<boolean>
-    [k: string]: Stream<boolean>
+    K: Prop<boolean>
+    Q: Prop<boolean>
+    k: Prop<boolean>
+    q: Prop<boolean>
+    [k: string]: Prop<boolean>
   }
-  enpassant: Stream<string>
-  halfmove: Stream<string>
-  moves: Stream<string>
+  enpassant: Prop<string>
+  halfmove: Prop<string>
+  moves: Prop<string>
 }
 
 interface Data {
@@ -56,8 +54,8 @@ export default class EditorCtrl {
   public continuePopup: ContinuePopupCtrl
   public chessground: Chessground
 
-  public positions: Stream<Array<BoardPosition>>
-  public endgamesPositions: Stream<Array<BoardPosition>>
+  public positions: Prop<Array<BoardPosition>>
+  public endgamesPositions: Prop<Array<BoardPosition>>
   public extraPositions: Array<BoardPosition>
 
   public constructor(fen?: string) {
@@ -79,8 +77,8 @@ export default class EditorCtrl {
 
     this.setPlayable(initFen).then(redraw)
 
-    this.positions = Stream([])
-    this.endgamesPositions = Stream([])
+    this.positions = prop<BoardPosition[]>([])
+    this.endgamesPositions = prop<BoardPosition[]>([])
 
     this.extraPositions = [{
       fen: startingFen,
@@ -231,16 +229,16 @@ export default class EditorCtrl {
   private readFen(fen: string): EditorData {
     const parts = fen.split(' ')
     return {
-      color: Stream(parts[1] as Color),
+      color: prop(parts[1] as Color),
       castles: {
-        K: Stream(parts[2].includes('K')),
-        Q: Stream(parts[2].includes('Q')),
-        k: Stream(parts[2].includes('k')),
-        q: Stream(parts[2].includes('q'))
+        K: prop(parts[2].includes('K')),
+        Q: prop(parts[2].includes('Q')),
+        k: prop(parts[2].includes('k')),
+        q: prop(parts[2].includes('q'))
       },
-      enpassant: Stream(parts[3]),
-      halfmove: Stream(parts[4]),
-      moves: Stream(parts[5])
+      enpassant: prop(parts[3]),
+      halfmove: prop(parts[4]),
+      moves: prop(parts[5])
     }
   }
 }

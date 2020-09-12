@@ -1,4 +1,3 @@
-import * as Mithril from 'mithril'
 import h from 'mithril/hyperscript'
 import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import * as utils from '../../utils'

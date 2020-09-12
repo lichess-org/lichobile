@@ -1,5 +1,4 @@
 import { Capacitor } from '@capacitor/core'
-import * as Mithril from 'mithril'
 import socket from '../../socket'
 import signals from '../../signals'
 import { safeStringToNum } from '../../utils'

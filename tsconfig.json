@@ -1,18 +1,20 @@
 {
   "compilerOptions": {
-    "allowJs": true,
+    "baseUrl": "./src",
+    "paths": {
+      "~/*": ["*"]
+    },
     "target": "es2017",
     "suppressImplicitAnyIndexErrors": false,
     "allowSyntheticDefaultImports": true,
     "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
-    "strictFunctionTypes": false,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "jsx": "react",
     "jsxFactory": "h",
-    "types": ["lodash-es", "mithril", "d3"]
+    "types": ["lodash-es", "d3"]
   },
   "include": [
     "src/**/*.js",

@@ -122,6 +122,7 @@ export default {
         ['cardinal'],
         ['tatiana' ],
         ['staunty' ],
+        ['governor'],
         ['symmetric' ],
         ['dubrovny' ],
         ['shapes' ],

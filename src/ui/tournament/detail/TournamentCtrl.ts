@@ -4,15 +4,17 @@ import socket, { SocketIFace } from '../../../socket'
 import redraw from '../../../utils/redraw'
 import { fromNow } from '../../../i18n'
 import * as utils from '../../../utils'
+import settings from '../../../settings'
+import session from '~/session'
 import * as tournamentApi from '../../../lichess/tournament'
 import { Tournament, StandingPlayer, StandingPage, TeamBattle, TeamColorMap } from '../../../lichess/interfaces/tournament'
 
+import { Chat } from '~/ui/shared/chat'
 import * as xhr from '../tournamentXhr'
 import faq, { FaqCtrl } from '../faq'
 import playerInfo, { PlayerInfoCtrl } from './playerInfo'
 import teamInfo, { TeamInfoCtrl } from './teamInfo'
 import socketHandler from './socketHandler'
-import settings from '../../../settings'
 
 const MAX_PER_PAGE = 10
 
@@ -30,11 +32,12 @@ export default class TournamentCtrl {
   public isLoadingPage: boolean = false
   public startsAt?: string
 
-  public socketIface: SocketIFace
+  public readonly chat?: Chat
+  public readonly socketIface: SocketIFace
+  public readonly faqCtrl: FaqCtrl
+  public readonly playerInfoCtrl: PlayerInfoCtrl
+  public readonly teamInfoCtrl: TeamInfoCtrl
 
-  public faqCtrl: FaqCtrl
-  public playerInfoCtrl: PlayerInfoCtrl
-  public teamInfoCtrl: TeamInfoCtrl
   public teamColorMap: TeamColorMap
 
   private pagesCache: PagesCache = {}
@@ -62,6 +65,18 @@ export default class TournamentCtrl {
       socketHandler(this),
       featuredGame
     )
+
+    if (data.chat) {
+      this.chat = new Chat(
+        this.socketIface,
+        data.id,
+        data.chat.lines,
+        undefined,
+        data.chat.writeable,
+        session.isShadowban(),
+        'Tournament'
+      )
+    }
 
     this.appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
       if (state.isActive) this.reload()

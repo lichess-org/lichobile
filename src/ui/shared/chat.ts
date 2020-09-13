@@ -12,7 +12,7 @@ import router from '../../router'
 import { SocketIFace } from '../../socket'
 import { closeIcon } from '../shared/icons'
 
-export type ChatStore = 'Corres' | 'Game' | 'Study'
+export type ChatStore = 'Corres' | 'Game' | 'Study' | 'Tournament'
 
 export class Chat {
   public showing: boolean
@@ -288,6 +288,10 @@ interface Storage {
     key: 'studyChat',
     readCounts?: LRUMap<string, number>
   },
+  Tournament: {
+    key: 'tourChat',
+    readCounts?: LRUMap<string, number>
+  },
 }
 const storage: Storage = {
   Corres: {
@@ -298,6 +302,9 @@ const storage: Storage = {
   },
   Study: {
     key: 'studyChat',
+  },
+  Tournament: {
+    key: 'tourChat',
   },
 }
 

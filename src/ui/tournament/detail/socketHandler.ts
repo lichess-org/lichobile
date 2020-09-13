@@ -1,6 +1,7 @@
-import redraw from '../../../utils/redraw'
-import router from '../../../router'
-import { MessageHandlers } from '../../../socket'
+import redraw from '~/utils/redraw'
+import router from '~/router'
+import { MessageHandlers } from '~/socket'
+import { ChatMsg } from '~/lichess/interfaces/chat'
 
 import TournamentCtrl from './TournamentCtrl'
 
@@ -24,6 +25,9 @@ export default function(ctrl: TournamentCtrl): MessageHandlers {
       featured.fen = d.fen
       featured.lastMove = d.lm
       redraw()
-    }
+    },
+    message(msg: ChatMsg) {
+      if (ctrl.chat) ctrl.chat.append(msg)
+    },
   } as MessageHandlers
 }

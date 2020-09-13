@@ -9,7 +9,7 @@ import * as helper from '../../helper'
 import layout from '../../layout'
 
 import * as xhr from '../tournamentXhr'
-import { tournamentBody, renderPlayerInfoOverlay, renderTeamInfoOverlay, renderFAQOverlay, renderFooter, timeInfo } from './tournamentView'
+import { tournamentBody, renderOverlay, renderFooter, timeInfo } from './tournamentView'
 import joinForm from './joinForm'
 import TournamentCtrl from './TournamentCtrl'
 
@@ -81,15 +81,10 @@ export default {
 
     const body = tournamentBody(this.ctrl)
     const footer = renderFooter(this.ctrl)
-    const faqOverlay = renderFAQOverlay(this.ctrl)
-    const playerInfoOverlay = renderPlayerInfoOverlay(this.ctrl)
-    const teamInfoOverlay = renderTeamInfoOverlay(this.ctrl)
     const overlay = [
-      faqOverlay,
-      playerInfoOverlay,
-      teamInfoOverlay,
-      joinForm.view()
-    ]
+      ...renderOverlay(this.ctrl),
+      joinForm.view(),
+    ].filter(utils.noNull)
 
     return layout.free(header, body, footer, overlay)
   }

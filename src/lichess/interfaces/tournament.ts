@@ -1,7 +1,9 @@
 import { FeaturedGame } from '.'
+import { ChatData } from './chat'
 import { Opening } from './game'
 
 export interface Tournament {
+  readonly chat?: ChatData
   readonly clock: TournamentClock
   readonly createdBy: string
   featured?: FeaturedGame

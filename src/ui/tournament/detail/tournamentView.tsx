@@ -10,6 +10,7 @@ import * as helper from '../../helper'
 import settings from '../../../settings'
 import MiniBoard from '../../shared/miniBoard'
 import CountdownTimer from '../../shared/CountdownTimer'
+import { chatView } from '../../shared/chat'
 
 import faq from '../faq'
 import playerInfo from './playerInfo'
@@ -17,21 +18,12 @@ import teamInfo from './teamInfo'
 import joinForm from './joinForm'
 import TournamentCtrl from './TournamentCtrl'
 
-export function renderFAQOverlay(ctrl: TournamentCtrl) {
+export function renderOverlay(ctrl: TournamentCtrl) {
   return [
-    faq.view(ctrl.faqCtrl)
-  ]
-}
-
-export function renderPlayerInfoOverlay(ctrl: TournamentCtrl) {
-  return [
-    playerInfo.view(ctrl.playerInfoCtrl)
-  ]
-}
-
-export function renderTeamInfoOverlay(ctrl: TournamentCtrl) {
-  return [
-    teamInfo.view(ctrl.teamInfoCtrl)
+    faq.view(ctrl.faqCtrl),
+    playerInfo.view(ctrl.playerInfoCtrl),
+    teamInfo.view(ctrl.teamInfoCtrl),
+    ctrl.chat ? chatView(ctrl.chat) : null,
   ]
 }
 
@@ -57,14 +49,30 @@ export function renderFooter(ctrl: TournamentCtrl) {
 
   return (
     <div className="actions_bar">
-      <button key="faqButton" className="action_bar_button" oncreate={helper.ontap(ctrl.faqCtrl.open)}>
-        <span className="fa fa-question-circle" />
-        FAQ
+      <button key="faqButton" className="action_bar_button fa fa-question-circle" oncreate={helper.ontap(
+        ctrl.faqCtrl.open,
+        () => Plugins.LiToast.show({ text: i18n('tournamentFAQ'), duration: 'short', position: 'bottom' })
+      )}>
       </button>
-      <button key="shareButton" className="action_bar_button" oncreate={helper.ontap(() => Plugins.LiShare.share({ url: tUrl }))}>
-        <span className="fa fa-share-alt" />
-        Share
+      <button key="shareButton" className="action_bar_button fa fa-share-alt" oncreate={helper.ontap(
+        () => Plugins.LiShare.share({ url: tUrl }),
+        () => Plugins.LiToast.show({ text: i18n('shareUrl'), duration: 'short', position: 'bottom' })
+      )}>
       </button>
+      {ctrl.chat ?
+        <button key="chatButton" className="action_bar_button fa fa-comments withChip"
+          oncreate={helper.ontap(
+            ctrl.chat.open,
+            () => Plugins.LiToast.show({ text: i18n('chatRoom'), duration: 'short', position: 'bottom' })
+          )}
+        >
+          { ctrl.chat.nbUnread > 0 ?
+          <span className="chip">
+            { ctrl.chat.nbUnread <= 99 ? ctrl.chat.nbUnread : 99 }
+          </span> : null
+          }
+        </button> : null
+      }
       { ctrl.hasJoined ? withdrawButton(ctrl, t) : joinButton(ctrl, t) }
     </div>
   )
@@ -184,9 +192,10 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
     () => ctrl.join()
 
   return (
-    <button key="joinButton" className="action_bar_button" oncreate={helper.ontap(action)}>
-      <span className="fa fa-play" />
-      {i18n('join')}
+    <button key="joinButton" className="action_bar_button fa fa-play" oncreate={helper.ontap(
+      action,
+      () => Plugins.LiToast.show({ text: i18n('join'), duration: 'short', position: 'bottom' })
+    )}>
     </button>
   )
 }
@@ -196,9 +205,10 @@ function withdrawButton(ctrl: TournamentCtrl, t: Tournament) {
     return h.fragment({key: 'noWithdrawButton'}, [])
   }
   return (
-    <button key="withdrawButton" className="action_bar_button" oncreate={helper.ontap(ctrl.withdraw)}>
-      <span className="fa fa-flag" />
-      {i18n('withdraw')}
+    <button key="withdrawButton" className="action_bar_button fa fa-flag" oncreate={helper.ontap(
+      ctrl.withdraw,
+      () => Plugins.LiToast.show({ text: i18n('withdraw'), duration: 'short', position: 'bottom' })
+    )}>
     </button>
   )
 }

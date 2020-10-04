@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@drawable/splash"
-    android:scaleType="centerCrop"
-    />
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@android:color/white"
+        android:gravity="fill" />
+
+    <item
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawable="@drawable/ic_logo"
+        android:gravity="center"
+        android:top="200dp"
+        android:left="200dp"
+        android:right="200dp"
+        android:bottom="200dp"
+        android:scaleType="centerInside" />
+
+</layer-list>

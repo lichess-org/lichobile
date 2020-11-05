@@ -121,10 +121,19 @@ function awaitInvitePopup(ctrl: ChallengeCtrl, challenge: Challenge) {
         gameInfos(challenge),
         h('br'),
         h('p.explanation', i18n('toInviteSomeoneToPlayGiveThisUrl')),
-        h('input.lichess_game_url', {
-          value: publicUrl(challenge),
-          readonly: true
-        }),
+        h('div.copy_container', [
+          h('div.icon_container', [
+            h('span.fa.fa-clipboard')
+          ]),
+          h('input.lichess_game_url', {
+            oncreate: helper.ontap(function() {
+              Plugins.Clipboard.write({url: publicUrl(challenge)})
+              Plugins.LiToast.show({ text: 'Copied to clipboard', duration: 'short'})
+            }),
+            value: publicUrl(challenge),
+            readonly: true
+          })
+        ]),
         h('p.explanation.small', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
         h('div.go_or_cancel.clearfix', [
           h('button.binary_choice[data-icon=E].withIcon', {

@@ -12,7 +12,7 @@ import * as sleepUtils from '../../utils/sleep'
 import { isOnlineGameData, OnlineGameData } from '../../lichess/interfaces/game'
 import { ChallengeData } from '../../lichess/interfaces/challenge'
 import * as gameApi from '../../lichess/game'
-import variantApi from '../../lichess/variant'
+import { getVariant } from '../../lichess/variant'
 import socket from '../../socket'
 import * as helper from '../helper'
 import roundView, { viewOnlyBoardContent } from '../shared/round/view/roundView'
@@ -113,7 +113,7 @@ function loadRound(
     ) {
       sound.dong()
       vibrate.quick()
-      const variant = variantApi(data.game.variant.key)
+      const variant = getVariant(data.game.variant.key)
       const storageKey = variantStorageKey(data.game.variant.key)
       if (
         variant.alert && [1, 3].indexOf(variant.id) === -1 &&

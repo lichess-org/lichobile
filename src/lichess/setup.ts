@@ -10,7 +10,7 @@ export function humanSetupFromSettings(settingsObj: HumanSettings): HumanSeekSet
     increment: Number(settingsObj.increment()),
     days: Number(settingsObj.days()),
     color: settingsObj.color() as Color,
-    ratingMin: Number(settingsObj.ratingMin()),
-    ratingMax: Number(settingsObj.ratingMax())
+    ratingRangeMin: Number(settingsObj.ratingRangeMin()),
+    ratingRangeMax: Number(settingsObj.ratingRangeMax())
   }
 }

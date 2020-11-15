@@ -13,7 +13,7 @@ interface DocVariant {
   initialFen?: string
 }
 
-const variantMap: {[key: string]: DocVariant} = {
+const variantMap: {[key in VariantKey]: DocVariant} = {
   standard: {
     name: 'Standard',
     tinyName: 'Std',
@@ -101,7 +101,7 @@ const variantMap: {[key: string]: DocVariant} = {
   }
 }
 
-export default function getVariant(key: VariantKey): DocVariant {
+export function getVariant(key: VariantKey): DocVariant {
   return variantMap[key]
 }
 

@@ -44,11 +44,63 @@ export function newAiGame(fen?: string): Promise<OnlineGameData> {
 }
 
 export function seekGame(setup: HumanSeekSetup): Promise<HookData> {
-  const { ratingMin, ratingMax, ...rest } = setup
+  const { ratingRangeMin, ratingRangeMax, ...rest } = setup
+  const user = session.get()
   let body: string
-  if (ratingMin !== undefined && ratingMax !== undefined) {
-    const ratingRange = ratingMin + '-' + ratingMax
-    body = JSON.stringify({ ratingRange, ...rest })
+  if (user && ratingRangeMin !== undefined && ratingRangeMax !== undefined) {
+    let perfKey: PerfKey = 'correspondence'
+    switch (setup.variant) {
+      case 1:
+      case 3: {
+        if (setup.timeMode === 1) {
+          const time = setup.time * 60 + setup.increment * 40
+          if (time < 30) perfKey = 'ultraBullet'
+          else if (time < 180) perfKey = 'bullet'
+          else if (time < 480) perfKey = 'blitz'
+          else if (time < 1500) perfKey = 'rapid'
+          else perfKey = 'classical'
+        }
+        break
+      }
+      case 2:
+        perfKey = 'chess960'
+        break
+      case 4:
+        perfKey = 'kingOfTheHill'
+        break
+      case 5:
+        perfKey = 'threeCheck'
+        break
+      case 6:
+        perfKey = 'antichess'
+        break
+      case 7:
+        perfKey = 'atomic'
+        break
+      case 8:
+        perfKey = 'horde'
+        break
+      case 9:
+        perfKey = 'racingKings'
+        break
+      case 10:
+        perfKey = 'crazyhouse'
+        break
+    }
+    const bodySetup = {
+      ratingRange_range_min: ratingRangeMin,
+      ratingRange_range_max: ratingRangeMax,
+      ...rest,
+    }
+    const perf = user.perfs[perfKey]
+    if (perf) {
+      body = JSON.stringify({
+        ...bodySetup,
+        ratingRange: `${perf.rating + ratingRangeMin}-${perf.rating + ratingRangeMax}`,
+      })
+    } else {
+      body = JSON.stringify(bodySetup)
+    }
   } else {
     body = JSON.stringify({ ...rest })
   }

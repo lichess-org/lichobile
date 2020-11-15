@@ -9,7 +9,7 @@ import i18n from './i18n'
 import push from './push'
 import settings, { Prop } from './settings'
 import { TempBan, LobbyData, NowPlayingGame } from './lichess/interfaces'
-import { PlayTime } from './lichess/interfaces/user'
+import { PlayTime, Perfs } from './lichess/interfaces/user'
 import friendsApi from './lichess/friends'
 import challengesApi from './lichess/challenges'
 import storage from './storage'
@@ -45,7 +45,7 @@ export interface Session {
   readonly patron: boolean
   readonly language?: string
   readonly profile?: Profile
-  readonly perfs: any
+  readonly perfs: Perfs
   readonly createdAt: number
   readonly seenAt: number
   readonly playTime: PlayTime

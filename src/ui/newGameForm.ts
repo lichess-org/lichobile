@@ -231,11 +231,11 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
         h('div.title', i18n('ratingRange')),
         h('div.select_input.inline',
           formWidgets.renderSelect('Min', formName + 'rating_min',
-            humanSetup.availableRatingRanges.min, settingsObj.ratingMin, false)
+            humanSetup.availableRatingRanges.min, settingsObj.ratingRangeMin, false)
         ),
         h('div.select_input.inline',
           formWidgets.renderSelect('Max', formName + 'rating_max',
-            humanSetup.availableRatingRanges.max, settingsObj.ratingMax, false)
+            humanSetup.availableRatingRanges.max, settingsObj.ratingRangeMax, false)
         )
       ])
     )
@@ -272,7 +272,6 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
       e.preventDefault()
       if (!settings.gameSetup.isTimeValid(settingsObj)) return
       close()
-      // TODO just use localstorage as settings saver
       goSeek(humanSetupFromSettings(settingsObj))
     }
   }, [

@@ -26,29 +26,7 @@ const availableClocks = [
   ['Stage', 'stage'],
 ]
 
-const minRatingRanges = [
-  ['800', '800'],
-  ['900', '900'],
-  ['1000', '1000'],
-  ['1100', '1100'],
-  ['1200', '1200'],
-  ['1300', '1300'],
-  ['1400', '1400'],
-  ['1500', '1500'],
-  ['1600', '1600'],
-  ['1700', '1700'],
-  ['1800', '1800'],
-  ['1900', '1900'],
-  ['2000', '2000'],
-  ['2100', '2100'],
-  ['2200', '2200'],
-  ['2300', '2300'],
-  ['2400', '2400'],
-  ['2500', '2500'],
-  ['2600', '2600'],
-  ['2700', '2700'],
-  ['2800', '2800'],
-]
+const ratingRanges = [...Array(11).keys()].map(x => x * 50)
 
 const settingsStore = {}
 
@@ -301,14 +279,11 @@ export default {
         ['Racing Kings', '9']
       ],
       availableRatingRanges: {
-        min: minRatingRanges,
-        max: [
-          ...minRatingRanges,
-          ['2900', '2900']
-        ].slice(1)
+        min: [...ratingRanges].reverse().map(n => ['-' + n, '-' + n]),
+        max: ratingRanges.map(n => ['+' + n, '+' + n]),
       },
-      ratingMin: prop('game.human.rating.min', '800'),
-      ratingMax: prop('game.human.rating.max', '2900'),
+      ratingRangeMin: prop('game.human.rating.range_min', '-500'),
+      ratingRangeMax: prop('game.human.rating.range_max', '+500'),
       color: prop('game.human.color', 'random'),
       variant: prop('game.human.variant', '1'),
       availableTimeModes: [
@@ -439,8 +414,8 @@ export interface GameSettings {
 
 export interface HumanSettings extends GameSettings {
   readonly mode: Prop<string>
-  readonly ratingMin: Prop<string>
-  readonly ratingMax: Prop<string>
+  readonly ratingRangeMin: Prop<string>
+  readonly ratingRangeMax: Prop<string>
   readonly days: Prop<string>
 }
 

@@ -175,7 +175,7 @@ const perfIconsMap: {[index: string]: string} = {
   bot: 'n',
 }
 
-export function gameIcon(perf?: PerfKey): string {
+export function gameIcon(perf?: PerfKey | VariantKey): string {
   return perf ? perfIconsMap[perf] || '8' : '8'
 }
 

@@ -20,11 +20,11 @@ export default function ButtonHandler(
   repeatHandler?: () => boolean,
   scrollX?: boolean,
   scrollY?: boolean,
-  getElement?: (e: TouchEvent) => HTMLElement,
+  getElement?: (e: TouchEvent) => HTMLElement | null,
   preventEndDefault = true,
 ) {
 
-  let activeElement = el
+  let activeElement: HTMLElement | null = el
 
   let startX: number,
     startY: number,

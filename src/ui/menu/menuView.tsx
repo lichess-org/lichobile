@@ -121,14 +121,16 @@ const actionMap: { [index: string]: () => void } = {
 function onLinkTap(e: Event) {
   e.stopPropagation()
   const el = helper.getLI(e)
-  const ds = el.dataset
-  if (el && ds.route) {
-    menu.route(ds.route)()
-  } else if (el && ds.action) {
-    menu.action(actionMap[ds.action])()
-  } else if (el && ds.nocloseaction) {
-    actionMap[ds.nocloseaction]()
-    redraw()
+  if (el) {
+    const ds = el.dataset
+    if (ds.route) {
+      menu.route(ds.route)()
+    } else if (el && ds.action) {
+      menu.action(actionMap[ds.action])()
+    } else if (el && ds.nocloseaction) {
+      actionMap[ds.nocloseaction]()
+      redraw()
+    }
   }
 }
 

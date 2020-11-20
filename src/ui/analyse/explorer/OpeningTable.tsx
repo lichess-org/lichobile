@@ -59,10 +59,9 @@ export function showEmpty(ctrl: AnalyseCtrl) {
   )
 }
 
-export function getTR(e: Event): HTMLElement {
+export function getTR(e: Event): HTMLElement | null {
   const target = (e.target as HTMLElement)
-  return target.tagName === 'TR' ? target :
-    helper.findParentBySelector(target, 'tr')
+  return target.tagName === 'TR' ? target : target.closest('tr')
 }
 
 function resultBar(move: OpeningMoveStats) {

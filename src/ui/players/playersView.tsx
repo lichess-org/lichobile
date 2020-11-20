@@ -101,9 +101,11 @@ function onlinePlayers(ctrl: PlayersCtrl) {
 
 function onPlayerTap(e: Event) {
   const el = helper.getLI(e)
-  const ds = el.dataset as DOMStringMap
-  if (el && ds.id) {
-    router.set('/@/' + ds.id)
+  if (el) {
+    const ds = el.dataset as DOMStringMap
+    if (ds.id) {
+      router.set('/@/' + ds.id)
+    }
   }
 }
 

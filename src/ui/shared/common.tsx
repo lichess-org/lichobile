@@ -80,9 +80,8 @@ function gamesButton() {
 }
 
 function onHeaderBtnTap(e: Event) {
-  const el = helper.getByClass('main_header_button')(e)
-  const ds = el.dataset
-  const button = ds.button
+  const el = helper.closest(e, '.main_header_button')
+  const button = el?.dataset.button
   if (el && button) {
     if (button === 'games') {
       const nbChallenges = challengesApi.all().length
@@ -102,7 +101,7 @@ export function headerBtns() {
     onHeaderBtnTap,
     undefined,
     undefined,
-    helper.getByClass('main_header_button')
+    helper.closestHandler('.main_header_button')
   )
   if (session.isConnected() && friendsApi.count()) {
     return (

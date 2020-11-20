@@ -132,20 +132,8 @@ function computeTransformProp() {
     'oTransform' : 'msTransform'
 }
 
-function collectionHas(coll: NodeListOf<Element>, el: HTMLElement): boolean {
-  for (let i = 0, len = coll.length; i < len; i++) {
-    if (coll[i] === el) return true
-  }
-  return false
-}
-
 export function findParentBySelector(el: HTMLElement, selector: string): HTMLElement {
-  const matches = document.querySelectorAll(selector)
-  let cur = el as HTMLElement
-  while (cur && !collectionHas(matches, cur)) {
-    cur = (cur.parentNode as HTMLElement)
-  }
-  return cur
+  return el.closest(selector) || el
 }
 
 export function viewportDim(): ViewportDim {
@@ -230,7 +218,7 @@ export function fadesOut(e: Event, callback: () => void, selector?: string, time
 type TapHandler = (e: TouchEvent) => void
 type RepeatHandler = () => boolean
 
-function createTapHandler(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: RepeatHandler, scrollX?: boolean, scrollY?: boolean, getElement?: (e: TouchEvent) => HTMLElement, preventEndDefault?: boolean) {
+function createTapHandler(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: RepeatHandler, scrollX?: boolean, scrollY?: boolean, getElement?: (e: TouchEvent) => HTMLElement | null, preventEndDefault?: boolean) {
   return function(vnode: Mithril.VnodeDOMAny) {
     ButtonHandler(vnode.dom as HTMLElement,
       (e: TouchEvent) => {
@@ -254,19 +242,19 @@ export function ontouch(handler: TapHandler) {
   }
 }
 
-export function ontap(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: RepeatHandler, getElement?: (e: TouchEvent) => HTMLElement) {
+export function ontap(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: RepeatHandler, getElement?: (e: TouchEvent) => HTMLElement | null) {
   return createTapHandler(tapHandler, holdHandler, repeatHandler, false, false, getElement)
 }
 
-export function ontapX(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement) {
+export function ontapX(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement | null) {
   return createTapHandler(tapHandler, holdHandler, undefined, true, false, getElement)
 }
 
-export function ontapY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement, preventEndDefault = true) {
+export function ontapY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement | null, preventEndDefault = true) {
   return createTapHandler(tapHandler, holdHandler, undefined, false, true, getElement, preventEndDefault)
 }
 
-export function ontapXY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement, preventEndDefault = true) {
+export function ontapXY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement | null, preventEndDefault = true) {
   return createTapHandler(tapHandler, holdHandler, undefined, true, true, getElement, preventEndDefault)
 }
 
@@ -377,32 +365,30 @@ export function renderRatingDiff(player: Player | UserGamePlayer): Mithril.Child
   return null
 }
 
-export function getButton(e: Event): HTMLElement {
+export function getButton(e: Event): HTMLElement | null{
   const target = (e.target as HTMLElement)
-  return target.tagName === 'BUTTON' ? target : findParentBySelector(target, 'button')
+  return target.tagName === 'BUTTON' ? target : target.closest('button')
 }
 
-export function getAnchor(e: Event): HTMLElement {
+export function getAnchor(e: Event): HTMLElement | null{
   const target = (e.target as HTMLElement)
-  return target.tagName === 'A' ? target : findParentBySelector(target, 'a')
+  return target.tagName === 'A' ? target : target.closest('a')
 }
 
-export function getLI(e: Event) {
+export function getLI(e: Event): HTMLElement | null {
   const target = (e.target as HTMLElement)
-  return target.tagName === 'LI' ? target : findParentBySelector(target, 'li')
+  return target.tagName === 'LI' ? target : target.closest('li')
 }
 
-export function getTR(e: Event) {
+export function getTR(e: Event): HTMLElement | null {
   const target = (e.target as HTMLElement)
-  return target.tagName === 'TR' ? target : findParentBySelector(target, 'tr')
+  return target.tagName === 'TR' ? target : target.closest('tr')
 }
 
-export function getByClass(className: string): (e: Event) => HTMLElement {
-  return (e: Event) => findElByClassName(e, className)
+export function closest(e: Event, selector: string): HTMLElement | null {
+  return (e.target as HTMLElement)?.closest(selector)
 }
 
-export function findElByClassName(e: Event, className: string) {
-  const target = (e.target as HTMLElement)
-  return target.classList.contains(className) ?
-    target : findParentBySelector(target, '.' + className)
+export function closestHandler(selector: string): (e: Event) => HTMLElement | null {
+  return (e: Event) => (e.target as HTMLElement)?.closest(selector)
 }

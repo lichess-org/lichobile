@@ -90,7 +90,7 @@ function studyList(ctrl: StudyIndexCtrl) {
 
   return h('div#scroller-wrapper.native_scroller.study-pagerScroller.box', {
     onscroll: throttle(ctrl.onScroll, 30),
-    oncreate: helper.ontapY(e => onTap(ctrl, e!), undefined, helper.getByClass('study-pagerItem'))
+    oncreate: helper.ontapY(e => onTap(ctrl, e!), undefined, helper.closestHandler('.study-pagerItem'))
   },
     ctrl.state.paginator ?
       studies.length ?
@@ -105,8 +105,8 @@ function studyList(ctrl: StudyIndexCtrl) {
 }
 
 function onTap(ctrl: StudyIndexCtrl, e: Event) {
-  const el = helper.getByClass('study-pagerItem')(e)
-  const id = el && el.dataset.id
+  const el = helper.closest(e, '.study-pagerItem')
+  const id = el?.dataset.id
   if (id) {
     ctrl.goToStudy(id)
   }

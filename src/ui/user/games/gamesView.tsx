@@ -35,10 +35,10 @@ function getButton(e: Event): HTMLElement | undefined {
 
 function onTap(ctrl: IUserGamesCtrl, e: Event) {
   const starButton = getButton(e)
-  const tournamentLink = helper.findElByClassName(e, 'tournament')
+  const tournamentLink: HTMLElement | null = (e.target as HTMLElement)?.closest('.tournament')
   const el = helper.getLI(e)
-  const id = el && el.dataset.id
-  const playerId = el && el.dataset.pid
+  const id = el?.dataset.id
+  const playerId = el?.dataset.pid
   if (id && starButton) {
     ctrl.toggleBookmark(id)
   } else if (tournamentLink) {

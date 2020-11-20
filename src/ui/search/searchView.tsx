@@ -110,10 +110,10 @@ function getButton(e: Event): HTMLElement | undefined {
 interface GameDataSet extends DOMStringMap {
   id: string
 }
-function onTap (ctrl: ISearchCtrl, e: Event) {
+function onTap (ctrl: ISearchCtrl, e: TouchEvent) {
   const starButton = getButton(e)
-  const el = helper.findElByClassName(e, 'userGame')
-  const id = el && (el.dataset as GameDataSet).id
+  const el = helper.closest(e, '.userGame')
+  const id = (el?.dataset as GameDataSet).id
   if (starButton) {
     ctrl.toggleBookmark(id)
   } else {
@@ -139,7 +139,7 @@ function renderResult(ctrl: ISearchCtrl) {
 
   return h('ul.searchGamesList', {
     className: ctrl.searchState.searching ? 'searching' : '',
-    oncreate: helper.ontapY(e => onTap(ctrl, e!), undefined, e => helper.findElByClassName(e!, 'userGame'))
+    oncreate: helper.ontapY(e => onTap(ctrl, e!), undefined, helper.closestHandler('.userGame'))
   }, children)
 }
 

@@ -365,12 +365,12 @@ export function renderRatingDiff(player: Player | UserGamePlayer): Mithril.Child
   return null
 }
 
-export function getButton(e: Event): HTMLElement | null{
+export function getButton(e: Event): HTMLElement | null {
   const target = (e.target as HTMLElement)
   return target.tagName === 'BUTTON' ? target : target.closest('button')
 }
 
-export function getAnchor(e: Event): HTMLElement | null{
+export function getAnchor(e: Event): HTMLElement | null {
   const target = (e.target as HTMLElement)
   return target.tagName === 'A' ? target : target.closest('a')
 }

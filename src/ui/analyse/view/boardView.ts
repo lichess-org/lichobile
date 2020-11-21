@@ -58,8 +58,8 @@ function computeShapes(ctrl: AnalyseCtrl): readonly Shape[] {
   const player = ctrl.data.game.player
   const ceval = ctrl.node && ctrl.node.ceval
   const rEval = ctrl.node && ctrl.node.eval
-  let nextBest: string | undefined
   let curBestShapes: readonly Shape[] = []
+  let pastBestShape: readonly Shape[] = []
 
   if (ctrl.practice) {
     const hint = ctrl.practice.hinting()
@@ -73,7 +73,7 @@ function computeShapes(ctrl: AnalyseCtrl): readonly Shape[] {
   }
 
   if (!ctrl.retro && !ctrl.practice && ctrl.settings.s.showBestMove) {
-    nextBest = ctrl.nextNodeBest() || (ceval && ceval.best)
+    const nextBest = ctrl.nextNodeBest() || (ceval && ceval.best)
     if (nextBest) {
       curBestShapes = moveOrDropShape(nextBest, 'paleBlue', player)
     }
@@ -86,13 +86,14 @@ function computeShapes(ctrl: AnalyseCtrl): readonly Shape[] {
         }
       })
     }
+    if (rEval && rEval.best) {
+      pastBestShape = moveOrDropShape(rEval.best, 'paleGreen', player)
+    }
   }
-  const pastBestShape: Shape[] = !ctrl.retro && rEval && rEval.best ?
-  moveOrDropShape(rEval.best, 'paleGreen', player) : []
 
   const badNode = ctrl.retro && ctrl.retro.showBadNode()
   const badMoveShape: Shape[] = badNode && badNode.uci ?
-  moveOrDropShape(badNode.uci, 'paleRed', player) : []
+    moveOrDropShape(badNode.uci, 'paleRed', player) : []
 
   return [
     ...pastBestShape, ...curBestShapes, ...badMoveShape

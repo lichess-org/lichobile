@@ -4,6 +4,7 @@ import storage from '../../storage'
 import sound from '../../sound'
 import vibrate from '../../vibrate'
 import i18n from '../../i18n'
+import redraw from '../../utils/redraw'
 import { handleXhrError } from '../../utils'
 import { positionsCache } from '../../utils/gamePosition'
 import { emptyFen } from '../../utils/fen'
@@ -43,6 +44,7 @@ export default {
     .then(data => {
       if (isChallengeData(data)) {
         vnode.state.challenge = new ChallengeCtrl(data)
+        redraw()
       } else if (isOnlineGameData(data)) {
         loadRound(vnode, now, data)
       }

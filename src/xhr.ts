@@ -110,7 +110,7 @@ export function seekGame(setup: HumanSeekSetup): Promise<HookData> {
   }, true)
 }
 
-export function challenge(userId: string, fen?: string): Promise<{ challenge: Challenge }> {
+export function challenge(userId?: string, fen?: string): Promise<{ challenge: Challenge }> {
   const config = settings.gameSetup.challenge
   const url = userId ? `/setup/friend?user=${userId}` : '/setup/friend'
 

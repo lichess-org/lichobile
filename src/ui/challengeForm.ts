@@ -43,7 +43,7 @@ function close(fromBB?: string) {
 }
 
 function doChallenge() {
-  return challengeXhr(userId!, setupFen)
+  return challengeXhr(userId, setupFen)
   .then(data => {
 
     if (data.challenge.destUser && challengesApi.isPersistent(data.challenge)) {

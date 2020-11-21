@@ -36,7 +36,7 @@
         "mustache": "3.1.0",
         "rimraf": "3.0.2",
         "rollup": "2.10.9",
-        "rollup-plugin-terser": "6.0.1",
+        "rollup-plugin-terser": "7.0.2",
         "rollup-plugin-visualizer": "4.0.4",
         "stylus": "0.54.7",
         "tslint": "5.8.0",

@@ -54,7 +54,7 @@
         "@types/lodash-es": "4.17.3",
         "capacitor-cordova-plugin-stockfish": "git+https://github.com/veloce/cordova-plugin-stockfish.git#capacitor",
         "capacitor-sound-effect": "git+https://github.com/veloce/capacitor-sound-effect.git",
-        "chessops": "0.6.0",
+        "chessops": "0.7.3",
         "cordova-plugin-fullscreen": "1.2.0",
         "cordova-plugin-insomnia": "4.2.0",
         "d3-axis": "1.0.8",

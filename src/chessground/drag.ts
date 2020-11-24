@@ -72,7 +72,7 @@ export function dragNewPiece(ctrl: Chessground, piece: Piece, e: TouchEvent, for
 
 export function start(ctrl: Chessground, e: TouchEvent) {
   // support one finger touch only
-  if (e.touches && e.touches.length > 1) return
+  if (!e.isTrusted || (e.touches && e.touches.length > 1)) return
   e.preventDefault()
   const state = ctrl.state
   const dom = ctrl.dom!

@@ -1,6 +1,11 @@
 import * as cg from './interfaces'
 import { State } from './state'
 
+export type Callback = (...args: any[]) => void
+
+export function callUserFunction(f: Callback | undefined, ...args: any[]): void {
+  if (f) setTimeout(() => f(...args), 1)
+}
 export function noop() {}
 
 export const files: readonly cg.File[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']

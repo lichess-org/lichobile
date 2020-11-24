@@ -22,11 +22,13 @@ export function setPieces(state: State, pieces: cg.PiecesDiff): void {
 }
 
 export function setCheck(state: State, color: Color | boolean): void {
+  state.check = null
   if (color === true) color = state.turnColor
-  if (!color) state.check = null
-  else for (const [k, v] of state.pieces) {
-    if (v.role === 'king' && v.color === color) {
-      state.check = k
+  if (color) {
+    for (const [k, v] of state.pieces) {
+      if (v.role === 'king' && v.color === color) {
+        state.check = k
+      }
     }
   }
 }
@@ -34,15 +36,13 @@ export function setCheck(state: State, color: Color | boolean): void {
 export function setPremove(state: State, orig: Key, dest: Key): void {
   unsetPredrop(state)
   state.premovable.current = [orig, dest]
-  setTimeout(() => {
-    if (state.premovable.events.set) state.premovable.events.set(orig, dest)
-  }, 0)
+  util.callUserFunction(state.premovable.events.set, orig, dest)
 }
 
 export function unsetPremove(state: State): void {
   if (state.premovable.current) {
     state.premovable.current = null
-    setTimeout(state.premovable.events.unset || util.noop)
+    util.callUserFunction(state.premovable.events.unset)
   }
 }
 
@@ -52,17 +52,13 @@ export function setPredrop(state: State, role: Role, key: Key): void {
     role: role,
     key
   } as cg.Drop
-  setTimeout(() => {
-    if (state.predroppable.events.set) state.predroppable.events.set(role, key)
-  }, 0)
+  util.callUserFunction(state.predroppable.events.set, role, key)
 }
 
 export function unsetPredrop(state: State): void {
   if (state.predroppable.current) {
     state.predroppable.current = null
-    setTimeout(() => {
-      if (state.predroppable.events.unset) state.predroppable.events.unset()
-    })
+    util.callUserFunction(state.predroppable.events.unset)
   }
 }
 
@@ -79,11 +75,7 @@ export function userMove(state: State, orig: Key, dest: Key): boolean {
     const result = baseUserMove(state, orig, dest)
     if (result) {
       setSelected(state, null)
-      setTimeout(() => {
-        if (state.movable.events.after) state.movable.events.after(orig, dest, {
-          premove: false
-        })
-      })
+      util.callUserFunction(state.movable.events.after, orig, dest, { premove: false })
       return true
     }
   }
@@ -105,11 +97,8 @@ export function dropNewPiece(state: State, orig: Key, dest: Key, force = false):
   if (piece && (canDrop(state, orig, dest) || force)) {
     state.pieces.delete(orig)
     baseNewPiece(state, piece, dest, force)
-    setTimeout(() => {
-      if (state.movable.events.afterNewPiece) state.movable.events.afterNewPiece(piece.role, dest, {
-        premove: false,
-        predrop: false
-      })
+    util.callUserFunction(state.movable.events.afterNewPiece, piece.role, dest, {
+      predrop: false
     })
   } else if (piece && canPredrop(state, orig, dest)) {
     setPredrop(state, piece.role, dest)
@@ -211,10 +200,8 @@ export function playPremove(state: State): void {
   const orig = move[0], dest = move[1]
   if (canMove(state, orig, dest)) {
     if (baseUserMove(state, orig, dest)) {
-      setTimeout(() => {
-        if (state.movable.events.after) state.movable.events.after(orig, dest, {
-          premove: true
-        })
+      util.callUserFunction(state.movable.events.after, orig, dest, {
+        premove: true
       })
     }
   }
@@ -231,11 +218,8 @@ export function playPredrop(state: State, validate: (d: cg.Drop) => boolean): bo
       color: state.movable.color
     } as Piece
     if (baseNewPiece(state, piece, drop.key)) {
-      setTimeout(() => {
-        if (state.movable.events.afterNewPiece) state.movable.events.afterNewPiece(drop.role, drop.key, {
-          premove: false,
-          predrop: true
-        })
+      util.callUserFunction(state.movable.events.afterNewPiece, drop.role, drop.key, {
+        predrop: true
       })
       success = true
     }
@@ -265,17 +249,14 @@ function baseMove(state: State, orig: Key, dest: Key): boolean {
   const captured = (
     destPiece && destPiece.color !== origPiece.color
   ) ? destPiece : undefined
-  // always call events.move
-  setTimeout(() => {
-    if (state.events.move) state.events.move(orig, dest, captured)
-  }, 0)
+  util.callUserFunction(state.events.move, orig, dest, captured)
   if (!tryAutoCastle(state, orig, dest)) {
     state.pieces.set(dest, origPiece)
     state.pieces.delete(orig)
   }
   state.lastMove = [orig, dest]
   state.check = null
-  setTimeout(state.events.change || util.noop)
+  util.callUserFunction(state.events.change)
   return true
 }
 
@@ -284,13 +265,11 @@ function baseNewPiece(state: State, piece: Piece, key: Key, force = false): bool
     if (force) state.pieces.delete(key)
     else return false
   }
-  setTimeout(() => {
-    if (state.events.dropNewPiece) state.events.dropNewPiece(piece, key)
-  })
+  util.callUserFunction(state.events.dropNewPiece, piece, key)
   state.pieces.set(key, piece)
   state.lastMove = [key, key]
   state.check = null
-  setTimeout(state.events.change || util.noop)
+  util.callUserFunction(state.events.change)
   state.movable.dests = {}
   state.turnColor = util.opposite(state.turnColor)
   return true

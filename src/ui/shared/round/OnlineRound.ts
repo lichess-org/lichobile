@@ -464,7 +464,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         turnColor: d.game.player,
         dests: playing ?
         gameApi.parsePossibleMoves(d.possibleMoves) : <DestsMap>{},
-        check: o.check
+        check: !!o.check
       }
 
       if (isMove(o)) {

@@ -288,12 +288,29 @@ function userInfos(user: User, player: Player, playerName: string) {
   Plugins.LiToast.show({ text: title, duration: 'short' })
 }
 
+function renderPlayerName(player: Player) {
+  if (player.name || player.username || player.user) {
+    let name = player.name || player.username || player.user?.username
+    return h('span', [
+      player.user?.title ? [
+        h('span.userTitle' + (player.user?.title === 'BOT' ? '.bot' : ''), player.user.title),
+        ' '
+      ] : [],
+      name
+    ])
+  }
+
+  if (player.ai) return playerApi.aiName({ ai: player.ai })
+
+  return 'Anonymous'
+}
+
 function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Material, position: Position, isCrazy: boolean) {
   const user = player.user
-  const playerName = playerApi.playerName(player)
+  const playerName = renderPlayerName(player)
   const togglePopup = user ? () => ctrl.openUserPopup(position, user.id) : utils.noop
   const vConf = user ?
-    helper.ontap(togglePopup, () => userInfos(user, player, playerName)) :
+    helper.ontap(togglePopup, () => userInfos(user, player, playerApi.playerName(player))) :
     helper.ontap(utils.noop, () => Plugins.LiToast.show({ text: playerName, duration: 'short' }))
 
   const checksNb = getChecksCount(ctrl, player.color)

@@ -31,10 +31,11 @@ export function userTitle(
     <span className={'userStatus patron ' + status} data-icon="" /> :
     <span className={'fa fa-circle userStatus ' + status} />
 
+  const isBot = title === 'BOT'
   return h('div.title', [
     icon,
     h('span', [
-      ...(title ? [h('span.userTitle', title), ' '] : []),
+      ...(title ? [h('span.userTitle' + (isBot ? '.bot' : ''), title), ' '] : []),
       username
     ])
   ])

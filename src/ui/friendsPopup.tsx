@@ -4,7 +4,6 @@ import router from '../router'
 import popupWidget from './shared/popup'
 import i18n, { plural } from '../i18n'
 import friendsApi, { Friend } from '../lichess/friends'
-import * as utils from '../utils'
 import challengeForm from './challengeForm'
 
 let isOpen = false
@@ -53,9 +52,10 @@ function renderFriends() {
     )
 }
 
-function renderFriend([name, status]: Friend) {
+function renderFriend(friend: Friend) {
 
-  const userId = utils.userFullNameToId(name)
+  const userId = friend.name.toLowerCase()
+  const isBot = friend.title === 'BOT'
 
   function action() {
     close()
@@ -71,15 +71,21 @@ function renderFriend([name, status]: Friend) {
   return (
     <li className="list_item" key={userId} oncreate={helper.ontapY(action)}>
       <div className="friend_name">
-        { status.patron ?
+        { friend.patron ?
           <span className="patron is-green" data-icon="" />
           :
           null
         }
-        <span>{name}</span>
+        <span>
+          {friend.title ?
+            <span className={'userTitle' + (isBot ? ' bot' : '') }>{friend.title} </span> :
+            null
+          }
+          {friend.name}
+        </span>
       </div>
       <div className="onlineFriends_actions">
-        { status.playing ?
+        { friend.playing ?
           <span className="friend_tv" data-icon="1" oncreate={helper.ontapY(onTapTv)}> </span>
           :
           null

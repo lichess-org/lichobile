@@ -89,7 +89,7 @@ const worker = new Worker('lib/socketWorker.js')
 const defaultHandlers: MessageHandlers = {
   following_onlines: handleFollowingOnline,
   following_enters: (name: string, payload: FollowingEntersPayload) =>
-    autoredraw(() => friendsApi.add(name, payload.playing || false, payload.patron || false)),
+    autoredraw(() => friendsApi.set(name, payload.playing || false, payload.patron || false)),
   following_leaves: (name: string) => autoredraw(() => friendsApi.remove(name)),
   following_playing: (name: string) => autoredraw(() => friendsApi.playing(name)),
   following_stopped_playing: (name: string) =>
@@ -106,10 +106,10 @@ const defaultHandlers: MessageHandlers = {
   }
 }
 
-function handleFollowingOnline(data: Array<string>, payload: FollowingOnlinePayload) {
+function handleFollowingOnline(data: string[], payload: FollowingOnlinePayload) {
   const friendsPlaying = payload.playing
   const friendsPatrons = payload.patrons
-  friendsApi.set(data, friendsPlaying, friendsPatrons)
+  friendsApi.reset(data, friendsPlaying, friendsPatrons)
 
   redraw()
 }

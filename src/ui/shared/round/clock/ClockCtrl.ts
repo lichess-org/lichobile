@@ -116,6 +116,11 @@ export default class ClockCtrl {
 
   isRunning = () => this.times.activeColor !== undefined
 
+  unload = () => {
+    clearTimeout(this.tickTimeoutID)
+    this.times.activeColor = undefined
+  }
+
   private scheduleTick = (time: Millis, extraDelay: Millis) => {
     if (this.tickTimeoutID !== undefined) clearTimeout(this.tickTimeoutID)
     this.tickTimeoutID = setTimeout(

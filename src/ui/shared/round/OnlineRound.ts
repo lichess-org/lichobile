@@ -660,6 +660,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public unload() {
+    if (this.clock) this.clock.unload()
     clearInterval(this.clockIntervId)
     this.appStateListener.remove()
   }

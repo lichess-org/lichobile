@@ -22,8 +22,6 @@ const prefsCtrl = {
   animation: session.lichessBackedProp<number>('prefs.animation', Animation.NORMAL),
   showCaptured: session.lichessBackedProp<boolean>('prefs.captured', true),
   replay: session.lichessBackedProp<number>('prefs.replay', Replay.ALWAYS),
-  // highlight: session.lichessBackedProp<boolean>('prefs.highlight', true),
-  // destination: session.lichessBackedProp<boolean>('prefs.destination', true),
 }
 
 export function render(ctrl: typeof prefsCtrl) {
@@ -34,12 +32,6 @@ export function render(ctrl: typeof prefsCtrl) {
     h('li.list_item',
       formWidgets.renderMultipleChoiceButton(i18n('materialDifference'), formWidgets.booleanChoice, ctrl.showCaptured),
     ),
-    // h('li.list_item',
-    //   formWidgets.renderMultipleChoiceButton(i18n('boardHighlights'), formWidgets.booleanChoice, ctrl.highlight)
-    // ),
-    // h('li.list_item',
-    //   formWidgets.renderMultipleChoiceButton(i18n('pieceDestinations'), formWidgets.booleanChoice, ctrl.destination)
-    // ),
     h('li.list_item',
       formWidgets.renderMultipleChoiceButton(i18n('moveListWhilePlaying'), ReplayChoices, ctrl.replay)
     ),

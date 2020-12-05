@@ -2,9 +2,9 @@ import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
 import * as gameApi from '../../../lichess/game'
 import settings from '../../../settings'
+import { boardOrientation, animationDuration } from '../../../utils'
 import { OfflineGameData } from '../../../lichess/interfaces/game'
 import { AfterMoveMeta } from '../../../lichess/interfaces/move'
-import { boardOrientation } from '../../../utils'
 import { uciToMoveOrDrop } from '../../../utils/chessFormat'
 import { GameSituation } from '../../../chess'
 
@@ -34,8 +34,8 @@ function makeConfig(data: OfflineGameData, sit: GameSituation): cg.InitConfig {
       rookCastle: settings.game.rookCastle() === 1,
     },
     animation: {
-      enabled: settings.game.animations(),
-      duration: 300
+      enabled: !!settings.game.animations(),
+      duration: animationDuration(settings.game.animations()),
     },
     premovable: {
       enabled: false

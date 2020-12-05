@@ -4,6 +4,13 @@
     background themeBgLight
     color themeBgLightText
 
+  #free_content
+    background #fff
+    .list_item
+      border-color darken(#fff, 5%)
+      &.selected
+        background-color darken(#fff, 5%)
+
   .main_header
     color themeBgLightText
     background themeBgLightHeader
@@ -126,7 +133,7 @@
     color textLightBg
 
   .radio_list input.radio:checked + label, .settings_list .list_item.selected
-      background-color darken(themeBgLight, 5%)
+      background-color darken(#fff, 5%)
 
   .profilePerf
     &.active

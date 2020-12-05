@@ -23,31 +23,31 @@ input[type='text']
   border none
 
 input[type='checkbox']
-  flex 0 0 55px
+  flex 0 0 45px
   position relative
   margin 0
   border none
   height 26px
   border-radius 15px
-  background-color #ccc
+  background-color #6b6b6b
   transition background-color 250ms ease-out
   outline none
 input[type='checkbox']:checked
-  background-color gold
+  background-color darken(green2, 10%)
 input[type='checkbox']:after
   content ''
   display inline-block
   position absolute
-  top 2px
-  left 2px
-  width 22px
-  height 22px
+  top 0px
+  left 0px
+  width 26px
+  height 26px
   border-radius 50%
-  background #fff
+  background linear-gradient(to bottom, #3c3934, #33312e 100%)
   transition left 200ms
-  box-shadow 0px 2px 5px 0px rgba(0, 0, 0, 0.3)
+  box-shadow 0 1px 2.5px rgba(0,0,0,0.3)
 input[type='checkbox']:checked:after
-  left 31px
+  left 20px
 
 // select
 .select_input
@@ -169,16 +169,15 @@ input[type=range]
     cursor: pointer;
     animate: 0.2s;
     box-shadow: 0px 0px 0px #000000;
-    background: #bbb
+    background: #6b6b6b
     border-radius: 1px;
     border: 0px solid #000000;
   &::-webkit-slider-thumb
-    box-shadow 0px 2px 5px 0px rgba(0, 0, 0, 0.3)
-    border: 1px solid #aaa
     height: 18px;
     width: 18px;
     border-radius: 25px;
-    background: #fff
+    background: linear-gradient(to bottom, #3c3934, #33312e 100%)
+    box-shadow 0 1px 2.5px rgba(0,0,0,0.3)
     cursor: pointer;
     -webkit-appearance: none;
     margin-top: -7px;
@@ -203,36 +202,38 @@ button.fat
     margin-top 15px
     max-width initial
     border-radius 2px
-    span
-      &.selected
-        background gold
 
 .form-multipleChoice
-  display: flex;
+  display: flex
+  flex-flow row wrap
+  overflow hidden
   max-width 300px
   margin 0 auto
+  box-shadow 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12)
   &.wrap
     flex-flow wrap
-  span
+  div
     display flex
+    flex 1 1 auto
     justify-content center
     align-items center
-    flex-grow: 1;
     font-size 0.9em
-    padding: 5px 10px
+    padding: 10px
     text-align: center;
     transition: background 0.13s;
-    border: 1px solid modalDarkBorder
-    border-width: 1px 0 1px 1px;
+    border-right: 1px solid modalDarkBorder
+    background: linear-gradient(to bottom, #3c3934, #33312e 100%)
     &:first-child
       border-radius: 3px 0 0 3px;
     &:last-child
       border-radius: 0 3px 3px 0;
-      border-right-width: 1px;
+      border-right 0
     &.selected
-      background blue
-      color: #fff
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1) inset
+      font-weight bold
+      background #4d4d4d
+      color: #e3e3e3
+      text-shadow 1px 1px 1px #000
+      box-shadow 0 3px 4px rgba(0,0,0,0.15) inset
 
 .no_arrow_after
   label:after
@@ -248,11 +249,20 @@ input.form-error
 .view-container.light
   input[type='checkbox'], input[type='checkbox']:before
     background-color #ccc
+  input[type='checkbox']:after
+    background linear-gradient(to bottom, #f5f5f5 0%, #ededed 100%)
+    box-shadow 0 1px 2.5px rgba(0,0,0,0.3)
   input[type='checkbox']:checked, input[type='checkbox']:checked:before
-    background-color gold
+    background-color green2
   .form-multipleChoice
-    span
-      border-color #ddd
+    div
+      background linear-gradient(to bottom, #f5f5f5 0%, #ededed 100%)
+      text-shadow 0 1px 0 #fff
+      border-color #d9d9d9
+      &.selected
+        background #dbdbdb
+        color #000
+        text-shadow 1px 1px 1px #fff !important
   .select_input
     background #fff
     color textDarkGray
@@ -261,10 +271,19 @@ input.form-error
       background #fff
       color textGray
       border-color #ddd
+  input[type=range]
+    &::-webkit-slider-runnable-track
+      background #bbb
+    &::-webkit-slider-thumb
+      background linear-gradient(to bottom, #f5f5f5 0%, #ededed 100%)
+      box-shadow 0 1px 2.5px rgba(0,0,0,0.3)
 
 
 .view-container.transp
   .form-multipleChoice
-    span
+    div
+      background linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.5) 100%)
       border-color transpWhite015
+      &.selected
+        background transpWhite01
 

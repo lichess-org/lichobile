@@ -115,7 +115,7 @@ export default {
       h('section.db', [
         h('label', i18n('database')),
         h('div.form-multipleChoice', d.db.available.map(s => {
-          return h('span', {
+          return h('div', {
             className: d.db.selected() === s ? 'selected' : '',
             oncreate: helper.ontapY(() => ctrl.toggleDb(s))
           }, s)
@@ -129,7 +129,7 @@ export default {
           h('label', i18n('averageElo')),
           h('div.form-multipleChoice',
             d.rating.available.map(r => {
-              return h('span', {
+              return h('div', {
                 className: d.rating.selected().indexOf(r) > -1 ? 'selected' : '',
                 oncreate: helper.ontapY(() => ctrl.toggleRating(r))
               }, r)
@@ -140,7 +140,7 @@ export default {
           h('label', i18n('timeControl')),
           h('div.form-multipleChoice',
             d.speed.available.map(s => {
-              return h('span', {
+              return h('div', {
                 className: d.speed.selected().indexOf(s) > -1 ? 'selected' : '',
                 oncreate: helper.ontapY(() => ctrl.toggleSpeed(s))
               }, s)

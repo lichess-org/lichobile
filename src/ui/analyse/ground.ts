@@ -1,11 +1,9 @@
 import Chessground from '../../chessground/Chessground'
 import * as cg from '../../chessground/interfaces'
 import settings from '../../settings'
-import { AnalyseData } from '../../lichess/interfaces/analyse'
-
+import { animationDuration } from '../../utils'
 
 function makeConfig(
-  data: AnalyseData,
   config: cg.SetConfig,
   orientation: Color,
   onMove: (orig: Key, dest: Key, capturedPiece?: Piece) => void,
@@ -45,20 +43,19 @@ function makeConfig(
       check: settings.game.highlights()
     },
     animation: {
-      enabled: settings.game.animations(),
-      duration: data.pref.animationDuration
+      enabled: !!settings.game.animations(),
+      duration: animationDuration(settings.game.animations()),
     }
   }
 }
 
 export default {
   make(
-    data: AnalyseData,
     config: cg.SetConfig,
     orientation: Color,
     onMove: (orig: Key, dest: Key, capturedPiece?: Piece) => void,
     onNewPiece: (piece: Piece, pos: Key) => void
   ) {
-    return new Chessground(makeConfig(data, config, orientation, onMove, onNewPiece))
+    return new Chessground(makeConfig(config, orientation, onMove, onNewPiece))
   },
 }

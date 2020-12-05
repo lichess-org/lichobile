@@ -42,7 +42,7 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): c
       rookCastle: settings.game.rookCastle() === 1,
     },
     animation: {
-      enabled: settings.game.animations(),
+      enabled: !!settings.game.animations(),
       duration: data.pref.animationDuration
     },
     premovable: {

@@ -55,7 +55,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     this.actions = actions.controller(this)
     this.newGameMenu = newGameMenu.controller(this)
 
-    this.moveList = settings.game.moveList()
+    this.moveList = !!settings.game.moveList()
 
     this.vm = {
       engineSearching: false,

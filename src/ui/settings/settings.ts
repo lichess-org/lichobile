@@ -37,6 +37,9 @@ function renderBody(appVersion?: string) {
         oncreate: helper.ontapY(() => router.set('/settings/gameDisplay'))
       }, i18n('gameDisplay')),
       h('li.list_item.nav', {
+        oncreate: helper.ontapY(() => router.set('/settings/clock'))
+      }, i18n('clock')),
+      h('li.list_item.nav', {
         oncreate: helper.ontapY(() => router.set('/settings/gameBehavior'))
       }, i18n('gameBehavior')),
       h('li.list_item.nav', {

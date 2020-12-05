@@ -134,7 +134,7 @@ export function renderCastlingOptions(ctrl: EditorCtrl) {
 
 function castlingButton(ctrl: EditorCtrl, c: string[]) {
   const cur = ctrl.data.editor.castles[c[0]]
-  return h('span', {
+  return h('div', {
     className: cur() ? 'selected' : '',
     oncreate: helper.ontap(() => cur(!cur()))
   }, c[1])

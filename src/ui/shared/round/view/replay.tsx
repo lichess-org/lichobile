@@ -13,6 +13,11 @@ export function onPieceNotationChange(pn: boolean) {
 
 export function renderReplay(ctrl: OnlineRound) {
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
+
+  if (!ctrl.vm.moveList || ctrl.isZen()) {
+    return null
+  }
+
   return h('div.replay.box', {
     className: helper.classSet({
       displayPieces: !!pieceNotation,

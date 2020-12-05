@@ -9,6 +9,8 @@ import * as chessFormat from '../../utils/chessFormat'
 import { build as makeTree, path as treePath, ops as treeOps, TreeWrapper, Tree } from '../shared/tree'
 import redraw from '../../utils/redraw'
 import session from '../../session'
+import settings from '../../settings'
+import { handleXhrError, oppositeColor, hasNetwork, noop, animationDuration } from '../../utils'
 import vibrate from '../../vibrate'
 import sound from '../../sound'
 import { toggleGameBookmark } from '../../xhr'
@@ -19,8 +21,6 @@ import * as gameApi from '../../lichess/game'
 import { AnalyseData, AnalyseDataWithTree, isOnlineAnalyseData } from '../../lichess/interfaces/analyse'
 import { Study, findTag } from '../../lichess/interfaces/study'
 import { Opening } from '../../lichess/interfaces/game'
-import settings from '../../settings'
-import { handleXhrError, oppositeColor, hasNetwork, noop } from '../../utils'
 import promotion from '../shared/offlineRound/promotion'
 import continuePopup, { Controller as ContinuePopupController } from '../shared/continuePopup'
 import { NotesCtrl } from '../shared/round/notes'
@@ -142,7 +142,7 @@ export default class AnalyseCtrl {
 
     const explorerAllowed = !this.study || this.study.data.chapter.features.explorer
     this.explorer = ExplorerCtrl(this, explorerAllowed)
-    this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50)
+    this.debouncedExplorerSetStep = debounce(this.explorer.setStep, animationDuration(settings.game.animations()) + 50)
 
     const initPly = ply !== undefined ? ply : this.tree.lastPly()
 
@@ -702,7 +702,7 @@ export default class AnalyseCtrl {
     this.cgConfig = config
     this.data.game.player = color
     if (!this.chessground) {
-      this.chessground = ground.make(this.data, config, this.orientation, this.userMove, this.userNewPiece)
+      this.chessground = ground.make(config, this.orientation, this.userMove, this.userNewPiece)
     } else {
       this.chessground.set(config)
     }

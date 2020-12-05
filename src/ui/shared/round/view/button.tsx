@@ -29,6 +29,12 @@ export default {
       'data-icon': ctrl.data.bookmarked ? 't' : 's'
     }, [i18n('bookmarkThisGame')]) : null
   },
+  toggleZen(ctrl: OnlineRound) {
+    return ctrl.zenAvailable() ? h('button', {
+      className: ctrl.isZen() ? 'on' : '',
+      oncreate: helper.ontap(ctrl.toggleZenMode)
+    }, [h('span.fa.fa-volume-off'), i18n('zenMode')]) : null
+  },
   shareLink(ctrl: OnlineRound) {
     return h('button', {
       oncreate: helper.ontap(() => {

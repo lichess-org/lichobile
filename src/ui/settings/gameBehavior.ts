@@ -7,7 +7,7 @@ import session from '../../session'
 import * as helper from '../helper'
 import { dropShadowHeader, backButton } from '../shared/common'
 import formWidgets from '../shared/form'
-import { prefsCtrl, renderLichessPrefs } from '../user/account/gameBehavior'
+import { prefsCtrl, render as renderLichessPrefs } from '../user/account/gameBehavior'
 
 export default {
   oncreate: helper.viewSlideIn,
@@ -15,7 +15,7 @@ export default {
   view() {
     const header = dropShadowHeader(null, backButton(i18n('gameBehavior')))
     return layout.free(header,
-      h('ul.native_scroller.page.settings_list.game',
+      h('ul.native_scroller.page.settings_list.multiChoices',
         renderAppPrefs().concat(hasNetwork() && session.isConnected() ?
           renderLichessPrefs(prefsCtrl) : []
         )

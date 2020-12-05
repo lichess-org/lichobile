@@ -47,25 +47,27 @@ export default {
 
 const sepHigh = ':'
 const sepLow = ' '
-export function formatClockTime(time: Millis, isRunning: boolean = false) {
+export function formatClockTime(time: Millis, showTenths: boolean, isRunning: boolean = false) {
   const date = new Date(time)
-  const minutes = prefixInteger(date.getUTCMinutes(), 2)
-  const seconds = prefixInteger(date.getUTCSeconds(), 2)
-  const tenths = Math.floor(date.getUTCMilliseconds() / 100)
-  let pulse = (isRunning && tenths < 5) ? sepLow : sepHigh
-
-  if (time < 10000) {
-    return seconds + '.' + tenths
-  }
+  const millis = date.getUTCMilliseconds()
+  const minutes = pad2(date.getUTCMinutes())
+  const seconds = pad2(date.getUTCSeconds())
 
   if (time >= 3600000) {
-    let hours = prefixInteger(date.getUTCHours(), 1)
+    const hours = pad2(date.getUTCHours())
+    const pulse = (isRunning && millis < 500) ? sepLow : sepHigh
     return hours + pulse + minutes
+  } else if (showTenths) {
+    let tenthsStr = Math.floor(millis / 100).toString()
+    if (!isRunning && time < 1000) {
+      tenthsStr += '<huns>' + (Math.floor(millis / 10) % 10) + '</huns>'
+    }
+    return minutes + sepHigh + seconds + '<tenths>.' + tenthsStr + '</tenths>'
   }
 
   return minutes + sepHigh + seconds
 }
 
-function prefixInteger(num: number, length: number) {
-  return (num / Math.pow(10, length)).toFixed(length).substr(2)
+function pad2(num: number): string {
+ return (num < 10 ? '0' : '') + num
 }

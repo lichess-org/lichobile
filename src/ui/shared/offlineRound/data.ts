@@ -1,5 +1,6 @@
 import session from '../../../session'
-import { oppositeColor } from '../../../utils'
+import { oppositeColor, animationDuration } from '../../../utils'
+import settings from '../../../settings'
 import i18n from '../../../i18n'
 import { standardFen } from '../../../lichess/variant'
 import { OfflineGameData } from '../../../lichess/interfaces/game'
@@ -58,9 +59,7 @@ export default function data(cfg: OfflineDataConfig): OfflineGameData {
       username: i18n(oppositeColor(confColor))
     },
     pref: {
-      animationDuration: 300,
-      highlight: true,
-      destination: true,
+      animationDuration: animationDuration(settings.game.animations()),
       centerPiece: cfg.pref && cfg.pref.centerPiece || false
     },
     steps: [],

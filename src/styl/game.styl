@@ -257,7 +257,7 @@
 
 .clock
   display flex
-  align-items center
+  align-items baseline
   transform translateZ(0)
   font-family 'Roboto'
   text-align right
@@ -265,12 +265,10 @@
   padding 1vmax 2vmin
   color textDarkBg
   background-color #262626
-  > seph
-    opacity 0.7
-  > sepl
-    opacity 0.15
-  > tens
+  > tenths
     font-size 0.8em
+    > huns
+      font-size 0.8em
   &.running
     background-color darkGreen
     color #fff
@@ -373,7 +371,8 @@
       > span
         margin-right 5px
     &.on
-      background-color darken(#fff, 15%)
+      background-color darken(green, 15%)
+      color #fff
   .negotiation, .force_resign_zone, .claim_draw_zone
     background-color lighten(modalDarkBg, 10%)
     text-align center
@@ -570,7 +569,8 @@
   .player_controls
     button
       &.on
-        background-color darken(#fff, 15%)
+        background-color green
+        color #fff
     .negotiation, .force_resign_zone, .claim_draw_zone
       background-color selectBg
       button

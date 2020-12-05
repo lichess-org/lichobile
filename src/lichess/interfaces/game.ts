@@ -16,15 +16,31 @@ export interface GameData {
   possibleDrops?: PossibleDrops
   userTV?: string
   tv?: string
-  readonly pref?: any
   bookmarked?: boolean
   readonly takebackable?: boolean
+}
+
+export interface OnlinePref {
+  animationDuration: number
+  autoQueen: 1 | 2 | 3
+  clockSound?: boolean
+  clockTenths: 0 | 1 | 2
+  confirmResign?: boolean
+  enablePremove?: boolean
+  moveEvent: 0 | 1 | 2
+  replay: 0 | 1 | 2
+  rookCastle?: boolean
+  showCaptured?: boolean
+  submitMove?: boolean
+  highlight?: boolean
+  destination?: boolean
 }
 
 export interface OnlineGameData extends GameData {
   readonly player: OnlinePlayer
   readonly game: OnlineGame
   readonly orientation: Color
+  readonly pref: OnlinePref
   readonly takebackable: boolean
   watchers?: GameWatchers
   readonly url: {
@@ -39,6 +55,10 @@ export function isOnlineGameData(d: GameData): d is OnlineGameData {
 
 export interface OfflineGameData extends GameData {
   readonly offlineClock?: ClockState
+  readonly pref: {
+    animationDuration: number
+    centerPiece?: boolean
+  }
 }
 
 export type GameSource = 'lobby' | 'pool' | 'friend' | 'ai' | 'api' | 'tournament' | 'position' | 'import' | 'offline'

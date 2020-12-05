@@ -10,6 +10,12 @@ function renderBody() {
   return [
     h('ul.native_scroller.page.settings_list.game', [
       h('li.list_item.nav', {
+        oncreate: helper.ontapY(() => router.set('/account/preferences/game-display'))
+      }, i18n('gameDisplay')),
+      h('li.list_item.nav', {
+        oncreate: helper.ontapY(() => router.set('/account/preferences/clock'))
+      }, i18n('clock')),
+      h('li.list_item.nav', {
         oncreate: helper.ontapY(() => router.set('/account/preferences/game-behavior'))
       }, i18n('gameBehavior')),
       h('li.list_item.nav', {

@@ -1,4 +1,4 @@
-import { Game, Player, ClockData, CorrespondenceClockData } from './game'
+import { Game, Player, ClockData, CorrespondenceClockData, OnlinePref } from './game'
 import { Tree } from '../../ui/shared/tree'
 
 export interface AnalyseData {
@@ -28,6 +28,7 @@ export interface AnalyseData {
 }
 
 export interface OnlineAnalyseData extends AnalyseData {
+  readonly pref: OnlinePref
   readonly url: {
     readonly round: string
     readonly socket: string

@@ -1,4 +1,4 @@
-import { GameData } from '../../../../lichess/interfaces/game'
+import { OnlineGameData } from '../../../../lichess/interfaces/game'
 import * as gameApi from '../../../../lichess/game'
 import sound from '../../../../sound'
 import { formatClockTime } from './clockView'
@@ -10,6 +10,7 @@ export type Millis = number
 interface ClockOpts {
   onFlag(): void
   soundColor: Color | null
+  showTenths: 0 | 1 | 2
 }
 
 interface Times {
@@ -30,6 +31,9 @@ interface EmergSound {
 }
 
 export default class ClockCtrl {
+  public showTenths: (millis: Millis) => boolean
+
+  private tickTimeoutID?: number
 
   emergSound: EmergSound = {
     play: sound.lowtime,
@@ -49,24 +53,33 @@ export default class ClockCtrl {
     black: null
   } as ColorMap<HTMLElement | null>
 
-  constructor(d: GameData, public opts: ClockOpts) {
+  constructor(d: OnlineGameData, public opts: ClockOpts) {
     const cdata = d.clock!
+
+    if (opts.showTenths === 0) this.showTenths = () => false
+    else {
+      const cutoff = opts.showTenths === 1 ? 10000 : 3600000
+      this.showTenths = (time) => time < cutoff
+    }
 
     this.emergMs = 1000 * Math.min(60, Math.max(10, cdata.initial * .125))
 
     this.setClock(d, cdata.white, cdata.black)
   }
 
-  setClock = (d: GameData, white: Seconds, black: Seconds, delay: Centis = 0) => {
+  setClock = (d: OnlineGameData, white: Seconds, black: Seconds, delay: Centis = 0) => {
     const isClockRunning = gameApi.playable(d) &&
-           ((d.game.turns - d.game.startedAtTurn) > 1 || d.clock!.running)
+           (gameApi.playedTurns(d) > 1 || d.clock!.running)
+    const delayMs = delay * 10
 
     this.times = {
       white: white * 1000,
       black: black * 1000,
       activeColor: isClockRunning ? d.game.player : undefined,
-      lastUpdate: performance.now() + delay * 10
+      lastUpdate: performance.now() + delayMs
     }
+
+    if (isClockRunning) this.scheduleTick(this.times[d.game.player], delayMs)
   }
 
   addTime = (color: Color, time: Centis): void => {
@@ -82,14 +95,46 @@ export default class ClockCtrl {
     }
   }
 
-  tick = (): void => {
+  updateElement(color: Color, millis: Millis) {
+    const el = this.elements[color]
+    if (el) {
+      const showTenths = this.showTenths(millis)
+      const formatted = formatClockTime(millis, showTenths, this.times.activeColor === color)
+      if (showTenths) {
+        el.innerHTML = formatted
+      } else {
+        el.textContent = formatted
+      }
+      if (millis < this.emergMs) el.classList.add('emerg')
+      else el.classList.remove('emerg')
+    }
+  }
+
+  millisOf = (color: Color): Millis => (this.times.activeColor === color ?
+     Math.max(0, this.times[color] - this.elapsed()) : this.times[color]
+  )
+
+  isRunning = () => this.times.activeColor !== undefined
+
+  private scheduleTick = (time: Millis, extraDelay: Millis) => {
+    if (this.tickTimeoutID !== undefined) clearTimeout(this.tickTimeoutID)
+    this.tickTimeoutID = setTimeout(
+      this.tick,
+      time % (this.showTenths(time) ? 100 : 500) + 1 + extraDelay)
+  }
+
+  // Should only be invoked by scheduleTick.
+  private tick = (): void => {
+    this.tickTimeoutID = undefined
+
     const color = this.times.activeColor
     if (!color) return
 
     const now = performance.now()
-    const millis = this.times[color] - this.elapsed(now)
+    const millis = Math.max(0, this.times[color] - this.elapsed(now))
 
-    if (millis <= 0) this.opts.onFlag()
+    this.scheduleTick(millis, 0)
+    if (millis === 0) this.opts.onFlag()
     else this.updateElement(color, millis)
 
     if (this.opts.soundColor === color) {
@@ -105,20 +150,5 @@ export default class ClockCtrl {
     }
   }
 
-  updateElement(color: Color, millis: Millis) {
-    const el = this.elements[color]
-    if (el) {
-      el.textContent = formatClockTime(millis, this.times.activeColor === color)
-      if (millis < this.emergMs) el.classList.add('emerg')
-      else el.classList.remove('emerg')
-    }
-  }
-
-  elapsed = (now = performance.now()) => Math.max(0, now - this.times.lastUpdate)
-
-  millisOf = (color: Color): Millis => (this.times.activeColor === color ?
-     Math.max(0, this.times[color] - this.elapsed()) : this.times[color]
-  )
-
-  isRunning = () => this.times.activeColor !== undefined
+  private elapsed = (now = performance.now()) => Math.max(0, now - this.times.lastUpdate)
 }

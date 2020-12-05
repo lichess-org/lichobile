@@ -316,3 +316,20 @@ export function prop<A>(initialValue: PropParam<A>): Prop<A> {
     return value
   }
 }
+
+export function animationDuration(pref: boolean): number {
+  return pref ? 250 : 0
+  // const base = 250
+  // switch (pref) {
+  //   case 0:
+  //     return 0
+  //   case 1:
+  //     return base * 0.5
+  //   case 2:
+  //     return base
+  //   case 3:
+  //     return base * 2
+  //   default:
+  //     return base
+  // }
+}

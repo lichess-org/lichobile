@@ -154,8 +154,20 @@ export default {
         })
       })
 
+      router.add('account/preferences/game-display', ({ params }) => {
+        import('./ui/user/account/gameDisplay').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
       router.add('account/preferences/game-behavior', ({ params }) => {
         import('./ui/user/account/gameBehavior').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('account/preferences/clock', ({ params }) => {
+        import('./ui/user/account/clock').then(m => {
           onRouteMatch(m.default, params)
         })
       })
@@ -234,6 +246,12 @@ export default {
 
       router.add('settings/gameDisplay', ({ params }) => {
         import('./ui/settings/gameDisplay').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
+      router.add('settings/clock', ({ params }) => {
+        import('./ui/settings/clock').then(m => {
           onRouteMatch(m.default, params)
         })
       })

@@ -1,12 +1,18 @@
 .settings_list
   flex-grow 1
+  &.multiChoices
+    .list_item
+      border-bottom none
+      margin-bottom 1rem
   .explanation
     padding 15px
   .list_item
-    &.selected
-      background-color lighten(bgdark, 5%)
     > .fa-check
       margin-left 1em
+    label
+      font-family 'Roboto'
+      font-weight 300
+      font-size 1.1em
 
 .app_version
   flex-grow 0
@@ -20,7 +26,7 @@
   input.radio:empty
     display none
   input.radio:checked + label
-    background-color lighten(bgdark, 5%)
+    background-color lighten(bgdarkPage, 5%)
   input.radio:checked + label:after
     display inline-block
     font normal normal normal 14px/1 FontAwesome
@@ -154,129 +160,105 @@
 
 .list_item.piece_theme
   line-height 60px
-  > label
-    background-repeat no-repeat
-    background-position right 10px center
-    background-size 60px 60px
-    @media only screen and (min-width 600px)
-      background-position right 10px center, right 70px center, right 130px center, right 190px center, right 250px center, right 310px center;
+  background-repeat no-repeat
+  background-position right 10px center
+  background-size 60px 60px
+  text-transform capitalize
+  @media only screen and (min-width 600px)
+    background-position right 10px center, right 70px center, right 130px center, right 190px center, right 250px center, right 310px center;
   &.merida
-    > label
-      background-image url('../../images/pieces/merida/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/merida/wP.svg'),url('../../images/pieces/merida/wN.svg'),url('../../images/pieces/merida/wB.svg'),url('../../images/pieces/merida/wR.svg'),url('../../images/pieces/merida/wQ.svg'),url('../../images/pieces/merida/wK.svg')
+    background-image url('../../images/pieces/merida/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/merida/wP.svg'),url('../../images/pieces/merida/wN.svg'),url('../../images/pieces/merida/wB.svg'),url('../../images/pieces/merida/wR.svg'),url('../../images/pieces/merida/wQ.svg'),url('../../images/pieces/merida/wK.svg')
   &.cburnett
-    > label
-      background-image url('../../images/pieces/cburnett/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/cburnett/wP.svg'),url('../../images/pieces/cburnett/wN.svg'),url('../../images/pieces/cburnett/wB.svg'),url('../../images/pieces/cburnett/wR.svg'),url('../../images/pieces/cburnett/wQ.svg'),url('../../images/pieces/cburnett/wK.svg')
+    background-image url('../../images/pieces/cburnett/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/cburnett/wP.svg'),url('../../images/pieces/cburnett/wN.svg'),url('../../images/pieces/cburnett/wB.svg'),url('../../images/pieces/cburnett/wR.svg'),url('../../images/pieces/cburnett/wQ.svg'),url('../../images/pieces/cburnett/wK.svg')
   &.pirouetti
-    > label
-      background-image url('../../images/pieces/pirouetti/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/pirouetti/wP.svg'),url('../../images/pieces/pirouetti/wN.svg'),url('../../images/pieces/pirouetti/wB.svg'),url('../../images/pieces/pirouetti/wR.svg'),url('../../images/pieces/pirouetti/wQ.svg'),url('../../images/pieces/pirouetti/wK.svg')
+    background-image url('../../images/pieces/pirouetti/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/pirouetti/wP.svg'),url('../../images/pieces/pirouetti/wN.svg'),url('../../images/pieces/pirouetti/wB.svg'),url('../../images/pieces/pirouetti/wR.svg'),url('../../images/pieces/pirouetti/wQ.svg'),url('../../images/pieces/pirouetti/wK.svg')
   &.alpha
-    > label
-      background-image url('../../images/pieces/alpha/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/alpha/wP.svg'),url('../../images/pieces/alpha/wN.svg'),url('../../images/pieces/alpha/wB.svg'),url('../../images/pieces/alpha/wR.svg'),url('../../images/pieces/alpha/wQ.svg'),url('../../images/pieces/alpha/wK.svg')
+    background-image url('../../images/pieces/alpha/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/alpha/wP.svg'),url('../../images/pieces/alpha/wN.svg'),url('../../images/pieces/alpha/wB.svg'),url('../../images/pieces/alpha/wR.svg'),url('../../images/pieces/alpha/wQ.svg'),url('../../images/pieces/alpha/wK.svg')
   &.spatial
-    > label
-      background-image url('../../images/pieces/spatial/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/spatial/wP.svg'),url('../../images/pieces/spatial/wN.svg'),url('../../images/pieces/spatial/wB.svg'),url('../../images/pieces/spatial/wR.svg'),url('../../images/pieces/spatial/wQ.svg'),url('../../images/pieces/spatial/wK.svg')
+    background-image url('../../images/pieces/spatial/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/spatial/wP.svg'),url('../../images/pieces/spatial/wN.svg'),url('../../images/pieces/spatial/wB.svg'),url('../../images/pieces/spatial/wR.svg'),url('../../images/pieces/spatial/wQ.svg'),url('../../images/pieces/spatial/wK.svg')
   &.reilly
-    > label
-      background-image url('../../images/pieces/reilly/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/reilly/wP.svg'),url('../../images/pieces/reilly/wN.svg'),url('../../images/pieces/reilly/wB.svg'),url('../../images/pieces/reilly/wR.svg'),url('../../images/pieces/reilly/wQ.svg'),url('../../images/pieces/reilly/wK.svg')
+    background-image url('../../images/pieces/reilly/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/reilly/wP.svg'),url('../../images/pieces/reilly/wN.svg'),url('../../images/pieces/reilly/wB.svg'),url('../../images/pieces/reilly/wR.svg'),url('../../images/pieces/reilly/wQ.svg'),url('../../images/pieces/reilly/wK.svg')
   &.companion
-    > label
-      background-image url('../../images/pieces/companion/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/companion/wP.svg'),url('../../images/pieces/companion/wN.svg'),url('../../images/pieces/companion/wB.svg'),url('../../images/pieces/companion/wR.svg'),url('../../images/pieces/companion/wQ.svg'),url('../../images/pieces/companion/wK.svg')
+    background-image url('../../images/pieces/companion/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/companion/wP.svg'),url('../../images/pieces/companion/wN.svg'),url('../../images/pieces/companion/wB.svg'),url('../../images/pieces/companion/wR.svg'),url('../../images/pieces/companion/wQ.svg'),url('../../images/pieces/companion/wK.svg')
   &.kosal
-    > label
-      background-image url('../../images/pieces/kosal/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/kosal/wP.svg'),url('../../images/pieces/kosal/wN.svg'),url('../../images/pieces/kosal/wB.svg'),url('../../images/pieces/kosal/wR.svg'),url('../../images/pieces/kosal/wQ.svg'),url('../../images/pieces/kosal/wK.svg')
+    background-image url('../../images/pieces/kosal/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/kosal/wP.svg'),url('../../images/pieces/kosal/wN.svg'),url('../../images/pieces/kosal/wB.svg'),url('../../images/pieces/kosal/wR.svg'),url('../../images/pieces/kosal/wQ.svg'),url('../../images/pieces/kosal/wK.svg')
   &.leipzig
-    > label
-      background-image url('../../images/pieces/leipzig/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/leipzig/wP.svg'),url('../../images/pieces/leipzig/wN.svg'),url('../../images/pieces/leipzig/wB.svg'),url('../../images/pieces/leipzig/wR.svg'),url('../../images/pieces/leipzig/wQ.svg'),url('../../images/pieces/leipzig/wK.svg')
+    background-image url('../../images/pieces/leipzig/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/leipzig/wP.svg'),url('../../images/pieces/leipzig/wN.svg'),url('../../images/pieces/leipzig/wB.svg'),url('../../images/pieces/leipzig/wR.svg'),url('../../images/pieces/leipzig/wQ.svg'),url('../../images/pieces/leipzig/wK.svg')
   &.fantasy
-    > label
-      background-image url('../../images/pieces/fantasy/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/fantasy/wP.svg'),url('../../images/pieces/fantasy/wN.svg'),url('../../images/pieces/fantasy/wB.svg'),url('../../images/pieces/fantasy/wR.svg'),url('../../images/pieces/fantasy/wQ.svg'),url('../../images/pieces/fantasy/wK.svg')
+    background-image url('../../images/pieces/fantasy/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/fantasy/wP.svg'),url('../../images/pieces/fantasy/wN.svg'),url('../../images/pieces/fantasy/wB.svg'),url('../../images/pieces/fantasy/wR.svg'),url('../../images/pieces/fantasy/wQ.svg'),url('../../images/pieces/fantasy/wK.svg')
   &.shapes
-    > label
-      background-image url('../../images/pieces/shapes/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/shapes/wP.svg'),url('../../images/pieces/shapes/wN.svg'),url('../../images/pieces/shapes/wB.svg'),url('../../images/pieces/shapes/wR.svg'),url('../../images/pieces/shapes/wQ.svg'),url('../../images/pieces/shapes/wK.svg')
+    background-image url('../../images/pieces/shapes/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/shapes/wP.svg'),url('../../images/pieces/shapes/wN.svg'),url('../../images/pieces/shapes/wB.svg'),url('../../images/pieces/shapes/wR.svg'),url('../../images/pieces/shapes/wQ.svg'),url('../../images/pieces/shapes/wK.svg')
   &.letter
-    > label
-      background-image url('../../images/pieces/letter/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/letter/wP.svg'),url('../../images/pieces/letter/wN.svg'),url('../../images/pieces/letter/wB.svg'),url('../../images/pieces/letter/wR.svg'),url('../../images/pieces/letter/wQ.svg'),url('../../images/pieces/letter/wK.svg')
+    background-image url('../../images/pieces/letter/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/letter/wP.svg'),url('../../images/pieces/letter/wN.svg'),url('../../images/pieces/letter/wB.svg'),url('../../images/pieces/letter/wR.svg'),url('../../images/pieces/letter/wQ.svg'),url('../../images/pieces/letter/wK.svg')
   &.chessnut
-    > label
-      background-image url('../../images/pieces/chessnut/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/chessnut/wP.svg'),url('../../images/pieces/chessnut/wN.svg'),url('../../images/pieces/chessnut/wB.svg'),url('../../images/pieces/chessnut/wR.svg'),url('../../images/pieces/chessnut/wQ.svg'),url('../../images/pieces/chessnut/wK.svg')
+    background-image url('../../images/pieces/chessnut/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/chessnut/wP.svg'),url('../../images/pieces/chessnut/wN.svg'),url('../../images/pieces/chessnut/wB.svg'),url('../../images/pieces/chessnut/wR.svg'),url('../../images/pieces/chessnut/wQ.svg'),url('../../images/pieces/chessnut/wK.svg')
   &.chess7
-    > label
-      background-image url('../../images/pieces/chess7/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/chess7/wP.svg'),url('../../images/pieces/chess7/wN.svg'),url('../../images/pieces/chess7/wB.svg'),url('../../images/pieces/chess7/wR.svg'),url('../../images/pieces/chess7/wQ.svg'),url('../../images/pieces/chess7/wK.svg')
+    background-image url('../../images/pieces/chess7/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/chess7/wP.svg'),url('../../images/pieces/chess7/wN.svg'),url('../../images/pieces/chess7/wB.svg'),url('../../images/pieces/chess7/wR.svg'),url('../../images/pieces/chess7/wQ.svg'),url('../../images/pieces/chess7/wK.svg')
   &.riohacha
-    > label
-      background-image url('../../images/pieces/riohacha/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/riohacha/wP.svg'),url('../../images/pieces/riohacha/wN.svg'),url('../../images/pieces/riohacha/wB.svg'),url('../../images/pieces/riohacha/wR.svg'),url('../../images/pieces/riohacha/wQ.svg'),url('../../images/pieces/riohacha/wK.svg')
+    background-image url('../../images/pieces/riohacha/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/riohacha/wP.svg'),url('../../images/pieces/riohacha/wN.svg'),url('../../images/pieces/riohacha/wB.svg'),url('../../images/pieces/riohacha/wR.svg'),url('../../images/pieces/riohacha/wQ.svg'),url('../../images/pieces/riohacha/wK.svg')
   &.maestro
-    > label
-      background-image url('../../images/pieces/maestro/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/maestro/wP.svg'),url('../../images/pieces/maestro/wN.svg'),url('../../images/pieces/maestro/wB.svg'),url('../../images/pieces/maestro/wR.svg'),url('../../images/pieces/maestro/wQ.svg'),url('../../images/pieces/maestro/wK.svg')
+    background-image url('../../images/pieces/maestro/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/maestro/wP.svg'),url('../../images/pieces/maestro/wN.svg'),url('../../images/pieces/maestro/wB.svg'),url('../../images/pieces/maestro/wR.svg'),url('../../images/pieces/maestro/wQ.svg'),url('../../images/pieces/maestro/wK.svg')
   &.fresca
-    > label
-      background-image url('../../images/pieces/fresca/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/fresca/wP.svg'),url('../../images/pieces/fresca/wN.svg'),url('../../images/pieces/fresca/wB.svg'),url('../../images/pieces/fresca/wR.svg'),url('../../images/pieces/fresca/wQ.svg'),url('../../images/pieces/fresca/wK.svg')
+    background-image url('../../images/pieces/fresca/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/fresca/wP.svg'),url('../../images/pieces/fresca/wN.svg'),url('../../images/pieces/fresca/wB.svg'),url('../../images/pieces/fresca/wR.svg'),url('../../images/pieces/fresca/wQ.svg'),url('../../images/pieces/fresca/wK.svg')
   &.cardinal
-    > label
-      background-image url('../../images/pieces/cardinal/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/cardinal/wP.svg'),url('../../images/pieces/cardinal/wN.svg'),url('../../images/pieces/cardinal/wB.svg'),url('../../images/pieces/cardinal/wR.svg'),url('../../images/pieces/cardinal/wQ.svg'),url('../../images/pieces/cardinal/wK.svg')
+    background-image url('../../images/pieces/cardinal/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/cardinal/wP.svg'),url('../../images/pieces/cardinal/wN.svg'),url('../../images/pieces/cardinal/wB.svg'),url('../../images/pieces/cardinal/wR.svg'),url('../../images/pieces/cardinal/wQ.svg'),url('../../images/pieces/cardinal/wK.svg')
   &.tatiana
-    > label
-      background-image url('../../images/pieces/tatiana/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/tatiana/wP.svg'),url('../../images/pieces/tatiana/wN.svg'),url('../../images/pieces/tatiana/wB.svg'),url('../../images/pieces/tatiana/wR.svg'),url('../../images/pieces/tatiana/wQ.svg'),url('../../images/pieces/tatiana/wK.svg')
+    background-image url('../../images/pieces/tatiana/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/tatiana/wP.svg'),url('../../images/pieces/tatiana/wN.svg'),url('../../images/pieces/tatiana/wB.svg'),url('../../images/pieces/tatiana/wR.svg'),url('../../images/pieces/tatiana/wQ.svg'),url('../../images/pieces/tatiana/wK.svg')
   &.staunty
-    > label
-      background-image url('../../images/pieces/staunty/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/staunty/wP.svg'),url('../../images/pieces/staunty/wN.svg'),url('../../images/pieces/staunty/wB.svg'),url('../../images/pieces/staunty/wR.svg'),url('../../images/pieces/staunty/wQ.svg'),url('../../images/pieces/staunty/wK.svg')
+    background-image url('../../images/pieces/staunty/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/staunty/wP.svg'),url('../../images/pieces/staunty/wN.svg'),url('../../images/pieces/staunty/wB.svg'),url('../../images/pieces/staunty/wR.svg'),url('../../images/pieces/staunty/wQ.svg'),url('../../images/pieces/staunty/wK.svg')
   &.governor
-    > label
-      background-image url('../../images/pieces/governor/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/governor/wP.svg'),url('../../images/pieces/governor/wN.svg'),url('../../images/pieces/governor/wB.svg'),url('../../images/pieces/governor/wR.svg'),url('../../images/pieces/governor/wQ.svg'),url('../../images/pieces/governor/wK.svg')
+    background-image url('../../images/pieces/governor/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/governor/wP.svg'),url('../../images/pieces/governor/wN.svg'),url('../../images/pieces/governor/wB.svg'),url('../../images/pieces/governor/wR.svg'),url('../../images/pieces/governor/wQ.svg'),url('../../images/pieces/governor/wK.svg')
   &.symmetric
-    > label
-      background-image url('../../images/pieces/symmetric/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/symmetric/wP.svg'),url('../../images/pieces/symmetric/wN.svg'),url('../../images/pieces/symmetric/wB.svg'),url('../../images/pieces/symmetric/wR.svg'),url('../../images/pieces/symmetric/wQ.svg'),url('../../images/pieces/symmetric/wK.svg')
+    background-image url('../../images/pieces/symmetric/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/symmetric/wP.svg'),url('../../images/pieces/symmetric/wN.svg'),url('../../images/pieces/symmetric/wB.svg'),url('../../images/pieces/symmetric/wR.svg'),url('../../images/pieces/symmetric/wQ.svg'),url('../../images/pieces/symmetric/wK.svg')
   &.dubrovny
-    > label
-      background-image url('../../images/pieces/dubrovny/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/dubrovny/wP.svg'),url('../../images/pieces/dubrovny/wN.svg'),url('../../images/pieces/dubrovny/wB.svg'),url('../../images/pieces/dubrovny/wR.svg'),url('../../images/pieces/dubrovny/wQ.svg'),url('../../images/pieces/dubrovny/wK.svg')
+    background-image url('../../images/pieces/dubrovny/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/dubrovny/wP.svg'),url('../../images/pieces/dubrovny/wN.svg'),url('../../images/pieces/dubrovny/wB.svg'),url('../../images/pieces/dubrovny/wR.svg'),url('../../images/pieces/dubrovny/wQ.svg'),url('../../images/pieces/dubrovny/wK.svg')
   &.pixel
-    > label
-      background-image url('../../images/pieces/pixel/wN.svg')
-      @media only screen and (min-width 600px)
-        background-image url('../../images/pieces/pixel/wP.svg'),url('../../images/pieces/pixel/wN.svg'),url('../../images/pieces/pixel/wB.svg'),url('../../images/pieces/pixel/wR.svg'),url('../../images/pieces/pixel/wQ.svg'),url('../../images/pieces/pixel/wK.svg')
+    background-image url('../../images/pieces/pixel/wN.svg')
+    @media only screen and (min-width 600px)
+      background-image url('../../images/pieces/pixel/wP.svg'),url('../../images/pieces/pixel/wN.svg'),url('../../images/pieces/pixel/wB.svg'),url('../../images/pieces/pixel/wR.svg'),url('../../images/pieces/pixel/wQ.svg'),url('../../images/pieces/pixel/wK.svg')

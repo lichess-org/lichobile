@@ -18,7 +18,7 @@ export default {
     const header = dropShadowHeader(null, backButton(i18n('about')))
     return layout.free(
       header,
-      <div class="aboutBody native_scroller">
+      <div class="aboutBody native_scroller page">
         <p>lichess.org is a free, open-source chess server powered by volunteers and donations.</p>
 
         <p>In 2010, Thibault Duplessis began work on Lichess as a hobby project. The site was simple in the beginning, not even checking to see if moves were legal. He made the site {externalLink('open-source', 'https://www.youtube.com/watch?v=Tyd0FO0tko8')}, which means anyone is free to read the source code and make contributions.  Gradually, the site improved and collected users as an enthusiastic volunteer staff assembled to help Thibault build and maintain the site.</p>

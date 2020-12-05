@@ -7,6 +7,13 @@ body
   overflow hidden
   padding-top: env(safe-area-inset-top);
 
+#free_content
+  background-color bgdarkPage
+  .list_item
+    border-color lighten(bgdarkPage, 8%)
+    &.selected
+      background-color lighten(bgdarkPage, 5%)
+
 .view-container
   position absolute
   overflow hidden

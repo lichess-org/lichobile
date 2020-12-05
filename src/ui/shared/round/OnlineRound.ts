@@ -50,6 +50,7 @@ interface VM {
   tClockEl: HTMLElement | null
   offlineWatcher: boolean
   clockPosition: 'right' | 'left'
+  showCaptured: boolean
   moveList: boolean
 }
 
@@ -76,7 +77,6 @@ export default class OnlineRound implements OnlineRoundInterface {
   private lastMoveMillis?: number
   private lastDrawOfferAtPly!: number
   private clockIntervId!: number
-  private clockTimeoutId!: number
   private blur: boolean
 
   private readonly playableOnInit: boolean
@@ -120,7 +120,8 @@ export default class OnlineRound implements OnlineRoundInterface {
         }
       },
       clockPosition: settings.game.clockPosition() || 'right',
-      moveList: settings.game.moveList(),
+      showCaptured: !!this.data.pref.showCaptured,
+      moveList: this.replayEnabledByPref(),
       showingActions: false,
       showingShareActions: false,
       confirmResign: false,
@@ -167,16 +168,9 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     this.clock = this.data.clock ? new ClockCtrl(this.data, {
       onFlag: this.outoftime,
-      soundColor: this.data.player.spectator ? null : this.data.player.color
+      soundColor: (this.data.player.spectator || !this.data.pref.clockSound) ? null : this.data.player.color,
+      showTenths: this.data.pref.clockTenths,
     }) : null
-
-    if (this.clock) {
-      const tickNow = () => {
-        this.clock && this.clock.tick()
-        if (gameApi.playable(this.data)) this.clockTimeoutId = setTimeout(tickNow, 100)
-      }
-      this.clockTimeoutId = setTimeout(tickNow, 100)
-    }
 
     this.makeCorrespondenceClock()
     if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick, 6000)
@@ -188,8 +182,15 @@ export default class OnlineRound implements OnlineRoundInterface {
     redraw()
   }
 
-  public isZen = () => this.zenModeEnabled && !this.data.player.spectator &&
-    !(gameStatusApi.finished(this.data) || gameStatusApi.aborted(this.data))
+  public zenAvailable = () => !this.data.player.spectator &&
+    gameApi.playable(this.data)
+
+  public isZen = () => this.zenAvailable() && this.zenModeEnabled
+
+  public toggleZenMode = () => {
+    this.zenModeEnabled = !this.zenModeEnabled
+    redraw()
+  }
 
   public goToAnalysis = () => {
     const d = this.data
@@ -659,9 +660,15 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public unload() {
-    clearTimeout(this.clockTimeoutId)
     clearInterval(this.clockIntervId)
     this.appStateListener.remove()
+  }
+
+  private replayEnabledByPref = (): boolean => {
+    const d = this.data
+    return d.pref.replay === 2 || (
+      d.pref.replay === 1 && (d.game.speed === 'classical' || d.game.speed === 'unlimited' || d.game.speed === 'correspondence')
+    )
   }
 
   private makeCorrespondenceClock() {

@@ -14,7 +14,7 @@ interface State {
   lang?: string | null
 }
 
-export const LangPrefScreen: Mithril.Component<{}, State> = {
+export default {
   oncreate: helper.viewSlideIn,
 
   oninit() {
@@ -73,6 +73,4 @@ export const LangPrefScreen: Mithril.Component<{}, State> = {
 
     return layout.free(header, renderBody())
   }
-}
-
-export default LangPrefScreen
+} as Mithril.Component<{}, State>

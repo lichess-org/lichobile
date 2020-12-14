@@ -54,6 +54,27 @@
       overflow hidden
       text-overflow ellipsis
 
+.analyse-tabContentTitle
+  font-family 'Roboto'
+  font-size: 1em;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  margin: 1.5em 0 3px 0;
+  display: table;
+  padding: 0 10px;
+  &:before, &:after
+    border-top: 1px solid #404040;
+    content: '';
+    display: table-cell;
+    position: relative;
+    top: .5em;
+    width: 45%;
+  &:before
+    right 8px
+  &:after
+    left 8px
+
 .tabs-navigation.analyse
   background inherit
   flex 0 0 auto
@@ -95,6 +116,12 @@
 
 .analyse-chart
   height 150px
+
+.analyse-autoplay
+  font-size 0.9em
+  display flex
+  width 100%
+  justify-content space-evenly
 
 .analyse_actions_bar
   flex 0 0 40px
@@ -256,6 +283,7 @@ comment
   align-items center
   padding 2em 1em
   width 100%
+  font-size 0.9rem
   > .gameInfos
     font-size 0.9em
   > .status
@@ -447,6 +475,10 @@ comment
     border-bottom 1px solid borderLightGray
     background #fff
 
+  .analyse-tabContentTitle
+    &:before, &:after
+      border-color: themeBgLightBorder
+
   inline
     color rgba(textLightBg, 0.8)
 
@@ -486,6 +518,10 @@ comment
 
 
 .view-container.transp
+
+  .analyse-tabContentTitle
+    &:before, &:after
+      border-color: transpWhite01
 
   .analyse-training_box.box
     background-color #f5f5f5

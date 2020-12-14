@@ -26,6 +26,7 @@ import continuePopup, { Controller as ContinuePopupController } from '../shared/
 import { NotesCtrl } from '../shared/round/notes'
 
 import * as util from './util'
+import { Autoplay } from './autoplay'
 import CevalCtrl from './ceval/CevalCtrl'
 import RetroCtrl, { IRetroCtrl } from './retrospect/RetroCtrl'
 import { make as makePractice, PracticeCtrl } from './practice/practiceCtrl'
@@ -49,6 +50,7 @@ export default class AnalyseCtrl {
   continuePopup: ContinuePopupController
   notes: NotesCtrl | null
   chessground!: Chessground
+  autoplay: Autoplay
   ceval: ICevalCtrl
   retro: IRetroCtrl | null
   practice: PracticeCtrl | null
@@ -113,6 +115,7 @@ export default class AnalyseCtrl {
     this.settings = analyseSettings.controller(this)
     this.menu = analyseMenu.controller(this)
     this.continuePopup = continuePopup.controller()
+    this.autoplay = new Autoplay(this)
 
     this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null
 
@@ -377,6 +380,7 @@ export default class AnalyseCtrl {
   }
 
   userJump = (path: Tree.Path, direction?: 'forward' | 'backward') => {
+    this.autoplay.stop()
     if (this.practice) {
       const prev = this.path
       this.practice.preUserJump(prev, path)
@@ -391,6 +395,19 @@ export default class AnalyseCtrl {
 
   jumpToIndex = (index: number) => {
     this.jumpToMain(index + 1 + (this.data.game.startedAtTurn || 0))
+  }
+
+  canGoForward = () => {
+    return this.node.children.length > 0
+  }
+
+  next = () => {
+    if (!this.canGoForward()) return false
+
+    const child = this.node.children[0]
+    if (child) this.userJump(this.path + child.id, 'forward')
+
+    return true
   }
 
   fastforward = () => {
@@ -540,19 +557,6 @@ export default class AnalyseCtrl {
       curFen: this.node.fen
     })
   }, 200)
-
-  private canGoForward() {
-    return this.node.children.length > 0
-  }
-
-  private next() {
-    if (!this.canGoForward()) return false
-
-    const child = this.node.children[0]
-    if (child) this.userJump(this.path + child.id, 'forward')
-
-    return true
-  }
 
   private prev() {
     this.userJump(treePath.init(this.path), 'backward')

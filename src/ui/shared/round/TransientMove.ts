@@ -24,7 +24,6 @@ export default class TransientMove {
   }
 
   expire = () => {
-    // fetchText('/statlog?e=roundTransientExpire', { method:'POST' })
     this.ctrl.reloadGameData()
   }
 }

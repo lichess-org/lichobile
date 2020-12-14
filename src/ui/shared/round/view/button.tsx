@@ -1,6 +1,5 @@
 import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
-import throttle from 'lodash-es/throttle'
 import { handleXhrError, hasNetwork } from '../../../../utils'
 import * as gameApi from '../../../../lichess/game'
 import session from '../../../../session'
@@ -20,7 +19,7 @@ export default {
     return condition(ctrl.data) && hasNetwork() ? h('button', {
       className: socketMsg,
       'data-icon': icon,
-      oncreate: helper.ontap(onTap ? onTap : () => { ctrl.socketIface.send(socketMsg) })
+      oncreate: helper.ontap(onTap ? onTap : () => { ctrl.socket.iface.send(socketMsg) })
     }, i18n(hint)) : null
   },
   bookmark(ctrl: OnlineRound) {
@@ -86,7 +85,7 @@ export default {
       <div className="negotiation">
         <div className="binary_choice_wrapper">
           <button className="binary_choice" data-icon="E"
-            oncreate={helper.ontap(() => { ctrl.socketIface.send('resign') })}
+            oncreate={helper.ontap(() => { ctrl.socket.iface.send('resign') })}
           >
             {i18n('resign')}
           </button>
@@ -105,10 +104,10 @@ export default {
         h('div.notice', i18n('opponentLeftChoices')),
         h('div.binary_choice_wrapper', [
           h('button.binary_choice.left', {
-            oncreate: helper.ontap(() => { ctrl.socketIface.send('resign-force') })
+            oncreate: helper.ontap(() => { ctrl.socket.iface.send('resign-force') })
           }, i18n('forceResignation')),
           h('button.binary_choice.right', {
-            oncreate: helper.ontap(() => { ctrl.socketIface.send('draw-force') })
+            oncreate: helper.ontap(() => { ctrl.socket.iface.send('draw-force') })
           }, i18n('forceDraw'))
         ])
       ]) : null
@@ -118,7 +117,7 @@ export default {
       h('div.notice', i18n('threefoldRepetition')),
       h.trust('&nbsp;'),
       h('button[data-icon=E]', {
-        oncreate: helper.ontap(() => { ctrl.socketIface.send('draw-claim') })
+        oncreate: helper.ontap(() => { ctrl.socket.iface.send('draw-claim') })
       }, i18n('claimADraw'))
     ]) : null
   },
@@ -161,10 +160,10 @@ export default {
       h('div.notice', i18n('yourOpponentOffersADraw')),
       h('div.binary_choice_wrapper', [
         h('button.binary_choice[data-icon=E]', {
-          oncreate: helper.ontap(() => { ctrl.socketIface.send('draw-yes') })
+          oncreate: helper.ontap(() => { ctrl.socket.iface.send('draw-yes') })
         }, i18n('accept')),
         h('button.binary_choice[data-icon=L]', {
-          oncreate: helper.ontap(() => { ctrl.socketIface.send('draw-no') })
+          oncreate: helper.ontap(() => { ctrl.socket.iface.send('draw-no') })
         }, i18n('decline'))
       ])
     ])
@@ -174,7 +173,7 @@ export default {
     if (ctrl.data.player.proposingTakeback) return h('div.negotiation', [
       h('div.notice', i18n('takebackPropositionSent')),
       h('button[data-icon=L]', {
-        oncreate: helper.ontap(() => { ctrl.socketIface.send('takeback-no') })
+        oncreate: helper.ontap(() => { ctrl.socket.iface.send('takeback-no') })
       }, i18n('cancel'))
     ])
     return null
@@ -184,10 +183,10 @@ export default {
       h('div.notice', i18n('yourOpponentProposesATakeback')),
       h('div.binary_choice_wrapper', [
         h('button.binary_choice[data-icon=E]', {
-          oncreate: helper.ontap(() => { ctrl.socketIface.send('takeback-yes') })
+          oncreate: helper.ontap(() => { ctrl.socket.iface.send('takeback-yes') })
         }, i18n('accept')),
         h('button.binary_choice[data-icon=L]', {
-          oncreate: helper.ontap(() => { ctrl.socketIface.send('takeback-no') })
+          oncreate: helper.ontap(() => { ctrl.socket.iface.send('takeback-no') })
         }, i18n('decline'))
       ])
     ])
@@ -232,10 +231,10 @@ export default {
         h('div.notice', i18n('yourOpponentWantsToPlayANewGameWithYou')),
         h('div.binary_choice_wrapper', [
           h('button.binary_choice[data-icon=E]', {
-            oncreate: helper.ontap(() => { ctrl.socketIface.send('rematch-yes') })
+            oncreate: helper.ontap(() => { ctrl.socket.iface.send('rematch-yes') })
           }, i18n('joinTheGame')),
           h('button.binary_choice[data-icon=L]', {
-            oncreate: helper.ontap(() => { ctrl.socketIface.send('rematch-no') })
+            oncreate: helper.ontap(() => { ctrl.socket.iface.send('rematch-no') })
           }, i18n('decline'))
         ])
       ])
@@ -244,19 +243,19 @@ export default {
         h('div.notice', i18n('rematchOfferSent')),
         h('div.notice', i18n('waitingForOpponent')),
         h('button[data-icon=L]', {
-          oncreate: helper.ontap(() => { ctrl.socketIface.send('rematch-no') })
+          oncreate: helper.ontap(() => { ctrl.socket.iface.send('rematch-no') })
         }, i18n('cancelRematchOffer'))
       ])
     } else {
       return h('button', {
-        oncreate: helper.ontap(() => { ctrl.socketIface.send('rematch-yes') }),
+        oncreate: helper.ontap(() => { ctrl.socket.iface.send('rematch-yes') }),
         disabled: !rematchable,
       }, [h('span.fa.fa-refresh'), i18n('rematch')])
     }
   },
   moretime(ctrl: OnlineRound) {
     if (gameApi.moretimeable(ctrl.data)) return h('button[data-icon=O]', {
-      oncreate: helper.ontap(throttle(() => { ctrl.socketIface.send('moretime') }, 600))
+      oncreate: helper.ontap(ctrl.socket.moreTime)
     }, plural('giveNbSeconds', 15))
     return null
   },

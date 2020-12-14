@@ -8,12 +8,12 @@ export default class ChallengeCtrl {
 
   public challenge: Challenge
 
-  private socketIface?: SocketIFace
+  private socket?: SocketIFace
   private pingTimeoutId!: number
 
   constructor(readonly data: ChallengeData) {
     this.challenge = data.challenge
-    this.socketIface = socket.createChallenge(data.challenge.id, data.socketVersion, this.onSocketOpen, {
+    this.socket = socket.createChallenge(data.challenge.id, data.socketVersion, this.onSocketOpen, {
       reload: this.reloadChallenge
     })
   }
@@ -82,7 +82,7 @@ export default class ChallengeCtrl {
   private pingNow = () => {
     clearTimeout(this.pingTimeoutId)
     this.pingTimeoutId = setTimeout(this.pingNow, 2000)
-    if (this.socketIface) this.socketIface.send('ping')
+    if (this.socket) this.socket.send('ping')
   }
 
   private onSocketOpen = () => {

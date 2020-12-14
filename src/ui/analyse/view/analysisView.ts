@@ -123,7 +123,7 @@ function renderStudyAnalysisRequest(ctrl: AnalyseCtrl) {
           spinner.getVdom('monochrome')
         ]) : h('button.fatButton', {
           oncreate: helper.ontapXY(() => {
-            ctrl.socketIface.send('requestAnalysis', ctrl.study!.data.chapter.id)
+            ctrl.socket.send('requestAnalysis', ctrl.study!.data.chapter.id)
             ctrl.analysisProgress = true
             redraw()
           })

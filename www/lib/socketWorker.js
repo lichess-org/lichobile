@@ -359,6 +359,10 @@ self.onmessage = function(msg) {
       if (socketInstance) postMessage({ topic: 'currentLag', payload: socketInstance.currentLag });
       else postMessage({ topic: 'currentLag', payload: null });
       break;
+    case 'getVersion':
+      if (socketInstance) postMessage({ topic: 'getVersion', payload: socketInstance.version });
+      else postMessage({ topic: 'getVersion', payload: null });
+      break;
     case 'deploy':
       socketInstance.deploy();
       break;

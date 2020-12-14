@@ -24,7 +24,7 @@ export default class HomeCtrl {
 
   public isScrolling: boolean = false
 
-  public socketIface?: SocketIFace
+  public socket?: SocketIFace
 
   public corresPool: ReadonlyArray<CorrespondenceSeek>
   public dailyPuzzle?: PuzzleData
@@ -70,7 +70,7 @@ export default class HomeCtrl {
   }
 
   public socketSend = <D>(t: string, d: D): void => {
-    if (this.socketIface) this.socketIface.send(t, d)
+    if (this.socket) this.socket.send(t, d)
   }
 
   public unload = () => {
@@ -80,7 +80,7 @@ export default class HomeCtrl {
 
   public init = () => {
     if (isForeground()) {
-      this.socketIface = socket.createLobby('homeLobby', this.reloadCorresPool, {
+      this.socket = socket.createLobby('homeLobby', this.reloadCorresPool, {
         redirect: socket.redirectToGame,
         reload_seeks: this.reloadCorresPool,
         resync: () => lobbyXhr().then(d => {

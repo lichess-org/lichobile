@@ -57,7 +57,7 @@ export default class AnalyseCtrl {
   evalCache: EvalCache
   study?: StudyCtrl
 
-  socketIface: SocketIFace
+  socket: SocketIFace
 
   // current tree state, cursor, and denormalized node lists
   path!: Tree.Path
@@ -158,7 +158,7 @@ export default class AnalyseCtrl {
     }
 
     if (this.study) {
-      this.socketIface = this.study.createSocket()
+      this.socket = this.study.createSocket()
     } else if (
       !this.data.analysis &&
       session.isConnected() &&
@@ -167,14 +167,14 @@ export default class AnalyseCtrl {
       this.data.url !== undefined &&
       this.data.player.version !== undefined
     ) {
-      this.socketIface = socket.createGame(
+      this.socket = socket.createGame(
         this.data.url.socket,
         this.data.player.version,
         socketHandler(this),
         this.data.url.round
       )
     } else {
-      this.socketIface = socket.createAnalysis(socketHandler(this))
+      this.socket = socket.createAnalysis(socketHandler(this))
     }
 
     this.evalCache = makeEvalCache({
@@ -182,7 +182,7 @@ export default class AnalyseCtrl {
       canGet: this.canEvalGet,
       getNode: () => this.node,
       receive: this.onCevalMsg,
-      socketIface: this.socketIface,
+      socketIface: this.socket,
     })
 
     this.updateBoard()
@@ -748,7 +748,7 @@ export default class AnalyseCtrl {
       this.tree.updateAt(this.path, (node: Tree.Node) => {
         // flag opening as null in any case to not request twice
         node.opening = null
-        this.socketIface.ask<{ opening: Opening, path: string }>('opening', 'opening', msg)
+        this.socket.ask<{ opening: Opening, path: string }>('opening', 'opening', msg)
         .then(d => {
           if (d.opening && d.path) {
             node.opening = d.opening

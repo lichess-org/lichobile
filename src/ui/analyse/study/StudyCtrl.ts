@@ -28,7 +28,7 @@ export default class StudyCtrl {
 
     if (data.features.chat && data.chat) {
       this.chat = new Chat(
-        rootCtrl.socketIface,
+        rootCtrl.socket,
         data.id,
         data.chat.lines,
         undefined,
@@ -55,7 +55,7 @@ export default class StudyCtrl {
   }
 
   public toggleLike = (): void => {
-    this.rootCtrl.socketIface.send('like', {
+    this.rootCtrl.socket.send('like', {
       liked: !this.data.liked
     })
   }

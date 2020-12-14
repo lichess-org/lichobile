@@ -513,6 +513,9 @@ export default {
   destroy() {
     tellWorker(worker, 'destroy')
   },
+  getVersion(): Promise<number | null> {
+    return askWorker(worker, { topic: 'getVersion' })
+  },
   getCurrentPing(): Promise<number> {
     return askWorker(worker, { topic: 'currentLag' })
   },

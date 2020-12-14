@@ -21,7 +21,7 @@ export class Chat {
   public lines: Array<ChatMsg>
 
   constructor(
-    readonly socketIface: SocketIFace,
+    readonly socket: SocketIFace,
     readonly id: string,
     lines: Array<ChatMsg>,
     readonly player: Player | undefined,
@@ -144,7 +144,7 @@ export function chatView(ctrl: Chat, header?: string) {
           ctrl.inputValue = ''
           ta.setAttribute('rows', '1')
           ta.style.paddingTop = '8px'
-          ctrl.socketIface.send('talk', msg)
+          ctrl.socket.send('talk', msg)
           const sendButton = document.getElementById('chat_send')
           if (sendButton) {
             sendButton.classList.add('disabled')

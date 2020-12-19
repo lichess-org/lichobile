@@ -538,6 +538,7 @@ export default class AnalyseCtrl {
   }
 
   unload = () => {
+    this.autoplay.stop()
     if (this.ceval) this.ceval.destroy()
   }
 

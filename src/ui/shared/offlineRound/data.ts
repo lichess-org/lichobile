@@ -51,6 +51,7 @@ export default function data(cfg: OfflineDataConfig): OfflineGameData {
         id: 20,
         name: 'created'
       },
+      speed: 'unlimited',
       createdAt: Date.now()
     },
     player,

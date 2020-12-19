@@ -93,9 +93,11 @@ function renderStatus(ctrl: AnalyseCtrl) {
 
 function autoplayButtons(ctrl: AnalyseCtrl) {
   const d = ctrl.data
+  const hasRealtime = d.game.speed !== 'correspondence' && d.game.moveCentis
+    && d.game.moveCentis.length !== 0
   const speeds = [
     ...baseSpeeds,
-    ...(d.game.speed !== 'correspondence' && d.game.moveCentis?.length !== 0 ? [realtimeSpeed] : []),
+    ...(hasRealtime ? [realtimeSpeed] : []),
     ...(d.analysis ? [cplSpeed] : [])
   ]
   return h('div.analyse-autoplay', speeds.map(speed => {

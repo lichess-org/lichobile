@@ -63,10 +63,8 @@ export class Autoplay {
   }
 
   stop(): void {
-    if (this.timeoutId) {
-      clearTimeout(this.timeoutId)
-      this.timeoutId = undefined
-    }
+    clearTimeout(this.timeoutId)
+    this.timeoutId = undefined
   }
 
   toggle(delay: AutoplayDelay): void {

@@ -436,7 +436,7 @@ function tvChannelSelector(ctrl: OnlineRound) {
         onchange(e: Event) {
           const val = (e.target as HTMLSelectElement).value
           settings.tv.channel(val)
-          ctrl.onTVChannelChange && ctrl.onTVChannelChange()
+          ctrl.onFeatured && ctrl.onFeatured()
           setTimeout(redraw, 10)
         }
       }, channels.map(v =>

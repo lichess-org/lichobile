@@ -1,5 +1,4 @@
 import h from 'mithril/hyperscript'
-import router from '../../router'
 import socket from '../../socket'
 import * as helper from '../helper'
 import * as sleepUtils from '../../utils/sleep'
@@ -21,12 +20,11 @@ const UserTv: Mithril.Component<Attrs, State> = {
     sleepUtils.keepAwake()
 
     const userId = vnode.attrs.id
-    const onRedirect = () => router.set(`/@/${userId}/tv`, true)
 
     tv(userId)
     .then(data => {
       data.userTV = userId
-      this.round = new OnlineRound(false, data.game.id, data, false, undefined, undefined, userId, onRedirect)
+      this.round = new OnlineRound(false, data.game.id, data, false, undefined, userId)
     })
     .catch(handleXhrError)
   },

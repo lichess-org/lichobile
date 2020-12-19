@@ -103,7 +103,10 @@ const defaultHandlers: MessageHandlers = {
   },
   deployPost() {
     tellWorker(worker, 'deploy')
-  }
+  },
+  resync() {
+    router.reload()
+  },
 }
 
 function handleFollowingOnline(data: string[], payload: FollowingOnlinePayload) {

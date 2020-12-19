@@ -10,7 +10,6 @@ import redraw from '../../../utils/redraw'
 import sound from '../../../sound'
 import vibrate from '../../../vibrate'
 import OnlineRound from './OnlineRound'
-import * as xhr from './roundXhr'
 
 export default class RoundSocket {
 
@@ -19,7 +18,6 @@ export default class RoundSocket {
   constructor (
     readonly ctrl: OnlineRound,
     onFeatured?: () => void,
-    onUserTVRedirect?: () => void
   ) {
 
     function reload(o: LichessMessageAny) {
@@ -80,21 +78,7 @@ export default class RoundSocket {
        redirect(e: string | RedirectObj) {
          socket.redirectToGame(e)
        },
-       // server tells client to reload at once game data
        reload,
-       // if client version is too old compared to server, the latter will send a
-       // resync event
-       resync() {
-         if (onUserTVRedirect) {
-           onUserTVRedirect()
-         } else {
-           xhr.reload(ctrl)
-           .then(data => {
-             socket.setVersion(data.player.version)
-             ctrl.onReload(data)
-           })
-         }
-       },
        endData(o: ApiEnd) {
          ctrl.endWithData(o)
          redraw()

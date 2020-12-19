@@ -55,22 +55,17 @@ interface VM {
 }
 
 export default class OnlineRound implements OnlineRoundInterface {
-  public id: string
   public data!: OnlineGameData
   public chessground: Chessground
   public clock: ClockCtrl | null
   public correspondenceClock!: CorresClockCtrl
   public chat: Chat | null
   public notes: NotesCtrl | null
-  public onFeatured?: () => void
-  public onTVChannelChange?: () => void
-  public onUserTVRedirect?: () => void
   public vm: VM
   public title!: Mithril.Children
   public subTitle!: string
   public tv!: string
   public score?: Score
-  public readonly goingBack: boolean
   public socket: RoundSocket
 
   private zenModeEnabled: boolean
@@ -85,22 +80,15 @@ export default class OnlineRound implements OnlineRoundInterface {
   private appStateListener: PluginListenerHandle
 
   public constructor(
-    goingBack: boolean,
-    id: string,
+    readonly goingBack: boolean,
+    readonly id: string,
     cfg: OnlineGameData,
     flipped: boolean = false,
-    onFeatured?: () => void,
-    onTVChannelChange?: () => void,
+    readonly onFeatured?: () => void,
     userTv?: string,
-    onUserTVRedirect?: () => void
   ) {
-    this.goingBack = goingBack
-    this.id = id
     this.setData(cfg)
-    this.onTVChannelChange = onTVChannelChange
-    this.onFeatured = onFeatured
     this.data.userTV = userTv
-    this.onUserTVRedirect = onUserTVRedirect
 
     this.zenModeEnabled = settings.game.zenMode()
     this.blur = false
@@ -138,7 +126,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       offlineWatcher: !hasNetwork()
     }
 
-    this.socket = new RoundSocket(this, this.onFeatured, this.onUserTVRedirect)
+    this.socket = new RoundSocket(this, this.onFeatured)
 
     this.chat = (session.isKidMode() || this.data.tv || (!this.data.player.spectator && (this.data.game.tournamentId || this.data.opponent.ai))) ? null : new Chat(
       this.socket.iface,

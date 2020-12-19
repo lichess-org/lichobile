@@ -6,9 +6,5 @@
     <param name="ios-package" value="CordovaPluginStockfish"/>
   </feature>
 
-  <feature name="Insomnia">
-    <param name="ios-package" value="Insomnia"/>
-  </feature>
-
   
 </widget>

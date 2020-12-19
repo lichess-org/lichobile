@@ -1,3 +1,5 @@
+import { Plugins } from '@capacitor/core'
+
 const IDLE_TIMER_DELAY = 15 * 60 * 1000
 const SLEEP_DELAY = 45 * 60 * 1000
 
@@ -5,7 +7,7 @@ let sleepAgainTimeoutId: number
 let cancelTimer: (() => void) | undefined
 
 export function keepAwake() {
-  window.plugins.insomnia.keepAwake()
+  Plugins.KeepAwake.keepAwake()
   if (cancelTimer !== undefined) {
     cancelTimer()
   }
@@ -13,7 +15,7 @@ export function keepAwake() {
     IDLE_TIMER_DELAY,
     () => {
       sleepAgainTimeoutId = setTimeout(() => {
-        window.plugins.insomnia.allowSleepAgain()
+        Plugins.KeepAwake.allowSleep()
       }, SLEEP_DELAY)
     },
     () => {
@@ -27,7 +29,7 @@ export function allowSleepAgain() {
     cancelTimer()
     cancelTimer = undefined
   }
-  window.plugins.insomnia.allowSleepAgain()
+  Plugins.KeepAwake.allowSleep()
 }
 
 function idleTimer(delay: number, onIdle: () => void, onWakeUp: () => void): () => void {

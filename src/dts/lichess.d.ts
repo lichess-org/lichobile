@@ -64,7 +64,6 @@ interface Window {
     showSystemUI: () => void
     immersiveMode: () => void
   }
-  plugins: Plugins
   deviceInfo: {
     platform: 'ios' | 'android' | 'electron' | 'web'
     uuid: string

@@ -1,6 +1,8 @@
 PODS:
   - Capacitor (2.4.3):
     - CapacitorCordova
+  - CapacitorCommunityKeepAwake (1.0.0):
+    - Capacitor
   - CapacitorCordova (2.4.3)
   - CapacitorSoundEffect (0.0.1):
     - Capacitor
@@ -74,6 +76,7 @@ PODS:
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorCommunityKeepAwake (from `../../node_modules/@capacitor-community/keep-awake`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - CapacitorSoundEffect (from `../../node_modules/capacitor-sound-effect`)
   - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
@@ -99,6 +102,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorCommunityKeepAwake:
+    :path: "../../node_modules/@capacitor-community/keep-awake"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorSoundEffect:
@@ -108,6 +113,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Capacitor: 723817d2a46affb831c80233f2abc502ff63b37a
+  CapacitorCommunityKeepAwake: c4476e4a01406d22ec14df13520e391685441813
   CapacitorCordova: 7b6eb536dd6d517a32056341575bb0b187bd44a5
   CapacitorSoundEffect: 31a36e64d0220c6d0e1621a61744b5d8c1e7738d
   CordovaPlugins: 050a0344e9aa9996d7e5858294d4626d1c94ed97
@@ -126,6 +132,6 @@ SPEC CHECKSUMS:
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   Protobuf: 2793fcd0622a00b546c60e7cbbcc493e043e9bb9
 
-PODFILE CHECKSUM: 06ca90a8aee4779c787c43172fc10b29195b2f3f
+PODFILE CHECKSUM: d42aa658dd687df090de848c4639c80163e1e818
 
 COCOAPODS: 1.9.3

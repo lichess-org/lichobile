@@ -45,6 +45,7 @@
     },
     "dependencies": {
         "@badrap/result": "0.2.6",
+        "@capacitor-community/keep-awake": "1.0.0",
         "@capacitor/android": "2.4.3",
         "@capacitor/cli": "2.4.3",
         "@capacitor/core": "2.4.3",
@@ -56,7 +57,6 @@
         "capacitor-sound-effect": "git+https://github.com/veloce/capacitor-sound-effect.git",
         "chessops": "0.7.3",
         "cordova-plugin-fullscreen": "1.2.0",
-        "cordova-plugin-insomnia": "4.2.0",
         "d3-axis": "1.0.8",
         "d3-scale": "1.0.6",
         "d3-selection": "1.1.0",

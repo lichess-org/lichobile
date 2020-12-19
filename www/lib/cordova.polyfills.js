@@ -7,13 +7,6 @@
     window.AndroidFullScreen.immersiveMode = noop;
   }
 
-  if (!window.plugins || !window.plugins.insomnia) {
-    window.plugins = {};
-    window.plugins.insomnia = {};
-    window.plugins.insomnia.allowSleepAgain = noop;
-    window.plugins.insomnia.keepAwake = noop;
-  }
-
   if (!window.Stockfish) {
     var stockfishWorker;
     window.Stockfish = {

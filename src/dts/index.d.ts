@@ -1,4 +1,3 @@
-/// <reference path="cordova-plugin-insomnia.d.ts" />
 /// <reference path="jsx.d.ts" />
 /// <reference path="lichess.d.ts" />
 /// <reference path="rlite.d.ts" />

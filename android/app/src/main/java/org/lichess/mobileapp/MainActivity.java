@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 public class MainActivity extends BridgeActivity {
 
   private static String LOGTAG = "LichessActivity";
+  private static Integer MIN_VERSION = 69;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class MainActivity extends BridgeActivity {
     if (pInfo != null) {
       try {
         Integer majorVersion = Integer.parseInt(pInfo.versionName.split(Pattern.quote("."))[0]);
-        if (majorVersion < 63) {
+        if (majorVersion < MIN_VERSION) {
           String title = "Update required!";
           String appName;
           try {

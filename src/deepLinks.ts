@@ -39,7 +39,7 @@ export default {
 }
 
 const links = new Rlite()
-const gamePattern = /^\/(\w{8})(\/black|white)?$/
+const gamePattern = /^\/(\w{8})(\/black|\/white)?$/
 
 links.add('analysis', () => router.set('/analyse'))
 links.add(`analysis/${fenParams}`, ({ params }) => {

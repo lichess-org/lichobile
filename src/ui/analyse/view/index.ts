@@ -33,6 +33,7 @@ import renderAnalysis from './analysisView'
 import renderBoard from './boardView'
 import renderGameInfos from './gameInfosView'
 import renderActionsBar from './actionsView'
+import renderForecasts from '../forecast/forecastView'
 
 export function loadingScreen(isPortrait: boolean, color?: Color, curFen?: string) {
   const isSmall = settings.analyse.smallBoard()
@@ -196,6 +197,7 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Chi
   ceval: renderCeval,
   pgnTags: renderPgnTags,
   comments: renderReadonlyComments,
+  forecasts: renderForecasts,
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {

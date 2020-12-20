@@ -11,7 +11,7 @@ import OnlineRound from './OnlineRound'
  */
 export default class TransientMove {
 
-  private current: number | undefined = undefined
+  private current?: number
 
   constructor(readonly ctrl: OnlineRound) { }
 
@@ -20,7 +20,7 @@ export default class TransientMove {
   }
 
   clear = () => {
-    if (this.current) clearTimeout(this.current)
+    clearTimeout(this.current)
   }
 
   expire = () => {

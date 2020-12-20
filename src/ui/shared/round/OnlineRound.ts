@@ -110,7 +110,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       },
       clockPosition: settings.game.clockPosition() || 'right',
       showCaptured: !!this.data.pref.showCaptured,
-      moveList: this.replayEnabledByPref(),
+      moveList: settings.game.moveList(),
       showingActions: false,
       showingShareActions: false,
       confirmResign: false,
@@ -664,13 +664,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (this.clock) this.clock.unload()
     clearInterval(this.clockIntervId)
     this.appStateListener.remove()
-  }
-
-  private replayEnabledByPref = (): boolean => {
-    const d = this.data
-    return d.pref.replay === 2 || (
-      d.pref.replay === 1 && (d.game.speed === 'classical' || d.game.speed === 'unlimited' || d.game.speed === 'correspondence')
-    )
   }
 
   private makeCorrespondenceClock() {

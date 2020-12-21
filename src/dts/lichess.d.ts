@@ -68,6 +68,7 @@ interface Window {
     platform: 'ios' | 'android' | 'electron' | 'web'
     uuid: string
     appVersion: string
+    cpuCores: number
   }
   requestIdleCallback?: ((
     callback: ((deadline: RequestIdleCallbackDeadline) => void),

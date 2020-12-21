@@ -1,9 +1,5 @@
 import { VariantKey } from '../lichess/interfaces/variant'
 
-interface XNavigator extends Navigator {
-  hardwareConcurrency: number
-}
-
 export function send(text: string) {
   console.debug('[stockfish <<] ' + text)
   return Stockfish.cmd(text)
@@ -14,7 +10,7 @@ export function setOption(name: string, value: string | number | boolean) {
 }
 
 export function getNbCores(): number {
-  const cores = (<XNavigator>navigator).hardwareConcurrency || 1
+  const cores = window.deviceInfo.cpuCores
   return cores > 2 ? cores - 1 : 1
 }
 

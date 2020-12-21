@@ -82,11 +82,3 @@ interface Tournament {
   readonly name: string
   readonly running: boolean
 }
-
-export interface ForecastStep {
-  readonly ply: Ply
-  readonly uci: Uci
-  readonly san: San
-  readonly fen: Fen
-  readonly check?: Key
-}

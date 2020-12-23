@@ -3,9 +3,30 @@ import i18n from "~/i18n";
 import { ForecastStep } from "~/lichess/interfaces/forecast";
 import { ontap } from "~/ui/helper";
 import AnalyseCtrl from "../AnalyseCtrl";
+import ForecastCtrl from "./ForecastCtrl";
 import { groupMoves } from "./util";
 
 type MaybeVNode = Mithril.Child | null;
+
+function makeCandidateNodes(
+  ctrl: AnalyseCtrl,
+  fctrl: ForecastCtrl
+): ForecastStep[] {
+  const afterPly = ctrl.tree.getCurrentNodesAfterPly(
+    ctrl.nodeList,
+    ctrl.mainline,
+    ctrl.data.game.turns
+  );
+  return fctrl.truncate(
+    afterPly.map((node) => ({
+      ply: node.ply,
+      fen: node.fen,
+      uci: node.uci!,
+      san: node.san!,
+      check: node.check,
+    }))
+  );
+}
 
 function renderNodesHtml(nodes: ForecastStep[]): MaybeVNode[] {
   if (!nodes[0]) return [];
@@ -24,6 +45,9 @@ function renderNodesHtml(nodes: ForecastStep[]): MaybeVNode[] {
 export default function renderForecasts(ctrl: AnalyseCtrl) {
   if (!ctrl.forecast) return null;
 
+  const candidateNodes = makeCandidateNodes(ctrl, ctrl.forecast);
+  const isCandidate = ctrl.forecast.isCandidate(candidateNodes);
+
   return h("div.forecasts-wrapper.native_scroller", [
     h(
       "div.forecasts-list",
@@ -34,7 +58,7 @@ export default function renderForecasts(ctrl: AnalyseCtrl) {
             oncreate: ontap(
               () => {},
               () => {
-                ctrl.forecast!.contextIndex = i
+                ctrl.forecast!.contextIndex = i;
               }
             ),
           },
@@ -42,6 +66,25 @@ export default function renderForecasts(ctrl: AnalyseCtrl) {
         );
       })
     ),
-    h("div.info", i18n("playVariationToCreateConditionalPremoves")),
+    h(
+      "div.info",
+      {
+        class: isCandidate ? "add-forecast" : "",
+      },
+      isCandidate
+        ? h(
+            "div.add-forecast",
+            {
+              oncreate: ontap(() => {
+                ctrl.forecast?.add(candidateNodes);
+              }),
+            },
+            [
+              h("span.fa.fa-plus-circle"),
+              h("sans", renderNodesHtml(candidateNodes)),
+            ]
+          )
+        : i18n("playVariationToCreateConditionalPremoves")
+    ),
   ]);
 }

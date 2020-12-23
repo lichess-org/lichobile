@@ -6,7 +6,8 @@ import i18n from '~/i18n'
 import ForecastCtrl from './ForecastCtrl'
 import { renderForecastTxt } from './util'
 
-export function view(ctrl: ForecastCtrl): Mithril.Child | null {
+export function view(ctrl?: ForecastCtrl): Mithril.Child | null {
+  if (!ctrl) return null
 
   const contextIndex = ctrl.contextIndex;
   if (contextIndex == null) return null

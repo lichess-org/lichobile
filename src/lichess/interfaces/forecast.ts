@@ -8,5 +8,4 @@ export interface ForecastStep {
   uci: Uci;
   san: San;
   fen: Fen;
-  check?: Key;
 }

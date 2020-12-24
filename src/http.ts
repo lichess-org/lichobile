@@ -48,7 +48,7 @@ function request<T>(url: string, type: 'json' | 'text', opts?: RequestOpts, feed
   })
 
   const sid = storage.get<string>(SESSION_ID_KEY)
-  if (sid !== null) {
+  if (sid !== null && sid !== undefined) {
     headers.append(SESSION_ID_KEY, sid)
   }
 

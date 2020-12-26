@@ -13,5 +13,5 @@ export function saveForecasts(
       body: JSON.stringify(forecasts),
     },
     true
-  );
+  )
 }

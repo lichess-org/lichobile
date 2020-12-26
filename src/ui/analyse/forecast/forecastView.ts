@@ -1,12 +1,12 @@
-import h from "mithril/hyperscript";
-import i18n from "~/i18n";
-import { ForecastStep } from "~/lichess/interfaces/forecast";
-import { ontap } from "~/ui/helper";
-import AnalyseCtrl from "../AnalyseCtrl";
-import ForecastCtrl from "./ForecastCtrl";
-import { groupMoves } from "./util";
+import h from 'mithril/hyperscript'
+import i18n from '~/i18n'
+import { ForecastStep } from '~/lichess/interfaces/forecast'
+import { ontap } from '~/ui/helper'
+import AnalyseCtrl from '../AnalyseCtrl'
+import ForecastCtrl from './ForecastCtrl'
+import { groupMoves } from './util'
 
-type MaybeVNode = Mithril.Child | null;
+type MaybeVNode = Mithril.Child | null
 
 function makeCandidateNodes(
   ctrl: AnalyseCtrl,
@@ -16,7 +16,7 @@ function makeCandidateNodes(
     ctrl.nodeList,
     ctrl.mainline,
     ctrl.data.game.turns
-  );
+  )
   return fctrl.truncate(
     afterPly.map((node) => ({
       ply: node.ply,
@@ -25,66 +25,66 @@ function makeCandidateNodes(
       san: node.san!,
       check: node.check,
     }))
-  );
+  )
 }
 
 function renderNodesHtml(nodes: ForecastStep[]): MaybeVNode[] {
-  if (!nodes[0]) return [];
-  if (!nodes[0].san) nodes = nodes.slice(1);
-  if (!nodes[0]) return [];
+  if (!nodes[0]) return []
+  if (!nodes[0].san) nodes = nodes.slice(1)
+  if (!nodes[0]) return []
 
   return groupMoves(nodes).map(({ black, white, index }) => {
-    return h("move", [
-      h("index", index + (white ? "." : "...")),
-      white ? h("san", white) : null,
-      black ? h("san", black) : null,
-    ]);
-  });
+    return h('move', [
+      h('index', index + (white ? '.' : '...')),
+      white ? h('san', white) : null,
+      black ? h('san', black) : null,
+    ])
+  })
 }
 
 export default function renderForecasts(ctrl: AnalyseCtrl) {
   if (!ctrl.forecast) return null
 
-  const candidateNodes = makeCandidateNodes(ctrl, ctrl.forecast);
-  const isCandidate = ctrl.forecast.isCandidate(candidateNodes);
+  const candidateNodes = makeCandidateNodes(ctrl, ctrl.forecast)
+  const isCandidate = ctrl.forecast.isCandidate(candidateNodes)
 
-  return h("div.forecasts-wrapper.native_scroller", [
+  return h('div.forecasts-wrapper.native_scroller', [
     h(
-      "div.forecasts-list",
+      'div.forecasts-list',
       ctrl.forecast.lines.map((nodes, i) => {
         return h(
-          "div.forecast",
+          'div.forecast',
           {
             oncreate: ontap(
               () => {},
               () => {
-                ctrl.forecast!.contextIndex = i;
+                ctrl.forecast!.contextIndex = i
               }
             ),
           },
-          [h("sans", renderNodesHtml(nodes))]
-        );
+          [h('sans', renderNodesHtml(nodes))]
+        )
       })
     ),
     h(
-      "div.info",
+      'div.info',
       {
-        class: isCandidate ? "add-forecast" : "",
+        class: isCandidate ? 'add-forecast' : '',
       },
       isCandidate
         ? h(
-            "div.add-forecast",
+            'div.add-forecast',
             {
               oncreate: ontap(() => {
-                ctrl.forecast?.add(candidateNodes);
+                ctrl.forecast?.add(candidateNodes)
               }),
             },
             [
-              h("span.fa.fa-plus-circle"),
-              h("sans", renderNodesHtml(candidateNodes)),
+              h('span.fa.fa-plus-circle'),
+              h('sans', renderNodesHtml(candidateNodes)),
             ]
           )
-        : i18n("playVariationToCreateConditionalPremoves")
+        : i18n('playVariationToCreateConditionalPremoves')
     ),
-  ]);
+  ])
 }

@@ -9,7 +9,7 @@ import { renderForecastTxt } from './util'
 export function view(ctrl?: ForecastCtrl): Mithril.Child | null {
   if (!ctrl) return null
 
-  const contextIndex = ctrl.contextIndex;
+  const contextIndex = ctrl.contextIndex
   if (contextIndex == null) return null
 
   return popupWidget(

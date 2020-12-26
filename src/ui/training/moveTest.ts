@@ -35,6 +35,11 @@ export default function moveTest(
     return acc[step.uci] || (step.castle && acc[altCastles[step.uci]!])
   }, puzzle.lines)
 
+  if (node.san?.endsWith('#')) {
+    const feedback = 'win'
+    node.puzzle = feedback
+    return feedback
+  }
   if (!curLine) {
     const feedback = 'fail'
     node.puzzle = feedback

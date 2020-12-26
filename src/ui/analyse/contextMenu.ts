@@ -4,6 +4,7 @@ import popupWidget from '../shared/popup'
 import * as helper from '../helper'
 import { nodeFullName } from './util'
 import AnalyseCtrl from './AnalyseCtrl'
+import i18n from '~/i18n'
 
 export function view(ctrl: AnalyseCtrl): Mithril.Child | null {
 
@@ -20,7 +21,7 @@ export function view(ctrl: AnalyseCtrl): Mithril.Child | null {
       return [
         onMainline ? null : action('S', 'Promote variation', () => ctrl.promote(path, false)),
         onMainline ? null : action('E', 'Make main line', () => ctrl.promote(path, true)),
-        action('q', 'Delete from here', () => ctrl.deleteNode(path))
+        action('q', i18n('deleteFromHere'), () => ctrl.deleteNode(path))
       ]
     },
     true,

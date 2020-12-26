@@ -43,7 +43,7 @@ function renderNodesHtml(nodes: ForecastStep[]): MaybeVNode[] {
 }
 
 export default function renderForecasts(ctrl: AnalyseCtrl) {
-  if (!ctrl.forecast) return null;
+  if (!ctrl.forecast) return null
 
   const candidateNodes = makeCandidateNodes(ctrl, ctrl.forecast);
   const isCandidate = ctrl.forecast.isCandidate(candidateNodes);

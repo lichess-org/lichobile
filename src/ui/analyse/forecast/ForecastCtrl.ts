@@ -1,18 +1,24 @@
 import { ForecastData, ForecastStep, MinimalForecastStep } from '~/lichess/interfaces/forecast'
+import { Game, Player } from '~/lichess/interfaces/game'
 import redraw from '~/utils/redraw'
+import { saveForecasts } from './xhr'
 
 const MAX_FORECAST_PLIES = 30
 
 export default class ForecastCtrl {
   private _lines: ForecastStep[][]
   private _contextIndex: number | null
-  private _isPovPlayerTurn: boolean
+  private readonly _isPovPlayerTurn: boolean
+  private readonly _game?: Game
+  private readonly _player?: Player
 
-  constructor(forecastData?: ForecastData) {
+  constructor(forecastData?: ForecastData, game?: Game, player?: Player) {
     this._lines = forecastData?.steps || []
     const onMyTurn = forecastData?.onMyTurn
-    this._isPovPlayerTurn = onMyTurn === undefined ? true : onMyTurn
+    this._isPovPlayerTurn = !!onMyTurn
     this._contextIndex = null
+    this._game = game
+    this._player = player
   }
 
   /**
@@ -57,8 +63,19 @@ export default class ForecastCtrl {
   }
 
   save() {
-    // TODO
+    const playerId = this._player?.id
+    const gameId = this._game?.id
+    if (this._isPovPlayerTurn || !playerId || !gameId) return
+    // loading(true);
     redraw()
+    saveForecasts(gameId, playerId, this.lines).then(data => {
+      // TODO if (data.reload) reloadToLastPly();
+      // else {
+        // loading(false);
+      this._lines = data.steps || []
+      // }
+      redraw()
+    })
   }
 
   get lines(): ForecastStep[][] {

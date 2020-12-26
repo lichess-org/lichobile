@@ -103,7 +103,7 @@ export default class AnalyseCtrl {
     this.ongoing = !this.synthetic && gameApi.playable(data)
     this.initialPath = treePath.root
     this.study = studyData !== undefined ? new StudyCtrl(studyData, this) : undefined
-    this.forecast = data.forecast?.steps ? new ForecastCtrl(data.forecast) : undefined
+    this.forecast = data.forecast ? new ForecastCtrl(data.forecast, data.game, data.player) : undefined
 
     this._currentTabIndex = (!this.study || this.study.data.chapter.tags.length === 0) && this.synthetic ? 0 : 1
 
@@ -244,7 +244,7 @@ export default class AnalyseCtrl {
     if (this.study || (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data))) {
       val = [...val, tabs.charts]
     }
-    if (hasNetwork() && !this.synthetic && gameApi.playable(this.data)) {
+    if (hasNetwork() && !this.synthetic && gameApi.playable(this.data) && this.data.forecast) {
       val = [tabs.forecasts, ...val]
     }
     if (hasNetwork() && this.explorer.allowed) val = [...val, tabs.explorer]

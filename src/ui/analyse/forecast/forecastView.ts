@@ -1,5 +1,5 @@
 import h from 'mithril/hyperscript'
-import i18n from '~/i18n'
+import i18n, { plural } from '~/i18n'
 import { ForecastStep } from '~/lichess/interfaces/forecast'
 import { ontap } from '~/ui/helper'
 import AnalyseCtrl from '../AnalyseCtrl'
@@ -42,6 +42,32 @@ function renderNodesHtml(nodes: ForecastStep[]): MaybeVNode[] {
   })
 }
 
+function renderOnMyTurnView(ctrl: AnalyseCtrl, candidate: ForecastStep[]): MaybeVNode {
+  if (!ctrl.forecast?.isMyTurn) return
+  const firstNode = candidate[0]
+  if (!firstNode) return
+  const candidates = ctrl.forecast!.findStartingWithNode(firstNode)
+  if (!candidates.length) return
+
+  const lineCount = candidates.filter((candidate) => {
+    return candidate.length > 1
+  }).length
+
+  return h(
+    'button.defaultButton',
+    {
+      oncreate: ontap(() => ctrl.forecast!.playAndSave(firstNode))
+    }, [
+      h('span.fa.fa-check'),
+      h('span', [
+        h('strong', i18n('playX', candidate[0].san)),
+        ' ',
+        lineCount ? h('span', plural('andSaveNbPremoveLines', lineCount)) : null
+      ])
+    ],
+  )
+}
+
 export default function renderForecasts(ctrl: AnalyseCtrl) {
   if (!ctrl.forecast) return null
 
@@ -51,40 +77,41 @@ export default function renderForecasts(ctrl: AnalyseCtrl) {
   return h('div.forecasts-wrapper.native_scroller', [
     h(
       'div.forecasts-list',
-      ctrl.forecast.lines.map((nodes, i) => {
-        return h(
-          'div.forecast',
-          {
-            oncreate: ontap(
-              () => {},
-              () => {
-                ctrl.forecast!.contextIndex = i
-              }
-            ),
-          },
-          [h('sans', renderNodesHtml(nodes))]
-        )
-      })
+      [
+        ...ctrl.forecast.lines.map((nodes, i) => {
+          return h(
+            'div.forecast',
+            {
+              oncreate: ontap(
+                () => {},
+                () => {
+                  ctrl.forecast!.contextIndex = i
+                }
+              ),
+            },
+            [h('sans', renderNodesHtml(nodes))]
+          )
+        }),
+        isCandidate
+          ? h(
+              'div.forecast.add-forecast',
+              {
+                oncreate: ontap(() => {
+                  ctrl.forecast?.add(candidateNodes)
+                }),
+              },
+              [
+                h('span.fa.fa-plus-circle'),
+                h('sans', renderNodesHtml(candidateNodes)),
+              ]
+            )
+          : null,
+      ]
     ),
     h(
       'div.info',
-      {
-        class: isCandidate ? 'add-forecast' : '',
-      },
-      isCandidate
-        ? h(
-            'div.add-forecast',
-            {
-              oncreate: ontap(() => {
-                ctrl.forecast?.add(candidateNodes)
-              }),
-            },
-            [
-              h('span.fa.fa-plus-circle'),
-              h('sans', renderNodesHtml(candidateNodes)),
-            ]
-          )
-        : i18n('playVariationToCreateConditionalPremoves')
+      isCandidate ? null : i18n('playVariationToCreateConditionalPremoves')
     ),
+    renderOnMyTurnView(ctrl, candidateNodes)
   ])
 }

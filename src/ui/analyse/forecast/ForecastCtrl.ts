@@ -1,21 +1,23 @@
 import { ForecastData, ForecastStep, MinimalForecastStep } from '~/lichess/interfaces/forecast'
 import { Game, Player } from '~/lichess/interfaces/game'
+import router from '~/router'
 import redraw from '~/utils/redraw'
-import { saveForecasts } from './xhr'
+import { playAndSaveForecasts, saveForecasts } from './xhr'
 
 const MAX_FORECAST_PLIES = 30
 
 export default class ForecastCtrl {
+  readonly isMyTurn: boolean
+
   private _lines: ForecastStep[][]
   private _contextIndex: number | null
-  private readonly _isPovPlayerTurn: boolean
   private readonly _game?: Game
   private readonly _player?: Player
 
   constructor(forecastData?: ForecastData, game?: Game, player?: Player) {
     this._lines = forecastData?.steps || []
     const onMyTurn = forecastData?.onMyTurn
-    this._isPovPlayerTurn = !!onMyTurn
+    this.isMyTurn = !!onMyTurn
     this._contextIndex = null
     this._game = game
     this._player = player
@@ -26,7 +28,7 @@ export default class ForecastCtrl {
    *          with the viewing player's move.
    */
   truncate<T extends MinimalForecastStep>(nodes: T[]): T[] {
-    const requiredPlyMod = this._isPovPlayerTurn ? 1 : 0
+    const requiredPlyMod = this.isMyTurn ? 1 : 0
 
     // must end with player move
     return (nodes.length % 2 !== requiredPlyMod ? nodes.slice(0, -1) : nodes).slice(0, MAX_FORECAST_PLIES)
@@ -62,20 +64,53 @@ export default class ForecastCtrl {
     this.save()
   }
 
-  save() {
+  save(): void {
     const playerId = this._player?.id
     const gameId = this._game?.id
-    if (this._isPovPlayerTurn || !playerId || !gameId) return
+    if (this.isMyTurn || !playerId || !gameId) return
     // loading(true);
     redraw()
     saveForecasts(gameId, playerId, this.lines).then(data => {
-      // TODO if (data.reload) reloadToLastPly();
-      // else {
+      if (data.reload) {
+        this.reloadToLastPly()
+      } else {
         // loading(false);
-      this._lines = data.steps || []
-      // }
-      redraw()
+        this._lines = data.steps || []
+        redraw()
+      }
     })
+  }
+
+  playAndSave(moveToPlay: ForecastStep): void {
+    const playerId = this._player?.id
+    const gameId = this._game?.id
+    if (!this.isMyTurn || !playerId || !gameId) return
+
+    const forecasts = this.findStartingWithNode(moveToPlay)
+      .filter(forecast => forecast.length > 0)
+      .map(forecast => forecast.slice(1))
+
+    playAndSaveForecasts(gameId, playerId, moveToPlay, forecasts)
+      .then(data => {
+        if (data.reload) {
+          this.reloadToLastPly()
+        } else {
+          this._lines = data.steps || []
+          redraw()
+        }
+      })
+  }
+
+  findStartingWithNode(node: ForecastStep): ForecastStep[][] {
+    return this.lines.filter((candidate) => {
+      return this.isPrefix(candidate, [node])
+    })
+  }
+
+  reloadToLastPly(): void {
+    redraw()
+    window.history.replaceState(null, '', '#last')
+    router.reload()
   }
 
   get lines(): ForecastStep[][] {
@@ -113,7 +148,7 @@ export default class ForecastCtrl {
   collides(fc1: MinimalForecastStep[], fc2: MinimalForecastStep[]): boolean {
     for (let i = 0, max = Math.min(fc1.length, fc2.length); i < max; i++) {
       if (fc1[i].uci !== fc2[i].uci) {
-        if (this._isPovPlayerTurn) {
+        if (this.isMyTurn) {
           return i !== 0 && i % 2 === 0
         }
         return i % 2 === 1
@@ -131,7 +166,7 @@ export default class ForecastCtrl {
   }
 
   private isLongEnough(fc: MinimalForecastStep[]): boolean {
-    return fc.length >= (this._isPovPlayerTurn ? 1 : 2)
+    return fc.length >= (this.isMyTurn ? 1 : 2)
   }
 
   /**

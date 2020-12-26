@@ -1,8 +1,4 @@
 import h from 'mithril/hyperscript'
-import { select } from 'd3-selection'
-import { scaleLinear } from 'd3-scale'
-import { area as d3Area } from 'd3-shape'
-import { axisLeft } from 'd3-axis'
 import session from '../../session'
 import i18n from '../../i18n'
 import router from '../../router'

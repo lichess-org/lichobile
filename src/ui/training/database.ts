@@ -19,7 +19,7 @@ export interface UserOfflineData {
 
 type UserId = string
 
-const dbName = 'offlinePuzzlesV2';
+const dbName = 'offlinePuzzlesV2'
 
 function fetch(userId: UserId): Promise<UserOfflineData | null> {
   return asyncStorage.get<UserOfflineData>(`${dbName}.${userId}`)

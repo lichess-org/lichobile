@@ -1,6 +1,6 @@
 import { ForecastData, ForecastStep, MinimalForecastStep } from '~/lichess/interfaces/forecast'
 import { Game, Player } from '~/lichess/interfaces/game'
-import router from '~/router'
+// import router from '~/router'
 import redraw from '~/utils/redraw'
 import { playAndSaveForecasts, saveForecasts } from './xhr'
 
@@ -110,7 +110,7 @@ export default class ForecastCtrl {
   reloadToLastPly(): void {
     redraw()
     window.history.replaceState(null, '', '#last')
-    router.reload()
+    // router.reload()
   }
 
   get lines(): ForecastStep[][] {

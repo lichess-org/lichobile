@@ -15,7 +15,7 @@
     "noUnusedLocals": true,
     "jsx": "react",
     "jsxFactory": "h",
-    "types": ["lodash-es", "d3", "jest"]
+    "types": ["lodash-es", "d3"]
   },
   "include": [
     "src/**/*.js",
@@ -26,6 +26,7 @@
     "node_modules",
     "plugins",
     "platforms",
-    "scripts"
+    "scripts",
+    "src/**/__tests__/*"
   ]
 }

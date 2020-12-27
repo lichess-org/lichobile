@@ -197,15 +197,8 @@ export default class TrainingCtrl implements PromotingInterface {
 
   public vote = throttle((v: boolean) => {
     this.vm.voted = v
-    xhr.vote(this.data.puzzle.id, v).then((res) => {
-      this.vm.vote = res[1]
-      redraw()
-    })
+    xhr.vote(this.data.puzzle.id, v).then(redraw)
   }, 1000)
-
-  public getVotes = () => {
-    return this.vm.vote
-  }
 
   public share = () => {
     Plugins.LiShare.share({ url: `https://lichess.org/training/${this.data.puzzle.id}` })
@@ -236,7 +229,6 @@ export default class TrainingCtrl implements PromotingInterface {
       canViewSolution: false,
       resultSent: false,
       voted: null,
-      vote: cfg.puzzle.vote,
     }
 
     const user = session.get()

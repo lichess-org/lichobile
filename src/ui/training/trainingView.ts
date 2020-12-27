@@ -157,7 +157,6 @@ function renderViewSolution(ctrl: TrainingCtrl) {
 
 function renderVoteControls(ctrl: TrainingCtrl) {
   return [
-    h('p', ctrl.getVotes()),
     h('div.buttons', [
       h('span.fa.fa-caret-up', {
         oncreate: helper.ontap(ctrl.upvote),

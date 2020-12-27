@@ -24,6 +24,4 @@ export interface VM {
   resultSent: boolean
   // true: up, false: down, null: not voted
   voted: boolean | null
-  // popularity
-  vote: number
 }

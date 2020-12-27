@@ -2,7 +2,7 @@ import { select } from 'd3-selection'
 import { scaleLinear } from 'd3-scale'
 import { area as d3Area } from 'd3-shape'
 
-import { Tree } from '../../shared/tree/interfaces'
+import * as Tree from '../../shared/tree/interfaces'
 import { AnalyseData } from '../../../lichess/interfaces/analyse'
 
 interface Point {

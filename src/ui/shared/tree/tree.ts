@@ -1,6 +1,6 @@
 import * as treePath from './path'
 import * as ops from './ops'
-import { Tree } from './interfaces'
+import * as Tree from './interfaces'
 
 export type MaybeNode = Tree.Node | undefined
 

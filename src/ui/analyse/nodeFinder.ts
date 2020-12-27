@@ -1,5 +1,5 @@
 import * as winningChances from './ceval/winningChances'
-import { Tree } from '../shared/tree/interfaces'
+import * as Tree from '../shared/tree/interfaces'
 
 function hasCompChild(node: Tree.Node): boolean {
   return !!node.children.find(function(c) {

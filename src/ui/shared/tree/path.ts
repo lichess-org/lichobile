@@ -1,4 +1,4 @@
-import { Tree } from './interfaces'
+import * as Tree from './interfaces'
 
 export const root: Tree.Path = ''
 

@@ -10,6 +10,7 @@ import redraw from '../../../utils/redraw'
 import sound from '../../../sound'
 import vibrate from '../../../vibrate'
 import OnlineRound from './OnlineRound'
+import backoff from './backoff'
 
 export default class RoundSocket {
 
@@ -136,34 +137,11 @@ export default class RoundSocket {
     this.iface.send('moretime')
   }, 300)
 
-  public outoftime =  backoff(500, 1.1, () => {
+  public outoftime = backoff(500, 1.1, () => {
     this.iface.send('flag', this.ctrl.data.game.player)
   })
 
   public berserk = throttle(() => {
     this.iface.send('berserk', null, { ackable: true })
   }, 200)
-}
-
-type Callback = (...args: any[]) => void
-function backoff(delay: number, factor: number, callback: Callback): Callback {
-  let timer: number | undefined
-  let lastExec = 0
-
-  return function(this: any, ...args: any[]): void {
-    const self: any = this
-    const elapsed = performance.now() - lastExec
-
-    function exec() {
-      timer = undefined
-      lastExec = performance.now()
-      delay *= factor
-      callback.apply(self, args)
-    }
-
-    if (timer) clearTimeout(timer)
-
-    if (elapsed > delay) exec()
-    else timer = setTimeout(exec, delay - elapsed)
-  }
 }

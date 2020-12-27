@@ -26,7 +26,7 @@ export interface RequestOpts {
 
 function addQuerystring(url: string, querystring: string): string {
   const prefix = url.indexOf('?') < 0 ? '?' : '&'
-  let res = url + prefix + querystring
+  const res = url + prefix + querystring
   return res
 }
 

@@ -37,7 +37,7 @@ function linkReplace(match: string, before: string, url: string) {
 
 const userPattern = /(^|[^\w@#/])@([\w-]{2,})/g
 
-function userLinkReplace(orig: string, prefix: String, user: string) {
+function userLinkReplace(orig: string, prefix: string, user: string) {
   if (user.length > 20) return orig
   return prefix + `<a href="?/@/${user}">@${user}</a>`
 }

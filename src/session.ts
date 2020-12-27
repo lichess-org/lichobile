@@ -96,7 +96,7 @@ function getUserId(): string | undefined {
 }
 
 function nowPlaying(): NowPlayingGame[] {
-  let np = session && session.nowPlaying || []
+  const np = session && session.nowPlaying || []
   return np.filter(e =>
     settings.game.supportedVariants.indexOf(e.variant.key) !== -1
   )

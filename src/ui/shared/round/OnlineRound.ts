@@ -83,7 +83,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     readonly goingBack: boolean,
     readonly id: string,
     cfg: OnlineGameData,
-    flipped: boolean = false,
+    flipped = false,
     readonly onFeatured?: () => void,
     userTv?: string,
   ) {
@@ -322,7 +322,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       ((this.data.game.turns - this.data.game.startedAtTurn) > 1 || this.data.clock.running)
   }
 
-  public sendMove(orig: Key, dest: Key, prom?: Role, isPremove: boolean = false) {
+  public sendMove(orig: Key, dest: Key, prom?: Role, isPremove = false) {
     const move = {
       u: orig + dest
     }
@@ -428,8 +428,8 @@ export default class OnlineRound implements OnlineRoundInterface {
       d.game.winner = o.winner
     }
 
-    let wDraw = white.offeringDraw
-    let bDraw = black.offeringDraw
+    const wDraw = white.offeringDraw
+    const bDraw = black.offeringDraw
     if (!wDraw && o.wDraw) {
       sound.dong()
       vibrate.quick()

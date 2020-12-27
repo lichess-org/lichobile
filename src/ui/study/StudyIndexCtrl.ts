@@ -27,7 +27,7 @@ export default class StudyIndexCtrl {
 
   private cacheAvailable: boolean
   // used to restore scroll position only once from cached state
-  private initialized: boolean = false
+  private initialized = false
 
   public constructor(
     public readonly cat: PagerCategory = 'all',

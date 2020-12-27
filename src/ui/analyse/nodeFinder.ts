@@ -43,7 +43,7 @@ export function detectThreefold(nodeList: Tree.Node[], node: Tree.Node): void {
   if (node.threefold !== undefined) return
   const currentFen = threefoldFen(node.fen)
   let nbSimilarPositions = 0
-  for (let i in nodeList)
+  for (const i in nodeList)
     if (threefoldFen(nodeList[i].fen) === currentFen)
       nbSimilarPositions++
   node.threefold = nbSimilarPositions > 2

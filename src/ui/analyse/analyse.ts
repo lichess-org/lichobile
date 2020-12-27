@@ -146,7 +146,7 @@ export default {
         } else {
           backButton = renderBackbutton([
             h(GameTitle, { data: this.ctrl.data, subTitle: 'date' }),
-            bookmarkButton(this.ctrl.toggleBookmark, this.ctrl.data.bookmarked!!),
+            bookmarkButton(this.ctrl.toggleBookmark, this.ctrl.data.bookmarked!),
           ])
         }
       }

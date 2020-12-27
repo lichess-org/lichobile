@@ -9,7 +9,7 @@ import challengeForm from '../../challengeForm'
 export default class RelatedCtrl {
   currentTab: number
 
-  isLoadingNextPage: boolean = false
+  isLoadingNextPage = false
 
   followers?: readonly Related[]
   followersPaginator?: Paginator<Related>

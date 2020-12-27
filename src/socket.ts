@@ -81,8 +81,8 @@ export const SEEKING_SOCKET_NAME = 'seekLobby'
 // connectedWS means connection is established and server ping/pong
 // is working normally
 let connectedWS = false
-let currentMoveLatency: number = 0
-let currentPingInterval: number = 2000
+let currentMoveLatency = 0
+let currentPingInterval = 2000
 let rememberedSetups: Array<ConnectionSetup> = []
 
 const worker = new Worker('lib/socketWorker.js')
@@ -146,7 +146,7 @@ function setupConnection(setup: SocketSetup, socketHandlers: SocketHandlers) {
         if (socketHandlers.onError) socketHandlers.onError()
         break
       case 'handle':
-        let h = socketHandlers.events[msg.data.payload.t]
+        const h = socketHandlers.events[msg.data.payload.t]
         if (h) h(msg.data.payload.d, msg.data.payload)
         break
       case 'pingInterval':
@@ -244,7 +244,7 @@ function createTournament(
   handlers: MessageHandlers,
   featuredGameId?: string
 ): SocketIFace {
-  let url = '/tournament/' + tournamentId + `/socket/v${globalConfig.apiVersion}`
+  const url = '/tournament/' + tournamentId + `/socket/v${globalConfig.apiVersion}`
   const socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers),
     onOpen: session.backgroundRefresh

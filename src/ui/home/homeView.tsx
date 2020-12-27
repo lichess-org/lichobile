@@ -151,9 +151,9 @@ function spreadNumber(
     if (overrideNbSteps) nbSteps = Math.abs(overrideNbSteps)
     timeouts.forEach(clearTimeout)
     timeouts = []
-    let prev = previous === 0 ? 0 : (previous || nb)
+    const prev = previous === 0 ? 0 : (previous || nb)
     previous = nb
-    let interv = Math.abs(getDuration() / nbSteps)
+    const interv = Math.abs(getDuration() / nbSteps)
     for (let i = 0; i < nbSteps; i++) {
       timeouts.push(
         setTimeout(() => display(el, prev, nb, i), Math.round(i * interv))

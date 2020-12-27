@@ -30,8 +30,8 @@ const letters = {
 export function read(fen: string): cg.Pieces {
   if (fen === 'start') fen = initial
   const pieces: cg.Pieces = new Map()
-  let row: number = 8
-  let col: number = 0
+  let row = 8
+  let col = 0
   for (let i = 0; i < fen.length; i++) {
     const c = fen[i]
     switch (c) {

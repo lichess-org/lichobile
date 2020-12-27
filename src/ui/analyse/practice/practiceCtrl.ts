@@ -72,7 +72,7 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
     }
   }
 
-  function commentable(node: Tree.Node, bonus: number = 0): boolean {
+  function commentable(node: Tree.Node, bonus = 0): boolean {
     if (root.gameOver(node) || node.tbhit) return true
     const ceval = node.ceval
     return ceval ? ((ceval.depth + bonus) >= 15 || (ceval.depth >= 13 && Number(ceval.millis) > 3000)) : false

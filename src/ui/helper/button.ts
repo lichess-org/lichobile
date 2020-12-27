@@ -51,11 +51,11 @@ export default function ButtonHandler(
   }
 
   function onTouchStart(e: TouchEvent) {
-    let touch = e.changedTouches[0]
+    const touch = e.changedTouches[0]
     activeElement  = getElement ? getElement(e) : el
     if (!activeElement) return
     if ((activeElement as HTMLButtonElement).disabled === true) return
-    let boundingRect = activeElement.getBoundingClientRect()
+    const boundingRect = activeElement.getBoundingClientRect()
     startX = touch.clientX
     startY = touch.clientY
     boundaries = {
@@ -77,7 +77,7 @@ export default function ButtonHandler(
   function onTouchMove(e: TouchEvent) {
     // if going out of bounds, no way to reenable the button
     if (active && activeElement) {
-      let touch = e.changedTouches[0]
+      const touch = e.changedTouches[0]
       active = isActive(touch)
       if (!active) {
         clearTimeout(holdTimeoutID)

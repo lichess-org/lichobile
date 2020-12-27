@@ -22,10 +22,10 @@ const uid = (function() {
 const router = new Rlite()
 
 // unique incremented state id to determine slide direction
-let currentStateId: number = 0
+let currentStateId = 0
 let viewSlideDirection = 'fwd'
 
-let previousPath: string = '/'
+let previousPath = '/'
 
 const mountPoint = document.body
 

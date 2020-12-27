@@ -76,7 +76,7 @@
         "start": "concurrently 'npm run watch' 'npm run serve'",
         "serve": "http-server -p 8080 -s -g -c-1 .",
         "version": "node scripts/bump-version.js",
-        "lint": "tslint --project tsconfig.json -e '**/dts/**' -e '**/*.js'",
+        "lint": "eslint src/",
         "test": "jest",
         "i18n-update": "rimraf www/i18n/*.js && cd scripts && npm run i18n-update",
         "compile-date-locales": "node scripts/compile-date-locales",

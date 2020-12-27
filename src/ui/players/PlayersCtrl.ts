@@ -8,7 +8,7 @@ import * as xhr from './playerXhr'
 export default class PlayersCtrl {
   public currentTab: number
 
-  public isSearchOpen: boolean = false
+  public isSearchOpen = false
   public searchResults: readonly string[] = []
   public players?: readonly User[]
   public leaderboard?: Rankings

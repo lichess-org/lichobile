@@ -45,7 +45,7 @@ export function setAtPath(obj: any, path: any, value: any): void {
   }
 
   if (path.length > 1) {
-    let p = path.shift()
+    const p = path.shift()
     if (obj[p] === null || typeof obj[p] !== 'object') {
       obj[p] = {}
     }

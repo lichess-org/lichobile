@@ -22,7 +22,7 @@ import { dailyPuzzle as dailyPuzzleXhr, featuredTournaments as featuredTournamen
 export default class HomeCtrl {
   public selectedTab: number
 
-  public isScrolling: boolean = false
+  public isScrolling = false
 
   public socket?: SocketIFace
 

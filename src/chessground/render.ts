@@ -54,7 +54,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
   // walk over all board dom elements, apply animations and flag moved pieces
   let el = dom.board.firstChild as cg.KeyedNode
   while (el) {
-    let k = el.cgKey
+    const k = el.cgKey
     if (isPieceNode(el)) {
       pieceAtKey = pieces.get(k)
       squareClassAtKey = squares.get(k)

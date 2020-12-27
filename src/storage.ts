@@ -1,7 +1,7 @@
 function withStorage<T>(f: (s: Storage) => T | void): T | void | null {
   // can throw an exception when storage is full
   try {
-    return !!window.localStorage ? f(window.localStorage) : null
+    return window.localStorage ? f(window.localStorage) : null
   } catch (e) {}
 }
 

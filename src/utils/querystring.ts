@@ -25,7 +25,7 @@ export function buildQueryString(obj: any, sep?: string, eq?: string, name?: str
 
   if (typeof obj === 'object') {
     return Object.keys(obj).map((k) => {
-      let ks = encodeURIComponent(stringifyPrimitive(k)) + eq
+      const ks = encodeURIComponent(stringifyPrimitive(k)) + eq
       if (Array.isArray(obj[k])) {
         return obj[k].map((v: any) => {
           return ks + encodeURIComponent(stringifyPrimitive(v))

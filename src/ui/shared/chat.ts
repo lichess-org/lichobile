@@ -69,7 +69,7 @@ export class Chat {
 
   public selectLines() {
     let prev: ChatMsg
-    let ls: ChatMsg[] = []
+    const ls: ChatMsg[] = []
     this.lines.forEach((line: ChatMsg) => {
       if (this.isLegitMsg(line) &&
         (!prev || !compactableDeletedLines(prev, line))
@@ -192,7 +192,7 @@ function renderPlayerMsg(player: Player, msg: ChatMsg, i: number, all: ChatMsg[]
     player.user && msg.u === player.user.username
 
   let closeBalloon = true
-  let next = all[i + 1]
+  const next = all[i + 1]
   let nextTalking
   if (next) {
     nextTalking = next.c ? next.c === player.color :

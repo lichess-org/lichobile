@@ -9,7 +9,7 @@ import session from '../../session'
 export default class TeamsListCtrl {
   public currentTab: number
 
-  public isSearchOpen: boolean = false
+  public isSearchOpen = false
   public searchResults?: TeamResults
 
   public allTeams?: TeamResults

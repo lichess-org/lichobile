@@ -139,8 +139,8 @@ export function findParentBySelector(el: HTMLElement, selector: string): HTMLEle
 export function viewportDim(): ViewportDim {
   if (cachedViewportDim) return cachedViewportDim
 
-  let e = document.documentElement
-  let vpd = cachedViewportDim = {
+  const e = document.documentElement
+  const vpd = cachedViewportDim = {
     vw: e.clientWidth,
     vh: e.clientHeight
   }
@@ -268,7 +268,7 @@ export function progress(p: number): Mithril.Children {
 
 export function classSet(classes: {[cl: string]: boolean}): string {
   const arr: string[] = []
-  for (let i in classes) {
+  for (const i in classes) {
     if (classes[i]) arr.push(i)
   }
   return arr.join(' ')

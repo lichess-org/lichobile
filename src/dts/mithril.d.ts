@@ -70,9 +70,9 @@ declare namespace Mithril {
 
   type VnodeDOMAny = VnodeDOM<any, any>
 
-	interface CVnode<A = {}> extends Vnode<A, ClassComponent<A>> { }
+	type CVnode<A = {}> = Vnode<A, ClassComponent<A>>
 
-	interface CVnodeDOM<A = {}> extends VnodeDOM<A, ClassComponent<A>> { }
+	type CVnodeDOM<A = {}> = VnodeDOM<A, ClassComponent<A>>
 
 	/**
 	 * Components are a mechanism to encapsulate parts of a view to make code easier to organize and/or reuse.

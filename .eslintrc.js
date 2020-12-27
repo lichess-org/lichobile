@@ -14,5 +14,6 @@ module.exports = {
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
+    "@typescript-eslint/triple-slash-reference": "off"
   }
 }

@@ -1039,5 +1039,16 @@ export default {
   "xJoinRequests:one": "%s stojimo prašymas",
   "xJoinRequests:few": "%s stojimo prašymai",
   "xJoinRequests:many": "%s stojimo prašymų",
-  "xJoinRequests:other": "%s stojimo prašymų"
+  "xJoinRequests:other": "%s stojimo prašymų",
+  "twoFactorAuth": "Dviejų lygių tapatumo nustatymas",
+  "twoFactorHelp": "Dviejų lygių tapatumo nustatymas jūsų paskyrai suteikia papildomą saugumo sluoksnį.",
+  "twoFactorApp": "Dviejų lygių tapatumo nustatymui reikalinga programa, pvz., „Google Authenticator“, skirta „%1$s“ arba „%2$s“.",
+  "scanTheCode": "Nuskaitykite QR kodą su programa.",
+  "enterPassword": "Įveskite slaptažodį ir programoje sugeneruota kodą, norėdami užbaigti sąranką. Tapatumo nustatymo kodas bus reikalingas kiekvieno prisijungimo metu.",
+  "authenticationCode": "Tapatumo nustatymo kodas",
+  "ifYouLoseAccess": "Dėmesio: jeigu prarasite priėjimą prie savo dviejų lygių tapatumo nustatymo kodų, slaptažodį galėsite pasikeisti el. paštu.",
+  "enableTwoFactor": "Įjungti dviejų lygių tapatumo nustatymą",
+  "disableTwoFactor": "Išjungti dviejų lygių tapatumo nustatymą",
+  "twoFactorEnabled": "Dviejų lygių tapatumo nustatymas įjungtas",
+  "twoFactorDisable": "Norint išjungti dviejų lygių tapatumo nustatymą, reikalingas slaptažodis ir kodas iš tam skirtos programos.\nJeigu nebeturite priėjimo prie savo kodų, galite pasikeisti slaptažodį el. paštu."
 }

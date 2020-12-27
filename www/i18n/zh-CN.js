@@ -973,5 +973,16 @@ export default {
   "usersWhoCanManageThisTeam": "可以管理此团队的用户",
   "leadersChat": "领队聊天",
   "teamLeaders:other": "领队",
-  "xJoinRequests:other": "%s 件加入请求"
+  "xJoinRequests:other": "%s 件加入请求",
+  "twoFactorAuth": "双重认证",
+  "twoFactorHelp": "双重认证能增加您的账号的安全性。",
+  "twoFactorApp": "下载一个双重认证 app，例如谷歌身份验证器 (%1$s 或 %2$s)。",
+  "scanTheCode": "用 app 扫描 QR 码。",
+  "enterPassword": "请输入您的账号密码和由 app 生成的验证码而完成设置。您将在每次登录时都需要新的验证码。",
+  "authenticationCode": "授权码",
+  "ifYouLoseAccess": "注意：如果您无法再参考您的双重验证码，您可以通过电邮请求重置密码。",
+  "enableTwoFactor": "启用双重认证",
+  "disableTwoFactor": "禁用双重认证",
+  "twoFactorEnabled": "双重验证已开启",
+  "twoFactorDisable": "如果想要禁用双重认证，您需要您的账号密码和 app 生成的验证码。\n如果您无法再参考您的验证码，您可以通过电邮请求重置密码。"
 }

@@ -1104,5 +1104,16 @@ export default {
   "teamLeaders:one": "Vodja ekipe",
   "teamLeaders:two": "Vodji ekipe",
   "teamLeaders:few": "Vodje ekipe",
-  "teamLeaders:other": "Vodij ekipe"
+  "teamLeaders:other": "Vodij ekipe",
+  "twoFactorAuth": "Dvojna avtentikacija",
+  "twoFactorHelp": "Dvoja avtentikacija nudi dodaten nivo zaščite k vašemu računu.",
+  "twoFactorApp": "Pridobite si aplikacijo za dvojno avtenikacijo, na primer Google Authenticator za %1$s ali %2$s.",
+  "scanTheCode": "Z aplikacijo skenirajte QR kodo.",
+  "enterPassword": "Za namestitev, vpišite svoje geslo in avtentikacijsko kodo, ki jo ustvari aplikacija.\nKo se boste prijavili, boste vsakokrat potrebovali avtentikacijsko kodo.",
+  "authenticationCode": "Avtentikacijska koda",
+  "ifYouLoseAccess": "Opomnik: Če boste izgubili dostop do kode za dvojno avtentikacijo, boste lahko ponastavili geslo preko email naslova.",
+  "enableTwoFactor": "Omogočite dvojno avtentikacijo",
+  "disableTwoFactor": "Onemogočite dvojno avtentikacijo",
+  "twoFactorEnabled": "Dvoja avtentikacija je omogočena",
+  "twoFactorDisable": "Če želite onemogočiti dvojno avtentikacijo, boste potrebovali geslo in aplikacijo za dvojno avtentikacijo.\nČe boste izgubili dostop do kod za dvojno avtentikacijo, lahko ponastavite geslo preko email naslova."
 }

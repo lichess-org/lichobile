@@ -1019,5 +1019,16 @@ export default {
   "teamLeaders:one": "Holdleder",
   "teamLeaders:other": "Holdledere",
   "xJoinRequests:one": "%s tilmeldingsanmodning",
-  "xJoinRequests:other": "%s tilmeldingsanmodninger"
+  "xJoinRequests:other": "%s tilmeldingsanmodninger",
+  "twoFactorAuth": "Totrinsbekræftelse",
+  "twoFactorHelp": "Totrinsbekræftelse tilføjer et ekstra sikkerhedslag til din konto.",
+  "twoFactorApp": "Skaf en app til totrinsbekræftelse, for eksempel Google Authenticator til %1$s eller %2$s.",
+  "scanTheCode": "Skan QR-koden med appen.",
+  "enterPassword": "Indtast din adgangskode og bekræftelseskoden genereret af appen for at færdiggøre opsætningen. Du vil få brug for en bekræftelseskode, hvor gang du logger ind.",
+  "authenticationCode": "Bekræftelseskode",
+  "ifYouLoseAccess": "Bemærk: Hvis du mister adgang til dine totrinsbekræftelseskoder, kan du lave en adgangskode-nulstilling via e-mail.",
+  "enableTwoFactor": "Aktivér totrinsbekræftelse",
+  "disableTwoFactor": "Deaktivér totrinsbekræftelse",
+  "twoFactorEnabled": "Totrinsbekræftelse aktiveret",
+  "twoFactorDisable": "Du skal bruge adgangskode og en bekræftelseskode fra din godkendelsesapp for at deaktivere totrinsbekræftelse.\nHvis du har mistet adgangen til dine bekræftelseskoder, kan du også lave en adgangskode-nulstilling via e-mail."
 }

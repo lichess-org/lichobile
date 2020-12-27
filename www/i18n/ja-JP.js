@@ -973,5 +973,16 @@ export default {
   "usersWhoCanManageThisTeam": "チームを管理できるユーザー",
   "leadersChat": "リーダー・チャット",
   "teamLeaders:other": "チームリーダー",
-  "xJoinRequests:other": "%s の加入申請"
+  "xJoinRequests:other": "%s の加入申請",
+  "twoFactorAuth": "2 要素認証",
+  "twoFactorHelp": "2 要素認証はアカウントのセキュリティを高めます。",
+  "twoFactorApp": "2 要素認証のためのアプリ（たとえば%1$s、%2$s 用の Google Authenticator）を手に入れてください。",
+  "scanTheCode": "そのアプリで QR コードをスキャンします。",
+  "enterPassword": "パスワードと、アプリが生成した認証コードを入力すれば準備完了です。認証コードはログインするたびに必要になります。",
+  "authenticationCode": "認証コード",
+  "ifYouLoseAccess": "2 要素認証コードがわからなくなったら、Lichess にメールで連絡してパスワードリセットを行なうことができます。",
+  "enableTwoFactor": "2 要素認証を有効にする",
+  "disableTwoFactor": "2 要素認証を無効にする",
+  "twoFactorEnabled": "2 要素認証を有効にしました。",
+  "twoFactorDisable": "2 要素認証を無効にするには、パスワードと、アプリが生成した認証コードが必要です。\n認証コードがわからなくなったら、Lichess にメールで連絡してパスワードリセットを行なってください。"
 }

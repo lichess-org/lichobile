@@ -1019,5 +1019,16 @@ export default {
   "teamLeaders:one": "Takım lideri",
   "teamLeaders:other": "Takım liderleri",
   "xJoinRequests:one": "%s katılma talebi",
-  "xJoinRequests:other": "%s katılma talebi"
+  "xJoinRequests:other": "%s katılma talebi",
+  "twoFactorAuth": "İki aşamalı kimlik doğrulama",
+  "twoFactorHelp": "İki aşamalı kimlik doğrulama, hesabınıza bir güvenlik katmanı daha ekler.",
+  "twoFactorApp": "İki aşamalı kimlik doğrulama için bir uygulama indirin. Örneğin %1$s ve %2$s için Google Authenticator yükleyebilirsiniz.",
+  "scanTheCode": "QR kodunu uygulamaya okutun.",
+  "enterPassword": "İşlemi tamamlamak için şifrenizi ve uygulama tarafından oluşturulan kimlik doğrulama kodunu girin. Her giriş yaptığınızda bir doğrulama kodu girmeniz gerekecek.",
+  "authenticationCode": "Kimlik doğrulama kodu",
+  "ifYouLoseAccess": "Not: İki aşamalı kimlik doğrulama koduna erişiminizi kaybederseniz e-posta aracılığıyla şifrenizi sıfırlayabilirsiniz.",
+  "enableTwoFactor": "İki aşamalı doğrulamayı etkinleştir",
+  "disableTwoFactor": "İki aşamalı doğrulamayı devre dışı bırak",
+  "twoFactorEnabled": "İki aşamalı kimlik doğrulama etkin",
+  "twoFactorDisable": "İki aşamalı kimlik doğrulamayı devre dışı bırakmak için şifrenize ve kimlik belirleme programınızdaki doğrulama koduna ihtiyacınız olacak.\n\nKimlik doğrulama kodlarına erişimi kaybettiyseniz e-posta aracılığıyla şifrenizi sıfırlayabilirsiniz."
 }

@@ -1019,5 +1019,16 @@ export default {
   "teamLeaders:one": "Lagledare",
   "teamLeaders:other": "Lagledare",
   "xJoinRequests:one": "%s förfrågan att gå med",
-  "xJoinRequests:other": "%s förfrågan att gå med"
+  "xJoinRequests:other": "%s förfrågan att gå med",
+  "twoFactorAuth": "Tvåfaktorsautentisering",
+  "twoFactorHelp": "Tvåfaktorsautentisering lägger till ytterligare ett säkerhetslager till ditt konto.",
+  "twoFactorApp": "Skaffa en app för tvåfaktorsautentisering, till exempel Google Authenticator för %1$s eller %2$s.",
+  "scanTheCode": "Skanna QR-koden med appen.",
+  "enterPassword": "Ange ditt lösenord och autentiseringskoden som genereras av appen för att slutföra installationen. Du behöver en autentiseringskod varje gång du loggar in.",
+  "authenticationCode": "Autentiseringskod",
+  "ifYouLoseAccess": "Obs! Om du förlorar åtkomst till dina tvåfaktorsautentiseringskoder, kan du återställa lösenordet via e-post.",
+  "enableTwoFactor": "Aktivera tvåfaktorsautentisering",
+  "disableTwoFactor": "Inaktivera tvåfaktorsautentisering",
+  "twoFactorEnabled": "Tvåfaktorsautentisering aktiverad",
+  "twoFactorDisable": "Du behöver ditt lösenord och en autentiseringskod från din autentiseringapp för att inaktivera tvåfaktorsautentisering.\nOm du har förlorat åtkomst till dina autentiseringskoder, kan du också återställa lösenordet via e-post."
 }

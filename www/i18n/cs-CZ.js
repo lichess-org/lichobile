@@ -1101,5 +1101,16 @@ export default {
   "xJoinRequests:one": "%s se připojil k žádosti",
   "xJoinRequests:few": "%s se připojili k žádosti",
   "xJoinRequests:many": "%s se připojilo k žádosti",
-  "xJoinRequests:other": "%s se připojilo k žádosti"
+  "xJoinRequests:other": "%s se připojilo k žádosti",
+  "twoFactorAuth": "Dvoufázové ověření",
+  "twoFactorHelp": "Dvoufázové ověření do vašeho účtu přidává další vrstvu zabezpečení.",
+  "twoFactorApp": "Stáhněte si aplikaci pro dvoufázové ověřování, například Google Authenticator pro %1$s nebo %2$s.",
+  "scanTheCode": "Naskenujte QR kód pomocí aplikace.",
+  "enterPassword": "Zadejte své heslo a ověřovací kód vygenerovaný aplikací pro dokončení nastavení. Při každém přihlášení budete potřebovat ověřovací kód.",
+  "authenticationCode": "Ověřovací kód",
+  "ifYouLoseAccess": "Poznámka: Pokud ztratíte přístup k vašim dvoufázovým ověřovacím kódům, můžete provést resetování hesla e-mailem.",
+  "enableTwoFactor": "Povolit dvoufázové ověřování",
+  "disableTwoFactor": "Zakázat dvoufázové ověření",
+  "twoFactorEnabled": "Dvoufázové ověřování zapnuto",
+  "twoFactorDisable": "Pro vypnutí dvoufázového ověřování potřebujete své heslo a ověřovací kód z Vaší ověřovací aplikace.\nPokud jste ztratili přístup ke svým ověřovacím kódům, můžete také provést obnovení hesla e-mailem."
 }

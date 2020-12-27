@@ -1019,5 +1019,16 @@ export default {
   "teamLeaders:one": "Capitán del equipo",
   "teamLeaders:other": "Líderes del equipo",
   "xJoinRequests:one": "%s solicitud de ingreso",
-  "xJoinRequests:other": "%s solicitudes de ingreso"
+  "xJoinRequests:other": "%s solicitudes de ingreso",
+  "twoFactorAuth": "Autenticación en dos pasos",
+  "twoFactorHelp": "La autenticación en dos pasos añade una capa de seguridad adicional a tu cuenta.",
+  "twoFactorApp": "Descárgate una aplicación para autenticación en dos pasos, por ejemplo Google Authenticator, para %1$s o %2$s.",
+  "scanTheCode": "Escanea el código QR con la aplicación.",
+  "enterPassword": "Introduce tu contraseña y el código de autenticación generado por la aplicación para completar la configuración. Necesitarás un código de autenticación cada vez que inicies sesión.",
+  "authenticationCode": "Código de autenticación",
+  "ifYouLoseAccess": "Nota: si pierdes el acceso a tus códigos de autenticación doble, puedes restablecer tu contraseña por correo electrónico.",
+  "enableTwoFactor": "Habilitar la autenticación en dos pasos",
+  "disableTwoFactor": "Desactivar la autenticación en dos pasos",
+  "twoFactorEnabled": "Autenticación en dos pasos habilitada",
+  "twoFactorDisable": "Necesitas tu contraseña y un código de autenticación de tu aplicación de autenticación para desactivar la autenticación en dos pasos.\nSi perdiste el acceso a tus códigos de autenticación, también puedes restablecer tu contraseña por correo electrónico."
 }

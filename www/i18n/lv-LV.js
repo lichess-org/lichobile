@@ -1063,5 +1063,16 @@ export default {
   "teamLeaders:other": "Komandas vadītāji",
   "xJoinRequests:zero": "%s pievienošanās pieprasījumu",
   "xJoinRequests:one": "%s pievienošanās pieprasījums",
-  "xJoinRequests:other": "%s pievienošanās pieprasījumi"
+  "xJoinRequests:other": "%s pievienošanās pieprasījumi",
+  "twoFactorAuth": "Divfaktoru autentifikācija",
+  "twoFactorHelp": "Divfaktoru autentifikācija pievieno papildu drošības slāni jūsu kontam.",
+  "twoFactorApp": "Iegūstiet lietojumprogrammu divfaktoru autentifikācijai, piemēram Google Autentifikatoru platformai %1$s vai %2$s.",
+  "scanTheCode": "Skenējiet QR kodu ar lietojumprogrammu.",
+  "enterPassword": "Ievadiet savu paroli un autentifikācijas lietojumprogrammas radīto kodu lai pabeigtu uzstādīšanu. Jums vajadzēs autentifikācijas kodu katru reizi, kad ierakstīsieties.",
+  "authenticationCode": "Autentifikācijas kods",
+  "ifYouLoseAccess": "Piezīme: Ja zaudēsiet piekļuvi divfaktoru autentifikācijas kodiem, varēsiet atiestatīt paroli, izmantojot epastu.",
+  "enableTwoFactor": "Iespējot divfaktoru autentifikāciju",
+  "disableTwoFactor": "Atspējot divfaktoru autentifikāciju",
+  "twoFactorEnabled": "Iespējota divfaktoru autentifikācija",
+  "twoFactorDisable": "Jums nepieciešama parole un autentifikatora lietojumprogrammas autentifikācijas kods, lai atspējotu divfaktoru autentifikāciju.\nJa zaudējāt piekļuvi autentifikācijas kodiem, varat arī atiestatīt paroli, izmantojot e-pastu."
 }

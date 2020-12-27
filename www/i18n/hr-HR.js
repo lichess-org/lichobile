@@ -1065,5 +1065,16 @@ export default {
   "teamLeaders:other": "Vođe tima",
   "xJoinRequests:one": "%s zahtjeva za pridruživanje",
   "xJoinRequests:few": "%s zahtjeva za pridruživanje",
-  "xJoinRequests:other": "%s zahtjeva za pridruživanje"
+  "xJoinRequests:other": "%s zahtjeva za pridruživanje",
+  "twoFactorAuth": "Dvofaktorska provjera autentičnosti",
+  "twoFactorHelp": "Dvofaktorska provjera autentičnosti dodaje još jedan sloj sigurnosti vašem računu.",
+  "twoFactorApp": "Nabavite aplikaciju za dvofaktorsku provjeru autentičnosti, na primjer Google Authenticator za %1$s ili %2$s.",
+  "scanTheCode": "Skenirajte QR kôd pomoću aplikacije.",
+  "enterPassword": "Unesite lozinku i kôd za provjeru autentičnosti koji je generirala aplikacija da biste dovršili postavljanje. Trebat će vam kôd za provjeru autentičnosti svaki put kada se prijavite.",
+  "authenticationCode": "Kôd za provjeru autentičnosti",
+  "ifYouLoseAccess": "Napomena: Ako izgubite pristup dvofaktorskim kodovima za provjeru autentičnosti, možete izvršiti resetiranje lozinke putem e-pošte.",
+  "enableTwoFactor": "Uključite dvofaktorsku provjeru autentičnosti",
+  "disableTwoFactor": "Isključite dvofaktorsku provjeru autentičnosti",
+  "twoFactorEnabled": "Dvofaktorska provjera autentičnosti je uključena",
+  "twoFactorDisable": "Da biste onemogućili dvofaktorsku provjeru autentičnosti, potrebna vam je lozinka i kôd za provjeru autentičnosti iz aplikacije za potvrđivanje. Ako ste izgubili pristup kodovima za provjeru autentičnosti, možete izvršiti resetiranje lozinke putem e-pošte."
 }

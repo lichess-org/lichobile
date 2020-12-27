@@ -1107,5 +1107,7 @@ export default {
   "xJoinRequests:one": "%s בקשת הצטרפות",
   "xJoinRequests:two": "%s בקשות הצטרפות",
   "xJoinRequests:many": "%s בקשות הצטרפות",
-  "xJoinRequests:other": "%s בקשות הצטרפות"
+  "xJoinRequests:other": "%s בקשות הצטרפות",
+  "twoFactorAuth": "אימות דו-גורמי",
+  "twoFactorHelp": "אימות דו-גורמי מוסיף עוד שכבה של אבטחה לחשבון שלך."
 }

@@ -1019,5 +1019,16 @@ export default {
   "teamLeaders:one": "Líder da equipe",
   "teamLeaders:other": "Líderes da equipe",
   "xJoinRequests:one": "%s pedido de adesão",
-  "xJoinRequests:other": "%s pedidos de adesão"
+  "xJoinRequests:other": "%s pedidos de adesão",
+  "twoFactorAuth": "Autenticação de dois fatores",
+  "twoFactorHelp": "A autenticação de dois fatores adiciona outra camada de segurança à sua conta.",
+  "twoFactorApp": "Obtenha um aplicativo para autenticação de dois fatores, por exemplo, o Google Authenticator para %1$s ou %2$s.",
+  "scanTheCode": "Escaneie o código QR com o aplicativo.",
+  "enterPassword": "Digite sua senha e o código de autenticação gerado pelo aplicativo para concluir a configuração. Você precisará de um código de autenticação toda vez que fizer login.",
+  "authenticationCode": "Código de autenticação",
+  "ifYouLoseAccess": "Nota: Se você perder o acesso aos seus códigos de autenticação de dois fatores, você pode redefinir a senha por e-mail.",
+  "enableTwoFactor": "Ativar autenticação de dois fatores",
+  "disableTwoFactor": "Desativar autenticação de dois fatores",
+  "twoFactorEnabled": "Autenticação de dois fatores ativada",
+  "twoFactorDisable": "Você precisa da sua senha e de um código de autenticação do seu aplicativo autenticador para desativar a autenticação de dois fatores.\nSe você perdeu o acesso aos seus códigos de autenticação, você também pode redefinir a senha por e-mail."
 }

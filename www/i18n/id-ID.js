@@ -965,5 +965,16 @@ export default {
   "teamTournamentOverview": "Sebuah arena turnamen yang hanya bisa diikuti oleh anggota tim Anda",
   "messageAllMembers": "Pesan semua anggota",
   "messageAllMembersOverview": "Kirim pesan pribadi kepada semua anggota tim",
-  "xJoinRequests:other": "%s ajukan permintaan"
+  "xJoinRequests:other": "%s ajukan permintaan",
+  "twoFactorAuth": "Otentikasi dua-langkah",
+  "twoFactorHelp": "Otentikasi dua-langkah menambahkan lapisan keamanan lain ke akun Anda.",
+  "twoFactorApp": "Dapatkan aplikasi untuk otentikasi dua-langkah, misalnya Otentikator Google untuk %1$s atau %2$s.",
+  "scanTheCode": "Pindai kode QR dengan aplikasi.",
+  "enterPassword": "Masukkan kata sandi Anda dan kode otentikasi yang dihasilkan oleh aplikasi untuk menyelesaikan pengaturan. Anda akan memerlukan kode otentikasi setiap kali Anda masuk.",
+  "authenticationCode": "Kode otentikasi",
+  "ifYouLoseAccess": "Catatan: Jika Anda kehilangan akses ke kode otentikasi dua-langkah, Anda dapat melakukan pengaturan ulang kata sandi melalui email.",
+  "enableTwoFactor": "Aktifkan otentikasi dua-langkah",
+  "disableTwoFactor": "Non-aktifkan otentikasi dua-langkah",
+  "twoFactorEnabled": "Otentikasi dua-langkah telah diaktifkan",
+  "twoFactorDisable": "Anda memerlukan kata sandi dan kode otentikasi dari aplikasi otentikator untuk menonaktifkan otentikasi dua-langkah. Jika Anda kehilangan akses ke kode otentikasi Anda, Anda juga dapat melakukan reset kata sandi melalui email."
 }

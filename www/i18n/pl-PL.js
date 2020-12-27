@@ -1111,5 +1111,16 @@ export default {
   "xJoinRequests:one": "Prośba o dołączenie od %s",
   "xJoinRequests:few": "Prośby o dołączenie od %s",
   "xJoinRequests:many": "Prośby o dołączenie od %s",
-  "xJoinRequests:other": "Prośby o dołączenie od %s"
+  "xJoinRequests:other": "Prośby o dołączenie od %s",
+  "twoFactorAuth": "Uwierzytelnienie dwuetapowe",
+  "twoFactorHelp": "Uwierzytelnianie dwuetapowe dodaje kolejną warstwę zabezpieczeń do Twojego konta.",
+  "twoFactorApp": "Pobierz aplikację do uwierzytelniania dwuetapowego, na przykład Google Authenticator dla %1$s lub %2$s.",
+  "scanTheCode": "Zeskanuj kod QR za pomocą aplikacji.",
+  "enterPassword": "Wprowadź hasło i kod uwierzytelniający wygenerowany przez aplikację, aby zakończyć konfigurację. Będziesz potrzebował kodu uwierzytelniającego za każdym razem, gdy się zalogujesz.",
+  "authenticationCode": "Kod uwierzytelniania",
+  "ifYouLoseAccess": "Uwaga: Jeśli utracisz dostęp do kodów uwierzytelniania dwuetapowego, możesz zresetować hasło za pomocą wiadomości e-mail.",
+  "enableTwoFactor": "Włącz uwierzytelnianie dwuetapowe",
+  "disableTwoFactor": "Wyłącz uwierzytelnianie dwuetapowe",
+  "twoFactorEnabled": "Uwierzytelnianie dwuetapowe włączone",
+  "twoFactorDisable": "Potrzebujesz hasła i kodu uwierzytelniającego z aplikacji uwierzytelniającej, aby wyłączyć uwierzytelnianie dwuetapowe.\nJeśli utraciłeś dostęp do swoich kodów uwierzytelniających, możesz również zresetować hasło poprzez e-mail."
 }

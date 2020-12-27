@@ -1019,5 +1019,16 @@ export default {
   "teamLeaders:one": "Taldearen kapitaina",
   "teamLeaders:other": "Taldearen kapitainak",
   "xJoinRequests:one": "Sartzeko eskaera %s",
-  "xJoinRequests:other": "Sartzeko %s eskaera"
+  "xJoinRequests:other": "Sartzeko %s eskaera",
+  "twoFactorAuth": "Bi faktoreko autentikazioa",
+  "twoFactorHelp": "Bi faktoreko autentikazioak beste segurtasun kapa bat jartzen dio zure kontuari.",
+  "twoFactorApp": "Lortu bi faktoreko autentikaziorako aplikazioa, adibidez Google Authenticator %1$s edo %2$s plataformarako.",
+  "scanTheCode": "QR kodea aplikazioa erabiliz eskaneatu.",
+  "enterPassword": "Idatzi zure pasahitza eta aplikazioak sortutako autentikazio kodea ezarpenak gordetzeko. Webgunera sartzen zaren bakoitzean autentikazio kodea sartu beharko duzu.",
+  "authenticationCode": "Autentikazio kodea",
+  "ifYouLoseAccess": "Oharra: bi faktoreko autentikaziora sartzeko aplikazioa galtzen baduzu, pasahitza berrezarri egin dezakezu.",
+  "enableTwoFactor": "Gaitu bi faktoreko autentifikazioa",
+  "disableTwoFactor": "Desgaitu bi faktoreko autentifikazioa",
+  "twoFactorEnabled": "Bi faktoreetako autentifikazioa gaituta",
+  "twoFactorDisable": "Pasahitza eta aplikazioak ematen dizun kodea behar duzu bi faktoreko autentikazioa desgaitzeko.\nAplikazioa galdu edo ezabatu baduzu, pasahitza berrezarri eta eposta bidezko prozesua osatu beharko duzu."
 }

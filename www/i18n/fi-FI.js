@@ -1017,5 +1017,16 @@ export default {
   "teamLeaders:one": "Joukkueen johtaja",
   "teamLeaders:other": "Joukkueen johtajat",
   "xJoinRequests:one": "%s liittymispyyntö",
-  "xJoinRequests:other": "%s liittymispyyntöä"
+  "xJoinRequests:other": "%s liittymispyyntöä",
+  "twoFactorAuth": "Kaksivaiheinen tunnistautuminen",
+  "twoFactorHelp": "Kaksivaiheinen tunnistautuminen lisää tiliisi uuden tietoturvatason.",
+  "twoFactorApp": "Lataa sovellus kaksivaiheiseen tunnistautumiseen, esimerkiksi Google Authenticator %1$s tai %2$s -laitteeseen.",
+  "scanTheCode": "Skannaa sovelluksella tämä QR-koodi.",
+  "enterPassword": "Saata asennus loppuun kirjoittamalla tähän salasanasi ja sovelluksen tuottaman tunnistautumiskoodin. Tämän jälkeen tarvitset kirjautumiseen joka kerralla tunnistautumiskoodin.",
+  "authenticationCode": "Tunnistautumiskoodi",
+  "ifYouLoseAccess": "Huomaa: Jos menetät pääsyn kaksivaiheisen tunnistautumisen koodeihin, voit nollata salasanasi sähköpostitse.",
+  "enableTwoFactor": "Ota käyttöön kaksivaiheinen tunnistautuminen",
+  "disableTwoFactor": "Poista käytöstä kaksivaiheinen tunnistautuminen",
+  "twoFactorEnabled": "Kaksivaiheinen tunnistautuminen käytössä",
+  "twoFactorDisable": "Poistaaksesi kaksivaiheisen tunnistautumisen käytöstä tarvitset salasanasi sekä tunnistautumiskoodin tunnistautumissovelluksestasi.\nJos olet menettänyt pääsyn tunnistautumiskoodeihin, voit myös nollata salasanasi sähköpostitse."
 }

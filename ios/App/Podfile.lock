@@ -6,8 +6,8 @@ PODS:
   - CapacitorCordova (2.4.3)
   - CapacitorSoundEffect (0.0.1):
     - Capacitor
-  - CordovaPlugins (2.4.3):
-    - CapacitorCordova
+  - CapacitorStockfish (0.0.1):
+    - Capacitor
   - Firebase/CoreOnly (7.3.0):
     - FirebaseCore (= 7.3.0)
   - Firebase/Messaging (7.3.0):
@@ -70,7 +70,7 @@ DEPENDENCIES:
   - "CapacitorCommunityKeepAwake (from `../../node_modules/@capacitor-community/keep-awake`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - CapacitorSoundEffect (from `../../node_modules/capacitor-sound-effect`)
-  - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
+  - CapacitorStockfish (from `../../../capacitor-stockfish`)
   - Firebase/Messaging
 
 SPEC REPOS:
@@ -95,15 +95,15 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorSoundEffect:
     :path: "../../node_modules/capacitor-sound-effect"
-  CordovaPlugins:
-    :path: "../capacitor-cordova-ios-plugins"
+  CapacitorStockfish:
+    :path: "../../../capacitor-stockfish"
 
 SPEC CHECKSUMS:
   Capacitor: 723817d2a46affb831c80233f2abc502ff63b37a
   CapacitorCommunityKeepAwake: c4476e4a01406d22ec14df13520e391685441813
   CapacitorCordova: 7b6eb536dd6d517a32056341575bb0b187bd44a5
   CapacitorSoundEffect: 31a36e64d0220c6d0e1621a61744b5d8c1e7738d
-  CordovaPlugins: 050a0344e9aa9996d7e5858294d4626d1c94ed97
+  CapacitorStockfish: 1a9c8082df10ca1bf1c8cdf44ad75b639a67f1ef
   Firebase: 26223c695fe322633274198cb19dca8cb7e54416
   FirebaseCore: 4d3c72622ce0e2106aaa07bb4b2935ba2c370972
   FirebaseCoreDiagnostics: d50e11039e5984d92c8a512be2395f13df747350
@@ -115,6 +115,6 @@ SPEC CHECKSUMS:
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
 
-PODFILE CHECKSUM: d42aa658dd687df090de848c4639c80163e1e818
+PODFILE CHECKSUM: 09b96d20aa796c7f25a118d01a10011541decb4e
 
 COCOAPODS: 1.10.0

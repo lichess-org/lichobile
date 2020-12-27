@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import settings from '../../../settings'
 import { Tree } from '../../shared/tree'
 import { getNbCores } from '../../../utils/stockfish'
@@ -8,6 +9,8 @@ export default function CevalCtrl(
   opts: Opts,
   emit: (path: string, res?: Tree.ClientEval) => void,
 ): ICevalCtrl {
+
+  const hashPromise = Plugins.Stockfish.getMaxMemory()
 
   let initialized = false
 
@@ -27,10 +30,11 @@ export default function CevalCtrl(
     emit(work.path, res)
   }
 
-  function start(path: Tree.Path, nodes: Tree.Node[], forceMaxLevel: boolean) {
+  async function start(path: Tree.Path, nodes: Tree.Node[], forceMaxLevel: boolean) {
     if (!enabled()) {
       return
     }
+    const { value: hash } = await hashPromise
     const step = nodes[nodes.length - 1]
     if (step.ceval && step.ceval.depth >= maxDepth) {
       return
@@ -41,6 +45,7 @@ export default function CevalCtrl(
       moves: nodes.slice(1).map((s) => fixCastle(s.uci!, s.san!)),
       maxDepth: forceMaxLevel ? 18 : effectiveMaxDepth(),
       cores: forceMaxLevel ? getNbCores() : opts.cores,
+      hash,
       path,
       ply: step.ply,
       multiPv: forceMaxLevel ? 1 : opts.multiPv,

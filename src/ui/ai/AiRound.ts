@@ -142,7 +142,8 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
       payload.fen = setupFen
     }
 
-    chess.init(payload)
+    this.engine.newGame()
+    .then(() => chess.init(payload))
     .then((data: chess.InitResponse) => {
       this.init(makeData({
         id: 'offline_ai',

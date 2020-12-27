@@ -11,9 +11,10 @@ apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':capacitor-community-keep-awake')
     implementation project(':capacitor-sound-effect')
+    implementation project(':capacitor-stockfish')
 
 }
-apply from: "../../node_modules/capacitor-cordova-plugin-stockfish/build-extras-stockfish.gradle"
+
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

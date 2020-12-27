@@ -22,6 +22,7 @@ export interface Work {
   path: string
   maxDepth: number
   cores: number
+  hash: number
   multiPv: number
   ply: number
   threatMode: boolean
@@ -54,7 +55,7 @@ export interface ICevalCtrl {
 
 export interface IEngine {
   init(): Promise<void>
-  start(work: Work): void
+  start(work: Work): Promise<void>
   stop(): void
   exit(): Promise<void>
   isSearching(): boolean

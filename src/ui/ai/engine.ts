@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import { AiRoundInterface } from '../shared/round'
 import { send, getNbCores, setOption, setVariant } from '../../utils/stockfish'
 
@@ -20,6 +21,7 @@ const levelToDepth: LevelToDepth = {
 
 export interface EngineInterface {
   init(): Promise<void>
+  newGame(): Promise<void>
   search(initialFen: string, moves: string): void
   setLevel(level: number): Promise<void>
   prepare(variant: VariantKey): Promise<void>
@@ -31,24 +33,27 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
 
   return {
     init() {
-      return Stockfish.init()
-      .then(onInit)
-      .catch(console.error.bind(console))
-    },
-
-    search(initialFen: string, moves: string) {
-      Stockfish.output((msg: string) => {
-        console.debug('[stockfish >>] ' + msg)
-        const match = msg.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/)
+      Plugins.Stockfish.addListener('output', ({ line }: { line: string }) => {
+        console.debug('[stockfish >>] ' + line)
+        const match = line.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/)
         if (match) {
           if (match[1]) ctrl.onEngineMove(match[1])
           else if (match[2]) ctrl.onEngineDrop(match[2])
         }
       })
 
+      return Plugins.Stockfish.start()
+      .then(onInit)
+      .catch(console.error.bind(console))
+    },
+
+    newGame() {
+      return send('ucinewgame')
+    },
+
+    search(initialFen: string, moves: string) {
       // console.info('engine search pos: ', `position fen ${initialFen} moves ${moves}`)
-      setOption('Threads', getNbCores())
-      .then(() => send(`position fen ${initialFen} moves ${moves}`))
+      send(`position fen ${initialFen} moves ${moves}`)
       .then(() => send(`go movetime ${moveTime(level)} depth ${depth(level)}`))
     },
 
@@ -62,13 +67,19 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
     },
 
     exit() {
-      return Stockfish.exit()
+      Plugins.Stockfish.removeAllListeners()
+      return Plugins.Stockfish.exit()
     }
   }
 }
 
 function onInit() {
   return send('uci')
+  .then(() => setOption('Threads', getNbCores()))
+  .then(async () => {
+    const { value: mem }= await Plugins.Stockfish.getMaxMemory()
+    setOption('Hash', mem)
+  })
   .then(() => setOption('Ponder', 'false'))
 }
 

@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import { Tree } from '../../shared/tree/interfaces'
 import { Work, IEngine } from './interfaces'
 import { send, setOption, setVariant } from '../../../utils/stockfish'
@@ -33,13 +34,11 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
    * Init engine with default options and variant
    */
   function init() {
-    return Stockfish.init()
-    .then(() => {
-      return send('uci')
-      .then(() => setOption('Ponder', 'false'))
-      .then(() => setVariant(variant))
-    })
-    .catch(err => console.error('stockfish init error', err))
+    return Plugins.Stockfish.start()
+    .then(() => send('uci'))
+    .then(() => setOption('Ponder', 'false'))
+    .then(() => setVariant(variant))
+    .catch((err: any) => console.error('stockfish init error', err))
   }
 
   /*
@@ -57,7 +56,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
       stopTimeoutId = setTimeout(reject, 5 * 1000)
     })
 
-    Promise.race([readyPromise, timeout])
+    return Promise.race([readyPromise, timeout])
     .then(search)
     .catch(() => {
       reset().then(search)
@@ -84,13 +83,17 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
       stopped = false
       finished = false
       startQueue = []
+      curEval = null
 
       readyPromise = new Promise((resolve) => {
-        Stockfish.output((msg: string) => processOutput(msg, work, resolve))
+        Plugins.Stockfish.removeAllListeners()
+        Plugins.Stockfish.addListener('output', ({ line }: { line: string }) => {
+          processOutput(line, work, resolve)
+        })
       })
 
       return setOption('Threads', work.cores)
-      .then(() => curEval = null)
+      .then(() => setOption('Hash', work.hash))
       .then(() => setOption('MultiPV', work.multiPv))
       .then(() => send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' ')))
       .then(() => send('go depth ' + work.maxDepth))
@@ -178,7 +181,8 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
 
 
   function exit() {
-    return Stockfish.exit()
+    Plugins.Stockfish.removeAllListeners()
+    return Plugins.Stockfish.exit()
   }
 
   function reset() {

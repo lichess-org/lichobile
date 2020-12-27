@@ -17,8 +17,10 @@ import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.Dialogs;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.community.keepawake.KeepAwake;
+import com.getcapacitor.plugin.Storage;
 
 import org.lichess.plugin.SoundEffect;
+import org.lichess.mobileapp.stockfish.Stockfish;
 import org.lichess.mobileapp.BuildConfig;
 
 import java.io.File;
@@ -42,6 +44,7 @@ public class MainActivity extends BridgeActivity {
       add(LiShare.class);
       add(SoundEffect.class);
       add(KeepAwake.class);
+      add(Stockfish.class);
     }});
 
     this.versionUpdateActions();

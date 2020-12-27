@@ -16,7 +16,7 @@ export interface ErrorResponse {
 export interface RequestOpts {
   method?: 'GET' | 'POST'
   body?: any
-  query?: Object
+  query?: Record<string, unknown>
   headers?: Record<string, string>
   cache?: RequestCache
   mode?: RequestMode

@@ -28,7 +28,7 @@ export default {
     const header = dropShadowHeader(null, backButton(i18n('settings')))
     return layout.free(header, renderBody(this.appVersion))
   }
-} as Mithril.Component<{}, State>
+} as Mithril.Component<Record<string, never>, State>
 
 function renderBody(appVersion?: string) {
   return [

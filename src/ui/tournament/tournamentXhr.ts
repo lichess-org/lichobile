@@ -1,6 +1,8 @@
 import { fetchJSON } from '../../http'
 import { Tournament, PlayerInfo, TournamentCreateResponse, TournamentLists, StandingPage } from '../../lichess/interfaces/tournament'
 
+type EmptyObject = Record<string, never>
+
 export function currentTournaments(): Promise<TournamentLists> {
   return fetchJSON('/tournament', {}, true)
 }
@@ -21,7 +23,7 @@ export function loadPage(id: string, p: number): Promise<StandingPage> {
   return fetchJSON('/tournament/' + id + '/standing/' + p)
 }
 
-export function join(id: string, password?: string, team?: string): Promise<{}> {
+export function join(id: string, password?: string, team?: string): Promise<EmptyObject> {
   return fetchJSON('/tournament/' + id + '/join',
   {
     method: 'POST',
@@ -32,7 +34,7 @@ export function join(id: string, password?: string, team?: string): Promise<{}> 
   }, true)
 }
 
-export function withdraw(id: string): Promise<{}> {
+export function withdraw(id: string): Promise<EmptyObject> {
   return fetchJSON('/tournament/' + id + '/withdraw', { method: 'POST' }, true)
 }
 

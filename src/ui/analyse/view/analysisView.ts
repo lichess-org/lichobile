@@ -56,7 +56,7 @@ const AcplSummary: Mithril.Component<{
   d: AnalyseData
   analysis: RemoteEvalSummary
   study?: Study
-}, {}> = {
+}> = {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
     return !shallowEqual(attrs.analysis, oldattrs.analysis)
   },

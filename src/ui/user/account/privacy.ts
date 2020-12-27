@@ -28,7 +28,7 @@ export default {
     const header = dropShadowHeader(null, backButton(i18n('privacy')))
     return layout.free(header, renderBody(ctrl))
   }
-} as Mithril.Component<{}, { ctrl: Ctrl }>
+} as Mithril.Component<Record<string, never>, { ctrl: Ctrl }>
 
 function renderBody(ctrl: Ctrl) {
   return [

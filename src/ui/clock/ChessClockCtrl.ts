@@ -19,7 +19,7 @@ export interface IChessClockCtrl {
   appStateListener: PluginListenerHandle
 }
 
-function noop() {}
+function noop() { /* noop */ }
 
 export default function ChessClockCtrl(): IChessClockCtrl {
 

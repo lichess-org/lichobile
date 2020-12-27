@@ -1,3 +1,4 @@
+/* eslint-disable */
 declare namespace Mithril {
 
 	interface Lifecycle<Attrs, State> {

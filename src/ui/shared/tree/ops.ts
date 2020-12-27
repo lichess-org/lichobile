@@ -20,8 +20,9 @@ export function findInMainline(fromNode: Tree.Node, predicate: (node: Tree.Node)
 
 // returns a list of nodes collected from the original one
 export function collect(fromNode: Tree.Node, pickChild: (node: Tree.Node) => Tree.Node | undefined): Tree.Node[] {
-  let nodes = [fromNode], n = fromNode, c
-  while (c = pickChild(n)) {
+  const nodes = [fromNode]
+  let n = fromNode, c
+  while ((c = pickChild(n))) {
     nodes.push(c)
     n = c
   }

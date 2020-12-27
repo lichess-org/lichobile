@@ -130,10 +130,10 @@ export default function ButtonHandler(
   }
 
   function isActive(touch: Touch) {
-    let x = touch.clientX,
+     const x = touch.clientX,
       y = touch.clientY,
-      b = boundaries,
-      dX = 0,
+      b = boundaries;
+    let dX = 0,
       dY = 0
     if (scrollX) dX = Math.abs(x - startX)
     if (scrollY) dY = Math.abs(y - startY)

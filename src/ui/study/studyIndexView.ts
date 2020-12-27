@@ -151,4 +151,4 @@ const Item = {
 } as Mithril.Component<{
   study: PagerDataWithDate
   index: number
-}, {}>
+}>

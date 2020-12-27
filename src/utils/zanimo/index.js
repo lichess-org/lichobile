@@ -78,7 +78,7 @@ function applycss(el, attr, value) {
 }
 
 function css(el, attr, value) {
-  if(el._zanimo && el._zanimo.hasOwnProperty(attr)) {
+  if(el._zanimo && Object.prototype.hasOwnProperty.call(el._zanimo, attr)) {
     console.warn(
       'Zanimo transition with transform=' +
         el._zanimo[attr].value +

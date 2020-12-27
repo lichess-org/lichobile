@@ -37,7 +37,7 @@ export default {
       close
     ) : null
   }
-} as Mithril.Component<Attrs, {}>
+} as Mithril.Component<Attrs>
 
 function content(mini: any, player: Player, opponent: Player, score?: Score) {
   const user = player.user

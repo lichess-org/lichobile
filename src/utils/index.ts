@@ -152,7 +152,7 @@ export function serializeQueryParameters(obj: StringMap): string {
   return str
 }
 
-export function noop() {}
+export function noop() { /* noop */ }
 
 const perfIconsMap: {[index: string]: string} = {
   bullet: 'T',

@@ -26,9 +26,8 @@ export default {
   },
 
   view() {
-    const ctrl = this
     const header = dropShadowHeader(null, backButton(i18n('language')))
-    const currentLang = ctrl.lang
+    const currentLang = this.lang
 
     function renderLang(l: string) {
       const name = getLanguageNativeName(getIsoCodeFromLocale(l))
@@ -43,25 +42,25 @@ export default {
       )
     }
 
-    function onTap(e: Event) {
+    const onTap = (e: Event) => {
       const el = helper.getLI(e)
       const lang = el && el.dataset.lang
       if (lang) {
         setServerLang(lang)
         loadLanguage(lang).then(() => {
-          ctrl.lang = lang
+          this.lang = lang
           redraw()
         })
       }
     }
 
-    function renderBody() {
-      return ctrl.locales ?
+    const renderBody = () => {
+      return this.locales ?
         <ul
           className="native_scroller page settings_list"
           oncreate={helper.ontapY(onTap, undefined, helper.getLI)}
         >
-          {ctrl.locales.map(l => renderLang(l))}
+          {this.locales.map(l => renderLang(l))}
         </ul> :
         <div
           className="loader_container"
@@ -73,4 +72,4 @@ export default {
 
     return layout.free(header, renderBody())
   }
-} as Mithril.Component<{}, State>
+} as Mithril.Component<Record<string, never>, State>

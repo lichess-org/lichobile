@@ -32,7 +32,7 @@ export default class PlayersCtrl {
   }
 
   public onTabChange = (tabIndex: number) => {
-    const loc = window.location.search.replace(/\?tab\=\w+$/, '')
+    const loc = window.location.search.replace(/\?tab=\w+$/, '')
     try {
       window.history.replaceState(window.history.state, '', loc + '?tab=' + tabIndex)
     } catch (e) { console.error(e) }

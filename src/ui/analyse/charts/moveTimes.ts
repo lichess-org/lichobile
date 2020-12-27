@@ -84,7 +84,7 @@ export default function drawMoveTimesChart(
   .y0(y(0))
   .y1(d => y(d.y))
 
-  const maxCentis = Math.max.apply(Math, moveCentis) / 100
+  const maxCentis = Math.max(...moveCentis) / 100
   const legendScale = scaleLinear()
   .domain([-maxCentis, maxCentis])
   .rangeRound([height, 0])

@@ -132,7 +132,7 @@ export default class HomeCtrl {
   }
 
   public onTabChange = (i: number) => {
-    const loc = window.location.search.replace(/\?tab\=\w+$/, '')
+    const loc = window.location.search.replace(/\?tab=\w+$/, '')
     try {
       window.history.replaceState(window.history.state, '', loc + '?tab=' + i)
     } catch (e) { console.error(e) }

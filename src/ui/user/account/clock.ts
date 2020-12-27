@@ -16,7 +16,7 @@ export default {
       h('ul.native_scroller.page.settings_list.game', render(prefsCtrl))
     )
   }
-} as Mithril.Component<{}, {}>
+} as Mithril.Component
 
 export const prefsCtrl = {
   clockTenths: session.lichessBackedProp<number>('prefs.clockTenths', ClockTenths.LOWTIME),

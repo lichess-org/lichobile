@@ -47,7 +47,7 @@ export function onPageLeave(anim: (el: HTMLElement) => Promise<void>, cleanup?: 
 
 // el fade in transition, can be applied to any element
 export function elFadeIn(el: HTMLElement, duration = animDuration, origOpacity = '0.5', endOpacity = '1') {
-  let tId: number
+  let tId: number | undefined = undefined
 
   el.style.opacity = origOpacity
   el.style.transition = `opacity ${duration}ms ease-out`
@@ -73,10 +73,10 @@ export function elFadeIn(el: HTMLElement, duration = animDuration, origOpacity =
 // apply only to page change transitions
 // they listen to history to determine if animation is going forward or backward
 export function pageSlideIn(el: HTMLElement) {
-  let tId: number
+  let tId: number | undefined = undefined
 
   function after() {
-    clearTimeout(tId)
+    clearTimeout(tId )
     if (el) {
       el.removeAttribute('style')
       el.removeEventListener('transitionend', after, false)
@@ -97,7 +97,7 @@ export function pageSlideIn(el: HTMLElement) {
 }
 
 export function elSlideIn(el: HTMLElement, dir: 'left' | 'right') {
-  let tId: number
+  let tId: number | undefined = undefined
 
   function after() {
     clearTimeout(tId)

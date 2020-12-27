@@ -90,7 +90,7 @@ export default {
       </li>
     )
   }
-} as Mithril.Component<Attrs, {}>
+} as Mithril.Component<Attrs>
 
 function renderBoard(fen: string, orientation: Color, boardTheme: string) {
 

@@ -1,9 +1,20 @@
 import { Plugins } from '@capacitor/core'
-import { VariantKey } from '../lichess/interfaces/variant'
+import { VariantKey } from './lichess/interfaces/variant'
+
+export interface StockfishPlugin {
+  addListener(event: 'output', callback: (v: { line: string }) => void): void
+  removeAllListeners(): void
+  getMaxMemory(): Promise<{ value: number }>
+  start(): Promise<void>
+  cmd(options: { cmd: string }): Promise<void>
+  exit(): Promise<void>
+}
+
+export const Stockfish = Plugins.Stockfish as StockfishPlugin
 
 export function send(text: string): Promise<void> {
   console.debug('[stockfish <<] ' + text)
-  return Plugins.Stockfish.cmd({ cmd: text })
+  return Stockfish.cmd({ cmd: text })
 }
 
 export function setOption(name: string, value: string | number | boolean): Promise<void> {

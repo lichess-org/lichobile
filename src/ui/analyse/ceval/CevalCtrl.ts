@@ -1,7 +1,6 @@
-import { Plugins } from '@capacitor/core'
 import settings from '../../../settings'
 import { Tree } from '../../shared/tree'
-import { getNbCores } from '../../../utils/stockfish'
+import { Stockfish, getNbCores } from '../../../stockfish'
 import StockfishEngine from './StockfishEngine'
 import { Opts, Work, ICevalCtrl } from './interfaces'
 
@@ -10,7 +9,7 @@ export default function CevalCtrl(
   emit: (path: string, res?: Tree.ClientEval) => void,
 ): ICevalCtrl {
 
-  const hashPromise = Plugins.Stockfish.getMaxMemory()
+  const hashPromise = Stockfish.getMaxMemory()
 
   let initialized = false
 

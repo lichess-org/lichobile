@@ -1,6 +1,5 @@
-import { Plugins } from '@capacitor/core'
 import { AiRoundInterface } from '../shared/round'
-import { send, getNbCores, setOption, setVariant } from '../../utils/stockfish'
+import { Stockfish, send, getNbCores, setOption, setVariant } from '../../stockfish'
 
 interface LevelToDepth {
   [index: number]: number
@@ -33,7 +32,7 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
 
   return {
     init() {
-      Plugins.Stockfish.addListener('output', ({ line }: { line: string }) => {
+      Stockfish.addListener('output', ({ line }) => {
         console.debug('[stockfish >>] ' + line)
         const match = line.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/)
         if (match) {
@@ -42,7 +41,7 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
         }
       })
 
-      return Plugins.Stockfish.start()
+      return Stockfish.start()
       .then(onInit)
       .catch(console.error.bind(console))
     },
@@ -67,8 +66,8 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
     },
 
     exit() {
-      Plugins.Stockfish.removeAllListeners()
-      return Plugins.Stockfish.exit()
+      Stockfish.removeAllListeners()
+      return Stockfish.exit()
     }
   }
 }
@@ -77,7 +76,7 @@ function onInit() {
   return send('uci')
   .then(() => setOption('Threads', getNbCores()))
   .then(async () => {
-    const { value: mem }= await Plugins.Stockfish.getMaxMemory()
+    const { value: mem } = await Stockfish.getMaxMemory()
     setOption('Hash', mem)
   })
   .then(() => setOption('Ponder', 'false'))

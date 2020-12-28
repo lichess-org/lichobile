@@ -1,7 +1,6 @@
-import { Plugins } from '@capacitor/core'
 import { Tree } from '../../shared/tree/interfaces'
 import { Work, IEngine } from './interfaces'
-import { send, setOption, setVariant } from '../../../utils/stockfish'
+import { Stockfish, send, setOption, setVariant } from '../../../stockfish'
 
 const EVAL_REGEX = new RegExp(''
   + /^info depth (\d+) seldepth \d+ multipv (\d+) /.source
@@ -34,7 +33,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
    * Init engine with default options and variant
    */
   function init() {
-    return Plugins.Stockfish.start()
+    return Stockfish.start()
     .then(() => send('uci'))
     .then(() => setOption('Ponder', 'false'))
     .then(() => setVariant(variant))
@@ -86,8 +85,8 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
       curEval = null
 
       readyPromise = new Promise((resolve) => {
-        Plugins.Stockfish.removeAllListeners()
-        Plugins.Stockfish.addListener('output', ({ line }: { line: string }) => {
+        Stockfish.removeAllListeners()
+        Stockfish.addListener('output', ({ line }) => {
           processOutput(line, work, resolve)
         })
       })
@@ -181,8 +180,8 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
 
 
   function exit() {
-    Plugins.Stockfish.removeAllListeners()
-    return Plugins.Stockfish.exit()
+    Stockfish.removeAllListeners()
+    return Stockfish.exit()
   }
 
   function reset() {

@@ -1,6 +1,6 @@
 import { Tree } from '../../shared/tree/interfaces'
 import { Work, IEngine } from './interfaces'
-import { Stockfish, send, setOption, setVariant } from '../../../stockfish'
+import { Stockfish } from '../../../stockfish'
 
 const EVAL_REGEX = new RegExp(''
   + /^info depth (\d+) seldepth \d+ multipv (\d+) /.source
@@ -10,6 +10,7 @@ const EVAL_REGEX = new RegExp(''
   + /pv (.+)/.source)
 
 export default function StockfishEngine(variant: VariantKey): IEngine {
+  const stockfish = new Stockfish(variant)
 
   let stopTimeoutId: number
   let readyPromise: Promise<void> = Promise.resolve()
@@ -33,10 +34,10 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
    * Init engine with default options and variant
    */
   function init() {
-    return Stockfish.start()
-    .then(() => send('uci'))
-    .then(() => setOption('Ponder', 'false'))
-    .then(() => setVariant(variant))
+    return stockfish.plugin.start()
+    .then(() => stockfish.send('uci'))
+    .then(() => stockfish.setOption('Ponder', 'false'))
+    .then(() => stockfish.setVariant())
     .catch((err: any) => console.error('stockfish init error', err))
   }
 
@@ -68,7 +69,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
   function stop() {
     if (!stopped) {
       stopped = true
-      send('stop')
+      stockfish.send('stop')
     }
   }
 
@@ -85,17 +86,17 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
       curEval = null
 
       readyPromise = new Promise((resolve) => {
-        Stockfish.removeAllListeners()
-        Stockfish.addListener('output', ({ line }) => {
+        stockfish.plugin.removeAllListeners()
+        stockfish.addListener(line => {
           processOutput(line, work, resolve)
         })
       })
 
-      return setOption('Threads', work.cores)
-      .then(() => setOption('Hash', work.hash))
-      .then(() => setOption('MultiPV', work.multiPv))
-      .then(() => send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' ')))
-      .then(() => send('go depth ' + work.maxDepth))
+      return stockfish.setOption('Threads', work.cores)
+      .then(() => stockfish.setOption('Hash', work.hash))
+      .then(() => stockfish.setOption('MultiPV', work.multiPv))
+      .then(() => stockfish.send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' ')))
+      .then(() => stockfish.send('go depth ' + work.maxDepth))
     }
   }
 
@@ -106,13 +107,11 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
    */
   function processOutput(text: string, work: Work, rdyResolve: () => void) {
     if (text.indexOf('bestmove') === 0) {
-      console.debug('[stockfish >>] ' + text)
       finished = true
       rdyResolve()
       work.emit()
     }
     if (finished || stopped) return
-    // console.debug(text)
 
     const matches = text.match(EVAL_REGEX)
     if (!matches) return
@@ -180,8 +179,8 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
 
 
   function exit() {
-    Stockfish.removeAllListeners()
-    return Stockfish.exit()
+    stockfish.plugin.removeAllListeners()
+    return stockfish.plugin.exit()
   }
 
   function reset() {

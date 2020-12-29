@@ -40,7 +40,7 @@ export default {
   oncreate: helper.viewFadeIn,
   onremove() {
     sleepUtils.allowSleepAgain()
-    if (this.round) this.round.engine.exit()
+    if (this.round) this.round.engine?.exit()
   },
   view({ attrs }) {
     let content: Mithril.Children, header: Mithril.Children

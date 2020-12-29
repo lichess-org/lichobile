@@ -26,7 +26,7 @@ import { ClockType } from '../shared/clock/interfaces'
 import Replay from '../shared/offlineRound/Replay'
 
 import actions, { AiActionsCtrl } from './actions'
-import engineCtrl, { EngineInterface } from './engine'
+import Engine from './engine'
 import newGameMenu, { NewAiGameCtrl } from './newAiGame'
 
 interface InitPayload {
@@ -43,7 +43,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   public vm: AiVM
   public moveList: boolean
 
-  public engine: EngineInterface
+  public engine?: Engine
 
   public constructor(
     saved: StoredOfflineGame | null,
@@ -51,7 +51,6 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     setupVariant?: VariantKey,
     setupColor?: Color
   ) {
-    this.engine = engineCtrl(this)
     this.actions = actions.controller(this)
     this.newGameMenu = newGameMenu.controller(this)
 
@@ -75,24 +74,20 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
       }
 
       redraw()
-    }
-
-    this.engine.init()
-    .then(() => {
+    } else {
       const currentVariant = <VariantKey>settings.ai.variant()
-      if (!setupFen) {
-        if (saved) {
-          try {
-            this.init(saved.data, saved.situations, saved.ply)
-          } catch (e) {
-            console.log(e, 'Fail to load saved game')
-            this.startNewGame(currentVariant)
-          }
-        } else {
+      if (saved) {
+        try {
+          this.init(saved.data, saved.situations, saved.ply)
+        } catch (e) {
+          console.log(e, 'Fail to load saved game')
           this.startNewGame(currentVariant)
         }
+      } else {
+        this.startNewGame(currentVariant)
       }
-    })
+    }
+
   }
 
   public init(data: OfflineGameData, situations: Array<chess.GameSituation>, ply: number) {
@@ -122,15 +117,20 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
       ground.reload(this.chessground, this.data, this.replay.situation())
     }
 
-    this.engine.prepare(this.data.game.variant.key)
-    .then(() => {
-      if (this.isEngineToMove()) {
-        this.engineMove()
-      }
-    })
-
     this.save()
     redraw()
+
+    if (this.engine && this.engine.variant === variant) {
+      this.engine.init()
+      .then(() => {
+        if (this.isEngineToMove()) {
+          this.engineMove()
+        }
+      })
+    } else {
+      this.engine = new Engine(this, variant)
+      this.engine.init()
+    }
   }
 
   // clockType preceded by underscore until we implement AI timed games
@@ -142,8 +142,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
       payload.fen = setupFen
     }
 
-    this.engine.newGame()
-    .then(() => chess.init(payload))
+    chess.init(payload)
     .then((data: chess.InitResponse) => {
       this.init(makeData({
         id: 'offline_ai',
@@ -242,8 +241,8 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
       this.data.opponent.name = aiName({
         ai: l
       })
-      this.engine.setLevel(l)
-      .then(() => this.engine.search(this.data.game.initialFen, sit.uciMoves.join(' ')))
+      this.engine!.setLevel(l)
+      .then(() => this.engine!.search(this.data.game.initialFen, sit.uciMoves.join(' ')))
     }, 500)
   }
 

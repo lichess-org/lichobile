@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core'
 import { Tree } from '../../shared/tree/interfaces'
 import { Work, IEngine } from './interfaces'
 import { Stockfish } from '../../../stockfish'
@@ -36,7 +37,6 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
   function init() {
     return stockfish.plugin.start()
     .then(() => stockfish.send('uci'))
-    .then(() => stockfish.setOption('Ponder', 'false'))
     .then(() => stockfish.setVariant())
     .catch((err: any) => console.error('stockfish init error', err))
   }
@@ -86,14 +86,15 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
       curEval = null
 
       readyPromise = new Promise((resolve) => {
-        stockfish.plugin.removeAllListeners()
         stockfish.addListener(line => {
           processOutput(line, work, resolve)
         })
       })
 
       return stockfish.setOption('Threads', work.cores)
-      .then(() => stockfish.setOption('Hash', work.hash))
+      .then(() => Capacitor.platform !== 'web' ?
+        stockfish.setOption('Hash', work.hash) : Promise.resolve()
+      )
       .then(() => stockfish.setOption('MultiPV', work.multiPv))
       .then(() => stockfish.send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' ')))
       .then(() => stockfish.send('go depth ' + work.maxDepth))

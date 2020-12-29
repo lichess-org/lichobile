@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core'
 import { AiRoundInterface } from '../shared/round'
 import { Stockfish, getNbCores, getMaxMemory } from '../../stockfish'
 
@@ -24,9 +25,7 @@ export default class Engine {
 
   constructor(readonly ctrl: AiRoundInterface, readonly variant: VariantKey) {
     this.stockfish = new Stockfish(variant)
-  }
 
-  public init() {
     this.stockfish.addListener(line => {
       const match = line.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/)
       if (match) {
@@ -34,14 +33,16 @@ export default class Engine {
         else if (match[2]) this.ctrl.onEngineDrop(match[2])
       }
     })
+  }
 
+  public init() {
     return this.stockfish.plugin.start()
     .then(() => {
       return this.stockfish.send('uci')
       .then(() => this.stockfish.setOption('Threads', getNbCores()))
       .then(async () => {
         const mem = await getMaxMemory()
-        this.stockfish.setOption('Hash', mem)
+        if (Capacitor.platform !== 'web') this.stockfish.setOption('Hash', mem)
       })
     })
     .catch(console.error.bind(console))

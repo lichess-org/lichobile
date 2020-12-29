@@ -87,10 +87,9 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
         this.startNewGame(currentVariant)
       }
     }
-
   }
 
-  public init(data: OfflineGameData, situations: Array<chess.GameSituation>, ply: number) {
+  private init(data: OfflineGameData, situations: Array<chess.GameSituation>, ply: number) {
     this.newGameMenu.close()
     this.actions.close()
     this.data = data
@@ -117,11 +116,8 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
       ground.reload(this.chessground, this.data, this.replay.situation())
     }
 
-    this.save()
-    redraw()
-
     if (this.engine && this.engine.variant === variant) {
-      this.engine.init()
+      this.engine.newGame()
       .then(() => {
         if (this.isEngineToMove()) {
           this.engineMove()
@@ -130,7 +126,15 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     } else {
       this.engine = new Engine(this, variant)
       this.engine.init()
+      .then(() => {
+        if (this.isEngineToMove()) {
+          this.engineMove()
+        }
+      })
     }
+
+    this.save()
+    redraw()
   }
 
   // clockType preceded by underscore until we implement AI timed games

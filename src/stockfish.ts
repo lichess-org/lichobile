@@ -27,12 +27,16 @@ if (Capacitor.platform === 'web') {
 
       return {
         remove: () => {
-          if (this.worker) this.worker.onmessage = null
+          this.listener = undefined
+          if (this.worker) {
+            this.worker.onmessage = null
+          }
         }
       }
     }
 
     removeAllListeners(): void {
+      this.listener = undefined
       if (this.worker) this.worker.onmessage = null
     }
 

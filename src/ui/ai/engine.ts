@@ -22,6 +22,7 @@ const levelToDepth: LevelToDepth = {
 export default class Engine {
   private level = 1
   private stockfish: Stockfish
+  private isInit = false
 
   constructor(readonly ctrl: AiRoundInterface, readonly variant: VariantKey) {
     this.stockfish = new Stockfish(variant)
@@ -38,12 +39,15 @@ export default class Engine {
   public init() {
     return this.stockfish.plugin.start()
     .then(() => {
-      return this.stockfish.send('uci')
-      .then(() => this.stockfish.setOption('Threads', getNbCores()))
-      .then(async () => {
-        const mem = await getMaxMemory()
-        if (Capacitor.platform !== 'web') this.stockfish.setOption('Hash', mem)
-      })
+      if (!this.isInit) {
+        this.isInit = true
+        return this.stockfish.send('uci')
+        .then(() => this.stockfish.setOption('Threads', getNbCores()))
+        .then(async () => {
+          const mem = await getMaxMemory()
+          if (Capacitor.platform !== 'web') this.stockfish.setOption('Hash', mem)
+        })
+      }
     })
     .catch(console.error.bind(console))
   }

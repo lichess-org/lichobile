@@ -245,7 +245,8 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
       this.data.opponent.name = aiName({
         ai: l
       })
-      this.engine!.setLevel(l)
+      this.engine!.init()
+      .then(() => this.engine!.setLevel(l))
       .then(() => this.engine!.search(this.data.game.initialFen, sit.uciMoves.join(' ')))
     }, 500)
   }

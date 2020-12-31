@@ -103,7 +103,7 @@ export default class AnalyseCtrl {
     this.ongoing = !this.synthetic && gameApi.playable(data)
     this.initialPath = treePath.root
     this.study = studyData !== undefined ? new StudyCtrl(studyData, this) : undefined
-    this.forecast = data.forecast ? new ForecastCtrl(data.forecast, data.game, data.player) : undefined
+    this.forecast = data.forecast ? new ForecastCtrl(data) : undefined
 
     this._currentTabIndex = (!this.study || this.study.data.chapter.tags.length === 0) && this.synthetic ? 0 : 1
 

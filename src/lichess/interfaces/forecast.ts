@@ -16,3 +16,20 @@ export interface ForecastStep extends MinimalForecastStep {
   san: San
   fen: Fen
 }
+
+/**
+ * Minimum subset of AnalyseData that the forecast control needs to read and save forecasts.
+ */
+export interface AnalyseDataForForecast {
+  readonly game: {
+    readonly id: string
+  },
+  readonly player: {
+    readonly id?: string | null
+  },
+  readonly forecast?: ForecastData,
+  readonly url?: {
+    readonly round: string
+    readonly socket: string
+  }
+}

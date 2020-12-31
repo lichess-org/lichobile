@@ -1,8 +1,24 @@
 import ForecastCtrl from '../ForecastCtrl'
-import { ForecastStep, MinimalForecastStep } from '~/lichess/interfaces/forecast'
+import { ForecastStep, MinimalForecastStep, AnalyseDataForForecast, ForecastData } from '~/lichess/interfaces/forecast'
 
-const fctrl = new ForecastCtrl({ onMyTurn: true })
-const notMyTurnFctrl = new ForecastCtrl({ onMyTurn: false })
+const mockPlayer = {
+  id: 'xIFe'
+}
+const mockGame = {
+  id: 'VU1DzvAq'
+}
+function mockAnalyseData(forecastData: ForecastData = {}): AnalyseDataForForecast {
+  return {
+    player: mockPlayer,
+    game: mockGame,
+    forecast: forecastData,
+    url: {
+      round: `/${mockGame.id}/white`,
+    }
+  }
+}
+const fctrl = new ForecastCtrl(mockAnalyseData({ onMyTurn: true }))
+const notMyTurnFctrl = new ForecastCtrl(mockAnalyseData({ onMyTurn: false }))
 const emptyLine: MinimalForecastStep[] = []
 const kingsPawn = [{ ply: 1, uci: 'e2e4' }]
 const queensPawn = [{ ply: 1, uci: 'd2d4' }]
@@ -114,7 +130,7 @@ describe('ForecastCtrl', () => {
     const existingLines: ForecastStep[][] = [
       kingsPawnGame,
     ]
-    const existingLinesFctrl = new ForecastCtrl({onMyTurn: true, steps: existingLines})
+    const existingLinesFctrl = new ForecastCtrl(mockAnalyseData({onMyTurn: true, steps: existingLines}))
 
     test('prefixes of existing lines are not candidates', () => {
       expect(existingLinesFctrl.isCandidate(kingsPawn)).toBe(false)
@@ -134,7 +150,7 @@ describe('ForecastCtrl', () => {
       })
     })
     describe('on the other player\'s turn', () => {
-      const fctrl = new ForecastCtrl({onMyTurn: false})
+      const fctrl = new ForecastCtrl(mockAnalyseData({onMyTurn: false}))
       test('single-ply lines are not candidates', () => {
         expect(fctrl.isCandidate(queensPawn)).toBe(false)
       })

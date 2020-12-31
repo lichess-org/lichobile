@@ -1,6 +1,5 @@
-import { ForecastData, ForecastStep, MinimalForecastStep } from '~/lichess/interfaces/forecast'
-import { Game, Player } from '~/lichess/interfaces/game'
-// import router from '~/router'
+import { AnalyseDataForForecast, ForecastStep, MinimalForecastStep } from '~/lichess/interfaces/forecast'
+import router from '~/router'
 import redraw from '~/utils/redraw'
 import { playAndSaveForecasts, saveForecasts } from './xhr'
 
@@ -11,16 +10,19 @@ export default class ForecastCtrl {
 
   private _lines: ForecastStep[][]
   private _contextIndex: number | null
-  private readonly _game?: Game
-  private readonly _player?: Player
+  private readonly _gameId: string
+  private readonly _playerId: string | null
+  private readonly _analyseUrl?: string
 
-  constructor(forecastData?: ForecastData, game?: Game, player?: Player) {
+  constructor(data: AnalyseDataForForecast) {
+    const forecastData = data.forecast
     this._lines = forecastData?.steps || []
     const onMyTurn = forecastData?.onMyTurn
     this.isMyTurn = !!onMyTurn
     this._contextIndex = null
-    this._game = game
-    this._player = player
+    this._gameId = data.game.id
+    this._playerId = data.player?.id || null
+    this._analyseUrl = data.url?.round
   }
 
   /**
@@ -65,9 +67,9 @@ export default class ForecastCtrl {
   }
 
   save(): void {
-    const playerId = this._player?.id
-    const gameId = this._game?.id
-    if (this.isMyTurn || !playerId || !gameId) return
+    const playerId = this._playerId
+    const gameId = this._gameId
+    if (this.isMyTurn || !playerId) return
     // loading(true);
     redraw()
     saveForecasts(gameId, playerId, this.lines).then(data => {
@@ -82,9 +84,9 @@ export default class ForecastCtrl {
   }
 
   playAndSave(moveToPlay: ForecastStep): void {
-    const playerId = this._player?.id
-    const gameId = this._game?.id
-    if (!this.isMyTurn || !playerId || !gameId) return
+    const playerId = this._playerId
+    const gameId = this._gameId
+    if (!this.isMyTurn || !playerId) return
 
     const forecasts = this.findStartingWithNode(moveToPlay)
       .filter(forecast => forecast.length > 0)
@@ -108,9 +110,7 @@ export default class ForecastCtrl {
   }
 
   reloadToLastPly(): void {
-    redraw()
-    window.history.replaceState(null, '', '#last')
-    // router.reload()
+    router.set(`/analyse/online${this._analyseUrl}`)
   }
 
   get lines(): ForecastStep[][] {

@@ -1,6 +1,7 @@
 import h from 'mithril/hyperscript'
 import i18n, { plural } from '~/i18n'
 import { ForecastStep } from '~/lichess/interfaces/forecast'
+import settings from '~/settings'
 import { ontap } from '~/ui/helper'
 import AnalyseCtrl from '../AnalyseCtrl'
 import ForecastCtrl from './ForecastCtrl'
@@ -78,6 +79,9 @@ export default function renderForecasts(ctrl: AnalyseCtrl) {
     h('div.forecasts-wrapper.native_scroller', [
       h(
         'div.forecasts-list',
+        {
+          class: settings.game.pieceNotation() ? 'displayPieces' : '',
+        },
         [
           ...ctrl.forecast.lines.map((nodes, i) => {
             return h(

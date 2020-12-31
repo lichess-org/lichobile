@@ -30,6 +30,5 @@ export interface AnalyseDataForForecast {
   readonly forecast?: ForecastData,
   readonly url?: {
     readonly round: string
-    readonly socket: string
   }
 }

@@ -110,7 +110,7 @@ export default class ForecastCtrl {
   }
 
   reloadToLastPly(): void {
-    router.set(`/analyse/online${this._analyseUrl}`)
+    router.set(`/analyse/online${this._analyseUrl}?tabId=forecasts`)
   }
 
   get lines(): ForecastStep[][] {

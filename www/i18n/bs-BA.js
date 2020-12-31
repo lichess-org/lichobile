@@ -1027,5 +1027,16 @@ export default {
   "teamBattle": "Bitka timova",
   "xJoinRequests:one": "%s zahtjev za pridruživanje",
   "xJoinRequests:few": "%s zahtjeva za pridruživanje",
-  "xJoinRequests:other": "%s zahtjeva za pridruživanje"
+  "xJoinRequests:other": "%s zahtjeva za pridruživanje",
+  "twoFactorAuth": "Dvofaktorska provjera autentičnosti",
+  "twoFactorHelp": "Dvofaktorska provjera autentičnosti dodaje još jedan sloj sigurnosti Vašem računu.",
+  "twoFactorApp": "Nabavite aplikaciju za dvofaktorsku provjeru autentičnosti, kao što je to na primjer Google Autenticator za %1$s ili %2$s.",
+  "scanTheCode": "Skenirajte QR kod sa aplikacijom.",
+  "enterPassword": "Unesite lozinku i kod za provjeru autentičnosti koji je generisala aplikacija da biste dovršili postavke. Kod za provjeru autentičnosti će Vam trebati svaki put kada se prijavljujete.",
+  "authenticationCode": "Kod za provjeru autentičnosti",
+  "ifYouLoseAccess": "Napomena: Ako izgubite pristup dvofaktornim kodovima za provjeru autentičnosti, možete resetovati lozinku pomoću e-mail poruke.",
+  "enableTwoFactor": "Uključite dvofaktorsku provjeru autentičnosti",
+  "disableTwoFactor": "Isključite dvofaktorsku provjeru autentičnosti",
+  "twoFactorEnabled": "Dvofaktorska provjera autentičnosti uključena",
+  "twoFactorDisable": "Da biste isključili dvofaktorsku provjeru autentičnosti, potrebna Vam je lozinka i kod za provjeru autentičnosti iz aplikacije za potvrđivanje.\nAko ste izgubili pristup kodovima za provjeru autentičnosti, možete resetovati lozinku pomoću e-mail poruke."
 }

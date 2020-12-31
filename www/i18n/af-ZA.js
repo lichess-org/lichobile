@@ -1001,5 +1001,16 @@ export default {
   "messageAllMembers": "Stuur 'n boodskap aan alle lede",
   "messageAllMembersOverview": "Stuur 'n private boodskap na elke lid van die span",
   "xJoinRequests:one": "%s Aansluitingsversoek",
-  "xJoinRequests:other": "%s Aansluitingsversoeke"
+  "xJoinRequests:other": "%s Aansluitingsversoeke",
+  "twoFactorAuth": "Tweeledige verifikasie",
+  "twoFactorHelp": "Tweeledige verifikasie voeg nog 'n laag sekuriteit tot jou rekening by.",
+  "twoFactorApp": "Kry 'n toep vir tweeledige verifikasie, byvoorbeeld Google Authenticator vir %1$s of %2$s.",
+  "scanTheCode": "Skandeer die QR kode met die toep.",
+  "enterPassword": "Tik jou wagwoord en die verifikasie kode in, wat deur die toep gegenereer word, om die opstelling te voltooi. Jy sal die verifikasie kode elke keer benodig wat jy inteken.",
+  "authenticationCode": "Verifikasie kode",
+  "ifYouLoseAccess": "Nem kennis: Indien jy toegang tot jou twee ledige verifikasie kodes verloor, kan jy jou wagwoord herstel via e-pos.",
+  "enableTwoFactor": "Skakel twee-ledige verifikasie aan",
+  "disableTwoFactor": "Skakel tweeledige verifikasie af",
+  "twoFactorEnabled": "Twee-ledige verifikasie aangeskakel",
+  "twoFactorDisable": "Jy benodig jou wagwoord en 'n verifikasie kode van jou verifikasie toep om tweeledige verifikasie af te skakel.\nAs jy jou toegang tot die verifikasie kodes verloor het, kan jy ook jou wagwoord herstel via e-pos."
 }

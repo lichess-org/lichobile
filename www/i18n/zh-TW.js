@@ -874,5 +874,16 @@ export default {
   "teamTournamentOverview": "一個只有在團隊裡的成員才能加入的錦標賽",
   "messageAllMembers": "發出公告給所有團隊裡的玩家",
   "messageAllMembersOverview": "發出私訊給所有團隊裡的玩家",
-  "xJoinRequests:other": "%s個加入申請"
+  "xJoinRequests:other": "%s個加入申請",
+  "twoFactorAuth": "兩步驟驗證",
+  "twoFactorHelp": "兩步驟驗證為您的帳戶多增加了一道防線",
+  "twoFactorApp": "得到用於兩步驟驗證的 App，例如適用於 %1$s或 %2$s 的Google Authenticator",
+  "scanTheCode": "使用App掃描QR code",
+  "enterPassword": "輸入您的密碼和兩步驟驗證碼以完成設置，在之後的每次登入，您都需要驗證碼",
+  "authenticationCode": "驗證碼",
+  "ifYouLoseAccess": "備註: 如果您遺失了您的兩步驟驗證碼，您可以用email來重設驗證碼",
+  "enableTwoFactor": "啟用兩步驟驗證",
+  "disableTwoFactor": "停用兩步驟驗證",
+  "twoFactorEnabled": "已啟用兩步驟驗證",
+  "twoFactorDisable": "您需要使用兩步驟驗證碼和密碼來解除兩步驟驗證。如果您遺失了您的驗證碼，您可以用email來重設驗證碼"
 }

@@ -821,5 +821,16 @@ export default {
   "beingReviewed": "Yêu cầu tham gia đề nghị đang được xem xét bởi trưởng nhóm.",
   "teamBattle": "Thi đấu theo đội",
   "nbMembers:other": "%s thành viên",
-  "xJoinRequests:other": "%s tham gia đề nghị"
+  "xJoinRequests:other": "%s tham gia đề nghị",
+  "twoFactorAuth": "Xác thực 2 bước",
+  "twoFactorHelp": "Xác thực 2 bước thêm lớp bảo mật khác cho tài khoản của bạn.",
+  "twoFactorApp": "Nhận ứng dụng cho xác thực 2 bước, ví dụ: Google Authenticator cho %1$s hoặc %2$s.",
+  "scanTheCode": "Quét mã QR bằng ứng dụng.",
+  "enterPassword": "Nhập mật khẩu và mã xác thực được tạo ra bởi ứng dụng để hoàn thành cài đặt. Bạn sẽ cần mã xác thực mỗi khi đăng nhập.",
+  "authenticationCode": "Mã xác thực",
+  "ifYouLoseAccess": "Nếu bạn mất quyền truy cập mã xác thực 2 bước, bạn có thể khởi tạo lại mật khẩu thông qua email.",
+  "enableTwoFactor": "Bật xác thực 2 bước",
+  "disableTwoFactor": "Tắt xác thực 2 bước",
+  "twoFactorEnabled": "Xác thực 2 bước đã được kích hoạt",
+  "twoFactorDisable": "Bạn cần mật khẩu và mã xác thực từ ứng dụng xác thực để tắt xác thực 2 bước.\nNếu bạn mất quyền truy cập vào mã xác thực, bạn có thể đặt lại mật khẩu qua email."
 }

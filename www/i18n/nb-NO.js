@@ -1019,5 +1019,16 @@ export default {
   "teamLeaders:one": "Lagleder",
   "teamLeaders:other": "Lagledere",
   "xJoinRequests:one": "%s anmodning om å slutte seg til",
-  "xJoinRequests:other": "%s anmodninger om å slutte seg til"
+  "xJoinRequests:other": "%s anmodninger om å slutte seg til",
+  "twoFactorAuth": "Tofaktorautentisering",
+  "twoFactorHelp": "Tofaktorautentisering er et ekstra lag med sikkerhet for Lichess-kontoen din.",
+  "twoFactorApp": "Skaff deg en tofaktorautentiseringsapp, for eksempel Google Authenticator for %1$s eller %2$s.",
+  "scanTheCode": "Skann QR-koden med appen.",
+  "enterPassword": "Skriv inn passordet ditt og autentiseringskoden generert av appen for å fullføre oppsettet. Du må bruke en ny autentiseringskode hver gang du logger inn.",
+  "authenticationCode": "Autentiseringskode",
+  "ifYouLoseAccess": "Merk: Hvis du mister tilgang til tofaktorautentiseringskodene så kan du tilbakestille passordet ditt via e-post.",
+  "enableTwoFactor": "Skru på tofaktorautentisering",
+  "disableTwoFactor": "Skru av tofaktorautentisering",
+  "twoFactorEnabled": "Tofaktorautentisering skrudd på",
+  "twoFactorDisable": "Du trenger passordet ditt, samt en autentiseringskode fra tofaktorautentiseringsappen for å skru av tofaktorautentisering.\nHvis du mister tilgang til autentiseringskodene dine, kan du også tilbakestille passordet ditt via e-post."
 }

@@ -1019,5 +1019,16 @@ export default {
   "teamLeaders:one": "Capogruppo",
   "teamLeaders:other": "Capogruppo",
   "xJoinRequests:one": "%s richiesta di adesione",
-  "xJoinRequests:other": "%s richieste di adesione"
+  "xJoinRequests:other": "%s richieste di adesione",
+  "twoFactorAuth": "Autenticazione due fattori",
+  "twoFactorHelp": "L'autenticazione a due fattori aggiunge un altro livello di sicurezza al tuo account.",
+  "twoFactorApp": "Ottieni un'app per l'autenticazione a due fattori, ad esempio Google Authenticator per %1$s o %2$s.",
+  "scanTheCode": "Scansiona il codice QR con l'app.",
+  "enterPassword": "Inserisci la tua password e il codice di autenticazione generato dall'app per completare l'installazione. Avrai bisogno di un codice di autenticazione ogni volta che effettui l'accesso.",
+  "authenticationCode": "Codice di autenticazione",
+  "ifYouLoseAccess": "Nota: Se perdi l'accesso ai tuoi codici di autenticazione a due fattori, puoi reimpostare la password via email.",
+  "enableTwoFactor": "Abilita l'autenticazione a due fattori",
+  "disableTwoFactor": "Disabilita l'autenticazione a due fattori",
+  "twoFactorEnabled": "Autenticazione a due fattori attivata",
+  "twoFactorDisable": "Hai bisogno della tua password e di un codice di autenticazione dalla tua app di autenticazione per disattivare l'autenticazione a due fattori.\nSe hai perso l'accesso ai tuoi codici di autenticazione, puoi anche reimpostare la password per email."
 }

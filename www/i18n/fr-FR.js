@@ -1019,5 +1019,16 @@ export default {
   "teamLeaders:one": "Chef d'équipe",
   "teamLeaders:other": "Chefs d'équipe",
   "xJoinRequests:one": "%s demande d'adhésion",
-  "xJoinRequests:other": "%s demandes d'adhésion"
+  "xJoinRequests:other": "%s demandes d'adhésion",
+  "twoFactorAuth": "Authentification à deux facteurs",
+  "twoFactorHelp": "L'authentification à deux facteurs ajoute une couche de sécurité supplémentaire à votre compte.",
+  "twoFactorApp": "Obtenez une application pour l'authentification à deux facteurs, par exemple Google Authenticator pour %1$s ou %2$s.",
+  "scanTheCode": "Scannez le code QR avec l'application.",
+  "enterPassword": "Saisissez votre mot de passe et le code d'authentification généré par l'application pour terminer la configuration. Vous aurez besoin d'un code d'authentification chaque fois que vous vous connecterez.",
+  "authenticationCode": "Code d'authentification",
+  "ifYouLoseAccess": "Remarque : Si vous perdez l'accès à vos codes d'authentification à deux facteurs, vous pouvez réinitialiser le mot de passe par courriel.",
+  "enableTwoFactor": "Activer l'authentification à deux facteurs",
+  "disableTwoFactor": "Désactiver l'authentification à deux facteurs",
+  "twoFactorEnabled": "Authentification à deux facteurs activée",
+  "twoFactorDisable": "Vous avez besoin de votre mot de passe et d'un code d'authentification de votre application pour désactiver l'authentification à deux facteurs.\nSi vous avez perdu l'accès à vos codes d'authentification, vous pouvez également réinitialiser le mot de passe par courriel."
 }

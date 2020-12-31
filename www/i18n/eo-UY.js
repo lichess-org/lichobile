@@ -1007,5 +1007,11 @@ export default {
   "teamLeaders:one": "Teamestro",
   "teamLeaders:other": "Teamestroj",
   "xJoinRequests:one": "%s aliĝpeto",
-  "xJoinRequests:other": "%s aliĝpetoj"
+  "xJoinRequests:other": "%s aliĝpetoj",
+  "twoFactorAuth": "Dufaza aŭtentigo",
+  "scanTheCode": "Skanu la QR-kodo per la app.",
+  "authenticationCode": "Aŭtentiga kodo",
+  "enableTwoFactor": "Ebligi dufazan aŭtentigon",
+  "disableTwoFactor": "Malebligi dufazan aŭtentigon",
+  "twoFactorEnabled": "Dufaza aŭtentigo ebligita"
 }

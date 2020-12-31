@@ -1037,5 +1037,16 @@ export default {
   "teamBattle": "Luptă în echipă",
   "xJoinRequests:one": "%s cerere de alăturare",
   "xJoinRequests:few": "%s cereri de alăturare",
-  "xJoinRequests:other": "%s cereri de alăturare"
+  "xJoinRequests:other": "%s cereri de alăturare",
+  "twoFactorAuth": "Autentificare în doi pași",
+  "twoFactorHelp": "Autentificarea în doi pași adaugă un alt strat de protecție pentru contul dvs.",
+  "twoFactorApp": "Obține o aplicație pentru autentificarea în doi pași, de exemplu Google Authenticator pentru %1$s sau %2$s.",
+  "scanTheCode": "Scanează codul QR cu aplicația.",
+  "enterPassword": "Introdu parola și codul de autentificare generat de aplicație pentru a completa configurarea. Vei avea nevoie de un cod de autentificare de fiecare dată când te conectezi.",
+  "authenticationCode": "Cod de autentificare",
+  "ifYouLoseAccess": "Notă: Dacă pierzi accesul la codurile de autentificare în doi pași, poți reseta parola prin email.",
+  "enableTwoFactor": "Activează autentificarea în doi pași",
+  "disableTwoFactor": "Dezactivează autentificarea în doi pași",
+  "twoFactorEnabled": "Autentificare în doi pași activată",
+  "twoFactorDisable": "Ai nevoie de parolă și de un cod de autentificare din aplicație pentru a dezactiva autentificarea în doi pași. Dacă ai pierdut accesul la codurile tale de autentificare, poți reseta parola prin email."
 }

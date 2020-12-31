@@ -742,5 +742,16 @@ export default {
   "teamLeaders:one": "Komanda lideri",
   "teamLeaders:other": "Komanda liderləri",
   "xJoinRequests:one": "%s qoşulma istəyi",
-  "xJoinRequests:other": "%s qoşulma istəyi"
+  "xJoinRequests:other": "%s qoşulma istəyi",
+  "twoFactorAuth": "2 mərhələli təsdiqləmə",
+  "twoFactorHelp": "2 mərhələli təsdiqləmə, hesabınıza daha bir təhlükəsizlik qatı əlavə edər.",
+  "twoFactorApp": "2 mərhələli təsdiqləmə üçün bir tətbiq endirin. Məsələn %1$s və ya %2$s üçün Google Authenticator.",
+  "scanTheCode": "Tətbiq ilə QR kodunu skan edin.",
+  "enterPassword": "Quraşdırmanı tamamlamaq üçün şifrəni və tətbiq tərəfindən yaradılmış kimlik təsdiqləmə kodunu daxil edin. Hər giriş edəndə təsdiqləmə kodunu daxil etməli olacaqsınız.",
+  "authenticationCode": "Kimlik təsdiqləmə kodu",
+  "ifYouLoseAccess": "Qeyd: 2 mərhələli təsdiqləmə koduna müraciəti itirsəniz, e-poçt vasitəsilə şifrənizi sıfırlaya bilərsiniz.",
+  "enableTwoFactor": "2 mərhələli təsdiqləməni fəallaşdır",
+  "disableTwoFactor": "2 mərhələli təsdiqləməni sıradan çıxart",
+  "twoFactorEnabled": "2 mərhələli təsdiqləmə fəaldır",
+  "twoFactorDisable": "2 mərhələli təsdiqləməni sıradan çıxartmaq üçün şifrəniz və kimlik təsdiqləyən tətbiqinizdəki təsdiqləmə kodu lazım olacaq.\nTəsdiqləmə kodlarınıza müraciəti itirsəniz, e-poçt vasitəsilə şifrənizi sıfırlaya bilərsiniz."
 }

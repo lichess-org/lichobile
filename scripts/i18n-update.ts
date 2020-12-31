@@ -24,7 +24,7 @@ function downloadTranslationsTo(zipFile: WriteStream) {
 
 function unzipTranslations(zipFilePath: string) {
   console.log(colors.blue('Unzipping translations...'));
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
       exec(`unzip -o ${zipFilePath} -d ${baseDir}`, {maxBuffer: unzipMaxBufferSize}, (err, stdout, stderr) => {
       if (err) {
         return reject('Unzip failed.');
@@ -99,7 +99,7 @@ async function main(args: string[]) {
 
     // load and flatten translations in one object
     const everything = {}
-    for (const section of ['site', 'study', 'arena', 'preferences', 'settings', 'search', 'team']) {
+    for (const section of ['site', 'study', 'arena', 'preferences', 'settings', 'search', 'team', 'tfa']) {
       const xml = await loadXml(locales, section)
       for (const locale in xml) {
         try {

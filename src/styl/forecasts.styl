@@ -1,33 +1,27 @@
 .forecasts-wrapper
   flex 1 1 auto
   padding 10px
-
   .info
     padding 0.5em
-
-    sans
-      // display block
-      // margin-top 0.15em
-    
     move
       padding 0
-
   san
     padding-left 0.17em
     padding-right 0.17em
-
   index
-    margin-left: 0.17em
+    margin-left 0.17em
+  .on-my-turn
+    text-align center
+    margin-top: 0.17em
 
 .forecasts-list
   width 100%
   &.displayPieces
     move
       font-family ChessSansPiratf
-
   .forecast
     &:nth-child(even)
-      background-color: lighten(bgdark, 15%)
+      background-color lighten(bgdark, 15%)
     font-size 14px
     padding 0 0.5em
     display flex

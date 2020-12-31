@@ -54,18 +54,22 @@ function renderOnMyTurnView(ctrl: AnalyseCtrl, candidate: ForecastStep[]): Maybe
     return candidate.length > 1
   }).length
 
-  return h(
-    'button.defaultButton',
-    {
-      oncreate: ontap(() => ctrl.forecast!.playAndSave(firstNode))
-    }, [
-      h('span.fa.fa-check'),
-      h('span', [
-        h('strong', i18n('playX', candidate[0].san)),
-        ' ',
-        lineCount ? h('span', plural('andSaveNbPremoveLines', lineCount)) : null
-      ])
-    ],
+  return (
+    h('div.on-my-turn',
+      h(
+        'button.defaultButton',
+        {
+          oncreate: ontap(() => ctrl.forecast!.playAndSave(firstNode))
+        }, [
+          h('span.fa.fa-check'),
+          h('span', [
+            h('strong', i18n('playX', candidate[0].san)),
+            ' ',
+            lineCount ? h('span', plural('andSaveNbPremoveLines', lineCount)) : null
+          ])
+        ],
+      )
+    )
   )
 }
 

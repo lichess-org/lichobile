@@ -17,13 +17,18 @@ import { isForeground, setForeground, setBackground } from './utils/appMode'
 
 let firstConnection = true
 
-export default function appInit(info: DeviceInfo, cpuCores: number) {
+export default function appInit(
+  info: DeviceInfo,
+  cpuCores: number,
+  sfMaxMem: number
+) {
 
   window.deviceInfo = {
     platform: info.platform,
     uuid: info.uuid,
     appVersion: info.appVersion,
     cpuCores,
+    stockfishMaxMemory: sfMaxMem,
   }
 
   if (Capacitor.platform === 'ios') {

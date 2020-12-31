@@ -15,14 +15,13 @@ export interface Opts {
   variant: VariantKey
   multiPv: number
   cores: number
+  hashSize: number
   infinite: boolean
 }
 
 export interface Work {
   path: string
   maxDepth: number
-  cores: number
-  hash: number
   multiPv: number
   ply: number
   threatMode: boolean

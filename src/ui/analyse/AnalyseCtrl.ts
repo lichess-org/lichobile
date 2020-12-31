@@ -140,6 +140,7 @@ export default class AnalyseCtrl {
       variant: this.data.game.variant.key,
       multiPv: this.settings.s.cevalMultiPvs,
       cores: this.settings.s.cevalCores,
+      hashSize: window.deviceInfo.stockfishMaxMemory,
       infinite: this.settings.s.cevalInfinite
     }, this.onCevalMsg)
 

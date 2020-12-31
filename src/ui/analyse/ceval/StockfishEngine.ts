@@ -10,7 +10,11 @@ const EVAL_REGEX = new RegExp(''
   + /(?:hashfull \d+ )?(?:tbhits \d+ )?time (\S+) /.source
   + /pv (.+)/.source)
 
-export default function StockfishEngine(variant: VariantKey): IEngine {
+export default function StockfishEngine(
+  variant: VariantKey,
+  threads: number,
+  hash: number,
+): IEngine {
   const stockfish = new Stockfish(variant)
 
   let stopTimeoutId: number
@@ -38,6 +42,10 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
     return stockfish.plugin.start()
     .then(() => stockfish.send('uci'))
     .then(() => stockfish.setVariant())
+    .then(() => stockfish.setOption('Threads', threads))
+    .then(() => Capacitor.platform !== 'web' ?
+      stockfish.setOption('Hash', hash) : Promise.resolve()
+    )
     .catch((err: any) => console.error('stockfish init error', err))
   }
 
@@ -91,11 +99,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
         })
       })
 
-      return stockfish.setOption('Threads', work.cores)
-      .then(() => Capacitor.platform !== 'web' ?
-        stockfish.setOption('Hash', work.hash) : Promise.resolve()
-      )
-      .then(() => stockfish.setOption('MultiPV', work.multiPv))
+      return stockfish.setOption('MultiPV', work.multiPv)
       .then(() => stockfish.send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' ')))
       .then(() => stockfish.send('go depth ' + work.maxDepth))
     }

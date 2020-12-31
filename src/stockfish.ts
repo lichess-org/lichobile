@@ -134,10 +134,8 @@ export class Stockfish {
   }
 }
 
-const memPromise = StockfishPlugin.getMaxMemory().then(r => r.value)
-
-export function getMaxMemory(): Promise<number> {
-  return memPromise
+export function getMaxMemory(): number {
+  return window.deviceInfo.stockfishMaxMemory
 }
 
 export function getNbCores(): number {

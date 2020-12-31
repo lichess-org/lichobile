@@ -74,44 +74,49 @@ export default function renderForecasts(ctrl: AnalyseCtrl) {
   const candidateNodes = makeCandidateNodes(ctrl, ctrl.forecast)
   const isCandidate = ctrl.forecast.isCandidate(candidateNodes)
 
-  return h('div.forecasts-wrapper.native_scroller', [
-    h(
-      'div.forecasts-list',
-      [
-        ...ctrl.forecast.lines.map((nodes, i) => {
-          return h(
-            'div.forecast',
-            {
-              oncreate: ontap(
-                () => {},
-                () => {
-                  ctrl.forecast!.contextIndex = i
-                }
-              ),
-            },
-            [h('sans', renderNodesHtml(nodes))]
-          )
-        }),
-        isCandidate
-          ? h(
-              'div.forecast.add-forecast',
+  return (
+    h('div.forecasts-wrapper.native_scroller', [
+      h(
+        'div.forecasts-list',
+        [
+          ...ctrl.forecast.lines.map((nodes, i) => {
+            return h(
+              'div.forecast',
               {
-                oncreate: ontap(() => {
-                  ctrl.forecast?.add(candidateNodes)
-                }),
+                key: nodes.map(node => node.san).join(''),
+                oncreate: ontap(
+                  () => {},
+                  () => {
+                    ctrl.forecast!.contextIndex = i
+                  }
+                ),
               },
-              [
-                h('span.fa.fa-plus-circle'),
-                h('sans', renderNodesHtml(candidateNodes)),
-              ]
+              [h('sans', renderNodesHtml(nodes))]
             )
-          : null,
-      ]
-    ),
-    h(
-      'div.info',
-      isCandidate ? null : i18n('playVariationToCreateConditionalPremoves')
-    ),
-    renderOnMyTurnView(ctrl, candidateNodes)
-  ])
+          }),
+          isCandidate
+            ? h(
+                'div.forecast.add-forecast',
+                {
+                  key: `candidate-${candidateNodes.map(node => node.san).join('')}`,
+                  oncreate: ontap(() => {
+                    const candidateNodes = makeCandidateNodes(ctrl, ctrl.forecast!)
+                    ctrl.forecast!.add(candidateNodes)
+                  })
+                },
+                [
+                  h('span.fa.fa-plus-circle'),
+                  h('sans', renderNodesHtml(candidateNodes)),
+                ]
+              )
+            : h.fragment({key: 'emptyCandidateForecast'}, []),
+        ]
+      ),
+      h(
+        'div.info',
+        isCandidate ? null : i18n('playVariationToCreateConditionalPremoves')
+      ),
+      renderOnMyTurnView(ctrl, candidateNodes)
+    ])
+  )
 }

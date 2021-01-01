@@ -132,7 +132,7 @@ function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
         ...b,
         chip: ctrl.node.comments.length
       }
-    } else if (b.id == 'forecasts' && ctrl.forecast?.lines && ctrl.forecast!.lines.length > 0) {
+    } else if (b.id === 'forecasts' && ctrl.forecast?.lines && ctrl.forecast!.lines.length > 0) {
       return {
         ...b,
         chip: ctrl.forecast!.lines!.length,

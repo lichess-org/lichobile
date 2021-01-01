@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig",
   "compilerOptions": {
+    "esModuleInterop": true,
     "types": ["lodash-es", "d3", "jest"]
   },
   "exclude": [

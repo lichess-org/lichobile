@@ -195,7 +195,7 @@ export default class AnalyseCtrl {
     if (tabId) {
       const curTabIndex = this.currentTabIndex(this.availableTabs())
       const newTabIndex = this.availableTabs().findIndex(tab => tab.id === tabId)
-      if (newTabIndex >= 0 && curTabIndex != newTabIndex) {
+      if (newTabIndex >= 0 && curTabIndex !== newTabIndex) {
         this.onTabChange(newTabIndex)
       }
     }

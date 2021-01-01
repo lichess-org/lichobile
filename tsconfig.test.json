@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "types": ["lodash-es", "d3", "jest"]
+  },
+  "exclude": [
+    "node_modules",
+    "plugins",
+    "platforms",
+    "scripts",
+  ]
+}

@@ -1,5 +1,11 @@
 import 'whatwg-fetch'
 
+// The @types/node package defines the types of global and process, but also defines the type
+// of setTimeout to return `NodeJS.Timeout` instead of window.setTimeout's `number`, which causes type errors
+// all over the project. So we're not using it.
+declare let global: any
+declare let process: any
+
 const testConfig = {
   apiEndPoint: 'http://test.org',
   fetchTimeoutMs: 10,
@@ -15,7 +21,7 @@ jest.mock('../config', () => {
 
 import * as http from '../http'
 
-process.on('unhandledRejection', error => {
+process.on('unhandledRejection', (_error: any) => {
   // catch all unhandled rejection here to avoid node warning
 })
 
@@ -129,8 +135,8 @@ describe('HTTP fetch wrapper', () => {
 
     http.fetchJSON('/api/test')
 
-    expect(global.fetch.mock.calls.length).toBe(1)
-    expect(global.fetch.mock.calls[0][0]).toBe('http://test.org/api/test')
+    expect((global.fetch as jest.Mock).mock.calls.length).toBe(1)
+    expect((global.fetch as jest.Mock).mock.calls[0][0]).toBe('http://test.org/api/test')
   })
 
   test('GET request call fetch with correct opts', () => {
@@ -138,8 +144,8 @@ describe('HTTP fetch wrapper', () => {
 
     http.fetchJSON('/api/test')
 
-    expect(global.fetch.mock.calls.length).toBe(1)
-    expect(global.fetch.mock.calls[0][1]).toEqual({
+    expect((global.fetch as jest.Mock).mock.calls.length).toBe(1)
+    expect((global.fetch as jest.Mock).mock.calls[0][1]).toEqual({
       method: 'GET',
       credentials: 'include',
       headers: new Headers({
@@ -160,8 +166,8 @@ describe('HTTP fetch wrapper', () => {
       credentials: 'omit',
     })
 
-    expect(global.fetch.mock.calls.length).toBe(1)
-    expect(global.fetch.mock.calls[0][1]).toEqual({
+    expect((global.fetch as jest.Mock).mock.calls.length).toBe(1)
+    expect((global.fetch as jest.Mock).mock.calls[0][1]).toEqual({
       method: 'GET',
       credentials: 'omit',
       headers: new Headers({
@@ -180,8 +186,8 @@ describe('HTTP fetch wrapper', () => {
       }
     })
 
-    expect(global.fetch.mock.calls.length).toBe(1)
-    expect(global.fetch.mock.calls[0][0]).toBe('http://test.org/api/test?q=text%20url%20encoded&v=1234')
+    expect((global.fetch as jest.Mock).mock.calls.length).toBe(1)
+    expect((global.fetch as jest.Mock).mock.calls[0][0]).toBe('http://test.org/api/test?q=text%20url%20encoded&v=1234')
   })
 
   test('POST request call fetch with correct opts', () => {
@@ -189,8 +195,8 @@ describe('HTTP fetch wrapper', () => {
 
     http.fetchJSON('/api/test', { method: 'POST' })
 
-    expect(global.fetch.mock.calls.length).toBe(1)
-    expect(global.fetch.mock.calls[0][1]).toEqual({
+    expect((global.fetch as jest.Mock).mock.calls.length).toBe(1)
+    expect((global.fetch as jest.Mock).mock.calls[0][1]).toEqual({
       method: 'POST',
       credentials: 'include',
       headers: new Headers({

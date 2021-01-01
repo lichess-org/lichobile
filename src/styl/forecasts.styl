@@ -1,6 +1,7 @@
 .forecasts-wrapper
   flex 1 1 auto
   padding 10px
+  position relative
   .info
     padding 0.5em
     move
@@ -13,6 +14,21 @@
   .on-my-turn
     text-align center
     margin-top: 0.17em
+  .spinner_overlay
+    position: absolute;
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    display flex
+    align-items center
+    justify-content center
+    background rgba(0, 0, 0, 0.4)
+    > .spinner
+      margin 22px 0 0
+      width initial
+      height initial
+      font-size 25px
 
 .forecasts-list
   width 100%

@@ -73,6 +73,10 @@ function renderOnMyTurnView(ctrl: AnalyseCtrl, candidate: ForecastStep[]): Maybe
   )
 }
 
+function renderSpinner(): Mithril.Child {
+  return h('div.spinner_overlay', h('div.spinner.fa.fa-hourglass-half'))
+}
+
 export default function renderForecasts(ctrl: AnalyseCtrl) {
   if (!ctrl.forecast) return null
 
@@ -124,7 +128,8 @@ export default function renderForecasts(ctrl: AnalyseCtrl) {
         'div.info',
         isCandidate ? null : i18n('playVariationToCreateConditionalPremoves')
       ),
-      renderOnMyTurnView(ctrl, candidateNodes)
+      renderOnMyTurnView(ctrl, candidateNodes),
+      ctrl.forecast!.loading ? renderSpinner() : null,
     ])
   )
 }

@@ -6,6 +6,7 @@ import { playAndSaveForecasts, saveForecasts } from './xhr'
 const MAX_FORECAST_PLIES = 30
 
 export default class ForecastCtrl {
+  loading: boolean = false
   readonly isMyTurn: boolean
 
   private _lines: ForecastStep[][]
@@ -70,13 +71,13 @@ export default class ForecastCtrl {
     const playerId = this._playerId
     const gameId = this._gameId
     if (this.isMyTurn || !playerId) return
-    // loading(true);
+    this.loading = true
     redraw()
     saveForecasts(gameId, playerId, this.lines).then(data => {
       if (data.reload) {
         this.reloadToLastPly()
       } else {
-        // loading(false);
+        this.loading = false
         this._lines = data.steps || []
         redraw()
       }
@@ -92,11 +93,14 @@ export default class ForecastCtrl {
       .filter(forecast => forecast.length > 0)
       .map(forecast => forecast.slice(1))
 
+    this.loading = true
+    redraw()
     playAndSaveForecasts(gameId, playerId, moveToPlay, forecasts)
       .then(data => {
         if (data.reload) {
           this.reloadToLastPly()
         } else {
+          this.loading = false
           this._lines = data.steps || []
           redraw()
         }

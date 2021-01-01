@@ -15,8 +15,7 @@ export function saveForecasts(
     {
       method: 'POST',
       body: JSON.stringify(forecasts),
-    },
-    true
+    }
   )
 }
 
@@ -31,7 +30,6 @@ export function playAndSaveForecasts(
     {
       method: 'POST',
       body: JSON.stringify(forecasts),
-    },
-    true
+    }
   )
 }

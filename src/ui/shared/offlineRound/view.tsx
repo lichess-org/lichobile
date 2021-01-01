@@ -12,7 +12,6 @@ import { OfflineRoundInterface, Position, Material } from '../round'
 import settings from '../../../settings'
 import Replay from './Replay'
 import { IChessClock, IStageClock } from '../clock/interfaces'
-import { formatClockTime } from '../round/clock/clockView'
 import { autoScroll, autoScrollInline, onReplayTap, getMoveEl } from '../round/util'
 
 let pieceNotation: boolean
@@ -202,6 +201,31 @@ function renderIndex(ply: Ply, withDots?: boolean): Mithril.Children {
 
 function plyToTurn(ply: number): number {
   return Math.floor((ply - 1) / 2) + 1
+}
+
+function pad2(num: number): string {
+ return (num < 10 ? '0' : '') + num
+}
+
+const sepHigh = ':'
+const sepLow = ' '
+function formatClockTime(time: Millis, isRunning: boolean = false) {
+  const date = new Date(time)
+  const millis = date.getUTCMilliseconds()
+  const minutes = pad2(date.getUTCMinutes())
+  const seconds = pad2(date.getUTCSeconds())
+
+  if (time >= 3600000) {
+    const hours = pad2(date.getUTCHours())
+    const pulse = (isRunning && millis < 500) ? sepLow : sepHigh
+    return hours + pulse + minutes
+  }
+  if (time < 10000) {
+    let tenthsStr = Math.floor(millis / 100).toString()
+    return [minutes + sepHigh + seconds, h('tenths', '.' + tenthsStr)]
+  }
+
+  return minutes + sepHigh + seconds
 }
 
 function renderClock(clock: IChessClock, color: Color) {

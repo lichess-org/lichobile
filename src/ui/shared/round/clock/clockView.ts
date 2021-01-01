@@ -47,7 +47,7 @@ export default {
 
 const sepHigh = ':'
 const sepLow = ' '
-export function formatClockTime(time: Millis, showTenths: boolean, isRunning: boolean = false): string {
+export function formatClockTime(time: Millis, showTenths: boolean, isRunning = false): string {
   const date = new Date(time)
   const millis = date.getUTCMilliseconds()
   const minutes = pad2(date.getUTCMinutes())

@@ -145,6 +145,7 @@ export default {
     cevalMultiPvs: prop<number>('ceval.multipv', 1),
     cevalCores: prop<number>('ceval.cores', 1),
     cevalInfinite: prop<boolean>('ceval.infinite', false),
+    cevalMaxDepth: prop<number>('ceval.maxDepth', 18),
     showBestMove: prop('analyse.showBestMove', true),
     showComments: prop('analyse.showComments', true),
     smallBoard: prop<boolean>('analyse.smallBoard', true),

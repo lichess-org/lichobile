@@ -35,7 +35,7 @@ export interface ICevalCtrl {
   init(): Promise<void>
   isInit(): boolean
   isSearching(): boolean
-  start(path: Tree.Path, steps: Tree.Node[], forceRetroOpts: boolean): void
+  start(path: Tree.Path, steps: Tree.Node[], forceRetroOpts: boolean, deeper: boolean): void
   stop(): void
   destroy(): void
   allowed: boolean
@@ -44,12 +44,13 @@ export interface ICevalCtrl {
   disable(): void
   variant: VariantKey
   minDepth: number
-  maxDepth: number
   effectiveMaxDepth(): number
   setCores(c: number): void
   setMultiPv(pv: number): void
   getMultiPv(): number
   toggleInfinite(): void
+  goDeeper(): void
+  canGoDeeper(): boolean
 }
 
 export interface IEngine {
@@ -58,4 +59,9 @@ export interface IEngine {
   stop(): void
   exit(): Promise<void>
   isSearching(): boolean
+}
+
+export interface Started {
+  path: Tree.Path
+  nodes: Tree.Node[]
 }

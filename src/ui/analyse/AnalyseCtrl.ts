@@ -311,7 +311,7 @@ export default class AnalyseCtrl {
   startCeval = () => {
     if (this.ceval.enabled() && this.canUseCeval()) {
       const forceMaxLv = !!this.retro || !!this.practice
-      this.ceval.start(this.path, this.nodeList, forceMaxLv)
+      this.ceval.start(this.path, this.nodeList, forceMaxLv, false)
       this.evalCache.fetch(this.path, forceMaxLv ? 1 : this.ceval.getMultiPv())
     }
   }

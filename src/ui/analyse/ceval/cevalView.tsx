@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
 import { parseUci } from 'chessops/util'
 import { makeSanVariation } from 'chessops/san'
@@ -31,7 +32,12 @@ function renderCevalInfos(ctrl: AnalyseCtrl) {
     className: ceval.cloud ? 'cloud' : ''
   }, [
     h('div.depth', [
-      h('span', i18n('depthX', ceval.depth + (isInfinite || ceval.maxDepth === undefined ? '' : `/${ceval.maxDepth}`)))
+      h('span', i18n('depthX', ceval.depth + (isInfinite || ceval.maxDepth === undefined ? '' : `/${ceval.maxDepth}`))),
+      ctrl.ceval.canGoDeeper() ? h('button.fa.fa-plus-square', {
+        oncreate: helper.ontap(ctrl.ceval.goDeeper, () => {
+          Plugins.LiToast.show({ text: i18n('goDeeper'), duration: 'short' })
+        })
+      }) : null
     ]),
     ceval.millis !== undefined ? h('div.time', [
       i18n('time'), ' ', formatTime(ceval.millis)

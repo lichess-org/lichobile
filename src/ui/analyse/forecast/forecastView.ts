@@ -77,11 +77,12 @@ function renderSpinner(): Mithril.Child {
   return h('div.spinner_overlay', h('div.spinner.fa.fa-hourglass-half'))
 }
 
-export default function renderForecasts(ctrl: AnalyseCtrl) {
-  if (!ctrl.forecast) return null
+export default function renderForecasts(ctrl: AnalyseCtrl): MaybeVNode {
+  const fctrl = ctrl.forecast
+  if (!fctrl) return null
 
-  const candidateNodes = makeCandidateNodes(ctrl, ctrl.forecast)
-  const isCandidate = ctrl.forecast.isCandidate(candidateNodes)
+  const candidateNodes = makeCandidateNodes(ctrl, fctrl)
+  const isCandidate = fctrl.isCandidate(candidateNodes)
 
   return (
     h('div.forecasts-wrapper.native_scroller', [
@@ -91,15 +92,15 @@ export default function renderForecasts(ctrl: AnalyseCtrl) {
           class: settings.game.pieceNotation() ? 'displayPieces' : '',
         },
         [
-          ...ctrl.forecast.lines.map((nodes, i) => {
+          ...fctrl.lines.map((nodes, i) => {
             return h(
               'div.forecast',
               {
                 key: nodes.map(node => node.san).join(''),
                 oncreate: ontap(
-                  () => {},
+                  () => { /* noop */ },
                   () => {
-                    ctrl.forecast!.contextIndex = i
+                    fctrl.contextIndex = i
                   }
                 ),
               },
@@ -112,8 +113,8 @@ export default function renderForecasts(ctrl: AnalyseCtrl) {
                 {
                   key: `candidate-${candidateNodes.map(node => node.san).join('')}`,
                   oncreate: ontap(() => {
-                    const candidateNodes = makeCandidateNodes(ctrl, ctrl.forecast!)
-                    ctrl.forecast!.add(candidateNodes)
+                    const candidateNodes = makeCandidateNodes(ctrl, fctrl)
+                    fctrl.add(candidateNodes)
                   })
                 },
                 [
@@ -129,7 +130,7 @@ export default function renderForecasts(ctrl: AnalyseCtrl) {
         isCandidate ? null : i18n('playVariationToCreateConditionalPremoves')
       ),
       renderOnMyTurnView(ctrl, candidateNodes),
-      ctrl.forecast!.loading ? renderSpinner() : null,
+      fctrl.loading ? renderSpinner() : null,
     ])
   )
 }

@@ -2,11 +2,12 @@ import { AnalyseDataForForecast, ForecastStep, MinimalForecastStep } from '~/lic
 import router from '~/router'
 import redraw from '~/utils/redraw'
 import { playAndSaveForecasts, saveForecasts } from './xhr'
+import { forecasts as forecastTab } from '~/ui/analyse/tabs'
 
 const MAX_FORECAST_PLIES = 30
 
 export default class ForecastCtrl {
-  loading: boolean = false
+  loading = false
   readonly isMyTurn: boolean
 
   private _lines: ForecastStep[][]
@@ -114,7 +115,7 @@ export default class ForecastCtrl {
   }
 
   reloadToLastPly(): void {
-    router.set(`/analyse/online${this._analyseUrl}?tabId=forecasts`)
+    router.set(`/analyse/online${this._analyseUrl}?tabId=${forecastTab.id}`)
   }
 
   get lines(): ForecastStep[][] {

@@ -11,12 +11,12 @@ jest.mock('../config', () => testConfig)
 // The @types/node package defines the types of global and process, but also defines the type
 // of setTimeout to return `NodeJS.Timeout` instead of window.setTimeout's `number`, which causes type errors
 // all over the project. So we're not using it.
-declare let global: any
-declare let process: any
+declare let global: { Headers: unknown, fetch: unknown }
+declare let process: { on: (s: string, cb: unknown) => unknown }
 
 import * as http from '../http'
 
-process.on('unhandledRejection', (_error: any) => {
+process.on('unhandledRejection', () => {
   // catch all unhandled rejection here to avoid node warning
 })
 

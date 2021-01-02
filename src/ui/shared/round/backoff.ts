@@ -1,16 +1,16 @@
-type Callback = (...args: any[]) => void
-export default function backoff(delay: number, factor: number, callback: Callback): Callback {
+type Callback<T> = (...args: T[]) => void
+export default function backoff<T>(delay: number, factor: number, callback: Callback<T>): Callback<T> {
   let timer: number | undefined
   let lastExec = 0
 
-  return (...args: any[]): void => {
+  return (...args: T[]): void => {
     const elapsed = performance.now() - lastExec
 
     const exec = () => {
       timer = undefined
       lastExec = performance.now()
       delay *= factor
-      callback(args)
+      callback(...args)
     }
 
     if (timer) clearTimeout(timer)

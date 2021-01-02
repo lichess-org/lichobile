@@ -94,6 +94,7 @@ export default {
         ['kosal' ],
         ['leipzig' ],
         ['fantasy' ],
+        ['california'],
         ['pixel'],
         ['maestro'],
         ['fresca'],

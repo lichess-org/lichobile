@@ -1,4 +1,5 @@
 import { Signal } from 'signals'
+import { PongMessage } from './lichess/interfaces'
 
 export default {
   // global screen redraw mechanism; it works the same way as m.redraw() works
@@ -15,5 +16,5 @@ export default {
   sessionRestored: new Signal(),
 
   // signal fired on websocket pong in homepage
-  homePong: new Signal(),
+  homePong: new Signal<PongMessage>(),
 }

@@ -103,7 +103,7 @@ SPEC CHECKSUMS:
   CapacitorCommunityKeepAwake: c4476e4a01406d22ec14df13520e391685441813
   CapacitorCordova: 7b6eb536dd6d517a32056341575bb0b187bd44a5
   CapacitorSoundEffect: 31a36e64d0220c6d0e1621a61744b5d8c1e7738d
-  CapacitorStockfish: 037339982b6ad41103a7e4cdb199063abdf3f35b
+  CapacitorStockfish: b2f46beafb34d5b9da93bb7115b6891eb4023093
   Firebase: 26223c695fe322633274198cb19dca8cb7e54416
   FirebaseCore: 4d3c72622ce0e2106aaa07bb4b2935ba2c370972
   FirebaseCoreDiagnostics: d50e11039e5984d92c8a512be2395f13df747350

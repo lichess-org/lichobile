@@ -1,6 +1,6 @@
 import { Capacitor } from '@capacitor/core'
 import { AiRoundInterface } from '../shared/round'
-import { Stockfish, getNbCores, getMaxMemory } from '../../stockfish'
+import { StockfishWrapper, getNbCores, getMaxMemory } from '../../stockfish'
 
 interface LevelToDepth {
   [index: number]: number
@@ -21,11 +21,11 @@ const levelToDepth: LevelToDepth = {
 
 export default class Engine {
   private level = 1
-  private stockfish: Stockfish
+  private stockfish: StockfishWrapper
   private isInit = false
 
   constructor(readonly ctrl: AiRoundInterface, readonly variant: VariantKey) {
-    this.stockfish = new Stockfish(variant)
+    this.stockfish = new StockfishWrapper(variant)
 
     this.stockfish.addListener(line => {
       const match = line.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/)
@@ -37,7 +37,7 @@ export default class Engine {
   }
 
   public init() {
-    return this.stockfish.plugin.start()
+    return this.stockfish.start()
     .then(() => {
       if (!this.isInit) {
         this.isInit = true
@@ -68,8 +68,7 @@ export default class Engine {
   }
 
   public exit() {
-    this.stockfish.plugin.removeAllListeners()
-    return this.stockfish.plugin.exit()
+    return this.stockfish.exit()
   }
 }
 

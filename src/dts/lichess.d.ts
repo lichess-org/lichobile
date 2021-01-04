@@ -59,6 +59,7 @@ type RequestIdleCallbackDeadline = {
 
 interface Window {
   lichess: LichessOptions
+  Stockfish: Stockfish.Static
   Shepherd: TetherShepherd.ShepherdStatic
   AndroidFullScreen: {
     showSystemUI: () => void

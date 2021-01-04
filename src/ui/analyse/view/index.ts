@@ -156,7 +156,7 @@ function renderTabTitle(ctrl: AnalyseCtrl, curTab: Tab) {
   }
   else if (curTab.id === 'ceval') {
     children = [
-      h('span', defaultTitle),
+      h('span', ctrl.ceval.getEngineName()),
       ctrl.ceval.isSearching() ? h('div.ceval-spinner', h('span.fa.fa-spinner.fa-pulse')) : null
     ]
   }

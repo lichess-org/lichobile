@@ -51,6 +51,7 @@ export interface ICevalCtrl {
   toggleInfinite(): void
   goDeeper(): void
   canGoDeeper(): boolean
+  getEngineName(): string
 }
 
 export interface IEngine {
@@ -59,6 +60,7 @@ export interface IEngine {
   stop(): void
   exit(): Promise<void>
   isSearching(): boolean
+  getName(): string
 }
 
 export interface Started {

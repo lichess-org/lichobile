@@ -1,7 +1,7 @@
 import { Capacitor } from '@capacitor/core'
 import { Tree } from '../../shared/tree/interfaces'
 import { Work, IEngine } from './interfaces'
-import { Stockfish } from '../../../stockfish'
+import { StockfishWrapper } from '../../../stockfish'
 
 const EVAL_REGEX = new RegExp(''
   + /^info depth (\d+) seldepth \d+ multipv (\d+) /.source
@@ -15,7 +15,9 @@ export default function StockfishEngine(
   threads: number,
   hash: number,
 ): IEngine {
-  const stockfish = new Stockfish(variant)
+  const stockfish = new StockfishWrapper(variant)
+
+  let engineName = 'Stockfish'
 
   let stopTimeoutId: number
   let readyPromise: Promise<void> = Promise.resolve()
@@ -39,12 +41,17 @@ export default function StockfishEngine(
    * Init engine with default options and variant
    */
   async function init() {
+    stockfish.addListener((line: string) => {
+      if (line.startsWith('id name ')) {
+        engineName = line.substring('id name '.length)
+      }
+    })
     try {
-      await stockfish.plugin.start()
+      await stockfish.start()
       await stockfish.send('uci')
       await stockfish.setVariant()
-      await stockfish.setOption('UCI_AnalyseMode', 'true');
-      await stockfish.setOption('Analysis Contempt', 'Off');
+      await stockfish.setOption('UCI_AnalyseMode', 'true')
+      await stockfish.setOption('Analysis Contempt', 'Off')
       await stockfish.setOption('Threads', threads)
       if (Capacitor.platform !== 'web') {
         await stockfish.setOption('Hash', hash)
@@ -143,7 +150,7 @@ export default function StockfishEngine(
     if (isMate && !povEv) return
 
     const pivot = work.threatMode ? 0 : 1
-    const ev = (work.ply % 2 === pivot) ? -povEv : povEv;
+    const ev = (work.ply % 2 === pivot) ? -povEv : povEv
 
     // For now, ignore most upperbound/lowerbound messages.
     // The exception is for multiPV, sometimes non-primary PVs
@@ -191,8 +198,7 @@ export default function StockfishEngine(
   }
 
   function exit() {
-    stockfish.plugin.removeAllListeners()
-    return stockfish.plugin.exit()
+    return stockfish.exit()
   }
 
   function reset() {
@@ -206,6 +212,9 @@ export default function StockfishEngine(
     exit,
     isSearching() {
       return !finished
+    },
+    getName() {
+      return engineName
     }
   }
 }

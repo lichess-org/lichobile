@@ -1,5 +1,6 @@
 /// <reference path="dts/index.d.ts" />
 import { Capacitor, Plugins } from '@capacitor/core'
+import './webPlugins'
 
 import appInit from './app'
 import { init as settingsInit } from './settings'

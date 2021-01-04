@@ -1,88 +1,5 @@
-import { Capacitor, Plugins, WebPlugin, registerWebPlugin, PluginListenerHandle, ListenerCallback } from '@capacitor/core'
+import { Plugins } from '@capacitor/core'
 import { VariantKey } from './lichess/interfaces/variant'
-import { isVariant } from './lichess/variant'
-
-// custom web plugin registration done here for now
-// because importing code from node_modules causes capacitor runtime code to
-// be included twice
-if (Capacitor.platform === 'web') {
-  class StockfishWeb extends WebPlugin {
-    private worker?: Worker
-    private listener?: ListenerCallback
-
-    constructor() {
-      super({
-        name: 'Stockfish',
-        platforms: ['web']
-      })
-    }
-
-    addListener(_: string, callback: ListenerCallback): PluginListenerHandle {
-      this.listener = callback
-      if (this.worker) {
-        this.worker.onmessage = msg => {
-          if (this.listener) this.listener({ line: msg.data })
-        }
-      }
-
-      return {
-        remove: () => {
-          this.listener = undefined
-          if (this.worker) {
-            this.worker.onmessage = null
-          }
-        }
-      }
-    }
-
-    removeAllListeners(): void {
-      this.listener = undefined
-      if (this.worker) this.worker.onmessage = null
-    }
-
-    async getMaxMemory(): Promise<number> {
-      return 1024
-    }
-
-    async start() {
-      return new Promise((resolve) => {
-        if (this.worker) {
-          this.worker.onmessage = msg => {
-            if (this.listener) this.listener({ line: msg.data })
-          }
-          setTimeout(resolve, 1)
-        } else {
-          this.worker = new Worker('../stockfish.js')
-          this.worker.onmessage = msg => {
-            if (this.listener) this.listener({ line: msg.data })
-          }
-          setTimeout(resolve, 1)
-        }
-      })
-    }
-
-    async cmd({ cmd }: { cmd: string }) {
-      return new Promise((resolve) => {
-        if (this.worker) this.worker.postMessage(cmd)
-        setTimeout(resolve, 1)
-      })
-    }
-
-    async exit() {
-      return new Promise((resolve) => {
-        if (this.worker) {
-          this.worker.terminate()
-          this.worker = undefined
-        }
-        setTimeout(resolve, 1)
-      })
-    }
-  }
-
-  const stockfishWeb = new StockfishWeb()
-
-  registerWebPlugin(stockfishWeb)
-}
 
 export interface StockfishPlugin {
   addListener(event: 'output', callback: (v: { line: string }) => void): void
@@ -95,25 +12,39 @@ export interface StockfishPlugin {
 
 const StockfishPlugin = Plugins.Stockfish as StockfishPlugin
 
-export class Stockfish {
-  public plugin: StockfishPlugin
+export class StockfishWrapper {
+  constructor(readonly variant: VariantKey) { }
 
-  constructor(readonly variant: VariantKey) {
-    // todo implem variant
-    this.plugin = isVariant(variant) ? StockfishPlugin : StockfishPlugin
+  public addListener(callback: (line: string) => void): void {
+    if (this.isVariant()) {
+      window.Stockfish.output((line: string) => {
+        console.debug('[stockfish >>] ' + line)
+        callback(line)
+      })
+    } else {
+      StockfishPlugin.removeAllListeners()
+      StockfishPlugin.addListener('output', ({ line }) => {
+        console.debug('[stockfish >>] ' + line)
+        callback(line)
+      })
+    }
   }
 
-  public addListener(callback: (line: string) => void) {
-    this.plugin.removeAllListeners()
-    this.plugin.addListener('output', ({ line }) => {
-      console.debug('[stockfish >>] ' + line)
-      callback(line)
-    })
+  public start(): Promise<void> {
+    if (this.isVariant()) {
+      return window.Stockfish.init()
+    } else {
+      return StockfishPlugin.start()
+    }
   }
 
   public send(text: string): Promise<void> {
     console.debug('[stockfish <<] ' + text)
-    return this.plugin.cmd({ cmd: text })
+    if (this.isVariant()) {
+      return window.Stockfish.cmd(text)
+    } else {
+      return StockfishPlugin.cmd({ cmd: text })
+    }
   }
 
   public setOption(name: string, value: string | number | boolean): Promise<void> {
@@ -121,16 +52,35 @@ export class Stockfish {
   }
 
   public setVariant(): Promise<void> {
-    if (isVariant(this.variant)) {
-      if (this.variant === 'chess960')
-        return this.setOption('UCI_Chess960', true)
-      else if (this.variant === 'antichess')
+    if (this.isVariant()) {
+      if (this.variant === 'antichess')
         return this.setOption('UCI_Variant', 'giveaway')
       else
         return this.setOption('UCI_Variant', this.variant.toLowerCase())
     }
 
+    if (this.variant === 'chess960') {
+      return this.setOption('UCI_Chess960', true)
+    }
+
     return Promise.resolve()
+  }
+
+  public exit(): Promise<void> {
+    if (this.isVariant()) {
+      return window.Stockfish.exit()
+    } else {
+      StockfishPlugin.removeAllListeners()
+      return StockfishPlugin.exit()
+    }
+  }
+
+  private isVariant() {
+    return !(
+      this.variant === 'standard' ||
+      this.variant === 'fromPosition' ||
+      this.variant === 'chess960'
+    )
   }
 }
 

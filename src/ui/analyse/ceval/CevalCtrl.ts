@@ -183,6 +183,9 @@ export default function CevalCtrl(
     canGoDeeper(): boolean {
       return !isDeeper && !opts.infinite && !engine.isSearching()
     },
+    getEngineName(): string {
+      return engine.getName()
+    },
   }
 }
 

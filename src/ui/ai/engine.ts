@@ -36,20 +36,22 @@ export default class Engine {
     })
   }
 
-  public init() {
-    return this.stockfish.start()
-    .then(() => {
+  public async init() {
+    try {
+      await this.stockfish.start()
       if (!this.isInit) {
         this.isInit = true
-        return this.stockfish.send('uci')
-        .then(() => this.stockfish.setOption('Threads', getNbCores()))
-        .then(async () => {
-          const mem = await getMaxMemory()
-          if (Capacitor.platform !== 'web') this.stockfish.setOption('Hash', mem)
-        })
+        await this.stockfish.send('uci')
+        await this.stockfish.setVariant()
+        await this.stockfish.setOption('Threads', getNbCores())
+        const mem = await getMaxMemory()
+        if (Capacitor.platform !== 'web') {
+          await this.stockfish.setOption('Hash', mem)
+        }
       }
-    })
-    .catch(console.error.bind(console))
+    } catch(e) {
+      console.error(e)
+    }
   }
 
   public newGame() {
@@ -62,12 +64,12 @@ export default class Engine {
     await this.stockfish.send(`go movetime ${moveTime(this.level)} depth ${depth(this.level)}`)
   }
 
-  public setLevel(l: number) {
+  public async setLevel(l: number) {
     this.level = l
     return this.stockfish.setOption('Skill Level', String(skill(this.level)))
   }
 
-  public exit() {
+  public async exit() {
     return this.stockfish.exit()
   }
 }

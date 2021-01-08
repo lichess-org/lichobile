@@ -8,8 +8,6 @@ PODS:
     - Capacitor
   - CapacitorStockfish (0.0.1):
     - Capacitor
-  - CordovaPlugins (2.4.3):
-    - CapacitorCordova
   - Firebase/CoreOnly (7.3.0):
     - FirebaseCore (= 7.3.0)
   - Firebase/Messaging (7.3.0):
@@ -65,7 +63,7 @@ PODS:
     - nanopb/encode (= 2.30906.0)
   - nanopb/decode (2.30906.0)
   - nanopb/encode (2.30906.0)
-  - PromisesObjC (1.2.11)
+  - PromisesObjC (1.2.12)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -73,7 +71,6 @@ DEPENDENCIES:
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - CapacitorSoundEffect (from `../../node_modules/capacitor-sound-effect`)
   - CapacitorStockfish (from `../../../capacitor-stockfish`)
-  - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
   - Firebase/Messaging
 
 SPEC REPOS:
@@ -100,16 +97,13 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/capacitor-sound-effect"
   CapacitorStockfish:
     :path: "../../../capacitor-stockfish"
-  CordovaPlugins:
-    :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
   Capacitor: 723817d2a46affb831c80233f2abc502ff63b37a
   CapacitorCommunityKeepAwake: c4476e4a01406d22ec14df13520e391685441813
   CapacitorCordova: 7b6eb536dd6d517a32056341575bb0b187bd44a5
   CapacitorSoundEffect: 31a36e64d0220c6d0e1621a61744b5d8c1e7738d
-  CapacitorStockfish: b2f46beafb34d5b9da93bb7115b6891eb4023093
-  CordovaPlugins: 050a0344e9aa9996d7e5858294d4626d1c94ed97
+  CapacitorStockfish: 76c7d03f033b7a180b68174bb1756d2d5bedfd87
   Firebase: 26223c695fe322633274198cb19dca8cb7e54416
   FirebaseCore: 4d3c72622ce0e2106aaa07bb4b2935ba2c370972
   FirebaseCoreDiagnostics: d50e11039e5984d92c8a512be2395f13df747350
@@ -119,8 +113,8 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 116c84c4bdeb76be2a7a46de51244368f9794eab
   GoogleUtilities: 3dc4ff0d5e4840e2fa8eef0889620e8c33d4218c
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
-  PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
+  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
 
-PODFILE CHECKSUM: 887a3309398e7e10cebbde3cd5099727c6083776
+PODFILE CHECKSUM: 09b96d20aa796c7f25a118d01a10011541decb4e
 
 COCOAPODS: 1.10.0

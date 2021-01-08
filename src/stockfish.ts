@@ -16,35 +16,20 @@ export class StockfishWrapper {
   constructor(readonly variant: VariantKey) { }
 
   public addListener(callback: (line: string) => void): void {
-    if (this.isVariant()) {
-      window.Stockfish.output((line: string) => {
-        console.debug('[stockfish >>] ' + line)
-        callback(line)
-      })
-    } else {
-      StockfishPlugin.removeAllListeners()
-      StockfishPlugin.addListener('output', ({ line }) => {
-        console.debug('[stockfish >>] ' + line)
-        callback(line)
-      })
-    }
+    StockfishPlugin.removeAllListeners()
+    StockfishPlugin.addListener('output', ({ line }) => {
+      console.debug('[stockfish >>] ' + line)
+      callback(line)
+    })
   }
 
   public start(): Promise<void> {
-    if (this.isVariant()) {
-      return window.Stockfish.init()
-    } else {
-      return StockfishPlugin.start()
-    }
+    return StockfishPlugin.start()
   }
 
   public send(text: string): Promise<void> {
     console.debug('[stockfish <<] ' + text)
-    if (this.isVariant()) {
-      return window.Stockfish.cmd(text)
-    } else {
-      return StockfishPlugin.cmd({ cmd: text })
-    }
+    return StockfishPlugin.cmd({ cmd: text })
   }
 
   public setOption(name: string, value: string | number | boolean): Promise<void> {
@@ -55,24 +40,22 @@ export class StockfishWrapper {
     if (this.isVariant()) {
       if (this.variant === 'antichess')
         return this.setOption('UCI_Variant', 'giveaway')
+      else if (this.variant === 'threeCheck')
+        return this.setOption('UCI_Variant', '3check')
       else
         return this.setOption('UCI_Variant', this.variant.toLowerCase())
+    } else {
+      const uci960p = this.setOption('UCI_Chess960', 'chess960' === this.variant)
+      return Promise.all([
+        this.setOption('UCI_Variant', 'chess'),
+        uci960p,
+      ]).then(() => {})
     }
-
-    if (this.variant === 'chess960') {
-      return this.setOption('UCI_Chess960', true)
-    }
-
-    return Promise.resolve()
   }
 
   public exit(): Promise<void> {
-    if (this.isVariant()) {
-      return window.Stockfish.exit()
-    } else {
-      StockfishPlugin.removeAllListeners()
-      return StockfishPlugin.exit()
-    }
+    StockfishPlugin.removeAllListeners()
+    return StockfishPlugin.exit()
   }
 
   private isVariant() {

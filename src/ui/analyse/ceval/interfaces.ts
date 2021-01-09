@@ -45,7 +45,6 @@ export interface ICevalCtrl {
   variant: VariantKey
   minDepth: number
   effectiveMaxDepth(): number
-  setCores(c: number): void
   setMultiPv(pv: number): void
   getMultiPv(): number
   toggleInfinite(): void

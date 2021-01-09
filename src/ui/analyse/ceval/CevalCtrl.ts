@@ -163,9 +163,6 @@ export default function CevalCtrl(
     disable() {
       isEnabled = false
     },
-    setCores(c: number) {
-      opts.cores = c
-    },
     setMultiPv(pv: number) {
       opts.multiPv = pv
     },

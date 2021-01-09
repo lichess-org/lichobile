@@ -4,6 +4,7 @@ import debounce from 'lodash-es/debounce'
 import { hasNetwork, requestIdleCallback } from './utils'
 import redraw from './utils/redraw'
 import session from './session'
+import settings from './settings'
 import { ensureLocaleIsAvailable, loadLanguage, getCurrentLocale } from './i18n'
 import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
@@ -22,6 +23,10 @@ export default function appInit(
   cpuCores: number,
   sfMaxMem: number
 ) {
+
+  if (settings.analyse.cevalHashSize() === 0) {
+    settings.analyse.cevalHashSize(sfMaxMem)
+  }
 
   window.deviceInfo = {
     platform: info.platform,

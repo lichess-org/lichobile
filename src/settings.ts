@@ -144,6 +144,7 @@ export default {
     enableCeval: prop<boolean>('analyse.enableCeval', false),
     cevalMultiPvs: prop<number>('ceval.multipv', 1),
     cevalCores: prop<number>('ceval.cores', 1),
+    cevalHashSize: prop<number>('ceval.hashSize', 0),
     cevalInfinite: prop<boolean>('ceval.infinite', false),
     cevalMaxDepth: prop<number>('ceval.maxDepth', 18),
     showBestMove: prop('analyse.showBestMove', true),

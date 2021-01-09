@@ -138,10 +138,10 @@ export default class AnalyseCtrl {
     this.ceval = CevalCtrl({
       allowed: cevalAllowed,
       variant: this.data.game.variant.key,
-      multiPv: this.settings.s.cevalMultiPvs,
-      cores: this.settings.s.cevalCores,
-      hashSize: window.deviceInfo.stockfishMaxMemory,
-      infinite: this.settings.s.cevalInfinite
+      multiPv: settings.analyse.cevalMultiPvs(),
+      cores: settings.analyse.cevalCores(),
+      hashSize: settings.analyse.cevalHashSize(),
+      infinite: settings.analyse.cevalInfinite(),
     }, this.onCevalMsg)
 
     const explorerAllowed = !this.study || this.study.data.chapter.features.explorer

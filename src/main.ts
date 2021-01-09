@@ -27,7 +27,7 @@ settingsInit()
   Capacitor.platform === 'ios' ?
     Plugins.CPUInfo.nbCores().then((r: { value: number }) => r.value).catch(() => 1) :
     Promise.resolve((<XNavigator>navigator).hardwareConcurrency || 1),
-  Plugins.Stockfish.getMaxMemory().then((r: { value: number }) => r.value).catch(() => 16),
+  Plugins.StockfishVariants.getMaxMemory().then((r: { value: number }) => r.value).catch(() => 16),
 ]))
 .then(([i, c, m]) => appInit(i, c, m))
 .then(() => Plugins.SplashScreen.hide())

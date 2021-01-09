@@ -56,6 +56,7 @@
         "@types/lodash-es": "4.17.3",
         "capacitor-sound-effect": "git+https://github.com/veloce/capacitor-sound-effect.git",
         "capacitor-stockfish": "file:../capacitor-stockfish",
+        "capacitor-stockfish-variants": "file:../capacitor-stockfish-variants",
         "chessops": "0.7.3",
         "cordova-plugin-fullscreen": "1.2.0",
         "d3-axis": "1.0.8",

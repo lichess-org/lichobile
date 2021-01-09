@@ -12,7 +12,7 @@ if (Capacitor.platform === 'web') {
 
     constructor() {
       super({
-        name: 'Stockfish',
+        name: 'StockfishVariants',
         platforms: ['web']
       })
     }
@@ -108,4 +108,3 @@ if (Capacitor.platform === 'web') {
   const SoundEffect = new SoundEffectWeb()
   registerWebPlugin(SoundEffect)
 }
-

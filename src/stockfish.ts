@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Capacitor, Plugins } from '@capacitor/core'
 import { VariantKey } from './lichess/interfaces/variant'
 
 export interface StockfishPlugin {
@@ -10,26 +10,32 @@ export interface StockfishPlugin {
   exit(): Promise<void>
 }
 
+const StockfishVariantsPlugin = Plugins.StockfishVariants as StockfishPlugin
 const StockfishPlugin = Plugins.Stockfish as StockfishPlugin
 
 export class StockfishWrapper {
-  constructor(readonly variant: VariantKey) { }
+  private plugin: StockfishPlugin
+
+  constructor(readonly variant: VariantKey) {
+    this.plugin = Capacitor.platform === 'android' && !this.isVariant() ?
+      StockfishPlugin : StockfishVariantsPlugin
+  }
 
   public addListener(callback: (line: string) => void): void {
-    StockfishPlugin.removeAllListeners()
-    StockfishPlugin.addListener('output', ({ line }) => {
+    this.plugin.removeAllListeners()
+    this.plugin.addListener('output', ({ line }) => {
       console.debug('[stockfish >>] ' + line)
       callback(line)
     })
   }
 
   public start(): Promise<void> {
-    return StockfishPlugin.start()
+    return this.plugin.start()
   }
 
   public send(text: string): Promise<void> {
     console.debug('[stockfish <<] ' + text)
-    return StockfishPlugin.cmd({ cmd: text })
+    return this.plugin.cmd({ cmd: text })
   }
 
   public setOption(name: string, value: string | number | boolean): Promise<void> {
@@ -54,8 +60,8 @@ export class StockfishWrapper {
   }
 
   public exit(): Promise<void> {
-    StockfishPlugin.removeAllListeners()
-    return StockfishPlugin.exit()
+    this.plugin.removeAllListeners()
+    return this.plugin.exit()
   }
 
   private isVariant() {

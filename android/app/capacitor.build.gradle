@@ -12,6 +12,7 @@ dependencies {
     implementation project(':capacitor-community-keep-awake')
     implementation project(':capacitor-sound-effect')
     implementation project(':capacitor-stockfish')
+    implementation project(':capacitor-stockfish-variants')
 
 }
 

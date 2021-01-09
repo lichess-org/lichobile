@@ -33,7 +33,7 @@ export default function appInit(
     uuid: info.uuid,
     appVersion: info.appVersion,
     cpuCores,
-    stockfishMaxMemory: sfMaxMem,
+    stockfishMaxMemory: Math.ceil(sfMaxMem / 16.0) * 16,
   }
 
   if (Capacitor.platform === 'ios') {

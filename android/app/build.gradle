@@ -25,6 +25,15 @@ android {
     packagingOptions {
         pickFirst 'lib/**/libc++_shared.so'
     }
+    flavorDimensions 'nnue'
+    productFlavors {
+        withNNUE {
+            dimension 'nnue'
+        }
+        withoutNNUE {
+            dimension 'nnue'
+        }
+    }
 }
 
 repositories {

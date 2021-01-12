@@ -9,7 +9,7 @@ import session from '../../session'
 export default class TeamsListCtrl {
   public currentTab: number
 
-  public isSearchOpen: boolean = false
+  public isSearchOpen = false
   public searchResults?: TeamResults
 
   public allTeams?: TeamResults
@@ -37,7 +37,7 @@ export default class TeamsListCtrl {
   }
 
   public onTabChange = (tabIndex: number) => {
-    const loc = window.location.search.replace(/\?tab\=\w+$/, '')
+    const loc = window.location.search.replace(/\?tab=\w+$/, '')
     try {
       window.history.replaceState(window.history.state, '', loc + '?tab=' + tabIndex)
     } catch (e) { console.error(e) }

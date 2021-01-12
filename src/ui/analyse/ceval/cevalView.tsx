@@ -95,7 +95,7 @@ function renderCevalPvs(ctrl: AnalyseCtrl) {
   }
 }
 
-export const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
+export const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }> = {
   onbeforeupdate({ attrs }) {
     return !attrs.ctrl.replaying
   },

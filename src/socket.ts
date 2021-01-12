@@ -19,7 +19,7 @@ export interface LichessMessage<T> {
   d?: T
 }
 
-export type LichessMessageAny = LichessMessage<{}>
+export type LichessMessageAny = LichessMessage<unknown>
 
 interface Options {
   name: string
@@ -81,8 +81,8 @@ export const SEEKING_SOCKET_NAME = 'seekLobby'
 // connectedWS means connection is established and server ping/pong
 // is working normally
 let connectedWS = false
-let currentMoveLatency: number = 0
-let currentPingInterval: number = 2000
+let currentMoveLatency = 0
+let currentPingInterval = 2000
 let rememberedSetups: Array<ConnectionSetup> = []
 
 const worker = new Worker('lib/socketWorker.js')
@@ -145,10 +145,11 @@ function setupConnection(setup: SocketSetup, socketHandlers: SocketHandlers) {
       case 'onError':
         if (socketHandlers.onError) socketHandlers.onError()
         break
-      case 'handle':
-        let h = socketHandlers.events[msg.data.payload.t]
+      case 'handle': {
+        const h = socketHandlers.events[msg.data.payload.t]
         if (h) h(msg.data.payload.d, msg.data.payload)
         break
+      }
       case 'pingInterval':
         currentPingInterval = msg.data.payload
         break
@@ -166,6 +167,8 @@ function send<D, O>(url: string , t: string, data?: D, opts?: O): void {
 
 function ask<D, O, R>(url: string, t: string, listenTo: string, data?: D, opts?: O): Promise<R> {
   return new Promise((resolve, reject) => {
+    // eslint is wrong, this gets reassigned at the end of the function
+    // eslint-disable-next-line prefer-const
     let tid: number
     function listen(e: MessageEvent) {
       if (e.data.topic === 'handle' && e.data.payload.t === listenTo) {
@@ -244,7 +247,7 @@ function createTournament(
   handlers: MessageHandlers,
   featuredGameId?: string
 ): SocketIFace {
-  let url = '/tournament/' + tournamentId + `/socket/v${globalConfig.apiVersion}`
+  const url = '/tournament/' + tournamentId + `/socket/v${globalConfig.apiVersion}`
   const socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers),
     onOpen: session.backgroundRefresh
@@ -430,7 +433,7 @@ function redirectToGame(obj: string | RedirectObj) {
   else {
     url = obj.url
     if (obj.cookie) {
-      const domain = document.domain.replace(/^.+(\.[^\.]+\.[^\.]+)$/, '$1')
+      const domain = document.domain.replace(/^.+(\.[^.]+\.[^.]+)$/, '$1')
       const cookie = [
         encodeURIComponent(obj.cookie.name) + '=' + obj.cookie.value,
         '; max-age=' + obj.cookie.maxAge,

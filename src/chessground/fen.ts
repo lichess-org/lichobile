@@ -30,8 +30,8 @@ const letters = {
 export function read(fen: string): cg.Pieces {
   if (fen === 'start') fen = initial
   const pieces: cg.Pieces = new Map()
-  let row: number = 8
-  let col: number = 0
+  let row = 8
+  let col = 0
   for (let i = 0; i < fen.length; i++) {
     const c = fen[i]
     switch (c) {
@@ -41,7 +41,7 @@ export function read(fen: string): cg.Pieces {
         if (row === 0) return pieces
         col = 0
         break
-      case '~':
+      case '~': {
         const k = util.pos2key([col, row] as cg.Pos)
         const p = pieces.get(k)
         if (p) {
@@ -49,7 +49,8 @@ export function read(fen: string): cg.Pieces {
           pieces.set(k, p)
         }
         break
-      default:
+      }
+      default: {
         const nb = ~~c
         if (nb) col += nb
         else {
@@ -60,6 +61,7 @@ export function read(fen: string): cg.Pieces {
             color: (c === role ? 'black' : 'white') as Color
           })
         }
+      }
     }
   }
   return pieces

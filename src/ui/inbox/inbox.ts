@@ -77,4 +77,4 @@ export default {
     const footer = renderFooter(this.ctrl)
     return layout.free(headerEl, body, footer)
   }
-} as Mithril.Component<{}, { ctrl: InboxCtrl }>
+} as Mithril.Component<Record<string, never>, { ctrl: InboxCtrl }>

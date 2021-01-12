@@ -141,7 +141,7 @@ export default class Chessground {
       white: {pieces: {}, score: score},
       black: {pieces: {}, score: -score}
     }
-    for (let role in counts) {
+    for (const role in counts) {
       const c = counts[role]
       if (c > 0) diff.white.pieces[role] = c
       else if (c < 0) diff.black.pieces[role] = -c
@@ -222,6 +222,7 @@ export default class Chessground {
   playPremove = (): boolean => {
 
     if (this.state.premovable.current) {
+      // eslint-disable-next-line no-extra-boolean-cast
       if (Boolean(anim(board.playPremove, this))) return true
       // if the premove couldn't be played, redraw to clear it up
       this.redraw()

@@ -35,7 +35,7 @@ export default {
       }, getMoveEl, false)
     }, renderTree(ctrl))
   }
-} as Mithril.Component<Attrs, {}>
+} as Mithril.Component<Attrs>
 
 function onReplayTap(ctrl: AnalyseCtrl, e: Event) {
   const el = getMoveEl(e)

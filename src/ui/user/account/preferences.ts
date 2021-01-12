@@ -28,7 +28,7 @@ function renderBody() {
   ]
 }
 
-const PreferencesScreen: Mithril.Component<{}, {}> = {
+const PreferencesScreen: Mithril.Component = {
   oncreate: helper.viewSlideIn,
 
   oninit() {

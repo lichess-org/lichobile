@@ -3,12 +3,12 @@ import * as utils from '../../utils'
 import * as helper from '../helper'
 
 export default function popup(
-  classes: object | string,
+  classes: Record<string, boolean> | string,
   headerF: (() => Mithril.Children) | undefined,
   contentF: () => Mithril.Children,
   isShowing: boolean,
   closef?: () => void
-) {
+): Mithril.Vnode | null {
   if (!isShowing) {
     return null
   }

@@ -15,7 +15,7 @@ export interface Attrs {
   data: OpeningData
 }
 
-const OpeningTable: Mithril.Component<Attrs, {}> = {
+const OpeningTable: Mithril.Component<Attrs> = {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
     return attrs.data !== oldattrs.data
   },

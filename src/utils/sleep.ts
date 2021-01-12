@@ -37,7 +37,7 @@ function idleTimer(delay: number, onIdle: () => void, onWakeUp: () => void): () 
   let listening = false
   let active = true
   let lastSeenActive = Date.now()
-  let intervalID: number
+  let intervalID: number | undefined = undefined
   const onActivity = () => {
     if (!active) {
       // console.log('Wake up')

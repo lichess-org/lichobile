@@ -3,9 +3,9 @@
 const rAmp = /&/g
 const rLt = /</g
 const rGt = />/g
-const rApos = /\'/g
-const rQuot = /\"/g
-const hChars = /[&<>\"\']/
+const rApos = /'/g
+const rQuot = /"/g
+const hChars = /[&<>"']/
 export function escapeHtml(str: string) {
   if (hChars.test(String(str))) {
     return str
@@ -26,7 +26,7 @@ export function linkify(text: string): string {
   return linked
 }
 
-const linkPattern = /(^|[\s\n]|<[A-Za-z]*\/?>)((?:(?:https?):\/\/|lichess\.org\/)[\-A-Z0-9+\u0026\u2019@#\/%?=()~_|!:,.;]*[\-A-Z0-9+\u0026@#\/%=~()_|])/gi
+const linkPattern = /(^|[\s\n]|<[A-Za-z]*\/?>)((?:(?:https?):\/\/|lichess\.org\/)[-A-Z0-9+\u0026\u2019@#/%?=()~_|!:,.;]*[-A-Z0-9+\u0026@#/%=~()_|])/gi
 
 function linkReplace(match: string, before: string, url: string) {
   if (url.indexOf('&quot;') !== -1) return match
@@ -37,7 +37,7 @@ function linkReplace(match: string, before: string, url: string) {
 
 const userPattern = /(^|[^\w@#/])@([\w-]{2,})/g
 
-function userLinkReplace(orig: string, prefix: String, user: string) {
+function userLinkReplace(orig: string, prefix: string, user: string) {
   if (user.length > 20) return orig
   return prefix + `<a href="?/@/${user}">@${user}</a>`
 }

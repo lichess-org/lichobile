@@ -21,7 +21,7 @@ export default {
     const header = dropShadowHeader(null, backButton(i18n('kidMode')))
     return layout.free(header, renderBody(this))
   }
-} as Mithril.Component<{}, { submitting: boolean }>
+} as Mithril.Component<Record<string, never>, { submitting: boolean }>
 
 function renderBody(ctrl: { submitting: boolean }) {
   return [

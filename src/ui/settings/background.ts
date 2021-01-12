@@ -22,7 +22,7 @@ interface State {
 
 let timeoutId: number
 
-const ThemePrefScreen: Mithril.Component<{}, State> = {
+const ThemePrefScreen: Mithril.Component<Record<string, never>, State> = {
   oncreate: helper.viewSlideIn,
 
   oninit() {

@@ -1,6 +1,6 @@
 import * as treePath from './path'
 import * as ops from './ops'
-import { Tree } from './interfaces'
+import * as Tree from './interfaces'
 
 export type MaybeNode = Tree.Node | undefined
 
@@ -69,9 +69,9 @@ export function build(root: Tree.Node): TreeWrapper {
   }
 
   function getCurrentNodesAfterPly(nodeList: Tree.Node[], mainline: Tree.Node[], ply: number): Tree.Node[] {
-    let node, nodes = []
-    for (let i in nodeList) {
-      node = nodeList[i]
+    const nodes = []
+    for (const i in nodeList) {
+      const node = nodeList[i]
       if (node.ply <= ply && mainline[i].id !== node.id) break
       if (node.ply > ply) nodes.push(node)
     }

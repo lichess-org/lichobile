@@ -58,7 +58,7 @@ export default {
       </div>
     )
   }
-} as Mithril.Component<{}, {}>
+} as Mithril.Component
 
 
 function externalLink(text: string, url: string): Mithril.Child {

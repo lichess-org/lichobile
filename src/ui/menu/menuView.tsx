@@ -39,7 +39,7 @@ export default {
       </aside>
     )
   }
-} as Mithril.Component<{}, {}>
+} as Mithril.Component
 
 function renderHeader(user?: Session) {
   const caretClass = menu.profileMenuOpen() ? 'up' : 'down'

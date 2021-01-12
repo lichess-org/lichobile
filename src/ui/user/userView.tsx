@@ -14,7 +14,7 @@ import session from '../../session'
 import { IUserCtrl, ProfileUser, isFullUser } from './UserCtrl'
 
 export function header(user: ProfileUser, ctrl: IUserCtrl) {
-  const title = userTitle(user.online!!, user.patron!!, user.username, user.title)
+  const title = userTitle(user.online!, user.patron!, user.username, user.title)
 
   const backButton = !ctrl.isMe() ? renderBackbutton(title) : null
   return dropShadowHeader(backButton ? null : title, backButton)

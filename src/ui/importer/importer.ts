@@ -13,7 +13,7 @@ interface State {
   ctrl: IImporterCtrl
 }
 
-const ImporterScreen: Mithril.Component<{}, State> = {
+const ImporterScreen: Mithril.Component<Record<string, never>, State> = {
   oninit() {
     socket.createDefault()
     this.ctrl = ImporterCtrl()

@@ -1,5 +1,5 @@
 import { Capacitor } from '@capacitor/core'
-import { Tree } from '../../shared/tree/interfaces'
+import * as Tree from '../../shared/tree/interfaces'
 import { Work, IEngine } from './interfaces'
 import { StockfishWrapper } from '../../../stockfish'
 

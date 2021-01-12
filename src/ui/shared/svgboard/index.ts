@@ -8,7 +8,7 @@ export function makeBoard(fen: string, orientation: Color) {
   const pieces = cgFen.read(fen)
   let b = '<svg xmlns="http://www.w3.org/2000/svg" width="360" height="360">'
   for (const [k, p] of pieces) {
-    let pos = pos2px(orient(key2pos(k), orientation))
+    const pos = pos2px(orient(key2pos(k), orientation))
     b += makePiece(pos, p)
   }
   b += '</svg>'

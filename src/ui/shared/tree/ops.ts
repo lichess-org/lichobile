@@ -1,4 +1,4 @@
-import { Tree } from './interfaces'
+import * as Tree from './interfaces'
 import { Pockets } from '../../../lichess/interfaces/game'
 
 function mainlineChild(node: Tree.Node): Tree.Node | undefined {
@@ -20,8 +20,9 @@ export function findInMainline(fromNode: Tree.Node, predicate: (node: Tree.Node)
 
 // returns a list of nodes collected from the original one
 export function collect(fromNode: Tree.Node, pickChild: (node: Tree.Node) => Tree.Node | undefined): Tree.Node[] {
-  let nodes = [fromNode], n = fromNode, c
-  while (c = pickChild(n)) {
+  const nodes = [fromNode]
+  let n = fromNode, c
+  while ((c = pickChild(n))) {
     nodes.push(c)
     n = c
   }
@@ -46,7 +47,7 @@ export function nodeAtPly(nodeList: Tree.Node[], ply: number): Tree.Node | undef
 
 export function takePathWhile(nodeList: Tree.Node[], predicate: (node: Tree.Node) => boolean): Tree.Path {
   let path = ''
-  for (let i in nodeList) {
+  for (const i in nodeList) {
     if (predicate(nodeList[i])) path += nodeList[i].id
     else break
   }

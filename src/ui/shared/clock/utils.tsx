@@ -24,7 +24,7 @@ export function isStageClock(c: IChessClock): c is IStageClock {
 }
 
 export function addStage (stagesSetting: Prop<Array<StageSetting>>) {
-  let stages = stagesSetting()
+  const stages = stagesSetting()
   stages[stages.length - 1].moves = stages[stages.length - 2].moves
   stages.push({time: stages[stages.length - 1].time, moves: null})
   stagesSetting(stages)
@@ -32,7 +32,7 @@ export function addStage (stagesSetting: Prop<Array<StageSetting>>) {
 }
 
 export function removeStage (stagesSetting: Prop<Array<StageSetting>>) {
-  let stages = stagesSetting()
+  const stages = stagesSetting()
   if (stages.length <= 2)
     return
   stages.pop()
@@ -160,7 +160,7 @@ function renderStage(onChange: () => void, index: number) {
 }
 
 function updateTime(index: number, time: string) {
-  let stages = settings.clock.stage.stages()
+  const stages = settings.clock.stage.stages()
 
   if (time) {
     stages[index].time = time
@@ -170,7 +170,7 @@ function updateTime(index: number, time: string) {
 }
 
 function updateMoves (index: number, moves: string) {
-  let stages = settings.clock.stage.stages()
+  const stages = settings.clock.stage.stages()
   if (moves) {
     stages[index].moves = moves
     settings.clock.stage.stages(stages)

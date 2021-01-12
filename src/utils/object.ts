@@ -34,18 +34,17 @@ export function shallowEqual(objA: OAny, objB: OAny): boolean {
   return true
 }
 
-export function getAtPath(obj: Object, path: string): any {
+export function getAtPath(obj: Record<string, any>, path: string): any {
   return path.split('.').reduce((acc: any, x) => acc && acc[x], obj)
 }
 
 export function setAtPath(obj: any, path: any, value: any): void {
   if (typeof path === 'string') {
-    /* tslint:disable-next-line:no-var-keyword */
-    var path: any = path.split('.')
+    path = path.split('.')
   }
 
   if (path.length > 1) {
-    let p = path.shift()
+    const p = path.shift()
     if (obj[p] === null || typeof obj[p] !== 'object') {
       obj[p] = {}
     }

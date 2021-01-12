@@ -1,4 +1,4 @@
-import { Tree } from './interfaces'
+import * as Tree from './interfaces'
 
 export const root: Tree.Path = ''
 
@@ -28,7 +28,7 @@ export function contains(p1: Tree.Path, p2: Tree.Path): boolean {
 
 export function fromNodeList(nodes: ReadonlyArray<Tree.Node>): Tree.Path {
   let path = ''
-  for (let i in nodes) {
+  for (const i in nodes) {
     path += nodes[i].id
   }
   return path

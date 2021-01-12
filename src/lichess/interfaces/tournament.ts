@@ -163,7 +163,7 @@ export interface TournamentLists {
 }
 
 export interface TournamentListItem {
-  readonly battle?: {}
+  readonly battle?: unknown
   readonly clock: TournamentClock
   readonly conditions: Conditions
   readonly createdBy: string

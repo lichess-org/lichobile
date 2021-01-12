@@ -40,7 +40,7 @@ export default class Gesture {
 
   private swipeThresholdX: number
   private swipeThresholdY: number
-  private startInputTimestamp: number = 0
+  private startInputTimestamp = 0
 
   constructor (
     readonly element: HTMLElement,

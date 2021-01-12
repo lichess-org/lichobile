@@ -33,7 +33,7 @@ const UserGames: Mithril.Component<Attrs, State> = {
 
     const user = this.ctrl.scrollState.user
     const displayedTitle = user ?
-      userTitle(user.online!!, user.patron!!, user.username, user.title) :
+      userTitle(user.online!, user.patron!, user.username, user.title) :
       userTitle(false, Boolean(patron), username || id, title)
 
     const header = headerWidget(null, backButton(displayedTitle))

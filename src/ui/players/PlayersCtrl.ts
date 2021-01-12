@@ -8,7 +8,7 @@ import * as xhr from './playerXhr'
 export default class PlayersCtrl {
   public currentTab: number
 
-  public isSearchOpen: boolean = false
+  public isSearchOpen = false
   public searchResults: readonly string[] = []
   public players?: readonly User[]
   public leaderboard?: Rankings
@@ -32,7 +32,7 @@ export default class PlayersCtrl {
   }
 
   public onTabChange = (tabIndex: number) => {
-    const loc = window.location.search.replace(/\?tab\=\w+$/, '')
+    const loc = window.location.search.replace(/\?tab=\w+$/, '')
     try {
       window.history.replaceState(window.history.state, '', loc + '?tab=' + tabIndex)
     } catch (e) { console.error(e) }

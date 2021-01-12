@@ -55,7 +55,7 @@ function onTablebaseTap(ctrl: AnalyseCtrl, e: Event) {
 }
 
 function showTablebase(ctrl: AnalyseCtrl, title: string, moves: readonly TablebaseMoveStats[], fen: string) {
-  let stm = fen.split(/\s/)[1]
+  const stm = fen.split(/\s/)[1]
   if (!moves.length) return null
   return [
     <div className="title">{title}</div>,
@@ -102,7 +102,7 @@ function showDtz(stm: string, move: TablebaseMoveStats) {
   else if (move.dtz === null) return null
   else if (move.dtz === 0) return h('result.draws', i18n('draw'))
   else if (move.zeroing) {
-    let capture = move.san.indexOf('x') !== -1
+    const capture = move.san.indexOf('x') !== -1
     if (capture) return h('result.' + winner(stm, move), i18n('capture'))
     else return h('result.' + winner(stm, move), i18n('pawnMove'))
   }

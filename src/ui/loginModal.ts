@@ -62,7 +62,7 @@ export default {
               h('input#token[type=number]', {
                 className: formError !== 'MissingTotpToken' ? 'form-error' : '',
                 placeholder: i18n('authenticationCode'),
-                pattern: '\d{6}',
+                pattern: '\\d{6}',
                 required: true
               }),
             ]),

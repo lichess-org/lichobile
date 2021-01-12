@@ -22,7 +22,7 @@ import { dailyPuzzle as dailyPuzzleXhr, featuredTournaments as featuredTournamen
 export default class HomeCtrl {
   public selectedTab: number
 
-  public isScrolling: boolean = false
+  public isScrolling = false
 
   public socket?: SocketIFace
 
@@ -132,7 +132,7 @@ export default class HomeCtrl {
   }
 
   public onTabChange = (i: number) => {
-    const loc = window.location.search.replace(/\?tab\=\w+$/, '')
+    const loc = window.location.search.replace(/\?tab=\w+$/, '')
     try {
       window.history.replaceState(window.history.state, '', loc + '?tab=' + i)
     } catch (e) { console.error(e) }

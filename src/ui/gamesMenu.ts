@@ -322,7 +322,7 @@ function renderAllGames() {
     renderSendingChallenge(c)
   )
 
-  let allCards = [
+  const allCards = [
     ...challengesDom,
     ...(nowPlaying.map(g => renderGame(g))),
     ...sendingChallengesDom,

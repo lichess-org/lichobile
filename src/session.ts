@@ -96,7 +96,7 @@ function getUserId(): string | undefined {
 }
 
 function nowPlaying(): NowPlayingGame[] {
-  let np = session && session.nowPlaying || []
+  const np = session && session.nowPlaying || []
   return np.filter(e =>
     settings.game.supportedVariants.indexOf(e.variant.key) !== -1
   )
@@ -197,12 +197,12 @@ const savePreferences = throttle((): Promise<string> => {
 }, 1000)
 
 function lichessBackedProp<T extends PrefValue>(path: string, defaultVal: T): Prop<T> {
-  return function() {
-    if (arguments.length) {
+  return function(...args: unknown[]) {
+    if (args.length) {
       let oldPref: T
       if (session) {
         oldPref = <T>getAtPath(session, path)
-        setAtPath(session, path, arguments[0])
+        setAtPath(session, path, args[0])
       }
       savePreferences()
       .catch((err) => {

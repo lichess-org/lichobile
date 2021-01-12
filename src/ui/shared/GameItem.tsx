@@ -90,7 +90,7 @@ export default {
       </li>
     )
   }
-} as Mithril.Component<Attrs, {}>
+} as Mithril.Component<Attrs>
 
 function renderBoard(fen: string, orientation: Color, boardTheme: string) {
 
@@ -119,7 +119,7 @@ function renderBoard(fen: string, orientation: Color, boardTheme: string) {
 }
 
 function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, color: Color) {
-  let player = players[color]
+  const player = players[color]
   let playerName: string
   if (player.user) playerName = playerApi.lightPlayerName(player.user)
   else if (player.aiLevel) {

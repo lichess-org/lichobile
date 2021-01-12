@@ -1,4 +1,4 @@
-import { Tree } from '../../shared/tree/interfaces'
+import * as Tree from '../../shared/tree/interfaces'
 import { Work, IEngine } from './interfaces'
 import { send, setOption, setVariant } from '../../../utils/stockfish'
 

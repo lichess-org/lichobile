@@ -84,7 +84,7 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
   const loadUserAndFilters = (userData: UserFullProfile) => {
     scrollState.user = userData
     const f = Object.keys(userData.count)
-    .filter(k => filters.hasOwnProperty(k) && (k === 'all' || userData.count[k] > 0))
+    .filter(k => Object.prototype.hasOwnProperty.call(filters, k) && (k === 'all' || userData.count[k] > 0))
     .map(k => {
       return {
         key: <GameFilter>k,

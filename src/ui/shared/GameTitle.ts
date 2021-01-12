@@ -90,4 +90,4 @@ export default {
     ])
   }
 
-} as Mithril.Component<Attrs, {}>
+} as Mithril.Component<Attrs>

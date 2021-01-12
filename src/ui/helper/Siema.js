@@ -55,8 +55,8 @@ export default class Siema {
       // multipleDrag: true,
       threshold: 20,
       rtl: false,
-      onInit: () => {},
-      onChange: () => {},
+      onInit: () => { /* noop */ },
+      onChange: () => { /* noop */ },
     };
 
     const userSttings = options;

@@ -16,7 +16,7 @@ export default {
       h('ul.native_scroller.page.settings_list.game', render(prefsCtrl))
     )
   }
-} as Mithril.Component<{}, {}>
+} as Mithril.Component
 
 const prefsCtrl = {
   animation: session.lichessBackedProp<number>('prefs.animation', Animation.NORMAL),

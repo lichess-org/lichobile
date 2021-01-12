@@ -7,7 +7,7 @@ import { BACKDROP_OPACITY } from '.'
 export type Side = 'left' | 'right'
 
 export default class SideMenuCtrl {
-  public isOpen: boolean = false
+  public isOpen = false
   public readonly side: Side
 
   private readonly menuID: string

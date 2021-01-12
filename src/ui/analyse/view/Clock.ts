@@ -12,7 +12,6 @@ export default {
     if (clock === undefined) return
     const parentClock = ctrl.tree.getParentClock(node, ctrl.path)
     let whiteCentis, blackCentis
-    let centis
     const isWhiteTurn = node.ply % 2 === 0
     if (isWhiteTurn) {
       whiteCentis = parentClock
@@ -22,14 +21,14 @@ export default {
       whiteCentis = clock
       blackCentis = parentClock
     }
-    centis = color === 'white' ? whiteCentis! : blackCentis!
+    const centis = color === 'white' ? whiteCentis! : blackCentis!
     const current = color === 'white' ? isWhiteTurn : !isWhiteTurn
 
     return h('span.analyse-clock', {
       className: current ? 'current' : '',
     }, clockContent(centis))
   }
-} as Mithril.Component<{ ctrl: AnalyseCtrl, color: Color }, {}>
+} as Mithril.Component<{ ctrl: AnalyseCtrl, color: Color }>
 
 function clockContent(centis: number): Mithril.Child {
   if (centis === undefined) return h('span.time', ['-'])

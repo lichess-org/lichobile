@@ -16,7 +16,7 @@ export default {
       h('ul.native_scroller.page.settings_list.game', render(prefsCtrl))
     )
   }
-} as Mithril.Component<{}, {}>
+} as Mithril.Component
 
 export const prefsCtrl = {
   premove: session.lichessBackedProp<boolean>('prefs.premove', true),
@@ -37,7 +37,7 @@ export function render(ctrl: typeof prefsCtrl) {
       i18n('promoteToQueenAutomatically'), AutoQueenChoices, ctrl.autoQueen
     )),
     h('li.list_item', formWidgets.renderMultipleChoiceButton(
-      i18n('claimDrawOnThreefoldRepetitionAutomatically').replace(/\%s/g, ''), AutoThreefoldChoices, ctrl.autoThreefold
+      i18n('claimDrawOnThreefoldRepetitionAutomatically').replace(/%s/g, ''), AutoThreefoldChoices, ctrl.autoThreefold
     )),
     h('li.list_item', formWidgets.renderMultipleChoiceButton(
       i18n('moveConfirmation'), SubmitMoveChoices, ctrl.submitMove

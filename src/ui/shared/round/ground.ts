@@ -8,7 +8,7 @@ import settings from '../../../settings'
 import { boardOrientation } from '../../../utils'
 import * as chessFormat from '../../../utils/chessFormat'
 
-function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): cg.InitConfig {
+function makeConfig(data: OnlineGameData, fen: string, flip = false): cg.InitConfig {
   const lastStep = data.steps[data.steps.length - 1]
   const lastMove = data.game.lastMove ?
     chessFormat.uciToMove(data.game.lastMove) :

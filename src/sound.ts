@@ -51,7 +51,7 @@ export default {
       Plugins.SoundEffect.loadSound({ id: 'berserk', path: `sounds/berserk${ext}` }),
       Plugins.SoundEffect.loadSound({ id: 'clock', path: `sounds/clock${ext}` }),
       Plugins.SoundEffect.loadSound({ id: 'confirmation', path: `sounds/confirmation${ext}` }),
-    ]).then(() => {})
+    ]).then(() => { /* noop */ })
   },
   move() {
     if (shouldPlay) Plugins.SoundEffect.play({ id: 'move' })

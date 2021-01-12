@@ -71,7 +71,7 @@ export default {
     const header = dropShadowHeader(null, backButton(i18n('boardTheme')))
     return layout.free(header, renderBody(this))
   }
-} as Mithril.Component<{}, State>
+} as Mithril.Component<Record<string, never>, State>
 
 function renderBody(state: State) {
 

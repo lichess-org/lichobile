@@ -44,7 +44,7 @@ export default {
       }, this.timeline().map(renderTimelineEntry))
     ])
   }
-} as Mithril.Component<{}, State>
+} as Mithril.Component<Record<string, never>, State>
 
 export function timelineOnTap(e: Event) {
   const el = helper.getLI(e)

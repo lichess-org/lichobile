@@ -25,11 +25,11 @@ interface PagesCache {
 export default class TournamentCtrl {
   public id: string
   public tournament: Tournament
-  public page: number = 1
+  public page = 1
   public currentPageResults!: ReadonlyArray<StandingPlayer>
-  public hasJoined: boolean = false
-  public focusOnMe: boolean = false
-  public isLoadingPage: boolean = false
+  public hasJoined = false
+  public focusOnMe = false
+  public isLoadingPage = false
   public startsAt?: string
 
   public readonly chat?: Chat

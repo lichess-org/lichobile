@@ -21,7 +21,7 @@ export default {
         )
     ))
   }
-} as Mithril.Component<{}, {}>
+} as Mithril.Component
 
 function renderAppPrefs() {
   return [

@@ -63,9 +63,7 @@ export default {
     }
 
     const tournament = this.ctrl.tournament
-    let header: Mithril.Children
-
-    header = headerWidget(null,
+    const header = headerWidget(null,
       backButton(h('div.main_header_title.withSub', [
         h('h1', [
           h('span.fa.fa-trophy'),

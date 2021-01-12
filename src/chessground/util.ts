@@ -6,7 +6,7 @@ export type Callback = (...args: any[]) => void
 export function callUserFunction(f: Callback | undefined, ...args: any[]): void {
   if (f) setTimeout(() => f(...args), 1)
 }
-export function noop() {}
+export function noop(): void { /* noop */ }
 
 export const files: readonly cg.File[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 export const invFiles: readonly cg.File[] = files.slice().reverse()

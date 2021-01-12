@@ -55,7 +55,7 @@ export class StockfishWrapper {
       return Promise.all([
         this.setOption('UCI_Variant', 'chess'),
         uci960p,
-      ]).then(() => {})
+      ]).then(() => { /* noop */ })
     }
   }
 

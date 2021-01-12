@@ -43,6 +43,7 @@ public class MainActivity extends BridgeActivity {
       // Additional plugins you've installed go here
       add(LiToast.class);
       add(LiShare.class);
+      add(LiBuildConfig.class);
       add(SoundEffect.class);
       add(KeepAwake.class);
       add(Stockfish.class);

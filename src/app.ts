@@ -21,7 +21,8 @@ let firstConnection = true
 export default function appInit(
   info: DeviceInfo,
   cpuCores: number,
-  sfMaxMem: number
+  sfMaxMem: number,
+  buildConfig: BuildConfig,
 ) {
 
   if (settings.analyse.cevalHashSize() === 0) {
@@ -35,6 +36,7 @@ export default function appInit(
     cpuCores,
     stockfishMaxMemory: Math.ceil(sfMaxMem / 16.0) * 16,
   }
+  window.lichess.buildConfig = buildConfig
 
   if (Capacitor.platform === 'ios') {
     Plugins.Keyboard.setAccessoryBarVisible({ isVisible: true })

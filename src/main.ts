@@ -28,6 +28,10 @@ settingsInit()
     Plugins.CPUInfo.nbCores().then((r: { value: number }) => r.value).catch(() => 1) :
     Promise.resolve((<XNavigator>navigator).hardwareConcurrency || 1),
   Plugins.StockfishVariants.getMaxMemory().then((r: { value: number }) => r.value).catch(() => 16),
+  Capacitor.platform === 'android' ?
+    Plugins.LiBuildConfig.get() : Promise.resolve({
+      NNUE: false
+    })
 ]))
-.then(([i, c, m]) => appInit(i, c, m))
+.then(([i, c, m, b]) => appInit(i, c, m, b))
 .then(() => Plugins.SplashScreen.hide())

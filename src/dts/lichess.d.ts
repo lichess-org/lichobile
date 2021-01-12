@@ -42,10 +42,15 @@ declare type DestsMap = {
   [index: string]: readonly Key[] | undefined
 }
 
+interface BuildConfig {
+  NNUE: boolean
+}
+
 interface LichessOptions {
   apiEndPoint: string
   socketEndPoint: string
   mode: string
+  buildConfig: BuildConfig
 }
 
 type RequestIdleCallbackHandle = any

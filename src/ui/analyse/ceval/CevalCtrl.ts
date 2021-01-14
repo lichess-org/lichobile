@@ -85,6 +85,7 @@ export default function CevalCtrl(
       ply: step.ply,
       multiPv: forceMaxLevel ? 1 : opts.multiPv,
       threatMode: false,
+      useNNUE: settings.analyse.cevalUseNNUE(),
       emit(ev?: Tree.ClientEval) {
         if (enabled()) onEmit(work, ev)
       }
@@ -182,6 +183,9 @@ export default function CevalCtrl(
     },
     getEngineName(): string {
       return engine.getName()
+    },
+    getEngineEvaluation(): string {
+      return engine.getEvaluation()
     },
   }
 }

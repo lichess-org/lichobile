@@ -18,6 +18,7 @@ export default function StockfishEngine(
   const stockfish = new StockfishWrapper(variant)
 
   let engineName = 'Stockfish'
+  let evaluation = 'classical'
 
   let stopTimeoutId: number
   let readyPromise: Promise<void> = Promise.resolve()
@@ -111,6 +112,9 @@ export default function StockfishEngine(
         })
       })
 
+      if (window.lichess.buildConfig.NNUE) {
+        await stockfish.setOption('Use NNUE', work.useNNUE)
+      }
       await stockfish.setOption('MultiPV', work.multiPv)
       await stockfish.send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' '))
       if (work.maxDepth >= 99) {
@@ -127,6 +131,11 @@ export default function StockfishEngine(
    * command is sent by stockfish
    */
   function processOutput(text: string, work: Work, rdyResolve: () => void) {
+    const evalMatch = text.match(/^info string (classical|NNUE) evaluation/)
+    if (evalMatch) {
+      evaluation = evalMatch[1]
+    }
+
     if (text.indexOf('bestmove') === 0) {
       finished = true
       rdyResolve()
@@ -215,6 +224,9 @@ export default function StockfishEngine(
     },
     getName() {
       return engineName
-    }
+    },
+    getEvaluation() {
+      return evaluation
+    },
   }
 }

@@ -24,6 +24,7 @@ export interface Work {
   maxDepth: number
   multiPv: number
   ply: number
+  useNNUE: boolean
   threatMode: boolean
   initialFen: string
   currentFen: string
@@ -51,6 +52,7 @@ export interface ICevalCtrl {
   goDeeper(): void
   canGoDeeper(): boolean
   getEngineName(): string
+  getEngineEvaluation(): string
 }
 
 export interface IEngine {
@@ -60,6 +62,7 @@ export interface IEngine {
   exit(): Promise<void>
   isSearching(): boolean
   getName(): string
+  getEvaluation(): string
 }
 
 export interface Started {

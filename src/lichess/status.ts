@@ -57,7 +57,7 @@ function toLabel(status: string, turns: number, winner: Color | undefined, varia
     case 'draw':
       return i18n('draw')
     case 'outoftime':
-      return `${turns % 2 === 0 ? i18n('whiteTimeOut') : i18n('blackTimeOut')}${!!winner ? '' : ` • ${i18n('draw')}`}`
+      return `${turns % 2 === 0 ? i18n('whiteTimeOut') : i18n('blackTimeOut')}${winner ? '' : ` • ${i18n('draw')}`}`
     case 'noStart':
       return (winner === 'white' ? 'Black' : 'White') + ' didn\'t move'
     case 'unknownFinish':

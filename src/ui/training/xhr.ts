@@ -5,7 +5,7 @@ export function round(outcome: PuzzleOutcome): Promise<RoundData> {
   return fetchJSON(`/training/${outcome.id}/round2`, {
     method: 'POST',
     body: JSON.stringify({
-      win: outcome.win ? 1 : 0
+      win: outcome.win
     })
   })
 }

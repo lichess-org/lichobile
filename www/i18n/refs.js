@@ -5,6 +5,7 @@ export default [
   "ar-SA",
   "as-IN",
   "az-AZ",
+  "ba-RU",
   "be-BY",
   "bg-BG",
   "bn-BD",
@@ -13,6 +14,7 @@ export default [
   "ca-ES",
   "ceb-PH",
   "ckb-IR",
+  "co-FR",
   "cs-CZ",
   "cv-CU",
   "cy-GB",
@@ -55,6 +57,8 @@ export default [
   "ko-KR",
   "ky-KG",
   "la-LA",
+  "lb-LU",
+  "lg-UG",
   "lt-LT",
   "lv-LV",
   "mg-MG",
@@ -105,5 +109,6 @@ export default [
   "zh-CN",
   "zh-TW",
   "zu-ZA",
-  "mt-MT"
+  "mt-MT",
+  "xh-ZA"
 ]

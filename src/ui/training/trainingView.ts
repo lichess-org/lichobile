@@ -85,7 +85,7 @@ function renderViewControls(ctrl: TrainingCtrl) {
     h('button.li-button.training-control.retry', {
       oncreate: helper.ontap(ctrl.retry),
       className: ctrl.vm.loading ? 'disabled' : ''
-    }, [h('span.fa.fa-refresh'), h('span', i18n('retryThisPuzzle'))]),
+    }, [h('span.fa.fa-refresh'), h('span', i18n('retry'))]),
     h('button.li-button.training-control.continue', {
       oncreate: helper.ontap(ctrl.newPuzzle),
       className: ctrl.vm.loading ? 'disabled' : ''
@@ -115,7 +115,7 @@ function renderFeedback(ctrl: TrainingCtrl) {
           h('div.training-icon', '!'),
           h('div.training-instruction', [
             h('strong', i18n('goodMove')),
-            h('span', i18n('butYouCanDoBetter'))
+            h('span', 'But you can do better')
           ]),
         ]),
         renderViewSolution(ctrl)
@@ -136,8 +136,8 @@ function renderFeedback(ctrl: TrainingCtrl) {
         h('div.player', [
           h('div.training-icon.loss', '✗'),
           h('div.training-instruction', [
-            h('strong', i18n('puzzleFailed')),
-            h('span', i18n('butYouCanKeepTrying'))
+            h('strong', i18n('notTheMove')),
+            h('span', i18n('trySomethingElse'))
           ])
         ]),
         renderViewSolution(ctrl)
@@ -175,7 +175,7 @@ function renderResult(ctrl: TrainingCtrl) {
     return [
       h('div.training-half', [
         h('div.training-icon.win', '✓'),
-        h('strong', [i18n('victory')]),
+        h('strong', [i18n('puzzleSuccess')]),
         session.isConnected() ?
           h('div.training-vote', renderVoteControls(ctrl)) : null
       ]),
@@ -185,7 +185,7 @@ function renderResult(ctrl: TrainingCtrl) {
   else {
     return [
       h('div.training-half', [
-        h('strong', 'Puzzle complete!'),
+        h('strong', i18n('puzzleComplete')),
         session.isConnected() ?
           h('div.training-vote', renderVoteControls(ctrl)) : null
       ]),

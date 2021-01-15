@@ -149,7 +149,6 @@ export default {
   "rank": "Isikhundla",
   "gamesPlayed": "Imidlalo edlaliwe",
   "cancel": "Khansela",
-  "timeOut": "Isikhathi siphelile",
   "drawOfferSent": "Dweba okunikezwayo kuthunyelwe",
   "drawOfferDeclined": "Ukunikezwa komdwebo kunqatshiwe",
   "drawOfferAccepted": "Dweba okunikezwayo okwamukelwe",

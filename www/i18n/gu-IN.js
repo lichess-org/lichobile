@@ -20,6 +20,9 @@ export default {
   "createAGame": "રમત બનાવો",
   "whiteIsVictorious": "સફેદ વિજય રહ્યો",
   "blackIsVictorious": "કાળો વિજય રહ્યો",
+  "youPlayTheWhitePieces": "તમે સફેદ મહોરા સાથે રમસો",
+  "youPlayTheBlackPieces": "તમે કાળા મહોરા સાથે રમસો",
+  "itsYourTurn": "તમારો વારો!",
   "kingInTheCenter": "મધ્યમાં રાજા",
   "threeChecks": "ત્રણ શે",
   "raceFinished": "રેસ પુરી થઇ ગઇ",
@@ -92,6 +95,8 @@ export default {
   "youCannotChallengeX": "તમે %sને પડકાર કરી શકતા નથી.",
   "xDoesNotAcceptChallenges": "%s પડકારોને સ્વીકારતા નથી.",
   "playX": "%s ચાલો",
+  "opponentLeftCounter:one": "તમારી સામેના ખેલાડી એ રમત છોડી દીધી છે તો તમે %s સેકન્ડમાં જીત નોંધાવી શકો છો.",
+  "opponentLeftCounter:other": "તમારી સામેના ખેલાડી એ રમત છોડી દીધી છે તો તમે %s સેકન્ડમાં જીત નોંધાવી શકો છો.",
   "mateInXHalfMoves:one": "મેટ %s ચાલ માં",
   "mateInXHalfMoves:other": "મેટ %s ચાલ માં",
   "addNewChapter": "નવું ઉમેરો",
@@ -122,5 +127,6 @@ export default {
   "howDoesItEndAnswer": "ટુર્નામેન્ટમાં કાઉન્ટડાઉન ઘડિયાળ છે. જ્યારે તે શૂન્ય સુધી પહોંચે છે, ત્યારે ટૂર્નામેન્ટ રેન્કિંગ સ્થિર થઈ જાય છે, અને વિજેતા જાહેર કરવામાં આવે છે. રમતો પ્રગતિ સમાપ્ત થવી આવશ્યક છે, જો કે તે ટુર્નામેન્ટ માટે ગણાય નહીં.",
   "otherRules": "અન્ય મહત્વના નિયમો",
   "thisIsPrivate": "આ એક ખાનગી ટુર્નામેન્ટ છે",
-  "shareUrl": "લોકોને જોડાવા માટે આ URL ને શેર કરો:%s"
+  "shareUrl": "લોકોને જોડાવા માટે આ URL ને શેર કરો:%s",
+  "preferences": "મેનુ જોવા માટે ઉપર જમણી બાજુ તમારા નામ ઉપર ક્લિક કરો"
 }

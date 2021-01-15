@@ -81,7 +81,6 @@ export default {
   "send": "ਭੇਜੋ",
   "freeOnlineChess": "ਮੁਫਤ ਦਾ ਸ਼ਤਰੰਜ",
   "spectators": "ਦਰਸ਼ਕ:",
-  "thisPlayerUsesChessComputerAssistance": "ਇਹ ਖਿਡਾਰੀ ਸ਼ਤਰੰਜ ਕੰਪਿਟਰ ਸਹਾਇਤਾ ਦੀ ਵਰਤੋਂ ਕਰਦਾ ਹੈ",
   "thisPlayerArtificiallyIncreasesTheirRating": "ਇਹ ਖਿਡਾਰੀ ਨਕਲੀ ਤੌਰ 'ਤੇ ਉਨ੍ਹਾਂ ਦੀ ਰੇਟਿੰਗ ਨੂੰ ਵਧਾ / ਘਟਾਉਂਦਾ ਹੈ",
   "openingExplorerAndTablebase": "ਉਦਘਾਟਨੀ ਖੋਜੀ; ਟੇਬਲਬੇਸ",
   "takeback": "ਵਾਪਸ ਲਓ",
@@ -117,6 +116,5 @@ export default {
   "myTeams": "ਮੇਰੀਆਂ ਟੀਮਾਂ",
   "noTeamFound": "ਕੋਈ ਟੀਮ ਨਹੀਂ ਮਿਲੀ",
   "joinTeam": "ਟੀਮ ਵਿਚ ਸ਼ਾਮਲ ਹੋਵੋ",
-  "quitTeam": "ਟੀਮ ਛੱਡੋ",
-  "anyoneCanJoin": "ਸਾਰਿਆਂ ਵਾਸਤੇ ਖੁਲਾ"
+  "quitTeam": "ਟੀਮ ਛੱਡੋ"
 }

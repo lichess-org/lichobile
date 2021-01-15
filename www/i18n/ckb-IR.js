@@ -107,7 +107,6 @@ export default {
   "next": "دواتر",
   "last": "دواترین",
   "startAtInitialPosition": "له شوێنێکی سەرەتایی دەستپێبکە",
-  "readMoreAboutEmbeddingAStudyChapter": "زیاتر بخوێنەوە دەربارەی چەسپکردنی بەشێکی لێکۆڵینەوە",
   "open": "کردنەوە",
   "studyNotFound": "لێکۆڵینەوەکە نەدۆزرایەوە",
   "editChapter": "چاککردنی بەش",

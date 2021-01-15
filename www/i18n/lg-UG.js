@@ -1,0 +1,21 @@
+export default {
+  "playWithAFriend": "Zzanya N'emukwano gwo",
+  "playWithTheMachine": "Zzanya Ne kompuuta",
+  "toInviteSomeoneToPlayGiveThisUrl": "Okukyaaza omuntu y'ena okuzanya, musindikile URL eno",
+  "gameOver": "Omuzanyo guweddemu",
+  "waitingForOpponent": "Okyaalinze omuzanyi",
+  "waiting": "Okyaliinze",
+  "yourTurn": "Mulundi gwo",
+  "aiNameLevelAiLevel": "%1$sEddaala%2$s",
+  "level": "Eddaala",
+  "toggleTheChat": "Kyuusa emboozi eno",
+  "toggleSound": "Kyuusa eddoboozi",
+  "chat": "Emboozi",
+  "resign": "Wanika",
+  "checkmate": "Checkmate",
+  "stalemate": "Stalemate",
+  "white": "Enjelu",
+  "black": "Enzilugavu",
+  "randomColor": "Random side",
+  "createAGame": "Kola omuzanyo"
+}

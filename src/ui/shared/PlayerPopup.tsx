@@ -71,9 +71,9 @@ function content(mini: any, player: Player, opponent: Player, score?: Score) {
           </p> : null
         }
       </div>
-      { user.engine || user.booster ?
+      { user.tosViolation || user.booster ?
         <div className="warning">
-          {user.engine ? i18n('thisPlayerUsesChessComputerAssistance') : ''}
+          {user.tosViolation ? i18n('thisAccountViolatedTos') : ''}
           {user.booster ? i18n('thisPlayerArtificiallyIncreasesTheirRating') : ''}
         </div> : null
       }

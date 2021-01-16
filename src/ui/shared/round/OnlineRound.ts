@@ -164,6 +164,8 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     this.transientMove = new TransientMove(this)
 
+    this.refreshMyTurns(0)
+
     redraw()
   }
 
@@ -557,13 +559,20 @@ export default class OnlineRound implements OnlineRoundInterface {
       }, premoveDelay)
     }
 
+    this.refreshMyTurns(5000)
+  }
+
+  private refreshMyTurns(delay: number) {
     if (!!this.data.opponent.ai && session.isConnected() && this.data.game.speed === 'correspondence') {
-      session.refresh()
-      .then(() => {
-        if (Capacitor.platform === 'ios') {
-          Plugins.Badge.setNumber({ badge: session.myTurnGames().length })
-        }
-      })
+      setTimeout(() => {
+        session.refresh()
+        .then(() => {
+          redraw()
+          if (Capacitor.platform === 'ios') {
+            Plugins.Badge.setNumber({ badge: session.myTurnGames().length })
+          }
+        })
+      }, delay)
     }
   }
 

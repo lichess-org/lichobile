@@ -8,7 +8,7 @@ if (Capacitor.platform === 'web') {
   // Stockfish
   class StockfishWeb extends WebPlugin {
     private worker?: Worker
-    private listener?: ListenerCallback
+    private outputListeners: Set<ListenerCallback> = new Set()
 
     constructor() {
       super({
@@ -18,26 +18,21 @@ if (Capacitor.platform === 'web') {
     }
 
     addListener(_: string, callback: ListenerCallback): PluginListenerHandle {
-      this.listener = callback
-      if (this.worker) {
-        this.worker.onmessage = msg => {
-          if (this.listener) this.listener({ line: msg.data })
-        }
-      }
+      this.outputListeners.add(callback)
 
       return {
         remove: () => {
-          this.listener = undefined
-          if (this.worker) {
-            this.worker.onmessage = null
-          }
+          this.outputListeners.delete(callback)
         }
       }
     }
 
     removeAllListeners(): void {
-      this.listener = undefined
-      if (this.worker) this.worker.onmessage = null
+      this.outputListeners.clear()
+    }
+
+    notifyListeners(_: string, data: unknown) {
+      for (const callback of this.outputListeners) callback(data)
     }
 
     async getMaxMemory(): Promise<number> {
@@ -47,14 +42,11 @@ if (Capacitor.platform === 'web') {
     async start() {
       return new Promise((resolve) => {
         if (this.worker) {
-          this.worker.onmessage = msg => {
-            if (this.listener) this.listener({ line: msg.data })
-          }
           setTimeout(resolve, 1)
         } else {
           this.worker = new Worker('../stockfish.js')
           this.worker.onmessage = msg => {
-            if (this.listener) this.listener({ line: msg.data })
+            this.notifyListeners('output', { line: msg.data })
           }
           setTimeout(resolve, 1)
         }

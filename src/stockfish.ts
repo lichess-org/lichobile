@@ -1,8 +1,8 @@
-import { Capacitor, Plugins } from '@capacitor/core'
+import { Capacitor, Plugins, PluginListenerHandle } from '@capacitor/core'
 import { VariantKey } from './lichess/interfaces/variant'
 
 export interface StockfishPlugin {
-  addListener(event: 'output', callback: (v: { line: string }) => void): void
+  addListener(event: 'output', callback: (v: { line: string }) => void): PluginListenerHandle
   removeAllListeners(): void
   getMaxMemory(): Promise<{ value: number }>
   start(): Promise<void>
@@ -22,15 +22,32 @@ export class StockfishWrapper {
   }
 
   public addListener(callback: (line: string) => void): void {
-    this.plugin.removeAllListeners()
     this.plugin.addListener('output', ({ line }) => {
       console.debug('[stockfish >>] ' + line)
       callback(line)
     })
   }
 
-  public start(): Promise<void> {
-    return this.plugin.start()
+  public removeAllListeners(): void {
+    this.plugin.removeAllListeners()
+  }
+
+  public async start(): Promise<{ engineName: string }> {
+    return new Promise((resolve) => {
+      let engineName = 'Stockfish'
+      const handle = this.plugin.addListener('output', ({ line }) => {
+        console.debug('[stockfish >>] ' + line)
+        if (line.startsWith('id name ')) {
+          engineName = line.substring('id name '.length)
+        }
+        if (line.startsWith('uciok')) {
+          handle.remove()
+          resolve({ engineName })
+        }
+      })
+      this.plugin.start()
+      .then(() => this.send('uci'))
+    })
   }
 
   public send(text: string): Promise<void> {

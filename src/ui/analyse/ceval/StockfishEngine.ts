@@ -42,14 +42,9 @@ export default function StockfishEngine(
    * Init engine with default options and variant
    */
   async function init() {
-    stockfish.addListener((line: string) => {
-      if (line.startsWith('id name ')) {
-        engineName = line.substring('id name '.length)
-      }
-    })
     try {
-      await stockfish.start()
-      await stockfish.send('uci')
+      const obj = await stockfish.start()
+      engineName = obj.engineName
       await stockfish.setVariant()
       await stockfish.setOption('UCI_AnalyseMode', 'true')
       await stockfish.setOption('Analysis Contempt', 'Off')
@@ -57,7 +52,7 @@ export default function StockfishEngine(
       if (Capacitor.platform !== 'web') {
         await stockfish.setOption('Hash', hash)
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('stockfish init error', err)
     }
   }
@@ -107,6 +102,7 @@ export default function StockfishEngine(
       curEval = undefined
 
       readyPromise = new Promise((resolve) => {
+        stockfish.removeAllListeners()
         stockfish.addListener(line => {
           processOutput(line, work, resolve)
         })

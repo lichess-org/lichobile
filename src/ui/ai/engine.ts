@@ -32,7 +32,7 @@ export default class Engine {
           await this.stockfish.setOption('Hash', mem)
         }
       }
-    } catch(e) {
+    } catch (e) {
       console.error(e)
     }
   }
@@ -56,12 +56,12 @@ export default class Engine {
       this.stockfish.setOption('Skill Level', String(skill(this.level)))
   }
 
-  public async exit(): Promise<void>{
+  public async exit(): Promise<void> {
     return this.stockfish.exit()
   }
 }
 
-const maxMoveTime = 3000
+const maxMoveTime = 5000
 const maxSkill = 20
 const levelToDepth: Record<number, number> = {
   1: 5,

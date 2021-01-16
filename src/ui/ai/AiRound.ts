@@ -124,6 +124,10 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
         }
       })
     } else {
+      if (this.engine) {
+        this.engine.exit()
+        this.engine = undefined
+      }
       this.engine = new Engine(this, variant)
       this.engine.init()
       .then(() => {

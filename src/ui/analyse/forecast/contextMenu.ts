@@ -5,6 +5,7 @@ import * as helper from '~/ui/helper'
 import i18n from '~/i18n'
 import ForecastCtrl from './ForecastCtrl'
 import { renderForecastTxt } from './util'
+import settings from '~/settings'
 
 export function view(ctrl?: ForecastCtrl): Mithril.Child | null {
   if (!ctrl) return null
@@ -13,13 +14,16 @@ export function view(ctrl?: ForecastCtrl): Mithril.Child | null {
   if (contextIndex == null) return null
 
   return popupWidget(
-    'analyse-cm',
+    {
+      'analyse-cm': true,
+      'displayPieces': settings.game.pieceNotation()
+    },
     () => renderForecastTxt(ctrl.lines[contextIndex]),
     () => {
       return [
         h('button.withIcon', {
           'data-icon': 'q',
-          oncreate: helper.ontapXY(() => ctrl.removeIndex(contextIndex))
+          oncreate: helper.ontapXY(() => ctrl.removeIndex(contextIndex)),
         }, i18n('delete'))
       ]
     },

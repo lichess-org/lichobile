@@ -47,7 +47,9 @@ export default function CevalCtrl(
         if (knps > 3500) depth = 25
         if (knps > 5000) depth = 26
         if (knps > 7000) depth = 27
-        settings.analyse.cevalMaxDepth(depth)
+        if (settings.analyse.cevalMaxDepth() !== depth) {
+          settings.analyse.cevalMaxDepth(depth)
+        }
         if (values.length > 40) values.shift()
       }
     }

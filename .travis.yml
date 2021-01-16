@@ -23,7 +23,7 @@ before_script:
 script:
   - npm run lint
   - npm run test
-  - cd android && ./gradlew assembleDebug
+  - cd android && ./gradlew assembleWithoutNNUEDebug
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/

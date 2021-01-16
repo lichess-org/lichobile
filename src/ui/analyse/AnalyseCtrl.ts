@@ -138,9 +138,10 @@ export default class AnalyseCtrl {
     this.ceval = CevalCtrl({
       allowed: cevalAllowed,
       variant: this.data.game.variant.key,
-      multiPv: this.settings.s.cevalMultiPvs,
-      cores: this.settings.s.cevalCores,
-      infinite: this.settings.s.cevalInfinite
+      multiPv: settings.analyse.cevalMultiPvs(),
+      cores: settings.analyse.cevalCores(),
+      hashSize: settings.analyse.cevalHashSize(),
+      infinite: settings.analyse.cevalInfinite(),
     }, this.onCevalMsg)
 
     const explorerAllowed = !this.study || this.study.data.chapter.features.explorer
@@ -310,7 +311,7 @@ export default class AnalyseCtrl {
   startCeval = () => {
     if (this.ceval.enabled() && this.canUseCeval()) {
       const forceMaxLv = !!this.retro || !!this.practice
-      this.ceval.start(this.path, this.nodeList, forceMaxLv)
+      this.ceval.start(this.path, this.nodeList, forceMaxLv, false)
       this.evalCache.fetch(this.path, forceMaxLv ? 1 : this.ceval.getMultiPv())
     }
   }
@@ -683,7 +684,7 @@ export default class AnalyseCtrl {
     }
   }
 
-  private debouncedStartCeval = debounce(this.startCeval, 800, { leading: true, trailing: true })
+  private debouncedStartCeval = debounce(this.startCeval, 500, { trailing: true })
 
   private updateBoard() {
     const node = this.node

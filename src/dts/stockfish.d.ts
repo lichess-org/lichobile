@@ -1,11 +1,9 @@
-
+// multi-variant cordova stockfish plugin
 declare namespace Stockfish {
   interface Static {
-    init(): Promise<any>
-    cmd(cmd: string): Promise<any>
+    init(): Promise<void>
+    cmd(cmd: string): Promise<void>
     output(success: (msg: string) => void, err?: (err: string) => void): void
-    exit(): Promise<any>
+    exit(): Promise<void>
   }
 }
-
-declare const Stockfish: Stockfish.Static;

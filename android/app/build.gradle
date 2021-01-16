@@ -8,6 +8,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField 'Boolean', 'NNUE', 'false'
     }
     signingConfigs {
         release {
@@ -22,7 +23,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        pickFirst 'lib/**/libc++_shared.so'
+    }
+    flavorDimensions 'nnue'
+    productFlavors {
+        withNNUE {
+            buildConfigField 'Boolean', 'NNUE', 'true'
+            dimension 'nnue'
+        }
+        withoutNNUE {
+            dimension 'nnue'
+        }
+    }
 }
+
 
 repositories {
     maven {

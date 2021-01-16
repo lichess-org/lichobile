@@ -1,6 +1,7 @@
+import { Capacitor } from '@capacitor/core'
 import * as Tree from '../../shared/tree/interfaces'
 import { Work, IEngine } from './interfaces'
-import { send, setOption, setVariant } from '../../../utils/stockfish'
+import { StockfishWrapper } from '../../../stockfish'
 
 const EVAL_REGEX = new RegExp(''
   + /^info depth (\d+) seldepth \d+ multipv (\d+) /.source
@@ -9,12 +10,20 @@ const EVAL_REGEX = new RegExp(''
   + /(?:hashfull \d+ )?(?:tbhits \d+ )?time (\S+) /.source
   + /pv (.+)/.source)
 
-export default function StockfishEngine(variant: VariantKey): IEngine {
+export default function StockfishEngine(
+  variant: VariantKey,
+  threads: number,
+  hash: number,
+): IEngine {
+  const stockfish = new StockfishWrapper(variant)
+
+  let engineName = 'Stockfish'
+  let evaluation = 'classical'
 
   let stopTimeoutId: number
   let readyPromise: Promise<void> = Promise.resolve()
 
-  let curEval: Tree.ClientEval | null = null
+  let curEval: Tree.ClientEval | undefined = undefined
 
   // after a 'go' command, stockfish will be continue to emit until the 'bestmove'
   // message, reached by depth or after a 'stop' command
@@ -32,21 +41,27 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
   /*
    * Init engine with default options and variant
    */
-  function init() {
-    return Stockfish.init()
-    .then(() => {
-      return send('uci')
-      .then(() => setOption('Ponder', 'false'))
-      .then(() => setVariant(variant))
-    })
-    .catch(err => console.error('stockfish init error', err))
+  async function init() {
+    try {
+      const obj = await stockfish.start()
+      engineName = obj.engineName
+      await stockfish.setVariant()
+      await stockfish.setOption('UCI_AnalyseMode', 'true')
+      await stockfish.setOption('Analysis Contempt', 'Off')
+      await stockfish.setOption('Threads', threads)
+      if (Capacitor.platform !== 'web') {
+        await stockfish.setOption('Hash', hash)
+      }
+    } catch (err: unknown) {
+      console.error('stockfish init error', err)
+    }
   }
 
   /*
    * Stop current command if not already stopped, then add a search command to
    * the queue.
    * The search will start when stockfish is ready (after reinit if it takes more
-   * than 5s to stop current search)
+   * than 10s to stop current search)
    */
   function start(work: Work) {
     stop()
@@ -54,10 +69,10 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
 
     clearTimeout(stopTimeoutId)
     const timeout: PromiseLike<void> = new Promise((_, reject) => {
-      stopTimeoutId = setTimeout(reject, 5 * 1000)
+      stopTimeoutId = setTimeout(reject, 10 * 1000)
     })
 
-    Promise.race([readyPromise, timeout])
+    return Promise.race([readyPromise, timeout])
     .then(search)
     .catch(() => {
       reset().then(search)
@@ -70,7 +85,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
   function stop() {
     if (!stopped) {
       stopped = true
-      send('stop')
+      stockfish.send('stop')
     }
   }
 
@@ -78,22 +93,31 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
    * Actual search is launched here, according to work opts, using the last work
    * queued
    */
-  function search() {
+  async function search() {
     const work = startQueue.pop()
     if (work) {
       stopped = false
       finished = false
       startQueue = []
+      curEval = undefined
 
       readyPromise = new Promise((resolve) => {
-        Stockfish.output((msg: string) => processOutput(msg, work, resolve))
+        stockfish.removeAllListeners()
+        stockfish.addListener(line => {
+          processOutput(line, work, resolve)
+        })
       })
 
-      return setOption('Threads', work.cores)
-      .then(() => curEval = null)
-      .then(() => setOption('MultiPV', work.multiPv))
-      .then(() => send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' ')))
-      .then(() => send('go depth ' + work.maxDepth))
+      if (window.lichess.buildConfig.NNUE) {
+        await stockfish.setOption('Use NNUE', work.useNNUE)
+      }
+      await stockfish.setOption('MultiPV', work.multiPv)
+      await stockfish.send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' '))
+      if (work.maxDepth >= 99) {
+        await stockfish.send('go depth 99')
+      } else {
+        await stockfish.send('go movetime 90000 depth ' + work.maxDepth)
+      }
     }
   }
 
@@ -103,14 +127,17 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
    * command is sent by stockfish
    */
   function processOutput(text: string, work: Work, rdyResolve: () => void) {
+    const evalMatch = text.match(/^info string (classical|NNUE) evaluation/)
+    if (evalMatch) {
+      evaluation = evalMatch[1]
+    }
+
     if (text.indexOf('bestmove') === 0) {
-      console.debug('[stockfish >>] ' + text)
       finished = true
       rdyResolve()
       work.emit()
     }
     if (finished || stopped) return
-    // console.debug(text)
 
     const matches = text.match(EVAL_REGEX)
     if (!matches) return
@@ -118,18 +145,17 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
     const depth = parseInt(matches[1]),
       multiPv = parseInt(matches[2]),
       isMate = matches[3] === 'mate',
+      povEv = parseInt(matches[4]),
       evalType = matches[5],
       nodes = parseInt(matches[6]),
       elapsedMs: number = parseInt(matches[7]),
       moves = matches[8].split(' ')
 
-    let ev = parseInt(matches[4])
-
     // Sometimes we get #0. Let's just skip it.
-    if (isMate && !ev) return
+    if (isMate && !povEv) return
 
     const pivot = work.threatMode ? 0 : 1
-    if (work.ply % 2 === pivot) ev = -ev
+    const ev = (work.ply % 2 === pivot) ? -povEv : povEv
 
     // For now, ignore most upperbound/lowerbound messages.
     // The exception is for multiPV, sometimes non-primary PVs
@@ -146,7 +172,7 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
 
     const knps = nodes / elapsedMs
 
-    if (curEval == null) {
+    if (curEval === undefined) {
       curEval = {
         fen: work.currentFen,
         maxDepth: work.maxDepth,
@@ -176,9 +202,8 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
     work.emit(curEval)
   }
 
-
   function exit() {
-    return Stockfish.exit()
+    return stockfish.exit()
   }
 
   function reset() {
@@ -192,6 +217,12 @@ export default function StockfishEngine(variant: VariantKey): IEngine {
     exit,
     isSearching() {
       return !finished
-    }
+    },
+    getName() {
+      return engineName
+    },
+    getEvaluation() {
+      return evaluation
+    },
   }
 }

@@ -17,8 +17,11 @@ import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.Dialogs;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.community.keepawake.KeepAwake;
+import com.getcapacitor.plugin.Storage;
 
 import org.lichess.plugin.SoundEffect;
+import org.lichess.mobileapp.stockfish.Stockfish;
+import org.lichess.mobileapp.stockfish.StockfishVariants;
 import org.lichess.mobileapp.BuildConfig;
 
 import java.io.File;
@@ -40,8 +43,11 @@ public class MainActivity extends BridgeActivity {
       // Additional plugins you've installed go here
       add(LiToast.class);
       add(LiShare.class);
+      add(LiBuildConfig.class);
       add(SoundEffect.class);
       add(KeepAwake.class);
+      add(Stockfish.class);
+      add(StockfishVariants.class);
     }});
 
     this.versionUpdateActions();

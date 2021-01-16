@@ -68,11 +68,7 @@ export class StockfishWrapper {
       else
         return this.setOption('UCI_Variant', this.variant.toLowerCase())
     } else {
-      const uci960p = this.setOption('UCI_Chess960', 'chess960' === this.variant)
-      return Promise.all([
-        this.setOption('UCI_Variant', 'chess'),
-        uci960p,
-      ]).then(() => { /* noop */ })
+      return this.setOption('UCI_Chess960', 'chess960' === this.variant)
     }
   }
 

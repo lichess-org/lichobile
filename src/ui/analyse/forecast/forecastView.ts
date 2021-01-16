@@ -85,7 +85,7 @@ export default function renderForecasts(ctrl: AnalyseCtrl): MaybeVNode {
   const isCandidate = fctrl.isCandidate(candidateNodes)
 
   return (
-    h('div.analyse-training_box.box', {
+    h('div.analyse-training_box.analyse-forecast_box.box', {
       className: fctrl.minimized ? 'minimized' : ''
     }, [
       renderTitle(fctrl),

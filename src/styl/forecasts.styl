@@ -39,7 +39,7 @@
     &:nth-child(even)
       background-color lighten(bgdark, 15%)
     font-size 14px
-    padding 0 0.5em
+    padding 0.25em 0 0.25em 0.5em
     display flex
     align-items center
 
@@ -54,3 +54,27 @@
 .overlay_popup.displayPieces
   header
     font-family ChessSansPiratf
+
+.view-container
+  &.transp, &.light
+    .forecast
+      &:nth-child(even)
+        background-color themeBgLight
+
+.view-container.transp
+  .analyse-forecast_box
+    > .titleWrapper
+      background-color rgba(#000, 0.9)
+    move
+      color textDarkGray
+    index
+      color rgba(textLightBg, 50%)
+
+.view-container.light
+  .analyse-forecast_box
+    > .titleWrapper
+      background-color blue
+      color #fff
+    .forecast
+      &.add-forecast
+        background darken(bglight, 20%)

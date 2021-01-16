@@ -14,7 +14,7 @@ export default class ForecastCtrl {
   private readonly _gameId: string
   private readonly _playerId: string | null
   private readonly _analyseUrl?: string
-  private _minimized = false
+  private _minimized = true
 
   constructor(data: AnalyseDataForForecast) {
     const forecastData = data.forecast

@@ -1,5 +1,6 @@
 import h from 'mithril/hyperscript'
 import i18n, { plural } from '~/i18n'
+import { playable } from '~/lichess/game'
 import { ForecastStep } from '~/lichess/interfaces/forecast'
 import settings from '~/settings'
 import { ontap } from '~/ui/helper'
@@ -24,7 +25,6 @@ function makeCandidateNodes(
       fen: node.fen,
       uci: node.uci!,
       san: node.san!,
-      check: node.check,
     }))
   )
 }
@@ -79,58 +79,76 @@ function renderSpinner(): Mithril.Child {
 
 export default function renderForecasts(ctrl: AnalyseCtrl): MaybeVNode {
   const fctrl = ctrl.forecast
-  if (!fctrl) return null
+  if (!fctrl || ctrl.synthetic || !playable(ctrl.data)) return null
 
   const candidateNodes = makeCandidateNodes(ctrl, fctrl)
   const isCandidate = fctrl.isCandidate(candidateNodes)
 
   return (
-    h('div.forecasts-wrapper.native_scroller', [
-      h(
-        'div.forecasts-list',
-        {
-          class: settings.game.pieceNotation() ? 'displayPieces' : '',
-        },
-        [
-          ...fctrl.lines.map((nodes, i) => {
-            return h(
-              'div.forecast',
-              {
-                key: nodes.map(node => node.san).join(''),
-                oncreate: ontap(
-                  () => { /* noop */ },
-                  () => {
-                    fctrl.contextIndex = i
-                  }
-                ),
-              },
-              [h('sans', renderNodesHtml(nodes))]
-            )
-          }),
-          isCandidate
-            ? h(
-                'div.forecast.add-forecast',
+    h('div.analyse-training_box.box', {
+      className: fctrl.minimized ? 'minimized' : ''
+    }, [
+      renderTitle(fctrl),
+      h('div.forecasts-wrapper.native_scroller', [
+        h(
+          'div.forecasts-list',
+          {
+            class: settings.game.pieceNotation() ? 'displayPieces' : '',
+          },
+          [
+            ...fctrl.lines.map((nodes, i) => {
+              return h(
+                'div.forecast',
                 {
-                  key: `candidate-${candidateNodes.map(node => node.san).join('')}`,
-                  oncreate: ontap(() => {
-                    const candidateNodes = makeCandidateNodes(ctrl, fctrl)
-                    fctrl.add(candidateNodes)
-                  })
+                  key: nodes.map(node => node.san).join(''),
+                  oncreate: ontap(
+                    () => { /* noop */ },
+                    () => {
+                      fctrl.contextIndex = i
+                    }
+                  ),
                 },
-                [
-                  h('span.fa.fa-plus-circle'),
-                  h('sans', renderNodesHtml(candidateNodes)),
-                ]
+                [h('sans', renderNodesHtml(nodes))]
               )
-            : h.fragment({key: 'emptyCandidateForecast'}, []),
-        ]
-      ),
-      h(
-        'div.info',
-        isCandidate ? null : i18n('playVariationToCreateConditionalPremoves')
-      ),
-      renderOnMyTurnView(ctrl, candidateNodes),
-      fctrl.loading ? renderSpinner() : null,
+            }),
+            isCandidate
+              ? h(
+                  'div.forecast.add-forecast',
+                  {
+                    key: `candidate-${candidateNodes.map(node => node.san).join('')}`,
+                    oncreate: ontap(() => {
+                      const candidateNodes = makeCandidateNodes(ctrl, fctrl)
+                      fctrl.add(candidateNodes)
+                    })
+                  },
+                  [
+                    h('span.fa.fa-plus-circle'),
+                    h('sans', renderNodesHtml(candidateNodes)),
+                  ]
+                )
+              : h.fragment({key: 'emptyCandidateForecast'}, []),
+          ]
+        ),
+        h(
+          'div.info',
+          isCandidate ? null : i18n('playVariationToCreateConditionalPremoves')
+        ),
+        renderOnMyTurnView(ctrl, candidateNodes),
+        fctrl.loading ? renderSpinner() : null,
+      ]),
     ])
   )
+}
+
+function renderTitle(ctrl: ForecastCtrl): Mithril.Child {
+  return h('div.titleWrapper', [
+    h('div.title', i18n('conditionalPremoves')),
+    h('div.actions', [
+      h('button.window-button', {
+        oncreate: ontap(() => ctrl.toggleMinimized())
+      }, h('span.fa', {
+        className: ctrl.minimized ? 'fa-window-maximize' : 'fa-window-minimize'
+      })),
+    ])
+  ]);
 }

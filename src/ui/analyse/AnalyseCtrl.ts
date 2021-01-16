@@ -244,9 +244,6 @@ export default class AnalyseCtrl {
     if (this.study || (isOnlineAnalyseData(this.data) && gameApi.analysable(this.data))) {
       val = [...val, tabs.charts]
     }
-    if (hasNetwork() && !this.synthetic && gameApi.playable(this.data) && this.data.forecast) {
-      val = [tabs.forecasts, ...val]
-    }
     if (hasNetwork() && this.explorer.allowed) val = [...val, tabs.explorer]
 
     return val

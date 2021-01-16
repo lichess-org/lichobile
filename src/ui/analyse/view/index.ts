@@ -204,7 +204,6 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Chi
   ceval: renderCeval,
   pgnTags: renderPgnTags,
   comments: renderReadonlyComments,
-  forecasts: renderForecasts,
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
@@ -222,5 +221,6 @@ function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
     }),
     ctrl.retro ? retroView(ctrl) : null,
     ctrl.practice ? practiceView(ctrl) : null,
+    ctrl.forecast ? renderForecasts(ctrl) : null,
   ])
 }

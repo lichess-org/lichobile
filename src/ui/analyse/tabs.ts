@@ -47,9 +47,3 @@ export const comments: Tab = {
   title: 'Comments',
   className: 'fa fa-comment-o'
 }
-
-export const forecasts: Tab = {
-  id: 'forecasts',
-  title: i18n('conditionalPremoves'),
-  className: 'fa fa-eye'
-}

@@ -2,7 +2,6 @@ import { AnalyseDataForForecast, ForecastStep, MinimalForecastStep } from '~/lic
 import router from '~/router'
 import redraw from '~/utils/redraw'
 import { playAndSaveForecasts, saveForecasts } from './xhr'
-import { forecasts as forecastTab } from '~/ui/analyse/tabs'
 
 const MAX_FORECAST_PLIES = 30
 
@@ -15,6 +14,7 @@ export default class ForecastCtrl {
   private readonly _gameId: string
   private readonly _playerId: string | null
   private readonly _analyseUrl?: string
+  private _minimized = false
 
   constructor(data: AnalyseDataForForecast) {
     const forecastData = data.forecast
@@ -115,7 +115,7 @@ export default class ForecastCtrl {
   }
 
   reloadToLastPly(): void {
-    router.set(`/analyse/online${this._analyseUrl}?tabId=${forecastTab.id}`)
+    router.set(`/analyse/online${this._analyseUrl}`)
   }
 
   get lines(): ForecastStep[][] {
@@ -164,6 +164,14 @@ export default class ForecastCtrl {
      * to be contradictory, but the smaller is considered a prefix of the larger. @see {isPrefix}
      */
     return false
+  }
+
+  toggleMinimized(): void {
+    this._minimized = !(this._minimized);
+  }
+
+  get minimized(): boolean {
+    return this._minimized
   }
 
   private keyOf(fc: MinimalForecastStep[]): string {

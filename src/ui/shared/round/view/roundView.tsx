@@ -587,12 +587,28 @@ function renderGameActionsBar(ctrl: OnlineRound) {
           </span> : null
          }
         </button> : null
+     }
+      {
+        gameApi.forecastable(ctrl.data)
+          ? renderAnalysisIcon(ctrl)
+          : (ctrl.notes ? gameButton.notes(ctrl) : null)
       }
-      {ctrl.notes ? gameButton.notes(ctrl) : null}
       {gameButton.flipBoard(ctrl)}
       {gameApi.playable(ctrl.data) ? null : gameButton.analysisBoardIconOnly(ctrl)}
       {gameButton.backward(ctrl)}
       {gameButton.forward(ctrl)}
     </section>
+  )
+}
+
+function renderAnalysisIcon(ctrl: OnlineRound): Mithril.Vnode {
+  return h(
+    'button.action_bar_button[data-icon=A].withChip',
+    {
+      oncreate: helper.ontap(ctrl.goToAnalysis)
+    },
+    (ctrl.data.forecastCount || 0) > 0
+      ? h('span.chip', ctrl.data.forecastCount)
+      : null
   )
 }

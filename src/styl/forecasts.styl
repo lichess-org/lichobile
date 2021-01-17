@@ -1,11 +1,8 @@
 .forecasts-wrapper
   flex 1 1 auto
-  padding 10px
   position relative
   .info
-    padding 0.5em
-    move
-      padding 0
+    padding 12px
   san
     padding-left 0.17em
     padding-right 0.17em
@@ -15,11 +12,11 @@
     text-align center
     margin-top: 0.17em
   .spinner_overlay
-    position: absolute;
-    top: 0
-    left: 0
-    width: 100%
-    height: 100%
+    position absolute
+    top 0
+    left 0
+    width 100%
+    height 100%
     display flex
     align-items center
     justify-content center
@@ -36,6 +33,8 @@
     move
       font-family ChessSansPiratf
   .forecast
+    &::before
+      margin-left -.6em
     &:nth-child(even)
       background-color lighten(bgdark, 15%)
     font-size 14px

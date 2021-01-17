@@ -98,7 +98,7 @@ export default function renderForecasts(ctrl: AnalyseCtrl): MaybeVNode {
           [
             ...fctrl.lines.map((nodes, i) => {
               return h(
-                'div.forecast',
+                'div.forecast[data-icon=G]',
                 {
                   key: nodes.map(node => node.san).join(''),
                   oncreate: ontap(

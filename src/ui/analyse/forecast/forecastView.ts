@@ -142,7 +142,7 @@ export default function renderForecasts(ctrl: AnalyseCtrl): MaybeVNode {
 
 function renderTitle(ctrl: ForecastCtrl): Mithril.Child {
   return h('div.titleWrapper', [
-    h('div.title', i18n('conditionalPremoves')),
+    h('div.title', [i18n('conditionalPremoves'), ctrl.lines.length > 0 ? ` (${ctrl.lines.length})` : null]),
     h('div.actions', [
       h('button.window-button', {
         oncreate: ontap(() => ctrl.toggleMinimized())

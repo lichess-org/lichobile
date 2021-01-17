@@ -189,7 +189,7 @@ export function empty(): Mithril.Children {
   return []
 }
 
-export function userStatus(user: BaseUser) {
+export function userStatus(user: BaseUser): Mithril.Vnode {
   const status = user.online ? 'online' : 'offline'
   return (
     <div className="user">

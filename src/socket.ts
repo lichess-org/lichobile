@@ -366,6 +366,36 @@ function createAnalysis(
   return socketIfaceFactory(url)
 }
 
+function createChat(
+  handlers: MessageHandlers,
+  onOpen?: () => void,
+): SocketIFace {
+  const socketHandlers = {
+    events: { ...defaultHandlers, ...handlers },
+    onOpen: () => {
+      session.backgroundRefresh()
+      onOpen && onOpen()
+    },
+  }
+  const opts = {
+    options: {
+      name: 'chat',
+      debug: globalConfig.mode === 'dev',
+      pingDelay: 2500,
+      registeredEvents: Object.keys(socketHandlers.events)
+    }
+  }
+  const url = `/socket/v${globalConfig.apiVersion}`
+  const setup = {
+    clientId: newSri(),
+    socketEndPoint: globalConfig.socketEndPoint,
+    url,
+    opts
+  }
+  setupConnection(setup, socketHandlers);
+  return socketIfaceFactory(url)
+}
+
 function createStudy(
   studyId: string,
   handlers: MessageHandlers
@@ -480,6 +510,7 @@ export default {
   createDefault,
   createAnalysis,
   createStudy,
+  createChat,
   redirectToGame,
   // send a message to socket, not checking if sending to the proper url
   // use sparingly

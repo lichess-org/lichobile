@@ -14,7 +14,7 @@ export interface ErrorResponse {
 }
 
 export interface RequestOpts {
-  method?: 'GET' | 'POST'
+  method?: 'GET' | 'POST' | 'DELETE'
   body?: any
   query?: Record<string, unknown>
   headers?: Record<string, string>

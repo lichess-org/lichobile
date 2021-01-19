@@ -26,7 +26,6 @@ import renderCeval, { EvalBox } from '../ceval/cevalView'
 import renderExplorer, { getTitle as getExplorerTitle } from '../explorer/explorerView'
 import renderCrazy, { renderPlayer as renderCrazyPlayer, renderOpponent as renderCrazyOpponent } from '../crazy/crazyView'
 import { view as renderContextMenu } from '../contextMenu'
-import { view as renderForecastMenu } from '../forecast/contextMenu'
 import Replay from './Replay'
 import retroView from '../retrospect/retroView'
 import practiceView from '../practice/practiceView'
@@ -76,7 +75,6 @@ export function overlay(ctrl: AnalyseCtrl) {
     ctrl.notes ? notesView(ctrl.notes) : null,
     continuePopup.view(ctrl.continuePopup),
     renderContextMenu(ctrl),
-    renderForecastMenu(ctrl.forecast),
   ]
 }
 

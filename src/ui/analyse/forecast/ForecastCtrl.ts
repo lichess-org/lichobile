@@ -10,21 +10,21 @@ export default class ForecastCtrl {
   readonly isMyTurn: boolean
 
   private _lines: ForecastStep[][]
-  private _contextIndex: number | null
   private readonly _gameId: string
   private readonly _playerId: string | null
   private readonly _analyseUrl?: string
   private _minimized = true
+  private _focusIndex: number | null
 
   constructor(data: AnalyseDataForForecast) {
     const forecastData = data.forecast
     this._lines = forecastData?.steps || []
     const onMyTurn = forecastData?.onMyTurn
     this.isMyTurn = !!onMyTurn
-    this._contextIndex = null
     this._gameId = data.game.id
     this._playerId = data.player?.id || null
     this._analyseUrl = data.url?.round
+    this._focusIndex = null
   }
 
   /**
@@ -55,7 +55,7 @@ export default class ForecastCtrl {
 
   removeIndex(index: number): void {
     this._lines = this._lines.filter((_, i) => i !== index)
-    this.contextIndex = null
+    this._focusIndex = null
     this.save()
   }
 
@@ -122,16 +122,6 @@ export default class ForecastCtrl {
     return this._lines
   }
 
-  get contextIndex(): number | null {
-    return this._contextIndex
-  }
-
-  set contextIndex(index: number | null) {
-    if (index != null && (index < 0 || index >= this.lines.length)) return
-
-    this._contextIndex = index
-  }
-
   /**
    * @returns whether the given forecast line is a prefix (up to equality) of the other line.
    *          For example, the line (1. e4) and (1. e4 e5) are prefixes of (1. e4 e5).
@@ -172,6 +162,16 @@ export default class ForecastCtrl {
 
   get minimized(): boolean {
     return this._minimized
+  }
+
+  set focusedIndex(index: number | null) {
+    if (index === null || (index < this.lines.length && index >= 0)) {
+      this._focusIndex = index
+    }
+  }
+
+  get focusedIndex(): number | null {
+    return this._focusIndex
   }
 
   private keyOf(fc: MinimalForecastStep[]): string {

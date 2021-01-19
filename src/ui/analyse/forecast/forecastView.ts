@@ -100,15 +100,25 @@ export default function renderForecasts(ctrl: AnalyseCtrl): MaybeVNode {
               return h(
                 'div.forecast[data-icon=G]',
                 {
-                  key: nodes.map(node => node.san).join(''),
+                  key: `${i}-${nodes.map(node => node.san).join('')}`,
                   oncreate: ontap(
-                    () => { /* noop */ },
-                    () => {
-                      fctrl.contextIndex = i
-                    }
+                    () => { fctrl.focusedIndex = i }
                   ),
                 },
-                [h('sans', renderNodesHtml(nodes))]
+                [
+                  h('sans', renderNodesHtml(nodes)),
+                  fctrl.focusedIndex === i ? h(
+                    'span.fa.fa-times-circle.delete',
+                    {
+                      oncreate: ontap(
+                        e => {
+                          e.stopPropagation()
+                          fctrl.removeIndex(i)
+                        }
+                      )
+                    }
+                  ) : null,
+                ]
               )
             }),
             isCandidate

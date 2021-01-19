@@ -5,7 +5,7 @@ import { ForecastStep } from '~/lichess/interfaces/forecast'
 import settings from '~/settings'
 import { ontap } from '~/ui/helper'
 import AnalyseCtrl from '../AnalyseCtrl'
-import ForecastCtrl from './ForecastCtrl'
+import ForecastCtrl, { keyOf } from './ForecastCtrl'
 import { groupMoves } from './util'
 
 type MaybeVNode = Mithril.Child | null
@@ -96,24 +96,25 @@ export default function renderForecasts(ctrl: AnalyseCtrl): MaybeVNode {
             class: settings.game.pieceNotation() ? 'displayPieces' : '',
           },
           [
-            ...fctrl.lines.map((nodes, i) => {
+            ...fctrl.lines.map(nodes => {
+              const key = keyOf(nodes)
               return h(
                 'div.forecast[data-icon=G]',
                 {
-                  key: `${i}-${nodes.map(node => node.san).join('')}`,
+                  key: key,
                   oncreate: ontap(
-                    () => { fctrl.focusedIndex = i }
+                    () => { fctrl.focusKey = key }
                   ),
                 },
                 [
                   h('sans', renderNodesHtml(nodes)),
-                  fctrl.focusedIndex === i ? h(
+                  fctrl.focusKey === key ? h(
                     'span.fa.fa-times-circle.delete',
                     {
                       oncreate: ontap(
                         e => {
                           e.stopPropagation()
-                          fctrl.removeIndex(i)
+                          fctrl.removeForecast(key)
                         }
                       )
                     }

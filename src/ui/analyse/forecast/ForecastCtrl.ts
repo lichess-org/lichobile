@@ -1,3 +1,4 @@
+import { keyBy, pickBy, some, values } from 'lodash-es'
 import { AnalyseDataForForecast, ForecastStep, MinimalForecastStep } from '~/lichess/interfaces/forecast'
 import router from '~/router'
 import redraw from '~/utils/redraw'
@@ -5,26 +6,35 @@ import { playAndSaveForecasts, saveForecasts } from './xhr'
 
 const MAX_FORECAST_PLIES = 30
 
+type SanMap = {[san: string]: ForecastStep[]}
+
+function linesToSanMap(lines: ForecastStep[][]): SanMap {
+  return keyBy(lines, keyOf)
+}
+
+export function keyOf(fc: MinimalForecastStep[]): string {
+  return fc.map((node) => node.ply + ':' + node.uci).join(',')
+}
+
 export default class ForecastCtrl {
-  loading = false
+  public focusKey: string | null = null
+  public loading = false
   readonly isMyTurn: boolean
 
-  private _lines: ForecastStep[][]
+  private _lines: SanMap
   private readonly _gameId: string
   private readonly _playerId: string | null
   private readonly _analyseUrl?: string
   private _minimized = true
-  private _focusIndex: number | null
 
   constructor(data: AnalyseDataForForecast) {
     const forecastData = data.forecast
-    this._lines = forecastData?.steps || []
+    this._lines = linesToSanMap(forecastData?.steps || [])
     const onMyTurn = forecastData?.onMyTurn
     this.isMyTurn = !!onMyTurn
     this._gameId = data.game.id
     this._playerId = data.player?.id || null
     this._analyseUrl = data.url?.round
-    this._focusIndex = null
   }
 
   /**
@@ -46,16 +56,16 @@ export default class ForecastCtrl {
     const forecastCandidate = this.truncate(nodes)
     if (!this.isLongEnough(forecastCandidate)) return false
 
-    const isPrefix = this._lines.find((existingForecast) => {
+    const isPrefix = some(this._lines, (existingForecast) => {
       return this.isPrefix(existingForecast, forecastCandidate)
     })
 
     return !isPrefix
   }
 
-  removeIndex(index: number): void {
-    this._lines = this._lines.filter((_, i) => i !== index)
-    this._focusIndex = null
+  removeForecast(key: string): void {
+    delete this._lines[key]
+    this.focusKey = null
     this.save()
   }
 
@@ -63,7 +73,7 @@ export default class ForecastCtrl {
     const candidate = this.truncate(line)
     if (!this.isCandidate(candidate)) return
 
-    this._lines.push(candidate)
+    this._lines[keyOf(candidate)] = candidate
     this.fixAll()
     this.save()
   }
@@ -79,7 +89,7 @@ export default class ForecastCtrl {
         this.reloadToLastPly()
       } else {
         this.loading = false
-        this._lines = data.steps || []
+        this._lines = linesToSanMap(data.steps || [])
         redraw()
       }
     })
@@ -102,7 +112,7 @@ export default class ForecastCtrl {
           this.reloadToLastPly()
         } else {
           this.loading = false
-          this._lines = data.steps || []
+          this._lines = linesToSanMap(data.steps || [])
           redraw()
         }
       })
@@ -119,7 +129,7 @@ export default class ForecastCtrl {
   }
 
   get lines(): ForecastStep[][] {
-    return this._lines
+    return values(this._lines)
   }
 
   /**
@@ -128,7 +138,7 @@ export default class ForecastCtrl {
    */
   isPrefix(line: MinimalForecastStep[], possiblePrefix: MinimalForecastStep[]): boolean {
     return (
-      line.length >= possiblePrefix.length && this.keyOf(line).startsWith(this.keyOf(possiblePrefix))
+      line.length >= possiblePrefix.length && keyOf(line).startsWith(keyOf(possiblePrefix))
     )
   }
 
@@ -164,20 +174,6 @@ export default class ForecastCtrl {
     return this._minimized
   }
 
-  set focusedIndex(index: number | null) {
-    if (index === null || (index < this.lines.length && index >= 0)) {
-      this._focusIndex = index
-    }
-  }
-
-  get focusedIndex(): number | null {
-    return this._focusIndex
-  }
-
-  private keyOf(fc: MinimalForecastStep[]): string {
-    return fc.map((node) => node.ply + ':' + node.uci).join(',')
-  }
-
   private isLongEnough(fc: MinimalForecastStep[]): boolean {
     return fc.length >= (this.isMyTurn ? 1 : 2)
   }
@@ -186,8 +182,8 @@ export default class ForecastCtrl {
    * Consolidates all forecasts such that none of them are contradictory and none of them are prefixes of another.
    */
   private fixAll(): void {
-    this._lines = this._lines.filter((line, i) => {
-      const issue = this._lines.find((otherLine, j) => {
+    this._lines = pickBy(this._lines, (line, i) => {
+      const issue = some(this._lines, (otherLine, j) => {
         return (
           (i !== j && this.isPrefix(otherLine, line))
           || (i < j && (this.collides(line, otherLine)))

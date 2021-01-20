@@ -1,4 +1,3 @@
-import { keyBy, pickBy, some, values } from 'lodash-es'
 import { AnalyseDataForForecast, ForecastStep, MinimalForecastStep } from '~/lichess/interfaces/forecast'
 import router from '~/router'
 import redraw from '~/utils/redraw'
@@ -6,10 +5,12 @@ import { playAndSaveForecasts, saveForecasts } from './xhr'
 
 const MAX_FORECAST_PLIES = 30
 
-type SanMap = {[san: string]: ForecastStep[]}
+type SanMap = Map<string, ForecastStep[]>
 
 function linesToSanMap(lines: ForecastStep[][]): SanMap {
-  return keyBy(lines, keyOf)
+  return lines.reduce((map, line) => {
+    return map.set(keyOf(line), line)
+  }, new Map());
 }
 
 export function keyOf(fc: MinimalForecastStep[]): string {
@@ -56,15 +57,17 @@ export default class ForecastCtrl {
     const forecastCandidate = this.truncate(nodes)
     if (!this.isLongEnough(forecastCandidate)) return false
 
-    const isPrefix = some(this._lines, (existingForecast) => {
-      return this.isPrefix(existingForecast, forecastCandidate)
-    })
+    for (const existingForecast of this._lines.values()) {
+      if (this.isPrefix(existingForecast, forecastCandidate)) {
+        return false
+      }
+    }
 
-    return !isPrefix
+    return true
   }
 
   removeForecast(key: string): void {
-    delete this._lines[key]
+    this._lines.delete(key)
     this.focusKey = null
     this.save()
   }
@@ -73,7 +76,7 @@ export default class ForecastCtrl {
     const candidate = this.truncate(line)
     if (!this.isCandidate(candidate)) return
 
-    this._lines[keyOf(candidate)] = candidate
+    this._lines.set(keyOf(candidate), candidate)
     this.fixAll()
     this.save()
   }
@@ -129,7 +132,7 @@ export default class ForecastCtrl {
   }
 
   get lines(): ForecastStep[][] {
-    return values(this._lines)
+    return Array.from(this._lines.values())
   }
 
   /**
@@ -182,14 +185,15 @@ export default class ForecastCtrl {
    * Consolidates all forecasts such that none of them are contradictory and none of them are prefixes of another.
    */
   private fixAll(): void {
-    this._lines = pickBy(this._lines, (line, i) => {
-      const issue = some(this._lines, (otherLine, j) => {
-        return (
-          (i !== j && this.isPrefix(otherLine, line))
-          || (i < j && (this.collides(line, otherLine)))
-        )
-      })
-      return !issue
-    })
+    for (const [key, line] of this._lines.entries()) {
+      // Since iteration occurs in the order of insertion, if a newer entry conflicts with an older one,
+      // the older one will be removed.
+      for (const [otherKey, otherLine] of this._lines.entries()) {
+        if (key !== otherKey && this.isPrefix(otherLine, line) || this.collides(line, otherLine)) {
+          this._lines.delete(key)
+          break
+        }
+      }
+    }
   }
 }

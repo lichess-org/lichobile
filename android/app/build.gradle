@@ -28,11 +28,11 @@ android {
     }
     flavorDimensions 'nnue'
     productFlavors {
-        withNNUE {
-            buildConfigField 'Boolean', 'NNUE', 'true'
+        withoutNNUE {
             dimension 'nnue'
         }
-        withoutNNUE {
+        withNNUE {
+            buildConfigField 'Boolean', 'NNUE', 'true'
             dimension 'nnue'
         }
     }

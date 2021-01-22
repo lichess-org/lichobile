@@ -3,7 +3,7 @@ import signals from '../../signals'
 import socket from '../../socket'
 import session from '../../session'
 import redraw from '../../utils/redraw'
-import { handleXhrError, safeStringToNum } from '../../utils'
+import { base62ToNumber, handleXhrError, safeStringToNum } from '../../utils'
 import * as sleepUtils from '../../utils/sleep'
 import { emptyFen } from '../../utils/fen'
 import * as helper from '../helper'
@@ -32,7 +32,7 @@ const cachedState: State = {}
 
 export default {
   oninit({ attrs }) {
-    const numId = safeStringToNum(attrs.id)
+    const numId = safeStringToNum(attrs.id) || base62ToNumber(attrs.id)
     if (numId !== undefined) {
       if (cachedState.ctrl && window.history.state.puzzleId === numId) {
         this.ctrl = cachedState.ctrl

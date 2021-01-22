@@ -102,8 +102,7 @@ export default function StockfishEngine(
       curEval = undefined
 
       readyPromise = new Promise((resolve) => {
-        stockfish.removeAllListeners()
-        stockfish.addListener(line => {
+        stockfish.onOutput(line => {
           processOutput(line, work, resolve)
         })
       })

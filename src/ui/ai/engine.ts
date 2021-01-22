@@ -16,7 +16,7 @@ export default class Engine {
       if (!this.isInit) {
         await this.stockfish.start()
         this.isInit = true
-        this.stockfish.addListener(line => {
+        this.stockfish.onOutput(line => {
           const bmMatch = line.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/)
           if (bmMatch) {
             if (bmMatch[1]) this.ctrl.onEngineMove(bmMatch[1])

@@ -292,6 +292,27 @@ export function safeStringToNum(s: string | null | undefined): number | undefine
   return isNaN(n) ? undefined : n
 }
 
+function charToInt(char: string) {
+  const i = char.charCodeAt(0)
+  if (i > 96) {
+    return i - 71
+  } else if (i > 64) {
+    return i - 65
+  }
+  return i + 4
+}
+
+export function base62ToNumber(id?: string): number | undefined {
+  // Server idSize is 5 at the time of writing, but we'll be lenient
+  if (id === undefined || id.length > 7 || id.length === 0 || id.match(/[^a-zA-Z0-9]/)) {
+    return undefined
+  }
+
+  return id.split('').reduce((output, char, i) => {
+    return output + charToInt(char) * Math.pow(62, i)
+  }, 0)
+}
+
 export function hashCode(str: string): number {
   let hash = 0
   for (let i = 0; i < str.length; i++) {

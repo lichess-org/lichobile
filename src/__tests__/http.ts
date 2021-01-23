@@ -12,12 +12,9 @@ const testConfig = {
   apiVersion: 1
 }
 
-// must be before import
-jest.mock('../config', () => {
-  return {
-    'default': testConfig
-  }
-})
+// must be before import http
+import '../config'
+jest.mock('../config', () => testConfig)
 
 import * as http from '../http'
 

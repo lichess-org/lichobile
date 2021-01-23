@@ -33,7 +33,6 @@ function StrongSocket(clientId, socketEndPoint, url, version, settings) {
   this.currentLag = 0;
   this.averageLag = 0;
   this.autoReconnect = true;
-  this.tryAnotherUrl = false;
 
   this.debug('Debug is enabled');
   this.connect();
@@ -129,7 +128,6 @@ StrongSocket.prototype = {
     clearTimeout(self.connectSchedule);
     self.connectSchedule = setTimeout(function() {
       postMessage({ topic: 'disconnected' });
-      self.tryAnotherUrl = true;
       self.connect();
     }, delay);
   },
@@ -252,7 +250,6 @@ StrongSocket.prototype = {
     postMessage({ topic: 'disconnected' });
     self.options.debug = true;
     self.debug('error: ' + JSON.stringify(e));
-    self.tryAnotherUrl = true;
     clearTimeout(self.pingSchedule);
   },
 

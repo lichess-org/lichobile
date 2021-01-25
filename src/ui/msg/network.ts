@@ -41,6 +41,10 @@ export async function del(u: string): Promise<MsgData> {
     .then(upgradeData);
 }
 
+export function unreadCount(): Promise<number> {
+  return fetchJSON('/inbox/unread-count', {}, false)
+}
+
 export class MessageSocket {
   private socket: SocketIFace
 

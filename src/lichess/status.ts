@@ -33,7 +33,7 @@ function aborted(data: GameData | AnalyseData): boolean {
   return data.game.status.id === ids.aborted
 }
 
-function toLabel(status: string, winner: Color | undefined, variant: VariantKey) {
+function toLabel(status: string, turns: number, winner: Color | undefined, variant: VariantKey) {
   switch (status) {
     case 'started':
       return i18n('playingRightNow')
@@ -57,7 +57,7 @@ function toLabel(status: string, winner: Color | undefined, variant: VariantKey)
     case 'draw':
       return i18n('draw')
     case 'outoftime':
-      return i18n('timeOut')
+      return `${turns % 2 === 0 ? i18n('whiteTimeOut') : i18n('blackTimeOut')}${winner ? '' : ` • ${i18n('draw')}`}`
     case 'noStart':
       return (winner === 'white' ? 'Black' : 'White') + ' didn\'t move'
     case 'unknownFinish':

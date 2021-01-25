@@ -84,7 +84,7 @@ function renderStatus(ctrl: AnalyseCtrl) {
   const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner)
   return (
     <div className="status">
-      {gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key)}
+      {gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.turns, ctrl.data.game.winner, ctrl.data.game.variant.key)}
 
       {winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : null}
     </div>

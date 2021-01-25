@@ -101,6 +101,10 @@ const variantMap: {[key in VariantKey]: DocVariant} = {
   }
 }
 
+export function isVariant(key: VariantKey): boolean {
+  return !(key === 'standard' || key === 'fromPosition')
+}
+
 export function getVariant(key: VariantKey): DocVariant {
   return variantMap[key]
 }

@@ -162,7 +162,10 @@ function renderTabTitle(ctrl: AnalyseCtrl, curTab: Tab) {
   }
   else if (curTab.id === 'ceval') {
     children = [
-      h('span', defaultTitle),
+      h('span',
+        ctrl.ceval.getEngineName() + (window.lichess.buildConfig.NNUE ?
+          ` (${ctrl.ceval.getEngineEvaluation()})` : '')
+      ),
       ctrl.ceval.isSearching() ? h('div.ceval-spinner', h('span.fa.fa-spinner.fa-pulse')) : null
     ]
   }

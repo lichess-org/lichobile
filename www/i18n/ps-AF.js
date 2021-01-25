@@ -62,7 +62,6 @@ export default {
   "rank": "پوړ",
   "gamesPlayed": "ترسره شوي لوبې",
   "cancel": "ړنګول",
-  "timeOut": "وختپای",
   "drawOfferSent": "انډولست ولېږدېد",
   "drawOfferDeclined": "انډولست وغورځید",
   "drawOfferAccepted": "انډولست ومنل شو",

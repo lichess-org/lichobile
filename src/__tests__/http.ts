@@ -1,18 +1,20 @@
 import 'whatwg-fetch'
 
+// The @types/node package defines the types of global and process, but also defines the type
+// of setTimeout to return `NodeJS.Timeout` instead of window.setTimeout's `number`, which causes type errors
+// all over the project. So we're not using it.
+declare let global: any
+declare let process: any
+
 const testConfig = {
   apiEndPoint: 'http://test.org',
   fetchTimeoutMs: 10,
   apiVersion: 1
 }
+
+// must be before import http
 import '../config'
 jest.mock('../config', () => testConfig)
-
-// The @types/node package defines the types of global and process, but also defines the type
-// of setTimeout to return `NodeJS.Timeout` instead of window.setTimeout's `number`, which causes type errors
-// all over the project. So we're not using it.
-declare let global: { Headers: unknown, fetch: unknown }
-declare let process: { on: (s: string, cb: unknown) => unknown }
 
 import * as http from '../http'
 

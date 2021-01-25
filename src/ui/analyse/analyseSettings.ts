@@ -5,8 +5,8 @@ import router from '../../router'
 import * as gameApi from '../../lichess/game'
 import { isOnlineAnalyseData } from '../../lichess/interfaces/analyse'
 import settings from '../../settings'
+import { getNbCores } from '../../stockfish'
 import { oppositeColor } from '../../utils'
-import { getNbCores } from '../../utils/stockfish'
 import formWidgets from '../shared/form'
 import AnalyseCtrl from './AnalyseCtrl'
 
@@ -17,9 +17,6 @@ export interface ISettingsCtrl {
     showBestMove: boolean
     showComments: boolean
     flip: boolean
-    cevalMultiPvs: number
-    cevalCores: number
-    cevalInfinite: boolean
   }
   open(): void
   close(fBB?: string): void
@@ -28,7 +25,6 @@ export interface ISettingsCtrl {
   toggleBestMove(): void
   toggleComments(): void
   cevalSetMultiPv(pv: number): void
-  cevalSetCores(c: number): void
   cevalToggleInfinite(): void
   flip(): void
 }
@@ -37,15 +33,23 @@ export default {
 
   controller(root: AnalyseCtrl): ISettingsCtrl {
     let isOpen = false
+    let cevalCoresOnOpen = settings.analyse.cevalCores()
+    let cevalHashSizeOnOpen = settings.analyse.cevalHashSize()
 
     function open() {
       router.backbutton.stack.push(close)
+      cevalCoresOnOpen = settings.analyse.cevalCores()
+      cevalHashSizeOnOpen = settings.analyse.cevalHashSize()
       isOpen = true
     }
 
     function close(fromBB?: string) {
       if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
       isOpen = false
+      if ((settings.analyse.cevalCores() !== cevalCoresOnOpen) ||
+        (settings.analyse.cevalHashSize() !== cevalHashSizeOnOpen)) {
+        router.reload()
+      }
     }
 
     const s = {
@@ -53,9 +57,6 @@ export default {
       showBestMove: settings.analyse.showBestMove(),
       showComments: settings.analyse.showComments(),
       flip: false,
-      cevalMultiPvs: settings.analyse.cevalMultiPvs(),
-      cevalCores: settings.analyse.cevalCores(),
-      cevalInfinite: settings.analyse.cevalInfinite()
     }
 
     return {
@@ -89,17 +90,10 @@ export default {
       },
       cevalSetMultiPv(pv: number) {
         settings.analyse.cevalMultiPvs(pv)
-        s.cevalMultiPvs = pv
         root.ceval.setMultiPv(pv)
       },
-      cevalSetCores(c: number) {
-        settings.analyse.cevalCores(c)
-        s.cevalCores = c
-        root.ceval.setCores(c)
-      },
       cevalToggleInfinite() {
-        s.cevalInfinite = !s.cevalInfinite
-        settings.analyse.cevalInfinite(s.cevalInfinite)
+        settings.analyse.cevalInfinite(!settings.analyse.cevalInfinite())
         root.ceval.toggleInfinite()
       }
     }
@@ -118,7 +112,8 @@ export default {
 
 function renderAnalyseSettings(ctrl: AnalyseCtrl) {
 
-  const cores = getNbCores()
+  const maxCores = getNbCores()
+  const maxMem = window.deviceInfo.stockfishMaxMemory
 
   return h('div.analyseSettings', [
     h('div.action', {
@@ -168,12 +163,24 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
         !ctrl.ceval.allowed
       )
     ]),
-    cores > 1 ? h('div.action', [
+    maxCores > 1 ? h('div.action', [
       formWidgets.renderSlider(
-        i18n('cpus'), 'ceval.cores', 1, cores, 1, settings.analyse.cevalCores,
-        ctrl.settings.cevalSetCores,
+        i18n('cpus'), 'ceval.cores', 1, maxCores, 1, settings.analyse.cevalCores,
+        undefined,
         !ctrl.ceval.allowed,
       )
+    ]) : null,
+    maxMem > 32 ? h('div.action', [
+      formWidgets.renderSlider(
+        i18n('memory'), 'ceval.hashSize', 16, maxMem, 16, settings.analyse.cevalHashSize,
+        undefined,
+        !ctrl.ceval.allowed,
+      )
+    ]) : null,
+    window.lichess.buildConfig.NNUE ? h('div.action', [
+      formWidgets.renderCheckbox(
+        'Use NNUE', 'ceval.useNNUE', settings.analyse.cevalUseNNUE
+      ),
     ]) : null
   ])
 }

@@ -9,8 +9,59 @@ const baseDir = 'tmp/translations';
 const i18nBaseDir = '../www/i18n';
 const unzipMaxBufferSize = 1024 * 1024 * 10; // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
+const modules = ['site', 'study', 'arena', 'preferences', 'settings', 'search', 'team', 'tfa', 'puzzle']
+
 type StringMap = {
   [i: string]: string | undefined
+}
+
+async function main(args: string[]) {
+  mkdirSync(`${baseDir}`, {recursive: true});
+
+  // Download translations zip
+  const zipFile = createWriteStream(`${baseDir}/out.zip`);
+  downloadTranslationsTo(zipFile)
+    .on('finish', async () => {
+
+    await unzipTranslations(`${baseDir}/out.zip`);
+
+    const locales = readdirSync(`${baseDir}/master/translation/dest/site`)
+    .map(fn => fn.split('.')[0])
+
+    // load and flatten translations in one object
+    const everything = {}
+    for (const section of modules) {
+      const xml = await loadXml(locales, section)
+      for (const locale in xml) {
+        try {
+          const trans = await transformTranslations(xml[locale], locale, section)
+          everything[locale] = {
+            ...everything[locale],
+            ...trans
+          }
+        } catch (e) {
+          console.error(e)
+        }
+      }
+    }
+
+    const allKeys = Object.keys(everything)
+
+    writeFileSync(`${i18nBaseDir}/refs.js`, 'export default ' + JSON.stringify(allKeys, null, 2));
+    console.log(
+      'Supported locales: ', allKeys.join(', ')
+    );
+
+    // Write flattened translation objects to file. Skip if it would remove one or more keys.
+    allKeys.forEach(locale => {
+      const newData = everything[locale];
+      try {
+        writeTranslations(`${i18nBaseDir}/${locale}.js`, newData);
+      } catch (e) {
+        console.error(colors.red(`Could not write translations for ${colors.bold(locale)}, skipping...`));
+      }
+    });
+  });
 }
 
 function downloadTranslationsTo(zipFile: WriteStream) {
@@ -82,55 +133,6 @@ async function loadXml(locales: readonly string[], section: string) {
     }
   }
   return sectionXml
-}
-
-async function main(args: string[]) {
-  mkdirSync(`${baseDir}`, {recursive: true});
-
-  // Download translations zip
-  const zipFile = createWriteStream(`${baseDir}/out.zip`);
-  downloadTranslationsTo(zipFile)
-    .on('finish', async () => {
-
-    await unzipTranslations(`${baseDir}/out.zip`);
-
-    const locales = readdirSync(`${baseDir}/master/translation/dest/site`)
-    .map(fn => fn.split('.')[0])
-
-    // load and flatten translations in one object
-    const everything = {}
-    for (const section of ['site', 'study', 'arena', 'preferences', 'settings', 'search', 'team', 'tfa']) {
-      const xml = await loadXml(locales, section)
-      for (const locale in xml) {
-        try {
-          const trans = await transformTranslations(xml[locale], locale, section)
-          everything[locale] = {
-            ...everything[locale],
-            ...trans
-          }
-        } catch (e) {
-          console.error(e)
-        }
-      }
-    }
-
-    const allKeys = Object.keys(everything)
-
-    writeFileSync(`${i18nBaseDir}/refs.js`, 'export default ' + JSON.stringify(allKeys, null, 2));
-    console.log(
-      'Supported locales: ', allKeys.join(', ')
-    );
-
-    // Write flattened translation objects to file. Skip if it would remove one or more keys.
-    allKeys.forEach(locale => {
-      const newData = everything[locale];
-      try {
-        writeTranslations(`${i18nBaseDir}/${locale}.js`, newData);
-      } catch (e) {
-        console.error(colors.red(`Could not write translations for ${colors.bold(locale)}, skipping...`));
-      }
-    });
-  });
 }
 
 main(process.argv);

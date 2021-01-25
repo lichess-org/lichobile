@@ -1,5 +1,6 @@
 /// <reference path="dts/index.d.ts" />
 import { Capacitor, Plugins } from '@capacitor/core'
+import './webPlugins'
 
 import appInit from './app'
 import { init as settingsInit } from './settings'
@@ -24,8 +25,13 @@ settingsInit()
 .then(() => Promise.all([
   Plugins.Device.getInfo(),
   Capacitor.platform === 'ios' ?
-    Plugins.CPUInfo.nbCores().then((r: { value: number }) => r.value) :
-    Promise.resolve((<XNavigator>navigator).hardwareConcurrency || 1)
+    Plugins.CPUInfo.nbCores().then((r: { value: number }) => r.value).catch(() => 1) :
+    Promise.resolve((<XNavigator>navigator).hardwareConcurrency || 1),
+  Plugins.StockfishVariants.getMaxMemory().then((r: { value: number }) => r.value).catch(() => 16),
+  Capacitor.platform === 'android' ?
+    Plugins.LiBuildConfig.get() : Promise.resolve({
+      NNUE: false
+    })
 ]))
-.then(([i, c]) => appInit(i, c))
+.then(([i, c, m, b]) => appInit(i, c, m, b))
 .then(() => Plugins.SplashScreen.hide())

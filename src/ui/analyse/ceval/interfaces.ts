@@ -15,15 +15,16 @@ export interface Opts {
   variant: VariantKey
   multiPv: number
   cores: number
+  hashSize: number
   infinite: boolean
 }
 
 export interface Work {
   path: string
   maxDepth: number
-  cores: number
   multiPv: number
   ply: number
+  useNNUE: boolean
   threatMode: boolean
   initialFen: string
   currentFen: string
@@ -35,7 +36,7 @@ export interface ICevalCtrl {
   init(): Promise<void>
   isInit(): boolean
   isSearching(): boolean
-  start(path: Tree.Path, steps: Tree.Node[], forceRetroOpts: boolean): void
+  start(path: Tree.Path, steps: Tree.Node[], forceRetroOpts: boolean, deeper: boolean): void
   stop(): void
   destroy(): void
   allowed: boolean
@@ -44,18 +45,27 @@ export interface ICevalCtrl {
   disable(): void
   variant: VariantKey
   minDepth: number
-  maxDepth: number
   effectiveMaxDepth(): number
-  setCores(c: number): void
   setMultiPv(pv: number): void
   getMultiPv(): number
   toggleInfinite(): void
+  goDeeper(): void
+  canGoDeeper(): boolean
+  getEngineName(): string
+  getEngineEvaluation(): string
 }
 
 export interface IEngine {
   init(): Promise<void>
-  start(work: Work): void
+  start(work: Work): Promise<void>
   stop(): void
   exit(): Promise<void>
   isSearching(): boolean
+  getName(): string
+  getEvaluation(): string
+}
+
+export interface Started {
+  path: Tree.Path
+  nodes: Tree.Node[]
 }

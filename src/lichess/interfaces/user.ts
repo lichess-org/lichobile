@@ -56,7 +56,7 @@ export interface BaseUser {
 }
 
 export interface User extends BaseUser {
-  readonly engine: boolean
+  readonly tosViolation?: boolean
   readonly name?: string
   readonly language: string
   readonly rating?: number

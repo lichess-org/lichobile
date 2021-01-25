@@ -4,6 +4,7 @@ import debounce from 'lodash-es/debounce'
 import { hasNetwork, requestIdleCallback } from './utils'
 import redraw from './utils/redraw'
 import session from './session'
+import settings from './settings'
 import { ensureLocaleIsAvailable, loadLanguage, getCurrentLocale } from './i18n'
 import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
@@ -17,14 +18,25 @@ import { isForeground, setForeground, setBackground } from './utils/appMode'
 
 let firstConnection = true
 
-export default function appInit(info: DeviceInfo, cpuCores: number) {
+export default function appInit(
+  info: DeviceInfo,
+  cpuCores: number,
+  sfMaxMem: number,
+  buildConfig: BuildConfig,
+) {
+
+  if (settings.analyse.cevalHashSize() === 0) {
+    settings.analyse.cevalHashSize(sfMaxMem)
+  }
 
   window.deviceInfo = {
     platform: info.platform,
     uuid: info.uuid,
     appVersion: info.appVersion,
     cpuCores,
+    stockfishMaxMemory: Math.ceil(sfMaxMem / 16.0) * 16,
   }
+  window.lichess.buildConfig = buildConfig
 
   if (Capacitor.platform === 'ios') {
     Plugins.Keyboard.setAccessoryBarVisible({ isVisible: true })

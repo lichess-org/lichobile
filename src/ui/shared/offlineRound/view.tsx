@@ -112,7 +112,7 @@ export function renderEndedGameStatus(ctrl: OfflineRoundInterface) {
   if (gameStatusApi.finished(ctrl.data)) {
     const result = gameApi.result(ctrl.data)
     const winner = sit.winner
-    const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
+    const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.turns, ctrl.data.game.winner, ctrl.data.game.variant.key) +
       (winner ? '. ' + i18n(winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
     return (
       <div className="result">

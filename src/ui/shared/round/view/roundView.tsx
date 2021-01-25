@@ -332,13 +332,13 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
         {tournamentRank}
         {playerName}
         { isBerserk ? <span className="berserk" data-icon="`" /> : null }
-        { isCrazy && position === 'opponent' && user && (user.engine || user.booster) ?
+        { isCrazy && position === 'opponent' && user && (user.tosViolation || user.booster) ?
           <span className="warning" data-icon="j"></span> : null
         }
       </h2>
       { !isCrazy ?
       <div className="ratingAndMaterial">
-        { position === 'opponent' && user && (user.engine || user.booster) ?
+        { position === 'opponent' && user && (user.tosViolation || user.booster) ?
           <span className="warning" data-icon="j"></span> : null
         }
         {user ?
@@ -530,7 +530,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
 function renderStatus(ctrl: OnlineRound) {
   const result = gameApi.result(ctrl.data)
   const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner)
-  const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
+  const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.turns, ctrl.data.game.winner, ctrl.data.game.variant.key) +
     (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
   return (gameStatusApi.aborted(ctrl.data) ? [] : [
     h('strong', result), h('br')

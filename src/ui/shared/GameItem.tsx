@@ -28,7 +28,7 @@ export default {
     const title = g.source === 'import' ?
     `Import • ${g.variant.name}` :
     `${time} • ${g.variant.name} • ${mode}`
-    const status = gameStatus.toLabel(g.status.name, g.winner, g.variant.key) +
+    const status = gameStatus.toLabel(g.status.name, g.turns, g.winner, g.variant.key) +
       (g.winner ? '. ' + i18n(g.winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
     const icon = g.source === 'import' ? '/' : utils.gameIcon(g.perf) || ''
     const whiteUser = g.players.white.user

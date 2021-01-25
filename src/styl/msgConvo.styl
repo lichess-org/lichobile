@@ -1,8 +1,10 @@
 .msg-app
   &__convo
     flex-column()
-
     flex 1 1 100%
+    display none
+    .pane-convo &
+      display flex
 
     &__head
       flex-between-nowrap()

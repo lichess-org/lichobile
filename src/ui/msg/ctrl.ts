@@ -169,6 +169,7 @@ export default class MsgCtrl {
     if (userId) network.del(userId).then(data => {
       this.data = data
       this.confirmDelete = null
+      this.pane = 'side'
       redraw()
       router.replacePath('/inbox')
     });

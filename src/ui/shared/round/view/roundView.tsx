@@ -456,6 +456,7 @@ function renderGameRunningActions(ctrl: OnlineRound) {
   ] : [
     gameButton.toggleZen(ctrl),
     gameButton.analysisBoard(ctrl),
+    gameButton.notes(ctrl),
     gameButton.moretime(ctrl),
     gameButton.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort'),
   ].concat(
@@ -517,6 +518,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
       buttons = [
         shareActions,
         gameButton.analysisBoard(ctrl),
+        gameButton.notes(ctrl),
         gameButton.newOpponent(ctrl),
         gameButton.rematch(ctrl),
       ]
@@ -587,12 +589,24 @@ function renderGameActionsBar(ctrl: OnlineRound) {
           </span> : null
          }
         </button> : null
-      }
-      {ctrl.notes ? gameButton.notes(ctrl) : null}
+     }
+      {gameApi.forecastable(ctrl.data) ? renderAnalysisIcon(ctrl) : null}
       {gameButton.flipBoard(ctrl)}
       {gameApi.playable(ctrl.data) ? null : gameButton.analysisBoardIconOnly(ctrl)}
       {gameButton.backward(ctrl)}
       {gameButton.forward(ctrl)}
     </section>
+  )
+}
+
+function renderAnalysisIcon(ctrl: OnlineRound): Mithril.Vnode {
+  return h(
+    'button.action_bar_button[data-icon=A].withChip',
+    {
+      oncreate: helper.ontap(ctrl.goToAnalysis)
+    },
+    (ctrl.data.forecastCount || 0) > 0
+      ? h('span.chip', ctrl.data.forecastCount)
+      : null
   )
 }

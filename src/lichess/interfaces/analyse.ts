@@ -1,5 +1,6 @@
 import { Game, Player, ClockData, CorrespondenceClockData, OnlinePref } from './game'
 import { Tree } from '../../ui/shared/tree'
+import { ForecastData } from './forecast'
 
 export interface AnalyseData {
   bookmarked?: boolean
@@ -15,7 +16,7 @@ export interface AnalyseData {
   analysis?: RemoteEvalSummary
   readonly userAnalysis: boolean
   readonly tournament?: Tournament
-  readonly forecast?: any
+  readonly forecast?: ForecastData
   treeParts: Array<Partial<Tree.Node>>
   readonly evalPut?: boolean
   // practiceGoal?: PracticeGoal

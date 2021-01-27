@@ -95,7 +95,7 @@ function getUserId(): string | undefined {
   return session && session.id
 }
 
-function nowPlaying(): NowPlayingGame[] {
+function nowPlaying(): readonly NowPlayingGame[] {
   const np = session && session.nowPlaying || []
   return np.filter(e =>
     settings.game.supportedVariants.indexOf(e.variant.key) !== -1
@@ -115,7 +115,7 @@ function isShadowban(): boolean {
   return !!(session && session.troll)
 }
 
-function myTurnGames() {
+function myTurnGames(): readonly NowPlayingGame[] {
   return nowPlaying().filter(e => e.isMyTurn)
 }
 
@@ -163,7 +163,7 @@ const savePreferences = throttle((): Promise<string> => {
     'coords',
     'replay',
     'blindfold'
-  ])).reduce(makeReducer('display.'), {}) as StringMap
+  ])).reduce(makeReducer('display.'), {}) as Record<string, string>
 
   const behavior = Object.entries(pick(prefs, [
     'premove',
@@ -173,7 +173,7 @@ const savePreferences = throttle((): Promise<string> => {
     'submitMove',
     'confirmResign',
     'moretime',
-  ])).reduce(makeReducer('behavior.'), {}) as StringMap
+  ])).reduce(makeReducer('behavior.'), {}) as Record<string, string>
 
   const rest = Object.entries(pick(prefs, [
     'clockTenths',
@@ -183,7 +183,7 @@ const savePreferences = throttle((): Promise<string> => {
     'challenge',
     'message',
     'insightShare'
-  ])).reduce(makeReducer(''), {}) as StringMap
+  ])).reduce(makeReducer(''), {}) as Record<string, string>
 
   return fetchText('/account/preferences', {
     method: 'POST',
@@ -243,7 +243,7 @@ function login(username: string, password: string, token: string | null): Promis
   })
 }
 
-function logout() {
+function logout(): Promise<void> {
   return push.unregister()
   .then(() =>
     fetchJSON('/logout', { method: 'POST' }, true)
@@ -359,7 +359,7 @@ export default {
   backgroundRefresh: throttle(backgroundRefresh, 1000),
   get: getSession,
   getUserId,
-  appUser(fallback: string) {
+  appUser(fallback: string): string {
     if (session)
       return session && session.username
     else

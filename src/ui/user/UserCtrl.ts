@@ -63,11 +63,11 @@ export default function UserCtrl(userId: string): IUserCtrl {
     goToGames() {
       const u = user()
       if (u) {
-        const params: StringMap = {
+        const params: Record<string, string> = {
           username: u.username,
-          title: u.title,
         }
         if (u.patron) params.patron = '1'
+        if (u.title) params.title = u.title
         router.set(`/@/${u.id}/games?${utils.serializeQueryParameters(params)}`)
       }
     },
@@ -92,10 +92,10 @@ export default function UserCtrl(userId: string): IUserCtrl {
     followers() {
       const u = user()
       if (u) {
-        const params: StringMap = {
+        const params: Record<string, string> = {
           username: u.username,
-          title: u.title,
         }
+        if (u.title) params.title = u.title
         router.set(`/@/${u.id}/related?${utils.serializeQueryParameters(params)}`)
       }
     },

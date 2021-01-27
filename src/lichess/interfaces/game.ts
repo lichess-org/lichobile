@@ -7,6 +7,7 @@ export interface GameData {
   readonly player: Player
   readonly opponent: Player
   readonly correspondence?: CorrespondenceClockData
+  readonly forecastCount?: number
   readonly clock?: ClockData
   readonly steps: Array<GameStep>
   readonly tournament?: Tournament

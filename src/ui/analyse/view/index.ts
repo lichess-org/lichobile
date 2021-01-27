@@ -33,6 +33,7 @@ import renderAnalysis from './analysisView'
 import renderBoard from './boardView'
 import renderGameInfos from './gameInfosView'
 import renderActionsBar from './actionsView'
+import renderForecasts from '../forecast/forecastView'
 
 export function loadingScreen(isPortrait: boolean, color?: Color, curFen?: string) {
   const isSmall = settings.analyse.smallBoard()
@@ -73,7 +74,7 @@ export function overlay(ctrl: AnalyseCtrl) {
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notesView(ctrl.notes) : null,
     continuePopup.view(ctrl.continuePopup),
-    renderContextMenu(ctrl)
+    renderContextMenu(ctrl),
   ]
 }
 
@@ -128,6 +129,11 @@ function renderAnalyseTabs(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
       return {
         ...b,
         chip: ctrl.node.comments.length
+      }
+    } else if (b.id === 'forecasts' && ctrl.forecast?.lines && ctrl.forecast!.lines.length > 0) {
+      return {
+        ...b,
+        chip: ctrl.forecast!.lines!.length,
       }
     }
     return b
@@ -202,10 +208,11 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Chi
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
+  const withTrainingBox = ctrl.retro || ctrl.practice || ctrl.forecast
   return h('div.analyse-table.box', [
     renderAnalyseTabs(ctrl, availTabs),
     h(TabView, {
-      className: 'analyse-tabsContent',
+      className: 'analyse-tabsContent' + (withTrainingBox ? ' withTrainingBox' : ''),
       selectedIndex: ctrl.currentTabIndex(availTabs),
       tabs: availTabs.map(t => ({
         id: t.id,
@@ -216,5 +223,6 @@ function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
     }),
     ctrl.retro ? retroView(ctrl) : null,
     ctrl.practice ? practiceView(ctrl) : null,
+    ctrl.forecast ? renderForecasts(ctrl) : null,
   ])
 }

@@ -183,6 +183,13 @@ export default class AnalyseCtrl {
       this.socket = socket.createAnalysis(socketHandler(this))
     }
 
+    // forecast mode: reload when opponent moves
+    if (!this.synthetic) {
+      setTimeout(() => {
+        this.socket.send('startWatching', this.data.game.id)
+      }, 1000)
+    }
+
     this.evalCache = makeEvalCache({
       variant: this.data.game.variant.key,
       canGet: this.canEvalGet,

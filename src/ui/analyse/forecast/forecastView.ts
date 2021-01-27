@@ -10,6 +10,76 @@ import { groupMoves } from './util'
 
 type MaybeVNode = Mithril.Child | null
 
+export default function renderForecasts(ctrl: AnalyseCtrl): MaybeVNode {
+  const fctrl = ctrl.forecast
+  if (!fctrl || ctrl.synthetic || !playable(ctrl.data)) return null
+
+  const candidateNodes = makeCandidateNodes(ctrl, fctrl)
+  const isCandidate = fctrl.isCandidate(candidateNodes)
+
+  return (
+    h('div.analyse-training_box.analyse-forecast_box.box', {
+      className: fctrl.minimized ? 'minimized' : '',
+      oncreate: ontap(() => { fctrl.focusKey = null }),
+    }, [
+      renderTitle(fctrl),
+      h('div.forecasts-wrapper.native_scroller', [
+        h(
+          'div.forecasts-list',
+          {
+            className: settings.game.pieceNotation() ? 'displayPieces' : '',
+          },
+          [
+            ...fctrl.lines.map(nodes => {
+              const key = keyOf(nodes)
+              return h(
+                'div.forecast[data-icon=G]',
+                {
+                  key: key,
+                  oncreate: ontap((e) => {
+                    e.stopPropagation()
+                    fctrl.focusKey = key
+                  }),
+                },
+                [
+                  h('sans', renderNodesHtml(nodes)),
+                  fctrl.focusKey === key ? h(
+                    'span.fa.fa-times-circle.delete',
+                    {
+                      oncreate: ontap(
+                        e => {
+                          e.stopPropagation()
+                          fctrl.removeForecast(key)
+                        }
+                      )
+                    }
+                  ) : null,
+                ]
+              )
+            }),
+          ]
+        ),
+        h('div.add', {
+          className: isCandidate ? 'enabled' : '',
+          'data-icon': isCandidate ? 'O' : '',
+          oncreate: ontap(() => {
+            const candidateNodes = makeCandidateNodes(ctrl, fctrl)
+            fctrl.add(candidateNodes)
+          })
+        }, [
+          isCandidate ? h('div', [
+            h('span', i18n('addCurrentVariation')),
+            h('sans', renderNodesHtml(candidateNodes)),
+          ]) :
+          h('span', i18n('playVariationToCreateConditionalPremoves'))
+        ]),
+        renderOnMyTurnView(ctrl, candidateNodes),
+        fctrl.loading ? renderSpinner() : null,
+      ]),
+    ])
+  )
+}
+
 function makeCandidateNodes(
   ctrl: AnalyseCtrl,
   fctrl: ForecastCtrl
@@ -75,80 +145,6 @@ function renderOnMyTurnView(ctrl: AnalyseCtrl, candidate: ForecastStep[]): Maybe
 
 function renderSpinner(): Mithril.Child {
   return h('div.spinner_overlay', h('div.spinner.fa.fa-hourglass-half'))
-}
-
-export default function renderForecasts(ctrl: AnalyseCtrl): MaybeVNode {
-  const fctrl = ctrl.forecast
-  if (!fctrl || ctrl.synthetic || !playable(ctrl.data)) return null
-
-  const candidateNodes = makeCandidateNodes(ctrl, fctrl)
-  const isCandidate = fctrl.isCandidate(candidateNodes)
-
-  return (
-    h('div.analyse-training_box.analyse-forecast_box.box', {
-      className: fctrl.minimized ? 'minimized' : ''
-    }, [
-      renderTitle(fctrl),
-      h('div.forecasts-wrapper.native_scroller', [
-        h(
-          'div.forecasts-list',
-          {
-            class: settings.game.pieceNotation() ? 'displayPieces' : '',
-          },
-          [
-            ...fctrl.lines.map(nodes => {
-              const key = keyOf(nodes)
-              return h(
-                'div.forecast[data-icon=G]',
-                {
-                  key: key,
-                  oncreate: ontap(
-                    () => { fctrl.focusKey = key }
-                  ),
-                },
-                [
-                  h('sans', renderNodesHtml(nodes)),
-                  fctrl.focusKey === key ? h(
-                    'span.fa.fa-times-circle.delete',
-                    {
-                      oncreate: ontap(
-                        e => {
-                          e.stopPropagation()
-                          fctrl.removeForecast(key)
-                        }
-                      )
-                    }
-                  ) : null,
-                ]
-              )
-            }),
-            isCandidate
-              ? h(
-                  'div.forecast.add-forecast',
-                  {
-                    key: `candidate-${candidateNodes.map(node => node.san).join('')}`,
-                    oncreate: ontap(() => {
-                      const candidateNodes = makeCandidateNodes(ctrl, fctrl)
-                      fctrl.add(candidateNodes)
-                    })
-                  },
-                  [
-                    h('span.fa.fa-plus-circle'),
-                    h('sans', renderNodesHtml(candidateNodes)),
-                  ]
-                )
-              : h.fragment({key: 'emptyCandidateForecast'}, []),
-          ]
-        ),
-        h(
-          'div.info',
-          isCandidate ? null : i18n('playVariationToCreateConditionalPremoves')
-        ),
-        renderOnMyTurnView(ctrl, candidateNodes),
-        fctrl.loading ? renderSpinner() : null,
-      ]),
-    ])
-  )
 }
 
 function renderTitle(ctrl: ForecastCtrl): Mithril.Child {

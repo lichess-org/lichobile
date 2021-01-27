@@ -1,8 +1,27 @@
 .forecasts-wrapper
   flex 1 1 auto
   position relative
-  .info
+  > .add
+    width 100%
+    display flex
+    flex-flow row nowrap
+    align-items center
+    &::before
+      opacity 0.6
+      margin-right 0.3em
+      font-size 2em
+    &.enabled::before
+      font-size 2.5em
+      color green
     padding 12px
+  sans
+    display flex
+    flex-flow row wrap
+    align-items center
+    > move
+      padding-left 0
+      > index
+        margin-left 0
   san
     padding-left 0.17em
     padding-right 0.17em
@@ -33,25 +52,21 @@
     move
       font-family ChessSansPiratf
   .forecast
+    border-bottom 1px solid lighten(bgdark, 15%)
     &::before
       margin-left -.6em
       opacity 0.5
-    &:nth-child(even)
-      background-color lighten(bgdark, 15%)
-    font-size 14px
-    padding 0.25em 0 0.25em 0.5em
+    font-size 1.2em
+    padding 0.5em
     display flex
+    flex-flow row nowrap
     align-items center
-
-    &.add-forecast
-      background lighten(bgdark, 20%)
-      padding-top 0.25em
-      padding-bottom 0.25em
 
     move
       padding 0
 
     .delete
+      font-size 1.2em
       position absolute
       right 0
       color red
@@ -63,8 +78,7 @@
 .view-container
   &.transp, &.light
     .forecast
-      &:nth-child(even)
-        background-color themeBgLight
+      border-bottom-color darken(bglight, 8%)
 
 .view-container.transp
   .analyse-forecast_box
@@ -74,13 +88,9 @@
       color textDarkGray
     index
       color rgba(textLightBg, 50%)
-    .forecast.add-forecast
-      background darken(bglight, 20%)
 
 .view-container.light
   .analyse-forecast_box
     > .titleWrapper
       background-color blue
       color #fff
-    .forecast.add-forecast
-      background darken(bglight, 20%)

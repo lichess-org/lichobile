@@ -208,10 +208,11 @@ const TabsContentRendererMap: { [id: string]: (ctrl: AnalyseCtrl) => Mithril.Chi
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrl, availTabs: ReadonlyArray<Tab>) {
+  const withTrainingBox = ctrl.retro || ctrl.practice || ctrl.forecast
   return h('div.analyse-table.box', [
     renderAnalyseTabs(ctrl, availTabs),
     h(TabView, {
-      className: 'analyse-tabsContent',
+      className: 'analyse-tabsContent' + (withTrainingBox ? ' withTrainingBox' : ''),
       selectedIndex: ctrl.currentTabIndex(availTabs),
       tabs: availTabs.map(t => ({
         id: t.id,

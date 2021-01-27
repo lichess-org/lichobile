@@ -14,6 +14,7 @@ module.exports = {
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "@typescript-eslint/triple-slash-reference": "off"
+    "@typescript-eslint/triple-slash-reference": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
   }
 }

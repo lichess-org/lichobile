@@ -25,8 +25,7 @@ export default class ForecastCtrl {
   private _lines: SanMap
   private readonly _gameId: string
   private readonly _playerId: string | null
-  private readonly _analyseUrl?: string
-  private _minimized = true
+  private _minimized = false
 
   constructor(data: AnalyseDataForForecast) {
     const forecastData = data.forecast
@@ -35,7 +34,6 @@ export default class ForecastCtrl {
     this.isMyTurn = !!onMyTurn
     this._gameId = data.game.id
     this._playerId = data.player?.id || null
-    this._analyseUrl = data.url?.round
   }
 
   /**
@@ -128,7 +126,7 @@ export default class ForecastCtrl {
   }
 
   reloadToLastPly(): void {
-    router.set(`/analyse/online${this._analyseUrl}`)
+    router.deleteQueryParam('ply', true)
   }
 
   get lines(): ForecastStep[][] {

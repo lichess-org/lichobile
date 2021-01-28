@@ -33,6 +33,7 @@ function StrongSocket(clientId, socketEndPoint, url, version, settings) {
   this.currentLag = 0;
   this.averageLag = 0;
   this.autoReconnect = true;
+  this.delayedDisconnectTimeoutId = null;
 
   this.debug('Debug is enabled');
   this.connect();
@@ -206,6 +207,17 @@ StrongSocket.prototype = {
     this.disconnect();
   },
 
+  delayedDisconnect: function(delay) {
+    this.delayedDisconnectTimeoutId = setTimeout(() => {
+      this.disconnect();
+    }, delay);
+  },
+
+  cancelDelayedDisconnect: function() {
+    clearTimeout(this.delayedDisconnectTimeoutId);
+    this.delayedDisconnectTimeoutId = null;
+  },
+
   // close websocket only when all queued messages are sent
   // accepts a callback to notify when the websocket is properly closed
   disconnect: function(onDisconnected) {
@@ -241,7 +253,11 @@ StrongSocket.prototype = {
    */
   deploy: function() {
     this.disconnect();
-    this.scheduleConnect(10 * 1000 + Math.random() * 10 * 1000);
+    // we don't want to possibly reconnect in background, so make sure there
+    // is not disconnect scheduled
+    if (this.delayedDisconnectTimeoutId === null) {
+      this.scheduleConnect(10 * 1000 + Math.random() * 10 * 1000);
+    }
   },
 
   onError: function(e) {
@@ -336,6 +352,12 @@ self.onmessage = function(msg) {
       break;
     case 'disconnect':
       if (socketInstance) socketInstance.appDisconnect();
+      break;
+    case 'delayedDisconnect':
+      if (socketInstance) socketInstance.delayedDisconnect(msg.data.payload);
+      break;
+    case 'cancelDelayedDisconnect':
+      if (socketInstance) socketInstance.cancelDelayedDisconnect();
       break;
     case 'destroy':
       if (socketInstance) {

@@ -23,7 +23,7 @@ export default function appInit(
   cpuCores: number,
   sfMaxMem: number,
   buildConfig: BuildConfig,
-) {
+): void {
 
   if (settings.analyse.cevalHashSize() === 0) {
     settings.analyse.cevalHashSize(sfMaxMem)
@@ -61,14 +61,14 @@ export default function appInit(
     if (state.isActive) {
       setForeground()
       session.refresh()
-      getPools().then(() => redraw())
+      socket.cancelDelayedDisconnect()
       socket.connect()
       redraw()
     }
     else {
       setBackground()
+      socket.delayedDisconnect(3 * 60 * 1000)
       lobby.appCancelSeeking()
-      socket.disconnect()
     }
   })
 

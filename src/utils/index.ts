@@ -12,8 +12,12 @@ export function currentSri(): string {
   return sri || newSri()
 }
 
+// Unique id for the current websocket connection. Should be different after
+// each websocket reconnection. Should be unpredictable and secret while
+// in use.
 export function newSri(): string {
-  sri = Math.random().toString(36).substring(2).slice(0, 10)
+  const data = window.crypto.getRandomValues(new Uint8Array(9))
+  sri = btoa(String.fromCharCode(...data)).replace(/[/+]/g, '_')
   return sri
 }
 

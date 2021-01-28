@@ -563,7 +563,7 @@ function renderGameActionsBar(ctrl: OnlineRound) {
   const gmClass = (ctrl.data.opponent.proposingTakeback ? [
     'fa',
     'fa-mail-reply'
-  ] : [
+  ] : ctrl.data.opponent.offeringDraw ? [] : [
     'fa',
     'fa-list'
   ]).concat([
@@ -571,14 +571,11 @@ function renderGameActionsBar(ctrl: OnlineRound) {
     answerRequired ? 'glow' : ''
   ]).join(' ')
 
-  const gmDataIcon = ctrl.data.opponent.offeringDraw ? '2' : null
-  const gmButton = gmDataIcon ?
-    <button className={gmClass} data-icon={gmDataIcon} oncreate={helper.ontap(ctrl.showActions)} /> :
-    <button className={gmClass} oncreate={helper.ontap(ctrl.showActions)} />
-
   return (
     <section className="actions_bar">
-      {gmButton}
+      <button className={gmClass} oncreate={helper.ontap(ctrl.showActions)}>
+        {ctrl.data.opponent.offeringDraw ? '½' : ''}
+      </button>
       {ctrl.chat && !ctrl.isZen() ?
         <button className="action_bar_button fa fa-comments withChip"
           oncreate={helper.ontap(ctrl.chat.open)}

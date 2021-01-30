@@ -29,6 +29,7 @@ android {
     flavorDimensions 'nnue'
     productFlavors {
         withoutNNUE {
+            isDefault true
             dimension 'nnue'
         }
         withNNUE {

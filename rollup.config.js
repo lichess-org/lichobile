@@ -10,7 +10,7 @@ import visualizer from 'rollup-plugin-visualizer'
 const release = process.env.APP_MODE === 'release'
 const projectRootDir = path.resolve(__dirname)
 
-export default {
+export default [{
   input: 'build/main.js',
   preserveEntrySignatures: false,
   output: {
@@ -43,4 +43,10 @@ export default {
     if ( warning.code === 'THIS_IS_UNDEFINED' ) return
     warn(warning)
   }
-}
+}, {
+  input: 'build/socketWorker.js',
+  output: {
+    file: 'www/socketWorker.js',
+    format: 'iife',
+  }
+}]

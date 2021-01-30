@@ -86,7 +86,7 @@ let currentMoveLatency = 0
 let currentPingInterval = 2000
 let rememberedSetups: Array<ConnectionSetup> = []
 
-const worker = new Worker('lib/socketWorker.js')
+const worker = new Worker('socketWorker.js')
 const defaultHandlers: MessageHandlers = {
   following_onlines: handleFollowingOnline,
   following_enters: (name: string, payload: FollowingEntersPayload) =>

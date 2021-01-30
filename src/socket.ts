@@ -569,7 +569,7 @@ export default {
     return askWorker(worker, { topic: 'getVersion' })
   },
   getCurrentPing(): Promise<number> {
-    return askWorker(worker, { topic: 'currentLag' })
+    return askWorker(worker, { topic: 'averageLag' })
   },
   getCurrentMoveLatency() {
     return currentMoveLatency

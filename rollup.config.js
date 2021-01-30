@@ -44,7 +44,7 @@ export default [{
     warn(warning)
   }
 }, {
-  input: 'build/socketWorker.js',
+  input: 'build/socketWorker/index.js',
   output: {
     file: 'www/socketWorker.js',
     format: 'iife',

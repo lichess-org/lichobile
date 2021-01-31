@@ -50,9 +50,7 @@ export class StockfishWrapper {
 
   public setVariant(): Promise<void> {
     if (this.isVariant()) {
-      if (this.variant === 'antichess')
-        return this.setOption('UCI_Variant', 'giveaway')
-      else if (this.variant === 'threeCheck')
+      if (this.variant === 'threeCheck')
         return this.setOption('UCI_Variant', '3check')
       else
         return this.setOption('UCI_Variant', this.variant.toLowerCase())

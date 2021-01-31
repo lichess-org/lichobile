@@ -48,5 +48,12 @@ export default [{
   output: {
     file: 'www/socketWorker.js',
     format: 'iife',
-  }
+  },
+  plugins: [
+    release && strip({
+      debugger: true,
+      sourceMap: false,
+    }),
+    release && terser(),
+  ]
 }]

@@ -15,7 +15,7 @@ export const ping = prop(0)
 
 function onMenuOpen() {
   if (hasNetwork()) {
-    socket.sendNoCheck('moveLat', true)
+    socket.sendWithNoCheck('moveLat', true)
   }
   pingsTimeoutID = setTimeout(getServerLags, 2000)
 }
@@ -24,7 +24,7 @@ function onMenuClose() {
   profileMenuOpen(false)
   clearTimeout(pingsTimeoutID)
   if (hasNetwork()) {
-    socket.sendNoCheck('moveLat', false)
+    socket.sendWithNoCheck('moveLat', false)
   }
 }
 

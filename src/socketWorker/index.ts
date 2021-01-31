@@ -2,9 +2,12 @@
  * Web Worker responsible for all websocket communication to lila
  * See src/socket.ts for the interface with the application
  */
+import { SocketSetup } from '../socket/interfaces'
 import StrongSocket from './StrongSocket'
 
-let socketInstance: StrongSocket | undefined
+const pool: Map<string, StrongSocket> = new Map()
+
+let current: StrongSocket | undefined
 
 const ctx: Worker = self as any
 ctx.onmessage = (msg: MessageEvent) => {
@@ -17,67 +20,67 @@ ctx.onmessage = (msg: MessageEvent) => {
       break
     case 'ask': {
       const event = msg.data.payload.listenTo
-      if (socketInstance &&
-        socketInstance.options.registeredEvents.indexOf(event) === -1) {
-        socketInstance.options.registeredEvents.push(event)
+      if (current &&
+        current.options.registeredEvents.indexOf(event) === -1) {
+        current.options.registeredEvents.push(event)
       }
       doSend(msg.data.payload.msg)
       break
     }
     case 'connect':
-      if (socketInstance) socketInstance.connect()
+      if (current) current.connect()
       break
     case 'disconnect':
-      if (socketInstance) socketInstance.disconnect()
+      if (current) current.disconnect()
       break
     case 'delayedDisconnect':
-      if (socketInstance) socketInstance.delayedDisconnect(msg.data.payload)
+      if (current) current.delayedDisconnect(msg.data.payload)
       break
     case 'cancelDelayedDisconnect':
-      if (socketInstance) socketInstance.cancelDelayedDisconnect()
+      if (current) current.cancelDelayedDisconnect()
       break
     case 'destroy':
-      if (socketInstance) {
-        socketInstance.disconnect()
-        socketInstance = undefined
+      if (current) {
+        current.disconnect()
+        current = undefined
       }
       break
     case 'setVersion':
-      if (socketInstance) {
-        socketInstance.setVersion(msg.data.payload)
+      if (current) {
+        current.setVersion(msg.data.payload)
       }
       break
     case 'averageLag':
-      if (socketInstance) {
-        ctx.postMessage({ topic: 'averageLag', payload: Math.round(socketInstance.averageLag) })
+      if (current) {
+        ctx.postMessage({ topic: 'averageLag', payload: Math.round(current.averageLag) })
       }
       else ctx.postMessage({ topic: 'averageLag', payload: null })
       break
     case 'getVersion':
-      if (socketInstance) ctx.postMessage({ topic: 'getVersion', payload: socketInstance.version })
+      if (current) ctx.postMessage({ topic: 'getVersion', payload: current.version })
       else ctx.postMessage({ topic: 'getVersion', payload: null })
       break
     case 'deploy':
-      if (socketInstance) socketInstance.deploy()
+      if (current) current.deploy()
       break
     default:
       throw new Error('socker worker message not supported: ' + msg.data.topic)
   }
 }
 
-function create(payload: any) {
+function create(payload: SocketSetup) {
   // don't always recreate default socket on page change
   // we don't want to do it for other sockets bc/ we want to register other
   // handlers on create
-  if (socketInstance && payload.opts.options.name === 'default' &&
-    socketInstance.options.name === 'default'
+  if (current && payload.opts.options.name === 'default' &&
+    current.options.name === 'default'
   ) {
     return
   }
 
-  if (socketInstance) {
-    socketInstance.disconnect(() => {
-      socketInstance = new StrongSocket(
+  if (current) {
+    current.disconnect(() => {
+      current = new StrongSocket(
         ctx,
         payload.clientId,
         payload.socketEndPoint,
@@ -87,7 +90,7 @@ function create(payload: any) {
       )
     })
   } else {
-    socketInstance = new StrongSocket(
+    current = new StrongSocket(
       ctx,
       payload.clientId,
       payload.socketEndPoint,
@@ -100,9 +103,9 @@ function create(payload: any) {
 
 function doSend(socketMsg: [string, string, any, any]) {
   const [url, t, d, o] = socketMsg
-  if (socketInstance && socketInstance.ws) {
-    if (socketInstance.path === url || url === 'noCheck') {
-      socketInstance.send(t, d, o)
+  if (current && current.ws) {
+    if (current.path === url || url === 'noCheck') {
+      current.send(t, d, o)
     } else {
       // trying to send to the wrong URL? log it
       const wrong = {
@@ -110,7 +113,7 @@ function doSend(socketMsg: [string, string, any, any]) {
         d: d,
         url: url
       }
-      socketInstance.send('wrongHole', wrong)
+      current.send('wrongHole', wrong)
       console.warn('[socket] wrongHole', wrong)
     }
   }

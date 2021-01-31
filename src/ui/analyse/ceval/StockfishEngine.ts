@@ -21,6 +21,7 @@ export default function StockfishEngine(
   let evaluation = 'classical'
 
   let stopTimeoutId: number
+  let listener: (e: Event) => void
   let readyPromise: Promise<void> = Promise.resolve()
 
   let curEval: Tree.ClientEval | undefined = undefined
@@ -102,9 +103,9 @@ export default function StockfishEngine(
       curEval = undefined
 
       readyPromise = new Promise((resolve) => {
-        stockfish.onOutput(line => {
-          processOutput(line, work, resolve)
-        })
+        window.removeEventListener('stockfish', listener, false)
+        listener = e => processOutput((e as any).output, work, resolve)
+        window.addEventListener('stockfish', listener, { passive: true })
       })
 
       if (window.lichess.buildConfig.NNUE) {
@@ -202,6 +203,7 @@ export default function StockfishEngine(
   }
 
   function exit() {
+    window.removeEventListener('stockfish', listener, false)
     return stockfish.exit()
   }
 

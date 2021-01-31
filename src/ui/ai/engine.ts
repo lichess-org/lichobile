@@ -6,8 +6,17 @@ export default class Engine {
   private level = 1
   private stockfish: StockfishWrapper
   private isInit = false
+  private listener: (e: Event) => void
 
   constructor(readonly ctrl: AiRoundInterface, readonly variant: VariantKey) {
+    this.listener = (e: Event) => {
+      const line = (e as any).output
+      const bmMatch = line.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/)
+      if (bmMatch) {
+        if (bmMatch[1]) this.ctrl.onEngineMove(bmMatch[1])
+        else if (bmMatch[2]) this.ctrl.onEngineDrop(bmMatch[2])
+      }
+    }
     this.stockfish = new StockfishWrapper(variant)
   }
 
@@ -16,13 +25,7 @@ export default class Engine {
       if (!this.isInit) {
         await this.stockfish.start()
         this.isInit = true
-        this.stockfish.onOutput(line => {
-          const bmMatch = line.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/)
-          if (bmMatch) {
-            if (bmMatch[1]) this.ctrl.onEngineMove(bmMatch[1])
-            else if (bmMatch[2]) this.ctrl.onEngineDrop(bmMatch[2])
-          }
-        })
+        window.addEventListener('stockfish', this.listener, { passive: true })
         await this.stockfish.setVariant()
         await this.stockfish.setOption('UCI_AnalyseMode', false)
         await this.stockfish.setOption('UCI_LimitStrength', true)
@@ -57,6 +60,7 @@ export default class Engine {
   }
 
   public async exit(): Promise<void> {
+    window.removeEventListener('stockfish', this.listener, false)
     return this.stockfish.exit()
   }
 }

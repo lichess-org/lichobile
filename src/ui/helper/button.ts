@@ -71,7 +71,7 @@ export default function ButtonHandler(
     holdTimeoutID = setTimeout(() => onHold(e), HOLD_DURATION)
     if (repeatHandler) repeatTimeoutId = setTimeout(() => {
       batchRequestAnimationFrame(onRepeat)
-    }, 150)
+    }, 500)
   }
 
   function onTouchMove(e: TouchEvent) {

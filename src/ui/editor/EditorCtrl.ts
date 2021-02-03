@@ -13,18 +13,13 @@ import { validateFen } from '../../utils/fen'
 import continuePopup, { Controller as ContinuePopupCtrl } from '../shared/continuePopup'
 import i18n from '../../i18n'
 import drag from './drag'
+import { castlesMetadataStr, CastlingToggles } from './util'
 
 const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
-interface EditorData {
+export interface EditorData {
   color: Prop<Color>
-  castles: {
-    K: Prop<boolean>
-    Q: Prop<boolean>
-    k: Prop<boolean>
-    q: Prop<boolean>
-    [k: string]: Prop<boolean>
-  }
+  castles: CastlingToggles,
   enpassant: Prop<string>
   halfmove: Prop<string>
   moves: Prop<string>
@@ -183,7 +178,7 @@ export default class EditorCtrl {
     this.updatePosition()
   }
 
-  public computeFen = () =>
+  public computeFen = (): string =>
     this.chessground.getFen() + ' ' + this.fenMetadatas()
 
   public loadNewFen = (newFen: string) => {
@@ -219,11 +214,8 @@ export default class EditorCtrl {
 
   private fenMetadatas() {
     const data = this.data.editor
-    let castlesStr = ''
-    Object.keys(data.castles).forEach(function(piece) {
-      if (data.castles[piece]()) castlesStr += piece
-    })
-    return data.color() + ' ' + (castlesStr.length ? castlesStr : '-') + ' ' + data.enpassant() + ' ' + data.halfmove() + ' ' + data.moves()
+    const castlesStr = castlesMetadataStr(data.castles, this.chessground.getFen())
+    return `${data.color()} ${castlesStr} ${data.enpassant()} ${data.halfmove()} ${data.moves()}`
   }
 
   private readFen(fen: string): EditorData {

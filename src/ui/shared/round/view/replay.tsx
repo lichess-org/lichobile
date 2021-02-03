@@ -33,19 +33,23 @@ export function renderReplay(ctrl: OnlineRound) {
 export function renderInlineReplay(ctrl: OnlineRound) {
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
 
-  if (!ctrl.vm.moveList || ctrl.isZen()) {
+  if (!ctrl.vm.moveList) {
     return null
+  }
+
+  if (ctrl.isZen()) {
+    return h('div.replay_inline.hidden')
   }
 
   return h('div.replay_inline', {
     className: helper.classSet({
       displayPieces: !!pieceNotation,
     }),
-    oncreate: (vnode: Mithril.VnodeDOM<any, any>) => {
+    oncreate: (vnode: Mithril.VnodeDOM) => {
       setTimeout(() => autoScrollInline(vnode.dom as HTMLElement), 100)
       helper.ontapX((e: Event) => onReplayTap(ctrl, e), undefined, getMoveEl)(vnode)
     },
-    onupdate: (vnode: Mithril.VnodeDOM<any, any>) => autoScrollInline(vnode.dom as HTMLElement),
+    onupdate: (vnode: Mithril.VnodeDOM) => autoScrollInline(vnode.dom as HTMLElement),
   }, renderMoves(ctrl))
 }
 

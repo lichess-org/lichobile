@@ -1,10 +1,10 @@
 import h from 'mithril/hyperscript'
+import { parseFen, makeFen } from 'chessops/fen'
 import * as utils from '../utils'
 import router from '../router'
 import redraw from '../utils/redraw'
 import i18n from '../i18n'
 import { challenge as challengeXhr } from '../xhr'
-import { validateFen } from '../utils/fen'
 import settings from '../settings'
 import session from '../session'
 import challengesApi from '../lichess/challenges'
@@ -17,8 +17,7 @@ import * as helper from './helper'
 
 let actionName = ''
 let userId: string | undefined
-let setupFen: string | undefined
-let setupFenError: string | undefined
+let setupFen: string | false | undefined
 
 const isOpen = utils.prop(false)
 
@@ -33,7 +32,6 @@ function open(uid?: string) {
   router.backbutton.stack.push(close)
   isOpen(true)
   setupFen = undefined
-  setupFenError = undefined
 }
 
 
@@ -96,42 +94,46 @@ function renderForm() {
       formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant)
     ),
     settingsObj.variant() === '3' ?
-    h('div.setupPosition',
-    userId ?
-    h('input[type=text][name=fen]', {
-      placeholder: i18n('pasteTheFenStringHere'),
-      oninput: (e: Event) => {
-        const rawfen = (e.target as HTMLInputElement).value
-        if (validateFen(rawfen)) {
-          setupFen = rawfen
-          setupFenError = undefined
-        }
-        else setupFenError = 'Invalid FEN'
-        redraw()
-      }
-    }) : h('div', h('button.withIcon', {
-      oncreate: helper.ontap(() => {
-        close()
-        router.set('/editor')
-      })
-    }, [h('span.fa.fa-pencil'), i18n('boardEditor')])),
-    setupFenError ?
-    h('div.setupFenError', setupFenError) : null,
-    setupFen ? [
-      h('div', {
-        style: {
-          width: '100px',
-          height: '100px'
-        },
-        oncreate: helper.ontap(() => {
-          close()
-          if (setupFen) router.set(`/editor/${encodeURIComponent(setupFen)}`)
-        })
-      }, [
-        h(ViewOnlyBoard, { fen: setupFen, orientation: 'white'})
-      ])
+    h('div.setupPosition', [
+      h('div.setupPositionInput', [
+        h('input[type=text][name=fen]', {
+          placeholder: i18n('pasteTheFenStringHere'),
+          oninput: (e: Event) => {
+            const rawfen = (e.target as HTMLInputElement).value
+            if (rawfen === '') {
+              setupFen = undefined
+            } else {
+              setupFen = parseFen(rawfen).unwrap(s => makeFen(s), () => false)
+            }
+            redraw()
+          }
+        }),
+        h('button.withIcon', {
+          oncreate: helper.ontap(() => {
+            close()
+            router.set('/editor')
+          })
+        }, h('span.fa.fa-pencil')),
+      ]),
+
+      setupFen === false ?
+        h('div.setupFenError', 'Invalid FEN') : null,
+
+      setupFen !== undefined && setupFen !== false ? [
+        h('div', {
+          style: {
+            width: '100px',
+            height: '100px'
+          },
+          oncreate: helper.ontap(() => {
+            close()
+            if (setupFen) router.set(`/editor/${encodeURIComponent(setupFen)}`)
+          })
+        }, [
+          h(ViewOnlyBoard, { fen: setupFen, orientation: 'white'})
+        ])
       ] : null
-    ) : null,
+    ]) : null,
     settingsObj.variant() !== '3' ?
     h('div.select_input',
       formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)

@@ -229,8 +229,10 @@ export default class EditorCtrl {
 
   setFen(fen: string): boolean {
     return parseFen(fen).unwrap(setup => {
-      if (this.chessground) this.chessground.set({fen})
-        this.pockets = setup.pockets
+      if (this.chessground) {
+        this.chessground.set({fen})
+      }
+      this.pockets = setup.pockets
       this.turn = setup.turn
       this.unmovedRooks = setup.unmovedRooks
       this.epSquare = setup.epSquare

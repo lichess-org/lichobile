@@ -89,17 +89,6 @@ interface Piece {
   promoted?: boolean
 }
 
-interface BoardPosition {
-  name: string
-  fen: string
-  eco?: string
-}
-
-interface BoardPositionCategory {
-  name: string
-  positions: Array<BoardPosition>
-}
-
 interface Variant {
   key: VariantKey
   name: string

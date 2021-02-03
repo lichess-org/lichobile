@@ -17,7 +17,7 @@ export default function view(ctrl: EditorCtrl) {
   const isPortrait = helper.isPortrait()
 
   const board = h(Board, {
-    variant: ctrl.data.game.variant.key,
+    variant: 'standard',
     chessground: ctrl.chessground,
   })
 
@@ -65,6 +65,7 @@ function sparePieces(color: Color, orientation: Color, position: 'top' | 'bottom
 }
 
 function renderActionsBar(ctrl: EditorCtrl) {
+  const state = ctrl.getState()
   return h('section.actions_bar', [
     helper.isPortrait() || !helper.isTablet() ? h('button.action_bar_button.fa.fa-gear', {
       oncreate: helper.ontap(ctrl.menu.open)
@@ -73,11 +74,11 @@ function renderActionsBar(ctrl: EditorCtrl) {
       oncreate: helper.ontap(ctrl.chessground.toggleOrientation)
     }),
     h('button.action_bar_button[data-icon=U]', {
-      disabled: !ctrl.data.playable,
+      disabled: !state.playable,
       oncreate: helper.ontap(ctrl.continueFromHere, () => Plugins.LiToast.show({ text: i18n('continueFromHere'), duration: 'short', position: 'bottom' }))
     }),
     h('button.action_bar_button[data-icon=A]', {
-      disabled: !ctrl.data.playable,
+      disabled: state.legalFen === undefined,
       oncreate: helper.ontap(ctrl.goToAnalyse, () => Plugins.LiToast.show({ text: i18n('analysis'), duration: 'short', position: 'bottom' }))
     }),
     h('button.action_bar_button.fa.fa-upload', {
@@ -86,7 +87,7 @@ function renderActionsBar(ctrl: EditorCtrl) {
     }),
     h('button.action_bar_button.fa.fa-share-alt', {
       oncreate: helper.ontap(
-        () => Plugins.LiShare.share({ text: ctrl.computeFen() }),
+        () => Plugins.LiShare.share({ text: ctrl.getLegalFen() }),
         () => Plugins.LiToast.show({ text: 'Share FEN', duration: 'short', position: 'bottom' })
       )
     })

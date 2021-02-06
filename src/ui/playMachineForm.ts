@@ -1,6 +1,8 @@
 import * as utils from '../utils'
+import { parseFen, makeFen } from 'chessops/fen'
 import router from '../router'
 import * as xhr from '../xhr'
+import redraw from '../utils/redraw'
 import settings, { AiSettings } from '../settings'
 import formWidgets from './shared/form'
 import popupWidget from './shared/popup'
@@ -10,7 +12,7 @@ import * as helper from './helper'
 import h from 'mithril/hyperscript'
 
 let isOpen = false
-let fromPositionFen: string | undefined
+let setupFen: string | false | undefined
 
 export default {
   open,
@@ -20,7 +22,7 @@ export default {
   openAIFromPosition(fen: string) {
     settings.gameSetup.ai.variant('3')
     open()
-    fromPositionFen = fen
+    setupFen = fen
   },
 
   view() {
@@ -46,7 +48,7 @@ export default {
 
 function open() {
   router.backbutton.stack.push(close)
-  fromPositionFen = undefined
+  setupFen = undefined
   isOpen = true
 }
 
@@ -56,12 +58,18 @@ function close(fromBB?: string) {
 }
 
 function startAIGame() {
-  return xhr.newAiGame(fromPositionFen)
+  return xhr.newAiGame(setupFen)
   .then((data) => {
     router.set('/game' + data.url.round)
   })
   .catch(utils.handleXhrError)
 }
+
+const colors = [
+  ['randomColor', 'random'],
+  ['white', 'white'],
+  ['black', 'black']
+]
 
 function renderForm(formName: string, settingsObj: AiSettings, variants: string[][], timeModes: string[][]) {
   const timeMode = settingsObj.timeMode()
@@ -69,52 +77,58 @@ function renderForm(formName: string, settingsObj: AiSettings, variants: string[
 
   const generalFieldset = [
     h('div.select_input', [
-      formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant)
-    ])
-  ]
-
-  const colors = [
-    ['randomColor', 'random'],
-    ['white', 'white'],
-    ['black', 'black']
-  ]
-
-  generalFieldset.unshift(
-    h('div.select_input', [
       formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color)
-    ])
-  )
-
-  if (settingsObj.variant() === '3') {
-    generalFieldset.push(h('div.setupPosition', fromPositionFen ? [
-      h('div.setupMiniBoardWrapper', {
-        style: {
-          width: '100px',
-          height: '100px'
-        },
-        oncreate: helper.ontap(() => {
-          close()
-          if (fromPositionFen) {
-            router.set(`/editor/${encodeURIComponent(fromPositionFen)}`)
+    ]),
+    h('div.select_input', [
+      formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant)
+    ]),
+    settingsObj.variant() === '3' ?
+    h('div.setupPosition', [
+      h('div.setupPositionInput', [
+        h('input[type=text][name=fen]', {
+          placeholder: i18n('pasteTheFenStringHere'),
+          oninput: (e: Event) => {
+            const rawfen = (e.target as HTMLInputElement).value
+            if (rawfen === '') {
+              setupFen = undefined
+            } else {
+              setupFen = parseFen(rawfen).unwrap(s => makeFen(s), () => false)
+            }
+            redraw()
           }
-        })
-      }, [
-        h(ViewOnlyBoard, { fen: fromPositionFen, orientation: 'white'})
-      ])
-      ] : h('div', h('button.withIcon.fa.fa-pencil', {
-        oncreate: helper.ontap(() => {
-          close()
-          router.set('/editor')
-        })
-      }, i18n('boardEditor')))
-    ))
-  }
+        }),
+        h('button.withIcon', {
+          oncreate: helper.ontap(() => {
+            close()
+            router.set('/editor')
+          })
+        }, h('span.fa.fa-pencil')),
+      ]),
 
-  generalFieldset.push(h('div.select_input', [
-    formWidgets.renderSelect('level', 'ailevel', [
-      '1', '2', '3', '4', '5', '6', '7', '8'
-    ].map(utils.tupleOf), settingsObj.level)
-  ]))
+      setupFen === false ?
+        h('div.setupFenError', 'Invalid FEN') : null,
+
+      setupFen !== undefined && setupFen !== false ? [
+        h('div', {
+          style: {
+            width: '100px',
+            height: '100px'
+          },
+          oncreate: helper.ontap(() => {
+            close()
+            if (setupFen) router.set(`/editor/${encodeURIComponent(setupFen)}`)
+          })
+        }, [
+          h(ViewOnlyBoard, { fen: setupFen, orientation: 'white'})
+        ])
+      ] : null
+    ]) : null,
+    h('div.select_input', [
+      formWidgets.renderSelect('level', 'ailevel', [
+        '1', '2', '3', '4', '5', '6', '7', '8'
+      ].map(utils.tupleOf), settingsObj.level)
+    ])
+  ]
 
   const timeFieldset = [
     h('div.select_input', [

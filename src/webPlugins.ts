@@ -8,7 +8,6 @@ if (Capacitor.platform === 'web') {
   // Stockfish
   class StockfishWeb extends WebPlugin {
     private worker?: Worker
-    private outputCallback?: (v: { line: string }) => void
 
     constructor() {
       super({
@@ -21,10 +20,6 @@ if (Capacitor.platform === 'web') {
       return 1024
     }
 
-    onOutput(callback: (v: { line: string }) => void) {
-      this.outputCallback = callback
-    }
-
     async start() {
       return new Promise((resolve) => {
         if (this.worker) {
@@ -32,7 +27,10 @@ if (Capacitor.platform === 'web') {
         } else {
           this.worker = new Worker('../stockfish.js')
           this.worker.onmessage = msg => {
-            if (this.outputCallback) this.outputCallback({ line: msg.data })
+
+            const ev: any = new Event('stockfish')
+            ev['output'] = msg.data
+            window.dispatchEvent(ev)
           }
           setTimeout(resolve, 1)
         }
@@ -48,7 +46,6 @@ if (Capacitor.platform === 'web') {
 
     async exit() {
       return new Promise((resolve) => {
-        this.outputCallback = undefined
         if (this.worker) {
           this.worker.terminate()
           this.worker = undefined

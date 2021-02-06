@@ -3,6 +3,7 @@ import settings from '../../settings'
 import { handleXhrError, loadLocalJsonFile } from '../../utils'
 import * as xhr from './tournamentXhr'
 import { TournamentListItem, TournamentLists } from '../../lichess/interfaces/tournament'
+import { BoardPositionCategory } from '../editor/interfaces'
 
 export default class TournamentsListCtrl {
   tournaments: TournamentLists | undefined

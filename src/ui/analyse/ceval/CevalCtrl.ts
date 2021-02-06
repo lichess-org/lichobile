@@ -1,6 +1,6 @@
 import settings from '../../../settings'
 import { Tree } from '../../shared/tree'
-import StockfishEngine from './StockfishEngine'
+import StockfishClient from './StockfishClient'
 import { Opts, Work, ICevalCtrl, Started } from './interfaces'
 import { povChances } from './winningChances'
 
@@ -13,7 +13,7 @@ export default function CevalCtrl(
 
   const minDepth = 6
 
-  const engine = StockfishEngine(opts.variant, opts.cores, opts.hashSize)
+  const engine = new StockfishClient(opts.variant, opts.cores, opts.hashSize)
 
   let started = false
   let isDeeper = false
@@ -184,10 +184,10 @@ export default function CevalCtrl(
       return !isDeeper && !opts.infinite && !engine.isSearching()
     },
     getEngineName(): string {
-      return engine.getName()
+      return engine.engineName
     },
     getEngineEvaluation(): string {
-      return engine.getEvaluation()
+      return engine.evaluation
     },
   }
 }

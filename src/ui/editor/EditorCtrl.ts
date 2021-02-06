@@ -1,110 +1,77 @@
 import { Plugins } from '@capacitor/core'
-import debounce from 'lodash-es/debounce'
+import { Rules, Square } from 'chessops/types'
+import { SquareSet } from 'chessops/squareSet'
+import { Board } from 'chessops/board'
+import { Setup, Material, RemainingChecks } from 'chessops/setup'
+import { Castles, setupPosition } from 'chessops/variant'
+import { makeFen, parseFen, parseCastlingFen, INITIAL_FEN, EMPTY_FEN } from 'chessops/fen'
+
 import Chessground from '../../chessground/Chessground'
 import * as cgDrag from '../../chessground/drag'
-import * as chess from '../../chess'
 import router from '../../router'
-import { loadLocalJsonFile, prop, Prop } from '../../utils'
+import { loadLocalJsonFile } from '../../utils'
 import redraw from '../../utils/redraw'
 import settings from '../../settings'
-import menu from './menu'
+import menu, { MenuInterface } from './menu'
 import pasteFenPopup from './pasteFenPopup'
-import { validateFen } from '../../utils/fen'
 import continuePopup, { Controller as ContinuePopupCtrl } from '../shared/continuePopup'
 import i18n from '../../i18n'
 import drag from './drag'
-
-const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
-
-interface EditorData {
-  color: Prop<Color>
-  castles: {
-    K: Prop<boolean>
-    Q: Prop<boolean>
-    k: Prop<boolean>
-    q: Prop<boolean>
-    [k: string]: Prop<boolean>
-  }
-  enpassant: Prop<string>
-  halfmove: Prop<string>
-  moves: Prop<string>
-}
-
-interface Data {
-  editor: EditorData
-  game: {
-    variant: {
-      key: VariantKey
-    }
-  }
-  playable: boolean
-}
-
-export interface MenuInterface {
-  open: () => void
-  close: () => void
-  isOpen: () => boolean
-  root: EditorCtrl
-}
+import { EditorState, BoardPosition, BoardPositionCategory, CastlingToggle, CastlingToggles, CASTLING_TOGGLES } from './interfaces'
 
 export default class EditorCtrl {
-  public data: Data
   public menu: MenuInterface
   public pasteFenPopup: MenuInterface
   public continuePopup: ContinuePopupCtrl
   public chessground: Chessground
 
-  public positions: Prop<Array<BoardPosition>>
-  public endgamesPositions: Prop<Array<BoardPosition>>
-  public extraPositions: Array<BoardPosition>
+  public initFen: string
+  public pockets: Material | undefined
+  public turn: Color = 'white'
+  public unmovedRooks: SquareSet | undefined
+  public castlingToggles: CastlingToggles = { K: false, Q: false, k: false, q: false }
+  public epSquare: Square | undefined
+  public remainingChecks: RemainingChecks | undefined
+  // TODO variants support
+  public rules: Rules = 'chess'
+  public halfmoves = 0
+  public fullmoves = 0
+
+  public positions: readonly BoardPosition[] = []
+  public endgamesPositions: readonly BoardPosition[] = []
+  public extraPositions: readonly BoardPosition[] = []
 
   public constructor(fen?: string) {
-    const initFen = fen || startingFen
+    this.initFen = fen || INITIAL_FEN
 
     this.menu = menu.controller(this)
     this.pasteFenPopup = pasteFenPopup.controller(this)
     this.continuePopup = continuePopup.controller()
 
-    this.data = {
-      editor: this.readFen(initFen),
-      game: {
-        variant: {
-          key: 'standard'
-        }
-      },
-      playable: true,
-    }
-
-    this.setPlayable(initFen).then(redraw)
-
-    this.positions = prop<BoardPosition[]>([])
-    this.endgamesPositions = prop<BoardPosition[]>([])
-
     this.extraPositions = [{
-      fen: startingFen,
+      fen: INITIAL_FEN,
       name: i18n('startPosition'),
       eco: '',
     }, {
-      fen: '8/8/8/8/8/8/8/8 w - - 0 1',
+      fen: EMPTY_FEN,
       name: i18n('clearBoard'),
       eco: '',
     }]
 
     Promise.all([
-      loadLocalJsonFile<Array<BoardPositionCategory>>('data/positions.json'),
-      loadLocalJsonFile<Array<BoardPosition>>('data/endgames.json')
+      loadLocalJsonFile<readonly BoardPositionCategory[]>('data/positions.json'),
+      loadLocalJsonFile<readonly BoardPosition[]>('data/endgames.json')
     ])
     .then(([openings, endgames]) => {
-      this.positions(
-        openings.reduce((acc: Array<BoardPosition>, c: BoardPositionCategory) =>
-          acc.concat(c.positions), [])
-      )
-      this.endgamesPositions(endgames)
+      this.positions =
+      openings.reduce((acc: readonly BoardPosition[], c: BoardPositionCategory) =>
+      acc.concat(c.positions), [])
+      this.endgamesPositions = endgames
       redraw()
     })
 
     this.chessground = new Chessground({
-      fen: initFen,
+      fen: this.initFen,
       orientation: 'white',
       movable: {
         free: true,
@@ -125,41 +92,40 @@ export default class EditorCtrl {
         deleteOnDropOff: true
       },
       events: {
-        change: () => {
-          // we don't support enpassant, halfmove and moves fields when setting
-          // position manually
-          this.data.editor.enpassant('-')
-          this.data.editor.halfmove('0')
-          this.data.editor.moves('1')
-          this.updatePosition()
-        }
+        change: this.onChange
       }
     })
+
+    this.setFen(this.initFen)
   }
 
-  private setPlayable = (fen: string): Promise<void> => {
-    return chess.situation({ variant: 'standard', fen })
-    .then(({ situation }) => {
-      this.data.playable = situation.playable
-    })
+  bottomColor(): Color {
+    return this.chessground ? this.chessground.state.orientation : 'white'
   }
 
-  private updatePosition = debounce(() => {
-    const newFen = this.computeFen()
-    if (validateFen(newFen)) {
-      const path = `/editor/${encodeURIComponent(newFen)}`
-      try {
-        window.history.replaceState(window.history.state, '', '?=' + path)
-      } catch (e) { console.error(e) }
-      this.setPlayable(newFen).then(redraw)
-    }
-  }, 250)
+  setCastlingToggle(id: CastlingToggle, value: boolean): void {
+    if (this.castlingToggles[id] != value) this.unmovedRooks = undefined
+    this.castlingToggles[id] = value
+    this.onChange()
+  }
+
+  setTurn(turn: Color): void {
+    this.turn = turn
+    this.onChange()
+  }
+
+  private onChange = () => {
+    const fen = this.getFen()
+    const path = `/editor/${encodeURIComponent(fen)}`
+    window.history.replaceState(window.history.state, '', '?=' + path)
+    redraw()
+  }
 
   public onstart = (e: TouchEvent) => drag(this, e)
   public onmove = (e: TouchEvent) => cgDrag.move(this.chessground, e)
   public onend = (e: TouchEvent) => cgDrag.end(this.chessground, e)
 
-  public editorOnCreate = (vn: Mithril.VnodeDOM<any, any>) => {
+  public editorOnCreate = (vn: Mithril.VnodeDOM) => {
     if (!vn.dom) return
     const editorNode = document.getElementById('boardEditor')
     if (editorNode) {
@@ -178,67 +144,119 @@ export default class EditorCtrl {
     }
   }
 
-  public setColor = (color: Color) => {
-    this.data.editor.color(color)
-    this.updatePosition()
-  }
-
-  public computeFen = () =>
-    this.chessground.getFen() + ' ' + this.fenMetadatas()
-
-  public loadNewFen = (newFen: string) => {
-    if (validateFen(newFen))
-      router.set(`/editor/${encodeURIComponent(newFen)}`, true)
-    else
-      Plugins.LiToast.show({ text: i18n('invalidFen'), duration: 'short' })
-  }
-
-  public goToAnalyse = () => {
-    const fen = this.computeFen()
-    chess.situation({ variant: 'standard', fen })
-    .then(({ situation }) => {
-      if (situation.playable) {
-        router.set(`/analyse/fen/${encodeURIComponent(fen)}`)
-      } else {
-        Plugins.LiToast.show({ text: i18n('invalidFen'), duration: 'short' })
-      }
-    })
-  }
-
-  public continueFromHere = () => {
-    const fen = this.computeFen()
-    chess.situation({ variant: 'standard', fen })
-    .then(({ situation }) => {
-      if (situation.playable) {
-        this.continuePopup.open(fen, 'standard')
-      } else {
-        Plugins.LiToast.show({ text: i18n('invalidFen'), duration: 'short' })
-      }
-    })
-  }
-
-  private fenMetadatas() {
-    const data = this.data.editor
-    let castlesStr = ''
-    Object.keys(data.castles).forEach(function(piece) {
-      if (data.castles[piece]()) castlesStr += piece
-    })
-    return data.color() + ' ' + (castlesStr.length ? castlesStr : '-') + ' ' + data.enpassant() + ' ' + data.halfmove() + ' ' + data.moves()
-  }
-
-  private readFen(fen: string): EditorData {
-    const parts = fen.split(' ')
-    return {
-      color: prop(parts[1] as Color),
-      castles: {
-        K: prop(parts[2].includes('K')),
-        Q: prop(parts[2].includes('Q')),
-        k: prop(parts[2].includes('k')),
-        q: prop(parts[2].includes('q'))
-      },
-      enpassant: prop(parts[3]),
-      halfmove: prop(parts[4]),
-      moves: prop(parts[5])
+  private castlingToggleFen(): string {
+    let fen = ''
+    for (const toggle of CASTLING_TOGGLES) {
+      if (this.castlingToggles[toggle]) fen += toggle
     }
+    return fen
+  }
+
+  private getSetup(): Setup {
+    const boardFen = this.chessground ? this.chessground.getFen() : this.initFen
+    const board = parseFen(boardFen).unwrap(setup => setup.board, _ => Board.empty())
+    return {
+      board,
+      pockets: this.pockets,
+      turn: this.turn,
+      unmovedRooks: this.unmovedRooks || parseCastlingFen(board, this.castlingToggleFen()).unwrap(),
+      epSquare: this.epSquare,
+      remainingChecks: this.remainingChecks,
+      halfmoves: this.halfmoves,
+      fullmoves: this.fullmoves,
+    }
+  }
+
+  public getFen(): string {
+    return makeFen(this.getSetup(), {promoted: this.rules == 'crazyhouse'})
+  }
+
+  public getLegalFen(): string | undefined {
+    return setupPosition(this.rules, this.getSetup()).unwrap(pos => {
+      return makeFen(pos.toSetup(), {promoted: pos.rules == 'crazyhouse'})
+    }, () => undefined)
+  }
+
+  private isPlayable(): boolean {
+    return setupPosition(this.rules, this.getSetup()).unwrap(pos => !pos.isEnd(), () => false)
+  }
+
+  getState(): EditorState {
+    return {
+      fen: this.getFen(),
+      legalFen: this.getLegalFen(),
+      playable: this.rules == 'chess' && this.isPlayable(),
+    }
+  }
+
+  private makeAnalysisUrl(legalFen: string): string {
+    switch (this.rules) {
+      case 'chess': return this.makeUrl('/analyse/fen/', legalFen)
+      case '3check': return this.makeUrl('/analyse/variant/threeCheck/fen/', legalFen)
+      case 'kingofthehill': return this.makeUrl('/analyse/variant/kingOfTheHill/fen/', legalFen)
+      case 'racingkings': return this.makeUrl('/analyse/variant/racingKings/fen/', legalFen)
+      case 'antichess':
+      case 'atomic':
+      case 'horde':
+      case 'crazyhouse':
+        return this.makeUrl(`/analyse/variant/${this.rules}/fen/`, legalFen)
+    }
+  }
+
+  private makeUrl(baseUrl: string, fen: string): string {
+    return baseUrl + encodeURIComponent(fen)
+  }
+
+  public loadNewFen = (newFen: string): void => {
+    this.setFen(newFen)
+  }
+
+  public goToAnalyse = (): void => {
+    const state = this.getState()
+    if (state.legalFen) {
+      router.set(this.makeAnalysisUrl(state.legalFen))
+    }
+  }
+
+  public continueFromHere = (): void => {
+    const state = this.getState()
+    if (state.legalFen && state.playable) {
+      this.continuePopup.open(state.legalFen, 'standard')
+    } else {
+      Plugins.LiToast.show({ text: i18n('invalidFen'), duration: 'short' })
+    }
+  }
+
+  setFen(fen: string): boolean {
+    return parseFen(fen).unwrap(setup => {
+      if (this.chessground) {
+        this.chessground.set({fen})
+      }
+      this.pockets = setup.pockets
+      this.turn = setup.turn
+      this.unmovedRooks = setup.unmovedRooks
+      this.epSquare = setup.epSquare
+      this.remainingChecks = setup.remainingChecks
+      this.halfmoves = setup.halfmoves
+      this.fullmoves = setup.fullmoves
+
+      const castles = Castles.fromSetup(setup)
+      this.castlingToggles['K'] = castles.rook.white.h !== undefined
+      this.castlingToggles['Q'] = castles.rook.white.a !== undefined
+      this.castlingToggles['k'] = castles.rook.black.h !== undefined
+      this.castlingToggles['q'] = castles.rook.black.a !== undefined
+
+      this.onChange()
+      return true
+    }, () => false)
+  }
+
+  setRules(rules: Rules): void {
+    this.rules = rules
+    if (rules != 'crazyhouse') this.pockets = undefined
+  else if (!this.pockets) this.pockets = Material.empty()
+    if (rules != '3check') this.remainingChecks = undefined
+  else if (!this.remainingChecks) this.remainingChecks = RemainingChecks.default()
+    this.onChange()
   }
 }

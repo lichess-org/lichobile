@@ -113,10 +113,10 @@ export default class StockfishClient {
   private search = async () => {
     const work = this.startQueue.pop()
     if (work) {
+      this.work = work
+      this.curEval = undefined
       this.stopped = false
       this.startQueue = []
-      this.curEval = undefined
-      this.work = work
       this.ready = defer()
 
       if (window.lichess.buildConfig.NNUE) {

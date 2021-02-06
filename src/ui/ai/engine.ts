@@ -1,23 +1,24 @@
 import { Capacitor } from '@capacitor/core'
 import { AiRoundInterface } from '../shared/round'
-import { StockfishWrapper, getNbCores, getMaxMemory } from '../../stockfish'
+import { StockfishPlugin, getNbCores, getMaxMemory } from '../../stockfish'
 
 export default class Engine {
   private level = 1
-  private stockfish: StockfishWrapper
+  private stockfish: StockfishPlugin
   private isInit = false
   private listener: (e: Event) => void
 
   constructor(readonly ctrl: AiRoundInterface, readonly variant: VariantKey) {
     this.listener = (e: Event) => {
       const line = (e as any).output
+      console.debug('[stockfish >>] ' + line)
       const bmMatch = line.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/)
       if (bmMatch) {
         if (bmMatch[1]) this.ctrl.onEngineMove(bmMatch[1])
         else if (bmMatch[2]) this.ctrl.onEngineDrop(bmMatch[2])
       }
     }
-    this.stockfish = new StockfishWrapper(variant)
+    this.stockfish = new StockfishPlugin(variant)
   }
 
   public async init(): Promise<void> {

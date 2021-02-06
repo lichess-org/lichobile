@@ -1,22 +1,21 @@
 import { Capacitor, Plugins } from '@capacitor/core'
 import { VariantKey } from './lichess/interfaces/variant'
 
-export interface StockfishPlugin {
+interface IStockfishPlugin {
   getMaxMemory(): Promise<{ value: number }>
   start(): Promise<void>
   cmd(options: { cmd: string }): Promise<void>
   exit(): Promise<void>
 }
+const CapacitorStockfishVariants = Plugins.StockfishVariants as IStockfishPlugin
+const CapacitorStockfish = Plugins.Stockfish as IStockfishPlugin
 
-const StockfishVariantsPlugin = Plugins.StockfishVariants as StockfishPlugin
-const StockfishPlugin = Plugins.Stockfish as StockfishPlugin
-
-export class StockfishWrapper {
-  private plugin: StockfishPlugin
+export class StockfishPlugin {
+  private plugin: IStockfishPlugin
 
   constructor(readonly variant: VariantKey) {
     this.plugin = Capacitor.platform === 'android' && !this.isVariant() ?
-      StockfishPlugin : StockfishVariantsPlugin
+      CapacitorStockfish : CapacitorStockfishVariants
   }
 
   public async start(): Promise<{ engineName: string }> {

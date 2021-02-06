@@ -28,13 +28,12 @@ export default class Engine {
         this.isInit = true
         window.addEventListener('stockfish', this.listener, { passive: true })
         await this.stockfish.setVariant()
-        await this.stockfish.setOption('UCI_AnalyseMode', false)
-        await this.stockfish.setOption('UCI_LimitStrength', true)
         await this.stockfish.setOption('Threads', getNbCores())
         const mem = await getMaxMemory()
         if (Capacitor.platform !== 'web') {
           await this.stockfish.setOption('Hash', mem)
         }
+        await this.newGame()
       }
     } catch (e) {
       console.error(e)
@@ -42,7 +41,10 @@ export default class Engine {
   }
 
   public async newGame(): Promise<void> {
+    // from UCI protocol spec, the client should always send isready after
+    // ucinewgame
     await this.stockfish.send('ucinewgame')
+    await this.stockfish.isReady()
     await this.stockfish.setOption('UCI_AnalyseMode', false)
     await this.stockfish.setOption('UCI_LimitStrength', true)
   }

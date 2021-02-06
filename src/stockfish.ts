@@ -38,6 +38,20 @@ export class StockfishPlugin {
     })
   }
 
+  public isReady(): Promise<void> {
+    return new Promise((resolve) => {
+      const listener = (e: Event) => {
+        const line = (e as any).output
+        if (line.startsWith('readyok')) {
+          window.removeEventListener('stockfish', listener, false)
+          resolve()
+        }
+      }
+      window.addEventListener('stockfish', listener, { passive: true })
+      this.send('isready')
+    })
+  }
+
   public send(text: string): Promise<void> {
     console.debug('[stockfish <<] ' + text)
     return this.plugin.cmd({ cmd: text })

@@ -1,6 +1,6 @@
 import h from "mithril/hyperscript"
 import { fromNow } from "~/i18n"
-import { ontap } from "~/ui/helper"
+import { ontapY } from "~/ui/helper"
 import { userStatus } from "~/ui/shared/common"
 import MsgCtrl from "../ctrl"
 import { Contact, LastMsg } from "../interfaces"
@@ -11,7 +11,7 @@ export default function renderContact(ctrl: MsgCtrl, contact: Contact, active?: 
   return h('div.msg-app__side__contact', {
     key: `${user.id}${active === user.id ? '-active' : ''}`,
     className: active === user.id ? 'active' : '',
-    oncreate: ontap(() => ctrl.openConvo(user.id))
+    oncreate: ontapY(() => ctrl.openConvo(user.id))
   }, [
     h('div.msg-app__side__contact__user', [
       h('div.msg-app__side__contact__head', [

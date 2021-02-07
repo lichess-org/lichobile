@@ -1,7 +1,7 @@
 import throttle from "lodash-es/throttle"
 import h from "mithril/hyperscript"
 import i18n from "~/i18n"
-import { ontap } from "~/ui/helper"
+import { ontapY } from "~/ui/helper"
 import { userStatus } from "~/ui/shared/common"
 import MsgCtrl from "../ctrl"
 import { SearchResult, User } from "../interfaces"
@@ -39,7 +39,7 @@ export function renderResults(ctrl: MsgCtrl, res: SearchResult): Mithril.Vnode {
 function renderUser(ctrl: MsgCtrl, user: User): Mithril.Vnode {
   return h('div.msg-app__side__contact', {
     key: user.id,
-    oncreate: ontap(() => ctrl.openConvo(user.id))
+    oncreate: ontapY(() => ctrl.openConvo(user.id))
   }, [
     h('div.msg-app__side__contact__user', [
       h('div.msg-app__side__contact__head', [

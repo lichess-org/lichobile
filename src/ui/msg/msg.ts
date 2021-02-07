@@ -6,8 +6,8 @@ import { viewFadeIn } from "../helper"
 import layout from "../layout"
 import { dropShadowHeader } from "../shared/common"
 import MsgCtrl from "./ctrl"
-import renderInbox from "./msg/main"
-import renderOverlay from "./msg/overlay"
+import renderInbox from "./view/main"
+import renderOverlay from "./view/overlay"
 import { loadContacts, loadConvo } from "./network"
 
 type Attrs = Record<string, never>

@@ -4,7 +4,7 @@ import redraw from '~/utils/redraw'
 import * as network from './network'
 import { hasNetwork } from '~/utils'
 import router from '~/router'
-import { scroller } from './msg/scroller'
+import { scroller } from './view/scroller'
 
 export default class MsgCtrl {
   data: MsgData

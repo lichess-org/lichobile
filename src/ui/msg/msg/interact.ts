@@ -29,7 +29,7 @@ export default function renderInteract(ctrl: MsgCtrl, user: User): Mithril.Vnode
   }, [
     renderTextarea(ctrl, user),
     h('button.msg-app__convo__post__submit.button.fa.fa-telegram', {
-      class: connected ? 'connected' : '',
+      className: connected ? 'connected' : '',
       type: 'submit',
       disabled: !connected
     })

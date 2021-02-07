@@ -20,7 +20,7 @@ export default function renderContact(ctrl: MsgCtrl, contact: Contact, active?: 
       ]),
       h('div.msg-app__side__contact__body', [
         h('div.msg-app__side__contact__msg', {
-          class: isNew ? 'msg-app__side__contact__msg--new' : '',
+          className: isNew ? 'msg-app__side__contact__msg--new' : '',
         }, msg.text),
         isNew ? h('i.msg-app__side__contact__new', {
           'data-icon': ''

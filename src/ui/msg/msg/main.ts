@@ -9,7 +9,7 @@ export default function renderInbox(ctrl?: MsgCtrl): Mithril.Vnode {
   if (ctrl) {
     const activeId = ctrl.data.convo?.user.id
     return h('main.box.msg-app', {
-      class: `pane-${ctrl.pane}`
+      className: `pane-${ctrl.pane}`
     }, [
       h('div.msg-app__side', [
         search.renderInput(ctrl),

@@ -392,7 +392,7 @@ function createChat(
     url,
     opts
   }
-  setupConnection(setup, socketHandlers);
+  setupConnection(setup, socketHandlers)
   return socketIfaceFactory(url)
 }
 

@@ -1,44 +1,44 @@
-import MsgCtrl from './ctrl';
-import { MsgData, Contact, User, Msg, Convo, SearchResult } from './interfaces';
-import { fetchJSON } from '~/http';
-import socket, { MessageHandlers, SocketIFace } from '~/socket';
+import MsgCtrl from './ctrl'
+import { MsgData, Contact, User, Msg, Convo, SearchResult } from './interfaces'
+import { fetchJSON } from '~/http'
+import socket, { MessageHandlers, SocketIFace } from '~/socket'
 
 const v5Opts = {headers: {'Accept': 'application/vnd.lichess.v5+json'}}
 
 export async function loadConvo(userId: string): Promise<MsgData> {
-  const d = await fetchJSON(`/inbox/${userId}`, v5Opts);
-  return upgradeData(d);
+  const d = await fetchJSON(`/inbox/${userId}`, v5Opts)
+  return upgradeData(d)
 }
 
 export async function getMore(userId: string, before: Date): Promise<MsgData> {
-  const d = await fetchJSON(`/inbox/${userId}?before=${before.getTime()}`, v5Opts);
-  return upgradeData(d);
+  const d = await fetchJSON(`/inbox/${userId}?before=${before.getTime()}`, v5Opts)
+  return upgradeData(d)
 }
 
 export async function loadContacts(): Promise<MsgData> {
-  const d = await fetchJSON(`/inbox`, v5Opts);
-  return upgradeData(d);
+  const d = await fetchJSON(`/inbox`, v5Opts)
+  return upgradeData(d)
 }
 
 export async function search(q: string): Promise<SearchResult> {
-  const res = await fetchJSON<SearchResult>(`/inbox/search?q=${q}`, v5Opts);
+  const res = await fetchJSON<SearchResult>(`/inbox/search?q=${q}`, v5Opts)
   return ({
     ...res,
     contacts: res.contacts.map(upgradeContact)
-  });
+  })
 }
 
 export function block(u: string): Promise<any> {
-  return fetchJSON(`/rel/block/${u}`, { ...v5Opts, method: 'POST' });
+  return fetchJSON(`/rel/block/${u}`, { ...v5Opts, method: 'POST' })
 }
 
 export function unblock(u: string): Promise<any> {
-  return fetchJSON(`/rel/unblock/${u}`, { ...v5Opts, method: 'POST' });
+  return fetchJSON(`/rel/unblock/${u}`, { ...v5Opts, method: 'POST' })
 }
 
 export async function del(u: string): Promise<MsgData> {
   return fetchJSON(`/inbox/${u}/delete`, { ...v5Opts, method: 'POST' })
-    .then(upgradeData);
+    .then(upgradeData)
 }
 
 export function unreadCount(): Promise<number> {
@@ -72,7 +72,7 @@ export function socketMessageHandlers(ctrl: MsgCtrl): MessageHandlers {
       ctrl.receive({
         ...upgradeMsg(msg),
         read: false
-      });
+      })
     },
     msgType: ctrl.receiveTyping,
     blockedBy: ctrl.changeBlockBy,
@@ -85,31 +85,31 @@ export function upgradeData(d: any): MsgData {
     ...d,
     convo: d.convo && upgradeConvo(d.convo),
     contacts: d.contacts.map(upgradeContact)
-  };
+  }
 }
 function upgradeMsg(m: any): Msg {
   return {
     ...m,
     date: new Date(m.date)
-  };
+  }
 }
 function upgradeUser(u: any): User {
   return {
     ...u,
     id: u.name.toLowerCase()
-  };
+  }
 }
 function upgradeContact(c: any): Contact {
   return {
     ...c,
     user: upgradeUser(c.user),
     lastMsg: upgradeMsg(c.lastMsg)
-  };
+  }
 }
 function upgradeConvo(c: any): Convo {
   return {
     ...c,
     user: upgradeUser(c.user),
     msgs: c.msgs.map(upgradeMsg)
-  };
+  }
 }

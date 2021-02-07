@@ -61,4 +61,4 @@ export interface Typing {
   timeout: number;
 }
 
-export type Pane = 'side' | 'convo';
+export type Pane = 'side' | 'convo'

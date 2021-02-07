@@ -1,13 +1,13 @@
-import h from "mithril/hyperscript";
-import spinner from "~/spinner";
-import MsgCtrl from "../ctrl";
-import renderContact from "./contact";
-import renderConvo from "./convo";
-import * as search from "./search";
+import h from "mithril/hyperscript"
+import spinner from "~/spinner"
+import MsgCtrl from "../ctrl"
+import renderContact from "./contact"
+import renderConvo from "./convo"
+import * as search from "./search"
 
 export default function renderInbox(ctrl?: MsgCtrl): Mithril.Vnode {
   if (ctrl) {
-    const activeId = ctrl.data.convo?.user.id;
+    const activeId = ctrl.data.convo?.user.id
     return h('main.box.msg-app', {
       class: `pane-${ctrl.pane}`
     }, [
@@ -26,7 +26,7 @@ export default function renderInbox(ctrl?: MsgCtrl): Mithril.Vnode {
             spinner.getVdom(),
           ]) : ''
       )
-    ]);
+    ])
   } else {
     return spinner.getVdom()
   }

@@ -1,13 +1,13 @@
-import h from "mithril/hyperscript";
-import { fromNow } from "~/i18n";
-import { ontap } from "~/ui/helper";
-import { userStatus } from "~/ui/shared/common";
-import MsgCtrl from "../ctrl";
-import { Contact, LastMsg } from "../interfaces";
+import h from "mithril/hyperscript"
+import { fromNow } from "~/i18n"
+import { ontap } from "~/ui/helper"
+import { userStatus } from "~/ui/shared/common"
+import MsgCtrl from "../ctrl"
+import { Contact, LastMsg } from "../interfaces"
 
 export default function renderContact(ctrl: MsgCtrl, contact: Contact, active?: string): Mithril.Vnode {
   const user = contact.user, msg = contact.lastMsg,
-    isNew = !msg.read && msg.user != ctrl.data.me.id;
+    isNew = !msg.read && msg.user != ctrl.data.me.id
   return h('div.msg-app__side__contact', {
     key: `${user.id}${active === user.id ? '-active' : ''}`,
     className: active === user.id ? 'active' : '',
@@ -27,7 +27,7 @@ export default function renderContact(ctrl: MsgCtrl, contact: Contact, active?: 
         }) : null
       ])
     ])
-  ]);
+  ])
 }
 
 function renderDate(msg: LastMsg): Mithril.Vnode {
@@ -35,5 +35,5 @@ function renderDate(msg: LastMsg): Mithril.Vnode {
     key: msg.date.getTime(),
     title: msg.date.toLocaleString(),
     datetime: msg.date.getTime()
-  }, fromNow(msg.date));
+  }, fromNow(msg.date))
 }

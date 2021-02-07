@@ -1,13 +1,13 @@
-import { Plugins } from "@capacitor/core";
-import throttle from "lodash-es/throttle";
-import h from "mithril/hyperscript";
-import MsgCtrl from "../ctrl";
-import { User } from "../interfaces";
+import { Plugins } from "@capacitor/core"
+import throttle from "lodash-es/throttle"
+import h from "mithril/hyperscript"
+import MsgCtrl from "../ctrl"
+import { User } from "../interfaces"
 
 let prev = 0
 
 export default function renderInteract(ctrl: MsgCtrl, user: User): Mithril.Vnode {
-  const connected = ctrl.connected();
+  const connected = ctrl.connected()
   return h('form.msg-app__convo__post', {
     onsubmit: (e: Event) => {
       e.preventDefault()
@@ -33,7 +33,7 @@ export default function renderInteract(ctrl: MsgCtrl, user: User): Mithril.Vnode
       type: 'submit',
       disabled: !connected
     })
-  ]);
+  ])
 }
 
 function renderTextarea(ctrl: MsgCtrl, user: User): Mithril.Vnode {
@@ -42,8 +42,8 @@ function renderTextarea(ctrl: MsgCtrl, user: User): Mithril.Vnode {
     oncreate: vnode => {
       const area = vnode.dom as HTMLTextAreaElement
       area.addEventListener('input', throttle(() => {
-        ctrl.sendTyping(user.id);
-      }, 500));
+        ctrl.sendTyping(user.id)
+      }, 500))
     }
-  });
+  })
 }

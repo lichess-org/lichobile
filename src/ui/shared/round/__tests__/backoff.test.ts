@@ -52,7 +52,7 @@ describe('backoff', () => {
       expect(mockCallback).toHaveBeenCalledTimes(index + 1)
       jest.advanceTimersByTime(150)
       expect(mockCallback).toHaveBeenCalledTimes(index + 2)
-    });
+    })
   })
 
   test('works with arrow functions', () => {

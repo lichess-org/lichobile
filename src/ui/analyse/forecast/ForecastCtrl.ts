@@ -10,7 +10,7 @@ type SanMap = Map<string, ForecastStep[]>
 function linesToSanMap(lines: ForecastStep[][]): SanMap {
   return lines.reduce((map, line) => {
     return map.set(keyOf(line), line)
-  }, new Map());
+  }, new Map())
 }
 
 export function keyOf(fc: MinimalForecastStep[]): string {
@@ -168,7 +168,7 @@ export default class ForecastCtrl {
   }
 
   toggleMinimized(): void {
-    this._minimized = !(this._minimized);
+    this._minimized = !(this._minimized)
   }
 
   get minimized(): boolean {

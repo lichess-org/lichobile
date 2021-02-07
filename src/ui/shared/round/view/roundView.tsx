@@ -456,6 +456,7 @@ function renderGameRunningActions(ctrl: OnlineRound) {
   ] : [
     gameButton.toggleZen(ctrl),
     gameButton.analysisBoard(ctrl),
+    gameButton.notes(ctrl),
     gameButton.moretime(ctrl),
     gameButton.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort'),
   ].concat(
@@ -517,6 +518,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
       buttons = [
         shareActions,
         gameButton.analysisBoard(ctrl),
+        gameButton.notes(ctrl),
         gameButton.newOpponent(ctrl),
         gameButton.rematch(ctrl),
       ]
@@ -561,7 +563,7 @@ function renderGameActionsBar(ctrl: OnlineRound) {
   const gmClass = (ctrl.data.opponent.proposingTakeback ? [
     'fa',
     'fa-mail-reply'
-  ] : [
+  ] : ctrl.data.opponent.offeringDraw ? [] : [
     'fa',
     'fa-list'
   ]).concat([
@@ -569,14 +571,11 @@ function renderGameActionsBar(ctrl: OnlineRound) {
     answerRequired ? 'glow' : ''
   ]).join(' ')
 
-  const gmDataIcon = ctrl.data.opponent.offeringDraw ? '2' : null
-  const gmButton = gmDataIcon ?
-    <button className={gmClass} data-icon={gmDataIcon} oncreate={helper.ontap(ctrl.showActions)} /> :
-    <button className={gmClass} oncreate={helper.ontap(ctrl.showActions)} />
-
   return (
     <section className="actions_bar">
-      {gmButton}
+      <button className={gmClass} oncreate={helper.ontap(ctrl.showActions)}>
+        {ctrl.data.opponent.offeringDraw ? '½' : ''}
+      </button>
       {ctrl.chat && !ctrl.isZen() ?
         <button className="action_bar_button fa fa-comments withChip"
           oncreate={helper.ontap(ctrl.chat.open)}
@@ -587,12 +586,24 @@ function renderGameActionsBar(ctrl: OnlineRound) {
           </span> : null
          }
         </button> : null
-      }
-      {ctrl.notes ? gameButton.notes(ctrl) : null}
+     }
+      {gameApi.forecastable(ctrl.data) ? renderAnalysisIcon(ctrl) : null}
       {gameButton.flipBoard(ctrl)}
       {gameApi.playable(ctrl.data) ? null : gameButton.analysisBoardIconOnly(ctrl)}
       {gameButton.backward(ctrl)}
       {gameButton.forward(ctrl)}
     </section>
+  )
+}
+
+function renderAnalysisIcon(ctrl: OnlineRound): Mithril.Vnode {
+  return h(
+    'button.action_bar_button[data-icon=A].withChip',
+    {
+      oncreate: helper.ontap(ctrl.goToAnalysis)
+    },
+    (ctrl.data.forecastCount || 0) > 0
+      ? h('span.chip', ctrl.data.forecastCount)
+      : null
   )
 }

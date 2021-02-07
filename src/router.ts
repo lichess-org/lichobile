@@ -33,7 +33,7 @@ export function withRouter(f: (r: Rlite.Rlite) => void): void {
   f(router)
 }
 
-export function onRouteMatch<T>(component: Mithril.Component<any, any>, params: T): void {
+export function onRouteMatch<T>(component: Mithril.Component, params: T): void {
 
   const RouteComponent = {view() {
     return Vnode(component, undefined, params)
@@ -65,13 +65,13 @@ export function processQuerystring(e?: PopStateEvent): void {
     }
     currentStateId = e.state.id
   }
-  previousPath = get()
+  previousPath = getPath()
   const qs = window.location.search || '?='
   const matched = router.run(qs.slice(2))
   if (!matched) router.run('/')
 }
 
-function assignState(state?: { [k: string]: any }, path?: string) {
+function assignState(state?: { [k: string]: unknown }, path?: string): void {
   // try catch to avoid ios 9 100th pushState call DOM error
   // see https://forums.developer.apple.com/thread/36650
   // and https://bugs.webkit.org/show_bug.cgi?id=156115
@@ -89,18 +89,38 @@ function assignState(state?: { [k: string]: any }, path?: string) {
   } catch (e) { console.error(e) }
 }
 
-function replacePath(path: string) {
+function replacePath(path: string): void {
   assignState(undefined, path)
 }
 
-function setQueryParams(params: StringMap, newState = false) {
+function setQueryParams(params: Record<string, string>, newState = false): void {
   const path = (window.location.search || '?=/').substring(2).replace(/\?.+$/, '')
   const newPath = path + `?${serializeQueryParameters(params)}`
   if (newState) {
-    set(newPath, true)
+    setPath(newPath, true)
   } else {
     replacePath(newPath)
   }
+}
+
+function deleteQueryParam(name: string, newState = false): void {
+  const params = getQueryParams()
+  if (params) {
+    delete params[name]
+    setQueryParams(params, newState)
+  }
+}
+
+function getQueryParams(): Record<string, string> {
+  const path = getPath()
+  const match = path.match(/\?.+$/)
+  const params: Record<string, string> = {}
+  if (match && match[0]) {
+    for (const [k, v] of new URLSearchParams(match[0])) {
+      params[k] = v
+    }
+  }
+  return params
 }
 
 const backbutton: Backbutton = (() => {
@@ -116,10 +136,10 @@ const backbutton: Backbutton = (() => {
     if (isFunction(b)) {
       b('backbutton')
       redraw()
-    } else if (!/^\/$/.test(get())) {
+    } else if (!/^\/$/.test(getPath())) {
       // if playing a game as anon ask for confirmation because there is no way
       // back!
-      if (/^\/game\/[a-zA-Z0-9]{12}/.test(get()) && !session.isConnected()) {
+      if (/^\/game\/[a-zA-Z0-9]{12}/.test(getPath()) && !session.isConnected()) {
         Plugins.Modals.confirm({
           title: 'Confirmation',
           message: 'Do you really want to leave the game? You can\'t go back to it after.',
@@ -145,7 +165,7 @@ const backbutton: Backbutton = (() => {
 function doSet(path: string, replace = false) {
   // reset backbutton stack when changing route
   backbutton.stack = []
-  previousPath = get()
+  previousPath = getPath()
   if (replace) {
     replacePath(path)
   } else {
@@ -164,11 +184,11 @@ function doSet(path: string, replace = false) {
 // otherwise it makes mithril create another root component on top of the
 // existing one
 // making router.set async makes it safe everywhere
-function set(path: string, replace = false): void {
+function setPath(path: string, replace = false): void {
   setTimeout(() => doSet(path, replace), 0)
 }
 
-function get(): string {
+function getPath(): string {
   const path = window.location.search || '?=/'
   return decodeURIComponent(path.substring(2))
 }
@@ -178,13 +198,15 @@ function backHistory(): void {
 }
 
 export default {
-  get,
-  set,
+  get: getPath,
+  set: setPath,
   reload(): void {
-    set(get(), true)
+    setPath(getPath(), true)
   },
   replacePath,
   setQueryParams,
+  getQueryParams,
+  deleteQueryParam,
   assignState,
   backHistory,
   getViewSlideDirection(): string {

@@ -18,7 +18,7 @@ jest.mock('../config', () => testConfig)
 
 import * as http from '../http'
 
-process.on('unhandledRejection', (_error: any) => {
+process.on('unhandledRejection', () => {
   // catch all unhandled rejection here to avoid node warning
 })
 

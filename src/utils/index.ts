@@ -8,12 +8,16 @@ import { TournamentClock } from '../lichess/interfaces/tournament'
 
 let sri: string
 
-export function currentSri() {
+export function currentSri(): string {
   return sri || newSri()
 }
 
-export function newSri() {
-  sri = Math.random().toString(36).substring(2).slice(0, 10)
+// Unique id for the current websocket connection. Should be different after
+// each websocket reconnection. Should be unpredictable and secret while
+// in use.
+export function newSri(): string {
+  const data = window.crypto.getRandomValues(new Uint8Array(9))
+  sri = btoa(String.fromCharCode(...data)).replace(/[/+]/g, '_')
   return sri
 }
 
@@ -137,7 +141,7 @@ export function handleXhrError(error: ErrorResponse): void {
   Plugins.LiToast.show({ text: message, duration: 'short' })
 }
 
-export function serializeQueryParameters(obj: StringMap): string {
+export function serializeQueryParameters(obj: Record<string, string>): string {
   let str = ''
   const keys = Object.keys(obj)
   keys.forEach(key => {
@@ -152,7 +156,7 @@ export function serializeQueryParameters(obj: StringMap): string {
   return str
 }
 
-export function noop() { /* noop */ }
+export function noop(): void { /* noop */ }
 
 const perfIconsMap: {[index: string]: string} = {
   bullet: 'T',
@@ -263,7 +267,7 @@ export function formatTournamentTimeControl(clock: TournamentClock): string {
   }
 }
 
-export function noNull<T>(v: T) {
+export function noNull<T>(v: T): boolean {
   return v !== undefined && v !== null
 }
 
@@ -271,7 +275,7 @@ export function flatten<T>(arr: T[][]): T[] {
   return arr.reduce((a: T[], b: T[]) => a.concat(b), [])
 }
 
-export function lichessAssetSrc(path: string) {
+export function lichessAssetSrc(path: string): string {
   return `${globalConfig.apiEndPoint}/assets/${path}`
 }
 

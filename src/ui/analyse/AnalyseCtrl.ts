@@ -42,6 +42,7 @@ import { make as makeEvalCache, EvalCache } from './evalCache'
 import { Source } from './interfaces'
 import * as tabs from './tabs'
 import StudyCtrl from './study/StudyCtrl'
+import ForecastCtrl from './forecast/ForecastCtrl'
 
 export default class AnalyseCtrl {
 
@@ -58,6 +59,7 @@ export default class AnalyseCtrl {
   tree: TreeWrapper
   evalCache: EvalCache
   study?: StudyCtrl
+  forecast?: ForecastCtrl
 
   socket: SocketIFace
 
@@ -100,8 +102,8 @@ export default class AnalyseCtrl {
     this.synthetic = util.isSynthetic(data)
     this.ongoing = !this.synthetic && gameApi.playable(data)
     this.initialPath = treePath.root
-
     this.study = studyData !== undefined ? new StudyCtrl(studyData, this) : undefined
+    this.forecast = data.forecast ? new ForecastCtrl(data) : undefined
 
     this._currentTabIndex = (!this.study || this.study.data.chapter.tags.length === 0) && this.synthetic ? 0 : 1
 
@@ -181,6 +183,13 @@ export default class AnalyseCtrl {
       this.socket = socket.createAnalysis(socketHandler(this))
     }
 
+    // forecast mode: reload when opponent moves
+    if (!this.synthetic) {
+      setTimeout(() => {
+        this.socket.send('startWatching', this.data.game.id)
+      }, 1000)
+    }
+
     this.evalCache = makeEvalCache({
       variant: this.data.game.variant.key,
       canGet: this.canEvalGet,
@@ -193,8 +202,8 @@ export default class AnalyseCtrl {
 
     if (tabId) {
       const curTabIndex = this.currentTabIndex(this.availableTabs())
-      const newTabIndex = this.availableTabs().map((tab: tabs.Tab) => tab.id === tabId).reduce((acc: number, match: boolean, index: number) => match ? index : acc, curTabIndex)
-      if (newTabIndex) {
+      const newTabIndex = this.availableTabs().findIndex(tab => tab.id === tabId)
+      if (newTabIndex >= 0 && curTabIndex !== newTabIndex) {
         this.onTabChange(newTabIndex)
       }
     }

@@ -1,6 +1,6 @@
 {
     "name": "lichobile",
-    "version": "7.7.1",
+    "version": "7.7.2",
     "description": "lichess.org mobile application",
     "repository": {
         "type": "git",
@@ -59,7 +59,7 @@
         "capacitor-sound-effect": "git+https://github.com/veloce/capacitor-sound-effect.git",
         "capacitor-stockfish": "git+https://github.com/veloce/capacitor-stockfish.git",
         "capacitor-stockfish-variants": "git+https://github.com/veloce/capacitor-stockfish.git#variants",
-        "chessops": "0.7.3",
+        "chessops": "0.8.1",
         "cordova-plugin-fullscreen": "1.2.0",
         "d3-axis": "1.0.8",
         "d3-scale": "1.0.6",

@@ -1,12 +1,13 @@
+import h from 'mithril/hyperscript'
 import i18n from '../../i18n'
 import popupWidget from '../shared/popup'
 import router from '../../router'
-import h from 'mithril/hyperscript'
-import EditorCtrl, { MenuInterface } from './EditorCtrl'
+import EditorCtrl from './EditorCtrl'
+import { MenuInterface } from './menu'
 
 export default {
 
-  controller: function(root: EditorCtrl) {
+  controller(root: EditorCtrl): MenuInterface {
     let isOpen = false
 
     function open() {
@@ -29,7 +30,7 @@ export default {
     }
   },
 
-  view: function(ctrl: MenuInterface) {
+  view(ctrl: MenuInterface): Mithril.Children {
     return popupWidget(
       'pasteFenPopup',
       undefined,

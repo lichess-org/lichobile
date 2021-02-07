@@ -6,7 +6,7 @@ const SLEEP_DELAY = 45 * 60 * 1000
 let sleepAgainTimeoutId: number
 let cancelTimer: (() => void) | undefined
 
-export function keepAwake() {
+export function keepAwake(): void {
   Plugins.KeepAwake.keepAwake()
   if (cancelTimer !== undefined) {
     cancelTimer()
@@ -24,7 +24,7 @@ export function keepAwake() {
   )
 }
 
-export function allowSleepAgain() {
+export function allowSleepAgain(): void {
   if (cancelTimer !== undefined) {
     cancelTimer()
     cancelTimer = undefined
@@ -36,7 +36,7 @@ function idleTimer(delay: number, onIdle: () => void, onWakeUp: () => void): () 
   const events = ['touchstart']
   let listening = false
   let active = true
-  let lastSeenActive = Date.now()
+  let lastSeenActive = performance.now()
   let intervalID: number | undefined = undefined
   const onActivity = () => {
     if (!active) {
@@ -44,7 +44,7 @@ function idleTimer(delay: number, onIdle: () => void, onWakeUp: () => void): () 
       onWakeUp()
     }
     active = true
-    lastSeenActive = Date.now()
+    lastSeenActive = performance.now()
     stopListening()
   }
   const startListening = () => {
@@ -68,7 +68,7 @@ function idleTimer(delay: number, onIdle: () => void, onWakeUp: () => void): () 
     stopListening()
   }
   intervalID = setInterval(() => {
-    if (active && Date.now() - lastSeenActive > delay) {
+    if (active && performance.now() - lastSeenActive > delay) {
       // console.log('Idle mode')
       onIdle()
       active = false

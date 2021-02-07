@@ -8,6 +8,7 @@ import { FeaturedGame } from './interfaces'
 import { UserGame } from './interfaces/user'
 import { GameData, OnlineGameData, Player } from './interfaces/game'
 import { AnalyseData, OnlineAnalyseData } from './interfaces/analyse'
+import { isSynthetic } from '~/ui/analyse/util'
 
 export const analysableVariants = ['standard', 'crazyhouse', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'antichess', 'horde', 'racingKings']
 
@@ -175,4 +176,8 @@ export function publicAnalyseUrl(data: AnalyseData) {
 
 export function isSupportedVariant(data: GameData) {
   return settings.game.supportedVariants.indexOf(data.game.variant.key) !== -1
+}
+
+export function forecastable(data: GameData | AnalyseData): boolean {
+  return playable(data) && !isSynthetic(data) && data.game.speed === 'correspondence'
 }

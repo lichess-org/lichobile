@@ -1,29 +1,34 @@
 export const emptyFen = '8/8/8/8/8/8/8/8 w - - 0 1'
 
-export function readFen(fen: string) {
-  const parts = fen.split(' ')
-  return {
-    color: parts[1],
-    castles: {
-      K: parts[2].includes('K'),
-      Q: parts[2].includes('Q'),
-      k: parts[2].includes('k'),
-      q: parts[2].includes('q')
-    },
-    enpassant: parts[3],
-    halfmove: Number(parts[4]),
-    moves: Number(parts[5])
+export function positionLooksLegit(fen: string): boolean {
+  const pieces = fen.split(' ')[0]
+  return (pieces.match(/k/g) || []).length === 1 && (pieces.match(/K/g) || []).length === 1
+}
+
+export function playerFromFen(fen?: string): Color {
+  if (fen) {
+    const { color } = readFen(fen)
+
+    return color === 'w' ? 'white' : 'black'
   }
+
+  return 'white'
 }
 
-// clean a FEN string from a lichess.org URI path.
-export function cleanFenUri(fenUri: string): string {
-  let fen = fenUri.replace(/_/g, ' ')
-  if (fen[0] === '/') fen = fen.substring(1)
-  return fen
+export function plyFromFen(fen?: string): number {
+  if (fen) {
+    const { color, moves } = readFen(fen)
+    return moves * 2 - (color === 'w' ? 2 : 1)
+  }
+
+  return 0
 }
 
-export function validateFen(fen: string, variant: VariantKey = 'standard') {
+export function colorOf(fen: string): Color {
+  return fen.split(' ')[1] === 'w' ? 'white' : 'black'
+}
+
+export function validateFen(fen: string, variant: VariantKey = 'standard'): boolean {
   const tokens = fen.split(/\s+/)
   const rows = tokens[0].split('/')
 
@@ -170,31 +175,19 @@ function validateTokens(tokens: string[]): boolean {
   return true
 }
 
-
-export function positionLooksLegit(fen: string) {
-  const pieces = fen.split(' ')[0]
-  return (pieces.match(/k/g) || []).length === 1 && (pieces.match(/K/g) || []).length === 1
-}
-
-export function playerFromFen(fen?: string): Color {
-  if (fen) {
-    const { color } = readFen(fen)
-
-    return color === 'w' ? 'white' : 'black'
+function readFen(fen: string) {
+  const parts = fen.split(' ')
+  return {
+    color: parts[1],
+    castles: {
+      K: parts[2].includes('K'),
+      Q: parts[2].includes('Q'),
+      k: parts[2].includes('k'),
+      q: parts[2].includes('q')
+    },
+    enpassant: parts[3],
+    halfmove: Number(parts[4]),
+    moves: Number(parts[5])
   }
-
-  return 'white'
 }
 
-export function plyFromFen(fen?: string) {
-  if (fen) {
-    const { color, moves } = readFen(fen)
-    return moves * 2 - (color === 'w' ? 2 : 1)
-  }
-
-  return 0
-}
-
-export function colorOf(fen: string): Color {
-  return fen.split(' ')[1] === 'w' ? 'white' : 'black'
-}

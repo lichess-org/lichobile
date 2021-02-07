@@ -72,11 +72,11 @@ export default {
   renderCheckbox(
     label: Mithril.Children,
     name: string,
-    settingsProp: Prop<boolean>,
+    prop: Prop<boolean>,
     callback?: (v: boolean) => void,
     disabled?: boolean
-  ) {
-    const isOn = settingsProp()
+  ): Mithril.Child {
+    const isOn = prop()
     return h('div.check_container', {
       className: disabled ? 'disabled' : ''
     }, [
@@ -90,7 +90,7 @@ export default {
         checked: isOn,
         onchange: () => {
           const newVal = !isOn
-          settingsProp(newVal)
+          prop(newVal)
           if (callback) callback(newVal)
           redraw()
         }
@@ -104,7 +104,7 @@ export default {
     prop: Prop<T>,
     wrap = false,
     callback?: (v: T) => void,
-  ) {
+  ): Mithril.Child {
     const selected = prop()
     return h('div.form-multipleChoiceContainer', [
       h('label', label),

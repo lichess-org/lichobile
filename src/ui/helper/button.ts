@@ -71,7 +71,7 @@ export default function ButtonHandler(
     holdTimeoutID = setTimeout(() => onHold(e), HOLD_DURATION)
     if (repeatHandler) repeatTimeoutId = setTimeout(() => {
       batchRequestAnimationFrame(onRepeat)
-    }, 150)
+    }, 500)
   }
 
   function onTouchMove(e: TouchEvent) {
@@ -132,7 +132,7 @@ export default function ButtonHandler(
   function isActive(touch: Touch) {
      const x = touch.clientX,
       y = touch.clientY,
-      b = boundaries;
+      b = boundaries
     let dX = 0,
       dY = 0
     if (scrollX) dX = Math.abs(x - startX)

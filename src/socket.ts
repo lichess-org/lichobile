@@ -544,6 +544,12 @@ export default {
   disconnect() {
     tellWorker(worker, 'disconnect')
   },
+  delayedDisconnect(delay: number) {
+    tellWorker(worker, 'delayedDisconnect', delay)
+  },
+  cancelDelayedDisconnect() {
+    tellWorker(worker, 'cancelDelayedDisconnect')
+  },
   isConnected() {
     return connectedWS
   },

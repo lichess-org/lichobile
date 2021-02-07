@@ -1,46 +1,54 @@
 import { Capacitor, Plugins } from '@capacitor/core'
 import { VariantKey } from './lichess/interfaces/variant'
 
-export interface StockfishPlugin {
+interface IStockfishPlugin {
   getMaxMemory(): Promise<{ value: number }>
   start(): Promise<void>
-  onOutput(callback: (v: { line: string }) => void): void
   cmd(options: { cmd: string }): Promise<void>
   exit(): Promise<void>
 }
+const CapacitorStockfishVariants = Plugins.StockfishVariants as IStockfishPlugin
+const CapacitorStockfish = Plugins.Stockfish as IStockfishPlugin
 
-const StockfishVariantsPlugin = Plugins.StockfishVariants as StockfishPlugin
-const StockfishPlugin = Plugins.Stockfish as StockfishPlugin
-
-export class StockfishWrapper {
-  private plugin: StockfishPlugin
+export class StockfishPlugin {
+  private plugin: IStockfishPlugin
 
   constructor(readonly variant: VariantKey) {
     this.plugin = Capacitor.platform === 'android' && !this.isVariant() ?
-      StockfishPlugin : StockfishVariantsPlugin
-  }
-
-  public onOutput(callback: (line: string) => void): void {
-    this.plugin.onOutput(({ line }) => {
-      console.debug('[stockfish >>] ' + line)
-      callback(line)
-    })
+      CapacitorStockfish : CapacitorStockfishVariants
   }
 
   public async start(): Promise<{ engineName: string }> {
     return new Promise((resolve) => {
       let engineName = 'Stockfish'
-      this.plugin.onOutput(({ line }) => {
+      const listener = (e: Event) => {
+        const line = (e as any).output
         console.debug('[stockfish >>] ' + line)
         if (line.startsWith('id name ')) {
           engineName = line.substring('id name '.length)
         }
         if (line.startsWith('uciok')) {
+          window.removeEventListener('stockfish', listener, false)
           resolve({ engineName })
         }
-      })
+      }
+      window.addEventListener('stockfish', listener, { passive: true })
       this.plugin.start()
       .then(() => this.send('uci'))
+    })
+  }
+
+  public isReady(): Promise<void> {
+    return new Promise((resolve) => {
+      const listener = (e: Event) => {
+        const line = (e as any).output
+        if (line.startsWith('readyok')) {
+          window.removeEventListener('stockfish', listener, false)
+          resolve()
+        }
+      }
+      window.addEventListener('stockfish', listener, { passive: true })
+      this.send('isready')
     })
   }
 
@@ -55,9 +63,7 @@ export class StockfishWrapper {
 
   public setVariant(): Promise<void> {
     if (this.isVariant()) {
-      if (this.variant === 'antichess')
-        return this.setOption('UCI_Variant', 'giveaway')
-      else if (this.variant === 'threeCheck')
+      if (this.variant === 'threeCheck')
         return this.setOption('UCI_Variant', '3check')
       else
         return this.setOption('UCI_Variant', this.variant.toLowerCase())

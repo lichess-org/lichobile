@@ -28,7 +28,7 @@ export default {
 
     return (
       <aside id="side_menu"
-        oncreate={({ dom }: Mithril.VnodeDOM<any, any>) => {
+        oncreate={({ dom }: Mithril.VnodeDOM) => {
           CloseSlideHandler(dom as HTMLElement, menu.mainMenuCtrl)
         }}
       >
@@ -65,10 +65,10 @@ function renderHeader(user?: Session) {
 }
 
 function renderProfileActions(user: Session) {
-  const gamesRouteParams: StringMap = {
+  const gamesRouteParams: Record<string, string> = {
     username: user.username,
-    title: user.title,
   }
+  if (user.title) gamesRouteParams.title = user.title
   if (user.patron) gamesRouteParams.patron = '1'
   return (
     <ul className="side_links profileActions"

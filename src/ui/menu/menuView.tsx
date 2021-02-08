@@ -175,6 +175,11 @@ function renderLinks(user?: Session) {
         </li> : null
       }
       {online ?
+        <li className="side_link" data-route="/coord">
+          <span data-icon="4" />{i18n('coordinates')}
+        </li> : null
+      }
+      {online ?
       <li className="sep_link">
         {i18n('watch')}
       </li> : null

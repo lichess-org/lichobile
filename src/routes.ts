@@ -346,6 +346,11 @@ export default {
         })
       })
 
+      router.add('coord', ({ params }) => {
+        import('./ui/coordinates/coordinates').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
     })
 
     window.addEventListener('popstate', processQuerystring)

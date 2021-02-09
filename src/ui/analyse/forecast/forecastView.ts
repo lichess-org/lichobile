@@ -157,5 +157,5 @@ function renderTitle(ctrl: ForecastCtrl): Mithril.Child {
         className: ctrl.minimized ? 'fa-window-maximize' : 'fa-window-minimize'
       })),
     ])
-  ]);
+  ])
 }

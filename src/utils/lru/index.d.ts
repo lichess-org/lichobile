@@ -15,16 +15,16 @@ export default class LRUMap<K,V> {
   constructor(entries :Iterable<[K,V]>);
 
   // Current number of items
-  size :number;
+  size :number
 
   // Maximum number of items this map can hold
-  limit :number;
+  limit :number
 
   // Least recently-used entry. Invalidated when map is modified.
-  oldest :Entry<K,V>;
+  oldest :Entry<K,V>
 
   // Most recently-used entry. Invalidated when map is modified.
-  newest :Entry<K,V>;
+  newest :Entry<K,V>
 
   // Replace all values in this map with key-value pairs (2-element Arrays) from
   // provided iterable.

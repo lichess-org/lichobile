@@ -14,7 +14,9 @@ module.exports = {
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
+    "semi": "off",
     "@typescript-eslint/triple-slash-reference": "off",
-    "@typescript-eslint/no-non-null-assertion": "off"
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/semi": ["error", "never"]
   }
 }

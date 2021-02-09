@@ -1080,5 +1080,15 @@ export default {
   "example": "Voorbeeld",
   "addAnotherTheme": "Voeg nog 'n tema by",
   "playedXTimes:one": "Gespeel %s tyd",
-  "playedXTimes:other": "Gespeel %s keer"
+  "playedXTimes:other": "Gespeel %s keer",
+  "coordinates": "Koördinate",
+  "coordinateTraining": "Koördinaat oefening",
+  "averageScoreAsWhiteX": "Gemiddelde telling as wit: %s",
+  "averageScoreAsBlackX": "Gemiddelde telling as swart: %s",
+  "knowingTheChessBoard": "Om die koördinate op die skaakbord te ken is 'n baie belangrike skaakvaardigheid:",
+  "mostChessCourses": "Meeste skaak kursusse en oefeninge gebruik algebraïese notasie.",
+  "talkToYourChessFriends": "Dit maak dit makliker om met jou skaak vriende te praat omdat julle albei die 'taal van skaak' verstaan.",
+  "youCanAnalyseAGameMoreEffectively": "Jy kan 'n spel meer effektief analiseer as jy vinnig koördinate kan herken.",
+  "aSquareNameAppears": "As 'n Koördinaat op die bord verskyn moet jy op die ooreenstemmende blokkie klik. Jy het 30 sekondes om soveel as moontlik blokkies aan te dui!",
+  "startTraining": "Begin die oefening"
 }

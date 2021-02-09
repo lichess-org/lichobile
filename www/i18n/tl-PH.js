@@ -862,5 +862,6 @@ export default {
   "voteToLoadNextOne": "Bumoto ka upang mapunta ka sa susunod na palaisipan!",
   "yourPuzzleRatingX": "Ang iyong marka sa palaisipan: %s",
   "findTheBestMoveForWhite": "Hanapin ang pinakamahusay na galaw para sa puti.",
-  "findTheBestMoveForBlack": "Hanapin ang pinakamahusay na galaw para sa itim."
+  "findTheBestMoveForBlack": "Hanapin ang pinakamahusay na galaw para sa itim.",
+  "coordinates": "Mga Coordinate"
 }

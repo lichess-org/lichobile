@@ -1096,5 +1096,15 @@ export default {
   "solved": "résolu",
   "failed": "non réussis",
   "playedXTimes:one": "Joué %s fois",
-  "playedXTimes:other": "Joué %s fois"
+  "playedXTimes:other": "Joué %s fois",
+  "coordinates": "Coordonnées",
+  "coordinateTraining": "Entrainement des coordonnées",
+  "averageScoreAsWhiteX": "Moyenne blanc : %s",
+  "averageScoreAsBlackX": "Moyenne noir : %s",
+  "knowingTheChessBoard": "Connaitre les coordonnées des cases d'un échiquier est une compétence clé :",
+  "mostChessCourses": "La plupart des cours et des exercices d’échecs utilisent la notation algébrique.",
+  "talkToYourChessFriends": "Cela facilite la communication avec vos amis, puisque vous comprenez tous les deux \"la langue des échecs\".",
+  "youCanAnalyseAGameMoreEffectively": "L'analyse des parties est facilité si vous visualisez l'emplacement des cases.",
+  "aSquareNameAppears": "Les coordonnées d'une case apparaissent sur l'échiquier, à vous de cliquer sur son emplacement correct. Vous avez 30 secondes pour trouver un maximum de cases possibles !",
+  "startTraining": "Démarrer l'entrainement"
 }

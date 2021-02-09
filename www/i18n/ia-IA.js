@@ -868,5 +868,15 @@ export default {
   "hardest": "Le plus difficile",
   "example": "Exemplo",
   "playedXTimes:one": "Jocate %s vice",
-  "playedXTimes:other": "Jocate %s vices"
+  "playedXTimes:other": "Jocate %s vices",
+  "coordinates": "Coordinatas",
+  "coordinateTraining": "Trainamento de coordinatas",
+  "averageScoreAsWhiteX": "Punctos medie como blanco: %s",
+  "averageScoreAsBlackX": "Punctos medie como nigro: %s",
+  "knowingTheChessBoard": "Recognoscer le coordinatas del tabuliero es un habilitate multo importante in le chacos:",
+  "mostChessCourses": "Le majoritate del cursos e exercitios de chacos usa le notation algebraic extensivemente.",
+  "talkToYourChessFriends": "Isto facilita conversar con altere jocatores, proque ambes comprende le \"linguage del chacos\".",
+  "youCanAnalyseAGameMoreEffectively": "Tu pote analysar un partita plus effectivemente si tu non ha besonio de cercar le nomines del quadratos.",
+  "aSquareNameAppears": "Un coordinata appare sur le tabuliero e tu debe cliccar super le quadrato correcte. Tu ha 30 secundas pro recognoscer le major numero de quadratos possibile!",
+  "startTraining": "Comenciar a exercitar"
 }

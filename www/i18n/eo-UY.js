@@ -1056,5 +1056,15 @@ export default {
   "harder": "Malfacile",
   "hardest": "Tre malfacile",
   "example": "Ekzamplo",
-  "addAnotherTheme": "Aldonu novan temon"
+  "addAnotherTheme": "Aldonu novan temon",
+  "coordinates": "Koordinatoj",
+  "coordinateTraining": "Koordinata ekzerco",
+  "averageScoreAsWhiteX": "Meznombra poentaro por blanka: %s",
+  "averageScoreAsBlackX": "Meznombra poentaro por nigra: %s",
+  "knowingTheChessBoard": "Scii la koordinatojn de ŝako estas tre grava ŝako:",
+  "mostChessCourses": "Plej multaj ŝako-kursoj kaj ekzercoj uzas la algebra notacio vaste.",
+  "talkToYourChessFriends": "Estas pli facile paroli kun viaj ŝakaj amikoj, ĉar vi ambaŭ komprenas la \"lingvon de ŝako\".",
+  "youCanAnalyseAGameMoreEffectively": "Vi povas analizi ludon pli efike se vi ne bezonas serĉi kvadratajn nomojn.",
+  "aSquareNameAppears": "Kvadrata nomo aperas sur la tabulo kaj vi devas alklaki la ĝustan kvadraton. Vi havas 30 sekundojn por rekoni tiom da kvadratoj kiel eble!",
+  "startTraining": "Komenci trejnadon"
 }

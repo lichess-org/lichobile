@@ -43,7 +43,7 @@ export default function view(ctrl: CoordCtrl) {
   const isWrongAnswer = (index: number) =>
     ctrl.wrongAnswer === true && index === 0 ? ".nope" : "";
 
-  return layout.board(header(i18n("coordinates-training")), [
+  return layout.board(header(i18n("coordinateTraining")), [
     h("main#trainer.coord-trainer.training", [
       h("div.coord-trainer__side", { style: { visibility: ctrl.started } }, [
         h("div.box", [h("h1", i18n("coordinates"))]),

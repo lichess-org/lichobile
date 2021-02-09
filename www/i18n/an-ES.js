@@ -1047,5 +1047,15 @@ export default {
   "disableTwoFactor": "Desactivar l'autentificación en dos pasos",
   "twoFactorEnabled": "Autenticación en dos pasos activada",
   "twoFactorDisable": "Fa falta la tuya clau y un codigo d'autentificación d'a tuya aplicación d'autenticación pa desactivar l'autentificación en dos pasos.\nSi has perdiu l'acceso a los tuyos codigos d'autentificación, tamién puetz restablir la tuya clau per correu electronico.",
-  "openTwoFactorApp": "Ubre l'autentificación en dos pasos en o tuyos dispositivo pa veyer lo tuyo codigo d'autentificación y verifica la tuya identidat."
+  "openTwoFactorApp": "Ubre l'autentificación en dos pasos en o tuyos dispositivo pa veyer lo tuyo codigo d'autentificación y verifica la tuya identidat.",
+  "coordinates": "Coordenadas",
+  "coordinateTraining": "Entrenar coordenadas",
+  "averageScoreAsWhiteX": "Puntuación meya con blancas: %s",
+  "averageScoreAsBlackX": "Puntuación meya con negras: %s",
+  "knowingTheChessBoard": "Conoixer las coordenadas d'os escaques ye esencial en os escaques:",
+  "mostChessCourses": "La mayoría d'os cursos y exercicios d'escaques usan la notación alchebraica.",
+  "talkToYourChessFriends": "Facilita la comunicación con atros chugadors, que tamién charran lo \"luengache d'os escaques\".",
+  "youCanAnalyseAGameMoreEffectively": "Puetz analisar partidas de forma mas eficient si no has de que andar buscando los nombres d'os quadretz",
+  "aSquareNameAppears": "Las coordenadas d'un quadret amaneixen en a pantalla y has de fer clic en o quadret correcto. Tiens 30 segundos pa identificar tantos escaques como puedas!",
+  "startTraining": "Prencipiar entrenamiento"
 }

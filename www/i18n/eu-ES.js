@@ -1096,5 +1096,15 @@ export default {
   "solved": "ebatzita",
   "failed": "huts eginda",
   "playedXTimes:one": "Behin jokatuta",
-  "playedXTimes:other": "%s aldiz jokatuta"
+  "playedXTimes:other": "%s aldiz jokatuta",
+  "coordinates": "Koordenatuak",
+  "coordinateTraining": "Koordenatuen entrenamendua",
+  "averageScoreAsWhiteX": "Zuri gisa egindako puntuen batazbestekoa: %s",
+  "averageScoreAsBlackX": "Beltz gisa egindako puntuen batazbestekoa: %s",
+  "knowingTheChessBoard": "Xake-taulako koordenatuak jakitea oso garrantzitsua da jokalarientzat:",
+  "mostChessCourses": "Ikastaro eta ariketa gehienek idazkera algebraikoa erabiltzen dute.",
+  "talkToYourChessFriends": "Horrela errazagoa da zure lagunekin hitz egitea, biok hitz egiten baituzue \"xakearen hizkuntza\".",
+  "youCanAnalyseAGameMoreEffectively": "Partida errazago aztertu dezakezu ez badituzu laukien izenak aurkitu behar.",
+  "aSquareNameAppears": "Xake-taulan lauki baten izena agertuko da eta lauki zuzena sakatu beharko duzu. 30 segundu dituzu ahalik eta lauki gehien asmatzeko!",
+  "startTraining": "Entrenatzen hasi"
 }

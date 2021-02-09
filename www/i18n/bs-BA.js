@@ -1135,5 +1135,15 @@ export default {
   "puzzleDashboard": "Kontrolna tabla za probleme",
   "improvementAreas": "Područja za poboljšanje",
   "strengths": "Jake strane",
-  "solved": "riješeno"
+  "solved": "riješeno",
+  "coordinates": "Koordinate",
+  "coordinateTraining": "Trening koordinata",
+  "averageScoreAsWhiteX": "Prosječan rezultat kao bijeli: %s",
+  "averageScoreAsBlackX": "Prosječan rezultat kao crni: %s",
+  "knowingTheChessBoard": "Znanje šahovskih koordinata je jako važna šahovska vještina:",
+  "mostChessCourses": "Većina šahovskih kurseva i vježbi intenzivno koriste algebarsku notaciju.",
+  "talkToYourChessFriends": "Lakše Vam je razgovarati sa Vašim šahovskim prijateljima, jer oboje razumijete \"šahovski jezik\".",
+  "youCanAnalyseAGameMoreEffectively": "Možete efikasnije analizirati partiju, ako možete brže pronaći koordinate pojedinih polja.",
+  "aSquareNameAppears": "Koordinate polja će se pojaviti na ploči, a Vi morate kliknuti na odgovarajuće polje. Imate 30 sekundi da ispravno označite što veći broj polja!",
+  "startTraining": "Pokrenite trening"
 }

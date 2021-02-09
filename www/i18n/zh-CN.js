@@ -1011,5 +1011,15 @@ export default {
   "harder": "更难",
   "hardest": "最难",
   "example": "例子",
-  "jumpToNextPuzzleImmediately": "一解决训练题就马上转到下一个"
+  "jumpToNextPuzzleImmediately": "一解决训练题就马上转到下一个",
+  "coordinates": "坐标",
+  "coordinateTraining": "坐标训练",
+  "averageScoreAsWhiteX": "白方平均得分：%s",
+  "averageScoreAsBlackX": "黑方平均得分：%s",
+  "knowingTheChessBoard": "了解棋盘坐标是一门很重要的象棋技能：",
+  "mostChessCourses": "象棋课程及练习普遍使用代数记谱法。",
+  "talkToYourChessFriends": "这能让您更便捷地与棋友交谈，因为你们都懂这门“象棋语言”。",
+  "youCanAnalyseAGameMoreEffectively": "快速识别格子可以高效的分析对局。",
+  "aSquareNameAppears": "棋盘中间出现格子的名称之后，您必须点击正确的格子。在30秒内认出尽可能多的格子！",
+  "startTraining": "开始训练"
 }

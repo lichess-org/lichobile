@@ -1094,5 +1094,15 @@ export default {
   "solved": "opgelost",
   "failed": "niet opgelost",
   "playedXTimes:one": "%s keer gespeeld",
-  "playedXTimes:other": "%s keer gespeeld"
+  "playedXTimes:other": "%s keer gespeeld",
+  "coordinates": "Coördinaten",
+  "coordinateTraining": "Coördinatentraining",
+  "averageScoreAsWhiteX": "Gemiddelde score als wit: %s",
+  "averageScoreAsBlackX": "Gemiddelde score als zwart: %s",
+  "knowingTheChessBoard": "De schaakbordcoördinaten kennen is een zeer belangrijke schaakvaardigheid:",
+  "mostChessCourses": "De meeste schaakcursussen en -oefeningen maken gebruik van de algebraïsche notatie.",
+  "talkToYourChessFriends": "Het maakt het gemakkelijker om met je schaakvrienden te praten, aangezien jullie beide de \"taal van het schaken\" begrijpen.",
+  "youCanAnalyseAGameMoreEffectively": "Je kunt een spel effectiever analyseren als je niet hoeft te zoeken naar de namen van de velden.",
+  "aSquareNameAppears": "Zodra de naam van een veld verschijnt klik je op het juiste vakje. Je hebt 30 seconden om zoveel mogelijk velden te herkennen!",
+  "startTraining": "Start de training"
 }

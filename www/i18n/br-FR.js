@@ -1161,5 +1161,15 @@ export default {
   "xJoinRequests:other": "%s goulenn emezelañ",
   "twoFactorAuth": "Dilesadur daou-faktor",
   "scanTheCode": "Skanit ar c'hQR kod gant an arload.",
-  "authenticationCode": "Rineg dilesa"
+  "authenticationCode": "Rineg dilesa",
+  "coordinates": "Daveennoù",
+  "coordinateTraining": "Pleustriñ war an daveennoù",
+  "averageScoreAsWhiteX": "Disoc'h keitat eus tu ar re wenn: %s",
+  "averageScoreAsBlackX": "Disoc'h keitat eus tu ar re zu: %s",
+  "knowingTheChessBoard": "Anavezout daveennoù an dachenn emgann zo ur varregezh a-bouez bras:",
+  "mostChessCourses": "Darn vrasañ eus ar c'hentelioù ha poelladennoù a ra gant an notadur aljebrek.",
+  "talkToYourChessFriends": "Aesoc'h e vo deoc'h kaozeal gant ho mignoned peogwir e veoc'h gouest da gomz \"yezh an echedoù\" asambles gante.",
+  "youCanAnalyseAGameMoreEffectively": "Efedusoc'h eo an dielfennañ pa ouzer diouzhtu pelec'h emaomp war an dachenn emgann.",
+  "aSquareNameAppears": "Un daveenn a zeuy war wel ha deoc'h-c'hwi da glikañ war ar garrezenn a glot ganti. 30 eilenn ho po evit adkavout ar muiañ a garrezennoù ma c'hallit!",
+  "startTraining": "Kregiñ ganti"
 }

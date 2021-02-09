@@ -595,5 +595,7 @@ export default {
   "nbMembers:one": "jan kulupu %s",
   "nbMembers:other": "jan kulupu pi mute %s",
   "teamLeaders:one": "jan lawa kulupu",
-  "teamLeaders:other": "jan lawa kulupu "
+  "teamLeaders:other": "jan lawa kulupu ",
+  "coordinates": "lon pi poki pi jan utala",
+  "startTraining": "o open kama sona"
 }

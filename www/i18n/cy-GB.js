@@ -762,5 +762,15 @@ export default {
   "nbMembers:many": "%s o aelodau",
   "nbMembers:other": "%s o aelodau",
   "history": "Hanes Posau",
-  "failed": "colli"
+  "failed": "colli",
+  "coordinates": "Sgwariau",
+  "coordinateTraining": "Hyfforddi sgwariau",
+  "averageScoreAsWhiteX": "Sgôr cyfartalog fel gwyn: %s",
+  "averageScoreAsBlackX": "Sgôr cyfartalog fel du: %s",
+  "knowingTheChessBoard": "Mae medru enwi'r sgwariau yn sgil bwysig:",
+  "mostChessCourses": "Mae'r rhan fwyaf o adnoddau gwyddbwyll yn defnyddio'r dull cofnodi algebraeg.",
+  "talkToYourChessFriends": "Mae'n haws i drafod gwyddbwyll gyda ffrindiau pan rydych chi'ch dau yn siarad \"iaith gwyddbwyll\".",
+  "youCanAnalyseAGameMoreEffectively": "Gellir dadansoddi gêm fwy effeithiol os nad oes angen chwilio am enwau sgwâr.",
+  "aSquareNameAppears": "Daw enw sgwâr ar y sgrin ac fydd angen i chi glicio ar y sgwâr cywir. Mae gofyn i chi adnabod cymaint a fedrwch chi mewn 30 eiliad!",
+  "startTraining": "Dechrau hyfforddiant"
 }

@@ -1086,5 +1086,15 @@ export default {
   "addAnotherTheme": "Afegir un nou tema",
   "jumpToNextPuzzleImmediately": "Passar al següent problema immediatament",
   "puzzleDashboard": "Panell de problemes",
-  "strengths": "Fortaleses"
+  "strengths": "Fortaleses",
+  "coordinates": "Coordenades",
+  "coordinateTraining": "Entrenament de coordenades",
+  "averageScoreAsWhiteX": "Puntuació mitja amb blanques: %s",
+  "averageScoreAsBlackX": "Puntuació mitja amb negres: %s",
+  "knowingTheChessBoard": "Saber les coordenades del tauler és una habilitat important:",
+  "mostChessCourses": "La majoria de cursos i exercicis usa la notació algebraica de forma extensiva.",
+  "talkToYourChessFriends": "Facilita la comunicació amb altres jugadors, ja que tots enteneu l’«idioma dels escacs».",
+  "youCanAnalyseAGameMoreEffectively": "Pots analitzar un joc de forma més eficient si en pots reconèixer ràpidament les coordenades.",
+  "aSquareNameAppears": "Una coordenada apareix en el tauler i has de clicar-nenla casella corresponent. Tens 30 segons per mapejar correctament el màxim de caselles possible!",
+  "startTraining": "Comença l'entrenament"
 }

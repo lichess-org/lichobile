@@ -348,9 +348,6 @@ export default {
   "automaticallyProceedToNextGameAfterMoving": "Automatically proceed to next game after moving",
   "autoSwitch": "Auto switch",
   "puzzles": "Puzzles",
-  "coordinates": "Coordinates",
-  "coordinates-training": "Coordinates Training",
-  "startTraining": "Start Training",
   "latestUpdates": "Latest updates",
   "tournamentWinners": "Tournament winners",
   "name": "Name",
@@ -1099,5 +1096,15 @@ export default {
   "solved": "solved",
   "failed": "failed",
   "playedXTimes:one": "Played %s time",
-  "playedXTimes:other": "Played %s times"
+  "playedXTimes:other": "Played %s times",
+  "coordinates": "Coordinates",
+  "coordinateTraining": "Coordinate training",
+  "averageScoreAsWhiteX": "Average score as white: %s",
+  "averageScoreAsBlackX": "Average score as black: %s",
+  "knowingTheChessBoard": "Knowing the chessboard coordinates is a very important chess skill:",
+  "mostChessCourses": "Most chess courses and exercises use the algebraic notation extensively.",
+  "talkToYourChessFriends": "It makes it easier to talk to your chess friends, since you both understand the \"language of chess\".",
+  "youCanAnalyseAGameMoreEffectively": "You can analyze a game more effectively if you can quickly recognize coordinates.",
+  "aSquareNameAppears": "A coordinate appears on the board and you must click on the corresponding square. You have 30 seconds to correctly map as many squares as possible!",
+  "startTraining": "Start training"
 }

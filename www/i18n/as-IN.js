@@ -20,5 +20,6 @@ export default {
   "talkInChat": "চেতত ভাল বাবে কথা পাতিব!",
   "whiteLeftTheGame": "বগা খেলোৱৈয়ে খেলখন এৰি গ'ল",
   "blackLeftTheGame": "ক'লা খেলোৱৈয়ে খেলখন এৰি গ'ল",
-  "close": "বন্ধ"
+  "close": "বন্ধ",
+  "startTraining": "প্ৰ‌শিক্ষণ আৰম্ভ"
 }

@@ -1159,5 +1159,15 @@ export default {
   "jumpToNextPuzzleImmediately": "Takoj skočite k naslednji uganki",
   "puzzleDashboard": "Nadzorna plošča uganke",
   "strengths": "Prednosti",
-  "solved": "rešeno"
+  "solved": "rešeno",
+  "coordinates": "Polja",
+  "coordinateTraining": "Trening šahovskih polj",
+  "averageScoreAsWhiteX": "Povprečno število točk kot beli: %s",
+  "averageScoreAsBlackX": "Povprečno število točk kot črni: %s",
+  "knowingTheChessBoard": "Poznavanje polj je zelo pomembna šahovska veščina:",
+  "mostChessCourses": "Večino šahovskih tečajev uporablja algebraičen način zapisovanja.",
+  "talkToYourChessFriends": "Lažje se je pogovarjati s šahovskimi kolegi, kadar oba razumeta \"šahovski jezik\".",
+  "youCanAnalyseAGameMoreEffectively": "Lažje je analizirati partijo če ni potrebno iskati imena polj.",
+  "aSquareNameAppears": "Ime polja se pojavi na šahovnici in morate klikniti nanj. Na voljo imate 30 sekund, da prepoznate čim več polj!",
+  "startTraining": "Začnite trening"
 }

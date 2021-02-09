@@ -1184,5 +1184,15 @@ export default {
   "playedXTimes:one": "Hrané %s-krát",
   "playedXTimes:few": "Hrané %s-krát",
   "playedXTimes:many": "Hrané %s-krát",
-  "playedXTimes:other": "Hrané %s-krát"
+  "playedXTimes:other": "Hrané %s-krát",
+  "coordinates": "Súradnice",
+  "coordinateTraining": "Tréning znalosti šachovnicových súradníc",
+  "averageScoreAsWhiteX": "Priemerné skóre ako biely: %s",
+  "averageScoreAsBlackX": "Priemerné skóre ako čierny: %s",
+  "knowingTheChessBoard": "Znalosť šachovnicových súradníc je pre šach veľmi dôležitá:",
+  "mostChessCourses": "Väčšina šachových kurzov a cvičení veľmi často používa algebraickú notáciu.",
+  "talkToYourChessFriends": "Ľahšie sa dorozumiete so svojimi šachovými priateľmi, pretože obaja budete hovoriť \"rečou šachu\".",
+  "youCanAnalyseAGameMoreEffectively": "Môžete efektívnejšie analyzovať partie, ak nebudete neustále potrebovať hľadať názvy polí.",
+  "aSquareNameAppears": "Na šachovnici sa objaví názov poľa a Vašou úlohou je kliknúť naň. Máte 30 sekúnd na správne označenie čo najväčšieho počtu polí!",
+  "startTraining": "Začať tréning"
 }

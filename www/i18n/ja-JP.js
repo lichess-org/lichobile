@@ -1049,5 +1049,15 @@ export default {
   "strengths": "得意テーマ",
   "solved": "正答済",
   "failed": "失敗",
-  "playedXTimes:other": "%s 回プレイ"
+  "playedXTimes:other": "%s 回プレイ",
+  "coordinates": "マスの位置",
+  "coordinateTraining": "座標を読むトレーニング",
+  "averageScoreAsWhiteX": "白番での平均スコア: %s",
+  "averageScoreAsBlackX": "黒番での平均スコア: %s",
+  "knowingTheChessBoard": "チェス盤の座標がすぐわかるのは非常にだいじなスキルです。",
+  "mostChessCourses": "チェスの講座、問題はほとんど「代数式」という記譜法を使っています。",
+  "talkToYourChessFriends": "またチェスの友人と話をするのも簡単になります。双方がいわば「チェス語」を理解しているからです。",
+  "youCanAnalyseAGameMoreEffectively": "このマスはどこか、いちいち探すことがなくなれば、ゲームの検討も効率よくできます。",
+  "aSquareNameAppears": "ボード上にマスの名前が表示されるので、そのマスをクリックしてください。30 秒間でできるだけ多くのマスをクリックします。",
+  "startTraining": "トレーニングを開始"
 }

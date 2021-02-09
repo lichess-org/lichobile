@@ -1065,5 +1065,15 @@ export default {
   "puzzleDashboard": "Uppgávuyvirlit",
   "strengths": "Styrkir",
   "playedXTimes:one": "Telvað %s ferð",
-  "playedXTimes:other": "Telvað %s ferðir"
+  "playedXTimes:other": "Telvað %s ferðir",
+  "coordinates": "Krosstøl",
+  "coordinateTraining": "Krosstalavenjing",
+  "averageScoreAsWhiteX": "Miðal stigatal við hvítum: %s",
+  "averageScoreAsBlackX": "Miðal stigatal við svørtum: %s",
+  "knowingTheChessBoard": "At kenna krosstølini á talvborðinum er ein týdningarmikil telvingarførleiki:",
+  "mostChessCourses": "Flestu talvskeið og talvuppgávur nýta bókstavarokningarskriviháttin (algebra).",
+  "talkToYourChessFriends": "Tað ger tað lættari at práta við talvvinir, at tit øll kenna 'talvmálið'.",
+  "youCanAnalyseAGameMoreEffectively": "Tú fært lættari greinað eitt talv, um tú kennir krosstølini skjótt aftur.",
+  "aSquareNameAppears": "Eitt krosstal kemur til sjóndar á talvborðinum, og tú skalt klikkja á rætta puntin. Tú fært 30 sekund at klikkja rætt á so nógvar puntar sum møguligt!",
+  "startTraining": "Byrja venjing"
 }

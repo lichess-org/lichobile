@@ -1096,5 +1096,15 @@ export default {
   "solved": "løst",
   "failed": "mislykket",
   "playedXTimes:one": "Spillet %s gang",
-  "playedXTimes:other": "Spillet %s gange"
+  "playedXTimes:other": "Spillet %s gange",
+  "coordinates": "Koordinater",
+  "coordinateTraining": "Koordinattræning",
+  "averageScoreAsWhiteX": "Gennemsnitlig score som hvid: %s",
+  "averageScoreAsBlackX": "Gennemsnitlig score som sort: %s",
+  "knowingTheChessBoard": "Det er vigtigt at kende koordinaterne på skakbrættet:",
+  "mostChessCourses": "De fleste skakkurser og øvelser bruger i vid udstrækning den algebraiske notation.",
+  "talkToYourChessFriends": "Det gør det lettere at snakke med dine skakvenner, når I begge forstår \"skakkens sprog\".",
+  "youCanAnalyseAGameMoreEffectively": "Du kan analysere et parti mere effektivt, hvis du ikke skal lede efter feltnavne.",
+  "aSquareNameAppears": "Der vises et feltnavn på brættet, og du skal så klikke på det rigtige felt. Du har 30 sekunder til at genkende så mange felter som muligt!",
+  "startTraining": "Start træning"
 }

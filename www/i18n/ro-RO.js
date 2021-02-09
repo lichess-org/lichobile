@@ -1113,5 +1113,15 @@ export default {
   "addAnotherTheme": "Adăugați o altă temă",
   "jumpToNextPuzzleImmediately": "Sari imediat la puzzle-ul următor",
   "improvementAreas": "Zone de îmbunătățit",
-  "solved": "rezolvat"
+  "solved": "rezolvat",
+  "coordinates": "Coordonate",
+  "coordinateTraining": "Antrenament la coordonate",
+  "averageScoreAsWhiteX": "Media scorului cu albele: %s",
+  "averageScoreAsBlackX": "Media scorului cu negrele: %s",
+  "knowingTheChessBoard": "Să știi coordonatele tablei de șah e o abilitate foarte importantă:",
+  "mostChessCourses": "Majoritatea exercițiilor și cursurilor de șah folosesc des notație algebrică.",
+  "talkToYourChessFriends": "Devine mai ușor să discuți cu prietenii tăi șahiști, căci înțelegeți „limba șahului”.",
+  "youCanAnalyseAGameMoreEffectively": "Poți analiza un meci mult mai eficient dacă nu trebuie să cauți după notația pătrățelelor.",
+  "aSquareNameAppears": "O notație apare pe tablă și trebuie să dai click pe pătrățica corectă conform notației. Ai 30 de secunde să identifici cât mai multe pătrățele!",
+  "startTraining": "Începe antrenamentul"
 }

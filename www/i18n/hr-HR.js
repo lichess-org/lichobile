@@ -1089,5 +1089,15 @@ export default {
   "disableTwoFactor": "Isključite dvofaktorsku provjeru autentičnosti",
   "twoFactorEnabled": "Dvofaktorska provjera autentičnosti je uključena",
   "twoFactorDisable": "Da biste onemogućili dvofaktorsku provjeru autentičnosti, potrebna vam je lozinka i kôd za provjeru autentičnosti iz aplikacije za potvrđivanje. Ako ste izgubili pristup kodovima za provjeru autentičnosti, možete izvršiti resetiranje lozinke putem e-pošte.",
-  "recommended": "Preporučeno"
+  "recommended": "Preporučeno",
+  "coordinates": "Koordinate",
+  "coordinateTraining": "Trening koordinata",
+  "averageScoreAsWhiteX": "Prosječan rezultat kao bijeli: %s",
+  "averageScoreAsBlackX": "Prosječan rezultat kao crni: %s",
+  "knowingTheChessBoard": "Znanje šahovskih koordinata je jako važna šahovska vještina:",
+  "mostChessCourses": "Većina šahovskih tečajeva i vježbi opsežno koristi algebarsku notaciju.",
+  "talkToYourChessFriends": "Jednostavnije je razgovarati sa svojim šahovskim prijateljima, jer oboje razumijete \"šahovski jezik\".",
+  "youCanAnalyseAGameMoreEffectively": "Možeš učinkovitije analizirati partiju ako ne trebaš tražiti koordinate pojedinih polja.",
+  "aSquareNameAppears": "Koordinate polja će se pojaviti na ploči, a ti moraš kliknuti na točno polje. Imaš 30 sekundi da prepoznaš čim više polja!",
+  "startTraining": "Započni trening"
 }

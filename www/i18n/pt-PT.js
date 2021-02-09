@@ -1046,5 +1046,15 @@ export default {
   "recommended": "Recomendado",
   "phases": "Fases",
   "advanced": "Avançado",
-  "lengths": "Comprimento"
+  "lengths": "Comprimento",
+  "coordinates": "Coordenadas",
+  "coordinateTraining": "Treino de coordenadas",
+  "averageScoreAsWhiteX": "Pontuação média com as brancas: %s",
+  "averageScoreAsBlackX": "Pontuação média com as pretas: %s",
+  "knowingTheChessBoard": "Saber as coordenadas do tabuleiro é uma habilidade muito importante no xadrez:",
+  "mostChessCourses": "A maioria dos cursos e exercícios usam extensamente a notação algébrica.",
+  "talkToYourChessFriends": "Torna-se mais fácil falar de xadrez com os teus amigos, já que ambos entendem o \"idioma do xadrez\".",
+  "youCanAnalyseAGameMoreEffectively": "Podes analisar um jogo com maior eficiência se conseguires reconhecer as coordenadas rapidamente.",
+  "aSquareNameAppears": "O nome da casa aparece no tabuleiro e tens de clicar na casa correspondente. Tenta reconhecer o maior número de casas em 30 segundos!",
+  "startTraining": "Começar o treino"
 }

@@ -1094,5 +1094,15 @@ export default {
   "improvementAreas": "Жетілдіру бағыты",
   "strengths": "Күштілігі",
   "playedXTimes:one": "%s рет ойналды",
-  "playedXTimes:other": "%s рет ойналды"
+  "playedXTimes:other": "%s рет ойналды",
+  "coordinates": "Координат",
+  "coordinateTraining": "Координат меңгеру",
+  "averageScoreAsWhiteX": "Ақтың орташа есебі: %s",
+  "averageScoreAsBlackX": "Қараның орташа есебі: %s",
+  "knowingTheChessBoard": "Шахмат координаттарын білу – шеберліктің бір бөлігі:",
+  "mostChessCourses": "Шахмат мектептердің көпшілігі алгебралық жазу тәртібін ұстанады.",
+  "talkToYourChessFriends": "\"Шахмат тілін\" біліп жүрсеңіз, шахмат білетін досыңызбен әңгіме құру оңай болады.",
+  "youCanAnalyseAGameMoreEffectively": "Координатты танитын болсаңыз, ойынды тиімді түрде талдауға қабілетті боласыз.",
+  "aSquareNameAppears": "Тақтада координат шыққанда, оған сәйкес шаршыны таңдауыңыз керек. 30 секунд ішінде шамаңыз келгенше көбірек шаршы табыңыз!",
+  "startTraining": "Жаттығуды бастау"
 }

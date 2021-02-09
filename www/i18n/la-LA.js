@@ -686,5 +686,11 @@ export default {
   "teamBestPlayers": "Meliores legionis lusores",
   "teamRecentMembers": "Nuper conventi sodales",
   "nbMembers:one": "%s sodales",
-  "nbMembers:other": "%s sodales"
+  "nbMembers:other": "%s sodales",
+  "coordinates": "Quadratis",
+  "coordinateTraining": "Exercitium quadratis",
+  "averageScoreAsWhiteX": "Cum mediocris commodum alba: %s",
+  "averageScoreAsBlackX": "Cum mediocris commodum nigra: %s",
+  "aSquareNameAppears": "A quadratum nomen apparet tabulam in recta et quadratum est per click. XXX secunda, in quadrato quot tu agnoscis?",
+  "startTraining": "Incipere exercitium"
 }

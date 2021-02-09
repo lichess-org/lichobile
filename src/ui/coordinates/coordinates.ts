@@ -1,5 +1,5 @@
-import CoordCtrl from "./coordCtrl";
-import coordinatesView from "./coordView";
+import CoordCtrl from "./coordCtrl"
+import coordinatesView from "./coordView"
 
 interface State {
   coordCtrl: CoordCtrl;
@@ -7,12 +7,12 @@ interface State {
 
 const CoordinatesBoard: Mithril.Component<any, State> = {
   oninit() {
-    this.coordCtrl = new CoordCtrl();
+    this.coordCtrl = new CoordCtrl()
   },
 
   view() {
-    return coordinatesView(this.coordCtrl);
+    return coordinatesView(this.coordCtrl)
   },
-};
+}
 
-export default CoordinatesBoard;
+export default CoordinatesBoard

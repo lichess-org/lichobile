@@ -1,25 +1,25 @@
-import h from "mithril/hyperscript";
-import Chessground from "~/chessground/Chessground";
-import redraw from "~/utils/redraw";
-import { header } from "../shared/common";
-import Board from "../shared/Board";
-import i18n from "../../i18n";
-import layout from "../layout";
-import { INITIAL_FEN } from "chessops/fen";
-import CoordCtrl from "./coordCtrl";
+import h from "mithril/hyperscript"
+import Chessground from "~/chessground/Chessground"
+import redraw from "~/utils/redraw"
+import { header } from "../shared/common"
+import Board from "../shared/Board"
+import i18n from "../../i18n"
+import layout from "../layout"
+import { INITIAL_FEN } from "chessops/fen"
+import CoordCtrl from "./coordCtrl"
 
-let orientation = (Math.random() > 0.5 ? "white" : "black") as Color;
-let random = true;
+let orientation = (Math.random() > 0.5 ? "white" : "black") as Color
+let random = true
 
 function reOriente(color: Color | undefined): void {
-  random = false;
+  random = false
   if (color === undefined) {
-    color = Math.random() > 0.5 ? "white" : ("black" as Color);
-    random = true;
+    color = Math.random() > 0.5 ? "white" : ("black" as Color)
+    random = true
   }
 
-  orientation = color;
-  redraw();
+  orientation = color
+  redraw()
 }
 
 export default function view(ctrl: CoordCtrl) {
@@ -38,10 +38,10 @@ export default function view(ctrl: CoordCtrl) {
         select: ctrl.handleSelect.bind(ctrl),
       },
     }),
-  });
+  })
 
   const isWrongAnswer = (index: number) =>
-    ctrl.wrongAnswer === true && index === 0 ? ".nope" : "";
+    ctrl.wrongAnswer === true && index === 0 ? ".nope" : ""
 
   return layout.board(header(i18n("coordinateTraining")), [
     h("main#trainer.coord-trainer.training", [
@@ -99,5 +99,5 @@ export default function view(ctrl: CoordCtrl) {
         h("div.progress_bar", { style: { width: ctrl.progress + "%" } }),
       ]),
     ]),
-  ]);
+  ])
 }

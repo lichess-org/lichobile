@@ -174,11 +174,9 @@ function renderLinks(user?: Session) {
           <span data-icon="4" />{i18n('studyMenu')}
         </li> : null
       }
-      {online ?
-        <li className="side_link" data-route="/coord">
-          <span data-icon="4" />{i18n('coordinates')}
-        </li> : null
-      }
+      <li className="side_link" data-route="/coord">
+        <span data-icon="4" />{i18n('coordinates')}
+      </li>
       {online ?
       <li className="sep_link">
         {i18n('watch')}

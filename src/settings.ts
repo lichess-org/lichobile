@@ -106,6 +106,7 @@ export default {
         ['dubrovny' ],
         ['shapes' ],
         ['letter' ],
+        ['horsey'],
       ],
       background: prop('bgTheme', 'dark'),
       board: prop('theme.board', 'brown'),

@@ -38,13 +38,13 @@ export class Chat {
     this.checkUnreadFromStorage()
   }
 
-  public open = () => {
+  public open = (): void => {
     router.backbutton.stack.push(helper.slidesOutDown(this.close, 'chat'))
     this.showing = true
     this.nbUnread = 0
   }
 
-  public close = (fromBB?: string) => {
+  public close = (fromBB?: string): void => {
     Plugins.Keyboard.hide()
     if (fromBB !== 'backbutton' && this.showing) router.backbutton.stack.pop()
     this.showing = false
@@ -52,14 +52,14 @@ export class Chat {
     this.storeNbLinesRead()
   }
 
-  public onReload = (lines?: ChatMsg[]) => {
+  public onReload = (lines?: ChatMsg[]): void => {
     if (lines !== undefined) {
       this.lines = lines
       this.checkUnreadFromStorage()
     }
   }
 
-  public append = (msg: ChatMsg) => {
+  public append = (msg: ChatMsg): void => {
     this.lines.push(msg)
     if (msg.u !== 'lichess') {
       this.nbUnread++
@@ -67,7 +67,7 @@ export class Chat {
     redraw()
   }
 
-  public selectLines() {
+  public selectLines(): ChatMsg[] {
     let prev: ChatMsg
     const ls: ChatMsg[] = []
     this.lines.forEach((line: ChatMsg) => {
@@ -112,7 +112,7 @@ export class Chat {
   }
 }
 
-export function chatView(ctrl: Chat, header?: string) {
+export function chatView(ctrl: Chat, header?: string): Mithril.Children {
 
   if (!ctrl.showing) return null
 
@@ -125,8 +125,8 @@ export function chatView(ctrl: Chat, header?: string) {
     ]),
     h('div#chat_content.modal_content.chat_content', [
       h('ul.chat_scroller.native_scroller', {
-        oncreate: ({ dom }: Mithril.VnodeDOM<any, any>) => scrollChatToBottom(dom as HTMLElement),
-        onupdate: ({ dom }: Mithril.VnodeDOM<any, any>) => scrollChatToBottom(dom as HTMLElement)
+        oncreate: ({ dom }: Mithril.VnodeDOM) => scrollCallback(ctrl, dom as HTMLElement),
+        onupdate: ({ dom }: Mithril.VnodeDOM) => scrollCallback(ctrl, dom as HTMLElement)
       },
         ctrl.selectLines().map((msg: ChatMsg, i: number, all: ChatMsg[]) => {
           if (ctrl.player !== undefined) return renderPlayerMsg(ctrl.player, msg, i, all)
@@ -224,8 +224,14 @@ function renderSpectatorMsg(msg: ChatMsg) {
   ])
 }
 
-function scrollChatToBottom(el: HTMLElement) {
-  el.scrollTop = el.scrollHeight
+function scrollCallback(ctrl: Chat, el: HTMLElement) {
+  if (ctrl.lines.length > 5) {
+    const autoScroll = (el.scrollTop === 0 || (el.scrollTop > (el.scrollHeight - el.clientHeight - 100)))
+    if (autoScroll) {
+      el.scrollTop = 999999
+      setTimeout(() => el.scrollTop = 999999, 300)
+    }
+  }
 }
 
 function calculateContentHeight(ta: HTMLElement, scanAmount: number): number {

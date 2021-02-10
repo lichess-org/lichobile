@@ -72,12 +72,10 @@ export default {
       },
       toggleBestMove() {
         const newVal = !s.showBestMove
-        settings.analyse.showBestMove(newVal)
         s.showBestMove = newVal
       },
       toggleComments() {
         const newVal = !s.showComments
-        settings.analyse.showComments(newVal)
         s.showComments = newVal
       },
       flip() {
@@ -93,7 +91,6 @@ export default {
         root.ceval.setMultiPv(pv)
       },
       cevalToggleInfinite() {
-        settings.analyse.cevalInfinite(!settings.analyse.cevalInfinite())
         root.ceval.toggleInfinite()
       }
     }

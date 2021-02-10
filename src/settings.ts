@@ -78,6 +78,7 @@ export default {
         { key: 'purple-diag', name: 'Purple 2', ext: 'png' },
         { key: 'pink', name: 'Pink', ext: 'png' },
         { key: 'ic', name: 'IC', ext: 'svg' },
+        { key: 'horsey', name: 'horsey', ext: 'jpg' },
       ],
       bundledBoardThemes: ['brown', 'blue', 'green', 'purple', 'ic'],
       availablePieceThemes: [
@@ -106,6 +107,7 @@ export default {
         ['dubrovny' ],
         ['shapes' ],
         ['letter' ],
+        ['horsey'],
       ],
       background: prop('bgTheme', 'dark'),
       board: prop('theme.board', 'brown'),

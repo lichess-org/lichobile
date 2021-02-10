@@ -57,6 +57,7 @@ www/images/pieces/fantasy | [Maurizio Monge](http://poisson.phc.unipi.it/~monge/
 www/images/pieces/spatial | [Maurizio Monge](http://poisson.phc.unipi.it/~monge/chess_art.php) | "give credit in a suitable way"
 www/images/pieces/reilly | [Reilly Craig](https://instagram.com/fader_) |
 www/images/pieces/riohacha |
+www/images/pieces/horsey | cham, michael1241 | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 Lichess icon font in www/fonts |
 
 External services

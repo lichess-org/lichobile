@@ -532,28 +532,38 @@
       color rgba(#c1c18e, 1)
     &.coord-odd
       color rgba(#ececec, 1)
-.horsey.orientation-white
-  > .files > li-coord
-    &.coord-odd
-      color rgba(#f8ebdb, 1)
-    &.coord-even
-      color rgba(#8e6548, 1)
-  > .ranks > li-coord
-    &.coord-even
-      color rgba(#f8ebdb, 1)
-    &.coord-odd
-      color rgba(#8e6548, 1)
-.horsey.orientation-black
-  > .files > li-coord
-    &.coord-odd
-      color rgba(#8e6548, 1)
-    &.coord-even
-      color rgba(#f8ebdb, 1)
-  > .ranks > li-coord
-    &.coord-even
-      color rgba(#8e6548, 1)
-    &.coord-odd
-      color rgba(#f8ebdb, 1)
+.horsey
+  square.selected
+    background url('../../images/board/horsey.selected.png')
+    background-size cover
+  square.last-move
+    background url('../../images/board/horsey.last-move.png')
+    background-size cover
+  square.current-premove
+    background url('../../images/board/horsey.current-premove.png')
+    background-size cover
+  &.orientation-white
+    > .files > li-coord
+      &.coord-odd
+        color rgba(#f8ebdb, 1)
+      &.coord-even
+        color rgba(#8e6548, 1)
+    > .ranks > li-coord
+      &.coord-even
+        color rgba(#f8ebdb, 1)
+      &.coord-odd
+        color rgba(#8e6548, 1)
+  &.orientation-black
+    > .files > li-coord
+      &.coord-odd
+        color rgba(#8e6548, 1)
+      &.coord-even
+        color rgba(#f8ebdb, 1)
+    > .ranks > li-coord
+      &.coord-even
+        color rgba(#8e6548, 1)
+      &.coord-odd
+        color rgba(#f8ebdb, 1)
 
 .kingOfTheHill > .cg-board:before
   width: 25%;

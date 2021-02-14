@@ -81,14 +81,14 @@ const levelToDepth: Record<number, number> = {
   8: 22
 }
 const eloTable: Record<number, number> = {
-  1: 800,
-  2: 1100,
-  3: 1400,
+  1: 1350,
+  2: 1500,
+  3: 1600,
   4: 1700,
   5: 2000,
   6: 2300,
   7: 2700,
-  8: 3000,
+  8: 2850,
 }
 
 function elo(level: number) {

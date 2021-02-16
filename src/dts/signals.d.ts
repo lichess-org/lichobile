@@ -1,4 +1,4 @@
-declare module "signals" {
+declare module 'signals' {
   type Listener<T> = (...params: T[]) => void
   type Context = unknown
   type SignalBinding = unknown

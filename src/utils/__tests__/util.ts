@@ -15,9 +15,9 @@ describe('base62ToNumber', () => {
 
   it('works on a variety of known numbers', () => {
     Object.entries({
-      "OOw2R": 264252818,
-      "tzQPe": 446929711,
-      "aRWYk": 537753616,
+      'OOw2R': 264252818,
+      'tzQPe': 446929711,
+      'aRWYk': 537753616,
     }).forEach(([base62, expected]) => {
       expect(base62ToNumber(base62)).toBe(expected)
     })

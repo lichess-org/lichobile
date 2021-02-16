@@ -36,7 +36,7 @@ export function newPuzzlesBatch(num: number, after?: number): Promise<PuzzleSync
 }
 
 export function solvePuzzlesBatch(outcomes: ReadonlyArray<PuzzleOutcome>): Promise<void> {
-  return fetchJSON(`/training/batch`, {
+  return fetchJSON('/training/batch', {
     method: 'POST',
     body: JSON.stringify({
       solutions: outcomes

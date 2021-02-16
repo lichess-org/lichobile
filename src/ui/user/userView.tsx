@@ -123,7 +123,7 @@ function renderWebsiteLinks(ctrl: IUserCtrl, user: ProfileUser) {
       { ctrl.isMe() ?
         <p>
           <a className="external_link"
-            oncreate={helper.ontapY(() => xhr.openWebsiteAuthPage(`/account/profile`))}
+            oncreate={helper.ontapY(() => xhr.openWebsiteAuthPage('/account/profile'))}
           >
             {i18n('editProfile')}
           </a>

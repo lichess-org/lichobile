@@ -41,7 +41,7 @@ export default function Zanimo(el, attr, value, duration, easing) {
 }
 
 function shorthand(v, d, t) {
-  return v + " " + d + "ms " + (t || "linear")
+  return v + ' ' + d + 'ms ' + (t || 'linear')
 }
 
 function isDOM(el) {

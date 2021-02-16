@@ -1,5 +1,5 @@
-import CoordCtrl from "./coordCtrl"
-import coordinatesView from "./coordView"
+import CoordCtrl from './coordCtrl'
+import coordinatesView from './coordView'
 
 interface State {
   coordCtrl: CoordCtrl;

@@ -1,21 +1,21 @@
-import redraw from "~/utils/redraw"
+import redraw from '~/utils/redraw'
 
-const FILES = "abcdefgh"
-const RANKS = "12345678"
+const FILES = 'abcdefgh'
+const RANKS = '12345678'
 
 export default class CoordCtrl {
   coords: Key[]
   wrongAnswer: boolean
   score: number
   progress: number
-  started: "hidden" | "visible"
+  started: 'hidden' | 'visible'
 
   constructor() {
     this.coords = []
     this.wrongAnswer = false
     this.score = 0
     this.progress = 100
-    this.started = "visible"
+    this.started = 'visible'
   }
 
   getCoord(): Key {
@@ -50,7 +50,7 @@ export default class CoordCtrl {
   }
 
   startTraining(): void {
-    this.started = "hidden"
+    this.started = 'hidden'
     this.coords = this.initCoords()
     this.progress = 0
     this.score = 0
@@ -60,7 +60,7 @@ export default class CoordCtrl {
     const frame = () => {
       if (this.progress > 100) {
         clearInterval(id)
-        this.started = "visible"
+        this.started = 'visible'
         this.coords = []
         redraw()
       } else {

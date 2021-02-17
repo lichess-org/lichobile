@@ -96,7 +96,7 @@ function renderBoard(fen: string, orientation: Color, boardTheme: string) {
 
   const boardClass = [
     'display_board',
-    boardTheme
+    `board-${boardTheme}`,
   ].join(' ')
 
   return (

@@ -74,7 +74,7 @@ export default {
     const boardClass = [
       'display_board',
       'orientation-' + chessground.state.orientation,
-      this.boardTheme,
+      `board-${this.boardTheme}`,
       customPieceTheme || this.pieceTheme,
       variant
     ].join(' ')

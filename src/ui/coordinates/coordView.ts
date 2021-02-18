@@ -41,7 +41,7 @@ export default function view(ctrl: CoordCtrl) {
   })
 
   const isWrongAnswer = (index: number) =>
-    ctrl.wrongAnswer === true && index === 0 ? '.nope' : ''
+    ctrl.wrongAnswer === true && index === 0 ? 'nope' : ''
 
   return layout.board(header(i18n('coordinateTraining')), [
     h('main#trainer.coord-trainer.training', [
@@ -83,7 +83,12 @@ export default function view(ctrl: CoordCtrl) {
       ]),
       h('div.coord-trainer__board.main-board', [
         ...ctrl.coords.map((e: Key, i: number) =>
-          h(`div#next_coord${i}.next_coord${isWrongAnswer(i)}`, { key: i }, e)
+          h('div.next_coord', {
+            key: i,
+            id: 'next_coord' + i,
+            className: isWrongAnswer(i)
+          }
+            , e)
         ),
         board,
       ]),

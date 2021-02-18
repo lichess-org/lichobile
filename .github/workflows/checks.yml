@@ -1,4 +1,4 @@
-name: Lint
+name: Lint and unit tests
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  lint:
+  checks:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,5 +27,9 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+      - name: Build
+        run: npm run build
       - name: Lint
         run: npm run lint
+      - name: Test
+        run: npm run test

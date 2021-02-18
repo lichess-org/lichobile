@@ -35,7 +35,7 @@ export default function view(ctrl: CoordCtrl) {
         color: null,
       },
       events: {
-        select: ctrl.handleSelect.bind(ctrl),
+        select: (key) => ctrl.handleSelect(key),
       },
     }),
   })
@@ -95,7 +95,7 @@ export default function view(ctrl: CoordCtrl) {
       h('div.coord-trainer__table', { style: { visibility: ctrl.started } }, [
         h(
           'button.start.button.button-fat',
-          { onclick: ctrl.startTraining.bind(ctrl) },
+          { onclick: () => ctrl.startTraining() },
           i18n('startTraining')
         ),
       ]),

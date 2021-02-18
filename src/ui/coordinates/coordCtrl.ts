@@ -1,9 +1,13 @@
+import { INITIAL_FEN } from 'chessops/fen'
+import Chessground from '~/chessground/Chessground'
+import  * as util from '~/chessground/util'
 import redraw from '~/utils/redraw'
 
 const FILES = 'abcdefgh'
 const RANKS = '12345678'
 
 export default class CoordCtrl {
+  chessground: Chessground
   coords: Key[]
   wrongAnswer: boolean
   score: number
@@ -16,6 +20,18 @@ export default class CoordCtrl {
     this.score = 0
     this.progress = 100
     this.started = 'visible'
+    this.chessground = new Chessground({
+      fen: INITIAL_FEN,
+      orientation: util.randomColor(),
+      coordinates: false,
+      movable: {
+        free: false,
+        color: null,
+      },
+      events: {
+        select: (key) => this.handleSelect(key),
+      },
+    })
   }
 
   getCoord(): Key {

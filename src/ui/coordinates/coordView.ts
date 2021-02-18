@@ -1,44 +1,13 @@
 import h from 'mithril/hyperscript'
-import Chessground from '~/chessground/Chessground'
-import redraw from '~/utils/redraw'
 import { header } from '../shared/common'
 import Board from '../shared/Board'
 import i18n from '../../i18n'
 import layout from '../layout'
-import { INITIAL_FEN } from 'chessops/fen'
 import CoordCtrl from './coordCtrl'
-
-let orientation = (Math.random() > 0.5 ? 'white' : 'black') as Color
-let random = true
-
-function reOriente(color: Color | undefined): void {
-  random = false
-  if (color === undefined) {
-    color = Math.random() > 0.5 ? 'white' : ('black' as Color)
-    random = true
-  }
-
-  orientation = color
-  redraw()
-}
+import * as helper from '../helper'
+import * as util from '~/chessground/util'
 
 export default function view(ctrl: CoordCtrl) {
-  const board = h(Board, {
-    key: orientation,
-    variant: 'standard',
-    chessground: new Chessground({
-      fen: INITIAL_FEN,
-      orientation: orientation,
-      coordinates: false,
-      movable: {
-        free: false,
-        color: null,
-      },
-      events: {
-        select: (key) => ctrl.handleSelect(key),
-      },
-    }),
-  })
 
   const isWrongAnswer = (index: number) =>
     ctrl.wrongAnswer === true && index === 0 ? 'nope' : ''
@@ -54,7 +23,7 @@ export default function view(ctrl: CoordCtrl) {
                 type: 'radio',
                 name: 'color',
                 value: 3,
-                onclick: () => reOriente('black'),
+                onclick: () => ctrl.chessground.orienteWithColor('black'),
               }),
               h('label.color.color_3', { for: 'coord_color_3' }, [h('i')]),
             ]),
@@ -62,10 +31,9 @@ export default function view(ctrl: CoordCtrl) {
               h('input#coord_color_2', {
                 type: 'radio',
                 name: 'color',
-                disabled: random,
-                checked: random ? 'checked' : null,
+                checked: 'checked',
                 value: 2,
-                onclick: () => reOriente(undefined),
+                onclick: () => ctrl.chessground.orienteWithColor(util.randomColor()),
               }),
               h('label.color.color_2', { for: 'coord_color_2' }, [h('i')]),
             ]),
@@ -74,7 +42,7 @@ export default function view(ctrl: CoordCtrl) {
                 type: 'radio',
                 name: 'color',
                 value: 1,
-                onclick: () => reOriente('white'),
+                onclick: () => ctrl.chessground.orienteWithColor('white'),
               }),
               h('label.color.color_1', { for: 'coord_color_1' }, [h('i')]),
             ]),
@@ -84,18 +52,20 @@ export default function view(ctrl: CoordCtrl) {
       h('div.coord-trainer__board.main-board', [
         ...ctrl.coords.map((e: Key, i: number) =>
           h('div.next_coord', {
-            key: i,
             id: 'next_coord' + i,
             className: isWrongAnswer(i)
           }
             , e)
         ),
-        board,
+        h(Board, {
+          variant: 'standard',
+          chessground: ctrl.chessground
+        }),
       ]),
       h('div.coord-trainer__table', { style: { visibility: ctrl.started } }, [
         h(
           'button.start.button.button-fat',
-          { onclick: () => ctrl.startTraining() },
+          { oncreate: helper.ontap(() => ctrl.startTraining()) },
           i18n('startTraining')
         ),
       ]),

@@ -7,6 +7,10 @@ export function toggleOrientation(state: State): void {
   state.orientation = util.opposite(state.orientation)
 }
 
+export function orienteWithColor(state: State, color: Color): void {
+  state.orientation = color
+}
+
 export function reset(state: State): void {
   state.lastMove = null
   setSelected(state, null)

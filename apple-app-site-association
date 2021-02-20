@@ -6,58 +6,73 @@
         "appIDs": [ "HP5YLVDU97.org.lichess.mobileapp.official" ],
         "components": [
           {
-            "/": "????????"
+            "/": "/features",
+            "exclude": true,
           },
           {
-            "/": "????????/black"
+            "/": "/practice",
+            "exclude": true,
           },
           {
-            "/": "????????/black"
+            "/": "/streamer",
+            "exclude": true,
           },
           {
-            "/": "analysis"
+            "/": "/????????"
           },
           {
-            "/": "analysis/*"
+            "/": "/????????/black"
           },
           {
-            "/": "editor"
+            "/": "/????????/black"
           },
           {
-            "/": "editor/*"
+            "/": "/analysis"
           },
           {
-            "/": "inbox/*"
+            "/": "/analysis/*"
           },
           {
-            "/": "tournament"
+            "/": "/editor"
           },
           {
-            "/": "tournament/*"
+            "/": "/editor/*"
           },
           {
-            "/": "training"
+            "/": "/inbox/*"
           },
           {
-            "/": "training/*"
+            "/": "/tournament"
           },
           {
-            "/": "tv"
+            "/": "/tournament/*"
           },
           {
-            "/": "tv/*"
+            "/": "/training"
           },
           {
-            "/": "study"
+            "/": "/training/*"
           },
           {
-            "/": "study/*"
+            "/": "/tv"
+          },
+          {
+            "/": "/tv/*"
+          },
+          {
+            "/": "/study"
+          },
+          {
+            "/": "/study/*"
           }
         ]
       },
       {
         "appID": "HP5YLVDU97.org.lichess.mobileapp.official",
         "paths": [
+          "NOT /features",
+          "NOT /practice",
+          "NOT /streamer",
           "/????????",
           "/????????/black",
           "/????????/white",

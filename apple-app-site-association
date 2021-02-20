@@ -3,20 +3,83 @@
     "apps": [],
     "details": [
       {
+        "appIDs": [ "HP5YLVDU97.org.lichess.mobileapp.official" ],
+        "components": [
+          {
+            "/": "????????"
+          },
+          {
+            "/": "????????/black"
+          },
+          {
+            "/": "????????/black"
+          },
+          {
+            "/": "analysis"
+          },
+          {
+            "/": "analysis/*"
+          },
+          {
+            "/": "editor"
+          },
+          {
+            "/": "editor/*"
+          },
+          {
+            "/": "inbox/*"
+          },
+          {
+            "/": "tournament"
+          },
+          {
+            "/": "tournament/*"
+          },
+          {
+            "/": "training"
+          },
+          {
+            "/": "training/*"
+          },
+          {
+            "/": "tv"
+          },
+          {
+            "/": "tv/*"
+          },
+          {
+            "/": "study"
+          },
+          {
+            "/": "study/*"
+          }
+        ]
+      },
+      {
         "appID": "HP5YLVDU97.org.lichess.mobileapp.official",
         "paths": [
-          "/*/black",
-          "/*/white",
-          "/analysis*",
-          "/editor*",
-          "/inbox*",
+          "/????????",
+          "/????????/black",
+          "/????????/white",
+          "/analysis",
+          "/analysis/*",
+          "/editor",
+          "/editor/*",
+          "/inbox/*",
           "/player",
-          "/tournament*",
-          "/training*",
+          "/tournament",
+          "/tournament/*",
+          "/training",
+          "/training/*",
           "/tv",
-          "/study*"
+          "/tv/*",
+          "/study",
+          "/study/*"
         ]
       }
     ]
+  },
+  "webcredentials": {
+    "apps": [ "HP5YLVDU97.org.lichess.mobileapp.official" ]
   }
 }

@@ -15,6 +15,8 @@ import friendsPopup from './friendsPopup'
 import lobby from './lobby'
 import EdgeOpenHandler, { Handlers } from './shared/sideMenu/EdgeOpenHandler'
 import MainBoard from './shared/layout/MainBoard'
+import announce, { Announcement } from '~/announce'
+import { distanceToNowStrict } from '~/i18n'
 
 let background: string
 
@@ -59,11 +61,13 @@ export default {
     footer?: Mithril.Children,
     overlay?: Mithril.Children,
     scrollListener?: (e: Event) => void
-  ) {
+  ): Mithril.Vnode {
     background = background || settings.general.theme.background()
+    const announcement = announce.get()
     return h('div.view-container', containerOpts(background), [
       h('main#page', { oncreate: handleMenuOpen }, [
         h('header.main_header', header),
+        renderAnnouncement(announcement),
         h('div#free_content.content.native_scroller', {
           className: footer ? 'withFooter' : '',
           oncreate: ({ dom }) => {
@@ -119,4 +123,15 @@ function containerOpts(bgTheme: string) {
   return {
     className: bgClass(bgTheme)
   }
+}
+
+function renderAnnouncement(announcement?: Announcement): Mithril.Child {
+  if (!announcement) {
+    return null
+  }
+
+  return h('div.announce', [
+    h('span', announcement.msg),
+    h('span', distanceToNowStrict(new Date(announcement.date), true))
+  ])
 }

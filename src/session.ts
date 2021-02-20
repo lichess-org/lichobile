@@ -2,7 +2,7 @@ import { Plugins } from '@capacitor/core'
 import throttle from 'lodash-es/throttle'
 import redraw from './utils/redraw'
 import signals from './signals'
-import { SESSION_ID_KEY, fetchJSON, fetchText, ErrorResponse } from './http'
+import { SESSION_ID_KEY, fetchJSON, fetchText } from './http'
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils'
 import { getAtPath, setAtPath, pick } from './utils/object'
 import i18n from './i18n'
@@ -15,6 +15,7 @@ import { PrefValue } from './lichess/prefs'
 import challengesApi from './lichess/challenges'
 import storage from './storage'
 import asyncStorage from './asyncStorage'
+import announce, { Announcement } from './announce'
 
 interface Prefs {
   [key: string]: PrefValue
@@ -56,6 +57,7 @@ export interface Session {
   readonly playban?: TempBan
   // sent on login/signup only
   readonly sessionId?: string
+  readonly announce?: Announcement
 }
 
 let session: Session | undefined
@@ -302,38 +304,37 @@ function rememberLogin(): Promise<Session> {
   })
 }
 
-function refresh(): Promise<void> {
-  return fetchJSON<Session>('/account/info', { cache: 'reload' })
-  .then((data: Session) => {
+async function refresh(): Promise<void> {
+  try {
+    const data = await fetchJSON<Session>('/account/info', { cache: 'reload' })
     session = data
     storeSession(data)
+    announce.set(data.announce)
     // if server tells me, reload challenges
     if (session.nbChallenges !== challengesApi.incoming().length) {
       challengesApi.refresh().then(redraw)
     }
     redraw()
-  })
-  .catch((err: ErrorResponse) => {
+  } catch (err) {
     if (session !== undefined && err.status === 401) {
       session = undefined
       onLogout()
       redraw()
       Plugins.LiToast.show({ text: i18n('signedOut'), duration: 'short' })
     }
-  })
+  }
 }
 
-function backgroundRefresh(): void {
+async function backgroundRefresh(): Promise<void> {
   if (hasNetwork() && isConnected()) {
-    fetchJSON<Session>('/account/info')
-    .then((data: Session) => {
-      session = data
-      storeSession(data)
-      // if server tells me, reload challenges
-      if (session.nbChallenges !== challengesApi.incoming().length) {
-        challengesApi.refresh().then(redraw)
-      }
-    })
+    const data = await fetchJSON<Session>('/account/info')
+    session = data
+    storeSession(data)
+    announce.set(data.announce)
+    // if server tells me, reload challenges
+    if (session.nbChallenges !== challengesApi.incoming().length) {
+      challengesApi.refresh().then(redraw)
+    }
   }
 }
 

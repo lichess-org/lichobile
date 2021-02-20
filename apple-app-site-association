@@ -7,15 +7,15 @@
         "components": [
           {
             "/": "/features",
-            "exclude": true,
+            "exclude": true
           },
           {
             "/": "/practice",
-            "exclude": true,
+            "exclude": true
           },
           {
             "/": "/streamer",
-            "exclude": true,
+            "exclude": true
           },
           {
             "/": "/????????"

@@ -1,0 +1,22 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "HP5YLVDU97.org.lichess.mobileapp.official",
+        "paths": [
+          "/*/black",
+          "/*/white",
+          "/analysis*",
+          "/editor*",
+          "/inbox*",
+          "/player",
+          "/tournament*",
+          "/training*",
+          "/tv",
+          "/study*"
+        ]
+      }
+    ]
+  }
+}

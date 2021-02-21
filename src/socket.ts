@@ -13,6 +13,7 @@ import friendsApi, { Friend } from './lichess/friends'
 import challengesApi from './lichess/challenges'
 import { ChallengesData } from './lichess/interfaces/challenge'
 import session from './session'
+import announce, { Announcement } from './announce'
 
 export interface LichessMessage<T> {
   t: string
@@ -107,6 +108,14 @@ const defaultHandlers: MessageHandlers = {
   resync() {
     router.reload()
   },
+  announce: (a: Announcement | Record<string, never>) => {
+    const announcement = a as Announcement
+    if (announcement.date) {
+      announce.set(announcement)
+    } else {
+      announce.set(undefined)
+    }
+  }
 }
 
 function handleFollowingOnline(data: string[], payload: FollowingOnlinePayload) {

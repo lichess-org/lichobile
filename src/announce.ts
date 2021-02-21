@@ -1,3 +1,5 @@
+import redraw from './utils/redraw'
+
 export interface Announcement {
   msg: string
   date: string
@@ -11,6 +13,7 @@ export function get(): Announcement | undefined {
 
 export function set(a: Announcement | undefined): void {
   announce = a
+  redraw()
 }
 
 export default {

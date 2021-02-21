@@ -438,6 +438,7 @@ export default {
   "lessThanNbMinutes:other": "%s விடக் குறைந்த நிமிடங்கள்",
   "nbGamesInPlay:one": "%s விளையாட்டுக்கள்",
   "nbGamesInPlay:other": "%s விளையாட்டுக்கள்",
+  "highestRating": "மிக உயர்ந்த தரமதிப்பு: %s",
   "preferences": "விருப்பங்கள்",
   "pgnLetter": "எழுத்து (K, Q, R, B, N)",
   "chessClock": "செஸ் கடிகாரம்",

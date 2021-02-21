@@ -910,6 +910,7 @@ export default {
   "history": "Arenusøga",
   "drawingWithinNbMoves:one": "At telva javnt áðrenn fyrsta %s leik, gevur hvørgum telvara nakað stig.",
   "drawingWithinNbMoves:other": "At telva javnt áðrenn fyrstu %s leikirnar, gevur hvørgum telvara nakað stig.",
+  "now": "nú",
   "preferences": "Stillingar",
   "gameDisplay": "Útsjónd á talvi",
   "pieceAnimation": "Snið á talvfólki",

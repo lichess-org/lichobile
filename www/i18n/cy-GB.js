@@ -690,6 +690,7 @@ export default {
   "otherRules": "Rheolau pwysig eraill",
   "thisIsPrivate": "Mae hwn yn dalwrn preifat",
   "shareUrl": "Rhannu URL hwn i wahodd pobl: %s",
+  "now": "nawr",
   "preferences": "Hoffterau",
   "gameDisplay": "Dangos y gêm",
   "pieceAnimation": "Animeiddiad darnau",

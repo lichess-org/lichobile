@@ -900,6 +900,7 @@ export default {
   "history": "Maydon tarixi",
   "drawingWithinNbMoves:one": "%s yurishgacha durrangga kelishilgan o'yin hech bir ishtirokchiga hisob bermaydi.",
   "drawingWithinNbMoves:other": "%s yurishgacha durrangga kelishilgan o'yinlar hech bir ishtirokchiga hisob bermaydi.",
+  "perfStats": "%sнинг натижалари",
   "preferences": "Shaxsiy sozlanmalar",
   "gameDisplay": "O'yin oynasi",
   "pieceAnimation": "Qism animatsiyalar",

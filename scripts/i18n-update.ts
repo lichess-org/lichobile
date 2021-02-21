@@ -9,7 +9,7 @@ const baseDir = 'tmp/translations';
 const i18nBaseDir = '../www/i18n';
 const unzipMaxBufferSize = 1024 * 1024 * 10; // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
-const modules = ['site', 'study', 'arena', 'preferences', 'settings', 'search', 'team', 'tfa', 'puzzle']
+const modules = ['site', 'study', 'arena', 'perfStat', 'preferences', 'settings', 'search', 'team', 'tfa', 'puzzle']
 
 type StringMap = {
   [i: string]: string | undefined

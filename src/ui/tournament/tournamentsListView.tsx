@@ -77,13 +77,14 @@ function renderTournamentListItem(tournament: TournamentListItem, index: number)
     capitalize(tournament.variant.short) : ''
   const evenOrOdd = index % 2 === 0 ? ' even ' : ' odd '
   const tournamentType = determineTournamentType(tournament)
+  const icon = tournament.schedule.freq === 'shield' ? '5' : tournament.perf.icon
 
   return (
     <li key={tournament.id}
       className={'list_item tournament_item' + evenOrOdd + tournamentType}
       data-id={tournament.id}
     >
-      <i className="tournamentListIcon" data-icon={tournament.perf.icon} />
+      <i className="tournamentListIcon" data-icon={icon} />
       <div className="tournamentListName">
         <div className="fullName">{tournament.fullName}</div>
         <small className="infos">{time} {variant} {mode} • {duration}</small>

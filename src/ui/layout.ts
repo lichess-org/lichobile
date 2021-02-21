@@ -2,7 +2,7 @@ import { Capacitor } from '@capacitor/core'
 import h from 'mithril/hyperscript'
 import settings from '../settings'
 import Gesture from '../utils/Gesture'
-import { viewportDim } from './helper'
+import { ontap, viewportDim } from './helper'
 import * as menu from './menu'
 import MenuView from './menu/menuView'
 import gamesMenu from './gamesMenu'
@@ -132,6 +132,9 @@ function renderAnnouncement(announcement?: Announcement): Mithril.Child {
 
   return h('div.announce', [
     h('span', announcement.msg),
-    h('span', distanceToNowStrict(new Date(announcement.date), true))
+    h('span', distanceToNowStrict(new Date(announcement.date), true)),
+    h('span.fa.fa-times.dismiss', {
+      oncreate: ontap(announce.dismiss)
+    })
   ])
 }

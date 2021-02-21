@@ -62,6 +62,7 @@ export default {
   "last": "Һуңғы",
   "open": "Асырға",
   "noPinnedComment": "Юҡ",
+  "now": "әле",
   "from": "Башлана:",
   "to": "Бөтә:",
   "date": "Дата",

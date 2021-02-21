@@ -10,6 +10,7 @@ import { shortPerfTitle } from '../../../lichess/perfs'
 import { User, PerfStats } from '../../../lichess/interfaces/user'
 import layout from '../../layout'
 import { renderBody } from './variantPerfView'
+import i18n from '../../../i18n'
 
 interface Attrs {
   id: string
@@ -57,7 +58,7 @@ export default {
     const header = headerWidget(null,
       backButton(h('div.main_header_title', [
         h('span.withIcon', { 'data-icon': gameIcon(perf) }),
-        userId + ' ' + shortPerfTitle(perf as PerfKey) + ' stats'
+        userId + ' ' + i18n('perfStats',shortPerfTitle(perf as PerfKey))
       ]))
     )
 

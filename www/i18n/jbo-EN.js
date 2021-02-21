@@ -668,6 +668,7 @@ export default {
   "otherRules": "lo drata ke vajni javni",
   "thisIsPrivate": "ti noi grinunjvi cu sivni",
   "shareUrl": "ko benji ti noi .urli ku'o mu'i lo nu cumgau lo nu lo prenu cu cmibi'o: %s",
+  "provisional": "zasni",
   "preferences": "lo se nelrai",
   "gameDisplay": "kelfoi selvistai",
   "pieceAnimation": "keldai muvdu bo nilsutra",

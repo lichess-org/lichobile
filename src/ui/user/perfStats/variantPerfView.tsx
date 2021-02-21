@@ -53,7 +53,7 @@ export function renderBody(ctrl: State) {
       <table class="variantPerf">
         <tbody>
         <tr>
-          <th class="variantPerfHeading" colspan="3"> Current Rating </th>
+          <th class="variantPerfHeading" colspan="3"> {i18n('yourRating')} </th>
         </tr>
         <tr>
           <th class="variantPerf"> {i18n('rating')} </th>
@@ -61,7 +61,7 @@ export function renderBody(ctrl: State) {
           <td> </td>
         </tr>
         <tr class={isEmpty(data.perf.progress)}>
-          <th class="variantPerf"> Last 12 games progress </th>
+          <th class="variantPerf"> {i18n('progressOverLastXGames','12').split(':')[0]} </th>
           <td class="variantPerf"> {helper.progress(data.perf.progress)} </td>
           <td> </td>
         </tr>
@@ -80,27 +80,27 @@ export function renderBody(ctrl: State) {
           <th class="variantPerfHeading" colspan="3">{i18n('ratingStats')}</th>
         </tr>
         <tr>
-          <th class="variantPerf"> Avg opponent {i18n('rating').toLowerCase()} </th>
+          <th class="variantPerf"> {i18n('averageOpponent')} </th>
           <td class="variantPerf"> {data.stat.count.opAvg} </td>
           <td> </td>
         </tr>
         <tr class={isEmpty(data.stat.highest)}>
-          <th class="variantPerf"> Highest {i18n('rating').toLowerCase()} </th>
+          <th class="variantPerf"> {i18n('highestRating', 0).split(':')[0]} </th>
           <td class="variantPerf"> <span class="progress positive"> {data.stat.highest ? data.stat.highest.int : ''} </span> </td>
           <td class="variantPerf"> <span class="progress positive"> {data.stat.highest ? data.stat.highest.at.substring(0, 10) : ''} </span> </td>
         </tr>
         <tr class={isEmpty(data.stat.lowest)}>
-          <th class="variantPerf"> Lowest {i18n('rating').toLowerCase()} </th>
+          <th class="variantPerf"> {i18n('lowestRating', 0).split(':')[0]} </th>
           <td class="variantPerf"> <span class="progress positive"> {data.stat.lowest ? data.stat.lowest.int : ''} </span> </td>
           <td class="variantPerf"> <span class="progress positive"> {data.stat.lowest ? data.stat.lowest.at.substring(0, 10) : ''} </span> </td>
         </tr>
         <tr>
-          <th class="variantPerf"> {i18n('tpTimeSpentPlaying', 0).split(':')[0]} </th>
+          <th class="variantPerf"> {i18n('timeSpentPlaying', 0).split(':')[0]} </th>
           <td class="variantPerf" colspan="2"> { (days > 0 ? (days + 'd, ') : '') + hours + 'h, ' + mins + 'm' } </td>
         </tr>
         <tr> <td class="variantPerfSpacer" colspan="3"> </td> </tr>
         <tr>
-          <th class="variantPerfHeading" colspan="3"> Game Stats </th>
+          <th class="variantPerfHeading" colspan="3"> {i18n('games')} </th>
         </tr>
         <tr>
           <th class="variantPerf"> {i18n('wins')} </th>
@@ -118,7 +118,7 @@ export function renderBody(ctrl: State) {
           <td class="variantPerf"> <span class="progress negative"> {Math.round((data.stat.count.loss / data.stat.count.all) * 100) + '%'} </span> </td>
         </tr>
         <tr>
-          <th class="variantPerf"> Total </th>
+          <th class="variantPerf"> {i18n('totalGames')} </th>
           <td class="variantPerf"> {data.stat.count.all} </td>
           <td> </td>
         </tr>
@@ -133,12 +133,12 @@ export function renderBody(ctrl: State) {
           <td class="variantPerfMemo"> {Math.round((data.stat.count.tour / data.stat.count.all) * 100) + '%'} </td>
         </tr>
         <tr>
-          <th class="variantPerfMemo"> Berserk </th>
+          <th class="variantPerfMemo"> {i18n('berserkedGames')} </th>
           <td class="variantPerfMemo"> {data.stat.count.berserk} </td>
           <td class="variantPerfMemo"> {Math.round((data.stat.count.berserk / data.stat.count.all) * 100) + '%'} </td>
         </tr>
         <tr>
-          <th class="variantPerfMemo"> Disconnect </th>
+          <th class="variantPerfMemo"> {i18n('disconnections')} </th>
           <td class="variantPerfMemo" > {data.stat.count.disconnects} </td>
           <td class="variantPerfMemo"> {Math.round((data.stat.count.disconnects / data.stat.count.all) * 100) + '%'} </td>
         </tr>
@@ -147,7 +147,7 @@ export function renderBody(ctrl: State) {
           <th class="variantPerfHeading" colspan="3"> Streaks </th>
         </tr>
         <tr class={isEmpty(data.stat.playStreak)}>
-          <th class="variantPerf"> Playing streak </th>
+          <th class="variantPerf"> {i18n('gamesInARow')} </th>
           <td class="variantPerf"> {data.stat.playStreak.nb.max.v} </td>
           <td class="variantPerf"> {data.stat.playStreak.nb.max.from.at && data.stat.playStreak.nb.max.from.at.substring(0, 10)} </td>
         </tr>
@@ -157,7 +157,7 @@ export function renderBody(ctrl: State) {
           <td class="variantPerf"> <span class="progress positive"> {data.stat.resultStreak.win.max.to ? data.stat.resultStreak.win.max.to.at.substring(0, 10) : ''} </span> </td>
         </tr>
         <tr class={isEmpty(data.stat.resultStreak.loss.max.v)}>
-          <th class="variantPerf"> Losing streak </th>
+          <th class="variantPerf"> {i18n('losingStreak')}</th>
           <td class="variantPerf"> <span class="progress negative"> {data.stat.resultStreak.loss.max.v ? data.stat.resultStreak.loss.max.v : ''} </span> </td>
           <td class="variantPerf"> <span class="progress negative"> {data.stat.resultStreak.loss.max.to ? data.stat.resultStreak.loss.max.to.at.substring(0, 10) : ''} </span> </td>
         </tr>
@@ -165,7 +165,7 @@ export function renderBody(ctrl: State) {
         </tbody>
       </table>
       <div class={'variantPerfGames noPadding ' + isEmpty(data.stat.bestWins.results.length)}>
-        <div class="variantPerfHeading"> Best Wins </div>
+        <div class="variantPerfHeading"> {i18n('bestRated')} </div>
         {data.stat.bestWins.results.map((p: any) => renderGame(p))}
       </div>
     </div>

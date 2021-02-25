@@ -30,7 +30,6 @@ import { Autoplay } from './autoplay'
 import CevalCtrl from './ceval/CevalCtrl'
 import RetroCtrl, { IRetroCtrl } from './retrospect/RetroCtrl'
 import { make as makePractice, PracticeCtrl } from './practice/practiceCtrl'
-import { ICevalCtrl } from './ceval/interfaces'
 import crazyValid from './crazy/crazyValid'
 import ExplorerCtrl from './explorer/ExplorerCtrl'
 import { IExplorerCtrl } from './explorer/interfaces'
@@ -52,7 +51,7 @@ export default class AnalyseCtrl {
   notes: NotesCtrl | null
   chessground!: Chessground
   autoplay: Autoplay
-  ceval: ICevalCtrl
+  ceval: CevalCtrl
   retro: IRetroCtrl | null
   practice: PracticeCtrl | null
   explorer: IExplorerCtrl
@@ -137,7 +136,7 @@ export default class AnalyseCtrl {
 
       return this.isOfflineOrNotPlayable()
     })()
-    this.ceval = CevalCtrl({
+    this.ceval = new CevalCtrl({
       allowed: cevalAllowed,
       variant: this.data.game.variant.key,
       multiPv: settings.analyse.cevalMultiPvs(),

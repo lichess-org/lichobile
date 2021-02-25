@@ -17,7 +17,7 @@ export interface AnalyseData {
   readonly userAnalysis: boolean
   readonly tournament?: Tournament
   readonly forecast?: ForecastData
-  treeParts: Array<Partial<Tree.Node>>
+  treeParts: ReadonlyArray<Partial<Tree.Node>>
   readonly evalPut?: boolean
   // practiceGoal?: PracticeGoal
   readonly pref: any
@@ -39,7 +39,8 @@ export function isOnlineAnalyseData(d: AnalyseData): d is OnlineAnalyseData {
   return (<OnlineAnalyseData>d).url !== undefined
 }
 
-export interface AnalyseDataWithTree extends AnalyseData {
+export interface AnalyseDataWithTree {
+  readonly analysis?: RemoteEvalSummary
   readonly tree: Tree.Node
 }
 
@@ -54,14 +55,6 @@ export interface EvalJugdment {
   readonly comment: string
   readonly glyph: Glyph
   readonly name: string
-}
-
-export interface RemoteEval {
-  readonly cp: number
-  readonly best?: string
-  readonly mate?: number
-  readonly variation?: string
-  readonly judgment?: EvalJugdment
 }
 
 interface PlayerEvalSummary {

@@ -19,7 +19,7 @@ export default {
   ] as readonly MultiOption<boolean>[],
 
   renderRadio(
-    label: string,
+    label: string | Mithril.Vnode<any, any>,
     name: string,
     value: string,
     checked: boolean,
@@ -41,7 +41,7 @@ export default {
       h('label', {
         for: id,
         className: labelClasses
-      }, i18n(label))
+      }, typeof label === 'string' ? i18n(label) : label)
     ]
   },
 

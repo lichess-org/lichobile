@@ -6,6 +6,7 @@ import layout from '../layout'
 import CoordCtrl from './coordCtrl'
 import * as helper from '../helper'
 import * as util from '~/chessground/util'
+import formWidgets from '../shared/form'
 
 export default function view(ctrl: CoordCtrl) {
 
@@ -19,32 +20,37 @@ export default function view(ctrl: CoordCtrl) {
         h('form.color.buttons', [
           h('group.radio', [
             h('div', [
-              h('input#coord_color_3', {
-                type: 'radio',
-                name: 'color',
-                value: 3,
-                onclick: () => ctrl.chessground.orienteWithColor('black'),
-              }),
-              h('label.color.color_3', { for: 'coord_color_3' }, [h('i')]),
+              formWidgets.renderRadio(
+                h('i'),
+                'color',
+                '3',
+                false,
+                () => ctrl.chessground.orienteWithColor('black'),
+                undefined,
+                'color color_3',
+              )
             ]),
             h('div', [
-              h('input#coord_color_2', {
-                type: 'radio',
-                name: 'color',
-                checked: 'checked',
-                value: 2,
-                onclick: () => ctrl.chessground.orienteWithColor(util.randomColor()),
-              }),
-              h('label.color.color_2', { for: 'coord_color_2' }, [h('i')]),
+              formWidgets.renderRadio(
+                h('i'),
+                'color',
+                '2',
+                true,
+                () => ctrl.chessground.orienteWithColor(util.randomColor()),
+                undefined,
+                'color color_2',
+              )
             ]),
             h('div', [
-              h('input#coord_color_1', {
-                type: 'radio',
-                name: 'color',
-                value: 1,
-                onclick: () => ctrl.chessground.orienteWithColor('white'),
-              }),
-              h('label.color.color_1', { for: 'coord_color_1' }, [h('i')]),
+              formWidgets.renderRadio(
+                h('i'),
+                'color',
+                '1',
+                false,
+                () => ctrl.chessground.orienteWithColor('white'),
+                undefined,
+                'color color_1',
+              )
             ]),
           ]),
         ]),

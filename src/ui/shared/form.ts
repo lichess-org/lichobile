@@ -24,8 +24,9 @@ export default {
     value: string,
     checked: boolean,
     onchange: (e: Event) => void,
-    disabled?: boolean
-  ) {
+    disabled?: boolean,
+    labelClasses?: string,
+  ): any {
     const id = name + '_' + value
     return [
       h('input.radio[type=radio]', {
@@ -38,7 +39,8 @@ export default {
         disabled
       }),
       h('label', {
-        'for': id
+        for: id,
+        className: labelClasses
       }, i18n(label))
     ]
   },

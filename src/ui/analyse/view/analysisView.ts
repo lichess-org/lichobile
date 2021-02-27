@@ -32,16 +32,25 @@ function renderAnalysisGraph(ctrl: AnalyseCtrl) {
     ctrl.analysisProgress ?
     h('div.analyse-gameAnalysis_chartPlaceholder', spinner.getVdom('monochrome')) :
     h('div.analyse-chart', {
-      oncreate({ dom }: Mithril.VnodeDOM<any, any>) {
-        setTimeout(() => {
+      oncreate({ dom }: Mithril.VnodeDOM) {
+        batchRequestAnimationFrame(() => {
           this.updateCurPly = drawAcplChart(dom as HTMLElement, ctrl.data, ctrl.node.ply)
-        }, 200)
-      },
-      onupdate() {
-        if (this.updateCurPly) batchRequestAnimationFrame(() => {
-          if (ctrl.onMainline) this.updateCurPly(ctrl.node.ply)
-          else this.updateCurPly(null)
         })
+      },
+      onupdate({ dom }: Mithril.VnodeDOM) {
+        if (this.updateCurPly) {
+          batchRequestAnimationFrame(() => {
+            this.updateCurPly(ctrl.onMainline ? ctrl.node.ply : null)
+          })
+        } else {
+          batchRequestAnimationFrame(() => {
+            const el = dom as HTMLElement
+            while (el.lastElementChild) {
+              el.removeChild(el.lastElementChild)
+            }
+            this.updateCurPly = drawAcplChart(el, ctrl.data, ctrl.node.ply)
+          })
+        }
       }
     }),
     h(AcplSummary, {

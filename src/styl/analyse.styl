@@ -217,13 +217,19 @@ move
   font-weight bold
   &.current
     color #fff
-    background rgba(blue, 0.8)
+    background #293a49
     > index
       color #fff
   &.active
     background lighten(bgdark, 10%)
   &.currentPlayable
     border: 1px solid orange
+  &.inaccuracy
+    color #56b4e9
+  &.mistake
+    color #e69f00
+  &.blunder
+    color #df5353
 
 glyph
   font-size 0.85em
@@ -493,7 +499,6 @@ comment
     color rgba(textLightBg, 0.5)
 
   move
-    color inherit
     &.active
       background darken(bglight, 10%)
     &.current
@@ -555,7 +560,6 @@ comment
     background transparent
 
   move
-    color textTransp
     &.current
       background-color transpWhite05
       color #fff

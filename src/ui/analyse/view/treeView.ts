@@ -160,12 +160,17 @@ function renderInline(ctx: Ctx, node: Tree.Node, opts: Opts): Mithril.Child {
   }))
 }
 
-function nodeClasses(c: AnalyseCtrl, path: Tree.Path): NodeClasses {
-  const currentPlayable = !c.study && (path === c.initialPath && gameApi.playable(c.data))
+function nodeClasses(ctx: Ctx, node: Tree.Node, path: Tree.Path): NodeClasses {
+  const ctrl = ctx.ctrl
+  const currentPlayable = !ctrl.study && (path === ctrl.initialPath && gameApi.playable(ctrl.data))
+  const glyphIds = ctx.showGlyphs && node.glyphs ? node.glyphs.map(g => g.id) : []
   return {
-    current: path === c.path,
+    current: path === ctrl.path,
     currentPlayable,
-    nongame: !currentPlayable && !!c.gamePath && treePath.contains(path, c.gamePath) && path !== c.gamePath
+    nongame: !currentPlayable && !!ctrl.gamePath && treePath.contains(path, ctrl.gamePath) && path !== ctrl.gamePath,
+    inaccuracy: glyphIds.includes(6),
+    mistake: glyphIds.includes(2),
+    blunder: glyphIds.includes(4),
   }
 }
 
@@ -190,7 +195,7 @@ function renderMoveOf(ctx: Ctx, node: Tree.Node, opts: Opts): Mithril.Child {
   if (node.glyphs) renderGlyphs(node.glyphs).forEach(g => content.push(g))
   return h('move', {
     'data-path': path,
-    className: helper.classSet(nodeClasses(ctx.ctrl, path))
+    className: helper.classSet(nodeClasses(ctx, node, path))
   }, content)
 }
 

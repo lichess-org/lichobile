@@ -14,7 +14,14 @@ function keyOf(a: Announcement): string {
   return a.date // includes milliseconds, effectively unique
 }
 
+function isExpired(dateStr: string): boolean {
+  return new Date(dateStr) < new Date()
+}
+
 export function get(): Announcement | undefined {
+  if (announce && isExpired(announce.date)) {
+    announce = undefined
+  }
   return announce
 }
 
@@ -43,7 +50,7 @@ export async function dismiss(): Promise<void> {
 
   // clean up existing dismissed cache and add this new entry
   const existingDismissed = await asyncStorage.get<string[]>(STORAGE_KEY)
-  const newDismissed = (existingDismissed || []).filter(dateStr => (new Date(dateStr) >= new Date()))
+  const newDismissed = (existingDismissed || []).filter(dateStr => !isExpired(dateStr))
   newDismissed.push(dismissKey)
   await asyncStorage.set(STORAGE_KEY, newDismissed)
 

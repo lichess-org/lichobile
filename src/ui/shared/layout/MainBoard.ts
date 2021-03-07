@@ -1,4 +1,6 @@
 import h from 'mithril/hyperscript'
+import announce from '~/announce'
+import renderAnnouncement from '~/ui/announceView'
 
 import Gesture from '../../../utils/Gesture'
 import { viewportDim } from '../../helper'
@@ -45,6 +47,7 @@ export default {
       className: color,
     }, [
       h('header.main_header.board', header),
+      renderAnnouncement(announce.get()),
       h('div.content_round', {
         className: attrs.klass || ''
       }, children),

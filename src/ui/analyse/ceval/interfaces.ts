@@ -24,7 +24,6 @@ export interface Work {
   maxDepth: number
   multiPv: number
   ply: number
-  useNNUE: boolean
   threatMode: boolean
   initialFen: string
   currentFen: string

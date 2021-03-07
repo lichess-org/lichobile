@@ -119,9 +119,6 @@ export default class StockfishClient {
       this.startQueue = []
       this.ready = defer()
 
-      if (window.lichess.buildConfig.NNUE) {
-        await this.stockfish.setOption('Use NNUE', work.useNNUE)
-      }
       await this.stockfish.setOption('MultiPV', work.multiPv)
       await this.stockfish.send(['position', 'fen', work.initialFen, 'moves'].concat(work.moves).join(' '))
       if (work.maxDepth >= 99) {

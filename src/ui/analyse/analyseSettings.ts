@@ -174,11 +174,6 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
         !ctrl.ceval.allowed,
       )
     ]) : null,
-    window.lichess.buildConfig.NNUE ? h('div.action', [
-      formWidgets.renderCheckbox(
-        'Use NNUE', 'ceval.useNNUE', settings.analyse.cevalUseNNUE
-      ),
-    ]) : null
   ])
 }
 

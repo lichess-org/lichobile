@@ -55,10 +55,9 @@ export default class CevalCtrl {
       ply: step.ply,
       multiPv: forceMaxLevel ? 1 : this.opts.multiPv,
       threatMode: false,
-      useNNUE: settings.analyse.cevalUseNNUE(),
       emit: (ev?: Tree.ClientEval) => {
         if (this.enabled()) this.onEmit(work, ev)
-      }
+      },
     }
 
     this.engine.start(work)

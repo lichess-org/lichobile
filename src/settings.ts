@@ -150,7 +150,6 @@ export default {
     cevalHashSize: prop<number>('ceval.hashSize', 0),
     cevalInfinite: prop<boolean>('ceval.infinite', false),
     cevalMaxDepth: prop<number>('ceval.maxDepth', 18),
-    cevalUseNNUE: prop<boolean>('ceval.useNNUE', true),
     showBestMove: prop('analyse.showBestMove', true),
     showComments: prop('analyse.showComments', true),
     smallBoard: prop<boolean>('analyse.smallBoard', true),

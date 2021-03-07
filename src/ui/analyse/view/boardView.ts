@@ -60,15 +60,16 @@ function computeShapes(ctrl: AnalyseCtrl): readonly Shape[] {
   const rEval = ctrl.node && ctrl.node.eval
   let curBestShapes: readonly Shape[] = []
   let pastBestShape: readonly Shape[] = []
+  let annotationShape: readonly Shape[] = []
 
   if (ctrl.practice) {
     const hint = ctrl.practice.hinting()
     if (hint) {
       if (hint.mode === 'move') curBestShapes = moveOrDropShape(hint.uci, 'paleBlue', player)
-        else curBestShapes = [{
-          orig: chessFormat.uciToMoveOrDrop(hint.uci)[0],
-          brush: 'paleBlue'
-        }]
+      else curBestShapes = [{
+        orig: chessFormat.uciToMoveOrDrop(hint.uci)[0],
+        brush: 'paleBlue'
+      }]
     }
   }
 
@@ -91,12 +92,21 @@ function computeShapes(ctrl: AnalyseCtrl): readonly Shape[] {
     }
   }
 
+  const { uci, glyphs } = ctrl.node
+  if (uci && glyphs && glyphs.length > 0) {
+    const glyph = glyphs[0]
+    annotationShape = [{
+      orig: chessFormat.uciToMoveOrDrop(uci)[1],
+      glyph,
+    }]
+  }
+
   const badNode = ctrl.retro && ctrl.retro.showBadNode()
   const badMoveShape: Shape[] = badNode && badNode.uci ?
     moveOrDropShape(badNode.uci, 'paleRed', player) : []
 
   return [
-    ...pastBestShape, ...curBestShapes, ...badMoveShape
+    ...pastBestShape, ...curBestShapes, ...badMoveShape, ...annotationShape
   ]
 }
 

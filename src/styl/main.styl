@@ -7,6 +7,44 @@ body
   overflow hidden
   padding-top: env(safe-area-inset-top);
 
+.announce
+  position absolute
+  top 0
+  min-height headerHeight
+  width 100%
+  padding env(safe-area-inset-top) 0
+  padding-left 0.5em
+  box-sizing border-box
+  background orange
+  text-align center
+  font-size 1.1em
+  color white
+  display flex
+  flex-flow row nowrap
+  justify-content space-between
+  align-items center
+  z-index 1000
+
+  .text
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+
+  .dismiss
+    margin-right 0
+    margin-left 0.5em
+    height: 56px;
+    width: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  &.expanded
+    height auto
+    .text
+      overflow auto
+      white-space normal
+
 #free_content
   background-color bgdarkPage
   .list_item

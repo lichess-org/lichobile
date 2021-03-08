@@ -15,6 +15,8 @@ import friendsPopup from './friendsPopup'
 import lobby from './lobby'
 import EdgeOpenHandler, { Handlers } from './shared/sideMenu/EdgeOpenHandler'
 import MainBoard from './shared/layout/MainBoard'
+import renderAnnouncement from './announceView'
+import announce from '~/announce'
 
 let background: string
 
@@ -59,11 +61,12 @@ export default {
     footer?: Mithril.Children,
     overlay?: Mithril.Children,
     scrollListener?: (e: Event) => void
-  ) {
+  ): Mithril.Vnode {
     background = background || settings.general.theme.background()
     return h('div.view-container', containerOpts(background), [
       h('main#page', { oncreate: handleMenuOpen }, [
         h('header.main_header', header),
+        renderAnnouncement(announce.get()),
         h('div#free_content.content.native_scroller', {
           className: footer ? 'withFooter' : '',
           oncreate: ({ dom }) => {

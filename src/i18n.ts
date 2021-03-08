@@ -4,6 +4,7 @@ import formatDistanceStrict from 'date-fns/esm/formatDistanceStrict'
 import formatRelative from 'date-fns/esm/formatRelative'
 import addSeconds from 'date-fns/esm/addSeconds'
 import settings from './settings'
+import formatDistanceToNowStrict from 'date-fns/esm/formatDistanceToNowStrict'
 
 type Quantity = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other'
 
@@ -53,7 +54,7 @@ function format(message: string, ...args: Array<string | number>): string {
 }
 
 function formatVdom(str: string, ...args: Array<Mithril.Child>): Mithril.Children {
-  const segments: Array<any> = str.split(/(%(?:\d\$)?s)/g)
+  const segments: Array<Mithril.Child> = str.split(/(%(?:\d\$)?s)/g)
   for (let i = 1; i <= args.length; i++) {
     const pos = segments.indexOf('%' + i + '$s')
     if (pos !== -1) segments[pos] = args[i - 1]
@@ -90,6 +91,13 @@ export function formatDuration(duration: Seconds): string {
 export function fromNow(date: Date): string {
   return formatRelative(date, new Date(), {
     locale: dateLocale
+  })
+}
+
+export function distanceToNowStrict(date: Date, addSuffix = false): string {
+  return formatDistanceToNowStrict(date, {
+    locale: dateLocale,
+    addSuffix: addSuffix,
   })
 }
 

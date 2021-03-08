@@ -4,6 +4,7 @@ import { distanceToNowStrict } from '~/i18n'
 import { prop } from '~/utils'
 import redraw from '~/utils/redraw'
 import { ontap } from './helper'
+import { closeIcon } from './shared/icons'
 
 const expanded = prop(false)
 
@@ -21,9 +22,9 @@ export default function renderAnnouncement(announcement?: Announcement): Mithril
         redraw()
       })
     }, announcement.msg),
-    h('span', distanceToNowStrict(new Date(announcement.date), true)),
-    h('span.fa.fa-times.dismiss', {
+    h('small', distanceToNowStrict(new Date(announcement.date), true)),
+    h('button.dismiss', {
       oncreate: ontap(announce.dismiss)
-    })
+    }, closeIcon)
   ])
 }

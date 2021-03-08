@@ -12,10 +12,12 @@ body
   top 0
   min-height headerHeight
   width 100%
-  padding env(safe-area-inset-top) 10px
+  padding env(safe-area-inset-top) 0
+  padding-left 0.5em
   box-sizing border-box
   background orange
   text-align center
+  font-size 1.1em
   color white
   display flex
   flex-flow row nowrap
@@ -31,6 +33,11 @@ body
   .dismiss
     margin-right 0
     margin-left 0.5em
+    height: 56px;
+    width: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
   &.expanded
     height auto

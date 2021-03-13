@@ -24,12 +24,6 @@ async function compile(entry) {
   }
 }
 
-async function sequential(iterable, action) {
-  for (const e of iterable) {
-    await action(e)
-  }
-}
-
 function execute() {
   console.log('Compiling date-fns locales...')
 

@@ -1,0 +1,16 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/triple-slash-reference": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/semi": ["error", "never"]
+  }
+}

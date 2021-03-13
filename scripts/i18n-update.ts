@@ -6,6 +6,7 @@ import colors = require('colors/safe')
 
 const baseDir = 'tmp/translations'
 const i18nBaseDir = '../www/i18n'
+const mobileSourceDir = '../translation/dest/'
 const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
 const modules = ['site', 'study', 'arena', 'perfStat', 'preferences', 'settings', 'search', 'team', 'tfa', 'puzzle']
@@ -41,6 +42,14 @@ async function main() {
         } catch (e) {
           console.error(e)
         }
+      }
+    }
+
+    const mobileTranslations = loadMobileTranslations()
+    for (const locale in mobileTranslations) {
+      everything[locale] = {
+        ...everything[locale],
+        ...mobileTranslations[locale],
       }
     }
 
@@ -134,4 +143,30 @@ async function loadXml(locales: readonly string[], section: string): Promise<Rec
   return sectionXml
 }
 
+function loadMobileTranslations(): Map<string, StringMap> {
+  const localeMap = new Map()
+
+  for (const locale of readdirSync(mobileSourceDir)) {
+    localeMap[locale] = loadMobileTranslationsForLocale(locale)
+  }
+
+  return localeMap
+}
+
+function loadMobileTranslationsForLocale(locale: string): StringMap {
+  let translationMap = {}
+  const localeDir = `${mobileSourceDir}/${locale}`
+
+  for (const file of readdirSync(localeDir)) {
+    const data = JSON.parse(readFileSync(`${localeDir}/${file}`).toString())
+    translationMap = {
+      ...translationMap,
+      ...data,
+    }
+  }
+  
+  return translationMap
+}
+
 main()
+

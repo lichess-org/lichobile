@@ -1,4 +1,3 @@
-/* tslint:disable:semicolon */
 import { readFileSync, createWriteStream, WriteStream, writeFileSync, fstat, existsSync, readdirSync, readdir, mkdirSync } from 'fs';
 import { parseStringPromise } from 'xml2js';
 import { get } from 'request';

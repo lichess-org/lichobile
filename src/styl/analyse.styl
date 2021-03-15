@@ -215,21 +215,21 @@ move
   white-space nowrap
   border-radius 3px
   font-weight bold
-  &.current
-    color #fff
-    background #293a49
-    > index
-      color #fff
-  &.active
-    background lighten(bgdark, 10%)
-  &.currentPlayable
-    border: 1px solid orange
   &.inaccuracy
     color #56b4e9
   &.mistake
     color #e69f00
   &.blunder
     color #df5353
+  &.current
+    color #fff
+    background rgba(blue, 0.8)
+    > index
+      color #fff
+  &.active
+    background lighten(bgdark, 10%)
+  &.currentPlayable
+    border: 1px solid orange
 
 glyph
   font-size 0.85em
@@ -561,7 +561,8 @@ comment
 
   move
     &.current
-      background-color transpWhite02
+      background-color transpWhite05
+      color #fff
     &.active
       background-color transpWhite01
 

@@ -16,7 +16,7 @@ const infoPlistText = fs.readFileSync(infoPlistPath).toString()
 
 // when this script is executed (by npm-version) the new version is accessible
 // in package.json
-const newVersion = require('../package.json').version;
+const newVersion = require('../package.json').version
 const newVersionParts = newVersion.split('.')
 const newVersionCode =
   newVersionParts[0].padEnd(2, 0) +

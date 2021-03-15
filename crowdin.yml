@@ -29,6 +29,8 @@ files: [
   #
   "translation" : "/translation/dest/%locale%/%file_name%.%file_extension%",
 
+  "labels" : "mobile",
+
   #
   # File type
   # e.g. "json"

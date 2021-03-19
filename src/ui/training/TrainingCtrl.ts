@@ -287,7 +287,7 @@ export default class TrainingCtrl implements PromotingInterface {
       orientation: this.data.puzzle.color,
       movableColor: this.gameOver() ? null : this.data.puzzle.color,
       dests: dests || null,
-      check: !!node.check,
+      check: !!(node.check || node.san?.endsWith('+')),
       lastMove: node.uci ? chessFormat.uciToMove(node.uci) : null
     }
 

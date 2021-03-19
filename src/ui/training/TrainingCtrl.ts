@@ -60,7 +60,7 @@ export default class TrainingCtrl implements PromotingInterface {
 
   public player = (): Color => this.data.puzzle.color
 
-  public viewSolution = () => {
+  public viewSolution = (): void => {
     if (!this.vm.canViewSolution) return
     this.sendResult(false)
     this.vm.mode = 'view'
@@ -88,7 +88,7 @@ export default class TrainingCtrl implements PromotingInterface {
     this.mainline = treeOps.mainlineNodeList(this.tree.root)
   }
 
-  public jump = (path: Tree.Path, withSound = false) => {
+  public jump = (path: Tree.Path, withSound = false): void => {
     const pathChanged = path !== this.path
     this.setPath(path)
     this.updateBoard()
@@ -99,15 +99,15 @@ export default class TrainingCtrl implements PromotingInterface {
     promotion.cancel(this.chessground)
   }
 
-  public userJump = (path: Tree.Path, withSound: boolean) => {
+  public userJump = (path: Tree.Path, withSound: boolean): void => {
     this.jump(path, withSound)
   }
 
-  public canGoForward = () => {
+  public canGoForward = (): boolean => {
     return !this.vm.initializing && this.node.children.length > 0
   }
 
-  public fastforward = () => {
+  public fastforward = (): boolean => {
     if (this.node.children.length === 0) return false
 
     const child = this.node.children[0]
@@ -115,13 +115,13 @@ export default class TrainingCtrl implements PromotingInterface {
     return true
   }
 
-  public canGoBackward = () => {
+  public canGoBackward = (): boolean => {
     if (this.vm.moveValidationPending) return false
     if (this.path === '') return false
     return true
   }
 
-  public resync = () => {
+  public resync = (): void => {
     const user = session.get()
     if (hasNetwork() && user) {
       if (this.vm.loading) {
@@ -144,7 +144,7 @@ export default class TrainingCtrl implements PromotingInterface {
     }
   }
 
-  public rewind = () => {
+  public rewind = (): boolean => {
     if (this.canGoBackward()) {
       this.userJump(treePath.init(this.path), false)
       return true
@@ -153,7 +153,7 @@ export default class TrainingCtrl implements PromotingInterface {
     return false
   }
 
-  public newPuzzle = () => {
+  public newPuzzle = (): void => {
     if (this.vm.loading) {
       return
     }
@@ -181,17 +181,17 @@ export default class TrainingCtrl implements PromotingInterface {
     }
   }
 
-  public retry = () => {
+  public retry = (): void => {
     if (!this.vm.loading) {
       this.init(this.initialData)
     }
   }
 
-  public upvote = () => {
+  public upvote = (): void => {
     this.vote(true)
   }
 
-  public downvote = () => {
+  public downvote = (): void => {
     this.vote(false)
   }
 
@@ -200,11 +200,11 @@ export default class TrainingCtrl implements PromotingInterface {
     xhr.vote(this.data.puzzle.id, v).then(redraw)
   }, 1000)
 
-  public share = () => {
+  public share = (): void => {
     Plugins.LiShare.share({ url: `https://lichess.org/training/${this.data.puzzle.id}` })
   }
 
-  public goToAnalysis = () => {
+  public goToAnalysis = (): void => {
     const puzzle = this.data.puzzle
     if (hasNetwork()) {
       router.set(`/analyse/online/${puzzle.gameId}/${puzzle.color}?ply=${puzzle.initialPly}&curFen=${this.initialNode.fen}&color=${puzzle.color}&fallback=1`)

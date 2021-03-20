@@ -29,7 +29,7 @@ files: [
   #
   "translation" : "/translation/dest/%locale%/%file_name%.%file_extension%",
 
-  "labels" : "mobile",
+  "labels" : ["mobile"],
 
   #
   # File type

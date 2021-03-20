@@ -352,7 +352,6 @@ const untranslated: StringMap = {
   lichessIsUnreachable: 'lichess.org is unreachable.',
   mustSignInToJoin: 'You must sign in to join it.',
   playerisInvitingYou: '%s is inviting you',
-  toATypeGame: 'To a %s game',
   unsupportedVariant: 'Variant %s is not supported in this version',
   notesSynchronizationHasFailed: 'Notes synchronization with lichess has failed, please try later.',
   returnToHome: 'Return to home',

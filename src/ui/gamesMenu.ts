@@ -189,7 +189,6 @@ function renderIncomingChallenge(c: Challenge) {
   }
 
   const mode = c.rated ? i18n('rated') : i18n('casual')
-  const timeAndMode = challengesApi.challengeTime(c) + ', ' + mode
   const mark = c.challenger.provisional ? '?' : ''
   const playerName = `${c.challenger.id} (${c.challenger.rating}${mark})`
 
@@ -202,8 +201,11 @@ function renderIncomingChallenge(c: Challenge) {
       h('div.description', [
         h('h2.title', i18n('playerisInvitingYou', playerName)),
         h('p.variant', [
-          h('span.variantName', i18n('toATypeGame', c.variant.name)),
-          h('span.time-indication[data-icon=p]', timeAndMode)
+          h('span.time-indication[data-icon=p]', challengesApi.challengeTime(c)),
+          ' • ',
+          h('span.variantName', c.variant.name),
+          ' • ',
+          h('span', mode),
         ])
       ]),
       h('div.actions', [
@@ -227,7 +229,6 @@ function renderIncomingChallenge(c: Challenge) {
 function renderSendingChallenge(c: Challenge) {
 
   const mode = c.rated ? i18n('rated') : i18n('casual')
-  const timeAndMode = challengesApi.challengeTime(c) + ', ' + mode
 
   function playerName(destUser: ChallengeUser) {
     const mark = destUser.provisional ? '?' : ''
@@ -243,8 +244,11 @@ function renderSendingChallenge(c: Challenge) {
       h('div.description', [
         h('h2.title', c.destUser ? playerName(c.destUser) : 'Open challenge'),
         h('p.variant', [
-          h('span.variantName', i18n('toATypeGame', c.variant.name)),
-          h('span.time-indication[data-icon=p]', timeAndMode)
+          h('span.time-indication[data-icon=p]', challengesApi.challengeTime(c)),
+          ' • ',
+          h('span.variantName', c.variant.name),
+          ' • ',
+          h('span', mode),
         ]),
       ]),
       h('div.actions', [

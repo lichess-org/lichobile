@@ -10,8 +10,6 @@
   "unsupportedVariant": "Variant %s is not supported in this version",
   "notesSynchronizationHasFailed": "Notes synchronization with lichess has failed, please try later.",
   "returnToHome": "Return to home",
-  "localEvalCaution": "Caution: intensive usage will drain battery.",
-  "incorrectThreefoldClaim": "Incorrect threefold repetition claim.",
   "vibrateOnGameEvents": "Vibrate on game events",
   "offline": "Offline"
 }

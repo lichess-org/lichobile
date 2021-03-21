@@ -71,22 +71,33 @@ export function processQuerystring(e?: PopStateEvent): void {
   if (!matched) router.run('/')
 }
 
-function replaceState(state?: { [k: string]: unknown }, path?: string): void {
-  // try catch to avoid ios 9 100th pushState call DOM error
-  // see https://forums.developer.apple.com/thread/36650
-  // and https://bugs.webkit.org/show_bug.cgi?id=156115
-  // (may be only 100 calls per 30s interval in ios 10... need to test)
-  try {
-    const newState = state ?
-      Object.assign({}, window.history.state, state) :
-      window.history.state
+const History = {
+  replaceState(state?: { [k: string]: unknown }, path?: string): void {
+    // try catch to avoid ios 9 100th pushState call DOM error
+    // see https://forums.developer.apple.com/thread/36650
+    // and https://bugs.webkit.org/show_bug.cgi?id=156115
+    // (may be only 100 calls per 30s interval in ios 10... need to test)
+    try {
+      const newState = state ?
+        Object.assign({}, window.history.state, state) :
+        window.history.state
 
-    if (path !== undefined) {
-      window.history.replaceState(newState, '', '?=' + path)
-    } else {
-      window.history.replaceState(newState, '')
-    }
-  } catch (e) { console.error(e) }
+      if (path !== undefined) {
+        window.history.replaceState(newState, '', '?=' + path)
+      } else {
+        window.history.replaceState(newState, '')
+      }
+    } catch (e) { console.error(e) }
+  },
+
+  pushState(path: string): void {
+    const stateId = uid()
+    currentStateId = stateId
+    viewSlideDirection = 'fwd'
+    try {
+      window.history.pushState({ id: stateId }, '', '?=' + path)
+    } catch (e) { console.error(e) }
+  },
 }
 
 function setQueryParams(params: Record<string, string>, newState = false): void {
@@ -95,7 +106,7 @@ function setQueryParams(params: Record<string, string>, newState = false): void 
   if (newState) {
     setPath(newPath, true)
   } else {
-    replaceState(undefined, newPath)
+    History.replaceState(undefined, newPath)
   }
 }
 
@@ -163,14 +174,9 @@ function doSet(path: string, replace = false) {
   backbutton.stack = []
   previousPath = getPath()
   if (replace) {
-    replaceState(undefined, path)
+    History.replaceState(undefined, path)
   } else {
-    const stateId = uid()
-    currentStateId = stateId
-    viewSlideDirection = 'fwd'
-    try {
-      window.history.pushState({ id: stateId }, '', '?=' + path)
-    } catch (e) { console.error(e) }
+    History.pushState(path)
   }
   const matched = router.run(path)
   if (!matched) router.run('/')
@@ -202,7 +208,7 @@ export default {
   setQueryParams,
   getQueryParams,
   deleteQueryParam,
-  replaceState,
+  History,
   backHistory,
   getViewSlideDirection(): string {
     return viewSlideDirection

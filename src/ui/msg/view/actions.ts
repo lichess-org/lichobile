@@ -1,6 +1,6 @@
-import { Convo } from '../interfaces'
-import MsgCtrl from '../ctrl'
 import h from 'mithril/hyperscript'
+import { Convo } from '../interfaces'
+import MsgCtrl from '../MsgCtrl'
 import i18n from '~/i18n'
 import { ontap } from '~/ui/helper'
 

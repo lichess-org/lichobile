@@ -3,7 +3,7 @@ import router from '~/router'
 import { ontap } from '~/ui/helper'
 import { userStatus } from '~/ui/shared/common'
 import { backArrow } from '~/ui/shared/icons'
-import MsgCtrl from '../ctrl'
+import MsgCtrl from '../MsgCtrl'
 import { Convo } from '../interfaces'
 import renderActions from './actions'
 import renderInteract from './interact'
@@ -11,7 +11,9 @@ import renderMsgs from './msgs'
 
 export default function renderConvo(ctrl: MsgCtrl, convo: Convo): Mithril.Vnode {
   const user = convo.user
-  return h('div.msg-app__convo', [
+  return h('div.msg-app__convo', {
+    key: 'convo-loaded',
+  }, [
     h('div.msg-app__convo__head', [
       h('div.msg-app__convo__head__left', [
         h('button.msg-app__convo__head__back', {

@@ -28,7 +28,7 @@
         flex-center-nowrap()
 
         flex 0 0 auto
-        font-size 1.4em
+        font-size 1.2em
 
         .utitle
           margin-right .7ch
@@ -54,6 +54,11 @@
     &__action
       &.button
         padding .8em 1em
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &:before
+          font-size 1.2em
 
     &__reply
       flex-center-nowrap()
@@ -96,7 +101,7 @@
 
         .view-container.light &
           border-color themeBgLightBorder
-          background themeBgLightActive
+          background #fff
 
       &__submit
         outline 0

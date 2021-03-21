@@ -218,7 +218,7 @@ export default class TrainingCtrl implements PromotingInterface {
   private init(cfg: PuzzleData) {
     this.initialData = cfg
 
-    router.replaceState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
+    router.History.replaceState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
 
     this.vm = {
       mode: 'play',

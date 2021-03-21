@@ -1,7 +1,7 @@
+import h from 'mithril/hyperscript'
 import { Plugins } from '@capacitor/core'
 import throttle from 'lodash-es/throttle'
-import h from 'mithril/hyperscript'
-import MsgCtrl from '../ctrl'
+import MsgCtrl from '../MsgCtrl'
 import { User } from '../interfaces'
 
 let prev = 0

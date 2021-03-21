@@ -2,7 +2,7 @@ import h from 'mithril/hyperscript'
 import i18n from '~/i18n'
 import { ontap } from '~/ui/helper'
 import { linkify } from '~/utils/html'
-import MsgCtrl from '../ctrl'
+import MsgCtrl from '../MsgCtrl'
 import { Convo, Daily, Msg } from '../interfaces'
 import { scroller } from './scroller'
 

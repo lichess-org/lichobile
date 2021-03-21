@@ -14,7 +14,7 @@ export default class MsgCtrl {
   pane: Pane
   loading = false
   confirmDelete: string | null = null
-  connected = (): boolean => true
+  connected: () => boolean
   msgsPerPage = 100
   canGetMoreSince?: Date
   typing?: Typing
@@ -31,7 +31,7 @@ export default class MsgCtrl {
   }
 
   openConvo = (userId: string): void => {
-    if (this.data.convo?.user.id != userId) {
+    if (this.data.convo?.user.id !== userId) {
       this.data.convo = undefined
       this.loading = true
     }
@@ -40,7 +40,7 @@ export default class MsgCtrl {
       this.search.result = undefined
       this.loading = false
       if (data.convo) {
-        router.goTo(`/inbox/${data.convo.user.name}`)
+        router.History.pushState(`/inbox/${data.convo.user.name}`)
         this.onLoadConvo(data.convo)
         redraw()
       }
@@ -52,7 +52,7 @@ export default class MsgCtrl {
 
   showSide = (): void => {
     this.pane = 'side'
-    router.goTo('/inbox')
+    router.History.pushState('/inbox')
     redraw()
   }
 
@@ -60,7 +60,7 @@ export default class MsgCtrl {
     if (this.data.convo && this.canGetMoreSince)
       network.getMore(this.data.convo.user.id, this.canGetMoreSince)
         .then(data => {
-          if (!this.data.convo || !data.convo || data.convo.user.id != this.data.convo.user.id || !data.convo.msgs[0]) return
+          if (!this.data.convo || !data.convo || data.convo.user.id !== this.data.convo.user.id || !data.convo.msgs[0]) return
           if (data.convo.msgs[0].date >= this.data.convo.msgs[this.data.convo.msgs.length - 1].date) return
           this.data.convo.msgs = this.data.convo.msgs.concat(data.convo.msgs)
           this.onLoadMsgs(data.convo.msgs)
@@ -112,7 +112,7 @@ export default class MsgCtrl {
     this.addMsg(msg, contact)
     if (contact) {
       let redrawn = false
-      if (msg.user == this.data.convo?.user.id) {
+      if (msg.user === this.data.convo?.user.id) {
         this.data.convo.msgs.unshift(msg)
         redrawn = this.setRead()
         this.receiveTyping(msg.user, true)
@@ -129,12 +129,12 @@ export default class MsgCtrl {
   private addMsg = (msg: LastMsg, contact?: Contact) => {
     if (contact) {
       contact.lastMsg = msg
-      this.data.contacts = [contact].concat(this.data.contacts.filter(c => c.user.id != contact.user.id))
+      this.data.contacts = [contact].concat(this.data.contacts.filter(c => c.user.id !== contact.user.id))
     }
   }
 
   private findContact = (userId: string): Contact | undefined =>
-    this.data.contacts.find(c => c.user.id == userId)
+    this.data.contacts.find(c => c.user.id === userId)
 
   private currentContact = (): Contact | undefined =>
    this.data.convo && this.findContact(this.data.convo.user.id)
@@ -154,7 +154,7 @@ export default class MsgCtrl {
 
   setRead = (): boolean => {
     const msg = this.currentContact()?.lastMsg
-    if (msg && msg.user != this.data.me.id) {
+    if (msg && msg.user !== this.data.me.id) {
       if (msg.read) return false
       msg.read = true
       this.socket.setRead(msg.user)
@@ -171,7 +171,7 @@ export default class MsgCtrl {
       this.confirmDelete = null
       this.pane = 'side'
       redraw()
-      router.goTo('/inbox')
+      router.History.pushState('/inbox')
     })
   }
 
@@ -186,7 +186,7 @@ export default class MsgCtrl {
   }
 
   changeBlockBy = (userId: string): void => {
-    if (userId == this.data.convo?.user.id) this.openConvo(userId)
+    if (userId === this.data.convo?.user.id) this.openConvo(userId)
   }
 
   sendTyping = throttle((user: string) => {
@@ -198,11 +198,11 @@ export default class MsgCtrl {
       clearTimeout(this.typing.timeout)
       this.typing = undefined
     }
-    if (cancel !== true && this.data.convo?.user.id == userId) {
+    if (cancel !== true && this.data.convo?.user.id === userId) {
       this.typing = {
         user: userId,
         timeout: setTimeout(() => {
-          if (this.data.convo?.user.id == userId) this.typing = undefined
+          if (this.data.convo?.user.id === userId) this.typing = undefined
           redraw()
         }, 3000)
       }

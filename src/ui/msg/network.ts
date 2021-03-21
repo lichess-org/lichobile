@@ -1,4 +1,4 @@
-import MsgCtrl from './ctrl'
+import MsgCtrl from './MsgCtrl'
 import { MsgData, Contact, User, Msg, Convo, SearchResult } from './interfaces'
 import { fetchJSON } from '~/http'
 import socket, { MessageHandlers, SocketIFace } from '~/socket'
@@ -56,11 +56,11 @@ export class MessageSocket {
   post(dest: string, text: string): void {
     this.socket.send('msgSend', { dest, text })
   }
-  
+
   setRead(dest: string): void {
     this.socket.send('msgRead', dest)
   }
-  
+
   typing(dest: string): void {
     this.socket.send('msgType', dest)
   }

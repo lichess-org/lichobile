@@ -203,25 +203,25 @@ export default {
       })
 
       router.add('inbox', ({ params }) => {
-        import('./ui/inbox/inbox').then(m => {
+        import('./ui/msg/msg').then(m => {
           onRouteMatch(m.default, params)
         })
       })
 
       router.add('inbox/:id', ({ params }) => {
-        import('./ui/inbox/thread/thread').then(m => {
+        import('./ui/msg/msg').then(m => {
           onRouteMatch(m.default, params)
         })
       })
 
       router.add('inbox/new', ({ params }) => {
-        import('./ui/inbox/compose/compose').then(m => {
+        import('./ui/msg/msg').then(m => {
           onRouteMatch(m.default, params)
         })
       })
 
-      router.add('inbox/new/:userId', ({ params }) => {
-        import('./ui/inbox/compose/compose').then(m => {
+      router.add('inbox/new/:id', ({ params }) => {
+        import('./ui/msg/msg').then(m => {
           onRouteMatch(m.default, params)
         })
       })

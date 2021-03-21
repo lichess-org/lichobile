@@ -1,0 +1,202 @@
+msg-top-height = 3em
+
+flex-between-nowrap()
+  display flex
+  flex-flow nowrap
+  align-items center
+  justify-content space-between
+
+nowrap-ellipsis()
+  white-space nowrap
+  overflow hidden
+  text-overflow ellipsis
+flex-column()
+  display flex
+  flex-flow column
+flex-center-nowrap()
+  display flex
+  flex-flow row nowrap
+  align-items center
+
+.msg-app
+  display flex
+
+  &__side
+    flex-flow column
+    flex 1 0 100%
+    display none
+    background bgdark
+    border-top 1px bordercolor solid
+    overflow hidden
+    .pane-side &
+      display flex
+    
+    .view-container.light &
+      background themeBgLight
+      border-color themeBgLightBorder
+    
+    .view-container.transp &
+      background rgba(0, 0, 0, 0.2)
+
+    // tablet or larger 
+    @media only screen and (min-width 768px)
+      display flex
+      flex 0 0 40ch
+      border-right 1px bordercolor solid
+
+    &__contact
+      flex-center-nowrap()
+
+      &:active, &.active
+        background rgba(headerBgDarkActive, 70%)
+
+        .view-container.light &
+          background themeBgLightActive
+
+      &__icon
+        flex 0 0 auto
+
+      &__user
+        nowrap-ellipsis()
+
+        flex 1 1 auto
+        padding .8em 1.5em
+
+      &__head
+        flex-between-nowrap()
+        align-items baseline
+
+      &__date
+        flex 0 0 auto
+
+        time
+          opacity 1
+          color textLightGray
+          letter-spacing -.5px
+
+      &__name
+        nowrap-ellipsis()
+
+        flex 1 1 auto
+        font-size 1.2em
+
+      &__body
+        flex-between-nowrap()
+
+        height 1.4em
+
+      &__msg
+        nowrap-ellipsis()
+
+        color textMediumGray
+
+        &--new
+          font-weight bold
+          color blue
+
+      &__new
+        color blue
+        margin-left .3em
+
+    &__search
+      display flex
+      flex-flow row wrap
+      align-items center
+      flex 0 0 msg-top-height
+      border-bottom 1px solid borderColor
+      overflow-y auto
+      background bgdark
+
+      .view-container.light &
+        border-color themeBgLightBorder
+        background themeBgLightHeader
+
+      input
+        outline 0
+        border 1px solid borderColor
+        width 100%
+        margin auto 2em
+        border-radius 99px
+        background headerBgDarkActive
+        padding .2em 1.2em
+
+        .view-container.light &
+          border-color themeBgLightBorder
+          background themeBgLightActive
+
+
+  &__search
+    h2
+      font-size 1.3em
+      font-weight bold
+      margin 1.2em 0 .8em 2em
+      text-transform uppercase
+
+.msg-app__convo__msgs
+  flex-column()
+
+  flex 1 1 auto
+  overflow-y auto
+
+  &__more
+    margin 2em auto
+
+  &__getting-more
+    flex 1 1 auto
+
+  &__typing
+    color textLightGray
+
+  &__content
+    flex-column()
+    overflow-wrap break-word
+    word-break break-word
+
+    flex 0 0 auto
+    padding 3em 3vw 1em 3vw
+
+  group
+    flex-column()
+    margin .5em 0
+
+  mine, their, day
+    border-radius 6px
+    margin .2em 0
+    padding .5em 1em
+    max-width 70%
+
+  day
+    align-self center
+    font-size .9em
+    margin .5em 0
+    background darken(lightBrown, 50%)
+
+    .view-container.light &
+      background lighten(lightBrown, 50%)
+
+  mine
+    align-self flex-end
+    background rgba(blue, 35%)
+
+    &:first-child
+      border-top-right-radius 0
+
+  their
+    align-self flex-start
+    background rgba(#d8d8d8, 70%)
+    color textDarkGray
+
+    em 
+      color textMediumGray
+
+    &:first-child
+      border-top-left-radius 0
+    
+    .view-container.light &
+      color textBgLight
+
+  em
+    color textLightGray
+    font-size .8em
+    float right
+    margin .4em 0 0 2em

@@ -1,0 +1,112 @@
+.msg-app
+  &__convo
+    flex-column()
+    flex 1 1 100%
+    display none
+    .pane-convo &
+      display flex
+
+    &__head
+      flex-between-nowrap()
+      background bgdark
+
+      flex 0 0 msg-top-height
+      padding 0 1em
+      border-bottom 1px borderColor solid
+
+      .view-container.light &
+        border-color themeBgLightBorder
+        background themeBgLightHeader
+
+      &__left
+        flex-center-nowrap()
+
+        height 100%
+        align-items stretch
+
+      .user-link
+        flex-center-nowrap()
+
+        flex 0 0 auto
+        font-size 1.4em
+
+        .utitle
+          margin-right .7ch
+
+        .line
+          flex 0 0 auto
+          font-size 1.5em
+      &__back
+        display flex
+        flex-flow row wrap
+        align-items center
+
+        padding-right 1em
+        font-size 1.5em
+
+        // tablet or larger
+        @media only screen and (min-width 768px)
+          display none
+
+      &__actions
+        flex-center-nowrap()
+
+    &__action
+      &.button
+        padding .8em 1em
+
+    &__reply
+      flex-center-nowrap()
+
+      flex 0 0 auto
+      border-top 1px borderColor solid
+      padding 1em 2em
+      background headerBgDark
+
+      @media only screen and (min-width 768px)
+        border-left 1px borderColor solid
+      
+      .view-container.light &
+        border-color themeBgLightBorder
+        background themeBgLightHeader
+
+      &__block
+        flex 1 1 auto
+        text-align center
+        margin .6em
+        &::before
+          vertical-align middle
+          margin-right 0.4em
+
+    &__post
+      flex-center-nowrap()
+
+      flex 1 1 100%
+
+      &__text
+        padding .8em 1em
+        outline 0
+
+        flex 1 1 100%
+        border-radius 1.5em
+        resize none
+        border 1px solid borderColor
+        background headerBgDarkActive
+
+        .view-container.light &
+          border-color themeBgLightBorder
+          background themeBgLightActive
+
+      &__submit
+        outline 0
+        margin-left 0.5em
+        font-size 40px
+        transition all 150ms
+        color textLightGray
+
+        &:before
+          display block
+          transform rotate(50deg)
+
+        &.connected, &.connected:hover
+          color lightBrown

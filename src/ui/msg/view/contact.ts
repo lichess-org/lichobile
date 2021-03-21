@@ -1,9 +1,9 @@
-import h from "mithril/hyperscript"
-import { fromNow } from "~/i18n"
-import { ontapY } from "~/ui/helper"
-import { userStatus } from "~/ui/shared/common"
-import MsgCtrl from "../ctrl"
-import { Contact, LastMsg } from "../interfaces"
+import h from 'mithril/hyperscript'
+import { fromNow } from '~/i18n'
+import { ontapY } from '~/ui/helper'
+import { userStatus } from '~/ui/shared/common'
+import MsgCtrl from '../ctrl'
+import { Contact, LastMsg } from '../interfaces'
 
 export default function renderContact(ctrl: MsgCtrl, contact: Contact, active?: string): Mithril.Vnode {
   const user = contact.user, msg = contact.lastMsg,

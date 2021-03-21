@@ -57,7 +57,7 @@ function content(mini: any, player: Player, opponent: Player, score?: Score) {
   return (
     <div className="miniUser">
       <div className="title">
-        <div className="username" oncreate={helper.ontap(() => router.set(`/@/${user.username}`))}>
+        <div className="username" oncreate={helper.ontap(() => router.goTo(`/@/${user.username}`))}>
           {status}
         </div>
         { user.profile && user.profile.country ?
@@ -106,7 +106,7 @@ function content(mini: any, player: Player, opponent: Player, score?: Score) {
         <div className="mini_user_actions_wrapper">
           <button data-icon="1"
             oncreate={helper.ontap(() => {
-              router.set(`/@/${user.id}/tv`)
+              router.goTo(`/@/${user.id}/tv`)
             })}
           >
             {i18n('watchGames')}

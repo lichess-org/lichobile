@@ -44,7 +44,7 @@ function onTap(ctrl: IUserGamesCtrl, e: Event) {
   } else if (tournamentLink) {
     const tid = tournamentLink.dataset.id
     if (tid) {
-      router.set(`/tournament/${tid}`)
+      router.goTo(`/tournament/${tid}`)
     }
   } else {
     if (id) {

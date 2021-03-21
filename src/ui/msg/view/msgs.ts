@@ -1,18 +1,20 @@
-import h from "mithril/hyperscript"
-import i18n from "~/i18n"
-import { ontap } from "~/ui/helper"
-import { linkify } from "~/utils/html"
-import MsgCtrl from "../ctrl"
-import { Convo, Daily, Msg } from "../interfaces"
-import { scroller } from "./scroller"
+import h from 'mithril/hyperscript'
+import i18n from '~/i18n'
+import { ontap } from '~/ui/helper'
+import { linkify } from '~/utils/html'
+import MsgCtrl from '../ctrl'
+import { Convo, Daily, Msg } from '../interfaces'
+import { scroller } from './scroller'
 
 export default function renderMsgs(ctrl: MsgCtrl, convo: Convo): Mithril.Vnode {
   return h('div.msg-app__convo__msgs.native_scroller', {
-    oncreate: (vnode) => {
+    oncreate(vnode) {
       scroller.init(vnode.dom as HTMLElement)
       scroller.auto()
     },
-    onupdate: () => scroller.auto(),
+    onupdate() {
+      scroller.auto()
+    },
   }, [
     h('div.msg-app__convo__msgs__content', [
       ctrl.canGetMoreSince ? h('button.msg-app__convo__msgs__more.button.button-empty', {

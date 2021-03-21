@@ -1,14 +1,14 @@
-import i18n from "~/i18n"
-import router from "~/router"
-import { handleXhrError } from "~/utils"
-import redraw from "~/utils/redraw"
-import { viewFadeIn } from "../helper"
-import layout from "../layout"
-import { dropShadowHeader } from "../shared/common"
-import MsgCtrl from "./ctrl"
-import renderInbox from "./view/main"
-import renderOverlay from "./view/overlay"
-import { loadContacts, loadConvo } from "./network"
+import i18n from '~/i18n'
+import router from '~/router'
+import { handleXhrError } from '~/utils'
+import redraw from '~/utils/redraw'
+import { viewFadeIn } from '../helper'
+import layout from '../layout'
+import { dropShadowHeader } from '../shared/common'
+import MsgCtrl from './ctrl'
+import renderInbox from './view/main'
+import renderOverlay from './view/overlay'
+import { loadContacts, loadConvo } from './network'
 
 type Attrs = Record<string, never>
 type State = { ctrl?: MsgCtrl }
@@ -39,7 +39,7 @@ export default {
           })
         } else {
           handleXhrError(error)
-          router.set('/inbox')
+          router.goTo('/inbox')
         }
       })
     } else {

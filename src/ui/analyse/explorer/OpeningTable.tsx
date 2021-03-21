@@ -96,11 +96,11 @@ function link(ctrl: AnalyseCtrl, e: Event) {
   const el = getTR(e)
   const gameId = el && el.dataset['id']
   if (gameId && ctrl.explorer.config.data.db.selected() === 'lichess') {
-    router.set(`/analyse/online/${gameId}/${orientation}`)
+    router.goTo(`/analyse/online/${gameId}/${orientation}`)
   } else if (gameId) {
     xhr.importMasterGame(gameId, orientation)
     .then((data: OnlineGameData) =>
-      router.set(`/analyse/online/${data.game.id}/${orientation}`)
+      router.goTo(`/analyse/online/${data.game.id}/${orientation}`)
     )
   }
 }

@@ -47,7 +47,7 @@ function doChallenge() {
     if (data.challenge.destUser && challengesApi.isPersistent(data.challenge)) {
       gamesMenu.open(session.nowPlaying().length + challengesApi.all().length)
     } else {
-      router.set(`/game/${data.challenge.id}`)
+      router.goTo(`/game/${data.challenge.id}`)
     }
   })
   .catch(utils.handleXhrError)
@@ -111,7 +111,7 @@ function renderForm() {
         h('button.withIcon', {
           oncreate: helper.ontap(() => {
             close()
-            router.set('/editor')
+            router.goTo('/editor')
           })
         }, h('span.fa.fa-pencil')),
       ]),
@@ -127,7 +127,7 @@ function renderForm() {
           },
           oncreate: helper.ontap(() => {
             close()
-            if (setupFen) router.set(`/editor/${encodeURIComponent(setupFen)}`)
+            if (setupFen) router.goTo(`/editor/${encodeURIComponent(setupFen)}`)
           })
         }, [
           h(ViewOnlyBoard, { fen: setupFen, orientation: 'white'})

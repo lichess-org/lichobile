@@ -18,7 +18,7 @@ export default class MsgCtrl {
   msgsPerPage = 100
   canGetMoreSince?: Date
   typing?: Typing
-  socket: network.MessageSocket 
+  socket: network.MessageSocket
 
   constructor(data: MsgData) {
     this.data = data
@@ -40,7 +40,7 @@ export default class MsgCtrl {
       this.search.result = undefined
       this.loading = false
       if (data.convo) {
-        router.replacePath(`/inbox/${data.convo.user.name}`)
+        router.goTo(`/inbox/${data.convo.user.name}`)
         this.onLoadConvo(data.convo)
         redraw()
       }
@@ -52,7 +52,7 @@ export default class MsgCtrl {
 
   showSide = (): void => {
     this.pane = 'side'
-    router.replacePath('/inbox')
+    router.goTo('/inbox')
     redraw()
   }
 
@@ -171,7 +171,7 @@ export default class MsgCtrl {
       this.confirmDelete = null
       this.pane = 'side'
       redraw()
-      router.replacePath('/inbox')
+      router.goTo('/inbox')
     })
   }
 

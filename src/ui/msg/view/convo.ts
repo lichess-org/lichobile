@@ -1,13 +1,13 @@
-import h from "mithril/hyperscript"
-import router from "~/router"
-import { ontap } from "~/ui/helper"
-import { userStatus } from "~/ui/shared/common"
-import { backArrow } from "~/ui/shared/icons"
-import MsgCtrl from "../ctrl"
-import { Convo } from "../interfaces"
-import renderActions from "./actions"
-import renderInteract from "./interact"
-import renderMsgs from "./msgs"
+import h from 'mithril/hyperscript'
+import router from '~/router'
+import { ontap } from '~/ui/helper'
+import { userStatus } from '~/ui/shared/common'
+import { backArrow } from '~/ui/shared/icons'
+import MsgCtrl from '../ctrl'
+import { Convo } from '../interfaces'
+import renderActions from './actions'
+import renderInteract from './interact'
+import renderMsgs from './msgs'
 
 export default function renderConvo(ctrl: MsgCtrl, convo: Convo): Mithril.Vnode {
   const user = convo.user
@@ -18,7 +18,7 @@ export default function renderConvo(ctrl: MsgCtrl, convo: Convo): Mithril.Vnode 
           oncreate: ontap(() => { ctrl.showSide() })
         }, backArrow),
         h('div.user-link', {
-          oncreate: ontap(() => router.set(`/@/${user.name}`)),
+          oncreate: ontap(() => router.goTo(`/@/${user.name}`)),
           className: user.online ? 'online' : 'offline'
         }, userStatus({...user, username: user.name}))
       ]),

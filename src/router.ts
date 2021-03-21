@@ -71,7 +71,7 @@ export function processQuerystring(e?: PopStateEvent): void {
   if (!matched) router.run('/')
 }
 
-function assignState(state?: { [k: string]: unknown }, path?: string): void {
+function replaceState(state?: { [k: string]: unknown }, path?: string): void {
   // try catch to avoid ios 9 100th pushState call DOM error
   // see https://forums.developer.apple.com/thread/36650
   // and https://bugs.webkit.org/show_bug.cgi?id=156115
@@ -89,17 +89,13 @@ function assignState(state?: { [k: string]: unknown }, path?: string): void {
   } catch (e) { console.error(e) }
 }
 
-function replacePath(path: string): void {
-  assignState(undefined, path)
-}
-
 function setQueryParams(params: Record<string, string>, newState = false): void {
   const path = (window.location.search || '?=/').substring(2).replace(/\?.+$/, '')
   const newPath = path + `?${serializeQueryParameters(params)}`
   if (newState) {
     setPath(newPath, true)
   } else {
-    replacePath(newPath)
+    replaceState(undefined, newPath)
   }
 }
 
@@ -167,7 +163,7 @@ function doSet(path: string, replace = false) {
   backbutton.stack = []
   previousPath = getPath()
   if (replace) {
-    replacePath(path)
+    replaceState(undefined, path)
   } else {
     const stateId = uid()
     currentStateId = stateId
@@ -180,10 +176,10 @@ function doSet(path: string, replace = false) {
   if (!matched) router.run('/')
 }
 
-// sync call to router.set must be avoided in any `oninit` mithril component
+// sync call to router.goTo must be avoided in any `oninit` mithril component
 // otherwise it makes mithril create another root component on top of the
 // existing one
-// making router.set async makes it safe everywhere
+// making router.goTo async makes it safe everywhere
 function setPath(path: string, replace = false): void {
   setTimeout(() => doSet(path, replace), 0)
 }
@@ -199,15 +195,14 @@ function backHistory(): void {
 
 export default {
   get: getPath,
-  set: setPath,
+  goTo: setPath,
   reload(): void {
     setPath(getPath(), true)
   },
-  replacePath,
   setQueryParams,
   getQueryParams,
   deleteQueryParam,
-  assignState,
+  replaceState,
   backHistory,
   getViewSlideDirection(): string {
     return viewSlideDirection

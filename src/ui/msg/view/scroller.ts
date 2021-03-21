@@ -1,4 +1,4 @@
-import throttle from "lodash-es/throttle"
+import throttle from 'lodash-es/throttle'
 
 class Scroller {
   enabled = false
@@ -13,14 +13,18 @@ class Scroller {
       this.enable(!!el && el.offsetHeight + el.scrollTop > el.scrollHeight - 20)
     }, 500), { passive: true })
   }
+
   auto = () => {
     if (this.element && this.enabled)
       requestAnimationFrame(() => this.element && (this.element.scrollTop = 9999999))
   }
+
   enable = (v: boolean) => { this.enabled = v }
+
   setMarker = () => {
     this.marker = this.element && this.element.querySelector('mine,their') as HTMLElement
   }
+
   toMarker = (): boolean => {
     if (this.marker && this.to(this.marker)) {
       this.marker = undefined
@@ -28,6 +32,7 @@ class Scroller {
     }
     return false
   }
+
   to = (target: HTMLElement) => {
     if (this.element) {
       const top = target.offsetTop - this.element.offsetHeight / 2 + target.offsetHeight / 2

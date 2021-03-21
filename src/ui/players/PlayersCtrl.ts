@@ -64,6 +64,6 @@ export default class PlayersCtrl {
   }
 
   public goToProfile = (u: string) => {
-    router.set('/@/' + u)
+    router.goTo('/@/' + u)
   }
 }

@@ -8,7 +8,7 @@ export default function renderActions(ctrl: MsgCtrl, convo: Convo): Mithril.Chil
   if (convo.user.id == 'lichess') return []
 
   return (
-    h(`button.msg-app__convo__action.button.button-empty.bad`, {
+    h('button.msg-app__convo__action.button.button-empty.bad', {
       key: 'delete',
       'data-icon': 'q',
       title: i18n('delete'),

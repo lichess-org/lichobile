@@ -44,7 +44,7 @@ export default function ChessClockCtrl(): IChessClockCtrl {
 
   function goHome() {
     if (!clockObj().isRunning() || clockObj().flagged()) {
-      router.set('/')
+      router.goTo('/')
     }
   }
 

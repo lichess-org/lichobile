@@ -1,11 +1,11 @@
-import throttle from "lodash-es/throttle"
-import h from "mithril/hyperscript"
-import i18n from "~/i18n"
-import { ontapY } from "~/ui/helper"
-import { userStatus } from "~/ui/shared/common"
-import MsgCtrl from "../ctrl"
-import { SearchResult, User } from "../interfaces"
-import renderContact from "./contact"
+import throttle from 'lodash-es/throttle'
+import h from 'mithril/hyperscript'
+import i18n from '~/i18n'
+import { ontapY } from '~/ui/helper'
+import { userStatus } from '~/ui/shared/common'
+import MsgCtrl from '../ctrl'
+import { SearchResult, User } from '../interfaces'
+import renderContact from './contact'
 
 export function renderInput(ctrl: MsgCtrl): Mithril.Vnode {
   return h('div.msg-app__side__search', [

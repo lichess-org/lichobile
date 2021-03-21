@@ -1,9 +1,9 @@
-import MsgCtrl from "../ctrl"
+import MsgCtrl from '../ctrl'
 import popupWidget from '~/ui/shared/popup'
-import h from "mithril/hyperscript"
-import { ontapXY } from "~/ui/helper"
-import redraw from "~/utils/redraw"
-import i18n from "~/i18n"
+import h from 'mithril/hyperscript'
+import { ontapXY } from '~/ui/helper'
+import redraw from '~/utils/redraw'
+import i18n from '~/i18n'
 
 export default function renderOverlay(ctrl?: MsgCtrl): Mithril.Children {
   if (!ctrl?.confirmDelete) return null

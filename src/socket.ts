@@ -222,7 +222,7 @@ function createGame(
         .catch((err: ErrorResponse) => {
           if (err.status === 401) {
             Plugins.LiToast.show({ text: i18n('unauthorizedError'), duration: 'short' })
-            router.set('/')
+            router.goTo('/')
           }
         })
       }
@@ -482,7 +482,7 @@ function redirectToGame(obj: string | RedirectObj) {
         document.cookie = cookie
     }
   }
-  router.set('/game' + url)
+  router.goTo('/game' + url)
 }
 
 function onConnected() {

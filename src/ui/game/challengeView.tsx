@@ -148,7 +148,7 @@ function awaitInvitePopup(ctrl: ChallengeCtrl, challenge: Challenge) {
         isPersistent ? h('div', [
           h('br'),
           h('button', {
-            oncreate: helper.ontap(() => router.set('/'))
+            oncreate: helper.ontap(() => router.goTo('/'))
           }, [h('span.fa.fa-home'), i18n('Return to home')])
         ]) : null
       ])
@@ -182,7 +182,7 @@ function awaitChallengePopup(ctrl: ChallengeCtrl, challenge: Challenge) {
       challengesApi.isPersistent(challenge) ? h('div', [
         h('br'),
         h('button', {
-          oncreate: helper.ontap(() => router.set('/'))
+          oncreate: helper.ontap(() => router.goTo('/'))
         }, [h('span.fa.fa-home'), i18n('Return to home')])
       ]) : null
     ])

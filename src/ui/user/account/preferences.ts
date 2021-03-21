@@ -10,19 +10,19 @@ function renderBody() {
   return [
     h('ul.native_scroller.page.settings_list.game', [
       h('li.list_item.nav', {
-        oncreate: helper.ontapY(() => router.set('/account/preferences/game-display'))
+        oncreate: helper.ontapY(() => router.goTo('/account/preferences/game-display'))
       }, i18n('gameDisplay')),
       h('li.list_item.nav', {
-        oncreate: helper.ontapY(() => router.set('/account/preferences/clock'))
+        oncreate: helper.ontapY(() => router.goTo('/account/preferences/clock'))
       }, i18n('clock')),
       h('li.list_item.nav', {
-        oncreate: helper.ontapY(() => router.set('/account/preferences/game-behavior'))
+        oncreate: helper.ontapY(() => router.goTo('/account/preferences/game-behavior'))
       }, i18n('gameBehavior')),
       h('li.list_item.nav', {
-        oncreate: helper.ontapY(() => router.set('/account/preferences/privacy'))
+        oncreate: helper.ontapY(() => router.goTo('/account/preferences/privacy'))
       }, i18n('privacy')),
       h('li.list_item.nav', {
-        oncreate: helper.ontapY(() => router.set('/account/preferences/kidMode'))
+        oncreate: helper.ontapY(() => router.goTo('/account/preferences/kidMode'))
       }, i18n('kidMode'))
     ])
   ]

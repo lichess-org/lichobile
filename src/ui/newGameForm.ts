@@ -89,7 +89,7 @@ function goSeek(conf: PoolMember | HumanSeekSetup) {
   // correspondence or unlimited seek
   else {
     xhr.seekGame(conf)
-    .then(() => router.set('/?tab=1'))
+    .then(() => router.goTo('/?tab=1'))
     .catch(utils.handleXhrError)
   }
 }

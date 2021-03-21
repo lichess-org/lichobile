@@ -1,9 +1,9 @@
-import h from "mithril/hyperscript"
-import spinner from "~/spinner"
-import MsgCtrl from "../ctrl"
-import renderContact from "./contact"
-import renderConvo from "./convo"
-import * as search from "./search"
+import h from 'mithril/hyperscript'
+import spinner from '~/spinner'
+import MsgCtrl from '../ctrl'
+import renderContact from './contact'
+import renderConvo from './convo'
+import * as search from './search'
 
 export default function renderInbox(ctrl?: MsgCtrl): Mithril.Vnode {
   if (ctrl) {

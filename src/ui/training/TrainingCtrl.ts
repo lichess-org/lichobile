@@ -207,9 +207,9 @@ export default class TrainingCtrl implements PromotingInterface {
   public goToAnalysis = (): void => {
     const puzzle = this.data.puzzle
     if (hasNetwork()) {
-      router.set(`/analyse/online/${puzzle.gameId}/${puzzle.color}?ply=${puzzle.initialPly}&curFen=${this.initialNode.fen}&color=${puzzle.color}&fallback=1`)
+      router.goTo(`/analyse/online/${puzzle.gameId}/${puzzle.color}?ply=${puzzle.initialPly}&curFen=${this.initialNode.fen}&color=${puzzle.color}&fallback=1`)
     } else {
-      router.set(`/analyse/variant/standard/fen/${encodeURIComponent(this.initialNode.fen)}?color=${puzzle.color}&goBack=1`)
+      router.goTo(`/analyse/variant/standard/fen/${encodeURIComponent(this.initialNode.fen)}?color=${puzzle.color}&goBack=1`)
     }
   }
 
@@ -218,7 +218,7 @@ export default class TrainingCtrl implements PromotingInterface {
   private init(cfg: PuzzleData) {
     this.initialData = cfg
 
-    router.assignState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
+    router.replaceState({ puzzleId: cfg.puzzle.id }, `/training/${cfg.puzzle.id}`)
 
     this.vm = {
       mode: 'play',

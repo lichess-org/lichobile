@@ -112,13 +112,13 @@ function joinGame(g: NowPlayingGame) {
   lastJoined = g
   positionsCache.set(g.fullId, { fen: g.fen, orientation: g.color })
   close()
-  router.set('/game/' + g.fullId)
+  router.goTo('/game/' + g.fullId)
 }
 
 function acceptChallenge(id: string) {
   return xhr.acceptChallenge(id)
   .then(data => {
-    router.set('/game' + data.url.round)
+    router.goTo('/game' + data.url.round)
   })
   .then(() => challengesApi.remove(id))
   .then(() => close())
@@ -255,7 +255,7 @@ function renderSendingChallenge(c: Challenge) {
         c.destUser ? null : h('button', {
           oncreate: helper.ontapX(() => {
             close()
-            router.set(`/game/${c.id}`)
+            router.goTo(`/game/${c.id}`)
           })
         }, i18n('viewInFullSize')),
         h('button', {

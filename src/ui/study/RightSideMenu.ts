@@ -68,7 +68,7 @@ export default {
               studyCtrl.sideMenu.close()
               .then(() => {
                 const tab = studyCtrl.analyseCtrl.currentTab(studyCtrl.analyseCtrl.availableTabs()).id
-                router.set(`/study/${study.id}/chapter/${id}?tabId=${tab}`, true)
+                router.goTo(`/study/${study.id}/chapter/${id}?tabId=${tab}`, true)
               })
             }
           }, undefined, helper.getLI)

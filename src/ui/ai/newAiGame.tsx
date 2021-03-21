@@ -92,7 +92,7 @@ export default {
                           height: '130px'
                         }}
                         oncreate={helper.ontap(() => {
-                          if (ctrl.root.vm.setupFen) router.set(`/editor/${encodeURIComponent(ctrl.root.vm.setupFen)}`)
+                          if (ctrl.root.vm.setupFen) router.goTo(`/editor/${encodeURIComponent(ctrl.root.vm.setupFen)}`)
                         })}
                       >
                         {h(ViewOnlyBoard, {
@@ -118,7 +118,7 @@ export default {
         ctrl.isOpen(),
         () => {
           if (ctrl.root.vm.setupFen) {
-            router.set('/ai')
+            router.goTo('/ai')
           }
           ctrl.close()
         }

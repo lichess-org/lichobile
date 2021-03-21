@@ -16,7 +16,7 @@ export async function getMore(userId: string, before: Date): Promise<MsgData> {
 }
 
 export async function loadContacts(): Promise<MsgData> {
-  const d = await fetchJSON(`/inbox`, v5Opts)
+  const d = await fetchJSON('/inbox', v5Opts)
   return upgradeData(d)
 }
 

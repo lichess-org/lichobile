@@ -1,64 +1,64 @@
 export interface MsgOpts {
-  data: MsgData;
-  i18n: any;
+  data: MsgData
+  i18n: any
 }
 export interface MsgData {
-  me: Me;
-  contacts: Contact[];
-  convo?: Convo;
+  me: Me
+  contacts: Contact[]
+  convo?: Convo
 }
 export interface Contact {
-  user: User;
-  lastMsg: LastMsg;
+  user: User
+  lastMsg: LastMsg
 }
 export interface User {
-  id: string;
-  name: string;
-  title?: string;
-  patron?: boolean;
-  online?: boolean;
+  id: string
+  name: string
+  title?: string
+  patron?: boolean
+  online?: boolean
 }
 export interface Me extends User {
-  kid: boolean;
+  kid: boolean
 }
 export interface Msg {
-  user: string;
-  text: string;
-  date: Date;
+  user: string
+  text: string
+  date: Date
 }
 export interface LastMsg extends Msg {
-  read: boolean;
+  read: boolean
 }
 export interface Convo {
-  user: User;
-  msgs: Msg[];
-  relations: Relations;
-  postable: boolean;
+  user: User
+  msgs: Msg[]
+  relations: Relations
+  postable: boolean
 }
 
 export interface Relations {
-  in?: boolean;
-  out?: boolean;
+  in?: boolean
+  out?: boolean
 }
 
 export interface Daily {
-  date: Date;
-  msgs: Msg[][];
+  date: Date
+  msgs: Msg[][]
 }
 
 export interface Search {
-  input: string;
-  result?: SearchResult;
+  input: string
+  result?: SearchResult
 }
 export interface SearchResult {
-  contacts: Contact[];
-  friends: User[];
-  users: User[];
+  contacts: Contact[]
+  friends: User[]
+  users: User[]
 }
 
 export interface Typing {
-  user: string;
-  timeout: number;
+  user: string
+  timeout: number
 }
 
 export type Pane = 'side' | 'convo'

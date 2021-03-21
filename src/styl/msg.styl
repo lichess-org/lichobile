@@ -30,15 +30,15 @@ flex-center-nowrap()
     overflow hidden
     .pane-side &
       display flex
-    
+
     .view-container.light &
       background themeBgLight
       border-color themeBgLightBorder
-    
+
     .view-container.transp &
       background rgba(0, 0, 0, 0.2)
 
-    // tablet or larger 
+    // tablet or larger
     @media only screen and (min-width 768px)
       display flex
       flex 0 0 40ch
@@ -153,7 +153,7 @@ flex-center-nowrap()
     word-break break-word
 
     flex 0 0 auto
-    padding 3em 3vw 1em 3vw
+    padding 1em 3vw 1em 3vw
 
   group
     flex-column()
@@ -186,12 +186,12 @@ flex-center-nowrap()
     background rgba(#d8d8d8, 70%)
     color textDarkGray
 
-    em 
+    em
       color textMediumGray
 
     &:first-child
       border-top-left-radius 0
-    
+
     .view-container.light &
       color textBgLight
 

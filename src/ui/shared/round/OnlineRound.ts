@@ -396,7 +396,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
   }
 
-  public apiMove(o: MoveOrDrop) {
+  public apiMove(o: MoveOrDrop): void {
     const d = this.data
     const playing = gameApi.isPlayerPlaying(d)
 
@@ -501,6 +501,10 @@ export default class OnlineRound implements OnlineRoundInterface {
           chessFormat.uciToDropPos(o.uci),
           newConf
         )
+      }
+
+      if (o.check) {
+        this.chessground.setCheck(true)
       }
 
       if (o.promotion) {

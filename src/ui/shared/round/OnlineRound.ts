@@ -450,8 +450,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.vm.ply++
       const newConf = {
         turnColor: d.game.player,
-        dests: playing ?
-        gameApi.parsePossibleMoves(d.possibleMoves) : <DestsMap>{},
+        dests: playing ? gameApi.parsePossibleMoves(d.possibleMoves) : <DestsMap>{},
         check: !!o.check
       }
 
@@ -491,6 +490,8 @@ export default class OnlineRound implements OnlineRoundInterface {
             pdiff,
             newConf
           )
+        } else {
+          this.chessground.set(newConf)
         }
       } else if (isDrop(o)) {
         this.chessground.apiNewPiece(

@@ -112,19 +112,17 @@ export function handleXhrError(error: ErrorResponse): void {
   let message: string
 
   if (!status || status === 0)
-    message = 'lichessIsUnreachable'
+    message = 'lichess.org is unreachable.'
   else if (status === 401)
-    message = 'unauthorizedError'
+    message = 'You are not authorized to do that.'
   else if (status === 404)
-    message = 'resourceNotFoundError'
+    message = 'Resource not found.'
   else if (status === 503)
-    message = 'lichessIsUnavailableError'
+    message = 'lichess.org is temporarily down for maintenance.'
   else if (status >= 500)
     message = 'Server error.'
   else
-    message = 'Error.'
-
-  message = i18n(message)
+    message = 'Something went wrong.'
 
   if (data) {
     if (typeof data === 'string') {

@@ -62,7 +62,7 @@ function joinPopup(ctrl: ChallengeCtrl, challenge: Challenge) {
   let joinDom: Mithril.Child
   if (challenge.rated && !session.isConnected()) {
     joinDom = h('div.error', [
-      i18n('thisGameIsRated'), h('br'), h('br'), i18n('mustSignInToJoin'),
+      i18n('thisGameIsRated'), h('br'), h('br'), i18n('youNeedAnAccountToDoThat'),
       h('div.go_or_cancel', [
         h('button.binary_choice[data-icon=E].withIcon', {
           oncreate: helper.ontap(loginModal.open)
@@ -149,7 +149,7 @@ function awaitInvitePopup(ctrl: ChallengeCtrl, challenge: Challenge) {
           h('br'),
           h('button', {
             oncreate: helper.ontap(() => router.set('/'))
-          }, [h('span.fa.fa-home'), i18n('returnToHome')])
+          }, [h('span.fa.fa-home'), i18n('Return to home')])
         ]) : null
       ])
     },
@@ -183,7 +183,7 @@ function awaitChallengePopup(ctrl: ChallengeCtrl, challenge: Challenge) {
         h('br'),
         h('button', {
           oncreate: helper.ontap(() => router.set('/'))
-        }, [h('span.fa.fa-home'), i18n('returnToHome')])
+        }, [h('span.fa.fa-home'), i18n('Return to home')])
       ]) : null
     ])
   }

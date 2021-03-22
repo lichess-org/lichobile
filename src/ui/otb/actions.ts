@@ -26,11 +26,11 @@ function renderAlways(ctrl: OtbRound) {
       }, i18n('analysis'))
     ]),
     h('div.action', formWidgets.renderCheckbox(
-      i18n('Flip pieces and opponent info after move'), 'flipPieces', settings.otb.flipPieces,
+      i18n('otbFlipPiecesAndInfoAfterMove'), 'flipPieces', settings.otb.flipPieces,
         (v) => ground.changeOTBMode(ctrl.chessground, v)
     )),
     h('div.action', formWidgets.renderCheckbox(
-      i18n('Use symmetric pieces'), 'useSymmetric', settings.otb.useSymmetric, redraw
+      i18n('otbUseSymmetricPieces'), 'useSymmetric', settings.otb.useSymmetric, redraw
     ))
   ]
 }

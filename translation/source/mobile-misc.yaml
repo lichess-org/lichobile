@@ -6,3 +6,5 @@ en:
   notesSynchronizationHasFailed: "Notes synchronization with lichess has failed, please try later."
   vibrateOnGameEvents: "Vibrate on game events"
   offline: "Offline"
+  otbUseSymmetricPieces: "Use symmetric pieces" # Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Flip pieces and opponent info after move" # Setting for offline over-the-board games

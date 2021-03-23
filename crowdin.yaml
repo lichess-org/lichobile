@@ -21,7 +21,7 @@ files: [
   # Source files filter
   # e.g. "/resources/en/*.json"
   #
-  "source" : "/translation/source/*.json",
+  "source" : "/translation/source/*.yaml",
 
   #
   # Where translations will be placed
@@ -35,7 +35,7 @@ files: [
   # File type
   # e.g. "json"
   #
-  "type" : "json",
+  "type" : "yaml",
 
   #
   # The parameter "update_option" is optional. If it is not set, after the files update the translations for changed strings will be removed. Use to fix typos and for minor changes in the source strings

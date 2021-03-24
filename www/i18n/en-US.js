@@ -1096,5 +1096,14 @@ export default {
   "solved": "solved",
   "failed": "failed",
   "playedXTimes:one": "Played %s time",
-  "playedXTimes:other": "Played %s times"
+  "playedXTimes:other": "Played %s times",
+  "apiUnsupported": "Your version of lichess app is too old! Please upgrade for free to the latest version.",
+  "apiDeprecated": "Upgrade for free to the latest lichess app! Support for this version will be dropped on %s.",
+  "playerisInvitingYou": "%s is inviting you",
+  "unsupportedVariant": "Variant %s is not supported in this version",
+  "notesSynchronizationHasFailed": "Notes synchronization with lichess has failed, please try later.",
+  "vibrateOnGameEvents": "Vibrate on game events",
+  "offline": "Offline",
+  "otbUseSymmetricPieces": "Use symmetric pieces",
+  "otbFlipPiecesAndInfoAfterMove": "Flip pieces and opponent info after move"
 }

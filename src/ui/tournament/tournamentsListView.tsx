@@ -22,7 +22,7 @@ function onTournamentTap(e: Event) {
   const el = helper.getLI(e)
   const ds = el?.dataset as DOMStringMap
   if (ds.id) {
-    router.goTo('/tournament/' + ds.id)
+    router.set('/tournament/' + ds.id)
   }
 }
 

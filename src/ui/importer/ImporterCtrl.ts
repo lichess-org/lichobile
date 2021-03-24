@@ -36,7 +36,7 @@ export default function ImporterCtrl(): IImporterCtrl {
       redraw()
       submitOnline(pgn, settings.importer.analyse())
       .then(data => {
-        router.goTo(`/analyse/online${data.url.round}`)
+        router.set(`/analyse/online${data.url.round}`)
       })
       .catch(err => {
         importing(false)

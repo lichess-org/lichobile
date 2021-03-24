@@ -51,7 +51,7 @@ export default {
     })
     .catch(error => {
       handleXhrError(error)
-      router.goTo('/')
+      router.set('/')
     })
   },
 
@@ -106,7 +106,7 @@ function loadRound(
 ): void {
   if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
     Plugins.LiToast.show({ text: i18n('unsupportedVariant', data.game.variant.name), duration: 'short' })
-    router.goTo('/')
+    router.set('/')
   }
   else {
     if (

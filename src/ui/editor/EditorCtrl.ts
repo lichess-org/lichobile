@@ -214,7 +214,7 @@ export default class EditorCtrl {
   public goToAnalyse = (): void => {
     const state = this.getState()
     if (state.legalFen) {
-      router.goTo(this.makeAnalysisUrl(state.legalFen))
+      router.set(this.makeAnalysisUrl(state.legalFen))
     }
   }
 

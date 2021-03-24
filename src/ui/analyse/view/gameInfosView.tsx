@@ -40,7 +40,7 @@ export default function renderGameInfos(ctrl: AnalyseCtrl) {
   return (
     <div className="analyse-gameInfos native_scroller">
       <div className="analyseOpponent li-button"
-        oncreate={helper.ontapXY(() => player.user && router.goTo(`/@/${player.user.id}/`))}
+        oncreate={helper.ontapXY(() => player.user && router.set(`/@/${player.user.id}/`))}
       >
         <div className="analysePlayerName">
           <span className={'color-icon ' + player.color} />
@@ -50,7 +50,7 @@ export default function renderGameInfos(ctrl: AnalyseCtrl) {
         </div>
       </div>
       <div className="analyseOpponent li-button"
-        oncreate={helper.ontapXY(() => opponent.user && router.goTo(`/@/${opponent.user.id}/`))}
+        oncreate={helper.ontapXY(() => opponent.user && router.set(`/@/${opponent.user.id}/`))}
       >
         <div className="analysePlayerName">
           <span className={'color-icon ' + opponent.color} />
@@ -68,7 +68,7 @@ export default function renderGameInfos(ctrl: AnalyseCtrl) {
       {gameStatusApi.finished(ctrl.data) ? renderStatus(ctrl) : null}
       { ctrl.data.tournament ?
         <div className="analyse-tournamentInfo li-button"
-          oncreate={helper.ontapXY(() => ctrl.data.tournament && router.goTo(`/tournament/${ctrl.data.tournament.id}`))}
+          oncreate={helper.ontapXY(() => ctrl.data.tournament && router.set(`/tournament/${ctrl.data.tournament.id}`))}
         >
           <span className="fa fa-trophy" />
           {ctrl.data.tournament.name + ' Arena'}

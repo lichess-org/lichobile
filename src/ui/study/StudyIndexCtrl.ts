@@ -68,7 +68,7 @@ export default class StudyIndexCtrl {
   }
 
   public goToStudy(id: string): void {
-    router.goTo(`/study/${id}`)
+    router.set(`/study/${id}`)
   }
 
   public readonly toggleSearch = (): void => {

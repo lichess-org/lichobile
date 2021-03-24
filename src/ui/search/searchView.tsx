@@ -120,7 +120,7 @@ function onTap (ctrl: ISearchCtrl, e: TouchEvent) {
     if (id) {
       const g = ctrl.searchState.games.find(game => game.id === id)
       if (g) {
-        router.goTo(`/analyse/online/${id}`)
+        router.set(`/analyse/online/${id}`)
       }
     }
   }

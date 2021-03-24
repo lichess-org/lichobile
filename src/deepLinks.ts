@@ -25,9 +25,9 @@ export default {
           if (found) {
             const color = found[2]
             if (color) {
-              router.goTo(`/game/${found[1]}?color=${color.substring(1)}`)
+              router.set(`/game/${found[1]}?color=${color.substring(1)}`)
             } else {
-              router.goTo(`/game/${found[1]}`)
+              router.set(`/game/${found[1]}`)
             }
           } else {
             console.warn('Could not handle deep link', path)
@@ -41,39 +41,39 @@ export default {
 const links = new Rlite()
 const gamePattern = /^\/(\w{8})(\/black|\/white)?$/
 
-links.add('analysis', () => router.goTo('/analyse'))
+links.add('analysis', () => router.set('/analyse'))
 links.add(`analysis/${fenParams}`, ({ params }) => {
   const fen = encodeURIComponent(fenFromParams(params))
-  router.goTo(`/analyse/fen/${fen}`)
+  router.set(`/analyse/fen/${fen}`)
 })
-links.add('editor', () => router.goTo('/editor'))
+links.add('editor', () => router.set('/editor'))
 links.add(`editor/${fenParams}`, ({ params }) => {
   const fen = encodeURIComponent(fenFromParams(params))
-  router.goTo(`/editor/${fen}`)
+  router.set(`/editor/${fen}`)
 })
-links.add('inbox', () => router.goTo('/inbox'))
-links.add('inbox/new', () => router.goTo('/inbox/new'))
-links.add('challenge/:id', ({ params }) => router.goTo(`/game/${params.id}`))
-links.add('study', () => router.goTo('/study'))
-links.add('study/:id', ({ params }) => router.goTo(`/study/${params.id}`))
-links.add('player', () => router.goTo('/players'))
-links.add('tournament', () => router.goTo('/tournament'))
-links.add('tournament/:id', ({ params }) => router.goTo(`/tournament/${params.id}`))
-links.add('training', () => router.goTo('/training'))
-links.add('training/:id', ({ params }) => router.goTo(`/training/${params.id}`))
-links.add('tv', () => router.goTo('/tv'))
-links.add('tv/:channel', ({ params }) => router.goTo(`/tv/${params.channel}`))
-links.add('@/:id', ({ params }) => router.goTo(`/@/${params.id}`))
-links.add('@/:id/tv', ({ params }) => router.goTo(`/@/${params.id}/tv`))
-links.add('@/:id/all', ({ params }) => router.goTo(`/@/${params.id}/games`))
-links.add('@/:id/perf/:key', ({ params }) => router.goTo(`/@/${params.id}/${params.key}/perf`))
+links.add('inbox', () => router.set('/inbox'))
+links.add('inbox/new', () => router.set('/inbox/new'))
+links.add('challenge/:id', ({ params }) => router.set(`/game/${params.id}`))
+links.add('study', () => router.set('/study'))
+links.add('study/:id', ({ params }) => router.set(`/study/${params.id}`))
+links.add('player', () => router.set('/players'))
+links.add('tournament', () => router.set('/tournament'))
+links.add('tournament/:id', ({ params }) => router.set(`/tournament/${params.id}`))
+links.add('training', () => router.set('/training'))
+links.add('training/:id', ({ params }) => router.set(`/training/${params.id}`))
+links.add('tv', () => router.set('/tv'))
+links.add('tv/:channel', ({ params }) => router.set(`/tv/${params.channel}`))
+links.add('@/:id', ({ params }) => router.set(`/@/${params.id}`))
+links.add('@/:id/tv', ({ params }) => router.set(`/@/${params.id}/tv`))
+links.add('@/:id/all', ({ params }) => router.set(`/@/${params.id}/games`))
+links.add('@/:id/perf/:key', ({ params }) => router.set(`/@/${params.id}/${params.key}/perf`))
 links.add('signup/confirm/:token', ({ params }) => {
   const token = params.token
   if (token) {
     session.confirmEmail(token)
     .then((data: Session) => {
       signupModal.close()
-      router.goTo(`/@/${data.id}`)
+      router.set(`/@/${data.id}`)
       setTimeout(() => {
         Plugins.LiToast.show({ text: i18n('loginSuccessful'), duration: 'long' })
       }, 1000)

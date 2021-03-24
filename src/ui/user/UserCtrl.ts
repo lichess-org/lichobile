@@ -68,13 +68,13 @@ export default function UserCtrl(userId: string): IUserCtrl {
         }
         if (u.patron) params.patron = '1'
         if (u.title) params.title = u.title
-        router.goTo(`/@/${u.id}/games?${utils.serializeQueryParameters(params)}`)
+        router.set(`/@/${u.id}/games?${utils.serializeQueryParameters(params)}`)
       }
     },
     goToUserTV() {
       const u = user()
       if (u) {
-        router.goTo(`/@/${u.id}/tv`)
+        router.set(`/@/${u.id}/tv`)
       }
     },
     challenge() {
@@ -86,7 +86,7 @@ export default function UserCtrl(userId: string): IUserCtrl {
     composeMessage() {
       const u = user()
       if (u) {
-        router.goTo(`/inbox/new/${u.id}`)
+        router.set(`/inbox/new/${u.id}`)
       }
     },
     followers() {
@@ -96,7 +96,7 @@ export default function UserCtrl(userId: string): IUserCtrl {
           username: u.username,
         }
         if (u.title) params.title = u.title
-        router.goTo(`/@/${u.id}/related?${utils.serializeQueryParameters(params)}`)
+        router.set(`/@/${u.id}/related?${utils.serializeQueryParameters(params)}`)
       }
     },
   }

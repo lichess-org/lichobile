@@ -39,7 +39,7 @@ export default {
           })
         } else {
           handleXhrError(error)
-          router.goTo('/inbox')
+          router.set('/inbox')
         }
       })
     } else {

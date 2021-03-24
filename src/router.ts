@@ -182,10 +182,10 @@ function doSet(path: string, replace = false) {
   if (!matched) router.run('/')
 }
 
-// sync call to router.goTo must be avoided in any `oninit` mithril component
+// sync call to router.set must be avoided in any `oninit` mithril component
 // otherwise it makes mithril create another root component on top of the
 // existing one
-// making router.goTo async makes it safe everywhere
+// making router.set async makes it safe everywhere
 function setPath(path: string, replace = false): void {
   setTimeout(() => doSet(path, replace), 0)
 }
@@ -201,7 +201,7 @@ function backHistory(): void {
 
 export default {
   get: getPath,
-  goTo: setPath,
+  set: setPath,
   reload(): void {
     setPath(getPath(), true)
   },

@@ -82,7 +82,7 @@ export default {
               const c = ctrl.color()
               if (f) {
                 if (validateFen(f, v) && positionLooksLegit(f)) {
-                  router.goTo(`/ai/variant/${v}/fen/${encodeURIComponent(f)}/color/${c}`)
+                  router.set(`/ai/variant/${v}/fen/${encodeURIComponent(f)}/color/${c}`)
                 } else {
                   Plugins.LiToast.show({ text: 'Invalid FEN', duration: 'short' })
                 }
@@ -96,7 +96,7 @@ export default {
               const v = ctrl.variant()
               if (f) {
                 if (validateFen(f, v) && positionLooksLegit(f)) {
-                  router.goTo(`/otb/variant/${v}/fen/${encodeURIComponent(f)}`)
+                  router.set(`/otb/variant/${v}/fen/${encodeURIComponent(f)}`)
                 } else {
                   Plugins.LiToast.show({ text: 'Invalid FEN', duration: 'short' })
                 }

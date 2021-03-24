@@ -155,7 +155,7 @@ export default {
                 if (el) {
                   const id = el.dataset.id
                   const color = el.dataset.color
-                  router.goTo(`/game/${id}?color=${color}&goingBack=1`)
+                  router.set(`/game/${id}?color=${color}&goingBack=1`)
                 }
               }, undefined, helper.getTR)}
             >

@@ -102,7 +102,7 @@ function renderStudyMenu(ctrl: AnalyseCtrl) {
       }),
     }, [h('span.fa.fa-bullseye'), i18n('practiceWithComputer')]) : null,
     h('button', {
-      oncreate: helper.ontap(() => router.goTo(`/editor/${encodeURIComponent(ctrl.node.fen)}`))
+      oncreate: helper.ontap(() => router.set(`/editor/${encodeURIComponent(ctrl.node.fen)}`))
     }, [h('span.fa.fa-pencil'), i18n('boardEditor')]),
     h('button', {
       oncreate: helper.ontap(() => {

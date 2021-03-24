@@ -38,7 +38,7 @@ export const mainMenuCtrl = new SideMenuCtrl(
 
 export function route(route: string) {
   return function() {
-    return mainMenuCtrl.close().then(() => router.goTo(route))
+    return mainMenuCtrl.close().then(() => router.set(route))
   }
 }
 

@@ -108,7 +108,7 @@ export default class AnalyseCtrl {
 
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
       Plugins.LiToast.show({ text: `Analysis board does not support ${this.data.game.variant.name} variant.`, duration: 'short' })
-      router.goTo('/')
+      router.set('/')
     }
 
     this.tree = makeTree(treeOps.reconstruct(this.data.treeParts))

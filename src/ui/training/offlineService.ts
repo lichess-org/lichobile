@@ -91,7 +91,7 @@ export function puzzleLoadFailure(reason: any) {
   } else {
     Plugins.LiToast.show({ text: 'Could not load puzzle', duration: 'short' })
   }
-  router.goTo('/')
+  router.set('/')
 }
 
 /*

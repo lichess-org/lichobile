@@ -80,7 +80,7 @@ function renderPlayer(ctrl: RelatedCtrl, obj: Related, i: number) {
   const status = obj.online ? 'online' : 'offline'
   const perfKey = obj.perfs && Object.keys(obj.perfs)[0] as PerfKey
   const perf = obj.perfs && obj.perfs[perfKey]
-  const userLink = helper.ontapY(() => router.goTo(`/@/${obj.user}`))
+  const userLink = helper.ontapY(() => router.set(`/@/${obj.user}`))
   const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
   return (
     <li className={`list_item followingList ${evenOrOdd}`}>

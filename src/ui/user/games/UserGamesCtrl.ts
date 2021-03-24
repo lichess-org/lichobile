@@ -175,9 +175,9 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
       positionsCache.set(g.id, { fen: g.fen, orientation: userColor })
       const mePlaying = session.getUserId() === userId
       if (mePlaying && playerId !== undefined) {
-        router.goTo(`/game/${id}${playerId}?goingBack=1`)
+        router.set(`/game/${id}${playerId}?goingBack=1`)
       } else {
-        router.goTo(`/analyse/online/${id}/${userColor}?curFen=${g.fen}&slide=1`)
+        router.set(`/analyse/online/${id}/${userColor}?curFen=${g.fen}&slide=1`)
       }
     }
   }

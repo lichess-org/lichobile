@@ -20,7 +20,7 @@ export default function renderConvo(ctrl: MsgCtrl, convo: Convo): Mithril.Vnode 
           oncreate: ontap(() => { ctrl.showSide() })
         }, backArrow),
         h('div.user-link', {
-          oncreate: ontap(() => router.goTo(`/@/${user.name}`)),
+          oncreate: ontap(() => router.set(`/@/${user.name}`)),
           className: user.online ? 'online' : 'offline'
         }, userStatus({...user, username: user.name}))
       ]),

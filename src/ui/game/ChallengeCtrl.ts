@@ -24,7 +24,7 @@ export default class ChallengeCtrl {
       return acceptChallenge(c.id)
       .then(d => {
         clearTimeout(this.pingTimeoutId)
-        router.goTo('/game' + d.url.round, true)
+        router.set('/game' + d.url.round, true)
       })
       .then(() => challengesApi.remove(c.id))
     }
@@ -69,7 +69,7 @@ export default class ChallengeCtrl {
         this.challenge = d.challenge
         switch (d.challenge.status) {
           case 'accepted':
-            router.goTo(`/game/${d.challenge.id}`, true)
+            router.set(`/game/${d.challenge.id}`, true)
             break
           case 'declined':
             router.backHistory()

@@ -70,6 +70,6 @@ function externalLink(text: string, url: string): Mithril.Child {
 
 function internalLink(text: string, route: string): Mithril.Child {
   return h('a', {
-    onclick: () => router.goTo(route)
+    onclick: () => router.set(route)
   }, text)
 }

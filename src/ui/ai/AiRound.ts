@@ -170,7 +170,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   }
 
   public goToAnalysis = () => {
-    router.goTo(`/analyse/offline/ai/${this.data.player.color}?ply=${this.replay.ply}&curFen=${this.replay.situation().fen}`)
+    router.set(`/analyse/offline/ai/${this.data.player.color}?ply=${this.replay.ply}&curFen=${this.replay.situation().fen}`)
   }
 
   public save() {

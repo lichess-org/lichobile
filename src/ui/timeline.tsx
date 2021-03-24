@@ -51,7 +51,7 @@ export function timelineOnTap(e: Event) {
   const path = el && el.dataset.path
   const external = el && el.dataset.external
   if (path) {
-    router.goTo(path)
+    router.set(path)
   }
   if (external) {
     openWebsiteAuthPage(external)

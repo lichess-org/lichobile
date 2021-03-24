@@ -143,7 +143,7 @@ function create(form: HTMLFormElement) {
   xhr.create(name, variant, position, mode, time, increment, duration, timeToStart, isPrivate, password)
   .then((data: TournamentCreateResponse) => {
     close()
-    router.goTo('/tournament/' + data.id)
+    router.set('/tournament/' + data.id)
   })
   .catch(utils.handleXhrError)
 }

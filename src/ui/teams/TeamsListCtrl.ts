@@ -65,7 +65,7 @@ export default class TeamsListCtrl {
   }
 
   public goToTeam = (team: Team) => {
-    router.goTo('/teams/' + team.id)
+    router.set('/teams/' + team.id)
   }
 
 }

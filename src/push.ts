@@ -64,20 +64,20 @@ export default {
           switch (action.notification.data['lichess.type']) {
             case 'challengeAccept':
               challengesApi.refresh()
-              router.goTo(`/game/${action.notification.data['lichess.challengeId']}`)
+              router.set(`/game/${action.notification.data['lichess.challengeId']}`)
               break
             case 'challengeCreate':
-              router.goTo(`/game/${action.notification.data['lichess.challengeId']}`)
+              router.set(`/game/${action.notification.data['lichess.challengeId']}`)
               break
             case 'corresAlarm':
             case 'gameMove':
             case 'gameFinish':
             case 'gameTakebackOffer':
             case 'gameDrawOffer':
-              router.goTo(`/game/${action.notification.data['lichess.fullId']}`)
+              router.set(`/game/${action.notification.data['lichess.fullId']}`)
               break
             case 'newMessage':
-              router.goTo(`/inbox/${action.notification.data['lichess.threadId']}`)
+              router.set(`/inbox/${action.notification.data['lichess.threadId']}`)
               break
           }
         }

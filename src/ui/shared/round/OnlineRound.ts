@@ -179,7 +179,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   public goToAnalysis = () => {
     const d = this.data
-    router.goTo(`/analyse/online/${d.game.id}/${boardOrientation(d)}?ply=${this.vm.ply}&curFen=${d.game.fen}`, !this.playableOnInit)
+    router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}?ply=${this.vm.ply}&curFen=${d.game.fen}`, !this.playableOnInit)
   }
 
   public openUserPopup = (position: string, userId: string) => {
@@ -229,8 +229,8 @@ export default class OnlineRound implements OnlineRoundInterface {
   public flip = () => {
     this.vm.flip = !this.vm.flip
     if (this.data.tv) {
-      if (this.vm.flip) router.goTo('/tv?flip=1', true)
-      else router.goTo('/tv', true)
+      if (this.vm.flip) router.set('/tv?flip=1', true)
+      else router.set('/tv', true)
       return
     }
     this.chessground.set({

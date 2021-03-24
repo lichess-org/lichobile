@@ -171,7 +171,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   }
 
   public goToAnalysis = () => {
-    router.goTo(`/analyse/offline/otb/${this.data.player.color}?ply=${this.replay.ply}&curFen=${this.replay.situation().fen}`)
+    router.set(`/analyse/offline/otb/${this.data.player.color}?ply=${this.replay.ply}&curFen=${this.replay.situation().fen}`)
   }
 
   public save = () => {

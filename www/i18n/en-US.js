@@ -1105,5 +1105,8 @@ export default {
   "vibrateOnGameEvents": "Vibrate on game events",
   "offline": "Offline",
   "otbUseSymmetricPieces": "Use symmetric pieces",
-  "otbFlipPiecesAndInfoAfterMove": "Flip pieces and opponent info after move"
+  "otbFlipPiecesAndInfoAfterMove": "Flip pieces and opponent info after move",
+  "settingsClockPosition": "Clock position",
+  "positionRight": "Right",
+  "positionLeft": "Left"
 }

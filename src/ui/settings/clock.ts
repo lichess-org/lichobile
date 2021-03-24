@@ -27,9 +27,9 @@ function renderAppPrefs() {
   return [
     h('li.list_item',
       formWidgets.renderMultipleChoiceButton(
-        'Clock position', [
-          { label: 'Left', value: 'left' },
-          { label: 'Right', value: 'right' },
+        i18n('settingsClockPosition'), [
+          { label: i18n('positionLeft'), value: 'left' },
+          { label: i18n('positionRight'), value: 'right' },
         ],
         settings.game.clockPosition
       )

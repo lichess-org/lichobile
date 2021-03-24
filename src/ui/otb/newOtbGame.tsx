@@ -82,7 +82,7 @@ export default {
                         }}
                         oncreate={helper.ontap(() => {
                           if (ctrl.root.vm.setupFen)
-                            router.set(`/editor/${encodeURIComponent(ctrl.root.vm.setupFen)}`)
+                            router.goTo(`/editor/${encodeURIComponent(ctrl.root.vm.setupFen)}`)
                         })}
                       >
                         {h(ViewOnlyBoard, { fen: ctrl.root.vm.setupFen, orientation: 'white'})}
@@ -110,7 +110,7 @@ export default {
         ctrl.isOpen(),
         () => {
           if (ctrl.root.vm.setupFen) {
-            router.set('/otb')
+            router.goTo('/otb')
           }
           ctrl.close()
         }

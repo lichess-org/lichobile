@@ -6,6 +6,7 @@
   },
   "rules": {
     "semi": "off",
-    "quotes": ["error", "single", { "avoidEscape": true }]
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "eqeqeq": ["error", "always"]
   }
 }

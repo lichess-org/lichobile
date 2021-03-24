@@ -104,7 +104,7 @@ function onPlayerTap(e: Event) {
   if (el) {
     const ds = el.dataset as DOMStringMap
     if (ds.id) {
-      router.set('/@/' + ds.id)
+      router.goTo('/@/' + ds.id)
     }
   }
 }
@@ -164,7 +164,7 @@ function renderRankingCategory(ranking: Rankings, key: PerfKey) {
 
 function renderRankingPlayer(user: RankingUser, key: RankingKey) {
   return (
-    <li className="list_item leaderboard_player" oncreate={helper.ontapY(() => router.set('/@/' + user.id))}>
+    <li className="list_item leaderboard_player" oncreate={helper.ontapY(() => router.goTo('/@/' + user.id))}>
       {userStatus(user)}
       <span className="rating">
         {user.perfs[key].rating}

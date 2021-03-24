@@ -204,7 +204,7 @@ function renderPerf(key: PerfKey, name: string, perf: Perf, user: ProfileUser) {
     className: 'profilePerf' + (avail ? ' nav' : ''),
     'data-icon': gameIcon(key),
     oncreate: helper.ontapY(() => {
-      if (avail) router.set(`/@/${user.id}/${key}/perf`)
+      if (avail) router.goTo(`/@/${user.id}/${key}/perf`)
     })
   }, [
     h('span.name', name),
@@ -244,7 +244,7 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
       }
       { session.isConnected() && ctrl.isMe() ?
       <div className="list_item"
-        oncreate={helper.ontapY(() => router.set('/inbox'))}
+        oncreate={helper.ontapY(() => router.goTo('/inbox'))}
       >
         <span className="fa fa-envelope" />
         {i18n('inbox')}
@@ -252,7 +252,7 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
       }
       { session.isConnected() && ctrl.isMe() ?
       <div className="list_item"
-        oncreate={helper.ontapY(() => router.set('/account/preferences'))}
+        oncreate={helper.ontapY(() => router.goTo('/account/preferences'))}
       >
         <span className="fa fa-cog" />
         {i18n('preferences')}

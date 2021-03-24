@@ -96,7 +96,7 @@ export function renderVariantSelector(ctrl: AnalyseCtrl) {
         onchange: (e: Event) => {
           const val = (e.target as HTMLSelectElement).value
           settings.analyse.syntheticVariant(val as VariantKey)
-          router.set(`/analyse/variant/${val}`)
+          router.goTo(`/analyse/variant/${val}`)
         }
       }, availVariants.map(v =>
         h('option', {

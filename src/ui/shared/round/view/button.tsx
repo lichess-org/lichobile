@@ -335,9 +335,9 @@ export default {
       ctrl.hideActions()
       const url = `/tournament/${ctrl.data.game.tournamentId}`
       if (ctrl.data.tv) {
-        router.set(url)
+        router.goTo(url)
       } else {
-        router.set(url, true)
+        router.goTo(url, true)
       }
     }
     return (
@@ -351,7 +351,7 @@ export default {
     function handler() {
       ctrl.hideActions()
       tournamentXhr.withdraw(tournamentId)
-      router.set(`/tournament/${tournamentId}`, true)
+      router.goTo(`/tournament/${tournamentId}`, true)
     }
     return (
       <button oncreate={helper.ontap(handler)}>

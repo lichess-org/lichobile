@@ -2,7 +2,7 @@ import { hasNetwork, prop } from '../../utils'
 import redraw from '../../utils/redraw'
 import router from '../../router'
 import socket from '../../socket'
-import * as inboxXhr from '../inbox/inboxXhr'
+import { unreadCount as fetchUnreadCount } from '../msg/network'
 import { ontap } from '../helper'
 import SideMenuCtrl from '../shared/sideMenu/SideMenuCtrl'
 
@@ -38,7 +38,7 @@ export const mainMenuCtrl = new SideMenuCtrl(
 
 export function route(route: string) {
   return function() {
-    return mainMenuCtrl.close().then(() => router.set(route))
+    return mainMenuCtrl.close().then(() => router.goTo(route))
   }
 }
 
@@ -54,7 +54,7 @@ export function action(f: () => void) {
 export function toggleHeader() {
   const open = !profileMenuOpen()
   if (open) {
-    inboxXhr.unreadCount()
+    fetchUnreadCount()
     .then(nb => {
       inboxUnreadCount(nb)
       redraw()

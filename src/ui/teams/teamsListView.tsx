@@ -98,7 +98,7 @@ function onTeamTap(e: Event) {
   const el = helper.getLI(e)
   const ds = el?.dataset as DOMStringMap
   if (ds.id) {
-    router.set('/teams/' + ds.id)
+    router.goTo('/teams/' + ds.id)
   }
 }
 

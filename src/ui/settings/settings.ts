@@ -34,28 +34,28 @@ function renderBody(appVersion?: string) {
   return [
     h('ul.settings_list.native_scroller.page', [
       h('li.list_item.nav', {
-        oncreate: helper.ontapY(() => router.set('/settings/gameDisplay'))
+        oncreate: helper.ontapY(() => router.goTo('/settings/gameDisplay'))
       }, i18n('gameDisplay')),
       h('li.list_item.nav', {
-        oncreate: helper.ontapY(() => router.set('/settings/clock'))
+        oncreate: helper.ontapY(() => router.goTo('/settings/clock'))
       }, i18n('clock')),
       h('li.list_item.nav', {
-        oncreate: helper.ontapY(() => router.set('/settings/gameBehavior'))
+        oncreate: helper.ontapY(() => router.goTo('/settings/gameBehavior'))
       }, i18n('gameBehavior')),
       h('li.list_item.nav', {
-        oncreate: helper.ontapY(() => router.set('/settings/lang'))
+        oncreate: helper.ontapY(() => router.goTo('/settings/lang'))
       }, i18n('language')),
       h('li.list_item.nav', {
-        oncreate: helper.ontapY(() => router.set('/settings/background'))
+        oncreate: helper.ontapY(() => router.goTo('/settings/background'))
       }, `${i18n('background')}`),
       h('li.list_item.nav', {
-        oncreate: helper.ontapY(() => router.set('/settings/themes/board'))
+        oncreate: helper.ontapY(() => router.goTo('/settings/themes/board'))
       }, i18n('boardTheme')),
       h('li.list_item.nav', {
-        oncreate: helper.ontapY(() => router.set('/settings/themes/piece'))
+        oncreate: helper.ontapY(() => router.goTo('/settings/themes/piece'))
       }, i18n('pieceSet')),
       h('li.list_item.nav', {
-        oncreate: helper.ontapY(() => router.set('/settings/soundNotifications'))
+        oncreate: helper.ontapY(() => router.goTo('/settings/soundNotifications'))
       }, i18n('sound') + ' | ' + i18n('notifications'))
     ]),
     appVersion ? h('section.app_version', 'v' + appVersion) : null

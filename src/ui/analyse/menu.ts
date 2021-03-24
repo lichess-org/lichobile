@@ -84,7 +84,7 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
       })
     }, i18n('continueFromHere')) : null,
     ctrl.isOfflineOrNotPlayable() ? h('button', {
-      oncreate: helper.ontap(() => router.set(`/editor/${encodeURIComponent(ctrl.node.fen)}`))
+      oncreate: helper.ontap(() => router.goTo(`/editor/${encodeURIComponent(ctrl.node.fen)}`))
     }, [h('span.fa.fa-pencil'), i18n('boardEditor')]) : null,
     ctrl.data.analysis ? h('button', {
       oncreate: helper.ontap(() => {

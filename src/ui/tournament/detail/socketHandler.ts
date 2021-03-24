@@ -16,7 +16,7 @@ export default function(ctrl: TournamentCtrl): MessageHandlers {
     reload: ctrl.reload,
     resync: ctrl.reload,
     redirect(gameId: string) {
-      router.set('/tournament/' + ctrl.tournament.id + '/game/' + gameId, true)
+      router.goTo('/tournament/' + ctrl.tournament.id + '/game/' + gameId, true)
     },
     fen(d: FeaturedGameUpdate) {
       const featured = ctrl.tournament.featured

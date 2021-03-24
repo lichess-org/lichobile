@@ -104,7 +104,7 @@ export default class EditorCtrl {
   }
 
   setCastlingToggle(id: CastlingToggle, value: boolean): void {
-    if (this.castlingToggles[id] != value) this.unmovedRooks = undefined
+    if (this.castlingToggles[id] !== value) this.unmovedRooks = undefined
     this.castlingToggles[id] = value
     this.onChange()
   }
@@ -121,11 +121,11 @@ export default class EditorCtrl {
     redraw()
   }
 
-  public onstart = (e: TouchEvent) => drag(this, e)
-  public onmove = (e: TouchEvent) => cgDrag.move(this.chessground, e)
-  public onend = (e: TouchEvent) => cgDrag.end(this.chessground, e)
+  public onstart = (e: TouchEvent): void => drag(this, e)
+  public onmove = (e: TouchEvent): void => cgDrag.move(this.chessground, e)
+  public onend = (e: TouchEvent): void => cgDrag.end(this.chessground, e)
 
-  public editorOnCreate = (vn: Mithril.VnodeDOM) => {
+  public editorOnCreate = (vn: Mithril.VnodeDOM): void => {
     if (!vn.dom) return
     const editorNode = document.getElementById('boardEditor')
     if (editorNode) {
@@ -135,7 +135,7 @@ export default class EditorCtrl {
     }
   }
 
-  public editorOnRemove = () => {
+  public editorOnRemove = (): void => {
     const editorNode = document.getElementById('boardEditor')
     if (editorNode) {
       editorNode.removeEventListener('touchstart', this.onstart)
@@ -154,7 +154,7 @@ export default class EditorCtrl {
 
   private getSetup(): Setup {
     const boardFen = this.chessground ? this.chessground.getFen() : this.initFen
-    const board = parseFen(boardFen).unwrap(setup => setup.board, _ => Board.empty())
+    const board = parseFen(boardFen).unwrap(setup => setup.board, () => Board.empty())
     return {
       board,
       pockets: this.pockets,
@@ -168,12 +168,12 @@ export default class EditorCtrl {
   }
 
   public getFen(): string {
-    return makeFen(this.getSetup(), {promoted: this.rules == 'crazyhouse'})
+    return makeFen(this.getSetup(), {promoted: this.rules === 'crazyhouse'})
   }
 
   public getLegalFen(): string | undefined {
     return setupPosition(this.rules, this.getSetup()).unwrap(pos => {
-      return makeFen(pos.toSetup(), {promoted: pos.rules == 'crazyhouse'})
+      return makeFen(pos.toSetup(), {promoted: pos.rules === 'crazyhouse'})
     }, () => undefined)
   }
 
@@ -185,7 +185,7 @@ export default class EditorCtrl {
     return {
       fen: this.getFen(),
       legalFen: this.getLegalFen(),
-      playable: this.rules == 'chess' && this.isPlayable(),
+      playable: this.rules === 'chess' && this.isPlayable(),
     }
   }
 
@@ -253,9 +253,9 @@ export default class EditorCtrl {
 
   setRules(rules: Rules): void {
     this.rules = rules
-    if (rules != 'crazyhouse') this.pockets = undefined
+    if (rules !== 'crazyhouse') this.pockets = undefined
   else if (!this.pockets) this.pockets = Material.empty()
-    if (rules != '3check') this.remainingChecks = undefined
+    if (rules !== '3check') this.remainingChecks = undefined
   else if (!this.remainingChecks) this.remainingChecks = RemainingChecks.default()
     this.onChange()
   }

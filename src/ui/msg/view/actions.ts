@@ -5,7 +5,7 @@ import i18n from '~/i18n'
 import { ontap } from '~/ui/helper'
 
 export default function renderActions(ctrl: MsgCtrl, convo: Convo): Mithril.Children {
-  if (convo.user.id == 'lichess') return []
+  if (convo.user.id === 'lichess') return []
 
   return (
     h('button.msg-app__convo__action.button.button-empty.bad', {

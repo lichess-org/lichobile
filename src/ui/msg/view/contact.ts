@@ -7,7 +7,7 @@ import * as helper from '../../helper'
 
 export default function renderContact(ctrl: MsgCtrl, contact: Contact, active?: string): Mithril.Vnode {
   const user = contact.user, msg = contact.lastMsg,
-    isNew = !msg.read && msg.user != ctrl.data.me.id
+    isNew = !msg.read && msg.user !== ctrl.data.me.id
   return h('div.msg-app__side__contact', {
     key: `${user.id}${active === user.id ? '-active' : ''}`,
     className: active === user.id ? 'active' : '',
@@ -30,11 +30,11 @@ export default function renderContact(ctrl: MsgCtrl, contact: Contact, active?: 
   ])
 }
 
-export function getContact(e: Event) {
+export function getContact(e: Event): HTMLElement | null {
   return helper.closest(e, '.msg-app__side__contact')
 }
 
-export function onContactTap(e: Event, ctrl: MsgCtrl) {
+export function onContactTap(e: Event, ctrl: MsgCtrl): void {
   const el = getContact(e)
   const ds = el?.dataset as DOMStringMap
   if (ds.userid) {

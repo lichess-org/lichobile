@@ -47,7 +47,7 @@ function renderDaily(ctrl: MsgCtrl, daily: Daily): Mithril.ChildArray {
 }
 
 function renderMsg(ctrl: MsgCtrl, msg: Msg) {
-  const tag = msg.user == ctrl.data.me.id ? 'mine' : 'their'
+  const tag = msg.user === ctrl.data.me.id ? 'mine' : 'their'
   return h(tag, [
     renderText(msg),
     h('em', `${pad2(msg.date.getHours())}:${pad2(msg.date.getMinutes())}`)
@@ -64,7 +64,7 @@ function groupMsgs(msgs: Msg[]): Daily[] {
   }]
   msgs.slice(1).forEach(msg => {
     if (sameDay(msg.date, prev.date)) {
-      if (msg.user == prev.user) dailies[0].msgs[0].unshift(msg)
+      if (msg.user === prev.user) dailies[0].msgs[0].unshift(msg)
       else dailies[0].msgs.unshift([msg])
     } else dailies.unshift({
       date: msg.date,
@@ -88,7 +88,7 @@ function renderDate(date: Date): string {
 const renderFullDate = (date: Date) => `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
 
 const sameDay = (d: Date, e: Date) =>
-  d.getDate() == e.getDate() && d.getMonth() == e.getMonth() && d.getFullYear() == e.getFullYear()
+  d.getDate() === e.getDate() && d.getMonth() === e.getMonth() && d.getFullYear() === e.getFullYear()
 
 const renderText = (msg: Msg) =>
   h('t', h.trust(linkify(msg.text).replace(/\n/g, '<br>')))

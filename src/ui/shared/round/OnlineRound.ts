@@ -670,6 +670,11 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.appStateListener.remove()
   }
 
+  public acceptTakeback(): void {
+    this.chessground.cancelPremove()
+    this.socket.iface.send('takeback-yes')
+  }
+
   private makeCorrespondenceClock() {
     if (this.data.correspondence && !this.correspondenceClock)
       this.correspondenceClock = new CorresClockCtrl(

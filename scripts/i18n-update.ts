@@ -3,6 +3,7 @@ import { parseStringPromise } from 'xml2js'
 import { get } from 'request'
 import { exec } from 'child_process'
 import colors = require('colors/safe')
+import { load as loadYaml } from 'js-yaml'
 
 const baseDir = 'tmp/translations'
 const i18nBaseDir = '../www/i18n'
@@ -131,8 +132,7 @@ function writeTranslations(where: string, data: any) {
 
 async function loadXml(locales: readonly string[], section: string): Promise<Record<string, any>> {
   const sectionXml = {}
-  for (const idx in locales) {
-    const locale = locales[idx]
+  for (const locale of locales) {
     console.log(colors.blue(`Loading translations for ${colors.bold(locale)}...`))
     try {
       sectionXml[locale] = await loadTranslations(section, locale)
@@ -158,10 +158,17 @@ function loadMobileTranslationsForLocale(locale: string): StringMap {
   const localeDir = `${mobileSourceDir}/${locale}`
 
   for (const file of readdirSync(localeDir)) {
-    const data = JSON.parse(readFileSync(`${localeDir}/${file}`).toString())
-    translationMap = {
-      ...translationMap,
-      ...data,
+    const data = <Record<string, string | StringMap>>loadYaml(readFileSync(`${localeDir}/${file}`, 'utf8'))[locale]
+    for (const key in data) {
+      const value = data[key]
+      if (typeof value === 'string') {
+        translationMap[key] = value
+      } else {
+        // flatten plurals
+        for (const pluralType in value) {
+          translationMap[`${key}:${pluralType}`] = value[pluralType]
+        }
+      }
     }
   }
   
@@ -169,4 +176,3 @@ function loadMobileTranslationsForLocale(locale: string): StringMap {
 }
 
 main()
-

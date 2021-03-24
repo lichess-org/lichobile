@@ -178,12 +178,12 @@ export default {
     ])
     return null
   },
-  answerOpponentTakebackProposition(ctrl: OnlineRound) {
+  answerOpponentTakebackProposition(ctrl: OnlineRound): Mithril.Child {
     if (ctrl.data.opponent.proposingTakeback) return h('div.negotiation', [
       h('div.notice', i18n('yourOpponentProposesATakeback')),
       h('div.binary_choice_wrapper', [
         h('button.binary_choice[data-icon=E]', {
-          oncreate: helper.ontap(() => { ctrl.socket.iface.send('takeback-yes') })
+          oncreate: helper.ontap(() => { ctrl.acceptTakeback() })
         }, i18n('accept')),
         h('button.binary_choice[data-icon=L]', {
           oncreate: helper.ontap(() => { ctrl.socket.iface.send('takeback-no') })

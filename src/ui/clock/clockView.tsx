@@ -1,9 +1,11 @@
+
 import h from 'mithril/hyperscript'
 import * as helper from '../helper'
 import clockSettings from './clockSettings'
 import { formatTime, isStageClock } from '../shared/clock/utils'
 
 import { IChessClockCtrl } from './ChessClockCtrl'
+import { IStageClock, IChessStageClockState } from '../shared/clock/interfaces'
 
 export function renderClockSettingsOverlay(ctrl: IChessClockCtrl) {
   return [
@@ -61,6 +63,7 @@ export function clockBody(ctrl: IChessClockCtrl) {
   return (
     <div className="clockContainer">
       <div className={whiteClockClass} oncreate={helper.ontouch(() => onClockTouch(ctrl, 'white'))}>
+        { isStageClock(clock) ? renderStage(clock, 'white') : null }
         { isStageClock(clock) ? renderMoves(clock.whiteMoves()) : null }
         <div className="clockTapAreaContent">
           <span className={whiteClockTimeClass}>
@@ -86,8 +89,20 @@ export function clockBody(ctrl: IChessClockCtrl) {
             { '.' + Math.trunc(clock.blackTime() / 100 % 10) }
           </span>
         </div>
+        { isStageClock(clock) ? renderStage(clock, 'black') : null }
         { isStageClock(clock) ? renderMoves(clock.blackMoves()) : null }
       </div>
+    </div>
+  )
+}
+
+function renderStage(clock: IStageClock, color: Color) {
+  const clockState = (clock.getState() as IChessStageClockState)
+  const currentStageIndex = (color === 'white' ? clockState.whiteStage : clockState.blackStage)
+
+  return (
+    <div className="clockStageInfo">
+      <span>Stage {currentStageIndex + 1}</span>
     </div>
   )
 }

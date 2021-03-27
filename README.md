@@ -13,7 +13,7 @@ in [TypeScript](http://www.typescriptlang.org/), with a bit of Kotlin and Swift.
 It is a web application that access native SDK thanks to [Ionic capacitor](https://capacitor.ionicframework.com/).
 The rendering library is [mithril.js](http://mithril.js.org/).
 It talks to a native [Stockfish](https://stockfishchess.org/) engine, [supporting multiple variants](https://github.com/ddugovic/Stockfish), through a
-[cordova plugin](https://github.com/veloce/cordova-plugin-stockfish).
+[capacitor plugin](https://github.com/veloce/capacitor-stockfish).
 Multi-variant chess library is brought by [a JavaScript version of scalachess](https://github.com/veloce/scalachessjs).
 
 ## Required dependencies

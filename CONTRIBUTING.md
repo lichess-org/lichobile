@@ -24,12 +24,21 @@ Please do not report mobile application bugs in lichess forum.
 
 Check the requirements and setup guide in the [readme](README.md).
 
+We use [eslint](https://eslint.org/) to enforce some coding conventions.
+
+Before sending a pull request, please ensure the following commands run
+without error:
+
+    $ npm run lint
+    $ npm run test
+
+## Caveats
+
 Mithril views should be written with the hyperscript function (imported as h),
 and not JSX. Current JSX views are here for legacy reasons.
 
-We use [eslint](https://eslint.org/) to enforce some coding conventions.
+Mithril is used *only* to write views via the module `mithril/hyperscript`.
+We do *not* use *any* of the framework api, such as `m.route`, `m.request`, etc.
 
-Before sending a pull request, please ensure the following command run
-without error (it will run lint, tests, and compilation in release mode):
-
-    $ npm run build-stage
+The redraw logic is also custom. Thus, if you need to re-render the view, you
+want to use the `~/utils/redraw` module instead of `m.redraw`.

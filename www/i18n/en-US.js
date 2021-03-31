@@ -1096,5 +1096,6 @@ export default {
   "solved": "solved",
   "failed": "failed",
   "playedXTimes:one": "Played %s time",
-  "playedXTimes:other": "Played %s times"
+  "playedXTimes:other": "Played %s times",
+  "landscapeBoardSide": "Board screen side (in landscape mode)"
 }

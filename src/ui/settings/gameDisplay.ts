@@ -39,6 +39,15 @@ function renderBody() {
       ),
       h('li.list_item',
         formWidgets.renderMultipleChoiceButton(
+          i18n('landscapeBoardSide'), [
+            { label: 'Left', value: 'left' },
+            { label: 'Right', value: 'right' },
+          ],
+          settings.game.landscapeBoardSide,
+        ),
+      ),
+      h('li.list_item',
+        formWidgets.renderMultipleChoiceButton(
           i18n('pgnPieceNotation'), [
             { label: i18n('chessPieceSymbol'), value: true },
             { label: i18n('pgnLetter'), value: false },

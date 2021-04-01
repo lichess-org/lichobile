@@ -136,6 +136,7 @@ export default {
     pieceMove: prop<'tap' | 'drag' | 'both'>('game.pieceMove', 'both'),
     rookCastle: prop<0 | 1>('game.rookCastle', 1),
     moveList: prop<boolean>('game.moveList', true),
+    landscapeBoardSide: prop<'right' | 'left'>('game.landscapeBoardSide', 'left'),
   },
 
   analyse: {

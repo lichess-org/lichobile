@@ -1,9 +1,10 @@
 import h from 'mithril/hyperscript'
 import announce from '~/announce'
+import settings from '~/settings'
 import renderAnnouncement from '~/ui/announceView'
 
 import Gesture from '../../../utils/Gesture'
-import { viewportDim } from '../../helper'
+import { classSet, viewportDim } from '../../helper'
 import * as menu from '../../menu'
 import EdgeOpenHandler, { Handlers } from '../sideMenu/EdgeOpenHandler'
 
@@ -43,13 +44,20 @@ export default {
 
   view({ attrs, children }) {
     const { header, color } = attrs
+    const classes = {
+      righty: settings.game.landscapeBoardSide() === 'right'
+    } as {[k: string]: boolean}
+    if (attrs.klass) {
+      classes[attrs.klass] = true
+    }
+
     return h('main#page', {
       className: color,
     }, [
       h('header.main_header.board', header),
       renderAnnouncement(announce.get()),
       h('div.content_round', {
-        className: attrs.klass || ''
+        className: classSet(classes),
       }, children),
       h('div#menu-close-overlay.menu-backdrop', { oncreate: menu.backdropCloseHandler })
     ])

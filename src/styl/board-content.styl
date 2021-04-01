@@ -15,9 +15,13 @@
   @media only screen and (orientation: landscape)
     display flex
     flex-flow row nowrap
-
     &.righty
       flex-direction row-reverse
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
+    &.righty
+      .playable_board_wrapper, .board_wrapper
+        margin-left 0
+        margin-right 3vh
 
 .playable_board_wrapper, .board_wrapper
   flex-shrink 0

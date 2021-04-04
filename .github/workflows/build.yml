@@ -49,7 +49,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: WithoutNNUEDebug
-          path: android/app/build/outputs/apk/withoutNNUE/debug/
+          path: android/app/build/outputs/apk/withoutNNUE/debug/app-withoutNNUE-debug.apk
       - name: Cleanup Gradle Cache
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
         # Restoring these files from a GitHub Actions cache might cause problems for future builds.

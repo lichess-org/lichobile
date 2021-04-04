@@ -7,6 +7,7 @@ on:
 
 jobs:
   apk:
+    name: Generate debug APK
     runs-on: ubuntu-latest
 
     steps:
@@ -45,6 +46,10 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Build APK
         run: cd android && ./gradlew assembleWithoutNNUEDebug
+      - uses: actions/upload-artifact@v2
+        with:
+          name: WithoutNNUEDebug
+          path: android/app/build/outputs/apk/withoutNNUE/debug/
       - name: Cleanup Gradle Cache
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
         # Restoring these files from a GitHub Actions cache might cause problems for future builds.

@@ -44,12 +44,20 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Build APK
-        run: cd android && ./gradlew assembleWithoutNNUEDebug
+      - name: Prepare build
+        working-directory: ./node_modules/capacitor-stockfish/stockfish/src
+        run: make net
+      - name: Build APKs
+        working-directory: ./android
+        run: |
+          ./gradlew assembleWithoutNNUEDebug
+          ./gradlew assembleWithNNUEDebug
       - uses: actions/upload-artifact@v2
         with:
-          name: WithoutNNUEDebug
-          path: android/app/build/outputs/apk/withoutNNUE/debug/app-withoutNNUE-debug.apk
+          name: debugApks
+          path: |
+            ./android/app/build/outputs/apk/withoutNNUE/debug/
+            ./android/app/build/outputs/apk/withNNUE/debug/
       - name: Cleanup Gradle Cache
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
         # Restoring these files from a GitHub Actions cache might cause problems for future builds.

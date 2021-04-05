@@ -2,8 +2,13 @@ name: Android build
 
 on:
   push:
-    branches: [ androidBuild ]
-    tags: [ 'v*' ]
+    branches: 
+      - master
+    paths:
+      - '.github/workflows/build.yml'
+  pull_request:
+    branches:
+      - master
 
 jobs:
   apk:

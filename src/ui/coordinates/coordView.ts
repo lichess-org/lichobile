@@ -1,84 +1,60 @@
 import h from 'mithril/hyperscript'
+import settings from '~/settings'
 import { header } from '../shared/common'
 import Board from '../shared/Board'
 import i18n from '../../i18n'
 import layout from '../layout'
-import CoordCtrl from './coordCtrl'
 import * as helper from '../helper'
-import * as util from '~/chessground/util'
-import formWidgets from '../shared/form'
 
-export default function view(ctrl: CoordCtrl) {
+import CoordCtrl from './CoordCtrl'
 
-  const isWrongAnswer = (index: number) =>
-    ctrl.wrongAnswer === true && index === 0 ? 'nope' : ''
+export default function view(ctrl: CoordCtrl): Mithril.Children {
+
+  const store = settings.coordinates
+
+  const renderCoord = (e: Key, i: number) => {
+    return h('div.next_coord', {
+      className: ('coord' + (i + 1)) + (ctrl.tempWrong === true && i === 0 ? ' nope' : ''),
+    }, e)
+  }
 
   return layout.board(header(i18n('coordinateTraining')), [
-    h('main#trainer.coord-trainer.training', [
-      h('div.coord-trainer__side', { style: { visibility: ctrl.started } }, [
-        h('div.box', [h('h1', i18n('coordinates'))]),
-        h('form.color.buttons', [
-          h('group.radio', [
-            h('div', [
-              formWidgets.renderRadio(
-                h('i'),
-                'color',
-                '3',
-                false,
-                () => ctrl.chessground.orienteWithColor('black'),
-                undefined,
-                'color color_3',
-              )
-            ]),
-            h('div', [
-              formWidgets.renderRadio(
-                h('i'),
-                'color',
-                '2',
-                true,
-                () => ctrl.chessground.orienteWithColor(util.randomColor()),
-                undefined,
-                'color color_2',
-              )
-            ]),
-            h('div', [
-              formWidgets.renderRadio(
-                h('i'),
-                'color',
-                '1',
-                false,
-                () => ctrl.chessground.orienteWithColor('white'),
-                undefined,
-                'color color_1',
-              )
-            ]),
-          ]),
-        ]),
-      ]),
-      h('div.coord-trainer__board.main-board', [
-        ...ctrl.coords.map((e: Key, i: number) =>
-          h('div.next_coord', {
-            id: 'next_coord' + i,
-            className: isWrongAnswer(i)
-          }
-            , e)
-        ),
-        h(Board, {
-          variant: 'standard',
-          chessground: ctrl.chessground
+    h('div.coord-trainer__board_wrapper', [
+      h('div.coord-trainer__progress', [
+        h('div.coord-trainer__progress_bar', {
+          className: ctrl.wrongAnswer ? 'nope' : '',
+          style: { width: ctrl.progress + '%' }
         }),
       ]),
-      h('div.coord-trainer__table', { style: { visibility: ctrl.started } }, [
-        h(
-          'button.start.button.button-fat',
-          { oncreate: helper.ontap(() => ctrl.startTraining()) },
-          i18n('startTraining')
-        ),
+      h('div.coord-trainer__coords', [
+        ...ctrl.coords.map(renderCoord),
       ]),
-      h('div.coord-trainer__score', ctrl.score),
-      h('div.coord-trainer__progress', [
-        h('div.progress_bar', { style: { width: ctrl.progress + '%' } }),
+      h(Board, {
+        variant: 'standard',
+        chessground: ctrl.chessground
+      }),
+    ]),
+    h('div.table.training-tableWrapper', [
+      h('div.training-table.coord-trainer__table.native_scroller.box', [
+        ctrl.started ?
+          h('div.coord-trainer__score', {
+            className: ctrl.wrongAnswer ? 'nope' : '',
+          }, ctrl.score) :
+          h('button.start.defaultButton.fat.wrap',
+            { oncreate: helper.ontap(() => ctrl.startTraining()) },
+            i18n('startTraining')
+          ),
       ]),
+      h('div.actions_bar.coord-trainer__colorChoice',
+        ['black', 'random', 'white'].map(o => {
+          return h('i.action_bar_button.' + o, {
+            className: o === store.colorChoice() ? 'selected' : '',
+            oncreate: helper.ontap(() => {
+              store.colorChoice(o as Color | 'random')
+            })
+          })
+        })
+      ),
     ]),
   ])
 }

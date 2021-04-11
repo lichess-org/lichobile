@@ -161,10 +161,6 @@ export default class Chessground {
     anim(board.toggleOrientation, this)
   }
 
-  orienteWithColor = (color: Color): void => {
-    anim(state => board.orienteWithColor(state, color), this)
-  }
-
   setOtbMode(mode: 'flip' | 'facing'): void {
     anim(state => {
       state.otbMode = mode

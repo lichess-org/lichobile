@@ -1,293 +1,92 @@
-/* Widths */
-/* Heights */
-/* Orientations */
-/* Capabilities */
-/* Aliases */
-/* Uniboard: keep the same page layout accross pages */
-/* when the width is appropriate for col1, but landscape prevents it */
-/* atm only chrome supports min-content, max-content */
-group.radio
-  display: flex
-  flex-flow: row wrap
+.coord-trainer__colorChoice
+  > .action_bar_button
+    background-position: center center
+    background-size: 30px 30px
+    background-repeat: no-repeat
+    &.selected
+      background-color: orange
+  > .white
+    background-image: url(../../images/pieces/cburnett/wK.svg)
+  > .black
+    background-image: url(../../images/pieces/cburnett/bK.svg)
+  > .random
+    background-image: url(../../images/icons/wbK.svg)
 
-group.radio label,
-.coord-trainer__score,
-.coord-trainer__table,
-.coord-trainer .next_coord
-  /* extends %flex-wrap */
-  display: flex
-  flex-flow: row wrap
-  align-items: center
+.coord-trainer__board_wrapper
+  position relative
+  @media only screen and (orientation: landscape)
+    .playable_board_wrapper
+      height: calc(var(--board-side-land) - 10px)
+      width: calc(var(--board-side-land) - 10px)
 
-.coord-trainer__score
-  font-family: "Roboto", Sans-Serif
+.coord-trainer__coords
+  > .next_coord
+    display flex
+    z-index: 2
+    justify-content: center
+    align-items: center
+    position: absolute
+    left: 0
+    width: 100%
+    height: 100%
+    font-size: 180px
+    font-weight: bold
+    pointer-events: none
+    user-select: none
+    color: #eee
+    text-shadow: 0 10px 10px #444
+    opacity: 0.7
+    transition: all 150ms
+    &.nope
+      color: #cc3333 !important
+    &.coord1
+      color: #fff
+    &.coord2
+      left: 30%
+      top: 10%
+      font-size: 60px
+      opacity: 0.4
+    &.coord3
+      transition: none
+      left: 44%
+      top: 13%
+      font-size: 28px
+      opacity: 0.2
 
-.button,
-.coord-trainer__score,
-.coord-trainer .progress_bar,
-group.radio
-  border-radius: 3px
-
-.button.active,
-group.radio input:checked + label
-  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15) inset
-
-.button.active,
-group.radio input:checked + label
-  background: #d64f00
-  color: #fff
-  text-shadow: 0 1px 1px black !important
-
-#main-wrap
-  --main-max-width: calc(100vh - calc(var(--site-header-height) + var(--site-header-margin)) - 3rem)
-
-@media (min-width: 980px)
-  #main-wrap
-    --main-max-width: auto
-
-.coord-trainer
-  grid-area: main
-  display: grid
-  overflow: hidden
-  grid-template-areas: "board" "progress" "score" "table" "side"
-  grid-row-gap: 2vmin
-
-.coord-trainer__side
-  grid-area: side
-
-.coord-trainer__board
-  grid-area: board
-
-.coord-trainer__table
-  grid-area: table
-
-.coord-trainer__progress
-  grid-area: progress
-
-.coord-trainer__score
-  grid-area: score
-
-@media (min-width: 980px)
-  .coord-trainer
-    grid-template-columns: minmax(calc(70vmin * var(--board-scale)), calc(100vh * var(--board-scale) - calc(var(--site-header-height) + var(--site-header-margin)) - 3rem)) 2vmin minmax(240px, 400px)
-    grid-template-rows: fit-content(0)
-    grid-template-areas: "board    . table" "board    . side" "progress . ." "score    . ."
-
-@media (min-width: 1260px)
-  .coord-trainer
-    grid-template-areas: "side . board    . table" ".    . progress . ." ".    . score    . ."
-    grid-template-columns: minmax(230px, 20vw) 2vmin minmax(calc(70vmin * var(--board-scale)), calc(100vh * var(--board-scale) - calc(var(--site-header-height) + var(--site-header-margin)) - 3rem)) 2vmin minmax(240px, 400px)
-
-.coord-trainer .box
-  padding: 2vmin
-
-.coord-trainer .box h1
-  font-size: 1.5em
-  padding: 0 !important
-  text-align: center
-
-.coord-trainer .box p
-  margin-top: 1em
-
-.coord-trainer form.color
-  margin-top: 2vmin
-
-.coord-trainer form.color .color i
-  display: block
-  width: 30px
-  height: 30px
-  background-size: 30px 30px
-  background-repeat: no-repeat
-  padding: 0
-
-.coord-trainer form.color .color_1 i
-  background-image: url(../../images/pieces/cburnett/wK.svg)
-
-.coord-trainer form.color .color_2 i
-  background-image: url(../../images/icons/wbK.svg)
-
-.coord-trainer form.color .color_3 i
-  background-image: url(../../images/pieces/cburnett/bK.svg)
-
-.coord-trainer .next_coord
-  z-index: 2
-  justify-content: center
-  position: absolute
-  bottom: 20%
-  left: 0
-  width: 90%
-  height: 100%
-  font-size: 180px
-  font-weight: bold
-  pointer-events: none
-  color: #eee
-  text-shadow: 0 10px 10px #444
-  opacity: 0.7
-  transition: all 150ms
-
-.coord-trainer .next_coord.nope
-  color: #cc3333 !important
-
-.coord-trainer #next_coord0
-  color: #fff
-
-.coord-trainer #next_coord1
-  left: 26%
-  font-size: 75px
-  opacity: 0.7
-
-.coord-trainer #next_coord2
-  transition: none
-  left: 38%
-  font-size: 38px
-  opacity: 0.4
-
-.coord-trainer #next_coord1,
-.coord-trainer #next_coord2,
-.coord-trainer #next_coord0
-  user-select: none
-
-.coord-trainer .progress_bar
-  width: 100%
-  height: 10px
-  background-color: #629924
-
-.coord-trainer__table
-  justify-content: space-around
+.training-table.coord-trainer__table
+  padding 0
+  justify-content space-around
+  align-items center
 
 .coord-trainer__table .explanation li
   list-style: outside disc
   margin: 0.5em 0 0.5em 1em
 
 .coord-trainer__score
+  display flex
   justify-content: center
+  align-items center
+  font-family 'Roboto'
   font-weight: bold
-  font-size: 70px
-  margin: auto
-  width: 110px
-  height: 110px
-  line-height: 110px
+  font-size: 4em
+  width 100px
+  height 100px
   background-color: #629924
   color: #fff
-  transition: all 150ms
+  border-radius 3px
+  &.nope
+    background-color: #cc3333
 
-.coord-trainer.wrong .progress_bar,
-.coord-trainer.wrong .coord-trainer__score
-  background-color: #cc3333
+.coord-trainer__progress
+  @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
+    width 94vw
+    margin auto
+  @media only screen and (orientation: landscape) and (min-width 768px) and (min-height 768px)
+    margin-left 3vh
 
-.coord-trainer.play .start,
-.coord-trainer #next_coord,
-.coord-trainer.play form.color
-  display: none
-
-.coord-trainer.play #next_coord
-  display: block
-
-@media (max-width: 979px)
-  .coord-trainer.init .coord-trainer__score
-    display: none
-
-  .coord-trainer.init .explanation
-    order: 2
-    margin-top: 1em
-
-.coord-trainer.init .coord-trainer__score
-  opacity: 0
-
-.coord-trainer.init form.color
-  margin-bottom: 2vmin
-
-#jqstooltip
-  box-sizing: content-box
-
-group.radio
-  overflow: hidden
-
-group.radio div
-  flex: 1 1 auto
-  position: relative
-
-group.radio input
-  position: absolute
-  left: -99999px
-
-group.radio label
-  justify-content: center
-  padding: 10px
-  height: 100%
-  cursor: pointer
-  border-right: 1px solid #d9d9d9
-  user-select: none
-
-group.radio div:last-child label
-  border-right: 0
-
-.button
-  background: #1b78d0
-  text-transform: uppercase
-  padding: 0.8em 1em
-  border: none
-  cursor: pointer
-  text-align: center
-  user-select: none
-  white-space: nowrap
-  transition: all 150ms
-
-.button,
-.button:visited
-  color: #fff
-
-.button:not(.disabled):hover
-  color: #fff
-  background: #2b8ae3
-
-.button-no-upper
-  text-transform: none
-
-.button-thin
-  padding: 0.1em 1em
-  font-size: 90%
-
-.button-fat
-  font-size: 1.6rem
-
-.button-green
-  background: #629924
-
-.button-green:not(.disabled):hover
-  background: #6da928
-
-.button-red
-  background: #cc3333
-
-.button-red:not(.disabled):hover
-  background: #d76060
-
-.button.button-empty
-  transition: none
-  background: none
-  box-shadow: none
-
-.button.button-empty,
-.button.button-empty:hover
-  color: #1b78d0
-
-.button.button-empty.button-red,
-.button.button-empty.button-red:hover
-  color: #cc3333
-
-.button.button-empty.button-green,
-.button.button-empty.button-green:hover
-  color: #629924
-
-.button.disabled
-  opacity: 0.5
-  cursor: not-allowed
-
-.button.active
-  color: #fff
-
-.button.active:not(.disabled):hover
-  color: #fff
-
-/*# sourceMappingURL=coord.css.map */
+.coord-trainer__progress_bar
+  width: 100%
+  height: 10px
+  background-color: #629924
+  &.nope
+    background-color: #cc3333

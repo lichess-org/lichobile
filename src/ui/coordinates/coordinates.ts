@@ -1,18 +1,19 @@
-import CoordCtrl from './coordCtrl'
+import * as helper from '../helper'
+import CoordCtrl from './CoordCtrl'
 import coordinatesView from './coordView'
 
 interface State {
-  coordCtrl: CoordCtrl;
+  coordCtrl: CoordCtrl
 }
 
-const CoordinatesBoard: Mithril.Component<any, State> = {
+export default {
   oninit() {
     this.coordCtrl = new CoordCtrl()
   },
 
+  oncreate: helper.viewFadeIn,
+
   view() {
     return coordinatesView(this.coordCtrl)
   },
-}
-
-export default CoordinatesBoard
+} as Mithril.Component<unknown, State>

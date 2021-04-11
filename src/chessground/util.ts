@@ -78,10 +78,6 @@ export function opposite(color: Color) {
   return color === 'white' ? 'black' : 'white'
 }
 
-export function randomColor(): Color {
-  return Math.random() > 0.5 ? 'white' : 'black'
-}
-
 export function containsX<T>(xs: readonly T[] | undefined, x: T) {
   return xs !== undefined && xs.indexOf(x) !== -1
 }

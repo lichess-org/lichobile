@@ -1086,5 +1086,15 @@ export default {
   "solved": "həll edilmiş",
   "failed": "uğursuz oldu",
   "playedXTimes:one": "%s dəfə həll edildi",
-  "playedXTimes:other": "%s dəfə həll edildi"
+  "playedXTimes:other": "%s dəfə həll edildi",
+  "coordinates": "Koordinatlar",
+  "coordinateTraining": "Koordinatlar məşğələsi",
+  "averageScoreAsWhiteX": "Ağlar qismində orta xal: %s",
+  "averageScoreAsBlackX": "Qaralar qismində orta xal: %s",
+  "knowingTheChessBoard": "Şahmat taxtasının koordinatlarını bilmək çox önəmlidir.",
+  "mostChessCourses": "Bir çox şahmat dərs və məşğələlərində cəbri notasiyadan istifadə edilir.",
+  "talkToYourChessFriends": "Hər ikiniz \"şahmat dilini\" bildikdə dostunla şahmat haqqında danışmaq asanlaşır.",
+  "youCanAnalyseAGameMoreEffectively": "Xanaların adını bildikdə oyunu daha tez təhlil etdə bilərsən.",
+  "aSquareNameAppears": "Xananın adı taxta üzərində göstərilir və sən doğru xananı seçməlisən. 30 saniyəyə bacardığın qədər çox xana tap!",
+  "startTraining": "Məşğələyə başla"
 }

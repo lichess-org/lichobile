@@ -19,13 +19,14 @@ export default {
   ] as readonly MultiOption<boolean>[],
 
   renderRadio(
-    label: string,
+    label: string | Mithril.Vnode<any, any>,
     name: string,
     value: string,
     checked: boolean,
     onchange: (e: Event) => void,
-    disabled?: boolean
-  ) {
+    disabled?: boolean,
+    labelClasses?: string,
+  ): any {
     const id = name + '_' + value
     return [
       h('input.radio[type=radio]', {
@@ -38,8 +39,9 @@ export default {
         disabled
       }),
       h('label', {
-        'for': id
-      }, i18n(label))
+        for: id,
+        className: labelClasses
+      }, typeof label === 'string' ? i18n(label) : label)
     ]
   },
 

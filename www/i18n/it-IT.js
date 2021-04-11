@@ -1100,5 +1100,15 @@ export default {
   "solved": "risolto",
   "failed": "sbagliato",
   "playedXTimes:one": "Giocato %s volta",
-  "playedXTimes:other": "Giocato %s volte"
+  "playedXTimes:other": "Giocato %s volte",
+  "coordinates": "Coordinate",
+  "coordinateTraining": "Allenamento sulle coordinate",
+  "averageScoreAsWhiteX": "Punteggio medio come bianco: %s",
+  "averageScoreAsBlackX": "Punteggio medio come nero: %s",
+  "knowingTheChessBoard": "Conoscere le coordinate della scacchiera è un'abilità molto importante:",
+  "mostChessCourses": "La maggior parte dei corsi e degli esercizi utilizzano ampiamente la notazione algebrica.",
+  "talkToYourChessFriends": "Rende più facile parlare di scacchi con i tuoi amici, dato che così entrambi ne conoscete il \"linguaggio\".",
+  "youCanAnalyseAGameMoreEffectively": "Puoi analizzare le partite con più efficacia se non hai bisogno di cercare di volta in volta le coordinate di ogni casa.",
+  "aSquareNameAppears": "Il nome di ogni casa apparirà sulla scacchiera e dovrai cliccare sulla casa indicata. Hai 30 secondi per riconoscere il maggior numero di case possibile!",
+  "startTraining": "Inizia l'allenamento"
 }

@@ -1135,5 +1135,15 @@ export default {
   "solved": "решено",
   "playedXTimes:one": "Играно %s пут",
   "playedXTimes:few": "Играно %s пута",
-  "playedXTimes:other": "Играно %s пута"
+  "playedXTimes:other": "Играно %s пута",
+  "coordinates": "Координате",
+  "coordinateTraining": "Тренинг координата",
+  "averageScoreAsWhiteX": "Просечан резултат као бели играч: %s",
+  "averageScoreAsBlackX": "Просечан резултат као црни играч: %s",
+  "knowingTheChessBoard": "Знање координата шаховске табле је веома важна шаховска вештина:",
+  "mostChessCourses": "Већина шаховских курсева и вежби интензивно користе алгебарску нотацију.",
+  "talkToYourChessFriends": "Олакшава вам причање о шаху са вашим пријатељима, јер обоје разумете \"језик шаха\".",
+  "youCanAnalyseAGameMoreEffectively": "Можете да анализирате игре ефикасније ако не морате тражити имена поља.",
+  "aSquareNameAppears": "Име поља се појави на табли и морате кликнути на исправан квадрат. Имате 30 секунди да препознате што више поља!",
+  "startTraining": "Почните тренинг"
 }

@@ -1089,5 +1089,15 @@ export default {
   "jumpToNextPuzzleImmediately": "Hoppa till nästa pussel omedelbart",
   "solved": "löst",
   "playedXTimes:one": "Spelat %s gånger",
-  "playedXTimes:other": "Spelat %s gånger"
+  "playedXTimes:other": "Spelat %s gånger",
+  "coordinates": "Koordinater",
+  "coordinateTraining": "Träna på koordinaterna",
+  "averageScoreAsWhiteX": "Genomsnittlig poäng som vit: %s",
+  "averageScoreAsBlackX": "Genomsnittlig poäng som svart: %s",
+  "knowingTheChessBoard": "Att veta schackbrädets koordinater är en mycket viktig schackfärdighet:",
+  "mostChessCourses": "De flesta schackkurserna och övningarna använder algebraisk notation.",
+  "talkToYourChessFriends": "Det gör det lättare att prata med dina schackvänner eftersom ni bägge förstår ”schackspråket”.",
+  "youCanAnalyseAGameMoreEffectively": "Ett parti analyseras ännu effektivare om du inte behöver söka efter rutornas koordinater.",
+  "aSquareNameAppears": "Rutornas namn visas på brädet och du måste klicka på rätt ruta. Du har 30 sekunder att identifiera så många rutor som möjligt!",
+  "startTraining": "Starta träningen"
 }

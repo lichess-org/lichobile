@@ -847,5 +847,11 @@ export default {
   "hardest": "Þyngst",
   "example": "Dæmi",
   "addAnotherTheme": "Bæta við annan þema",
-  "jumpToNextPuzzleImmediately": "Fara strax á næsta þraut"
+  "jumpToNextPuzzleImmediately": "Fara strax á næsta þraut",
+  "coordinates": "Hnit",
+  "coordinateTraining": "Hnitaþjálfun",
+  "averageScoreAsWhiteX": "Meðalskor sem hvítur: %s",
+  "averageScoreAsBlackX": "Meðalskor sem svartur: %s",
+  "knowingTheChessBoard": "Að þekkja hnit borðsins er mikilvægur hæfileiki í skák:",
+  "mostChessCourses": "Flest skáknámskeið og æfingar gjörnýta sama ritháttinn."
 }

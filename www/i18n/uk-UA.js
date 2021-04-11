@@ -1183,5 +1183,15 @@ export default {
   "playedXTimes:one": "Зіграно %s раз",
   "playedXTimes:few": "Зіграно %s рази",
   "playedXTimes:many": "Зіграно %s раз",
-  "playedXTimes:other": "Зіграно %s раз"
+  "playedXTimes:other": "Зіграно %s раз",
+  "coordinates": "Координати",
+  "coordinateTraining": "Координатне тренування",
+  "averageScoreAsWhiteX": "Середній рахунок за білих: %s",
+  "averageScoreAsBlackX": "Середній рахунок за чорних: %s",
+  "knowingTheChessBoard": "Знання координат шахівниці - дуже важлива шахова навичка:",
+  "mostChessCourses": "Більшість шахових задач активно використовуються в шаховій нотації.",
+  "talkToYourChessFriends": "Це спрощує розмову з друзями-шахістами, бо Ви обидва розумієте «мову шахів».",
+  "youCanAnalyseAGameMoreEffectively": "Ви можете більш ефективно аналізувати ігри, якщо вам не потрібно шукати назви квадратів.",
+  "aSquareNameAppears": "Назви квадратів з'являються на дошці, де Ви повинні натиснути конкретний квадрат. У вас є 30 секунд, щоб визначити якомога більше квадратів!",
+  "startTraining": "Розпочати тренування"
 }

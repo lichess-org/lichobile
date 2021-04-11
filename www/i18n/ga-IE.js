@@ -650,5 +650,10 @@ export default {
   "playedXTimes:two": "Imeartha %s uair",
   "playedXTimes:few": "Imeartha %s uair",
   "playedXTimes:many": "Imeartha %s uair",
-  "playedXTimes:other": "Imeartha %s uair"
+  "playedXTimes:other": "Imeartha %s uair",
+  "coordinates": "Comhordanáidí",
+  "coordinateTraining": "Cleachtadh comhordanáide",
+  "averageScoreAsWhiteX": "Meánscór le bán: %s",
+  "averageScoreAsBlackX": "Meánscór le dubh: %s",
+  "startTraining": "Tosaigh"
 }

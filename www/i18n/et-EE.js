@@ -893,5 +893,15 @@ export default {
   "hardest": "Väga raske",
   "example": "Näide",
   "playedXTimes:one": "Mängitud %s kord",
-  "playedXTimes:other": "Mängitud %s korda"
+  "playedXTimes:other": "Mängitud %s korda",
+  "coordinates": "Koordinaadid",
+  "coordinateTraining": "Koordinaatide harjutamine",
+  "averageScoreAsWhiteX": "Keskmine tulemus valgena: %s",
+  "averageScoreAsBlackX": "Keskmine tulemus mustana: %s",
+  "knowingTheChessBoard": "Malelaua koordinaatide tundmine on males väga oluline oskus:",
+  "mostChessCourses": "Enamik malekursustest ja -ülesannetest kasutavad ulatuslikult algebralisi märke.",
+  "talkToYourChessFriends": "See teeb oma malesõpradega rääkimise kergemaks, sest Te mõlemad mõistate \"male keelt\".",
+  "youCanAnalyseAGameMoreEffectively": "Saate mänge efektiivsemalt analüüsida, kui ei pea ruutude nimetusi taga otsima.",
+  "aSquareNameAppears": "Ruudu nimetus ilmub lauale ning peate klõpsama õigel ruudul. Teil on 30 sekundit aega, et tuvastada võimalikult palju ruute!",
+  "startTraining": "Alusta treeningut"
 }

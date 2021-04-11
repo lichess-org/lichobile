@@ -1097,6 +1097,16 @@ export default {
   "failed": "failed",
   "playedXTimes:one": "Played %s time",
   "playedXTimes:other": "Played %s times",
+  "coordinates": "Coordinates",
+  "coordinateTraining": "Coordinate training",
+  "averageScoreAsWhiteX": "Average score as white: %s",
+  "averageScoreAsBlackX": "Average score as black: %s",
+  "knowingTheChessBoard": "Knowing the chessboard coordinates is a very important chess skill:",
+  "mostChessCourses": "Most chess courses and exercises use the algebraic notation extensively.",
+  "talkToYourChessFriends": "It makes it easier to talk to your chess friends, since you both understand the \"language of chess\".",
+  "youCanAnalyseAGameMoreEffectively": "You can analyze a game more effectively if you can quickly recognize coordinates.",
+  "aSquareNameAppears": "A coordinate appears on the board and you must click on the corresponding square. You have 30 seconds to correctly map as many squares as possible!",
+  "startTraining": "Start training",
   "apiUnsupported": "Your version of lichess app is too old! Please upgrade for free to the latest version.",
   "apiDeprecated": "Upgrade for free to the latest lichess app! Support for this version will be dropped on %s.",
   "playerisInvitingYou": "%s is inviting you",
@@ -1108,6 +1118,5 @@ export default {
   "otbFlipPiecesAndInfoAfterMove": "Flip pieces and opponent info after move",
   "settingsClockPosition": "Clock position",
   "positionRight": "Right",
-  "positionLeft": "Left",
-  "landscapeBoardSide": "Board screen side (in landscape mode)"
+  "positionLeft": "Left"
 }

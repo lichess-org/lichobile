@@ -1093,5 +1093,15 @@ export default {
   "strengths": "Erősségek",
   "failed": "sikertelen",
   "playedXTimes:one": "%s beküldött megfejtés",
-  "playedXTimes:other": "%s beküldött megfejtés"
+  "playedXTimes:other": "%s beküldött megfejtés",
+  "coordinates": "Koordináták",
+  "coordinateTraining": "Koordináta gyakorló",
+  "averageScoreAsWhiteX": "Átlagos pontszám világosként: %s",
+  "averageScoreAsBlackX": "Átlagos pontszám sötétként: %s",
+  "knowingTheChessBoard": "A sakktábla koordinátáinak ismerete nagyon fontos sakk készség:",
+  "mostChessCourses": "A sakk tanfolyamok és feladványok többnyire az algebrai jelölési rendszert alkalmazzák.",
+  "talkToYourChessFriends": "Könnyebbé teszi a sakk társalgást a barátokkal, ha mindketten beszélik a \"sakk nyelvét\".",
+  "youCanAnalyseAGameMoreEffectively": "A játszmák hatékonyabban elemezhetőek, ha nem kell keresgetni a mezőket.",
+  "aSquareNameAppears": "Mindig arra a mezőre kell kattintani, amelyiknek a neve megjelenik a tábla előtt. A cél, minél több találat elérése 30 másodperc alatt.",
+  "startTraining": "Gyakorlás kezdése"
 }

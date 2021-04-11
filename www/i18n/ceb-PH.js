@@ -128,5 +128,15 @@ export default {
   "nextCaptureOrPawnMoveInXHalfMoves:one": "Sunod nga pagdakup o paglihok sa lakang sa %s tunga sa paglihok (Distansya Ngadto sa Zeroing sa 50 ka lakang sa pagbalhin)",
   "nextCaptureOrPawnMoveInXHalfMoves:other": "Sunod nga pagdakup o paglihok sa lakang sa %s tunga-tunga nga paglihok (Distansya Ngadto sa Zeroing sa 50 move counter)",
   "nbDays:one": "%s adlaw",
-  "nbDays:other": "%s mga adlaw"
+  "nbDays:other": "%s mga adlaw",
+  "coordinates": "Ang pagbalo sa mga posisyon",
+  "coordinateTraining": "Coordinate nga pagbansay",
+  "averageScoreAsWhiteX": "Average nga puntos ingon puti: %s",
+  "averageScoreAsBlackX": "Average nga iskor ingon itom: %s",
+  "knowingTheChessBoard": "Ang pagkahibalo sa mga coordinate sa chessboard usa ka hinungdanon kaayo nga kahanas sa chess:",
+  "mostChessCourses": "Kadaghanan sa mga kurso ug ehersisyo sa chess naggamit sa kadaghanan sa notasyon sa algebraic.",
+  "talkToYourChessFriends": "Mas dali kining makig-istorya sa imong mga higala sa chess, tungod kay pareho nimo ang pagsabot sa 'sinultian nga chess'.",
+  "youCanAnalyseAGameMoreEffectively": "Mahimo nimo nga ma-analisar ang usa ka dula nga mas epektibo kung dali ka makaila sa mga koordinar.",
+  "aSquareNameAppears": "Ang usa ka koordinasyon makita sa pisara ug kinahanglan nimo nga i-klik ang katugbang nga square. Adunay ka 30 segundo aron husto nga mapa ang daghang mga square kutob sa mahimo!",
+  "startTraining": "pagsugod sa pagbansay"
 }

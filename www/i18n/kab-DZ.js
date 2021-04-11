@@ -262,5 +262,9 @@ export default {
   "teamBestPlayers": "Aqaru n taɣlamt",
   "teamRecentMembers": "Imaslaḍen imaynuten",
   "nbMembers:one": "%s imedrawen",
-  "nbMembers:other": "%s imedrawen"
+  "nbMembers:other": "%s imedrawen",
+  "coordinates": "Tisidag",
+  "coordinateTraining": "Kemmel asileɣ",
+  "averageScoreAsWhiteX": "Agemmuḍ alemmas d amellal:%s",
+  "averageScoreAsBlackX": "Agemmuḍ alemmas d aberkan:%s"
 }

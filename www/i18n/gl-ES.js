@@ -975,5 +975,15 @@ export default {
   "addAnotherTheme": "Engadir outro tema",
   "jumpToNextPuzzleImmediately": "Ir ao seguinte crebacabezas inmediatamente",
   "playedXTimes:one": "Xogado %s veces",
-  "playedXTimes:other": "Xogado %s veces"
+  "playedXTimes:other": "Xogado %s veces",
+  "coordinates": "Coordenadas",
+  "coordinateTraining": "Adestramento de coordenadas",
+  "averageScoreAsWhiteX": "Puntuación media con brancas: %s",
+  "averageScoreAsBlackX": "Puntuación media con negras: %s",
+  "knowingTheChessBoard": "Coñecer as coordenadas do taboleiro é unha importante habilidade no xadrez:",
+  "mostChessCourses": "A maioría dos cursos e exercicios de xadrez empregan a notación alxebraica extensivamente.",
+  "talkToYourChessFriends": "Fai que sexa máis doado falar cos teus amigos xadrecistas, xa que ambos entendedes a \"linguaxe do xadrez\".",
+  "youCanAnalyseAGameMoreEffectively": "Podes analizar unha partida máis efectivamente se non precisas buscar o nome das casas.",
+  "aSquareNameAppears": "O nome dunha casa aparece no taboleiro e debes pinchar na casa correcta. Tés 30 segundos para recoñecer tantas casas como podas!",
+  "startTraining": "Comezar adestramento"
 }

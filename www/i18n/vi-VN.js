@@ -997,5 +997,15 @@ export default {
   "example": "Ví dụ",
   "addAnotherTheme": "Thêm chủ đề khác",
   "jumpToNextPuzzleImmediately": "Chuyển tới câu đố tiếp theo ngay lập tức",
-  "playedXTimes:other": "Đã chơi %s lần"
+  "playedXTimes:other": "Đã chơi %s lần",
+  "coordinates": "Tọa độ",
+  "coordinateTraining": "Luyện tập tọa độ",
+  "averageScoreAsWhiteX": "Điểm trung bình quân trắng: %s",
+  "averageScoreAsBlackX": "Điểm trung bình quân đen: %s",
+  "knowingTheChessBoard": "Biết tọa độ bàn cờ là kỹ năng rất quan trọng khi chơi cờ:",
+  "mostChessCourses": "Hầu hết các khóa học và bài tập cờ vua dùng ký hiệu đại số rộng rãi.",
+  "talkToYourChessFriends": "Nó giúp bạn cờ dễ nói chuyện với nhau hơn, vì cả hai đều hiểu \"ngôn ngữ cờ vua\".",
+  "youCanAnalyseAGameMoreEffectively": "Bạn sẽ phân tích ván cờ hiệu quả hơn nếu bạn có thể tìm ra ngay ô cờ từ tọa độ.",
+  "aSquareNameAppears": "Từng tọa độ sẽ xuất hiện trên bàn cờ và bạn phải chọn đúng ô cờ. Bạn có 30 giây để xác định nhiều ô cờ nhất có thể!",
+  "startTraining": "Bắt đầu luyện"
 }

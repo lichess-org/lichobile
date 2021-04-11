@@ -1139,5 +1139,15 @@ export default {
   "puzzleThemes": "Motivy úloh",
   "recommended": "Doporučené",
   "phases": "Fáze",
-  "motifs": "Techniky"
+  "motifs": "Techniky",
+  "coordinates": "Souřadnice",
+  "coordinateTraining": "Trénink souřadnic",
+  "averageScoreAsWhiteX": "Průměrné skóre jako bílý: %s",
+  "averageScoreAsBlackX": "Průměrné skóre jako černý: %s",
+  "knowingTheChessBoard": "Naučit se správně souřadnice na šachovnici je velmi důležitá šachová dovednost:",
+  "mostChessCourses": "Většina šachových kurzů a cvičení velmi často používá algebraickou notaci.",
+  "talkToYourChessFriends": "Snadněji se dorozumíte se svými šachovými přáteli, protože oba budete mluvit \"řečí šachu\".",
+  "youCanAnalyseAGameMoreEffectively": "Můžete efektivněji analyzovat partie, pokud nebudete muset neustále hledat jména polí.",
+  "aSquareNameAppears": "Označení pole se objeví na šachovnici a Vy musíte kliknout na správné pole. Kolik polí stihnete správně určit během 30 vteřin?",
+  "startTraining": "Začít trénink"
 }

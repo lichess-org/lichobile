@@ -824,5 +824,15 @@ export default {
   "teamBestPlayers": "Шилдэг тоглогчид",
   "teamRecentMembers": "Сүүлд элссэн гишүүд",
   "nbMembers:one": "%s гишүүд",
-  "nbMembers:other": "%s гишүүд"
+  "nbMembers:other": "%s гишүүд",
+  "coordinates": "Солбилцол",
+  "coordinateTraining": "Солбицолын сургуулилалт",
+  "averageScoreAsWhiteX": "Цагаанаар авсан дундаж оноо: %s",
+  "averageScoreAsBlackX": "Хараар авсан дундаж оноо: %s",
+  "knowingTheChessBoard": "Шатрын тавцангийн солбицолыг мэддэг байх нь маш чухал чадвар юм:",
+  "mostChessCourses": "Шатрын ихэнх хичээл, дугуйлангууд алгебрын тэмдэглэгээг өргөн хэрэглэдэг.",
+  "talkToYourChessFriends": "Энэ нь шатрын өргийн талаар найзтайгаа ярихад хялбар болгодог.",
+  "youCanAnalyseAGameMoreEffectively": "Та шатрын өргийг илүү үр дүнтэйгээр шинжэлж чадна.",
+  "aSquareNameAppears": "Солбилцолын нэр гарч ирэхэд та тэр нүдийг түргэн олж дарах ёстой. Таньд нийт 30 секундын хугацаа байгаа!",
+  "startTraining": "Дасгалыг эхлүүлэх"
 }

@@ -100,7 +100,7 @@ function renderFeedback(ctrl: TrainingCtrl) {
       return h('div.training-explanation', [
         h('div.player', [
           h('div.piece-no-square', {
-            className: ctrl.pieceTheme
+            className: settings.general.theme.piece(),
           }, h('piece.king.' + ctrl.data.puzzle.color)),
           h('div.training-instruction', [
             h('strong', i18n('yourTurn')),

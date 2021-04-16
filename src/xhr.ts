@@ -9,6 +9,7 @@ import session from './session'
 import { TimelineData, LobbyData, HookData, Pool, HumanSeekSetup, CorrespondenceSeek, ApiStatus } from './lichess/interfaces'
 import { ChallengeData, ChallengesData, Challenge } from './lichess/interfaces/challenge'
 import { OnlineGameData } from './lichess/interfaces/game'
+import { MiniUser } from './lichess/interfaces/user'
 
 interface GameSetup {
   variant: string
@@ -207,7 +208,7 @@ export function setServerLang(lang: string): Promise<void> {
   }
 }
 
-export function miniUser(userId: string) {
+export function miniUser(userId: string): Promise<MiniUser> {
   return fetchJSON(`/@/${userId}/mini`)
 }
 

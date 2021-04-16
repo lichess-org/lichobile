@@ -10,16 +10,23 @@ const RANKS = '12345678'
 
 const duration = 1000 * 30
 const storeKey = 'coordinates'
+const storeMaxScores = 100
 
-interface Score {
-  white?: { nb: number, avg: number }
-  black?: { nb: number, avg: number }
+interface SavedScores {
+  white?: number[]
+  black?: number[]
+}
+
+interface AverageScores {
+  white: number | null
+  black: number | null
 }
 
 export default class CoordCtrl {
   orientation: Color
   chessground: Chessground
   coords: Key[] = []
+  averageScores?: AverageScores | null
   wrongAnswer = false
   tempWrong = false
   score = 0
@@ -39,6 +46,14 @@ export default class CoordCtrl {
       events: {
         select: (key) => this.handleSelect(key),
       },
+    })
+
+    asyncStorage.get<SavedScores>(storeKey)
+    .then(saved => {
+      if (saved) {
+        this.averageScores = getAverage(saved)
+        redraw()
+      }
     })
   }
 
@@ -61,21 +76,23 @@ export default class CoordCtrl {
   }
 
   public handleSelect(key: Key): void {
-    if (key === this.coords[0]) {
-      this.coords.shift()
-      this.pushCoords()
-      this.wrongAnswer = false
-      this.tempWrong = false
-      this.score++
-    } else {
-      this.wrongAnswer = true
-      this.tempWrong = true
-      setTimeout(() => {
+    if (this.started) {
+      if (key === this.coords[0]) {
+        this.coords.shift()
+        this.pushCoords()
+        this.wrongAnswer = false
         this.tempWrong = false
-        redraw()
-      }, 350)
+        this.score++
+      } else {
+        this.wrongAnswer = true
+        this.tempWrong = true
+        setTimeout(() => {
+          this.tempWrong = false
+          redraw()
+        }, 350)
+      }
+      redraw()
     }
-    redraw()
   }
 
   public startTraining(): void {
@@ -97,9 +114,15 @@ export default class CoordCtrl {
         const spent = Math.min(duration, performance.now() - startedAt)
         if (spent >= duration) {
           clearInterval(id)
+          this.progress = 100
           this.started = false
+          this.wrongAnswer = false
+          this.tempWrong = false
           this.coords = []
-          // TODO save score
+          this.saveScore().then(s => {
+            this.averageScores = getAverage(s)
+            redraw()
+          })
           redraw()
         } else {
           this.progress = (100 * spent) / duration
@@ -111,10 +134,29 @@ export default class CoordCtrl {
     }
   }
 
-  private saveScore() {
-    asyncStorage.get<Score>(storeKey).then(saved => {
-      const score = saved || {}
-      const nb = score[this.orientation].nb + 1
+  private saveScore(): Promise<SavedScores> {
+    return asyncStorage.get<SavedScores>(storeKey)
+    .then(saved => {
+      saved = saved || {}
+      const scores = saved[this.orientation] || []
+      if (scores.length >= storeMaxScores) {
+        scores.shift()
+      }
+      scores.push(this.score)
+      saved[this.orientation] = scores
+      return saved
     })
+    .then(newState => asyncStorage.set(storeKey, newState))
   }
+}
+
+function getAverage(s: SavedScores): AverageScores {
+  return {
+    white: s.white ? computeAverage(s.white) : null,
+    black: s.black ? computeAverage(s.black) : null,
+  }
+}
+
+function computeAverage(n: number[]): number {
+  return Math.round((n.reduce((t, x) => t + x, 0) / n.length) * 100) / 100
 }

@@ -40,10 +40,16 @@ export default function view(ctrl: CoordCtrl): Mithril.Children {
           h('div.coord-trainer__score', {
             className: ctrl.wrongAnswer ? 'nope' : '',
           }, ctrl.score) :
-          h('button.start.defaultButton.fat.wrap',
-            { oncreate: helper.ontap(() => ctrl.startTraining()) },
-            i18n('startTraining')
-          ),
+          h.fragment({}, [
+            ctrl.averageScores ? h('div.coord-trainer__average', [
+              h('div', h.trust(i18n('averageScoreAsWhiteX', `<strong>${ctrl.averageScores.white !== null ? ctrl.averageScores.white : '?'}</strong>`))),
+              h('div', h.trust(i18n('averageScoreAsBlackX', `<strong>${ctrl.averageScores.black !== null ? ctrl.averageScores.black : '?'}</strong>`))),
+            ]) : null,
+            h('button.start.defaultButton.fat.wrap',
+              { oncreate: helper.ontap(() => ctrl.startTraining()) },
+              i18n('startTraining')
+            ),
+          ]),
       ]),
       h('div.actions_bar.coord-trainer__colorChoice',
         ['black', 'random', 'white'].map(o => {

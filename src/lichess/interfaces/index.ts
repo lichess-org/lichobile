@@ -1,5 +1,6 @@
 import { GameData } from './game'
 import { AnalyseData } from './analyse'
+import { MiniUser as MiniUserData } from './user'
 
 export interface Pool {
   readonly id: string
@@ -118,7 +119,7 @@ export interface NowPlayingGame {
 
 export interface MiniUserPlayer {
   showing: boolean
-  data: any
+  data: MiniUserData | null
 }
 export interface MiniUser {
   readonly player: MiniUserPlayer

@@ -160,5 +160,5 @@ export interface Score {
 
 export interface MiniUser {
   crosstable: Score
-  perfs: any
+  perfs: Perfs
 }

@@ -175,7 +175,7 @@ function renderLinks(user?: Session) {
         </li> : null
       }
       <li className="side_link" data-route="/coord">
-        <span data-icon="4" />{i18n('coordinates')}
+        <span className="fa fa-thumb-tack" />{i18n('coordinates')}
       </li>
       {online ?
       <li className="sep_link">

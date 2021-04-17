@@ -10,7 +10,7 @@ const i18nBaseDir = '../www/i18n'
 const mobileSourceDir = '../translation/dest/'
 const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
-const modules = ['site', 'study', 'arena', 'perfStat', 'preferences', 'settings', 'search', 'team', 'tfa', 'puzzle']
+const modules = ['site', 'study', 'arena', 'perfStat', 'preferences', 'settings', 'search', 'team', 'tfa', 'puzzle', 'coordinates']
 
 type StringMap = {
   [i: string]: string | undefined

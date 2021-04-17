@@ -1096,5 +1096,15 @@ export default {
   "solved": "løst",
   "failed": "mislykket",
   "playedXTimes:one": "Spilt %s gang",
-  "playedXTimes:other": "Spilt %s ganger"
+  "playedXTimes:other": "Spilt %s ganger",
+  "coordinates": "Koordinater",
+  "coordinateTraining": "Tren koordinater",
+  "averageScoreAsWhiteX": "Gjennomsnittlig poengsum som hvit: %s",
+  "averageScoreAsBlackX": "Gjennomsnittlig poengsum som sort: %s",
+  "knowingTheChessBoard": "Å kjenne sjakkbrettet er en meget viktig sjakkegenskap:",
+  "mostChessCourses": "De fleste sjakk-kurs og -øvelser bruker algebraisk notasjon mye.",
+  "talkToYourChessFriends": "Det gjør det lettere å snakke med sjakk-vennene dine, siden dere begge forstår \"sjakkens språk\".",
+  "youCanAnalyseAGameMoreEffectively": "Det er lettere å analysere partier dersom du ikke må lete for å finne navn på feltene.",
+  "aSquareNameAppears": "Navet på et felt dukker opp på brettet. Du har 30 sekunder til å identifisere så mange felter som mulig!",
+  "startTraining": "Begynn trening"
 }

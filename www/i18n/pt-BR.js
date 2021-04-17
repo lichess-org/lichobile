@@ -1096,5 +1096,15 @@ export default {
   "solved": "resolvido",
   "failed": "falhou",
   "playedXTimes:one": "Jogado %s vezes",
-  "playedXTimes:other": "Jogado %s vezes"
+  "playedXTimes:other": "Jogado %s vezes",
+  "coordinates": "Coordenadas",
+  "coordinateTraining": "Treinamento de coordenadas",
+  "averageScoreAsWhiteX": "Pontuação média com as brancas: %s",
+  "averageScoreAsBlackX": "Pontuação média com as pretas: %s",
+  "knowingTheChessBoard": "Saber as coordenadas do tabuleiro é habilidade enxadrística muito importante:",
+  "mostChessCourses": "A maioria dos cursos e exercícios de xadrez utilizam a notação algébrica extensivamente.",
+  "talkToYourChessFriends": "Isso torna mais fácil conversar com seus amigos de xadrez, desde que ambos entendam a \"linguagem do xadrez\".",
+  "youCanAnalyseAGameMoreEffectively": "Você pode analisar um jogo mais eficientemente se não precisar ficar procurando os nomes das casas.",
+  "aSquareNameAppears": "Uma coordenada aparece no tabuleiro e você deve clicar na casa correspondente. Você tem 30 segundos para reconhecer o máximo possível de casas!",
+  "startTraining": "Começar treino"
 }

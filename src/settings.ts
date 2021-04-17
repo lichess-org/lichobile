@@ -380,6 +380,10 @@ export default {
     ratingDiffThreshold: 100
   },
 
+  coordinates: {
+    colorChoice: prop<Color | 'random'>('coordinates.colorChoice', 'random')
+  },
+
   study: {
     tour: prop<string | null>('study.tour', null)
   },

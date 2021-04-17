@@ -1002,5 +1002,15 @@ export default {
   "xJoinRequests:one": "%s kërkesë për të hyrë",
   "xJoinRequests:other": "%s kërkesa për të hyrë",
   "twoFactorAuth": "Vërtetim me dy faktorë",
-  "twoFactorHelp": "Vërtetimi me dy faktorë i shton llogarisë tuaj edhe një shtresë sigurie."
+  "twoFactorHelp": "Vërtetimi me dy faktorë i shton llogarisë tuaj edhe një shtresë sigurie.",
+  "coordinates": "Kordinatat",
+  "coordinateTraining": "Trajnimin Kordinatat",
+  "averageScoreAsWhiteX": "Rezultati mesatar si i bardhë: %s",
+  "averageScoreAsBlackX": "Rezultati mesatar si i ziun: %s",
+  "knowingTheChessBoard": "Njohja e koordinatave të shahut është një aftësi shumë e rëndësishme e shahut:",
+  "mostChessCourses": "Shumica e kurseve dhe ushtrimeve të shahut përdorin gjerësisht notimin algjebrik.",
+  "talkToYourChessFriends": "Kjo traijnim e bën më të lehtë të bisedoni me shokët tuaj të shahut, pasi ju të dy e kuptoni \"gjuhën e shahut\".",
+  "youCanAnalyseAGameMoreEffectively": "Ju mund të analizoni një lojë më efektive nëse nuk keni nevojë të kërkoni emra katrorë.",
+  "aSquareNameAppears": "Një emër katror shfaqet në tabelë dhe ju duhet të klikoni në sheshin e saktë. Ju keni 30 sekonda për të njohur sa më shumë sheshe të jetë e mundur!",
+  "startTraining": "Fillo trajnimin"
 }

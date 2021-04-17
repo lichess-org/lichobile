@@ -1102,5 +1102,15 @@ export default {
   "solved": "çözüldü",
   "failed": "başarısız",
   "playedXTimes:one": "%s kez çözüldü",
-  "playedXTimes:other": "%s kez çözüldü"
+  "playedXTimes:other": "%s kez çözüldü",
+  "coordinates": "Koordinatlar",
+  "coordinateTraining": "Koordinat Antrenmanı",
+  "averageScoreAsWhiteX": "Beyaz olarak ortalama skor: %s",
+  "averageScoreAsBlackX": "Siyah olarak ortalama skor: %s",
+  "knowingTheChessBoard": "Satranç tahtasının koordinatlarını bilmek çok önemli bir satranç becerisidir:",
+  "mostChessCourses": "Satranç derslerinin ve alıştırmalarının çoğunda cebirsel gösterim kullanılır.",
+  "talkToYourChessFriends": "\"Satranç dilini\" anlayabildiğin için satranç oynayan arkadaşlarınla anlaşman daha kolay bir hâl alır.",
+  "youCanAnalyseAGameMoreEffectively": "Karelerin adlarını iyice bilirsen oyunları daha etkili bir şekilde analiz edebilirsin.",
+  "aSquareNameAppears": "Bu alıştırma için tahta üzerinde adı görünen karelere tıklaman gerekiyor. 30 saniye içinde mümkün olduğunca çok kareyi bulmaya çalış!",
+  "startTraining": "Antrenmana başla"
 }

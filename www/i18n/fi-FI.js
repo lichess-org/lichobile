@@ -1092,5 +1092,15 @@ export default {
   "solved": "ratkaistu",
   "failed": "epäonnistui",
   "playedXTimes:one": "Pelattu %s kerran",
-  "playedXTimes:other": "Pelattu %s kertaa"
+  "playedXTimes:other": "Pelattu %s kertaa",
+  "coordinates": "Koordinaatit",
+  "coordinateTraining": "Koordinaattiharjoittelu",
+  "averageScoreAsWhiteX": "Keskimääräinen tulos valkeana: %s",
+  "averageScoreAsBlackX": "Keskimääräinen tulos mustana: %s",
+  "knowingTheChessBoard": "Shakkilaudan koordinaattien hallinta on erittäin tärkeä kyky shakinpelaajalle:",
+  "mostChessCourses": "Useimmilla shakkikursseilla ja harjoitteissa algebrallinen merkintätapa vilisee siellä ja täällä.",
+  "talkToYourChessFriends": "On helpompaa keskustella shakista, kun molemmat ymmärtävät \"shakin kieltä\".",
+  "youCanAnalyseAGameMoreEffectively": "Peliä voi analysoida tehokkaammin, kun ei tarvitse haeskella ruutujen nimiä.",
+  "aSquareNameAppears": "Ruudun nimi ilmestyy laudalle ja sinun on klikattava oikeaa ruutua. Sinulla on 30 sekuntia aikaa tunnistaa niin monta ruutua kuin ehdit!",
+  "startTraining": "Aloita harjoitus"
 }

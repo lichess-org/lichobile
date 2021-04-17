@@ -356,3 +356,7 @@ export function animationDuration(pref: boolean): number {
   //     return base
   // }
 }
+
+export function randomColor(): Color {
+  return Math.random() > 0.5 ? 'white' : 'black'
+}

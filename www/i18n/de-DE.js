@@ -1102,5 +1102,15 @@ export default {
   "solved": "gelöst",
   "failed": "fehlgeschlagen",
   "playedXTimes:one": "%s mal gespielt",
-  "playedXTimes:other": "%s mal gespielt"
+  "playedXTimes:other": "%s mal gespielt",
+  "coordinates": "Koordinaten",
+  "coordinateTraining": "Koordinatentraining",
+  "averageScoreAsWhiteX": "Durchschnittliche Punktzahl als Weiß: %s",
+  "averageScoreAsBlackX": "Durchschnittliche Punktzahl als Schwarz: %s",
+  "knowingTheChessBoard": "Die Koordinaten des Schachbretts zu kennen ist eine wichtige Fähigkeit:",
+  "mostChessCourses": "Die meisten Schach-Kurse und Übungen verwenden die algebraische Notation.",
+  "talkToYourChessFriends": "Es macht es einfacher dich mit deinen Schachfreunden zu unterhalten, da ihr beide die \"Schachsprache\" versteht.",
+  "youCanAnalyseAGameMoreEffectively": "Du kannst ein Spiel effektiver analysieren, wenn du nicht immer nach den Feldbezeichnungen suchen musst.",
+  "aSquareNameAppears": "Der Feldname wird auf dem Brett angezeigt und du musst auf das zugehörige Feld klicken. Du hast 30 Sekunden, um möglichst viele Felder zu erkennen!",
+  "startTraining": "Training beginnen"
 }

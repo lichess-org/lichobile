@@ -962,5 +962,15 @@ export default {
   "beingReviewed": "Xwesteka te ya tevlîbûnê ji aliyê rêberê komê ve tê nirxandin.",
   "teamBattle": "Şerê Koman",
   "xJoinRequests:one": "%s xwesteka tevlîbûnê",
-  "xJoinRequests:other": "%s xwestekên tevlîbûnî"
+  "xJoinRequests:other": "%s xwestekên tevlîbûnî",
+  "coordinates": "Kordînat",
+  "coordinateTraining": "Perwerdeya kordînatê",
+  "averageScoreAsWhiteX": "Skora navîn wek spî: %s",
+  "averageScoreAsBlackX": "Skora navîn wek reş: %s",
+  "knowingTheChessBoard": "Zanîna koordînatên texteya kişikê qabiliyeteke kişikê yê pir girîng e:",
+  "mostChessCourses": "Di piraniya kurs û egzersîzên kişikan de notasyona cebîrî tê bikaranîn.",
+  "talkToYourChessFriends": "Ew dike ku hêsantir be xeberdana te ya bi hevalên kişikê re, piştî famkirina te ya 'zimanê kişikê'.",
+  "youCanAnalyseAGameMoreEffectively": "Tu yê karibî lîstikek karîgertir analîz bikî, ger koordînatan zû binasî.",
+  "aSquareNameAppears": "Koordînatekê dixuye li ser texteyê û divê tu bitikînî ser wê çarçikê. 30 saniyeyên te hene ji bo peydakirina çendîn çarçikan, bi qasî ku karibî!",
+  "startTraining": "Dest bi perwerdeyê bike"
 }

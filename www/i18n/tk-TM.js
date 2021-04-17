@@ -756,5 +756,15 @@ export default {
   "teamBattleOverview": "Birnäçe toparyň göreşi, her küştçi topary üçin utuk gazanýar",
   "teamTournament": "Topar bäsleşigi",
   "nbMembers:one": "%s agza",
-  "nbMembers:other": "%s agza"
+  "nbMembers:other": "%s agza",
+  "coordinates": "Kordinatlar",
+  "coordinateTraining": "Kordinat türgenleşigi",
+  "averageScoreAsWhiteX": "Aklar hökmünde ortaça hasap: %s",
+  "averageScoreAsBlackX": "Garalar hökmünde ortaça hasap: %s",
+  "knowingTheChessBoard": "Küşt tagtasyndaky kordinatlary bilmek diýseň wajyp küşt ukybydyr:",
+  "mostChessCourses": "Küşt kurslarynyň we türgenleşikleriniň aglabasy algebrik notasiýany ulanýar.",
+  "talkToYourChessFriends": "Ikiňiziň hem \"küşt dilini\" bilýändigiňiz sebäpli küştçi dostlaryň bilen gürleşmegi amatlylaşdyrýar.",
+  "youCanAnalyseAGameMoreEffectively": "Öýjük atlaryny agtarmaly bolmasaňyz oýunlary has täsirli ýagdaýda derňäp bilersiňiz.",
+  "aSquareNameAppears": "Ekranda öýjük ady peýda bolar we siz dogry öýjüge tyklamalysypyz. Mümkin boldukça köp öýjügi dogry bilmek üçin 30 sekundyňyz bar!",
+  "startTraining": "Türgenleşige başla"
 }

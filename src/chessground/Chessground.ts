@@ -9,7 +9,7 @@ import { renderBoard, makeCoords, makeSymmCoords } from './render'
 import { anim, skip as skipAnim } from './anim'
 import * as drag from './drag'
 
-const pieceScores: {[id: string]: number} = {
+const pieceScores: { [id: string]: number } = {
   pawn: 1,
   knight: 3,
   bishop: 3,
@@ -138,8 +138,8 @@ export default class Chessground {
       score += pieceScores[p.role] * (p.color === 'white' ? 1 : -1)
     }
     const diff: cg.MaterialDiff = {
-      white: {pieces: {}, score: score},
-      black: {pieces: {}, score: -score}
+      white: { pieces: {}, score: score },
+      black: { pieces: {}, score: -score }
     }
     for (const role in counts) {
       const c = counts[role]

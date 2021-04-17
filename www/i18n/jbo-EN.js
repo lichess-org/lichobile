@@ -715,5 +715,13 @@ export default {
   "quitTeam": "co'u cmima",
   "teamBestPlayers": "lo certu cmima",
   "teamRecentMembers": "lo pu zi cmibi'o",
-  "nbMembers:other": "%s da cmima"
+  "nbMembers:other": "%s da cmima",
+  "coordinates": "judri",
+  "coordinateTraining": "crezenzu'e tu'a lo judri",
+  "averageScoreAsWhiteX": "cnano lo ka do ci'erkeilai tai da'inai lo se caxmati fa li %s",
+  "averageScoreAsBlackX": "cnano lo ka do ci'erkeilai tai da'inai lo te caxmati fa li %s",
+  "knowingTheChessBoard": "lo nu djuno lo judri be fi lo caxmati'yta'o cu mutce lo ka vajni ke caxmati selylarcu",
+  "mostChessCourses": "so'e ctupoi be fu lo caxmati cu so'i roi pilno lo snicmaci snici'e",
+  "talkToYourChessFriends": "ra se jalge lo nu filmau fa lo nu tavla lo caxmati pendo be do kei kei ki'u lo nu do'o jimpe bau lo bangu po lo caxmati",
+  "startTraining": "co'a crezenzu'e"
 }

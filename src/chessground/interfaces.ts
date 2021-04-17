@@ -73,6 +73,7 @@ export interface InitConfig {
     change?: () => void
     move?: (orig: Key, dest: Key, capturedPiece?: Piece) => void
     dropNewPiece?: (piece: Piece, key: Key) => void
+    select?: (key: Key) => void
   }
 }
 

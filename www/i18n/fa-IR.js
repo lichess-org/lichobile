@@ -927,5 +927,15 @@ export default {
   "continueTraining": "ادامه دادن تمرین",
   "difficultyLevel": "میزان سختی",
   "easiest": "آسان‌ترین",
-  "hardest": "سخت‌ترین"
+  "hardest": "سخت‌ترین",
+  "coordinates": "مختصات",
+  "coordinateTraining": "تمرین مختصات",
+  "averageScoreAsWhiteX": "میانگین امتیاز به عنوان سفید: %s",
+  "averageScoreAsBlackX": "میانگین امتیاز به عنوان سیاه: %s",
+  "knowingTheChessBoard": "دانستن مختصات صفحه شطرنج مهارت خیلی مهمی است:",
+  "mostChessCourses": "بیشتر دروس و تمرینات شطرنج از نشانه های شطرنجی استفاده می کنند.",
+  "talkToYourChessFriends": "خیلی آسان تر است که با دوستتان در مورد شطرنج صحبت کنید وقتی هر دوی شما \"زبان شطرنج\" را بلد باشید.",
+  "youCanAnalyseAGameMoreEffectively": "شما می توانید به خوبی بازی های خود را بررسی کنید اگر نیازی برای جست و جو برای خانه ها نداشته باشید.",
+  "aSquareNameAppears": "نام یک خانه بر روی صحفه ضاهر می شود و شما باید بر روی ان کلیک کنید. شما 30 ثانیه وقت دارید تا هر چه می توانید امتیاز بگیرید!",
+  "startTraining": "شروع تمرین"
 }

@@ -872,5 +872,15 @@ export default {
   "harder": "어려움",
   "hardest": "매우 어려움",
   "example": "예시",
-  "addAnotherTheme": "새 테마 추가"
+  "addAnotherTheme": "새 테마 추가",
+  "coordinates": "좌표",
+  "coordinateTraining": "좌표 훈련",
+  "averageScoreAsWhiteX": "흰색으로 평균 점수: %s",
+  "averageScoreAsBlackX": "검정색으로 평균 점수: %s",
+  "knowingTheChessBoard": "체스판 좌표를 아는 것은 아주 중요한 체스 기술입니다:",
+  "mostChessCourses": "체스에선 대수 기본 표기법을 따르는 경우가 지배적이다.",
+  "talkToYourChessFriends": "둘다 체스의 \"언어\"를 이해하기 때문에 친구에게 얘기를 하는게 쉽니다.",
+  "youCanAnalyseAGameMoreEffectively": "당신이 좌표만 보고도 체스 상황을 상상할 수 있다면 더 효과적으로 게임을 분석하는데 도움이 됩니다.",
+  "aSquareNameAppears": "보드 위에 좌표의 이름이 나타납니다. 30초 내에 최대한 많은 좌표에 맞는 사각형을 클릭하십시오!",
+  "startTraining": "훈련 시작"
 }

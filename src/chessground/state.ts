@@ -77,6 +77,7 @@ export interface State {
     // capturedPiece is undefined or like {color: 'white'; 'role': 'queen'}
     move?: (orig: Key, dest: Key, capturedPiece?: Piece) => void
     dropNewPiece?: (piece: Piece, key: Key) => void
+    select?: (key: Key) => void
   }
   prev: cg.PrevData
 }

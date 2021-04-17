@@ -120,6 +120,7 @@ export function selectSquare(state: State, key: Key): void {
   } else if (isMovable(state, key) || isPremovable(state, key)) {
     setSelected(state, key)
   }
+  util.callUserFunction(state.events.select, key)
 }
 
 export function setSelected(state: State, key: Key | null): void {

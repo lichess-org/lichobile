@@ -1142,5 +1142,15 @@ export default {
   "failed": "neizdevās",
   "playedXTimes:zero": "Spēlēts %s reizes",
   "playedXTimes:one": "Spēlēts %s reizi",
-  "playedXTimes:other": "Spēlēts %s reizes"
+  "playedXTimes:other": "Spēlēts %s reizes",
+  "coordinates": "Koordinātas",
+  "coordinateTraining": "Koordinātu treniņš",
+  "averageScoreAsWhiteX": "Vidējais rezultāts ar baltajām: %s",
+  "averageScoreAsBlackX": "Vidējais rezultāts ar melnajām: %s",
+  "knowingTheChessBoard": "Šaha galdiņa koordinātu zināšana ir svarīga šaha prasme:",
+  "mostChessCourses": "Lielākajā daļā šaha literatūras plaši tiek lietota algebriskā notācija.",
+  "talkToYourChessFriends": "Būs vieglāk runāt ar saviem šaha draugiem, jo abi sapratīsiet \"šaha valodu\".",
+  "youCanAnalyseAGameMoreEffectively": "Varēsi efektīvāk analizēt spēli, ja nevajadzēs ik reizi meklēt lauciņa nosaukumu.",
+  "aSquareNameAppears": "Uz galdiņa parādās koordinātes, un jums jāklikšķina uz attiecīgā lauciņa. 30 sekundēs jums pareizi jāatrod pēc iespējas vairāk lauciņu!",
+  "startTraining": "Sākt treniņu"
 }

@@ -1194,5 +1194,15 @@ export default {
   "playedXTimes:one": "Žaista %s kartą",
   "playedXTimes:few": "Žaista %s kartus",
   "playedXTimes:many": "Žaista %s kartą",
-  "playedXTimes:other": "Žaista %s kartų"
+  "playedXTimes:other": "Žaista %s kartų",
+  "coordinates": "Koordinatės",
+  "coordinateTraining": "Koordinačių treniruotė",
+  "averageScoreAsWhiteX": "Vidutinis rezultatas baltaisiais: %s",
+  "averageScoreAsBlackX": "Vidutinis rezultatas juodaisiais: %s",
+  "knowingTheChessBoard": "Šachmatų lentos koordinačių žinojimas yra ypač svarbus įgūdis:",
+  "mostChessCourses": "Dauguma šachmatų kursų ir pratimų plačiai naudoja algebrinį žymėjimą.",
+  "talkToYourChessFriends": "Tai leidžia paprasčiau kalbėti su jūsų šachmatų draugais, kadangi abu suprantate „šachmatų kalbą“.",
+  "youCanAnalyseAGameMoreEffectively": "Galite efektyviau analizuoti partijas, kadangi nereikia ieškoti langelių pavadinimų.",
+  "aSquareNameAppears": "Ant lentos pasirodys langelio pavadinimas, o jūs turėsite spustelėti tinkamą langelį. Turite 30 sekundžių atpažinti kiek galima daugiau langelių!",
+  "startTraining": "Pradėti treniruotę"
 }

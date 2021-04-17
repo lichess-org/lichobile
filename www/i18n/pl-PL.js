@@ -1194,5 +1194,15 @@ export default {
   "playedXTimes:one": "Rozwiązywane %s raz",
   "playedXTimes:few": "Rozwiązywane %s razy",
   "playedXTimes:many": "Rozwiązywane %s razy",
-  "playedXTimes:other": "Rozwiązywane %s razy"
+  "playedXTimes:other": "Rozwiązywane %s razy",
+  "coordinates": "Współrzędne pól",
+  "coordinateTraining": "Trening współrzędnych pól",
+  "averageScoreAsWhiteX": "Średni wynik białymi: %s",
+  "averageScoreAsBlackX": "Średni wynik czarnymi: %s",
+  "knowingTheChessBoard": "Znajomość współrzędnych pól na szachownicy jest bardzo ważną umiejętnością:",
+  "mostChessCourses": "Większość kursów i ćwiczeń szachowych powszechnie wykorzystuje notację algebraiczną.",
+  "talkToYourChessFriends": "Rozmowa ze znajomymi szachistami będzie łatwiejsza, gdy będziecie się porozumiewać w „języku szachów”.",
+  "youCanAnalyseAGameMoreEffectively": "Analiza partii przebiega sprawniej, jeśli nie musisz szukać pól mając ich współrzędne.",
+  "aSquareNameAppears": "Gdy pojawią się współrzędne musisz jak najszybciej kliknąć we właściwe pole. Masz 30 sekund aby wskazać tak wiele pól jak to możliwe!",
+  "startTraining": "Rozpocznij trening"
 }

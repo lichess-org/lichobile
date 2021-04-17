@@ -487,5 +487,9 @@ export default {
   "quitTeam": "Ушкӑнтан тух",
   "teamBestPlayers": "Чи вӑйлӑ вӑйӑҫӑ",
   "teamRecentMembers": "Тин хутшӑннӑ пайташсем",
-  "nbMembers:other": "%s пайташ"
+  "nbMembers:other": "%s пайташ",
+  "coordinates": "Координатсем",
+  "coordinateTraining": "Координатӑ хӑнӑхтарӑвӗ",
+  "knowingTheChessBoard": "Шахмат хӑминчи координатӑсене пӗлни питӗ пӗлтерӗшлӗ меслет:",
+  "startTraining": "Хӑнӑхтару пуҫла"
 }

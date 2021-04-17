@@ -459,5 +459,10 @@ export default {
   "teamBestPlayers": "அணியின் சிறந்த விளையாடிகள்",
   "teamRecentMembers": "அணியின் அண்மை உறுப்பினர்கள்",
   "nbMembers:one": "%s உறுப்பினர்கள்",
-  "nbMembers:other": "%s உறுப்பினர்கள்"
+  "nbMembers:other": "%s உறுப்பினர்கள்",
+  "coordinates": "ஆள்கூறுகள்",
+  "averageScoreAsWhiteX": "சராசரி மதிப்பெண் வெள்ளை: %s",
+  "averageScoreAsBlackX": "சராசரி மதிப்பெண் கருப்பு: %s",
+  "mostChessCourses": "பெரும்பாலான செஸ் படிப்புகள், பயிற்சிகள் இயற்கணித நொட்டேஷன் பெற்றவர்களைத்தான்.",
+  "startTraining": "பயிற்சியை துவங்கு"
 }

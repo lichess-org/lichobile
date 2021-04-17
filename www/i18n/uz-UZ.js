@@ -999,5 +999,15 @@ export default {
   "xJoinRequests:one": "%s qoʻshilish soʻrovi",
   "xJoinRequests:other": "%s qoʻshilish soʻrovlari",
   "twoFactorAuth": "Ikki Faktorli Autentifikatsiya",
-  "strengths": "Kuchli tomonlari"
+  "strengths": "Kuchli tomonlari",
+  "coordinates": "Koordinatalar",
+  "coordinateTraining": "Kordinatalar bilan shug'ullanish",
+  "averageScoreAsWhiteX": "Oqlarda o'rtacha baho: %s",
+  "averageScoreAsBlackX": "Qorada o'rtacha baho: %s",
+  "knowingTheChessBoard": "Shahmat doskasini koordinatalarini bilish shahmatda muhim:",
+  "mostChessCourses": "Ko'pchilik shahmat kurslari va mashqlarida algebraik ifoda ishlatiladi.",
+  "talkToYourChessFriends": "Sizning shahmatdagi do'stlaringiz bilan gaplashish onson, chunki ikkalangiz ham shahmat tilini bilasiz.",
+  "youCanAnalyseAGameMoreEffectively": "Agar sizga kataklar nomlarini bilsangiz, ularni qidirmasdan o'yinni yanada chuqurroq tahlil qilishingiz mumkin.",
+  "aSquareNameAppears": "Kataklar nomi bitta-bitta sizga ko'rinadi va siz 30 sekund ichida imkon qadar ko'proq nomga mos kataklarni bosishingiz kerak bo'ladi!",
+  "startTraining": "Shug'ullanishni boshlash"
 }

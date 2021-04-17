@@ -1031,5 +1031,15 @@ export default {
   "easiest": "Paling mudah",
   "harder": "Lebih sulit",
   "hardest": "Paling sulit",
-  "example": "Contoh"
+  "example": "Contoh",
+  "coordinates": "Koordinat",
+  "coordinateTraining": "Latihan koordinat",
+  "averageScoreAsWhiteX": "Skor rata-rata putih: %s",
+  "averageScoreAsBlackX": "Skor rata-rata hitam: %s",
+  "knowingTheChessBoard": "Mengetahui koordinat papan catur adalah kemampuan catur yang sangat penting:",
+  "mostChessCourses": "Kebanyakan program catur dan latihan menggunakan notasi aljabar secara ekstensif.",
+  "talkToYourChessFriends": "Itu membuatnya lebih mudah untuk berbicara dengan teman-teman catur Anda, karena Anda berdua memahami \"bahasa catur\".",
+  "youCanAnalyseAGameMoreEffectively": "Anda dapat menganalisis permainan lebih efektif jika Anda tidak perlu untuk mencari nama-nama kotak.",
+  "aSquareNameAppears": "Nama kotak muncul di papan dan Anda harus klik di kotak yang benar. Anda memiliki waktu 30 detik untuk mengenali kotak sebanyak mungkin!",
+  "startTraining": "Mulai latihan"
 }

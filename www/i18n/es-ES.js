@@ -1102,5 +1102,15 @@ export default {
   "solved": "resuelto",
   "failed": "error",
   "playedXTimes:one": "Jugado %s vez",
-  "playedXTimes:other": "Jugado %s veces"
+  "playedXTimes:other": "Jugado %s veces",
+  "coordinates": "Coordenadas",
+  "coordinateTraining": "Entrenar coordenadas",
+  "averageScoreAsWhiteX": "Puntuación media con blancas: %s",
+  "averageScoreAsBlackX": "Puntuación media con negras: %s",
+  "knowingTheChessBoard": "Conocer las coordenadas de los escaques es esencial en el ajedrez:",
+  "mostChessCourses": "La mayoría de los cursos y ejercicios de ajedrez usan la notación algebraica.",
+  "talkToYourChessFriends": "Facilita la comunicación con otros jugadores, que también hablan el \"lenguaje del ajedrez\".",
+  "youCanAnalyseAGameMoreEffectively": "Puedes analizar partidas de forma más eficiente si no tienes que andar buscando los nombres de los escaques.",
+  "aSquareNameAppears": "El nombre de un escaque aparece en la pantalla y debes hacer clic en el escaque correcto. ¡Tienes 30 segundos para identificar tantos escaques como puedas!",
+  "startTraining": "Comenzar entrenamiento"
 }

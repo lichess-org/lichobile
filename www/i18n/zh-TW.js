@@ -941,5 +941,15 @@ export default {
   "example": "範例",
   "addAnotherTheme": "加入其他主題",
   "jumpToNextPuzzleImmediately": "立即跳到下一個題目",
-  "playedXTimes:other": "已被嘗試%s次"
+  "playedXTimes:other": "已被嘗試%s次",
+  "coordinates": "座標",
+  "coordinateTraining": "座標訓練",
+  "averageScoreAsWhiteX": "白棋方平均分數: %s",
+  "averageScoreAsBlackX": "黑棋方平均分數: %s",
+  "knowingTheChessBoard": "知道棋盤上的座標是一項很重要的技巧。",
+  "mostChessCourses": "大多數的國際象棋課程都很頻繁的使用代數記譜法。",
+  "talkToYourChessFriends": "這讓你跟和棋友更容易聊天，因為你們都知道\"國際象棋的語言\"。",
+  "youCanAnalyseAGameMoreEffectively": "如果能夠快速地辨認座標，可以更有效率的分析一場棋局。",
+  "aSquareNameAppears": "一個座標會出現在棋盤上，你必須點擊相對應的格子。你要在30秒內點擊正確的格子，越多越好！",
+  "startTraining": "開始訓練"
 }

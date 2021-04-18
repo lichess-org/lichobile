@@ -1,5 +1,5 @@
 import h from 'mithril/hyperscript'
-import i18n from '~/i18n'
+import i18n, { formatDate } from '~/i18n'
 import { ontap } from '~/ui/helper'
 import { linkify } from '~/utils/html'
 import MsgCtrl from '../MsgCtrl'
@@ -82,10 +82,8 @@ yesterday.setDate(yesterday.getDate() - 1)
 function renderDate(date: Date): string {
   if (sameDay(date, today)) return i18n('today').toUpperCase()
   if (sameDay(date, yesterday)) return i18n('yesterday').toUpperCase()
-  return renderFullDate(date)
+  return formatDate(date)
 }
-
-const renderFullDate = (date: Date) => `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
 
 const sameDay = (d: Date, e: Date) =>
   d.getDate() === e.getDate() && d.getMonth() === e.getMonth() && d.getFullYear() === e.getFullYear()

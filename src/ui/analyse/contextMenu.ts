@@ -19,8 +19,8 @@ export function view(ctrl: AnalyseCtrl): Mithril.Child | null {
     () => nodeFullName(node),
     () => {
       return [
-        onMainline ? null : action('S', 'Promote variation', () => ctrl.promote(path, false)),
-        onMainline ? null : action('E', 'Make main line', () => ctrl.promote(path, true)),
+        onMainline ? null : action('S', i18n('promoteVariation'), () => ctrl.promote(path, false)),
+        onMainline ? null : action('E', i18n('makeMainLine'), () => ctrl.promote(path, true)),
         action('q', i18n('deleteFromHere'), () => ctrl.deleteNode(path))
       ]
     },

@@ -347,7 +347,7 @@ export default class AnalyseCtrl {
       if (this.practice) this.practice = null
       this.retro = RetroCtrl(this)
       router.backbutton.stack.push(this.toggleRetro)
-      this.retro.jumpToNext()
+      this.retro.jumpToCurrent()
     }
   }
 

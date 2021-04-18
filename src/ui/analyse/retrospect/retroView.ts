@@ -25,14 +25,14 @@ function skipOrViewSolution(ctrl: IRetroCtrl) {
       oncreate: helper.ontap(ctrl.viewSolution)
     }, i18n('viewTheSolution')),
     h('button', {
-      oncreate: helper.ontap(ctrl.skip)
+      oncreate: helper.ontap(ctrl.nextMistake)
     }, i18n('skipThisMove'))
   ])
 }
 
 function jumpToNext(ctrl: IRetroCtrl) {
   return h('div.li-button.retro-half.retro-continue', {
-    oncreate: helper.ontap(ctrl.jumpToNext)
+    oncreate: helper.ontap(ctrl.nextMistake)
   }, [
     h('i[data-icon=G]'),
     i18n('next')
@@ -83,7 +83,7 @@ const feedback = {
           h('strong', 'You browsed away'),
           h('div.choices.off', [
             h('button', {
-              oncreate: helper.ontap(ctrl.jumpToNext)
+              oncreate: helper.ontap(ctrl.jumpToCurrent)
             }, 'Resume learning')
           ])
         ])

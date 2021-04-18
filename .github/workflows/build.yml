@@ -6,9 +6,6 @@ on:
       - master
     paths:
       - '.github/workflows/build.yml'
-  pull_request:
-    branches:
-      - master
 
 jobs:
   apk:

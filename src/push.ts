@@ -1,5 +1,4 @@
 import {
-  Capacitor,
   Plugins,
   PushNotification,
   PushNotificationToken,
@@ -41,17 +40,10 @@ export default {
             case 'corresAlarm':
             case 'gameTakebackOffer':
             case 'gameDrawOffer':
-              session.refresh()
-              break
             case 'challengeAccept':
             case 'gameMove':
             case 'gameFinish':
               session.refresh()
-              .then(() => {
-                if (Capacitor.platform === 'ios') {
-                  Plugins.Badge.setNumber({ badge: session.myTurnGames().length })
-                }
-              })
               break
           }
         }

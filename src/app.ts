@@ -61,6 +61,11 @@ export default function appInit(
     if (state.isActive) {
       setForeground()
       session.refresh()
+      .then(() => {
+        if (Capacitor.platform === 'ios') {
+          Plugins.Badge.setNumber({ badge: session.myTurnGames().length })
+        }
+      })
       socket.cancelDelayedDisconnect()
       socket.connect()
       redraw()

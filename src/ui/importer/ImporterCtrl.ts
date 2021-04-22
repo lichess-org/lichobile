@@ -9,11 +9,14 @@ import { OnlineGameData } from '../../lichess/interfaces/game'
 export interface IImporterCtrl {
   importGame(pgn: string): void
   importing: Prop<boolean>
+  pgn: Prop<string | null>
 }
 
 export default function ImporterCtrl(): IImporterCtrl {
 
   const importing = prop(false)
+
+  const pgn = prop<string | null>(null)
 
   function submitOnline(pgn: string, analyse: boolean): Promise<OnlineGameData> {
     const data: {[i: string]: string } = { pgn }
@@ -45,6 +48,7 @@ export default function ImporterCtrl(): IImporterCtrl {
         handleXhrError(err)
       })
     },
-    importing
+    importing,
+    pgn
   }
 }

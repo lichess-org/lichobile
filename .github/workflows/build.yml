@@ -6,6 +6,8 @@ on:
       - master
     paths:
       - '.github/workflows/build.yml'
+      - 'android/**'
+      - 'src/**'
 
 jobs:
   apk:

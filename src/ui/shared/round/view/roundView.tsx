@@ -332,13 +332,13 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
         {tournamentRank}
         {playerName}
         { isBerserk ? <span className="berserk" data-icon="`" /> : null }
-        { isCrazy && position === 'opponent' && user && (user.tosViolation || user.booster) ?
+        { isCrazy && position === 'opponent' && user && user.tosViolation ?
           <span className="warning" data-icon="j"></span> : null
         }
       </h2>
       { !isCrazy ?
       <div className="ratingAndMaterial">
-        { position === 'opponent' && user && (user.tosViolation || user.booster) ?
+        { position === 'opponent' && user && user.tosViolation ?
           <span className="warning" data-icon="j"></span> : null
         }
         {user ?

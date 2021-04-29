@@ -40,7 +40,6 @@ export interface Session {
   readonly title?: string
   readonly online: boolean
   readonly tosViolation?: boolean
-  readonly booster: boolean
   readonly troll?: boolean
   readonly kid: boolean
   readonly patron: boolean

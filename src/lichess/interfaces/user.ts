@@ -65,7 +65,6 @@ export interface User extends BaseUser {
   readonly perfs: Perfs
   readonly playTime?: PlayTime
   readonly profile?: any
-  readonly booster: boolean
 }
 
 export interface PlayTime {

@@ -1,8 +1,9 @@
 import h from 'mithril/hyperscript'
 import router from '../router'
 import redraw from '../utils/redraw'
-import { timeline as timelineXhr, openWebsiteAuthPage } from '../xhr'
+import { timeline as timelineXhr } from '../xhr'
 import { gameIcon, handleXhrError, prop, Prop } from '../utils'
+import { openWebsitePage } from '../utils/browse'
 import { dropShadowHeader as headerWidget, backButton } from './shared/common'
 import * as helper from './helper'
 import layout from './layout'
@@ -54,7 +55,7 @@ export function timelineOnTap(e: Event) {
     router.set(path)
   }
   if (external) {
-    openWebsiteAuthPage(external)
+    openWebsitePage(external)
   }
 }
 

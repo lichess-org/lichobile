@@ -279,26 +279,3 @@ export function status(): Promise<void> {
     }
   })
 }
-
-function createToken(): Promise<{ url: string }> {
-  return fetchJSON('/auth/token', {method: 'POST'}, true)
-}
-
-export function openWebsiteAuthPage(path: string) {
-  const anonUrl = `${globalConfig.apiEndPoint}${path}`
-  // we use the Browser plugin to open authenticated pages because window.open
-  // doesn't work inside a promise
-  // we don't want to open a internal browser in kid mode since it is not
-  // protected like the device browser can be
-  if (session.isConnected() && !session.isKidMode()) {
-    createToken()
-    .then((data: {url: string}) => {
-      Plugins.Browser.open({ url: `${data.url}?referrer=${encodeURIComponent(path)}` })
-    })
-    .catch(() => {
-      Plugins.Browser.open({ url: anonUrl })
-    })
-  } else {
-    window.open(anonUrl, '_blank')
-  }
-}

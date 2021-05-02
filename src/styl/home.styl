@@ -5,6 +5,7 @@
   grid-template-areas:
     'lobby'\
     'start'\
+    'streamers' \
     'tournament'\
     'timeline'\
     'puzzle'\
@@ -17,7 +18,7 @@
     grid-template-areas:
       'start start'\
       'lobby lobby'\
-      'timeline tournament'\
+      'streamers tournament'\
       'timeline puzzle';
 
   @media only screen and (min-width 800px)
@@ -27,7 +28,7 @@
 
     grid-template-areas:
       'start lobby lobby'\
-      'start lobby lobby'\
+      'streamers lobby lobby'\
       'timeline timeline tournament'\
       'timeline timeline puzzle';
 
@@ -98,6 +99,20 @@
       > .tournamentListName
         white-space normal
 
+.home__streamer,
+.home__timeline > .more,
+.home__timeline .timelineEntry,
+.home__timeline em
+  color darken(textDarkBg, 20%)
+
+.home__streamers
+  grid-area streamers
+  padding 0 2vmin
+  > .home__streamer
+    margin-bottom 0.8em
+    > strong
+      color gold
+
 .home__timeline
   grid-area timeline
   margin 0 2vmin
@@ -107,13 +122,9 @@
   &.loading
     padding-top 2em
   > .more
-    color darken(textDarkBg, 20%)
     font-size 0.9em
     text-align right
   .timelineEntry
-    color darken(textDarkBg, 20%)
-    em
-      color darken(textDarkBg, 20%)
     &.blogEntry
       color textDarkBg
     > strong
@@ -223,13 +234,14 @@
 
 .view-container.light
 
+  .home__streamer,
+  .home__timeline > .more,
+  .home__timeline .timelineEntry,
+  .home__timeline em
+    color darken(textLightGray, 20%)
+
   .home__timeline
-    > .more
-      color darken(textLightGray, 20%)
     .timelineEntry
-      color darken(textLightGray, 20%)
-      em
-        color darken(textLightGray, 20%)
       &.blogEntry
         color themeBgLightText
       > strong
@@ -257,6 +269,12 @@
 
 
 .view-container.transp
+  .home__streamer,
+  .home__timeline > .more,
+  .home__timeline .timelineEntry,
+  .home__timeline em
+    color inherit
+
   .tabs-navigation.homeSetup
     background-color inherit
     > .tab-button
@@ -272,9 +290,6 @@
   .home__timeline
     .timelineEntry
       text-shadow 0 1px 1px rgba(0,0,0,0.5)
-      color inherit
-      em
-        color inherit
       &.blogEntry
         color inherit
       > strong

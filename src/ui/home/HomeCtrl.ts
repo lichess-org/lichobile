@@ -9,7 +9,7 @@ import { timeline as timelineXhr, seeks as corresSeeksXhr, lobby as lobbyXhr } f
 import { hasNetwork, noop } from '../../utils'
 import { fromNow } from '../../i18n'
 import { isForeground } from '../../utils/appMode'
-import { PongMessage, TimelineEntry, CorrespondenceSeek } from '../../lichess/interfaces'
+import { Streamer, PongMessage, TimelineEntry, CorrespondenceSeek } from '../../lichess/interfaces'
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
 import { PuzzleData } from '../../lichess/interfaces/training'
 import session from '../../session'
@@ -17,7 +17,7 @@ import { supportedTypes as supportedTimelineTypes } from '../timeline'
 import offlinePuzzleDB from '../training/database'
 import { loadNewPuzzle } from '../training/offlineService'
 
-import { dailyPuzzle as dailyPuzzleXhr, featuredTournaments as featuredTournamentsXhr } from './homeXhr'
+import { dailyPuzzle as dailyPuzzleXhr, featuredTournaments as featuredTournamentsXhr, featuredStreamers as featuredStreamersXhr } from './homeXhr'
 
 export default class HomeCtrl {
   public selectedTab: number
@@ -28,8 +28,9 @@ export default class HomeCtrl {
 
   public corresPool: ReadonlyArray<CorrespondenceSeek>
   public dailyPuzzle?: PuzzleData
-  public featuredTournaments?: ReadonlyArray<TournamentListItem>
-  public timeline?: ReadonlyArray<TimelineEntry>
+  public featuredTournaments?: readonly TournamentListItem[]
+  public featuredStreamers?: readonly Streamer[]
+  public timeline?: readonly TimelineEntry[]
   public offlinePuzzle?: PuzzleData | undefined
 
   private networkListener: PluginListenerHandle
@@ -92,16 +93,22 @@ export default class HomeCtrl {
       })
 
       Promise.all([
-        dailyPuzzleXhr(),
         featuredTournamentsXhr(),
+        featuredStreamersXhr(),
       ])
       .then(results => {
-        const [dailyData, featuredTournamentsData] = results
-        this.dailyPuzzle = dailyData
-        this.featuredTournaments = featuredTournamentsData.featured
+        const [fTour, fStreamers] = results
+        this.featuredTournaments = fTour.featured
+        this.featuredStreamers = fStreamers
         redraw()
       })
       .catch(noop)
+
+      dailyPuzzleXhr()
+      .then(daily => {
+        this.dailyPuzzle = daily
+        redraw()
+      })
 
       timelineXhr()
       .then((timeline) => {

@@ -1,6 +1,12 @@
 import { GameData } from './game'
 import { AnalyseData } from './analyse'
-import { MiniUser as MiniUserData } from './user'
+import { LightUser, MiniUser as MiniUserData } from './user'
+
+export interface Streamer {
+  url: string
+  status: string
+  user: LightUser
+}
 
 export interface Pool {
   readonly id: string

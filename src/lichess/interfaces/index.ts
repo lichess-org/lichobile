@@ -137,11 +137,24 @@ export interface FeaturedGame {
   black: FeaturedPlayer
   clock?: FeaturedClock
   correspondence?: any // yolo
+  color: Color
   orientation: Color
   fen: string
   id: string
   lastMove?: string
   white: FeaturedPlayer
+}
+
+export interface FeaturedGame2 {
+  black: FeaturedPlayer
+  c?: { white: number, black: number }
+  orientation: Color
+  fen: string
+  id: string
+  lastMove?: string
+  white: FeaturedPlayer
+  finished?: boolean
+  winner?: Color
 }
 
 export interface FeaturedPlayer {

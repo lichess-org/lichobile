@@ -1,15 +1,17 @@
 import { Plugins, AppState, NetworkStatus, PluginListenerHandle } from '@capacitor/core'
+import throttle from 'lodash-es/throttle'
 import debounce from 'lodash-es/debounce'
 import Zanimo from '../../utils/zanimo'
 import socket, { SocketIFace } from '../../socket'
 import redraw from '../../utils/redraw'
 import signals from '../../signals'
 import settings from '../../settings'
-import { timeline as timelineXhr, seeks as corresSeeksXhr, lobby as lobbyXhr } from '../../xhr'
+import { timeline as timelineXhr, seeks as corresSeeksXhr, lobby as lobbyXhr, featured as featuredGameXhr } from '../../xhr'
 import { hasNetwork, noop } from '../../utils'
 import { fromNow } from '../../i18n'
 import { isForeground } from '../../utils/appMode'
-import { Streamer, PongMessage, TimelineEntry, CorrespondenceSeek } from '../../lichess/interfaces'
+import { Streamer, PongMessage, TimelineEntry, CorrespondenceSeek, FeaturedGame2, FeaturedPlayer } from '../../lichess/interfaces'
+import { Player } from '../../lichess/interfaces/game'
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
 import { PuzzleData } from '../../lichess/interfaces/training'
 import session from '../../session'
@@ -18,6 +20,19 @@ import offlinePuzzleDB from '../training/database'
 import { loadNewPuzzle } from '../training/offlineService'
 
 import { dailyPuzzle as dailyPuzzleXhr, featuredTournaments as featuredTournamentsXhr, featuredStreamers as featuredStreamersXhr } from './homeXhr'
+
+interface FeaturedFenData {
+  bc: number
+  fen: string
+  id: string
+  lm: string
+  wc: number
+}
+
+interface FeaturedFinished {
+  id: string
+  win?: 'b' | 'w'
+}
 
 export default class HomeCtrl {
   public selectedTab: number
@@ -28,6 +43,7 @@ export default class HomeCtrl {
 
   public corresPool: ReadonlyArray<CorrespondenceSeek>
   public dailyPuzzle?: PuzzleData
+  public featuredGame?: FeaturedGame2
   public featuredTournaments?: readonly TournamentListItem[]
   public featuredStreamers?: readonly Streamer[]
   public timeline?: readonly TimelineEntry[]
@@ -81,7 +97,10 @@ export default class HomeCtrl {
 
   public init = () => {
     if (isForeground()) {
-      this.socket = socket.createLobby('homeLobby', this.reloadCorresPool, {
+      this.socket = socket.createLobby('homeLobby', () => {
+        this.reloadCorresPool()
+        this.getFeatured()
+      }, {
         redirect: socket.redirectToGame,
         reload_seeks: this.reloadCorresPool,
         resync: () => lobbyXhr().then(d => {
@@ -89,7 +108,29 @@ export default class HomeCtrl {
         }),
         n: (_: any, d: PongMessage) => {
           signals.homePong.dispatch(d)
-        }
+        },
+        featured: () => {
+          this.getFeatured()
+        },
+        fen: (d: FeaturedFenData) => {
+          if (this.featuredGame && this.featuredGame.id === d.id) {
+            this.featuredGame.fen = d.fen
+            this.featuredGame.lastMove = d.lm
+            this.featuredGame.c = {
+              black: d.bc,
+              white: d.wc,
+            }
+            redraw()
+          }
+        },
+        finish: (d: FeaturedFinished) => {
+          if (this.featuredGame && this.featuredGame.id === d.id) {
+            this.featuredGame.finished = true
+            if (d.win === 'b') this.featuredGame.winner = 'black'
+            else if (d.win === 'w') this.featuredGame.winner = 'white'
+            redraw()
+          }
+        },
       })
 
       Promise.all([
@@ -172,6 +213,31 @@ export default class HomeCtrl {
       })
     }
   }
+
+  private getFeatured = throttle(() => {
+    featuredGameXhr('best', false)
+    .then((data) => {
+      const opp = playerToFeatured(data.opponent)
+      const player = playerToFeatured(data.player)
+
+      this.featuredGame = {
+        c: data.clock ? {
+          white: Math.round(data.clock.white),
+          black: Math.round(data.clock.black),
+        } : undefined,
+        black: data.game.player === 'white' ? opp : player,
+        orientation: data.orientation,
+        fen: data.game.fen,
+        id: data.game.id,
+        lastMove: data.game.lastMove,
+        white: data.game.player === 'white' ? player : opp,
+      }
+
+      this.socketSend('startWatching', data.game.id)
+
+      this.redrawIfNotScrolling()
+    })
+  }, 1000)
 }
 
 function seekUserId(seek: CorrespondenceSeek) {
@@ -195,4 +261,14 @@ function fixSeeks(seeks: CorrespondenceSeek[]): CorrespondenceSeek[] {
     .filter(([_, key], i, a) => a.map(e => e[1]).indexOf(key) === i)
     .map(([s]) => s)
   ] as CorrespondenceSeek[]
+}
+
+function playerToFeatured(p: Player): FeaturedPlayer {
+  return {
+    name: p.name || p.username || p.user && p.user.username || '',
+    rating: p.rating || 0,
+    ratingDiff: p.ratingDiff || 0,
+    berserk: p.berserk,
+    title: p.user && p.user.title,
+  }
 }

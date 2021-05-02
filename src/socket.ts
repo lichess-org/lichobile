@@ -337,7 +337,7 @@ function createLobby(
       registeredEvents: Object.keys(socketHandlers.events)
     }
   }
-  const url = `/lobby/socket/v${globalConfig.apiVersion}`
+  const url = `/lobby/socket/v5`
   const setup = {
     clientId: newSri(),
     socketEndPoint: globalConfig.socketEndPoint,

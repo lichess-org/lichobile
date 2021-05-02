@@ -6,8 +6,8 @@
     'lobby'\
     'start'\
     'streamers' \
-    'tournament'\
-    'timeline'\
+    'side'\
+    'tv'\
     'puzzle'\
     '.'
   grid-gap: 2vmin
@@ -18,8 +18,8 @@
     grid-template-areas:
       'start start'\
       'lobby lobby'\
-      'streamers tournament'\
-      'timeline puzzle';
+      'side tv'\
+      'side puzzle';
 
   @media only screen and (min-width 800px)
 
@@ -29,11 +29,15 @@
     grid-template-areas:
       'start lobby lobby'\
       'streamers lobby lobby'\
-      'timeline timeline tournament'\
-      'timeline timeline puzzle';
+      'side side tv'\
+      'side side puzzle';
 
 .home__lobby
   grid-area lobby
+
+.home__side
+  grid-area side
+  overflow hidden
 
 .home__stats
   padding 2vmin
@@ -80,6 +84,9 @@
   @media only screen and (min-width 800px)
     margin-top 33px
 
+.home__featured
+  grid-area tv
+
 .home__miniPuzzle
   grid-area puzzle
 
@@ -91,7 +98,6 @@
     margin 0 1vmin 0 0
 
 .home__tournament
-  grid-area tournament
   padding 0px
   > .tournamentList
     > .tournament_item
@@ -110,11 +116,13 @@
   padding 0 2vmin
   > .home__streamer
     margin-bottom 0.8em
+    overflow hidden
+    white-space nowrap
+    text-overflow ellipsis
     > strong
       color gold
 
 .home__timeline
-  grid-area timeline
   margin 0 2vmin
   margin-top 2vmin
   &:first-child

@@ -126,26 +126,27 @@
         }
 
 .mini_board_container
-  > .vsbloc
-    font-size 0.8em
-    background: linear-gradient(to bottom,rgba(40,40,40,1),rgba(34,34,34,1) 100%);
-    padding 5px
-    overflow hidden
-    text-align center
-    > .antagonists
-      display flex
-      flex-flow row nowrap
-      justify-content space-between
-      > .time
-        align-self center
-      > .player, > .opponent
-        max-width 49%
-        overflow hidden
-        text-overflow ellipsis
-      > .player
-        text-align left
-      > .opponent
-        text-align right
+  .mini_board__text, .mini_board__player
+    font-size 0.9em
+  .mini_board__text
+    display flex
+    justify-content flex-end
+  .mini_board__player
+    display flex
+    flex-flow row nowrap
+    justify-content space-between
+  .mini_board__user
+    > .rating
+      margin-left 0.5em
+      font-size 0.9em
+      opacity 0.8
+  .countdown-timer
+    color orange
+    font-weight normal
+  .mini_board__clock
+    font-family 'Roboto'
+  .score
+    font-weight bold
 
 .mini_board
   position: relative;

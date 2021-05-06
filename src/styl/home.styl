@@ -5,7 +5,6 @@
   grid-template-areas:
     'lobby'\
     'start'\
-    'streamers' \
     'side'\
     'tv'\
     'puzzle'\
@@ -28,7 +27,7 @@
 
     grid-template-areas:
       'start lobby lobby'\
-      'streamers lobby lobby'\
+      'start lobby lobby'\
       'side side tv'\
       'side side puzzle';
 
@@ -38,6 +37,8 @@
 .home__side
   grid-area side
   overflow hidden
+  display flex
+  flex-flow column
 
 .home__stats
   padding 2vmin
@@ -112,7 +113,6 @@
   color darken(textDarkBg, 20%)
 
 .home__streamers
-  grid-area streamers
   padding 0 2vmin
   > .home__streamer
     margin-bottom 0.8em
@@ -123,6 +123,7 @@
       color gold
 
 .home__timeline
+  overflow-y scroll
   margin 0 2vmin
   margin-top 2vmin
   &:first-child

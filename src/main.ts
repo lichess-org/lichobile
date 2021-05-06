@@ -7,6 +7,7 @@ import { init as settingsInit } from './settings'
 import { init as i18nInit } from './i18n'
 import { init as themeInit } from './theme'
 import routes from './routes'
+import { processWindowLocation } from './router'
 import push from './push'
 import deepLinks from './deepLinks'
 
@@ -15,13 +16,6 @@ interface XNavigator extends Navigator {
 }
 
 settingsInit()
-.then(() => {
-  routes.init()
-  deepLinks.init()
-  push.init()
-})
-.then(themeInit)
-.then(i18nInit)
 .then(() => Promise.all([
   Plugins.Device.getInfo(),
   Capacitor.platform === 'ios' ?
@@ -34,4 +28,12 @@ settingsInit()
     })
 ]))
 .then(([i, c, m, b]) => appInit(i, c, m, b))
+.then(() => {
+  routes.init()
+  deepLinks.init()
+  push.init()
+})
+.then(themeInit)
+.then(i18nInit)
+.then(() => processWindowLocation())
 .then(() => Plugins.SplashScreen.hide())

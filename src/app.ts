@@ -1,4 +1,3 @@
-/// <reference path="dts/index.d.ts" />
 import { Capacitor, Plugins, AppState, DeviceInfo, NetworkStatus } from '@capacitor/core'
 import debounce from 'lodash-es/debounce'
 import { hasNetwork, requestIdleCallback } from './utils'
@@ -24,7 +23,6 @@ export default function appInit(
   sfMaxMem: number,
   buildConfig: BuildConfig,
 ): void {
-
   if (settings.analyse.cevalHashSize() === 0) {
     settings.analyse.cevalHashSize(sfMaxMem)
   }
@@ -47,15 +45,6 @@ export default function appInit(
     helper.viewportDim()
     sound.load(info)
   })
-
-  // pull session data once (to log in user automatically thanks to cookie)
-  // and also listen to online event in case network was disconnected at app
-  // startup
-  if (hasNetwork()) {
-    onOnline()
-  } else {
-    session.restoreStoredSession()
-  }
 
   Plugins.App.addListener('appStateChange', (state: AppState) => {
     if (state.isActive) {
@@ -89,6 +78,15 @@ export default function appInit(
   Plugins.App.addListener('backButton', router.backbutton)
 
   window.addEventListener('resize', debounce(onResize), false)
+
+  // pull session data once (to log in user automatically thanks to cookie)
+  // and also listen to online event in case network was disconnected at app
+  // startup
+  if (hasNetwork()) {
+    onOnline()
+  } else {
+    session.restoreStoredSession()
+  }
 }
 
 function onResize() {

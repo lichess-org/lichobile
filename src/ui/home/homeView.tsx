@@ -1,7 +1,7 @@
 import h from 'mithril/hyperscript'
 import router from '../../router'
 import socket from '../../socket'
-import { openBrowser } from '../../utils/browse'
+import { openExternalBrowser } from '../../utils/browse'
 import { emptyFen } from '../../utils/fen'
 import { hasNetwork } from '../../utils'
 import i18n, { plural, formatNumber, fromNow } from '../../i18n'
@@ -258,7 +258,7 @@ function renderFeaturedStreamers(ctrl: HomeCtrl) {
   if (ctrl.featuredStreamers?.length)
     return h('ul.home__streamers', ctrl.featuredStreamers.map(s =>
       h('li.home__streamer', {
-        oncreate: helper.ontapY(() => openBrowser(s.url)),
+        oncreate: helper.ontapY(() => openExternalBrowser(s.url)),
       }, [
         h('strong[data-icon=]', (s.user.title ? s.user.title + ' ' : '') + s.user.name),
         h('span.status', ' ' + s.status),

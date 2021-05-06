@@ -26,12 +26,10 @@ export function openWebsitePage(path: string, withoutAuth = false) {
       Plugins.Browser.open({ url: anonUrl })
     }
   } else {
-    window.open(anonUrl, '_blank')
+    openExternalBrowser(anonUrl)
   }
 }
 
-export function openBrowser(url: string): void {
-  if (!session.isKidMode()) {
-    Plugins.Browser.open({ url })
-  }
+export function openExternalBrowser(url: string): void {
+  window.open(url, '_blank')
 }

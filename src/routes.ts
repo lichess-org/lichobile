@@ -1,4 +1,4 @@
-import { withRouter, onRouteMatch, processQuerystring } from './router'
+import { withRouter, onRouteMatch, processWindowLocation } from './router'
 
 export default {
   init() {
@@ -353,7 +353,6 @@ export default {
       })
     })
 
-    window.addEventListener('popstate', processQuerystring)
-    processQuerystring()
+    window.addEventListener('popstate', processWindowLocation)
   }
 }

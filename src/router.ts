@@ -56,7 +56,7 @@ export function onRouteMatch<T>(component: Mithril.Component, params: T): void {
   }
 }
 
-export function processQuerystring(e?: PopStateEvent): void {
+export function processWindowLocation(e?: PopStateEvent): void {
   if (e && e.state) {
     if (e.state.id < currentStateId) {
       viewSlideDirection = 'bwd'

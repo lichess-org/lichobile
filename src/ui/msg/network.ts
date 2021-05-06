@@ -3,25 +3,23 @@ import { MsgData, Contact, User, Msg, Convo, SearchResult } from './interfaces'
 import { fetchJSON } from '~/http'
 import socket, { MessageHandlers, SocketIFace } from '~/socket'
 
-const v5Opts = {headers: {'Accept': 'application/vnd.lichess.v5+json'}}
-
 export async function loadConvo(userId: string): Promise<MsgData> {
-  const d = await fetchJSON(`/inbox/${userId}`, v5Opts)
+  const d = await fetchJSON(`/inbox/${userId}`)
   return upgradeData(d)
 }
 
 export async function getMore(userId: string, before: Date): Promise<MsgData> {
-  const d = await fetchJSON(`/inbox/${userId}?before=${before.getTime()}`, v5Opts)
+  const d = await fetchJSON(`/inbox/${userId}?before=${before.getTime()}`)
   return upgradeData(d)
 }
 
 export async function loadContacts(): Promise<MsgData> {
-  const d = await fetchJSON('/inbox', v5Opts)
+  const d = await fetchJSON('/inbox')
   return upgradeData(d)
 }
 
 export async function search(q: string): Promise<SearchResult> {
-  const res = await fetchJSON<SearchResult>(`/inbox/search?q=${q}`, v5Opts)
+  const res = await fetchJSON<SearchResult>(`/inbox/search?q=${q}`)
   return ({
     ...res,
     contacts: res.contacts.map(upgradeContact)
@@ -29,15 +27,15 @@ export async function search(q: string): Promise<SearchResult> {
 }
 
 export function block(u: string): Promise<any> {
-  return fetchJSON(`/rel/block/${u}`, { ...v5Opts, method: 'POST' })
+  return fetchJSON(`/rel/block/${u}`, { method: 'POST' })
 }
 
 export function unblock(u: string): Promise<any> {
-  return fetchJSON(`/rel/unblock/${u}`, { ...v5Opts, method: 'POST' })
+  return fetchJSON(`/rel/unblock/${u}`, { method: 'POST' })
 }
 
 export async function del(u: string): Promise<MsgData> {
-  return fetchJSON(`/inbox/${u}/delete`, { ...v5Opts, method: 'POST' })
+  return fetchJSON(`/inbox/${u}/delete`, { method: 'POST' })
     .then(upgradeData)
 }
 

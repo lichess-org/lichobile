@@ -40,7 +40,7 @@ export default class MsgCtrl {
       this.search.result = undefined
       this.loading = false
       if (data.convo) {
-        router.History.pushState(`/inbox/${data.convo.user.name}`)
+        router.History.replaceState(undefined, `/inbox/${data.convo.user.name}`)
         this.onLoadConvo(data.convo)
         redraw()
       }
@@ -52,7 +52,6 @@ export default class MsgCtrl {
 
   showSide = (): void => {
     this.pane = 'side'
-    router.History.pushState('/inbox')
     redraw()
   }
 
@@ -170,8 +169,8 @@ export default class MsgCtrl {
       this.data = data
       this.confirmDelete = null
       this.pane = 'side'
+      router.History.replaceState(undefined, '/inbox')
       redraw()
-      router.History.pushState('/inbox')
     })
   }
 

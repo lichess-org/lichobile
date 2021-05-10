@@ -74,7 +74,7 @@ export const allKeys: readonly Key[] =
 
 export const invKeys: readonly Key[] = allKeys.slice(0).reverse()
 
-export function opposite(color: Color) {
+export function opposite(color: Color): Color {
   return color === 'white' ? 'black' : 'white'
 }
 

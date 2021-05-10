@@ -8,6 +8,7 @@ import { Shape } from '../../shared/BoardBrush'
 import Clock from './Clock'
 import { povDiff } from '../ceval/winningChances'
 import AnalyseCtrl from '../AnalyseCtrl'
+import { opposite } from '~/chessground/util'
 
 export default function renderBoard(ctrl: AnalyseCtrl) {
   return h('div.analyse-boardWrapper', [
@@ -88,7 +89,7 @@ function computeShapes(ctrl: AnalyseCtrl): readonly Shape[] {
       })
     }
     if (rEval && rEval.best) {
-      pastBestShape = moveOrDropShape(rEval.best, 'paleGreen', player)
+      pastBestShape = moveOrDropShape(rEval.best, 'paleGreen', opposite(player))
     }
   }
 

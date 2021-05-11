@@ -1118,5 +1118,6 @@ export default {
   "otbFlipPiecesAndInfoAfterMove": "Flip pieces and opponent info after move",
   "settingsClockPosition": "Clock position",
   "positionRight": "Right",
-  "positionLeft": "Left"
+  "positionLeft": "Left",
+  "landscapeBoardSide": "Board screen side (in landscape mode)"
 }

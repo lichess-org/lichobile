@@ -41,7 +41,7 @@ function renderBody() {
         formWidgets.renderMultipleChoiceButton(
           i18n('landscapeBoardSide'), [
             { label: i18n('positionLeft'), value: 'left' },
-            { label: i18n('positonRight'), value: 'right' },
+            { label: i18n('positionRight'), value: 'right' },
           ],
           settings.game.landscapeBoardSide,
         ),

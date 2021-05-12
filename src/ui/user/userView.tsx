@@ -55,7 +55,7 @@ export function profile(user: ProfileUser, ctrl: IUserCtrl) {
 }
 
 function renderWarnings(user: ProfileUser) {
-  if !user.tosViolation return null
+  if (!user.tosViolation) return null
 
   return (
     <section className="warnings">

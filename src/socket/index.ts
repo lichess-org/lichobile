@@ -13,6 +13,7 @@ import friendsApi from '../lichess/friends'
 import challengesApi from '../lichess/challenges'
 import { ChallengesData } from '../lichess/interfaces/challenge'
 import session from '../session'
+import announce, { Announcement } from '../announce'
 import { ConnectionSetup, MessageHandlers, FollowingOnlinePayload, FollowingEntersPayload, SocketSetup, SocketHandlers, SocketIFace, SocketConfig, LichessMessageAny } from './interfaces'
 
 export { SocketIFace, LichessMessageAny, MessageHandlers }
@@ -94,6 +95,9 @@ function setupConnection(setup: SocketSetup, socketHandlers: SocketHandlers) {
         break
       case 'onError':
         if (socketHandlers.onError) socketHandlers.onError()
+        break
+      case 'resync':
+        router.reload()
         break
       case 'handle': {
         const h = socketHandlers.events[msg.data.payload.t]
@@ -493,8 +497,11 @@ export default {
       tellWorker(worker, 'destroy')
     }
   },
-  disconnectAll(delay?: number): void {
-    tellWorker(worker, 'disconnect', delay)
+  disconnect(): void {
+    tellWorker(worker, 'disconnect')
+  },
+  delayedDisconnect(delay: number): void {
+    tellWorker(worker, 'delayedDisconnect', delay)
   },
   cancelDelayedDisconnect(): void {
     tellWorker(worker, 'cancelDelayedDisconnect')
@@ -502,7 +509,7 @@ export default {
   isConnected(): boolean {
     return connectedWS
   },
-  destroyAll(): void {
+  destroy(): void {
     tellWorker(worker, 'destroy')
   },
   getVersion(): Promise<number | null> {

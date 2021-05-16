@@ -46,6 +46,7 @@ export interface SocketSetup {
   url: string
   version?: number
   opts: SocketConfig
+  keep?: boolean
 }
 
 export interface ConnectionSetup {

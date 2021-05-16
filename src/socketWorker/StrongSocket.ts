@@ -25,24 +25,19 @@ interface Options {
   isAuth: boolean
   debug?: boolean
 }
-interface Params {
-  sri: string
-  mobile: number
-  flag?: string
-}
 interface Settings {
   receive?: (t: string, d: Payload) => void
   events: {
     [tpe: string]: (d: Payload | null, msg: MsgIn) => unknown
   }
-  params: Params
+  params: Record<string, string | number | boolean | undefined>
   options?: Partial<Options>
 }
 
 export default class StrongSocket {
   settings: Settings
   options: Options
-  version: number | false
+  version: number | undefined
   ws: WebSocket | undefined
   pingSchedule?: TimeoutId
   connectSchedule?: TimeoutId
@@ -64,17 +59,13 @@ export default class StrongSocket {
     registeredEvents: [],
     isAuth: false,
   }
-  static defaultParams: Params = {
-    sri: 'overrideMe',
-    mobile: 1
-  }
 
   constructor(
     readonly ctx: Worker,
     clientId: string,
     readonly baseUrl: string,
     readonly path: string,
-    version: number | false,
+    version: number | undefined,
     settings: Partial<Settings>
   ) {
     this.version = version
@@ -82,8 +73,8 @@ export default class StrongSocket {
       receive: settings.receive,
       events: settings.events || {},
       params: {
-        ...StrongSocket.defaultParams,
         ...settings.params || {},
+        mobile: 1,
         sri: clientId,
       }
     }
@@ -100,7 +91,7 @@ export default class StrongSocket {
     this.autoReconnect = true
     const fullUrl = makeUrl(this.baseUrl + this.path, {
       ...this.settings.params,
-      v: this.version === false ? undefined : this.version
+      v: this.version
     })
     this.debug('connection attempt to ' + fullUrl)
     try {
@@ -206,13 +197,14 @@ export default class StrongSocket {
   }
 
   private handle(m: MsgIn) {
-    if (m.v && this.version !== false) {
+    if (m.v && this.version !== undefined) {
       if (m.v <= this.version) {
         this.debug('already has event ' + m.v)
         return
       }
       if (m.v > this.version + 1) {
         this.debug('event gap detected from ' + this.version + ' to ' + m.v)
+        this.ctx.postMessage({ topic: 'resync' })
       }
       this.version = m.v
     }

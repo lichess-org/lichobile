@@ -5,8 +5,6 @@
 import { SocketSetup } from '../socket/interfaces'
 import StrongSocket from './StrongSocket'
 
-const pool: Map<string, StrongSocket> = new Map()
-
 let current: StrongSocket | undefined
 
 const ctx: Worker = self as any

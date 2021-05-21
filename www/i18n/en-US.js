@@ -1099,6 +1099,7 @@ export default {
   "playedXTimes:other": "Played %s times",
   "coordinates": "Coordinates",
   "coordinateTraining": "Coordinate training",
+  "previousScore": "Previous score: %s",
   "averageScoreAsWhiteX": "Average score as white: %s",
   "averageScoreAsBlackX": "Average score as black: %s",
   "knowingTheChessBoard": "Knowing the chessboard coordinates is a very important chess skill:",

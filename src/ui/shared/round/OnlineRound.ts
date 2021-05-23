@@ -544,10 +544,6 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.transientMove.clear()
     }
 
-    if (playing && playedColor !== d.player.color) {
-      vibrate.quick()
-    }
-
     if (!this.replaying() && playedColor !== d.player.color &&
       (this.chessground.state.premovable.current || this.chessground.state.predroppable.current)) {
       // atrocious hack to prevent race condition
@@ -736,6 +732,10 @@ export default class OnlineRound implements OnlineRoundInterface {
       }
     } else {
       sound.move()
+    }
+
+    if (!this.data.player.spectator) {
+      vibrate.quick()
     }
   }
 

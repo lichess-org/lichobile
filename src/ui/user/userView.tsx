@@ -55,15 +55,12 @@ export function profile(user: ProfileUser, ctrl: IUserCtrl) {
 }
 
 function renderWarnings(user: ProfileUser) {
-  if (!user.tosViolation && !user.booster) return null
+  if (!user.tosViolation) return null
 
   return (
     <section className="warnings">
       {user.tosViolation ?
       <div className="warning" data-icon="j">{i18n('thisAccountViolatedTos')}</div> : null
-      }
-      {user.booster ?
-      <div className="warning" data-icon="j">{i18n('thisPlayerArtificiallyIncreasesTheirRating')}</div> : null
       }
     </section>
   )

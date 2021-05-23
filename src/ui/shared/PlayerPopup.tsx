@@ -71,10 +71,9 @@ function content(mini: MiniUser, player: Player, opponent: Player, score?: Score
           </p> : null
         }
       </div>
-      { user.tosViolation || user.booster ?
+      { user.tosViolation ?
         <div className="warning">
           {user.tosViolation ? i18n('thisAccountViolatedTos') : ''}
-          {user.booster ? i18n('thisPlayerArtificiallyIncreasesTheirRating') : ''}
         </div> : null
       }
       { mini.perfs ?

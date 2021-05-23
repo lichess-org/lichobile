@@ -629,7 +629,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       session.backgroundRefresh()
       sleepUtils.allowSleepAgain()
       if (gameStatusApi.resigned(this.data) && this.data.player.color === o.winner) {
-        Plugins.LiToast.show({ text: this.gameStatus(), position: 'top', duration: 'short' })
+        Plugins.LiToast.show({ text: this.gameStatus(), duration: 'short' })
       }
     }
     this.score === undefined

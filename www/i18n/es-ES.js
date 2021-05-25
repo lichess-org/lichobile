@@ -1105,7 +1105,6 @@ export default {
   "playedXTimes:other": "Jugado %s veces",
   "coordinates": "Coordenadas",
   "coordinateTraining": "Entrenar coordenadas",
-  "previousScore": "Puntaje último: %s",
   "averageScoreAsWhiteX": "Puntuación media con blancas: %s",
   "averageScoreAsBlackX": "Puntuación media con negras: %s",
   "knowingTheChessBoard": "Conocer las coordenadas de los escaques es esencial en el ajedrez:",

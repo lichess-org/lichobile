@@ -56,7 +56,10 @@ export default function view(ctrl: CoordCtrl): Mithril.Children {
           return h('i.action_bar_button.' + o, {
             className: o === store.colorChoice() ? 'selected' : '',
             oncreate: helper.ontap(() => {
-              store.colorChoice(o as Color | 'random')
+              if (!ctrl.started) {
+                store.colorChoice(o as Color | 'random')
+                ctrl.updateOrientation()
+              }
             })
           })
         })

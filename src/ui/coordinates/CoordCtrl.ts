@@ -62,13 +62,11 @@ export default class CoordCtrl {
   }
 
   public updateOrientation() {
-    if (!this.started) {
-      this.orientation = this.getOrientation(settings.coordinates.colorChoice())
-      this.chessground.set({
-        orientation: this.orientation
-      })
-      redraw()
-    }  
+    this.orientation = this.getOrientation(settings.coordinates.colorChoice())
+    this.chessground.set({
+      orientation: this.orientation
+    })
+    redraw()
   }
 
   private nextCoord(): Key {
@@ -113,6 +111,8 @@ export default class CoordCtrl {
       this.score = 0
       this.wrongAnswer = false
       this.tempWrong = false
+
+      this.updateOrientation()
 
       const startedAt = performance.now()
       const frame = () => {

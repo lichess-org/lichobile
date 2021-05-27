@@ -34,7 +34,7 @@ export default class CoordCtrl {
   started = false
 
   constructor() {
-    this.orientation = 'white'
+    this.orientation = this.getOrientation(settings.coordinates.colorChoice())
     this.chessground = new Chessground({
       fen: INITIAL_FEN,
       orientation: this.orientation,
@@ -59,6 +59,14 @@ export default class CoordCtrl {
 
   public getOrientation(color: Color | 'random'): Color {
     return color === 'random' ? randomColor() : color as Color
+  }
+
+  public updateOrientation() {
+    this.orientation = this.getOrientation(settings.coordinates.colorChoice())
+    this.chessground.set({
+      orientation: this.orientation
+    })
+    redraw()
   }
 
   private nextCoord(): Key {
@@ -103,11 +111,8 @@ export default class CoordCtrl {
       this.score = 0
       this.wrongAnswer = false
       this.tempWrong = false
-      this.orientation = this.getOrientation(settings.coordinates.colorChoice())
 
-      this.chessground.set({
-        orientation: this.orientation
-      })
+      this.updateOrientation()
 
       const startedAt = performance.now()
       const frame = () => {

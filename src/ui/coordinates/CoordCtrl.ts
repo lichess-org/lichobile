@@ -30,7 +30,7 @@ export default class CoordCtrl {
   wrongAnswer = false
   tempWrong = false
   score = 0
-  lastScore = 0
+  lastScore?: number
   progress= 100
   started = false
 

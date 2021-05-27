@@ -41,6 +41,7 @@ export default function view(ctrl: CoordCtrl): Mithril.Children {
             className: ctrl.wrongAnswer ? 'nope' : '',
           }, ctrl.score) :
           h.fragment({}, [
+            ctrl.lastScore !== 0 ? h('div.coord-trainer__previous', h.trust(`Previous Score: <strong>${ctrl.lastScore}</strong>`)): null,
             ctrl.averageScores ? h('div.coord-trainer__average', [
               h('div', h.trust(i18n('averageScoreAsWhiteX', `<strong>${ctrl.averageScores.white !== null ? ctrl.averageScores.white : '?'}</strong>`))),
               h('div', h.trust(i18n('averageScoreAsBlackX', `<strong>${ctrl.averageScores.black !== null ? ctrl.averageScores.black : '?'}</strong>`))),

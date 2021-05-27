@@ -30,6 +30,7 @@ export default class CoordCtrl {
   wrongAnswer = false
   tempWrong = false
   score = 0
+  lastScore = 0
   progress= 100
   started = false
 
@@ -123,6 +124,7 @@ export default class CoordCtrl {
           this.started = false
           this.wrongAnswer = false
           this.tempWrong = false
+          this.lastScore = this.score
           this.coords = []
           this.saveScore().then(s => {
             this.averageScores = getAverage(s)

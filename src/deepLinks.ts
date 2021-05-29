@@ -5,6 +5,7 @@ import i18n from './i18n'
 import session, { Session } from './session'
 import signupModal from './ui/signupModal'
 import { handleXhrError } from './utils'
+import { buildQueryString } from './utils/querystring'
 
 const fenParams = ':r1/:r2/:r3/:r4/:r5/:r6/:r7/:r8'
 function fenFromParams(params: any): string {
@@ -17,18 +18,26 @@ export default {
   init() {
     Plugins.App.addListener('appUrlOpen', ({ url }) => {
       setTimeout(() => {
-        const path = new URL(url).pathname
+        const urlObject = new URL(url)
+        const path = urlObject.pathname
         const matched = links.run(path)
         if (!matched) {
           // it can be a game or challenge but we want to do an exact regex match
           const found = path.match(gamePattern)
           if (found) {
             const color = found[2]
+            const plyMatch = urlObject.hash.match(plyHashPattern)
+
+            const queryParams = {} as Record<string, string>
             if (color) {
-              router.set(`/game/${found[1]}?color=${color.substring(1)}`)
-            } else {
-              router.set(`/game/${found[1]}`)
+              queryParams['color'] = color.substring(1)
             }
+            if (plyMatch) {
+              queryParams['ply'] = plyMatch[1]
+            }
+
+            const queryString = buildQueryString(queryParams)
+            router.set(`/game/${found[1]}?${queryString}`)
           } else {
             console.warn('Could not handle deep link', path)
           }
@@ -40,6 +49,7 @@ export default {
 
 const links = new Rlite()
 const gamePattern = /^\/(\w{8})(\/black|\/white)?$/
+const plyHashPattern = /^#(\d+)$/
 
 links.add('analysis', () => router.set('/analyse'))
 links.add(`analysis/${fenParams}`, ({ params }) => {

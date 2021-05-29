@@ -28,6 +28,7 @@ interface Attrs {
   id: string
   color?: Color
   goingBack?: string
+  ply?: string
 }
 
 interface State {
@@ -133,7 +134,9 @@ function loadRound(
     const elapsed = performance.now() - time
 
     setTimeout(() => {
-      vnode.state.round = new OnlineRound(!!vnode.attrs.goingBack, vnode.attrs.id, data)
+      const plyCast = Number(vnode.attrs.ply)
+      const ply = isNaN(plyCast) ? undefined : plyCast
+      vnode.state.round = new OnlineRound(!!vnode.attrs.goingBack, vnode.attrs.id, data, false, undefined, undefined, ply)
     }, Math.max(400 - elapsed, 0))
 
     gamesMenu.resetLastJoined()

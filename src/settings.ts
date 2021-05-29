@@ -416,8 +416,6 @@ export interface GameSettings {
   readonly color: Prop<string>
   readonly mode?: Prop<string>
   readonly variant: Prop<string>
-  readonly ratingMin?: Prop<string>
-  readonly ratingMax?: Prop<string>
   readonly days?: Prop<string>
   readonly level?: Prop<string>
 }

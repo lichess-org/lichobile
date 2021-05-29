@@ -222,6 +222,8 @@ export default {
       return h('button[data-icon=r]', {
         oncreate: helper.ontap(() => {
           ctrl.hideActions()
+          router.reload() // hack to avoid websocket sending again messages
+                          // on socket reconnection
           lobby.onNewOpponent(ctrl.data)
         })
       }, i18n('newOpponent'))

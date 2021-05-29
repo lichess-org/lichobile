@@ -86,6 +86,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     flipped = false,
     readonly onFeatured?: () => void,
     userTv?: string,
+    ply?: number,
   ) {
     this.setData(cfg)
     this.data.userTV = userTv
@@ -163,6 +164,10 @@ export default class OnlineRound implements OnlineRoundInterface {
     })
 
     this.transientMove = new TransientMove(this)
+
+    if (ply !== undefined) {
+      this.jump(ply)
+    }
 
     redraw()
   }

@@ -1,4 +1,4 @@
-import { Plugins, NetworkStatus } from '@capacitor/core'
+import { Network, ConnectionStatusChangeListener } from '@capacitor/network'
 import { Toast } from '@capacitor/toast'
 import i18n from '../i18n'
 import globalConfig from '../config'
@@ -95,11 +95,11 @@ export function autoredraw(action: () => void): void {
   return res
 }
 
-let networkStatus: NetworkStatus
-Plugins.Network.addListener('networkStatusChange', st => {
+let networkStatus: ConnectionStatusChangeListener
+Network.addListener('networkStatusChange', st => {
   networkStatus = st
 })
-Plugins.Network.getStatus().then(st => {
+Network.getStatus().then(st => {
   networkStatus = st
 })
 

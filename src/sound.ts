@@ -1,4 +1,5 @@
-import { DeviceInfo, Plugins } from '@capacitor/core'
+import { Plugins } from '@capacitor/core'
+import { DeviceInfo } from '@capacitor/device'
 import settings from './settings'
 import throttle from 'lodash-es/throttle'
 

@@ -11,8 +11,10 @@ apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':capacitor-community-keep-awake')
     implementation project(':capacitor-app')
+    implementation project(':capacitor-device')
     implementation project(':capacitor-dialog')
     implementation project(':capacitor-keyboard')
+    implementation project(':capacitor-network')
     implementation project(':capacitor-share')
     implementation project(':capacitor-toast')
     implementation project(':capacitor-sound-effect')

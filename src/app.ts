@@ -1,6 +1,8 @@
-import { Capacitor, Plugins, DeviceInfo, NetworkStatus } from '@capacitor/core'
+import { Capacitor } from '@capacitor/core'
+import { Network } from '@capacitor/network'
 import { Keyboard } from '@capacitor/keyboard'
-import { App, AppState } from '@capacitor/app'
+import { App, AppState, AppInfo } from '@capacitor/app'
+import { DeviceInfo, DeviceId } from '@capacitor/device'
 import debounce from 'lodash-es/debounce'
 import { hasNetwork, requestIdleCallback } from './utils'
 import redraw from './utils/redraw'
@@ -21,7 +23,9 @@ import { isForeground, setForeground, setBackground } from './utils/appMode'
 let firstConnection = true
 
 export default function appInit(
-  info: DeviceInfo,
+  appInfo: AppInfo,
+  deviceInfo: DeviceInfo,
+  deviceId: DeviceId,
   cpuCores: number,
   sfMaxMem: number,
   buildConfig: BuildConfig,
@@ -31,9 +35,9 @@ export default function appInit(
   }
 
   window.deviceInfo = {
-    platform: info.platform,
-    uuid: info.uuid,
-    appVersion: info.appVersion,
+    platform: deviceInfo.platform,
+    uuid: deviceId.uuid,
+    appVersion: appInfo.version,
     cpuCores,
     stockfishMaxMemory: Math.ceil(sfMaxMem / 16.0) * 16,
   }
@@ -46,7 +50,7 @@ export default function appInit(
   requestIdleCallback(() => {
     // cache viewport dims
     helper.viewportDim()
-    sound.load(info)
+    sound.load(deviceInfo)
   })
 
   App.addListener('appStateChange', (state: AppState) => {
@@ -69,7 +73,7 @@ export default function appInit(
     }
   })
 
-  Plugins.Network.addListener('networkStatusChange', (s: NetworkStatus) => {
+  Network.addListener('networkStatusChange', s => {
     if (s.connected) {
       onOnline()
     }

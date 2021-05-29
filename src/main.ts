@@ -1,5 +1,7 @@
 /// <reference path="dts/index.d.ts" />
 import { Capacitor, Plugins } from '@capacitor/core'
+import { App } from '@capacitor/app'
+import { Device } from '@capacitor/app'
 import './webPlugins'
 
 import appInit from './app'
@@ -17,8 +19,10 @@ interface XNavigator extends Navigator {
 
 settingsInit()
 .then(() => Promise.all([
-  Plugins.Device.getInfo(),
-  Capacitor.platform === 'ios' ?
+  App.getInfo(),
+  Device.getInfo(),
+  Device.getId(),
+  Capacitor.getPlatform() === 'ios' ?
     Plugins.CPUInfo.nbCores().then((r: { value: number }) => r.value).catch(() => 1) :
     Promise.resolve((<XNavigator>navigator).hardwareConcurrency || 1),
   Plugins.StockfishVariants.getMaxMemory().then((r: { value: number }) => r.value).catch(() => 16),
@@ -27,7 +31,7 @@ settingsInit()
       NNUE: false
     })
 ]))
-.then(([i, c, m, b]) => appInit(i, c, m, b))
+.then(([ai, di, did, c, m, b]) => appInit(ai, di, did, c, m, b))
 .then(() => {
   routes.init()
   deepLinks.init()

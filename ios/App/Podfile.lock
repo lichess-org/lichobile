@@ -6,10 +6,15 @@ PODS:
   - CapacitorCommunityKeepAwake (1.0.0):
     - Capacitor
   - CapacitorCordova (2.4.6)
+  - CapacitorDevice (1.0.0):
+    - Capacitor
   - CapacitorDialog (1.0.0):
     - Capacitor
   - CapacitorKeyboard (1.0.0):
     - Capacitor
+  - CapacitorNetwork (1.0.0):
+    - Capacitor
+    - ReachabilitySwift (~> 5.0)
   - CapacitorShare (1.0.0):
     - Capacitor
   - CapacitorSoundEffect (0.0.1):
@@ -74,14 +79,17 @@ PODS:
   - nanopb/decode (2.30907.0)
   - nanopb/encode (2.30907.0)
   - PromisesObjC (1.2.12)
+  - ReachabilitySwift (5.0.0)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
   - "CapacitorCommunityKeepAwake (from `../../node_modules/@capacitor-community/keep-awake`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorDevice (from `../../node_modules/@capacitor/device`)"
   - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
+  - "CapacitorNetwork (from `../../node_modules/@capacitor/network`)"
   - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
   - CapacitorSoundEffect (from `../../node_modules/capacitor-sound-effect`)
   - CapacitorStockfishVariants (from `../../node_modules/capacitor-stockfish-variants`)
@@ -100,6 +108,7 @@ SPEC REPOS:
     - GoogleUtilities
     - nanopb
     - PromisesObjC
+    - ReachabilitySwift
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -110,10 +119,14 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor-community/keep-awake"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorDevice:
+    :path: "../../node_modules/@capacitor/device"
   CapacitorDialog:
     :path: "../../node_modules/@capacitor/dialog"
   CapacitorKeyboard:
     :path: "../../node_modules/@capacitor/keyboard"
+  CapacitorNetwork:
+    :path: "../../node_modules/@capacitor/network"
   CapacitorShare:
     :path: "../../node_modules/@capacitor/share"
   CapacitorSoundEffect:
@@ -128,8 +141,10 @@ SPEC CHECKSUMS:
   CapacitorApp: 65f98e8604f5c5523537aa3bc38ffe49461c6695
   CapacitorCommunityKeepAwake: c4476e4a01406d22ec14df13520e391685441813
   CapacitorCordova: 3375b39b5ebca770ac7869f85e4dea32a642c9e0
+  CapacitorDevice: 7745a3f55780f526c3086cfa97e6baa1885eba0e
   CapacitorDialog: c09e5762c8e055b0ba2a99dea4a0c10deb90072e
   CapacitorKeyboard: d43d9fbabf6c985c9a7c0f7e0b4ba59f6b28dd3f
+  CapacitorNetwork: 1293a596659c4f266ddc26df4381eb16d57ebca2
   CapacitorShare: 908a85fc16eabe87b7662d593a9c53153f3766a0
   CapacitorSoundEffect: 31a36e64d0220c6d0e1621a61744b5d8c1e7738d
   CapacitorStockfishVariants: 9789d8913a39bf8191121cc0c95bb0caca634508
@@ -144,7 +159,8 @@ SPEC CHECKSUMS:
   GoogleUtilities: 31c5b01f978a70c6cff2afc6272b3f1921614b43
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
 
-PODFILE CHECKSUM: 6df0c1994551642bb11b931f046e220799f6068f
+PODFILE CHECKSUM: c96213841c1427724abe64068dbe6932d297c442
 
 COCOAPODS: 1.10.1

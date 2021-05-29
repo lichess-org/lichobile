@@ -1,5 +1,5 @@
+import { Dialog } from '@capacitor/dialog'
 import { Toast } from '@capacitor/toast'
-import { Plugins } from '@capacitor/core'
 import debounce from 'lodash-es/debounce'
 import router from '../../router'
 import { formatDateTime } from '../../i18n'
@@ -297,7 +297,7 @@ export default class AnalyseCtrl {
     if (!node) return
     const count = treeOps.countChildrenAndComments(node)
     if (count.nodes >= 10 || count.comments > 0) {
-      Plugins.Modals.confirm({
+      Dialog.confirm({
         title: 'Confirm',
         message: `Delete ${count.nodes} move(s)` + (count.comments ? ` and ${count.comments} comment(s)` : '') + '?',
       })

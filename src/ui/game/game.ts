@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Dialog } from '@capacitor/dialog'
 import { Toast } from '@capacitor/toast'
 import router from '../../router'
 import storage from '../../storage'
@@ -123,7 +123,7 @@ function loadRound(
         variant.alert && [1, 3].indexOf(variant.id) === -1 &&
         !storage.get(storageKey)
       ) {
-        Plugins.Modals.alert({
+        Dialog.alert({
           title: 'Alert',
           message: variant.alert
         }).then(() => {

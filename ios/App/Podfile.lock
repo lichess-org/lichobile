@@ -6,6 +6,8 @@ PODS:
   - CapacitorCommunityKeepAwake (1.0.0):
     - Capacitor
   - CapacitorCordova (2.4.6)
+  - CapacitorDialog (1.0.0):
+    - Capacitor
   - CapacitorKeyboard (1.0.0):
     - Capacitor
   - CapacitorShare (1.0.0):
@@ -78,6 +80,7 @@ DEPENDENCIES:
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
   - "CapacitorCommunityKeepAwake (from `../../node_modules/@capacitor-community/keep-awake`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
   - CapacitorSoundEffect (from `../../node_modules/capacitor-sound-effect`)
@@ -107,6 +110,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor-community/keep-awake"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorDialog:
+    :path: "../../node_modules/@capacitor/dialog"
   CapacitorKeyboard:
     :path: "../../node_modules/@capacitor/keyboard"
   CapacitorShare:
@@ -123,6 +128,7 @@ SPEC CHECKSUMS:
   CapacitorApp: 65f98e8604f5c5523537aa3bc38ffe49461c6695
   CapacitorCommunityKeepAwake: c4476e4a01406d22ec14df13520e391685441813
   CapacitorCordova: 3375b39b5ebca770ac7869f85e4dea32a642c9e0
+  CapacitorDialog: c09e5762c8e055b0ba2a99dea4a0c10deb90072e
   CapacitorKeyboard: d43d9fbabf6c985c9a7c0f7e0b4ba59f6b28dd3f
   CapacitorShare: 908a85fc16eabe87b7662d593a9c53153f3766a0
   CapacitorSoundEffect: 31a36e64d0220c6d0e1621a61744b5d8c1e7738d
@@ -139,6 +145,6 @@ SPEC CHECKSUMS:
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
 
-PODFILE CHECKSUM: 99be8eb8a03f1f79755ecbc2f89726e63d43f339
+PODFILE CHECKSUM: 6df0c1994551642bb11b931f046e220799f6068f
 
 COCOAPODS: 1.10.1

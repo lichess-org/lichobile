@@ -8,6 +8,10 @@
 		"classpath": "com.capacitorjs.plugins.app.AppPlugin"
 	},
 	{
+		"pkg": "@capacitor/dialog",
+		"classpath": "com.capacitorjs.plugins.dialog.DialogPlugin"
+	},
+	{
 		"pkg": "@capacitor/keyboard",
 		"classpath": "com.capacitorjs.plugins.keyboard.KeyboardPlugin"
 	},

@@ -11,6 +11,7 @@ def capacitor_pods
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCommunityKeepAwake', :path => '../../node_modules/@capacitor-community/keep-awake'
   pod 'CapacitorApp', :path => '../../node_modules/@capacitor/app'
+  pod 'CapacitorDialog', :path => '../../node_modules/@capacitor/dialog'
   pod 'CapacitorKeyboard', :path => '../../node_modules/@capacitor/keyboard'
   pod 'CapacitorShare', :path => '../../node_modules/@capacitor/share'
   pod 'CapacitorToast', :path => '../../node_modules/@capacitor/toast'

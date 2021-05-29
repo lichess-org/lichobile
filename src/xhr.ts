@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Dialog } from '@capacitor/dialog'
 import globalConfig from './config'
 import { fetchJSON, fetchText } from './http'
 import { currentSri } from './utils'
@@ -186,7 +186,7 @@ export function status(): Promise<void> {
       const key = 'warn_bug_' + v
       const warnCount = Number(storage.get(key)) || 0
       if (warnCount === 0) {
-        Plugins.Modals.alert({
+        Dialog.alert({
           title: 'Alert',
           message: 'A new version of lichess mobile is available. Please upgrade as soon as possible.',
         }).then(() => {
@@ -211,14 +211,14 @@ export function status(): Promise<void> {
         const deprWarnCount = Number(storage.get(key)) || 0
 
         if (now > unsupportedDate) {
-          Plugins.Modals.alert({
+          Dialog.alert({
             title: 'Alert',
             message: i18n('apiUnsupported'),
           })
         }
         else if (now > deprecatedDate) {
           if (deprWarnCount === 0) {
-            Plugins.Modals.alert({
+            Dialog.alert({
               title: 'Alert',
               message: i18n('apiDeprecated', formatDate(unsupportedDate)),
             }).then(() => {

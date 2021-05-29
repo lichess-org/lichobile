@@ -53,6 +53,7 @@
         "@capacitor/app": "1.0.0",
         "@capacitor/cli": "3.0.0",
         "@capacitor/core": "3.0.0",
+        "@capacitor/dialog": "1.0.0",
         "@capacitor/ios": "2.4.6",
         "@capacitor/keyboard": "1.0.0",
         "@capacitor/share": "1.0.0",

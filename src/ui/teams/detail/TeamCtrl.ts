@@ -1,8 +1,8 @@
 import redraw from '../../../utils/redraw'
+import { Toast } from '@capacitor/toast'
 import { Team, TeamJoinLeaveResponse } from '../../../lichess/interfaces/teams'
 import * as utils from '../../../utils'
 import * as xhr from '../teamsXhr'
-import { Plugins } from '@capacitor/core'
 
 export default class TeamCtrl {
 
@@ -28,7 +28,7 @@ export default class TeamCtrl {
     xhr.joinTeam(team.id, message)
     .then((data: TeamJoinLeaveResponse) => {
       if (!data.ok) {
-        Plugins.LiToast.show({ text: 'Join failed', duration: 'short' })
+        Toast.show({ text: 'Join failed', duration: 'short' })
       }
       this.reload(this.teamId)
     })
@@ -43,7 +43,7 @@ export default class TeamCtrl {
     xhr.leaveTeam(team.id)
     .then((data: TeamJoinLeaveResponse) => {
       if (!data.ok) {
-        Plugins.LiToast.show({ text: 'Leave failed', duration: 'short' })
+        Toast.show({ text: 'Leave failed', duration: 'short' })
       }
       this.reload(this.teamId)
     })

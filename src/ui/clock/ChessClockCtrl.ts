@@ -1,4 +1,5 @@
-import { Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
+import { App, AppState } from '@capacitor/app'
+import { Plugins, PluginListenerHandle } from '@capacitor/core'
 import { prop, Prop } from '~/utils'
 import router from '../../router'
 import settings from '../../settings'
@@ -58,7 +59,7 @@ export default function ChessClockCtrl(): IChessClockCtrl {
     window.AndroidFullScreen.immersiveMode()
   }
 
-  const appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
+  const appStateListener = App.addListener('appStateChange', (state: AppState) => {
     if (state.isActive) hideStatusBar()
   })
 

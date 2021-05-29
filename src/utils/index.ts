@@ -1,4 +1,5 @@
 import { Plugins, NetworkStatus } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
 import i18n from '../i18n'
 import globalConfig from '../config'
 import { ErrorResponse } from '../http'
@@ -136,7 +137,7 @@ export function handleXhrError(error: ErrorResponse): void {
     }
   }
 
-  Plugins.LiToast.show({ text: message, duration: 'short' })
+  Toast.show({ text: message, duration: 'short' })
 }
 
 export function serializeQueryParameters(obj: Record<string, string>): string {

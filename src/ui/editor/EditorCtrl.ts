@@ -1,4 +1,5 @@
 import { Plugins } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
 import { Rules, Square } from 'chessops/types'
 import { SquareSet } from 'chessops/squareSet'
 import { Board } from 'chessops/board'
@@ -223,7 +224,7 @@ export default class EditorCtrl {
     if (state.legalFen && state.playable) {
       this.continuePopup.open(state.legalFen, 'standard')
     } else {
-      Plugins.LiToast.show({ text: i18n('invalidFen'), duration: 'short' })
+      Toast.show({ text: i18n('invalidFen'), position: 'center', duration: 'short' })
     }
   }
 

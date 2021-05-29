@@ -1,4 +1,5 @@
 import { Plugins } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
 import h from 'mithril/hyperscript'
 import { parseUci } from 'chessops/util'
 import { makeSanVariation } from 'chessops/san'
@@ -36,7 +37,7 @@ function renderCevalInfos(ctrl: AnalyseCtrl) {
       h('span', i18n('depthX', ceval.depth + (isInfinite || ceval.maxDepth === undefined ? '' : `/${ceval.maxDepth}`))),
       ctrl.ceval.canGoDeeper() ? h('button.fa.fa-plus-square', {
         oncreate: helper.ontap(ctrl.ceval.goDeeper, () => {
-          Plugins.LiToast.show({ text: i18n('goDeeper'), duration: 'short' })
+          Toast.show({ text: i18n('goDeeper'), position: 'center', duration: 'short' })
         })
       }) : null
     ]),

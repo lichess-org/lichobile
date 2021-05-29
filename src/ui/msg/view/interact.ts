@@ -1,5 +1,5 @@
 import h from 'mithril/hyperscript'
-import { Plugins } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
 import throttle from 'lodash-es/throttle'
 import MsgCtrl from '../MsgCtrl'
 import { User } from '../interfaces'
@@ -18,7 +18,7 @@ export default function renderInteract(ctrl: MsgCtrl, user: User): Mithril.Vnode
       const area = form[0] as HTMLTextAreaElement
       const body = area.value.trim()
       if (body.length > 8000) {
-        Plugins.LiToast.show({ text: 'Message is too long', duration: 'short' })
+        Toast.show({ text: 'Message is too long', duration: 'short' })
       } else if (body.length > 0) {
         prev = now
         ctrl.post(body)

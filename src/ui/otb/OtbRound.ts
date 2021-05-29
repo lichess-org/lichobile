@@ -1,4 +1,6 @@
-import { Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
+import { App, AppState } from '@capacitor/app'
+import { Share } from '@capacitor/share'
+import { Plugins, PluginListenerHandle } from '@capacitor/core'
 import sound from '../../sound'
 import router from '../../router'
 import Chessground from '../../chessground/Chessground'
@@ -88,7 +90,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
       }
     }
 
-    this.appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
+    this.appStateListener = App.addListener('appStateChange', (state: AppState) => {
       if (!state.isActive) this.saveClock()
     })
   }
@@ -203,7 +205,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public sharePGN = () => {
     this.replay.pgn('White', 'Black')
     .then((data: chess.PgnDumpResponse) =>
-      Plugins.LiShare.share({ text: data.pgn })
+      Share.share({ text: data.pgn })
     )
   }
 

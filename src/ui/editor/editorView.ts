@@ -1,4 +1,6 @@
 import { Plugins } from '@capacitor/core'
+import { Share } from '@capacitor/share'
+import { Toast } from '@capacitor/toast'
 import h from 'mithril/hyperscript'
 import settings from '../../settings'
 import { header } from '../shared/common'
@@ -75,20 +77,20 @@ function renderActionsBar(ctrl: EditorCtrl) {
     }),
     h('button.action_bar_button[data-icon=U]', {
       disabled: !state.playable,
-      oncreate: helper.ontap(ctrl.continueFromHere, () => Plugins.LiToast.show({ text: i18n('continueFromHere'), duration: 'short', position: 'bottom' }))
+      oncreate: helper.ontap(ctrl.continueFromHere, () => Toast.show({ text: i18n('continueFromHere'), duration: 'short', position: 'bottom' }))
     }),
     h('button.action_bar_button[data-icon=A]', {
       disabled: state.legalFen === undefined,
-      oncreate: helper.ontap(ctrl.goToAnalyse, () => Plugins.LiToast.show({ text: i18n('analysis'), duration: 'short', position: 'bottom' }))
+      oncreate: helper.ontap(ctrl.goToAnalyse, () => Toast.show({ text: i18n('analysis'), duration: 'short', position: 'bottom' }))
     }),
     h('button.action_bar_button.fa.fa-upload', {
       oncreate: helper.ontap(ctrl.pasteFenPopup.open,
-        () => Plugins.LiToast.show({ text: i18n('Load position from FEN'), duration: 'short', position: 'bottom' }))
+        () => Toast.show({ text: i18n('Load position from FEN'), duration: 'short', position: 'bottom' }))
     }),
     h('button.action_bar_button.fa.fa-share-alt', {
       oncreate: helper.ontap(
-        () => Plugins.LiShare.share({ text: ctrl.getLegalFen() }),
-        () => Plugins.LiToast.show({ text: 'Share FEN', duration: 'short', position: 'bottom' })
+        () => Share.share({ text: ctrl.getLegalFen() }),
+        () => Toast.show({ text: 'Share FEN', duration: 'short', position: 'bottom' })
       )
     })
   ])

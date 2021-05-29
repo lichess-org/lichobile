@@ -1,4 +1,6 @@
-import { Capacitor, Plugins, AppState, DeviceInfo, NetworkStatus } from '@capacitor/core'
+import { Capacitor, Plugins, DeviceInfo, NetworkStatus } from '@capacitor/core'
+import { Keyboard } from '@capacitor/keyboard'
+import { App, AppState } from '@capacitor/app'
 import debounce from 'lodash-es/debounce'
 import { hasNetwork, requestIdleCallback } from './utils'
 import redraw from './utils/redraw'
@@ -9,6 +11,7 @@ import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
 import * as helper from './ui/helper'
 import lobby from './ui/lobby'
+import Badge from './badge'
 import push from './push'
 import router from './router'
 import socket from './socket'
@@ -36,8 +39,8 @@ export default function appInit(
   }
   window.lichess.buildConfig = buildConfig
 
-  if (Capacitor.platform === 'ios') {
-    Plugins.Keyboard.setAccessoryBarVisible({ isVisible: true })
+  if (Capacitor.getPlatform() === 'ios') {
+    Keyboard.setAccessoryBarVisible({ isVisible: true })
   }
 
   requestIdleCallback(() => {
@@ -46,13 +49,13 @@ export default function appInit(
     sound.load(info)
   })
 
-  Plugins.App.addListener('appStateChange', (state: AppState) => {
+  App.addListener('appStateChange', (state: AppState) => {
     if (state.isActive) {
       setForeground()
       session.refresh()
       .then(() => {
-        if (Capacitor.platform === 'ios') {
-          Plugins.Badge.setNumber({ badge: session.myTurnGames().length })
+        if (Capacitor.getPlatform() === 'ios') {
+          Badge.setNumber({ badge: session.myTurnGames().length })
         }
       })
       socket.cancelDelayedDisconnect()
@@ -75,7 +78,7 @@ export default function appInit(
     }
   })
 
-  Plugins.App.addListener('backButton', router.backbutton)
+  App.addListener('backButton', router.backbutton)
 
   window.addEventListener('resize', debounce(onResize), false)
 
@@ -114,16 +117,16 @@ function onOnline() {
         }
         push.register()
         challengesApi.refresh()
-        if (Capacitor.platform === 'ios') {
-          Plugins.Badge.setNumber({ badge: session.myTurnGames().length })
+        if (Capacitor.getPlatform() === 'ios') {
+          Badge.setNumber({ badge: session.myTurnGames().length })
         }
         redraw()
 
       })
       .catch(() => {
         console.log('connected as anonymous')
-        if (Capacitor.platform === 'ios') {
-          Plugins.Badge.setNumber({ badge: 0 })
+        if (Capacitor.getPlatform() === 'ios') {
+          Badge.setNumber({ badge: 0 })
         }
       })
 

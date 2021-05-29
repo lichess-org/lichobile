@@ -1,4 +1,6 @@
 import { Plugins } from '@capacitor/core'
+import { Share } from '@capacitor/share'
+import { Toast } from '@capacitor/toast'
 import h from 'mithril/hyperscript'
 import router from '../../../router'
 import session from '../../../session'
@@ -51,19 +53,19 @@ export function renderFooter(ctrl: TournamentCtrl) {
     <div className="actions_bar">
       <button key="faqButton" className="action_bar_button fa fa-question-circle" oncreate={helper.ontap(
         ctrl.faqCtrl.open,
-        () => Plugins.LiToast.show({ text: i18n('tournamentFAQ'), duration: 'short', position: 'bottom' })
+        () => Toast.show({ text: i18n('tournamentFAQ'), duration: 'short', position: 'bottom' })
       )}>
       </button>
       <button key="shareButton" className="action_bar_button fa fa-share-alt" oncreate={helper.ontap(
-        () => Plugins.LiShare.share({ url: tUrl }),
-        () => Plugins.LiToast.show({ text: i18n('shareUrl'), duration: 'short', position: 'bottom' })
+        () => Share.share({ url: tUrl }),
+        () => Toast.show({ text: i18n('shareUrl'), duration: 'short', position: 'bottom' })
       )}>
       </button>
       {ctrl.chat ?
         <button key="chatButton" className="action_bar_button fa fa-comments withChip"
           oncreate={helper.ontap(
             ctrl.chat.open,
-            () => Plugins.LiToast.show({ text: i18n('chatRoom'), duration: 'short', position: 'bottom' })
+            () => Toast.show({ text: i18n('chatRoom'), duration: 'short', position: 'bottom' })
           )}
         >
           { ctrl.chat.nbUnread > 0 ?
@@ -194,7 +196,7 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
   return (
     <button key="joinButton" className="action_bar_button fa fa-play" oncreate={helper.ontap(
       action,
-      () => Plugins.LiToast.show({ text: i18n('join'), duration: 'short', position: 'bottom' })
+      () => Toast.show({ text: i18n('join'), duration: 'short', position: 'bottom' })
     )}>
     </button>
   )
@@ -207,7 +209,7 @@ function withdrawButton(ctrl: TournamentCtrl, t: Tournament) {
   return (
     <button key="withdrawButton" className="action_bar_button fa fa-flag" oncreate={helper.ontap(
       ctrl.withdraw,
-      () => Plugins.LiToast.show({ text: i18n('withdraw'), duration: 'short', position: 'bottom' })
+      () => Toast.show({ text: i18n('withdraw'), duration: 'short', position: 'bottom' })
     )}>
     </button>
   )

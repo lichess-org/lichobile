@@ -1,4 +1,5 @@
 import { Plugins } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
 import router from '../../router'
 import storage from '../../storage'
 import sound from '../../sound'
@@ -106,7 +107,7 @@ function loadRound(
   data: OnlineGameData
 ): void {
   if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
-    Plugins.LiToast.show({ text: i18n('unsupportedVariant', data.game.variant.name), duration: 'short' })
+    Toast.show({ text: i18n('unsupportedVariant', data.game.variant.name), position: 'center', duration: 'short' })
     router.set('/')
   }
   else {

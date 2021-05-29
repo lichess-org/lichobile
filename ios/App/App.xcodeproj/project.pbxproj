@@ -14,12 +14,8 @@
 		504EC30F1FED79650016851F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
-		961A8D8323D705E500229D0D /* LiToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961A8D8223D705E500229D0D /* LiToast.swift */; };
-		961A8D8523D7063900229D0D /* LiToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 961A8D8423D7063900229D0D /* LiToast.m */; };
 		961EFD3C239E968C0078A80B /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961EFD3B239E968C0078A80B /* Badge.swift */; };
 		961EFD3E239E97D70078A80B /* Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = 961EFD3D239E97D70078A80B /* Badge.m */; };
-		964169A123F40DBC00027DDE /* LiShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964169A023F40DBC00027DDE /* LiShare.swift */; };
-		964169A323F40E2C00027DDE /* LiShare.m in Sources */ = {isa = PBXBuildFile; fileRef = 964169A223F40E2C00027DDE /* LiShare.m */; };
 		9669431E234B79A000145494 /* SoundEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 9669431D234B79A000145494 /* SoundEffect.m */; };
 		96845EFE2590DA4800C770E3 /* CPUInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96845EFD2590DA4800C770E3 /* CPUInfo.swift */; };
 		96845F012590DC4500C770E3 /* CPUInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 96845F002590DC4500C770E3 /* CPUInfo.m */; };
@@ -39,12 +35,8 @@
 		504EC3111FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = SOURCE_ROOT; };
-		961A8D8223D705E500229D0D /* LiToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiToast.swift; sourceTree = "<group>"; };
-		961A8D8423D7063900229D0D /* LiToast.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiToast.m; sourceTree = "<group>"; };
 		961EFD3B239E968C0078A80B /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
 		961EFD3D239E97D70078A80B /* Badge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Badge.m; sourceTree = "<group>"; };
-		964169A023F40DBC00027DDE /* LiShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiShare.swift; sourceTree = "<group>"; };
-		964169A223F40E2C00027DDE /* LiShare.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiShare.m; sourceTree = "<group>"; };
 		9669431C234B79A000145494 /* App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "App-Bridging-Header.h"; sourceTree = "<group>"; };
 		9669431D234B79A000145494 /* SoundEffect.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SoundEffect.m; sourceTree = "<group>"; };
 		96845EFD2590DA4800C770E3 /* CPUInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUInfo.swift; sourceTree = "<group>"; };
@@ -111,10 +103,6 @@
 				50B271D01FEDC1A000F3C39B /* public */,
 				961EFD3B239E968C0078A80B /* Badge.swift */,
 				961EFD3D239E97D70078A80B /* Badge.m */,
-				961A8D8223D705E500229D0D /* LiToast.swift */,
-				961A8D8423D7063900229D0D /* LiToast.m */,
-				964169A023F40DBC00027DDE /* LiShare.swift */,
-				964169A223F40E2C00027DDE /* LiShare.m */,
 				96845EFD2590DA4800C770E3 /* CPUInfo.swift */,
 				96845F002590DC4500C770E3 /* CPUInfo.m */,
 			);
@@ -254,13 +242,9 @@
 				9669431E234B79A000145494 /* SoundEffect.m in Sources */,
 				961EFD3C239E968C0078A80B /* Badge.swift in Sources */,
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
-				964169A123F40DBC00027DDE /* LiShare.swift in Sources */,
 				96845F012590DC4500C770E3 /* CPUInfo.m in Sources */,
-				964169A323F40E2C00027DDE /* LiShare.m in Sources */,
 				96845EFE2590DA4800C770E3 /* CPUInfo.swift in Sources */,
 				961EFD3E239E97D70078A80B /* Badge.m in Sources */,
-				961A8D8523D7063900229D0D /* LiToast.m in Sources */,
-				961A8D8323D705E500229D0D /* LiToast.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

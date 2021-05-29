@@ -1,4 +1,5 @@
 import { Plugins } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
 import h from 'mithril/hyperscript'
 import redraw from '../../../../utils/redraw'
 import socket from '../../../../socket'
@@ -285,7 +286,7 @@ function userInfos(user: User, player: Player, playerName: string) {
   } else {
     title = playerName
   }
-  Plugins.LiToast.show({ text: title, duration: 'short' })
+  Toast.show({ text: title, position: 'center', duration: 'short' })
 }
 
 function renderPlayerName(player: Player) {
@@ -311,7 +312,7 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
   const togglePopup = user ? () => ctrl.openUserPopup(position, user.id) : utils.noop
   const vConf = user ?
     helper.ontap(togglePopup, () => userInfos(user, player, playerApi.playerName(player))) :
-    helper.ontap(utils.noop, () => Plugins.LiToast.show({ text: playerName, duration: 'short' }))
+    helper.ontap(utils.noop, () => Toast.show({ text: (player.name || player.username || player.user?.username)!, position: 'center', duration: 'short' }))
 
   const checksNb = getChecksCount(ctrl, player.color)
 

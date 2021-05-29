@@ -10,6 +10,10 @@ android {
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':capacitor-community-keep-awake')
+    implementation project(':capacitor-app')
+    implementation project(':capacitor-keyboard')
+    implementation project(':capacitor-share')
+    implementation project(':capacitor-toast')
     implementation project(':capacitor-sound-effect')
     implementation project(':capacitor-stockfish')
     implementation project(':capacitor-stockfish-variants')

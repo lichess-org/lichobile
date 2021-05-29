@@ -1,4 +1,5 @@
-import { Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
+import { App, AppState } from '@capacitor/app'
+import { Plugins, PluginListenerHandle } from '@capacitor/core'
 import throttle from 'lodash-es/throttle'
 import socket, { SocketIFace } from '../../../socket'
 import redraw from '../../../utils/redraw'
@@ -78,7 +79,7 @@ export default class TournamentCtrl {
       )
     }
 
-    this.appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
+    this.appStateListener = App.addListener('appStateChange', (state: AppState) => {
       if (state.isActive) this.reload()
     })
 

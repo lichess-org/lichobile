@@ -1,4 +1,5 @@
 import { Plugins } from '@capacitor/core'
+import { Share } from '@capacitor/share'
 import i18n from '../../i18n'
 import Chessground from '../../chessground/Chessground'
 import router from '../../router'
@@ -184,7 +185,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   public sharePGN = () => {
     this.replay.pgn(this.white(), this.black())
     .then((data: chess.PgnDumpResponse) =>
-      Plugins.LiShare.share({ text: data.pgn })
+      Share.share({ text: data.pgn })
     )
   }
 

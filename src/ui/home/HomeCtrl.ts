@@ -1,4 +1,5 @@
-import { Plugins, AppState, NetworkStatus, PluginListenerHandle } from '@capacitor/core'
+import { App, AppState } from '@capacitor/app'
+import { Plugins, NetworkStatus, PluginListenerHandle } from '@capacitor/core'
 import throttle from 'lodash-es/throttle'
 import debounce from 'lodash-es/debounce'
 import Zanimo from '../../utils/zanimo'
@@ -67,7 +68,7 @@ export default class HomeCtrl {
       if (s.connected) this.init()
     })
 
-    this.appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
+    this.appStateListener = App.addListener('appStateChange', (state: AppState) => {
       console.debug('appStateChange')
       if (state.isActive) this.init()
     })

@@ -1,4 +1,5 @@
 import { Plugins } from '@capacitor/core'
+import { Share } from '@capacitor/share'
 import debounce from 'lodash-es/debounce'
 import throttle from 'lodash-es/throttle'
 import Chessground from '../../chessground/Chessground'
@@ -197,7 +198,7 @@ export default class TrainingCtrl implements PromotingInterface {
   }, 1000)
 
   public share = (): void => {
-    Plugins.LiShare.share({ url: `https://lichess.org/training/${this.data.puzzle.id}` })
+    Share.share({ url: `https://lichess.org/training/${this.data.puzzle.id}` })
   }
 
   public goToAnalysis = (): void => {

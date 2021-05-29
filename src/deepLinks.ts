@@ -1,3 +1,4 @@
+import { Toast } from '@capacitor/toast'
 import { Plugins } from '@capacitor/core'
 import Rlite from 'rlite-router'
 import router from './router'
@@ -85,7 +86,7 @@ links.add('signup/confirm/:token', ({ params }) => {
       signupModal.close()
       router.set(`/@/${data.id}`)
       setTimeout(() => {
-        Plugins.LiToast.show({ text: i18n('loginSuccessful'), duration: 'long' })
+        Toast.show({ text: i18n('loginSuccessful'), position: 'center', duration: 'long' })
       }, 1000)
     })
     .catch(handleXhrError)

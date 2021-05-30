@@ -1,6 +1,5 @@
 import { Keyboard } from '@capacitor/keyboard'
 import { Toast } from '@capacitor/toast'
-import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
 import debounce from 'lodash-es/debounce'
 import session, { SignupData, EmailConfirm } from '../session'

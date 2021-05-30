@@ -1,7 +1,8 @@
 /// <reference path="dts/index.d.ts" />
-import { Capacitor, Plugins } from '@capacitor/core'
+import { Capacitor, registerPlugin, Plugins } from '@capacitor/core'
 import { App } from '@capacitor/app'
-import { Device } from '@capacitor/app'
+import { Device } from '@capacitor/device'
+import { SplashScreen } from '@capacitor/splash-screen'
 import './webPlugins'
 
 import appInit from './app'
@@ -17,17 +18,26 @@ interface XNavigator extends Navigator {
   hardwareConcurrency: number
 }
 
+interface CPUInfoPlugin {
+  nbCores(): Promise<{ value: number }>
+}
+const CPUInfo = registerPlugin<CPUInfoPlugin>('CPUInfo')
+interface LiBuildConfigPlugin {
+  get(): Promise<{ NNUE: boolean }>
+}
+const LiBuildConfig = registerPlugin<LiBuildConfigPlugin>('LiBuildConfig')
+
 settingsInit()
 .then(() => Promise.all([
   App.getInfo(),
   Device.getInfo(),
   Device.getId(),
   Capacitor.getPlatform() === 'ios' ?
-    Plugins.CPUInfo.nbCores().then((r: { value: number }) => r.value).catch(() => 1) :
+    CPUInfo.nbCores().then((r: { value: number }) => r.value).catch(() => 1) :
     Promise.resolve((<XNavigator>navigator).hardwareConcurrency || 1),
   Plugins.StockfishVariants.getMaxMemory().then((r: { value: number }) => r.value).catch(() => 16),
-  Capacitor.platform === 'android' ?
-    Plugins.LiBuildConfig.get() : Promise.resolve({
+  Capacitor.getPlatform() === 'android' ?
+    LiBuildConfig.get() : Promise.resolve({
       NNUE: false
     })
 ]))
@@ -40,4 +50,4 @@ settingsInit()
 .then(themeInit)
 .then(i18nInit)
 .then(() => processWindowLocation())
-.then(() => Plugins.SplashScreen.hide())
+.then(() => SplashScreen.hide())

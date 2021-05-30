@@ -1,6 +1,5 @@
 import h from 'mithril/hyperscript'
 import { Toast } from '@capacitor/toast'
-import { Plugins } from '@capacitor/core'
 import * as helper from '../../helper'
 
 import AnalyseCtrl from '../AnalyseCtrl'

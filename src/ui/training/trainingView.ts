@@ -1,6 +1,5 @@
-import { Plugins } from '@capacitor/core'
-import { Toast } from '@capacitor/toast'
 import h from 'mithril/hyperscript'
+import { Toast } from '@capacitor/toast'
 import i18n, { plural } from '../../i18n'
 import { hasNetwork } from '../../utils'
 import session from '../../session'

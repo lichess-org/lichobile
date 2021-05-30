@@ -1,5 +1,5 @@
 import { Toast } from '@capacitor/toast'
-import { Plugins } from '@capacitor/core'
+import { Device } from '@capacitor/device'
 import throttle from 'lodash-es/throttle'
 import redraw from './utils/redraw'
 import signals from './signals'
@@ -339,10 +339,10 @@ async function backgroundRefresh(): Promise<void> {
 }
 
 function sendUUID(): void {
-  Plugins.Device.getInfo()
-  .then(info => {
-    if (info.uuid !== 'web') {
-      fetchText(`/auth/set-fp/${info.uuid}/0`, { method: 'POST' })
+  Device.getId()
+  .then(({ uuid }) => {
+    if (uuid !== 'web') {
+      fetchText(`/auth/set-fp/${uuid}/0`, { method: 'POST' })
     }
   })
 }

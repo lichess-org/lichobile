@@ -1,4 +1,3 @@
-import { Plugins } from '@capacitor/core'
 import { Toast } from '@capacitor/toast'
 import { Rules, Square } from 'chessops/types'
 import { SquareSet } from 'chessops/squareSet'

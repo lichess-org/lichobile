@@ -1,4 +1,3 @@
-import { Plugins } from '@capacitor/core'
 import { Share } from '@capacitor/share'
 import h from 'mithril/hyperscript'
 import router from '../../../router'

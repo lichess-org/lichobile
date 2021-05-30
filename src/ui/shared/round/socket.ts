@@ -1,6 +1,5 @@
 import throttle from 'lodash-es/throttle'
 import { Toast } from '@capacitor/toast'
-import { Plugins } from '@capacitor/core'
 import i18n from '../../../i18n'
 import socket, { SocketIFace, RedirectObj, LichessMessageAny, MessageHandlers } from '../../../socket'
 import * as gameApi from '../../../lichess/game'

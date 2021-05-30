@@ -1,6 +1,5 @@
 import { Keyboard } from '@capacitor/keyboard'
 import { Toast } from '@capacitor/toast'
-import { Plugins } from '@capacitor/core'
 import h from 'mithril/hyperscript'
 import session from '../session'
 import { ErrorResponse } from '../http'

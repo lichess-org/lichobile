@@ -1,6 +1,6 @@
 import { App, AppState } from '@capacitor/app'
 import { Network, NetworkStatus } from '@capacitor/network'
-import { Plugins, PluginListenerHandle } from '@capacitor/core'
+import { PluginListenerHandle } from '@capacitor/core'
 import throttle from 'lodash-es/throttle'
 import debounce from 'lodash-es/debounce'
 import Zanimo from '../../utils/zanimo'

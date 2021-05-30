@@ -1,6 +1,6 @@
 import { App, AppState } from '@capacitor/app'
 import { Share } from '@capacitor/share'
-import { Plugins, PluginListenerHandle } from '@capacitor/core'
+import { PluginListenerHandle } from '@capacitor/core'
 import sound from '../../sound'
 import router from '../../router'
 import Chessground from '../../chessground/Chessground'

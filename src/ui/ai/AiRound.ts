@@ -1,4 +1,3 @@
-import { Plugins } from '@capacitor/core'
 import { Share } from '@capacitor/share'
 import i18n from '../../i18n'
 import Chessground from '../../chessground/Chessground'

@@ -1,8 +1,8 @@
 import { Toast } from '@capacitor/toast'
-import { Plugins, StatusBarStyle, FilesystemDirectory, FileReadResult } from '@capacitor/core'
+import { Filesystem, Directory, ReadFileResult } from '@capacitor/filesystem'
+import { StatusBar, Style as StatusBarStyle } from '@capacitor/status-bar'
 import settings from './settings'
 
-const { Filesystem } = Plugins
 const baseUrl = 'https://veloce.github.io/lichobile-themes'
 
 let styleEl: HTMLStyleElement
@@ -47,17 +47,17 @@ export function init() {
   }
 }
 
-export function getLocalFile(theme: Theme, fileName: string): Promise<FileReadResult> {
+export function getLocalFile(theme: Theme, fileName: string): Promise<ReadFileResult> {
   return Filesystem.readFile({
     path: theme + '-' + fileName,
-    directory: FilesystemDirectory.Data
+    directory: Directory.Data
   })
 }
 
 export function getLocalFiles(theme: Theme): Promise<readonly string[]> {
   return Filesystem.readdir({
     path: '',
-    directory: FilesystemDirectory.Data
+    directory: Directory.Data
   }).then(({ files }) => files.filter(f => f.startsWith(theme)))
 }
 
@@ -92,7 +92,7 @@ function createStylesheetRule(
   theme: Theme,
   key: string,
   filename: string,
-  { data }: FileReadResult
+  { data }: ReadFileResult
 ): void {
   if (!styleEl) {
     styleEl = document.createElement('style')
@@ -147,7 +147,7 @@ function download(
               Filesystem.writeFile({
                 path: theme + '-' + fileName,
                 data: base64data,
-                directory: FilesystemDirectory.Data,
+                directory: Directory.Data,
               })
               .then(() => resolve())
             }
@@ -164,14 +164,14 @@ function download(
 
 export function setStatusBarStyle(bgTheme: string): Promise<void> {
   return Promise.all([
-    Plugins.StatusBar.setBackgroundColor({
+    StatusBar.setBackgroundColor({
       color: bgTheme === 'light' ? '#edebe9' :
         bgTheme === 'dark' ? '#161512' : '#000000'
     }),
-    Plugins.StatusBar.setStyle({
+    StatusBar.setStyle({
       style: bgTheme === 'light' ? StatusBarStyle.Light : StatusBarStyle.Dark
     }),
-    // Plugins.StatusBar.setOverlaysWebView({
+    // StatusBar.setOverlaysWebView({
     //   overlay: isTransparent(bgTheme)
     // }),
   ]).then(() => { /* noop */ })

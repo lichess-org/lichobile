@@ -1,4 +1,3 @@
-import { Plugins } from '@capacitor/core'
 import { Toast } from '@capacitor/toast'
 import { SESSION_ID_KEY, fetchJSON, fetchText } from '../../../http'
 import { serializeQueryParameters } from '../../../utils'

@@ -1,4 +1,3 @@
-import { Plugins } from '@capacitor/core'
 import { Share } from '@capacitor/share'
 import { Toast } from '@capacitor/toast'
 import h from 'mithril/hyperscript'

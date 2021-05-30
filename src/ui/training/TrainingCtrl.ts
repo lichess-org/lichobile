@@ -1,4 +1,3 @@
-import { Plugins } from '@capacitor/core'
 import { Share } from '@capacitor/share'
 import debounce from 'lodash-es/debounce'
 import throttle from 'lodash-es/throttle'

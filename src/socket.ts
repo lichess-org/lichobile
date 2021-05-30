@@ -1,5 +1,4 @@
 import { Toast } from '@capacitor/toast'
-import { Plugins } from '@capacitor/core'
 import router from './router'
 import globalConfig from './config'
 import redraw from './utils/redraw'

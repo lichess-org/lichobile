@@ -1,4 +1,3 @@
-import { Plugins } from '@capacitor/core'
 import { Toast } from '@capacitor/toast'
 import h from 'mithril/hyperscript'
 import * as menu from '../menu'

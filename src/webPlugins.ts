@@ -1,4 +1,4 @@
-import { Capacitor, WebPlugin, registerWebPlugin } from '@capacitor/core'
+import { Capacitor, WebPlugin, registerWebPlugin, Plugins } from '@capacitor/core'
 // custom web plugin registration done here for now
 // because importing code from node_modules causes capacitor runtime code to
 // be included twice
@@ -83,4 +83,30 @@ if (Capacitor.platform === 'web') {
   }
   const SoundEffect = new SoundEffectWeb()
   registerWebPlugin(SoundEffect)
+
+  // LiShare
+  class LiShareWeb extends WebPlugin {
+    constructor() {
+      super({
+        name: 'LiShare',
+        platforms: ['web']
+      })
+    }
+
+    async share({url, text}: {url?: string, text?: string}): Promise<void> {
+      if (navigator.share !== undefined) {
+        await navigator.share({
+          url: url,
+          text: text,
+        })
+      } else {
+        await Plugins.Clipboard.write({
+          string: text,
+          url: url,
+        })
+      }
+    }
+  }
+  const LiShare = new LiShareWeb()
+  registerWebPlugin(LiShare)
 }

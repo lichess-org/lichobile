@@ -37,7 +37,8 @@ export default {
   shareLink(ctrl: OnlineRound) {
     return h('button', {
       oncreate: helper.ontap(() => {
-        Plugins.LiShare.share({ url: gameApi.publicUrl(ctrl.data) })
+        const orientation = ctrl.chessground.state.orientation
+        Plugins.LiShare.share({ url: `${gameApi.publicUrl(ctrl.data)}/${orientation}` })
       })
     }, [i18n('shareGameURL')])
   },

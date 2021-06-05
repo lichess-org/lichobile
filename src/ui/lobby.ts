@@ -177,7 +177,7 @@ function stopAndClose(fromBB?: string) {
 function userCancelSeeking(fromBB?: string) {
   stopAndClose(fromBB)
   leavePoolOrCancelHook()
-  socket.restorePrevious()
+  router.reload() // reload the page to restore socket
   sleepUtils.allowSleepAgain()
 }
 

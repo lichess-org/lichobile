@@ -103,11 +103,6 @@ function nowPlaying(): readonly NowPlayingGame[] {
   )
 }
 
-function currentBan(): Date | undefined {
-  const playban = session && session.playban
-  return playban && new Date(playban.date + playban.mins * 60000)
-}
-
 function isKidMode(): boolean {
   return !!(session && session.kid)
 }
@@ -370,8 +365,7 @@ export default {
   lichessBackedProp,
   setKidMode,
   confirmEmail,
-  currentBan,
   hasCurrentBan(): boolean {
-    return currentBan() !== undefined
+    return session?.playban !== undefined
   },
 }

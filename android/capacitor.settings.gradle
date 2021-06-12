@@ -42,10 +42,10 @@ include ':capacitor-toast'
 project(':capacitor-toast').projectDir = new File('../node_modules/@capacitor/toast/android')
 
 include ':capacitor-sound-effect'
-project(':capacitor-sound-effect').projectDir = new File('../node_modules/capacitor-sound-effect/android')
+project(':capacitor-sound-effect').projectDir = new File('../../temp-sound-effect/android')
 
 include ':capacitor-stockfish'
-project(':capacitor-stockfish').projectDir = new File('../node_modules/capacitor-stockfish/android')
+project(':capacitor-stockfish').projectDir = new File('../../capacitor-stockfish/android')
 
 include ':capacitor-stockfish-variants'
-project(':capacitor-stockfish-variants').projectDir = new File('../node_modules/capacitor-stockfish-variants/android')
+project(':capacitor-stockfish-variants').projectDir = new File('../../capacitor-stockfish-variants/android')

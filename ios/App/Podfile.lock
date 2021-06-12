@@ -103,10 +103,10 @@ DEPENDENCIES:
   - "CapacitorNetwork (from `../../node_modules/@capacitor/network`)"
   - "CapacitorPushNotifications (from `../../node_modules/@capacitor/push-notifications`)"
   - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
-  - CapacitorSoundEffect (from `../../node_modules/capacitor-sound-effect`)
+  - CapacitorSoundEffect (from `../../../temp-sound-effect`)
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
-  - CapacitorStockfishVariants (from `../../node_modules/capacitor-stockfish-variants`)
+  - CapacitorStockfishVariants (from `../../../capacitor-stockfish-variants`)
   - "CapacitorStorage (from `../../node_modules/@capacitor/storage`)"
   - "CapacitorToast (from `../../node_modules/@capacitor/toast`)"
   - Firebase/Messaging
@@ -149,13 +149,13 @@ EXTERNAL SOURCES:
   CapacitorShare:
     :path: "../../node_modules/@capacitor/share"
   CapacitorSoundEffect:
-    :path: "../../node_modules/capacitor-sound-effect"
+    :path: "../../../temp-sound-effect"
   CapacitorSplashScreen:
     :path: "../../node_modules/@capacitor/splash-screen"
   CapacitorStatusBar:
     :path: "../../node_modules/@capacitor/status-bar"
   CapacitorStockfishVariants:
-    :path: "../../node_modules/capacitor-stockfish-variants"
+    :path: "../../../capacitor-stockfish-variants"
   CapacitorStorage:
     :path: "../../node_modules/@capacitor/storage"
   CapacitorToast:
@@ -173,10 +173,10 @@ SPEC CHECKSUMS:
   CapacitorNetwork: 1293a596659c4f266ddc26df4381eb16d57ebca2
   CapacitorPushNotifications: 60b57551234cc621cd49df8c8ed3e57e5277565a
   CapacitorShare: 908a85fc16eabe87b7662d593a9c53153f3766a0
-  CapacitorSoundEffect: 31a36e64d0220c6d0e1621a61744b5d8c1e7738d
+  CapacitorSoundEffect: 521348e86af3277d95db713df030440df2162862
   CapacitorSplashScreen: 399720f32213f8429aa06e9de6458a2718967b44
   CapacitorStatusBar: 532fda5c353659ff240f24cb925e58329fab5253
-  CapacitorStockfishVariants: 9789d8913a39bf8191121cc0c95bb0caca634508
+  CapacitorStockfishVariants: f3d3172776e26b73ecfeb6b72d234be92aaf30e0
   CapacitorStorage: 59ed3a27f7d8bcb343d4cb331d9ef39b11176246
   CapacitorToast: 88d03bb7ec8c9dca4f9509cc7122c8110fa16cbf
   Firebase: cd2ab85eec8170dc260186159f21072ecb679ad5
@@ -191,6 +191,6 @@ SPEC CHECKSUMS:
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
 
-PODFILE CHECKSUM: 23988735b1cf7e2535fc3b38d0c515a9d138c0ee
+PODFILE CHECKSUM: 23edc8b6355e834e7c53db5f57375f6abfa31fe7
 
 COCOAPODS: 1.10.1

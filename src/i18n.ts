@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Device } from '@capacitor/device'
 import { Locale } from 'date-fns'
 import formatDistanceStrict from 'date-fns/esm/formatDistanceStrict'
 import formatRelative from 'date-fns/esm/formatRelative'
@@ -130,7 +130,7 @@ export async function init(): Promise<string> {
     return englishPromise.then(() => loadLanguage(fromSettings))
   } else {
     return englishPromise
-    .then(() => Plugins.Device.getLanguageCode())
+    .then(() => Device.getLanguageCode())
     .then(({ value }) => loadLanguage(value))
   }
 }

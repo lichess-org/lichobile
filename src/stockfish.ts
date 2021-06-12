@@ -1,4 +1,5 @@
 import { Capacitor, Plugins } from '@capacitor/core'
+import { Stockfish } from 'capacitor-stockfish'
 import { VariantKey } from './lichess/interfaces/variant'
 
 interface IStockfishPlugin {
@@ -8,14 +9,13 @@ interface IStockfishPlugin {
   exit(): Promise<void>
 }
 const CapacitorStockfishVariants = Plugins.StockfishVariants as IStockfishPlugin
-const CapacitorStockfish = Plugins.Stockfish as IStockfishPlugin
 
 export class StockfishPlugin {
   private plugin: IStockfishPlugin
 
   constructor(readonly variant: VariantKey) {
-    this.plugin = Capacitor.platform === 'android' && !this.isVariant() ?
-      CapacitorStockfish : CapacitorStockfishVariants
+    this.plugin = Capacitor.getPlatform() === 'android' && !this.isVariant() ?
+      Stockfish : CapacitorStockfishVariants
   }
 
   public async start(): Promise<{ engineName: string }> {

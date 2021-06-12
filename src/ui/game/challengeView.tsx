@@ -1,7 +1,7 @@
 import h from 'mithril/hyperscript'
+import { Clipboard } from '@capacitor/clipboard'
 import { Share } from '@capacitor/share'
 import { Toast } from '@capacitor/toast'
-import { Plugins } from '@capacitor/core'
 import router from '../../router'
 import session from '../../session'
 import loginModal from '../loginModal'
@@ -129,7 +129,7 @@ function awaitInvitePopup(ctrl: ChallengeCtrl, challenge: Challenge) {
           ]),
           h('input.lichess_game_url', {
             oncreate: helper.ontap(function() {
-              Plugins.Clipboard.write({url: publicUrl(challenge)})
+              Clipboard.write({url: publicUrl(challenge)})
               Toast.show({ text: 'Copied to clipboard', position: 'center', duration: 'short'})
             }),
             value: publicUrl(challenge),

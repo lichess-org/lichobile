@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { StatusBar } from '@capacitor/status-bar'
 import * as sleepUtils from '../../utils/sleep'
 import * as helper from '../helper'
 import layout from '../layout'
@@ -30,7 +30,7 @@ const ChessClockScreen: Mithril.Component<Record<string, never>, State> = {
 
     window.removeEventListener('resize', this.ctrl.hideStatusBar)
 
-    Plugins.StatusBar.show()
+    StatusBar.show()
 
     if (window.deviceInfo.platform === 'android') {
       window.AndroidFullScreen.showSystemUI()

@@ -3,7 +3,6 @@ import { Capacitor, registerPlugin, Plugins } from '@capacitor/core'
 import { App } from '@capacitor/app'
 import { Device } from '@capacitor/device'
 import { SplashScreen } from '@capacitor/splash-screen'
-import './webPlugins'
 
 import appInit from './app'
 import { init as settingsInit } from './settings'

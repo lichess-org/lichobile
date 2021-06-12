@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Browser } from '@capacitor/browser'
 import { fetchJSON } from '../http'
 import globalConfig from '../config'
 import session from '../session'
@@ -17,13 +17,13 @@ export function openWebsitePage(path: string, withoutAuth = false) {
       .then((data: {url: string}) => {
         // we must use the Browser plugin to open authenticated pages because window.open
         // doesn't work inside a promise
-        Plugins.Browser.open({ url: `${data.url}?referrer=${encodeURIComponent(path)}` })
+        Browser.open({ url: `${data.url}?referrer=${encodeURIComponent(path)}` })
       })
       .catch(() => {
-        Plugins.Browser.open({ url: anonUrl })
+        Browser.open({ url: anonUrl })
       })
     } else {
-      Plugins.Browser.open({ url: anonUrl })
+      Browser.open({ url: anonUrl })
     }
   } else {
     openExternalBrowser(anonUrl)

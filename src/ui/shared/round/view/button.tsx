@@ -38,7 +38,7 @@ export default {
     return h('button', {
       oncreate: helper.ontap(() => {
         const orientation = ctrl.chessground.state.orientation
-        Plugins.LiShare.share({ url: `${gameApi.publicUrl(ctrl.data)}/${orientation}` })
+        Plugins.LiShare.share({ url: `${gameApi.publicUrl(ctrl.data)}/${orientation}#${ctrl.vm.ply}` })
       })
     }, [i18n('shareGameURL')])
   },

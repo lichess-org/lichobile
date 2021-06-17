@@ -3,7 +3,7 @@ import router from '../../router'
 import socket from '../../socket'
 import { openExternalBrowser } from '../../utils/browse'
 import { emptyFen } from '../../utils/fen'
-import { hasNetwork } from '../../utils'
+import { gameIcon, hasNetwork } from '../../utils'
 import i18n, { plural, formatNumber, distanceToNowStrict } from '../../i18n'
 import session from '../../session'
 import { PongMessage, CorrespondenceSeek } from '../../lichess/interfaces'
@@ -239,7 +239,7 @@ function renderSeek(ctrl: HomeCtrl, seek: CorrespondenceSeek) {
     h('td', seek.rating + (seek.provisional ? '?' : '')),
     h('td', seek.days ? plural('nbDays', seek.days) : '∞'),
     h('td', h('span.withIcon', {
-      'data-icon': seek.perf.icon
+      'data-icon': gameIcon(seek.perf.key)
     }, i18n(seek.mode === 1 ? 'rated' : 'casual'))),
   ])
 }

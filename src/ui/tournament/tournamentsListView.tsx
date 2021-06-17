@@ -1,7 +1,7 @@
 import h from 'mithril/hyperscript'
 import i18n from '../../i18n'
 import router from '../../router'
-import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize } from '../../utils'
+import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize, gameIcon } from '../../utils'
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
 import * as helper from '../helper'
 import TabNavigation from '../shared/TabNavigation'
@@ -77,14 +77,13 @@ function renderTournamentListItem(tournament: TournamentListItem, index: number)
     capitalize(tournament.variant.short) : ''
   const evenOrOdd = index % 2 === 0 ? ' even ' : ' odd '
   const tournamentType = determineTournamentType(tournament)
-  const icon = tournament.schedule && tournament.schedule.freq === 'shield' ? '5' : tournament.perf.icon
 
   return (
     <li key={tournament.id}
       className={'list_item tournament_item' + evenOrOdd + tournamentType}
       data-id={tournament.id}
     >
-      <i className="tournamentListIcon" data-icon={icon} />
+      <i className="tournamentListIcon" data-icon={getIconFromTournament(tournament)} />
       <div className="tournamentListName">
         <div className="fullName">{tournament.fullName}</div>
         <small className="infos">{time} {variant} {mode} • {duration}</small>
@@ -95,6 +94,14 @@ function renderTournamentListItem(tournament: TournamentListItem, index: number)
       </div>
     </li>
   )
+}
+
+function getIconFromTournament(tournament: TournamentListItem) {
+  if (tournament.schedule?.freq === 'shield') {
+    return '5'
+  }
+
+  return gameIcon(tournament.perf.key)
 }
 
 function formatTime(timeInMillis: number) {

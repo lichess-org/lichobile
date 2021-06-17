@@ -21,6 +21,10 @@
         "url": "https://github.com/veloce/lichobile/issues"
     },
     "homepage": "https://github.com/veloce/lichobile",
+    "engines": {
+      "node": "^12.16",
+      "npm": "^7.16"
+    },
     "browserslist": "and_chr >= 69, ios_saf >= 12",
     "devDependencies": {
         "@rollup/plugin-commonjs": "12.0.0",

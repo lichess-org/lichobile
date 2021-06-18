@@ -208,7 +208,9 @@ export default class HomeCtrl {
     if (this.selectedTab === 1) {
       corresSeeksXhr(false)
       .then(d => {
-        this.corresPool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1)
+        this.corresPool = fixSeeks(d)
+          .filter(s => s.variant === undefined || settings.game.supportedVariants.includes(s.variant))
+          .sort((a, b) => a.rating > b.rating ? -1 : 1)
         this.redrawIfNotScrolling()
       })
     }
@@ -255,7 +257,7 @@ function fixSeeks(seeks: CorrespondenceSeek[]): CorrespondenceSeek[] {
     ...seeks
     .map(s => {
       const username = seekUserId(s) === userId ? s.id : s.username
-      const key = username + s.mode + s.variant.key + s.days + s.color
+      const key = username + s.mode + s.perf.key + s.days + s.color
       return [s, key]
     })
     .filter(([_, key], i, a) => a.map(e => e[1]).indexOf(key) === i)

@@ -209,7 +209,7 @@ export default class HomeCtrl {
       corresSeeksXhr(false)
       .then(d => {
         this.corresPool = fixSeeks(d)
-          .filter(s => s.variant === undefined || settings.game.supportedVariants.includes(s.variant))
+          .filter(s => settings.game.supportedVariants.includes(s.variant.key))
           .sort((a, b) => a.rating > b.rating ? -1 : 1)
         this.redrawIfNotScrolling()
       })

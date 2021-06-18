@@ -208,7 +208,9 @@ export default class HomeCtrl {
     if (this.selectedTab === 1) {
       corresSeeksXhr(false)
       .then(d => {
-        this.corresPool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.perf.key) !== -1)
+        this.corresPool = fixSeeks(d)
+          .filter(s => s.variant === undefined || settings.game.supportedVariants.includes(s.variant))
+          .sort((a, b) => a.rating > b.rating ? -1 : 1)
         this.redrawIfNotScrolling()
       })
     }

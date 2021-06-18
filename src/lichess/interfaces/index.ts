@@ -65,7 +65,7 @@ export interface CorrespondenceSeek {
   readonly id: string
   readonly username: string
   readonly rating: number
-  readonly variant?: Variant
+  readonly variant?: VariantKey
   readonly mode: ModeId
   readonly days: number
   readonly color: Color | ''

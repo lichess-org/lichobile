@@ -1,6 +1,6 @@
 {
     "name": "lichobile",
-    "version": "7.11.2",
+    "version": "7.11.3",
     "description": "lichess.org mobile application",
     "repository": {
         "type": "git",
@@ -22,8 +22,8 @@
     },
     "homepage": "https://github.com/veloce/lichobile",
     "engines": {
-      "node": "^12.16",
-      "npm": "^7.16"
+        "node": "^12.16",
+        "npm": "^7.16"
     },
     "browserslist": "and_chr >= 69, ios_saf >= 12",
     "devDependencies": {

@@ -125,7 +125,7 @@ export function nbMoves(data: OnlineGameData, color: Color) {
   return Math.floor((data.game.turns + (color === 'white' ? 1 : 0)) / 2)
 }
 
-export function result(data: GameData) {
+export function result(data: GameData): string {
   if (gameStatus.finished(data)) switch (data.game.winner) {
     case 'white':
       return '1-0'
@@ -170,11 +170,15 @@ export function publicUrl(data: GameData): string {
   return 'https://lichess.org/' + data.game.id
 }
 
-export function publicAnalyseUrl(data: AnalyseData) {
+export function publicAnalyseUrl(data: AnalyseData): string {
   return 'https://lichess.org/' + data.game.id + '/' + data.orientation
 }
 
-export function isSupportedVariant(data: GameData) {
+export function publicGIFUrl(data: GameData | AnalyseData): string {
+  return `https://lichess1.org/game/export/gif/${data.game.id}.gif`
+}
+
+export function isSupportedVariant(data: GameData): boolean {
   return settings.game.supportedVariants.indexOf(data.game.variant.key) !== -1
 }
 

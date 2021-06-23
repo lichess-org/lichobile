@@ -19,7 +19,7 @@ Multi-variant chess library is brought by [a JavaScript version of scalachess](h
 ## Required dependencies
 
 * [node](http://nodejs.org) latest LTS version
-* [ionic capacitor dependencies](https://capacitor.ionicframework.com/docs/getting-started/dependencies)
+* [ionic capacitor dependencies](https://capacitorjs.com/docs/v2/getting-started/dependencies)
 
 **Android:**
 

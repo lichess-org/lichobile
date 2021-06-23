@@ -22,8 +22,8 @@
     },
     "homepage": "https://github.com/veloce/lichobile",
     "engines": {
-        "node": "^12.16",
-        "npm": "^7.16"
+        "node": "^14.17",
+        "npm": "^6.14"
     },
     "browserslist": "and_chr >= 69, ios_saf >= 12",
     "devDependencies": {

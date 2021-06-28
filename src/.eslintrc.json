@@ -8,6 +8,9 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended"
   ],
+  "parserOptions": {
+    "project": ["tsconfig.json", "tsconfig.test.json"]
+  },
   "rules": {
     "@typescript-eslint/triple-slash-reference": "off",
     "@typescript-eslint/no-non-null-assertion": "off",

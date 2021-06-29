@@ -85,8 +85,8 @@ export class StockfishPlugin {
   }
 }
 
-export function getMaxMemory(): number {
-  return window.deviceInfo.stockfishMaxMemory
+export async function getMaxMemory(): Promise<number> {
+  return Promise.resolve(window.deviceInfo.stockfishMaxMemory)
 }
 
 export function getNbCores(): number {

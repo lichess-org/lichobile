@@ -27,6 +27,7 @@
     "@typescript-eslint/restrict-plus-operands": ["warn"],
     "@typescript-eslint/restrict-template-expressions": ["warn"],
     "@typescript-eslint/require-await": ["warn"],
+    "@typescript-eslint/strict-boolean-expressions": ["warn"],
     "@typescript-eslint/unbound-method": "off",
     "no-unused-vars": "off"
   }

@@ -23,7 +23,7 @@
     "homepage": "https://github.com/veloce/lichobile",
     "engines": {
         "node": "^14.17",
-        "npm": "^7.19"
+        "npm": "^6.14"
     },
     "browserslist": "and_chr >= 69, ios_saf >= 12",
     "devDependencies": {

@@ -4,7 +4,7 @@
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
-  "backgroundColor": "ff000000",
+  "backgroundColor": "000000ff",
   "appendUserAgent": "Lichobile/7.11.3",
   "plugins": {
     "PushNotifications": {

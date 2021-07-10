@@ -178,7 +178,7 @@ export function end(ctrl: Chessground, e: TouchEvent) {
   // board editor mode: delete any piece dropped off the board
   else if (cur.started && draggable.deleteOnDropOff) {
     state.pieces.delete(cur.orig)
-    setTimeout(() => (state.events.change || util.noop)(), 0)
+    setTimeout(state.events.change || util.noop, 0)
   }
   // crazy invalid drop (no dest): delete the piece
   else if (cur.newPiece) {

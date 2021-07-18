@@ -42,7 +42,11 @@ www/images/pieces/cardinal | [sadsnake1](https://github.com/sadsnake1) | [CC BY-
 www/images/pieces/tatiana | [sadsnake1](https://github.com/sadsnake1) | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 www/images/pieces/staunty | [sadsnake1](https://github.com/sadsnake1) | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 www/images/pieces/dubrovny | [sadsnake1](https://github.com/sadsnake1) | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+www/images/pieces/gioco | [sadsnake1](https://github.com/sadsnake1) | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+www/images/pieces/icpieces | [sadsnake1](https://github.com/sadsnake1) | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+www/images/pieces/libra | [sadsnake1](https://github.com/sadsnake1) | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 www/images/pieces/california | [Jerry S.](https://sites.google.com/view/jerrychess/home) | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+www/images/pieces/horsey | cham, michael1241 | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 Exceptions (non-free)
 ---------------------
@@ -57,7 +61,6 @@ www/images/pieces/fantasy | [Maurizio Monge](http://poisson.phc.unipi.it/~monge/
 www/images/pieces/spatial | [Maurizio Monge](http://poisson.phc.unipi.it/~monge/chess_art.php) | "give credit in a suitable way"
 www/images/pieces/reilly | [Reilly Craig](https://instagram.com/fader_) |
 www/images/pieces/riohacha |
-www/images/pieces/horsey | cham, michael1241 | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 Lichess icon font in www/fonts |
 
 External services

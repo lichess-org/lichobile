@@ -84,7 +84,7 @@ export class Chat {
   // --
 
   private isLegitMsg = (msg: ChatMsg) => {
-    return !msg.d && (!msg.r || msg.u == this.player?.user?.username) && !isSpam(msg.t);
+    return !msg.d && (!msg.r || msg.u === this.player?.user?.username) && !isSpam(msg.t)
   }
 
   private nbLines(): number {

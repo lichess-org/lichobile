@@ -11,7 +11,7 @@ android:
       - extra-android-m2repository
 sudo: false
 before_install:
-  - nvm install 12.2.0
+  - nvm install 14.17
   - echo y | sdkmanager "ndk-bundle"
 install:
   - npm install

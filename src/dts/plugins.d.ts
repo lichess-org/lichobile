@@ -1,9 +1,11 @@
+import { KeepAwakePlugin } from '@capacitor-community/keep-awake'
 import { SoundEffectPlugin } from 'capacitor-sound-effect'
 
 declare module '@capacitor/core' {
   interface PluginRegistry {
     Badge: BadgePlugin
     CPUInfo: CPUInfoPlugin
+    KeepAwake: KeepAwakePlugin
     LiBuildConfig: LiBuildConfigPlugin
     LiShare: LiSharePlugin
     LiToast: LiToastPlugin

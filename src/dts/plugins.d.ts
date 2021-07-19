@@ -4,6 +4,7 @@ declare module '@capacitor/core' {
   interface PluginRegistry {
     Badge: BadgePlugin
     CPUInfo: CPUInfoPlugin
+    LiBuildConfig: LiBuildConfigPlugin
     LiShare: LiSharePlugin
     LiToast: LiToastPlugin
     SoundEffect: SoundEffectPlugin
@@ -16,6 +17,10 @@ interface BadgePlugin {
 
 interface CPUInfoPlugin {
   nbCores: () => Promise<{value: number}>
+}
+
+interface LiBuildConfigPlugin {
+  get: () => Promise<BuildConfig>
 }
 
 type ShareOptions = ({url: string} | {text: string}) & {title?: string}

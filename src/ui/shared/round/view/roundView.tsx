@@ -290,10 +290,10 @@ function userInfos(user: User, player: Player, playerName: string) {
 
 function renderPlayerName(player: Player) {
   if (player.name || player.username || player.user) {
-    const name = player.name || player.username || player.user?.username
+    const name = player.name ?? player.username ?? player.user?.username
     return h('span', [
-      player.user?.title ? [
-        h('span.userTitle' + (player.user?.title === 'BOT' ? '.bot' : ''), player.user.title),
+      player.user?.title != null ? [
+        h('span.userTitle' + (player.user.title === 'BOT' ? '.bot' : ''), player.user.title),
         ' '
       ] : [],
       name
@@ -305,13 +305,28 @@ function renderPlayerName(player: Player) {
   return 'Anonymous'
 }
 
+function getPlayerName(player: Player): string {
+  if (player.name != null || player.username != null || player.user) {
+    const name = player.name ?? player.username ?? player.user?.username
+    if (player.user?.title != null) {
+      return `${player.user.title} ${name}`
+    } else {
+      return name ?? 'Unknown'
+    }
+  }
+
+  if (player.ai != null) return playerApi.aiName({ ai: player.ai })
+
+  return 'Anonymous'
+}
+
 function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Material, position: Position, isCrazy: boolean) {
   const user = player.user
   const playerName = renderPlayerName(player)
   const togglePopup = user ? () => ctrl.openUserPopup(position, user.id) : utils.noop
   const vConf = user ?
     helper.ontap(togglePopup, () => userInfos(user, player, playerApi.playerName(player))) :
-    helper.ontap(utils.noop, () => Plugins.LiToast.show({ text: playerName, duration: 'short' }))
+    helper.ontap(utils.noop, () => Plugins.LiToast.show({ text: getPlayerName(player), duration: 'short' }))
 
   const checksNb = getChecksCount(ctrl, player.color)
 

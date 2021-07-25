@@ -382,7 +382,6 @@ export default class AnalyseCtrl implements PromotingInterface {
     this.ceval.stop()
     this.debouncedExplorerSetStep()
     this.updateHref()
-    promotion.cancel(this, this.cgConfig)
     if (pathChanged) {
       if (this.retro) this.retro.onJump()
       if (this.practice) this.practice.onJump()

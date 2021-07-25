@@ -50,7 +50,7 @@ export function view<T extends PromotingInterface>(ctrl: T, cancelCallback: (ctr
   if (!ctrl.promoting) return null
 
   const pieces: Role[] = ['queen', 'knight', 'rook', 'bishop']
-  if (ctrl.data && ctrl.data.game.variant.key === 'antichess') {
+  if (ctrl.data.game.variant.key === 'antichess') {
     pieces.push('king')
   }
 
@@ -58,7 +58,7 @@ export function view<T extends PromotingInterface>(ctrl: T, cancelCallback: (ctr
     oncreate: helper.ontap(() => cancelCallback(ctrl))
   }, [h('div#promotion_choice', {
     className: settings.general.theme.piece(),
-    style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
+    style: { top: `${(helper.viewportDim().vh - 100) / 2}px` }
   }, pieces.map((role: Role) => {
     return h('piece.' + role + '.' + ctrl.player(), {
       oncreate: helper.ontap(() => finish(ctrl, role))
@@ -69,6 +69,5 @@ export function view<T extends PromotingInterface>(ctrl: T, cancelCallback: (ctr
 export default {
   start,
   cancel,
-  finish,
   view
 }

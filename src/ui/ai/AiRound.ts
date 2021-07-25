@@ -15,7 +15,7 @@ import { StoredOfflineGame, setCurrentAIGame } from '../../utils/offlineGames'
 import { OfflineGameData, GameStatus } from '../../lichess/interfaces/game'
 import redraw from '../../utils/redraw'
 
-import promotion from '../shared/offlineRound/promotion'
+import promotion, { Promoting } from '../shared/offlineRound/promotion'
 import ground from '../shared/offlineRound/ground'
 import makeData from '../shared/offlineRound/data'
 import { setResult } from '../shared/offlineRound'
@@ -42,6 +42,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   public newGameMenu: NewAiGameCtrl
   public vm: AiVM
   public moveList: boolean
+  public promoting: Promoting | null = null
 
   public engine?: Engine
 

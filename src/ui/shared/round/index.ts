@@ -5,6 +5,7 @@ import { AnalyseData } from '../../../lichess/interfaces/analyse'
 import { GameSituation } from '../../../chess'
 import { Data as TrainingData } from '../../training/interfaces'
 import { ClockType } from '../clock/interfaces'
+import { Promoting } from '../offlineRound/promotion'
 
 export type Position = 'player' | 'opponent'
 export type Material = { pieces: { [k: string]: number }, score: number }
@@ -15,6 +16,7 @@ export interface BoardInterface {
 }
 
 export interface PromotingInterface {
+  promoting: Promoting | null
   chessground: Chessground
   data: GameData | AnalyseData | TrainingData
   player: () => Color

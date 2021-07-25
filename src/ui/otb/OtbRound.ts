@@ -11,7 +11,7 @@ import { oppositeColor } from '../../utils'
 import { StoredOfflineGame, setCurrentOTBGame } from '../../utils/offlineGames'
 import redraw from '../../utils/redraw'
 
-import promotion from '../shared/offlineRound/promotion'
+import promotion, { Promoting } from '../shared/offlineRound/promotion'
 import ground from '../shared/offlineRound/ground'
 import makeData from '../shared/offlineRound/data'
 import { setResult } from '../shared/offlineRound'
@@ -43,6 +43,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public vm: OtbVM
   public clock?: IChessClock
   public moveList: boolean
+  public promoting: Promoting | null = null
 
   private appStateListener: PluginListenerHandle
 

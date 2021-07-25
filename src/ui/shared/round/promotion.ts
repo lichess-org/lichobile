@@ -1,17 +1,16 @@
 import redraw from '../../../utils/redraw'
 import { OnlineRoundInterface } from '.'
-import { noop } from '~/chessground/util'
 import promotion from '../offlineRound/promotion'
 
 function start(ctrl: OnlineRoundInterface, orig: Key, dest: Key, isPremove: boolean) {
   const piece = ctrl.chessground.state.pieces.get(dest)
   if (piece && piece.role === 'pawn' && (
-    (dest[1] === '8' && ctrl.chessground.state.turnColor === 'white') ||
-    (dest[1] === '1' && ctrl.chessground.state.turnColor === 'black'))) {
+    (dest[1] === '8' && ctrl.player() === 'white') ||
+    (dest[1] === '1' && ctrl.player() === 'black'))) {
     if (ctrl.data.pref.autoQueen === 3 || (ctrl.data.pref.autoQueen === 2 && isPremove)) return false
     ctrl.promoting = {
       orig, dest,
-      callback: noop
+      callback: (orig, dest, role) => ctrl.sendMove(orig, dest, role)
     }
     redraw()
     return true
@@ -20,7 +19,6 @@ function start(ctrl: OnlineRoundInterface, orig: Key, dest: Key, isPremove: bool
 }
 
 function cancel(ctrl: OnlineRoundInterface) {
-  console.log('online cancel', ctrl.promoting)
   if (ctrl.promoting) ctrl.reloadGameData()
   ctrl.promoting = null
 }

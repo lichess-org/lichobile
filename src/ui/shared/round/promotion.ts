@@ -3,16 +3,18 @@ import redraw from '../../../utils/redraw'
 import settings from '../../../settings'
 import * as helper from '../../helper'
 import { OnlineRoundInterface } from '.'
-
-let promoting: KeyPair | null = null
+import { noop } from '~/chessground/util'
 
 function start(ctrl: OnlineRoundInterface, orig: Key, dest: Key, isPremove: boolean) {
   const piece = ctrl.chessground.state.pieces.get(dest)
   if (piece && piece.role === 'pawn' && (
-    (dest[1] === '8' && ctrl.data.player.color === 'white') ||
-    (dest[1] === '1' && ctrl.data.player.color === 'black'))) {
+    (dest[1] === '8' && ctrl.chessground.state.turnColor === 'white') ||
+    (dest[1] === '1' && ctrl.chessground.state.turnColor === 'black'))) {
     if (ctrl.data.pref.autoQueen === 3 || (ctrl.data.pref.autoQueen === 2 && isPremove)) return false
-    promoting = [orig, dest]
+    ctrl.promoting = {
+      orig, dest,
+      callback: noop
+    }
     redraw()
     return true
   }
@@ -20,16 +22,17 @@ function start(ctrl: OnlineRoundInterface, orig: Key, dest: Key, isPremove: bool
 }
 
 function finish(ctrl: OnlineRoundInterface, role: Role) {
+  const promoting = ctrl.promoting
   if (promoting) {
-    ctrl.chessground.promote(promoting[1], role)
-    ctrl.sendMove(promoting[0], promoting[1], role)
+    ctrl.chessground.promote(promoting.dest, role)
+    ctrl.sendMove(promoting.orig, promoting.dest, role)
   }
-  promoting = null
+  ctrl.promoting = null
 }
 
 function cancel(ctrl: OnlineRoundInterface) {
-  if (promoting) ctrl.reloadGameData()
-  promoting = null
+  if (ctrl.promoting) ctrl.reloadGameData()
+  ctrl.promoting = null
 }
 
 export default {
@@ -37,7 +40,7 @@ export default {
   start: start,
 
   view: function(ctrl: OnlineRoundInterface) {
-    if (!promoting) return null
+    if (!ctrl.promoting) return null
 
     const pieces: Role[] = ['queen', 'knight', 'rook', 'bishop']
 

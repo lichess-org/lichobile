@@ -34,7 +34,7 @@ export interface RoundInterface extends BoardInterface {
   jumpLast(): boolean
 }
 
-export interface OnlineRoundInterface extends RoundInterface {
+export interface OnlineRoundInterface extends RoundInterface, PromotingInterface {
   data: OnlineGameData
 
   onReload(cfg: OnlineGameData): void

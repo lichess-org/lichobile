@@ -1,5 +1,4 @@
 import redraw from '../../../utils/redraw'
-import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
 import * as helper from '../../helper'
 import settings from '../../../settings'

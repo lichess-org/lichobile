@@ -11,7 +11,6 @@ import * as helper from '../helper'
 import actions from './actions'
 import newGameMenu from './newAiGame'
 import AiRound from './AiRound'
-import { noop } from '~/chessground/util'
 
 export function renderContent(ctrl: AiRound) {
 
@@ -59,7 +58,7 @@ export function overlay(ctrl: AiRound) {
   return [
     actions.view(ctrl.actions),
     newGameMenu.view(ctrl.newGameMenu),
-    renderPromotion(ctrl, noop) // Cannot
+    renderPromotion(ctrl)
   ]
 }
 

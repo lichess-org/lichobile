@@ -4,6 +4,7 @@ import * as helper from '../../helper'
 import settings from '../../../settings'
 import h from 'mithril/hyperscript'
 import { PromotingInterface } from '../round'
+import { noop } from '~/utils'
 
 type PromoteCallback = (orig: Key, dest: Key, prom: Role) => void
 export interface Promoting {
@@ -45,7 +46,7 @@ function cancel(ctrl: PromotingInterface, cgConfig?: cg.SetConfig) {
   }
 }
 
-export function view<T extends PromotingInterface>(ctrl: T, cancelCallback: (ctrl: T) => void = cancel) {
+export function view<T extends PromotingInterface>(ctrl: T, cancelCallback: (ctrl: T) => void = noop) {
   if (!ctrl.promoting) return null
 
   const pieces: Role[] = ['queen', 'knight', 'rook', 'bishop']

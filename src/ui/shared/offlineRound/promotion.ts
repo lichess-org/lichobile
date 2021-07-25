@@ -45,7 +45,7 @@ function cancel(ctrl: PromotingInterface, cgConfig?: cg.SetConfig) {
   }
 }
 
-export function view(ctrl: PromotingInterface, cancel: (i: PromotingInterface) => void) {
+export function view<T extends PromotingInterface>(ctrl: T, cancelCallback: (ctrl: T) => void = cancel) {
   if (!ctrl.promoting) return null
 
   const pieces: Role[] = ['queen', 'knight', 'rook', 'bishop']
@@ -54,7 +54,7 @@ export function view(ctrl: PromotingInterface, cancel: (i: PromotingInterface) =
   }
 
   return h('div.overlay.open', {
-    oncreate: helper.ontap(() => cancel(ctrl))
+    oncreate: helper.ontap(() => cancelCallback(ctrl))
   }, [h('div#promotion_choice', {
     className: settings.general.theme.piece(),
     style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }

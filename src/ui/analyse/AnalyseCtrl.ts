@@ -42,8 +42,9 @@ import { Source } from './interfaces'
 import * as tabs from './tabs'
 import StudyCtrl from './study/StudyCtrl'
 import ForecastCtrl from './forecast/ForecastCtrl'
+import { PromotingInterface } from '../shared/round'
 
-export default class AnalyseCtrl {
+export default class AnalyseCtrl implements PromotingInterface {
 
   settings: ISettingsCtrl
   menu: IMainMenuCtrl

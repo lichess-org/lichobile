@@ -213,7 +213,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   }
 
   private userMove = (orig: Key, dest: Key) => {
-    if (!promotion.start(this.chessground, orig, dest, this.onPromotion)) {
+    if (!promotion.start(this, orig, dest, this.onPromotion)) {
       this.replay.addMove(orig, dest)
     }
   }

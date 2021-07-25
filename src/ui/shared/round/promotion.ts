@@ -20,6 +20,7 @@ function start(ctrl: OnlineRoundInterface, orig: Key, dest: Key, isPremove: bool
 }
 
 function cancel(ctrl: OnlineRoundInterface) {
+  console.log('online cancel', ctrl.promoting)
   if (ctrl.promoting) ctrl.reloadGameData()
   ctrl.promoting = null
 }
@@ -28,5 +29,5 @@ export default {
 
   start: start,
 
-  view: (ctrl: OnlineRoundInterface) => promotion.view(ctrl, () => cancel(ctrl))
+  view: (ctrl: OnlineRoundInterface) => promotion.view(ctrl, cancel)
 }

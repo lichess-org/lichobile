@@ -30,8 +30,10 @@ function start(ctrl: PromotingInterface, orig: Key, dest: Key, callback: Promote
 
 function finish(ctrl: PromotingInterface, role: Role) {
   const promoting = ctrl.promoting
-  if (promoting) ctrl.chessground.promote(promoting.dest, role)
-  promoting?.callback(promoting.orig, promoting.dest, role)
+  if (promoting) {
+    ctrl.chessground.promote(promoting.dest, role)
+    promoting.callback(promoting.orig, promoting.dest, role)
+  }
   ctrl.promoting = null
 }
 
@@ -43,7 +45,7 @@ function cancel(ctrl: PromotingInterface, cgConfig?: cg.SetConfig) {
   }
 }
 
-export function view(ctrl: PromotingInterface) {
+export function view(ctrl: PromotingInterface, cancel: (i: PromotingInterface) => void) {
   if (!ctrl.promoting) return null
 
   const pieces: Role[] = ['queen', 'knight', 'rook', 'bishop']
@@ -51,7 +53,9 @@ export function view(ctrl: PromotingInterface) {
     pieces.push('king')
   }
 
-  return h('div.overlay.open', [h('div#promotion_choice', {
+  return h('div.overlay.open', {
+    oncreate: helper.ontap(() => cancel(ctrl))
+  }, [h('div#promotion_choice', {
     className: settings.general.theme.piece(),
     style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
   }, pieces.map((role: Role) => {
@@ -63,5 +67,7 @@ export function view(ctrl: PromotingInterface) {
 
 export default {
   start,
-  cancel
+  cancel,
+  finish,
+  view
 }

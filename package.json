@@ -60,7 +60,7 @@
         "@rollup/plugin-alias": "3.1.1",
         "@types/d3": "4.5.0",
         "@types/lodash-es": "4.17.3",
-        "capacitor-sound-effect": "git+https://git@github.com/veloce/capacitor-sound-effect.git",
+        "capacitor-sound-effect": "1.0.1",
         "capacitor-stockfish": "git+https://git@github.com/veloce/capacitor-stockfish.git",
         "capacitor-stockfish-variants": "git+https://git@github.com/veloce/capacitor-stockfish.git#variants",
         "chessops": "0.8.1",

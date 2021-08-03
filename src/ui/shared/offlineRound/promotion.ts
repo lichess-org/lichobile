@@ -45,6 +45,16 @@ function cancel(chessground: Chessground, cgConfig?: cg.SetConfig) {
   }
 }
 
+function otbPromoPieceTransform(ctrl: PromotingInterface): string {
+  const state = ctrl.chessground.state
+  if ((state.orientation === 'white' && ctrl.player() === 'black') ||
+      (state.orientation === 'black' && ctrl.player() === 'white')) {
+    return 'rotate(180deg)'
+  }
+
+  return ''
+}
+
 export function view(ctrl: PromotingInterface) {
   if (!promoting) return null
 
@@ -58,6 +68,7 @@ export function view(ctrl: PromotingInterface) {
     style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
   }, pieces.map((role: Role) => {
     return h('piece.' + role + '.' + ctrl.player(), {
+      style: {transform: otbPromoPieceTransform(ctrl)},
       oncreate: helper.ontap(() => finish(ctrl.chessground, role))
     })
   }))])

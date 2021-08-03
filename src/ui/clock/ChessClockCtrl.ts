@@ -56,10 +56,6 @@ export default function ChessClockCtrl(): IChessClockCtrl {
 
   hideStatusBar()
 
-  if (window.deviceInfo.platform === 'android') {
-    window.AndroidFullScreen.immersiveMode()
-  }
-
   const appStateListener = App.addListener('appStateChange', (state: AppState) => {
     if (state.isActive) hideStatusBar()
   })

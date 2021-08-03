@@ -8,6 +8,12 @@ project(':capacitor-community-keep-awake').projectDir = new File('../node_module
 include ':capacitor-app'
 project(':capacitor-app').projectDir = new File('../node_modules/@capacitor/app/android')
 
+include ':capacitor-browser'
+project(':capacitor-browser').projectDir = new File('../node_modules/@capacitor/browser/android')
+
+include ':capacitor-clipboard'
+project(':capacitor-clipboard').projectDir = new File('../node_modules/@capacitor/clipboard/android')
+
 include ':capacitor-device'
 project(':capacitor-device').projectDir = new File('../node_modules/@capacitor/device/android')
 
@@ -16,6 +22,9 @@ project(':capacitor-dialog').projectDir = new File('../node_modules/@capacitor/d
 
 include ':capacitor-filesystem'
 project(':capacitor-filesystem').projectDir = new File('../node_modules/@capacitor/filesystem/android')
+
+include ':capacitor-haptics'
+project(':capacitor-haptics').projectDir = new File('../node_modules/@capacitor/haptics/android')
 
 include ':capacitor-keyboard'
 project(':capacitor-keyboard').projectDir = new File('../node_modules/@capacitor/keyboard/android')
@@ -42,7 +51,7 @@ include ':capacitor-toast'
 project(':capacitor-toast').projectDir = new File('../node_modules/@capacitor/toast/android')
 
 include ':capacitor-sound-effect'
-project(':capacitor-sound-effect').projectDir = new File('../../temp-sound-effect/android')
+project(':capacitor-sound-effect').projectDir = new File('../node_modules/capacitor-sound-effect/android')
 
 include ':capacitor-stockfish'
 project(':capacitor-stockfish').projectDir = new File('../../capacitor-stockfish/android')

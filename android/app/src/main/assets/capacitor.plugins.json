@@ -1,11 +1,19 @@
 [
 	{
 		"pkg": "@capacitor-community/keep-awake",
-		"classpath": "com.getcapacitor.community.keepawake.KeepAwake"
+		"classpath": "com.getcapacitor.community.keepawake.KeepAwakePlugin"
 	},
 	{
 		"pkg": "@capacitor/app",
 		"classpath": "com.capacitorjs.plugins.app.AppPlugin"
+	},
+	{
+		"pkg": "@capacitor/browser",
+		"classpath": "com.capacitorjs.plugins.browser.BrowserPlugin"
+	},
+	{
+		"pkg": "@capacitor/clipboard",
+		"classpath": "com.capacitorjs.plugins.clipboard.ClipboardPlugin"
 	},
 	{
 		"pkg": "@capacitor/device",
@@ -18,6 +26,10 @@
 	{
 		"pkg": "@capacitor/filesystem",
 		"classpath": "com.capacitorjs.plugins.filesystem.FilesystemPlugin"
+	},
+	{
+		"pkg": "@capacitor/haptics",
+		"classpath": "com.capacitorjs.plugins.haptics.HapticsPlugin"
 	},
 	{
 		"pkg": "@capacitor/keyboard",

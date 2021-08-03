@@ -14,7 +14,6 @@ import android.webkit.WebView;
 
 import com.capacitorjs.plugins.dialog.Dialog;
 import com.getcapacitor.BridgeActivity;
-import com.getcapacitor.community.keepawake.KeepAwake;
 
 import org.lichess.mobileapp.stockfish.Stockfish;
 import org.lichess.mobileapp.stockfish.StockfishVariants;
@@ -33,7 +32,6 @@ public class MainActivity extends BridgeActivity {
     super.onCreate(savedInstanceState);
 
     registerPlugin(LiBuildConfig.class);
-    registerPlugin(KeepAwake.class);
     registerPlugin(Stockfish.class);
     registerPlugin(StockfishVariants.class);
 

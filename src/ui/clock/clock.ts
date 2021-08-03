@@ -16,6 +16,12 @@ const ChessClockScreen: Mithril.Component<Record<string, never>, State> = {
 
   oninit() {
     sleepUtils.keepAwake()
+
+    // TODO find capacitor alternative
+    // if (window.deviceInfo.platform === 'android') {
+    //   window.AndroidFullScreen.immersiveMode()
+    // }
+
     this.ctrl = ChessClockCtrl()
   },
 
@@ -32,9 +38,9 @@ const ChessClockScreen: Mithril.Component<Record<string, never>, State> = {
 
     StatusBar.show()
 
-    if (window.deviceInfo.platform === 'android') {
-      window.AndroidFullScreen.showSystemUI()
-    }
+    // if (window.deviceInfo.platform === 'android') {
+    //   window.AndroidFullScreen.showSystemUI()
+    // }
   },
 
   view() {

@@ -1,16 +1,22 @@
 PODS:
-  - Capacitor (2.4.6):
+  - Capacitor (3.1.2):
     - CapacitorCordova
   - CapacitorApp (1.0.0):
     - Capacitor
-  - CapacitorCommunityKeepAwake (1.0.0):
+  - CapacitorBrowser (1.0.1):
     - Capacitor
-  - CapacitorCordova (2.4.6)
+  - CapacitorClipboard (1.0.1):
+    - Capacitor
+  - CapacitorCommunityKeepAwake (2.1.0):
+    - Capacitor
+  - CapacitorCordova (3.1.2)
   - CapacitorDevice (1.0.0):
     - Capacitor
   - CapacitorDialog (1.0.0):
     - Capacitor
   - CapacitorFilesystem (1.0.0):
+    - Capacitor
+  - CapacitorHaptics (1.0.1):
     - Capacitor
   - CapacitorKeyboard (1.0.0):
     - Capacitor
@@ -94,11 +100,14 @@ PODS:
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
+  - "CapacitorBrowser (from `../../node_modules/@capacitor/browser`)"
+  - "CapacitorClipboard (from `../../node_modules/@capacitor/clipboard`)"
   - "CapacitorCommunityKeepAwake (from `../../node_modules/@capacitor-community/keep-awake`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDevice (from `../../node_modules/@capacitor/device`)"
   - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
+  - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorNetwork (from `../../node_modules/@capacitor/network`)"
   - "CapacitorPushNotifications (from `../../node_modules/@capacitor/push-notifications`)"
@@ -130,6 +139,10 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorApp:
     :path: "../../node_modules/@capacitor/app"
+  CapacitorBrowser:
+    :path: "../../node_modules/@capacitor/browser"
+  CapacitorClipboard:
+    :path: "../../node_modules/@capacitor/clipboard"
   CapacitorCommunityKeepAwake:
     :path: "../../node_modules/@capacitor-community/keep-awake"
   CapacitorCordova:
@@ -140,6 +153,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/dialog"
   CapacitorFilesystem:
     :path: "../../node_modules/@capacitor/filesystem"
+  CapacitorHaptics:
+    :path: "../../node_modules/@capacitor/haptics"
   CapacitorKeyboard:
     :path: "../../node_modules/@capacitor/keyboard"
   CapacitorNetwork:
@@ -162,13 +177,16 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/toast"
 
 SPEC CHECKSUMS:
-  Capacitor: 0f131577d41c082931f00cc080e2289d503465c8
+  Capacitor: 9d06cf7a97c4752037907979baade2f79f2800fa
   CapacitorApp: 65f98e8604f5c5523537aa3bc38ffe49461c6695
-  CapacitorCommunityKeepAwake: c4476e4a01406d22ec14df13520e391685441813
-  CapacitorCordova: 3375b39b5ebca770ac7869f85e4dea32a642c9e0
+  CapacitorBrowser: ccf09e666bec5edc52a01dcc253d9b62ffcaa653
+  CapacitorClipboard: 323bfcd73132c2b72ec9894b96120cd6c9ae1b20
+  CapacitorCommunityKeepAwake: da57047d09e2e02b86e1f81b5d0f83445ace5c77
+  CapacitorCordova: b8e7144f5dad047965035dbed9c9855b1f0f64e8
   CapacitorDevice: 7745a3f55780f526c3086cfa97e6baa1885eba0e
   CapacitorDialog: c09e5762c8e055b0ba2a99dea4a0c10deb90072e
   CapacitorFilesystem: 5d511231dda31accdcaa01098fa01e2df550c227
+  CapacitorHaptics: 9772848e4c259162b86625d384194e8b341fdae5
   CapacitorKeyboard: d43d9fbabf6c985c9a7c0f7e0b4ba59f6b28dd3f
   CapacitorNetwork: 1293a596659c4f266ddc26df4381eb16d57ebca2
   CapacitorPushNotifications: 60b57551234cc621cd49df8c8ed3e57e5277565a
@@ -191,6 +209,6 @@ SPEC CHECKSUMS:
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
 
-PODFILE CHECKSUM: 23edc8b6355e834e7c53db5f57375f6abfa31fe7
+PODFILE CHECKSUM: f38c9ebc8e88ebd74e974f1247f944b324794ed5
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.2

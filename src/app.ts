@@ -23,7 +23,7 @@ import { isForeground, setForeground, setBackground } from './utils/appMode'
 let firstConnection = true
 
 export default function appInit(
-  appInfo: AppInfo,
+  appInfo: Pick<AppInfo, 'version'>,
   deviceInfo: DeviceInfo,
   deviceId: DeviceId,
   cpuCores: number,

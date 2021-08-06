@@ -1,14 +1,17 @@
 import { Storage } from '@capacitor/storage'
 
-const result = await Storage.migrate()
-console.log(result)
-
 export default {
   get,
   set,
   remove(key: string): Promise<void> {
     return Storage.remove({ key })
-  }
+  },
+  // migration from capacitor 2.0 to 3.0
+  // TODO remove after
+  async migrate(): Promise<void> {
+    const result = await Storage.migrate()
+    console.log(result)
+  },
 }
 
 function get<T>(key: string): Promise<T | null> {

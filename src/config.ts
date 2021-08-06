@@ -4,6 +4,7 @@ export interface Config {
   socketEndPoint: string
   apiVersion: number
   fetchTimeoutMs: Millis
+  packageVersion: string
 }
 
 const defaults = {

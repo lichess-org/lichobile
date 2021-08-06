@@ -1,43 +1,43 @@
 PODS:
   - Capacitor (3.1.2):
     - CapacitorCordova
-  - CapacitorApp (1.0.0):
+  - CapacitorApp (1.0.2):
     - Capacitor
-  - CapacitorBrowser (1.0.1):
+  - CapacitorBrowser (1.0.2):
     - Capacitor
-  - CapacitorClipboard (1.0.1):
+  - CapacitorClipboard (1.0.2):
     - Capacitor
   - CapacitorCommunityKeepAwake (2.1.0):
     - Capacitor
   - CapacitorCordova (3.1.2)
-  - CapacitorDevice (1.0.0):
+  - CapacitorDevice (1.0.2):
     - Capacitor
-  - CapacitorDialog (1.0.0):
+  - CapacitorDialog (1.0.2):
     - Capacitor
-  - CapacitorFilesystem (1.0.0):
+  - CapacitorFilesystem (1.0.2):
     - Capacitor
-  - CapacitorHaptics (1.0.1):
+  - CapacitorHaptics (1.0.2):
     - Capacitor
-  - CapacitorKeyboard (1.0.0):
+  - CapacitorKeyboard (1.0.2):
     - Capacitor
-  - CapacitorNetwork (1.0.0):
+  - CapacitorNetwork (1.0.2):
     - Capacitor
     - ReachabilitySwift (~> 5.0)
-  - CapacitorPushNotifications (1.0.0):
+  - CapacitorPushNotifications (1.0.3):
     - Capacitor
-  - CapacitorShare (1.0.0):
+  - CapacitorShare (1.0.3):
     - Capacitor
   - CapacitorSoundEffect (2.0.0):
     - Capacitor
-  - CapacitorSplashScreen (1.0.0):
+  - CapacitorSplashScreen (1.1.0):
     - Capacitor
-  - CapacitorStatusBar (1.0.0):
+  - CapacitorStatusBar (1.0.2):
     - Capacitor
-  - CapacitorStockfishVariants (1.0.0):
+  - CapacitorStockfishVariants (2.0.0):
     - Capacitor
-  - CapacitorStorage (1.0.0):
+  - CapacitorStorage (1.0.3):
     - Capacitor
-  - CapacitorToast (1.0.0):
+  - CapacitorToast (1.0.2):
     - Capacitor
   - Firebase/CoreOnly (7.7.0):
     - FirebaseCore (= 7.7.0)
@@ -178,25 +178,25 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Capacitor: 9d06cf7a97c4752037907979baade2f79f2800fa
-  CapacitorApp: 65f98e8604f5c5523537aa3bc38ffe49461c6695
-  CapacitorBrowser: ccf09e666bec5edc52a01dcc253d9b62ffcaa653
-  CapacitorClipboard: 323bfcd73132c2b72ec9894b96120cd6c9ae1b20
+  CapacitorApp: 4a7a55cb30ac30af4e4801d4d6e51f4d03aa75e6
+  CapacitorBrowser: 78dca7e45adb2f3c8239c44095aeed7582bf0923
+  CapacitorClipboard: d8444615cb87293d7a2a2c310df5cf48b05c3620
   CapacitorCommunityKeepAwake: da57047d09e2e02b86e1f81b5d0f83445ace5c77
   CapacitorCordova: b8e7144f5dad047965035dbed9c9855b1f0f64e8
-  CapacitorDevice: 7745a3f55780f526c3086cfa97e6baa1885eba0e
-  CapacitorDialog: c09e5762c8e055b0ba2a99dea4a0c10deb90072e
-  CapacitorFilesystem: 5d511231dda31accdcaa01098fa01e2df550c227
-  CapacitorHaptics: 9772848e4c259162b86625d384194e8b341fdae5
-  CapacitorKeyboard: d43d9fbabf6c985c9a7c0f7e0b4ba59f6b28dd3f
-  CapacitorNetwork: 1293a596659c4f266ddc26df4381eb16d57ebca2
-  CapacitorPushNotifications: 60b57551234cc621cd49df8c8ed3e57e5277565a
-  CapacitorShare: 908a85fc16eabe87b7662d593a9c53153f3766a0
+  CapacitorDevice: 4d1a1f44e9f7ee126aa809b89c86c107a13bf898
+  CapacitorDialog: 410d570ad02845665836d60606802244fbbbd8ba
+  CapacitorFilesystem: a8f258902f03ee602148ad2428e1bad147b8d164
+  CapacitorHaptics: 2ba8b0f0fd40d5590baa756cd2c91a3d082106f8
+  CapacitorKeyboard: 25f67ec7f6c3ae9a956af8bb6ea0bade18257005
+  CapacitorNetwork: a85f117d3ea0d37864c91adbe0afecb664e7bae7
+  CapacitorPushNotifications: 4dbd874ad07c3146bc0195a622f679bd35fd0350
+  CapacitorShare: c600e0be9c94e63b15e4009e53f1036dd065a8f2
   CapacitorSoundEffect: ada8d1425724fefd348547348372e7d092fce4fb
-  CapacitorSplashScreen: 399720f32213f8429aa06e9de6458a2718967b44
-  CapacitorStatusBar: 532fda5c353659ff240f24cb925e58329fab5253
-  CapacitorStockfishVariants: f3d3172776e26b73ecfeb6b72d234be92aaf30e0
-  CapacitorStorage: 59ed3a27f7d8bcb343d4cb331d9ef39b11176246
-  CapacitorToast: 88d03bb7ec8c9dca4f9509cc7122c8110fa16cbf
+  CapacitorSplashScreen: 25fbdbaa5982dfdbfcb2dcbf3757c638a56ebaa9
+  CapacitorStatusBar: 5f78c4275b059bf5c0bcf059d9fafc4f1b620d5b
+  CapacitorStockfishVariants: a70adc15588467af79a2f726d39680d2806f4022
+  CapacitorStorage: 6854d59dd96ed64e75b46c4b7093d29fc9e83814
+  CapacitorToast: 75dc6e65832b6d318558f4e8bbb3cc369cff09db
   Firebase: cd2ab85eec8170dc260186159f21072ecb679ad5
   FirebaseCore: ac35d680a0bf32319a59966a1478e0741536b97b
   FirebaseCoreDiagnostics: 179bf3831213451c8addd036aca7fcf5492ec154

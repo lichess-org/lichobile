@@ -15,9 +15,6 @@ import android.webkit.WebView;
 import com.capacitorjs.plugins.dialog.Dialog;
 import com.getcapacitor.BridgeActivity;
 
-import org.lichess.mobileapp.stockfish.Stockfish;
-import org.lichess.mobileapp.stockfish.StockfishVariants;
-
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
@@ -32,8 +29,6 @@ public class MainActivity extends BridgeActivity {
     super.onCreate(savedInstanceState);
 
     registerPlugin(LiBuildConfig.class);
-    registerPlugin(Stockfish.class);
-    registerPlugin(StockfishVariants.class);
 
     this.versionUpdateActions();
 

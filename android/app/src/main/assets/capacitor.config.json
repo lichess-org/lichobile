@@ -2,11 +2,15 @@
 	"appId": "org.lichess.mobileapp",
 	"appName": "lichess",
 	"bundledWebRuntime": false,
-	"npmClient": "npm",
 	"webDir": "www",
 	"backgroundColor": "ff000000",
 	"appendUserAgent": "Lichobile/7.11.1",
 	"plugins": {
+		"SplashScreen": {
+			"androidSplashResourceName": "launch_splash",
+			"launchAutoHide": false,
+			"useDialog": false
+		},
 		"PushNotifications": {
 			"presentationOptions": [
 				"sound",

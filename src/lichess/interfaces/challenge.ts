@@ -37,6 +37,7 @@ export interface Challenge {
   readonly variant: Variant
   readonly initialFen: string | null
   readonly rated: boolean
+  readonly speed: Speed
   readonly timeControl: TimeControl
   readonly color: Color | 'random'
   readonly perf: {

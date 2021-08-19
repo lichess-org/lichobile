@@ -1,7 +1,6 @@
 import h from 'mithril/hyperscript'
 import router from '../../router'
 import { dropShadowHeader, backButton as renderBackbutton } from '../shared/common'
-import { getLanguageNativeName } from '../../utils/langs'
 import { hasNetwork, lichessAssetSrc, gameIcon } from '../../utils'
 import { openWebsitePage } from '../../utils/browse'
 import { linkify } from '../../utils/html'
@@ -86,13 +85,6 @@ function renderProfile(user: ProfileUser) {
         <div>
           { user.profile.fideRating ?
             <p>FIDE rating: <strong>{user.profile.fideRating}</strong></p> : null
-          }
-          {
-            user.language ?
-              <p className="language withIcon">
-                <span className="fa fa-comment-o" />
-                {getLanguageNativeName(user.language)}
-              </p> : null
           }
           <p className="location">
             {location}

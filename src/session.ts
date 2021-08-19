@@ -24,7 +24,7 @@ interface Prefs {
 export type EmailConfirm = { email_confirm: boolean }
 export type SignupData = Session | EmailConfirm
 
-interface Profile {
+export interface Profile {
   readonly country?: string
   readonly location?: string
   readonly bio?: string

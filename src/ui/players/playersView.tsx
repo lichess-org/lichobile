@@ -78,7 +78,7 @@ export function searchModal(ctrl: PlayersCtrl) {
         const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
         return (
           <li className={`list_item nav ${evenOrOdd}`} key={u.id} oncreate={helper.ontapY(() => ctrl.goToProfile(u.id))}>
-          {u.id}
+          {userStatus({username: u.name, ...u})}
           </li>
         )
       })}

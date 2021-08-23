@@ -1,10 +1,13 @@
 import { fetchJSON } from '../../http'
-import { User, Rankings } from '../../lichess/interfaces/user'
+import { User, Rankings, SearchUser } from '../../lichess/interfaces/user'
 
-export function autocomplete(term: string): Promise<ReadonlyArray<string>> {
-  return fetchJSON('/player/autocomplete?friend=1', {
+type SearchResult = ReadonlyArray<SearchUser>
+
+export async function autocomplete(term: string): Promise<SearchResult> {
+  const data = await fetchJSON<{result: SearchResult}>('/player/autocomplete?friend=1&object=1', {
     query: { term },
   })
+  return data.result
 }
 
 export function onlinePlayers(): Promise<ReadonlyArray<User>> {

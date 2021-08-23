@@ -67,6 +67,14 @@ export interface User extends BaseUser {
   readonly profile?: any
 }
 
+export interface SearchUser {
+  readonly id: string
+  readonly name: string
+  readonly online?: boolean
+  readonly patron?: boolean
+  readonly title?: string
+}
+
 export interface PlayTime {
   readonly total: number
   readonly tv: number

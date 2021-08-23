@@ -77,8 +77,8 @@ export function searchModal(ctrl: PlayersCtrl) {
       {ctrl.searchResults.map((u, i) => {
         const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
         return (
-          <li className={`list_item nav ${evenOrOdd}`} key={u} oncreate={helper.ontapY(() => ctrl.goToProfile(u))}>
-          {u}
+          <li className={`list_item nav ${evenOrOdd}`} key={u.id} oncreate={helper.ontapY(() => ctrl.goToProfile(u.id))}>
+          {u.id}
           </li>
         )
       })}

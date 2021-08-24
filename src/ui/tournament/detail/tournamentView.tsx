@@ -282,18 +282,18 @@ function renderPlayerEntry(userName: string, player: StandingPlayer, i: number, 
   return (
     <li key={player.name} data-player={player.name} className={`list_item tournament-list-item ${evenOrOdd}` + (isMe ? ' tournament-me' : '')} >
       <div className="tournamentIdentity">
-        <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '.')} &thinsp; </span>
+        <span className="flagRank" data-icon={player.withdraw === true ? 'b' : ''}> {player.withdraw === true ? '' : (`${player.rank}.`)} &thinsp; </span>
         <span className="playerName">
-          {player.title ? <span className="userTitle">{player.title}&nbsp;</span> : null}
-          {player.name + ' (' + player.rating + ')'}
+          {player.title != null ? <span className="userTitle">{player.title}&nbsp;</span> : null}
+          {`${player.name} (${player.rating})`}
         </span>
-        <span className={'playerTeam ttc-' + ttc}> {teamName ? teamName : '' } </span>
+        <span className={`playerTeam ttc-${ttc}`}> {teamName ?? ''} </span>
       </div>
       <div className={'tournamentPoints ' + (player.sheet.fire ? 'on-fire' : 'off-fire')} data-icon="Q">
         {player.score}
       </div>
     </li>
-  )
+  ) as Mithril.Child
 }
 
 function tournamentFeaturedGame(ctrl: TournamentCtrl) {

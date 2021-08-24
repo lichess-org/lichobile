@@ -274,6 +274,14 @@ function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
   })
 }
 
+function renderPlayerTitle(player: {title?: string}): Mithril.Child {
+  if (player.title == null) {
+    return null
+  }
+
+  return h('span.userTitle', [player.title, h.trust('&nbsp;')])
+}
+
 function renderPlayerEntry(userName: string, player: StandingPlayer, i: number, teamColor?: number, teamName?: string) {
   const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
   const isMe = player.name === userName
@@ -284,7 +292,7 @@ function renderPlayerEntry(userName: string, player: StandingPlayer, i: number, 
       <div className="tournamentIdentity">
         <span className="flagRank" data-icon={player.withdraw === true ? 'b' : ''}> {player.withdraw === true ? '' : (`${player.rank}.`)} &thinsp; </span>
         <span className="playerName">
-          {player.title != null ? <span className="userTitle">{player.title}&nbsp;</span> : null}
+          {renderPlayerTitle(player)}
           {`${player.name} (${player.rating})`}
         </span>
         <span className={`playerTeam ttc-${ttc}`}> {teamName ?? ''} </span>
@@ -336,6 +344,7 @@ function renderPlace(data: PodiumPlace) {
     <div className={'place' + rank}>
       <div className="trophy"> </div>
       <div className="username" oncreate={helper.ontap(() => router.set('/@/' + data.name))}>
+        {renderPlayerTitle(data)}
         {data.name}
       </div>
       <div className="rating"> {data.rating} </div>

@@ -67,6 +67,7 @@ export interface PodiumPlace {
   readonly rating: number
   readonly ratingDiff: number
   readonly score: number
+  readonly title?: string
 }
 
 interface Quote {

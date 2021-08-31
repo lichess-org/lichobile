@@ -72,7 +72,7 @@
         "@types/d3": "4.5.0",
         "@types/lodash-es": "4.17.3",
         "capacitor-sound-effect": "file:../temp-sound-effect",
-        "capacitor-stockfish": "file:../capacitor-stockfish",
+        "capacitor-stockfish": "git+https://github.com/veloce/capacitor-stockfish.git#capacitor3",
         "capacitor-stockfish-variants": "file:../capacitor-stockfish-variants",
         "chessops": "0.8.1",
         "d3-axis": "1.0.8",

@@ -59,7 +59,7 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
-    implementation('com.google.firebase:firebase-messaging:22.0.0') {
+    implementation('com.google.firebase:firebase-messaging:21.0.1') {
       exclude group: 'com.google.firebase', module: 'firebase-core'
       exclude group: 'com.google.firebase', module: 'firebase-analytics'
       exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'

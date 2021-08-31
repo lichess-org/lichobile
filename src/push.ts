@@ -77,17 +77,13 @@ export default {
 
   async register(): Promise<void> {
     if (settings.general.notifications.enable()) {
-      const status = await PushNotifications.checkPermissions()
-      switch (status.receive) {
-        case 'denied':
+      PushNotifications.requestPermissions().then(result => {
+        if (result.receive === 'granted') {
+          return PushNotifications.register()
+        } else {
           return Promise.reject('Permission to use push denied')
-        case 'prompt':
-        case 'prompt-with-rationale':
-          const r = await PushNotifications.requestPermissions()
-          if (r.receive === 'granted') return PushNotifications.register()
-          else Promise.reject('Permission to use push denied')
-        case 'granted': return PushNotifications.register()
-      }
+        }
+      })
     }
 
     return Promise.resolve()

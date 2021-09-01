@@ -28,7 +28,6 @@ import Replay from '../shared/offlineRound/Replay'
 import actions, { AiActionsCtrl } from './actions'
 import Engine from './engine'
 import newGameMenu, { NewAiGameCtrl } from './newAiGame'
-import { charToRole } from 'chessops/util'
 
 interface InitPayload {
   variant: VariantKey
@@ -226,16 +225,10 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   public onEngineMove = (bestmove: string) => {
     const from = <Key>bestmove.slice(0, 2)
     const to = <Key>bestmove.slice(2, 4)
+    const role = <Role>chessFormat.uciToProm(bestmove)
     this.vm.engineSearching = false
-    // does the promotion piece have to be passed to this function as well?
     this.chessground.apiMove(from, to)
-    if (bestmove.length > 4) {
-      const role = charToRole(bestmove.slice(4,5))
-      this.replay.addMove(from, to, role)
-    } else {
-      // inelegant to have this switch. Is there an empty Role to pass instead?
-      this.replay.addMove(from, to)
-    }
+		this.replay.addMove(from, to, role)
     redraw()
   }
 

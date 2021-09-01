@@ -228,7 +228,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     const role = <Role>chessFormat.uciToProm(bestmove)
     this.vm.engineSearching = false
     this.chessground.apiMove(from, to)
-		this.replay.addMove(from, to, role)
+    this.replay.addMove(from, to, role)
     redraw()
   }
 

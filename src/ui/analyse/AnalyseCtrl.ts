@@ -42,6 +42,7 @@ import { Source } from './interfaces'
 import * as tabs from './tabs'
 import StudyCtrl from './study/StudyCtrl'
 import ForecastCtrl from './forecast/ForecastCtrl'
+import { positionLooksLegit } from '~/utils/fen'
 
 export default class AnalyseCtrl {
 
@@ -131,6 +132,12 @@ export default class AnalyseCtrl {
       }
 
       if (study && !(study.chapter.features.computer || study.chapter.practice)) {
+        return false
+      }
+
+      if (this.data.game.variant.key !== 'antichess' &&
+          this.data.game.variant.key !== 'horde' &&
+          !positionLooksLegit(this.data.game.fen)) {
         return false
       }
 

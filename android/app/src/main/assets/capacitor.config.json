@@ -4,9 +4,14 @@
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
-  "backgroundColor": "ff000000",
+  "backgroundColor": "000000ff",
   "appendUserAgent": "Lichobile/7.11.3",
   "plugins": {
+    "SplashScreen": {
+      "backgroundColor": "000000",
+      "launchAutoHide": false,
+      "androidSplashResourceName": "launch_splash"
+    },
     "PushNotifications": {
       "presentationOptions": ["sound", "alert"]
     }

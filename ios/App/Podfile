@@ -25,7 +25,7 @@ def capacitor_pods
   pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
   pod 'CapacitorStorage', :path => '../../node_modules/@capacitor/storage'
   pod 'CapacitorToast', :path => '../../node_modules/@capacitor/toast'
-  pod 'CapacitorSoundEffect', :path => '../../../temp-sound-effect'
+  pod 'CapacitorSoundEffect', :path => '../../node_modules/capacitor-sound-effect'
   pod 'CapacitorStockfishVariants', :path => '../../../capacitor-stockfish-variants'
 end
 

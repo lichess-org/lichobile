@@ -21,7 +21,7 @@ import * as gameApi from '../../lichess/game'
 import { AnalyseData, AnalyseDataWithTree, isOnlineAnalyseData } from '../../lichess/interfaces/analyse'
 import { Study, findTag } from '../../lichess/interfaces/study'
 import { Opening } from '../../lichess/interfaces/game'
-import promotion from '../shared/offlineRound/promotion'
+import promotion, { Promoting } from '../shared/offlineRound/promotion'
 import continuePopup, { Controller as ContinuePopupController } from '../shared/continuePopup'
 import { NotesCtrl } from '../shared/round/notes'
 
@@ -42,8 +42,9 @@ import { Source } from './interfaces'
 import * as tabs from './tabs'
 import StudyCtrl from './study/StudyCtrl'
 import ForecastCtrl from './forecast/ForecastCtrl'
+import { PromotingInterface } from '../shared/round'
 
-export default class AnalyseCtrl {
+export default class AnalyseCtrl implements PromotingInterface {
 
   settings: ISettingsCtrl
   menu: IMainMenuCtrl
@@ -59,6 +60,7 @@ export default class AnalyseCtrl {
   evalCache: EvalCache
   study?: StudyCtrl
   forecast?: ForecastCtrl
+  promoting: Promoting | null = null
 
   socket: SocketIFace
 
@@ -380,7 +382,6 @@ export default class AnalyseCtrl {
     this.ceval.stop()
     this.debouncedExplorerSetStep()
     this.updateHref()
-    promotion.cancel(this.chessground, this.cgConfig)
     if (pathChanged) {
       if (this.retro) this.retro.onJump()
       if (this.practice) this.practice.onJump()
@@ -594,7 +595,7 @@ export default class AnalyseCtrl {
   private userMove = (orig: Key, dest: Key, captured?: Piece) => {
     if (captured) sound.capture()
     else sound.move()
-    if (!promotion.start(this.chessground, orig, dest, this.sendMove)) this.sendMove(orig, dest)
+    if (!promotion.start(this, orig, dest, this.sendMove)) this.sendMove(orig, dest)
   }
 
   private userNewPiece = (piece: Piece, pos: Key) => {

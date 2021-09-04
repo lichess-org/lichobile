@@ -32,6 +32,7 @@ import atomic from './atomic'
 import * as xhr from './roundXhr'
 import crazyValid from './crazy/crazyValid'
 import { OnlineRoundInterface } from './'
+import { Promoting } from '../offlineRound/promotion'
 
 interface VM {
   ply: number
@@ -67,6 +68,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public tv!: string
   public score?: Score
   public socket: RoundSocket
+  public promoting: Promoting | null = null
 
   private zenModeEnabled: boolean
   private lastMoveMillis?: number
@@ -167,6 +169,8 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     redraw()
   }
+
+  public player = () => this.data.player.color
 
   public zenAvailable = () => !this.data.player.spectator &&
     gameApi.playable(this.data)

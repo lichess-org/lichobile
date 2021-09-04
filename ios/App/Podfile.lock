@@ -8,31 +8,31 @@ PODS:
     - Capacitor
   - CapacitorStockfishVariants (1.0.0):
     - Capacitor
-  - Firebase/CoreOnly (7.6.0):
-    - FirebaseCore (= 7.6.0)
-  - Firebase/Messaging (7.6.0):
+  - Firebase/CoreOnly (7.7.0):
+    - FirebaseCore (= 7.7.0)
+  - Firebase/Messaging (7.7.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 7.6.0)
-  - FirebaseCore (7.6.0):
+    - FirebaseMessaging (~> 7.7.0)
+  - FirebaseCore (7.7.0):
     - FirebaseCoreDiagnostics (~> 7.4)
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/Logger (~> 7.0)
-  - FirebaseCoreDiagnostics (7.6.0):
+  - FirebaseCoreDiagnostics (7.7.0):
     - GoogleDataTransport (~> 8.0)
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/Logger (~> 7.0)
     - nanopb (~> 2.30907.0)
-  - FirebaseInstallations (7.6.0):
+  - FirebaseInstallations (7.7.0):
     - FirebaseCore (~> 7.0)
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/UserDefaults (~> 7.0)
     - PromisesObjC (~> 1.2)
-  - FirebaseInstanceID (7.6.0):
+  - FirebaseInstanceID (7.7.0):
     - FirebaseCore (~> 7.0)
     - FirebaseInstallations (~> 7.0)
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/UserDefaults (~> 7.0)
-  - FirebaseMessaging (7.6.0):
+  - FirebaseMessaging (7.7.0):
     - FirebaseCore (~> 7.0)
     - FirebaseInstanceID (~> 7.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
@@ -100,16 +100,16 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Capacitor: 0f131577d41c082931f00cc080e2289d503465c8
-  CapacitorCommunityKeepAwake: c4476e4a01406d22ec14df13520e391685441813
+  CapacitorCommunityKeepAwake: b2ee229bb1de59c7fdb2e1151720ea75b2725092
   CapacitorCordova: 3375b39b5ebca770ac7869f85e4dea32a642c9e0
   CapacitorSoundEffect: 31a36e64d0220c6d0e1621a61744b5d8c1e7738d
-  CapacitorStockfishVariants: 9789d8913a39bf8191121cc0c95bb0caca634508
-  Firebase: e1e089d9aac215a52442583f818ab61de3c4581b
-  FirebaseCore: 0a43b7f1c5b36f3358cd703011ca4c7e0df55870
-  FirebaseCoreDiagnostics: ee1184d51da3293335b83355aad20f537acc24cf
-  FirebaseInstallations: 6e4e77396559bc2ae0504823837ed737b1c7e47f
-  FirebaseInstanceID: cf243611700eddc916b093353adbd4da822cfa63
-  FirebaseMessaging: 4b9b2850fcfcaac2820097ee3703ba6cfff3df84
+  CapacitorStockfishVariants: f3d3172776e26b73ecfeb6b72d234be92aaf30e0
+  Firebase: cd2ab85eec8170dc260186159f21072ecb679ad5
+  FirebaseCore: ac35d680a0bf32319a59966a1478e0741536b97b
+  FirebaseCoreDiagnostics: 179bf3831213451c8addd036aca7fcf5492ec154
+  FirebaseInstallations: 42c86e7b02ff75b7f27f85833bf5dcb5f38a9774
+  FirebaseInstanceID: cf940324a20ac14a27ad1e931d15ac9d335526db
+  FirebaseMessaging: ce33c2537fdda1d1a4bc82b2245e3c3bf9107684
   GoogleDataTransport: 1024b1a4dfbd7a0e92cb20d7e0a6f1fb66b449a4
   GoogleUtilities: 31c5b01f978a70c6cff2afc6272b3f1921614b43
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
@@ -117,4 +117,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 8d649a18954c7e9cb06d29b0c44d85341f34f998
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.2

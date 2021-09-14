@@ -94,7 +94,7 @@ function onLogin(e: Event) {
   if (loading) return false
   e.preventDefault()
   const form = e.target as HTMLFormElement
-  const username = form['username'].value
+  const username = form['username'].value.trim()
   const password = form['password'].value
   const token = form['token'] ? form['token'].value : null
   if (!username || !password) return

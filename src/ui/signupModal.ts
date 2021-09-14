@@ -161,7 +161,7 @@ function onSignup(e: Event) {
   const form: HTMLFormElement = e.target as HTMLFormElement
   const login = (form[0] as HTMLInputElement).value.trim()
   const email = (form[1] as HTMLInputElement).value.trim()
-  const pass = (form[2] as HTMLInputElement).value.trim()
+  const pass = (form[2] as HTMLInputElement).value
   if (loading || !login || !email || !pass) return
   Plugins.Keyboard.hide()
   loading = true

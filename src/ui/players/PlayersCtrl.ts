@@ -2,14 +2,14 @@ import debounce from 'lodash-es/debounce'
 import redraw from '../../utils/redraw'
 import * as utils from '../../utils'
 import router from '../../router'
-import { User, Rankings } from '../../lichess/interfaces/user'
+import { User, Rankings, SearchUser } from '../../lichess/interfaces/user'
 import * as xhr from './playerXhr'
 
 export default class PlayersCtrl {
   public currentTab: number
 
   public isSearchOpen = false
-  public searchResults: readonly string[] = []
+  public searchResults: readonly SearchUser[] = []
   public players?: readonly User[]
   public leaderboard?: Rankings
 

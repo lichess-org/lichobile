@@ -7,6 +7,6 @@
   "rules": {
     "semi": "off",
     "quotes": ["error", "single", { "avoidEscape": true }],
-    "eqeqeq": ["error", "always"]
+    "eqeqeq": ["error", "smart"]
   }
 }

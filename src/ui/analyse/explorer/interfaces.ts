@@ -17,6 +17,8 @@ export interface MoveStats {
   san: San
 }
 
+export type TablebaseCategory = 'loss' | 'unknown' | 'maybe-loss' | 'blessed-loss' | 'draw' | 'cursed-win' | 'maybe-win' | 'win'
+
 export interface OpeningMoveStats extends MoveStats {
   white: number
   black: number
@@ -24,7 +26,6 @@ export interface OpeningMoveStats extends MoveStats {
   averageRating: number
 }
 export interface TablebaseMoveStats extends MoveStats {
-  wdl: number | null
   dtz: number | null
   dtm: number | null
   checkmate: boolean
@@ -33,6 +34,7 @@ export interface TablebaseMoveStats extends MoveStats {
   variant_loss: boolean
   insufficient_material: boolean
   zeroing: boolean
+  category: TablebaseCategory
 }
 
 export interface Player {
@@ -74,6 +76,7 @@ export interface TablebaseData extends ExplorerData {
   stalemate: boolean
   variant_win: boolean
   variant_loss: boolean
+  category: TablebaseCategory
 }
 
 export interface SimpleTablebaseHit {

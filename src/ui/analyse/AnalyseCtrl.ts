@@ -1,5 +1,7 @@
 import { Plugins } from '@capacitor/core'
 import debounce from 'lodash-es/debounce'
+import { parseFen } from 'chessops/fen'
+import { setupPosition } from 'chessops/variant'
 import router from '../../router'
 import { formatDateTime } from '../../i18n'
 import Chessground from '../../chessground/Chessground'
@@ -15,7 +17,7 @@ import vibrate from '../../vibrate'
 import sound from '../../sound'
 import { toggleGameBookmark } from '../../xhr'
 import socket, { SocketIFace } from '../../socket'
-import { openingSensibleVariants } from '../../lichess/variant'
+import { openingSensibleVariants, chessopRulesFromVariant } from '../../lichess/variant'
 import { playerName as gamePlayerName } from '../../lichess/player'
 import * as gameApi from '../../lichess/game'
 import { AnalyseData, AnalyseDataWithTree, isOnlineAnalyseData } from '../../lichess/interfaces/analyse'
@@ -133,6 +135,17 @@ export default class AnalyseCtrl implements PromotingInterface {
       }
 
       if (study && !(study.chapter.features.computer || study.chapter.practice)) {
+        return false
+      }
+
+      const isPosValid = parseFen(this.data.game.fen).unwrap(
+        setup => setupPosition(chessopRulesFromVariant(this.data.game.variant.key), setup).unwrap(
+          () => true,
+          () => false
+        ),
+        () => false
+      )
+      if (!isPosValid) {
         return false
       }
 

@@ -1,3 +1,4 @@
+import { Profile } from '~/session'
 import { GameSource, GameStatus, ClockData, Opening } from './game'
 
 export type GameFilter = 'all' | 'rated' | 'win' | 'loss' | 'draw' | 'bookmark' | 'me' | 'import' | 'playing'
@@ -64,7 +65,15 @@ export interface User extends BaseUser {
   readonly seenAt: Timestamp
   readonly perfs: Perfs
   readonly playTime?: PlayTime
-  readonly profile?: any
+  readonly profile?: Profile
+}
+
+export interface SearchUser {
+  readonly id: string
+  readonly name: string
+  readonly online?: boolean
+  readonly patron?: boolean
+  readonly title?: string
 }
 
 export interface PlayTime {

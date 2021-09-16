@@ -1,3 +1,4 @@
+import { Rules } from 'chessops'
 import { Variant, VariantKey } from './interfaces/variant'
 
 export const standardFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
@@ -122,6 +123,19 @@ export function getLichessVariant(key: VariantKey): Variant {
 export function getInitialFen(key: VariantKey): string {
   const v = variantMap[key]
   return v.initialFen || standardFen
+}
+
+export function chessopRulesFromVariant(key: VariantKey): Rules {
+  switch (key) {
+    case 'fromPosition':
+    case 'standard':
+    case 'chess960':
+      return 'chess'
+    case 'threeCheck':
+      return '3check'
+    default:
+      return key.toLowerCase() as Rules
+  }
 }
 
 export const specialFenVariants = new Set(['crazyhouse', 'threeCheck']) as Set<VariantKey>

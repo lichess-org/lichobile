@@ -197,7 +197,7 @@ function renderIncomingChallenge(c: Challenge) {
   }, [
     renderViewOnlyBoard(c.initialFen || standardFen, 'white', undefined, c.variant.key),
     h('div.infos', [
-      h('div.icon-game', { 'data-icon': c.perf.icon }),
+      h('div.icon-game', { 'data-icon': utils.gameIcon(c.speed) }),
       h('div.description', [
         h('h2.title', i18n('playerisInvitingYou', playerName)),
         h('p.variant', [
@@ -240,7 +240,7 @@ function renderSendingChallenge(c: Challenge) {
   }, [
     renderViewOnlyBoard(c.initialFen || standardFen, 'white', undefined, c.variant.key),
     h('div.infos', [
-      h('div.icon-game', { 'data-icon': c.perf.icon }),
+      h('div.icon-game', { 'data-icon': utils.gameIcon(c.speed) }),
       h('div.description', [
         h('h2.title', c.destUser ? playerName(c.destUser) : 'Open challenge'),
         h('p.variant', [

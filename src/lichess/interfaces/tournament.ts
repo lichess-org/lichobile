@@ -67,6 +67,7 @@ export interface PodiumPlace {
   readonly rating: number
   readonly ratingDiff: number
   readonly score: number
+  readonly title?: string
 }
 
 interface Quote {
@@ -99,6 +100,7 @@ export interface StandingPlayer {
   readonly score: number
   readonly sheet: Sheet
   readonly team?: string
+  readonly title?: string
   readonly withdraw?: boolean
 }
 

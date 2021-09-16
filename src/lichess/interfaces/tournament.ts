@@ -149,6 +149,7 @@ interface PlayerInfoPlayer {
   readonly rank: number
   readonly rating: number
   readonly ratingDiff: number
+  readonly title?: string
   readonly score: number | ReadonlyArray<number>
 }
 

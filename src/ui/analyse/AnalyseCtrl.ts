@@ -43,6 +43,7 @@ import * as tabs from './tabs'
 import StudyCtrl from './study/StudyCtrl'
 import ForecastCtrl from './forecast/ForecastCtrl'
 import { PromotingInterface } from '../shared/round'
+import { positionLooksLegit } from '~/utils/fen'
 
 export default class AnalyseCtrl implements PromotingInterface {
 
@@ -133,6 +134,12 @@ export default class AnalyseCtrl implements PromotingInterface {
       }
 
       if (study && !(study.chapter.features.computer || study.chapter.practice)) {
+        return false
+      }
+
+      if (this.data.game.variant.key !== 'antichess' &&
+          this.data.game.variant.key !== 'horde' &&
+          !positionLooksLegit(this.data.game.fen)) {
         return false
       }
 

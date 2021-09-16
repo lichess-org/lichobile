@@ -1,5 +1,7 @@
 import { Plugins } from '@capacitor/core'
 import debounce from 'lodash-es/debounce'
+import { parseFen } from 'chessops/fen'
+import { setupPosition } from 'chessops/variant'
 import router from '../../router'
 import { formatDateTime } from '../../i18n'
 import Chessground from '../../chessground/Chessground'
@@ -15,7 +17,7 @@ import vibrate from '../../vibrate'
 import sound from '../../sound'
 import { toggleGameBookmark } from '../../xhr'
 import socket, { SocketIFace } from '../../socket'
-import { openingSensibleVariants } from '../../lichess/variant'
+import { openingSensibleVariants, chessopRulesFromVariant } from '../../lichess/variant'
 import { playerName as gamePlayerName } from '../../lichess/player'
 import * as gameApi from '../../lichess/game'
 import { AnalyseData, AnalyseDataWithTree, isOnlineAnalyseData } from '../../lichess/interfaces/analyse'
@@ -43,7 +45,6 @@ import * as tabs from './tabs'
 import StudyCtrl from './study/StudyCtrl'
 import ForecastCtrl from './forecast/ForecastCtrl'
 import { PromotingInterface } from '../shared/round'
-import { positionLooksLegit } from '~/utils/fen'
 
 export default class AnalyseCtrl implements PromotingInterface {
 
@@ -137,9 +138,14 @@ export default class AnalyseCtrl implements PromotingInterface {
         return false
       }
 
-      if (this.data.game.variant.key !== 'antichess' &&
-          this.data.game.variant.key !== 'horde' &&
-          !positionLooksLegit(this.data.game.fen)) {
+      const isPosValid = parseFen(this.data.game.fen).unwrap(
+        setup => setupPosition(chessopRulesFromVariant(this.data.game.variant.key), setup).unwrap(
+          () => true,
+          () => false
+        ),
+        () => false
+      )
+      if (!isPosValid) {
         return false
       }
 

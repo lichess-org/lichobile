@@ -65,6 +65,8 @@ export class StockfishPlugin {
     if (this.isVariant()) {
       if (this.variant === 'threeCheck')
         return this.setOption('UCI_Variant', '3check')
+      if (Capacitor.platform === 'web' && this.variant === 'antichess')
+        return this.setOption('UCI_Variant', 'giveaway')
       else
         return this.setOption('UCI_Variant', this.variant.toLowerCase())
     } else {

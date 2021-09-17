@@ -63,7 +63,7 @@ export class StockfishPlugin {
 
   public setVariant(): Promise<void> {
     if (this.isVariant()) {
-      if (Capacitor.platform !== 'web' && this.variant === 'threeCheck')
+      if (this.variant === 'threeCheck')
         return this.setOption('UCI_Variant', '3check')
       if (Capacitor.platform === 'web' && this.variant === 'antichess')
         return this.setOption('UCI_Variant', 'giveaway')

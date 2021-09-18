@@ -12,7 +12,7 @@ export default class Engine {
     this.listener = (e: Event) => {
       const line = (e as any).output
       console.debug('[stockfish >>] ' + line)
-      const bmMatch = line.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/)
+      const bmMatch = line.match(/^bestmove (\w{4,5})|^bestmove ([PNBRQ]@\w{2})/)
       if (bmMatch) {
         if (bmMatch[1]) this.ctrl.onEngineMove(bmMatch[1])
         else if (bmMatch[2]) this.ctrl.onEngineDrop(bmMatch[2])

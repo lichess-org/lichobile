@@ -229,7 +229,6 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     const role = chessFormat.uciToProm(bestmove)
     this.vm.engineSearching = false
     this.chessground.apiMove(from, to)
-		// perhaps tell chessground that a promotion has happened if role is nonempty?
     this.replay.addMove(from, to, role)
     redraw()
   }

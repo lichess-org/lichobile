@@ -13,7 +13,7 @@ import { loadLocalJsonFile } from '../../utils'
 import redraw from '../../utils/redraw'
 import settings from '../../settings'
 import menu, { MenuInterface } from './menu'
-import pasteFenPopup from './pasteFenPopup'
+import pasteFenPopup, { Ctrl as PasteFenPopupCtrl } from './pasteFenPopup'
 import continuePopup, { Controller as ContinuePopupCtrl } from '../shared/continuePopup'
 import i18n from '../../i18n'
 import drag from './drag'
@@ -21,7 +21,7 @@ import { EditorState, BoardPosition, BoardPositionCategory, CastlingToggle, Cast
 
 export default class EditorCtrl {
   public menu: MenuInterface
-  public pasteFenPopup: MenuInterface
+  public pasteFenPopup: PasteFenPopupCtrl
   public continuePopup: ContinuePopupCtrl
   public chessground: Chessground
 
@@ -207,8 +207,8 @@ export default class EditorCtrl {
     return baseUrl + encodeURIComponent(fen)
   }
 
-  public loadNewFen = (newFen: string): void => {
-    this.setFen(newFen)
+  public loadNewFen = (newFen: string): boolean => {
+    return this.setFen(newFen)
   }
 
   public goToAnalyse = (): void => {

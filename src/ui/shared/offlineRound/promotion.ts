@@ -47,10 +47,12 @@ function cancel(ctrl: PromotingInterface, cgConfig?: cg.SetConfig) {
 }
 
 function otbPromoPieceTransform(ctrl: PromotingInterface): string {
-  const state = ctrl.chessground.state
-  if ((state.orientation === 'white' && ctrl.player() === 'black') ||
+  if (ctrl.data.game.id === 'offline_otb') {
+    const state = ctrl.chessground.state
+    if ((state.orientation === 'white' && ctrl.player() === 'black') ||
       (state.orientation === 'black' && ctrl.player() === 'white')) {
-    return 'rotate(180deg)'
+      return 'rotate(180deg)'
+    }
   }
 
   return ''

@@ -26,7 +26,7 @@ def capacitor_pods
   pod 'CapacitorStorage', :path => '../../node_modules/@capacitor/storage'
   pod 'CapacitorToast', :path => '../../node_modules/@capacitor/toast'
   pod 'CapacitorSoundEffect', :path => '../../node_modules/capacitor-sound-effect'
-  pod 'CapacitorStockfishVariants', :path => '../../../capacitor-stockfish-variants'
+  pod 'CapacitorStockfishVariants', :path => '../../node_modules/capacitor-stockfish-variants'
 end
 
 target 'lichess' do

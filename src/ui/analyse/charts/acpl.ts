@@ -3,7 +3,8 @@ import { scaleLinear } from 'd3-scale'
 import { area as d3Area } from 'd3-shape'
 
 import * as Tree from '../../shared/tree/interfaces'
-import { AnalyseData } from '../../../lichess/interfaces/analyse'
+import { AnalyseData, GameStage } from '../../../lichess/interfaces/analyse'
+import i18n from '~/i18n'
 
 interface Point {
   acpl: number
@@ -27,7 +28,7 @@ export default function drawAcplChart(
   const height = rect.height - margin.top - margin.bottom
   const g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
-  function addDivisionLine(xPos: number, name: string) {
+  function addDivisionLine(xPos: number, name: GameStage) {
     g.append('line')
     .attr('class', 'division ' + name)
     .attr('x1', xPos)
@@ -40,7 +41,7 @@ export default function drawAcplChart(
     .attr('transform', 'rotate(90)')
     .attr('y', -xPos)
     .attr('dy', '-0.4em')
-    .text(name)
+    .text(i18n(name))
   }
 
   const firstPly = aData.treeParts[0].ply || 0
@@ -109,12 +110,12 @@ export default function drawAcplChart(
   .attr('d', line as any)
 
   if (division && (division.middle || division.end)) {
-    addDivisionLine(x(0), 'Opening')
+    addDivisionLine(x(0), 'opening')
     if (division.middle) {
-      addDivisionLine(x(division.middle), 'Middlegame')
+      addDivisionLine(x(division.middle), 'middlegame')
     }
     if (division.end) {
-      addDivisionLine(x(division.end), 'Endgame')
+      addDivisionLine(x(division.end), 'endgame')
     }
   }
 

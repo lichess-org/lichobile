@@ -13,7 +13,7 @@ import { oppositeColor } from '../../utils'
 import { StoredOfflineGame, setCurrentOTBGame } from '../../utils/offlineGames'
 import redraw from '../../utils/redraw'
 
-import promotion from '../shared/offlineRound/promotion'
+import promotion, { Promoting } from '../shared/offlineRound/promotion'
 import ground from '../shared/offlineRound/ground'
 import makeData from '../shared/offlineRound/data'
 import { setResult } from '../shared/offlineRound'
@@ -45,6 +45,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public vm: OtbVM
   public clock?: IChessClock
   public moveList: boolean
+  public promoting: Promoting | null = null
 
   private appStateListener: PluginListenerHandle
 
@@ -214,7 +215,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   }
 
   private userMove = (orig: Key, dest: Key) => {
-    if (!promotion.start(this.chessground, orig, dest, this.onPromotion)) {
+    if (!promotion.start(this, orig, dest, this.onPromotion)) {
       this.replay.addMove(orig, dest)
     }
   }

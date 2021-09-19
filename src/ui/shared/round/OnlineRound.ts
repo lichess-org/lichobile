@@ -35,6 +35,7 @@ import atomic from './atomic'
 import * as xhr from './roundXhr'
 import crazyValid from './crazy/crazyValid'
 import { OnlineRoundInterface } from './'
+import { Promoting } from '../offlineRound/promotion'
 
 interface VM {
   ply: number
@@ -70,14 +71,13 @@ export default class OnlineRound implements OnlineRoundInterface {
   public tv!: string
   public score?: Score
   public socket: RoundSocket
+  public promoting: Promoting | null = null
 
   private zenModeEnabled: boolean
   private lastMoveMillis?: number
   private lastDrawOfferAtPly!: number
   private clockIntervId!: number
   private blur: boolean
-
-  private readonly playableOnInit: boolean
 
   private transientMove: TransientMove
   private appStateListener: PluginListenerHandle
@@ -96,8 +96,6 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     this.zenModeEnabled = settings.game.zenMode()
     this.blur = false
-
-    this.playableOnInit = gameApi.isPlayerPlaying(this.data)
 
     this.vm = {
       ply: this.lastPly(),
@@ -175,6 +173,8 @@ export default class OnlineRound implements OnlineRoundInterface {
     redraw()
   }
 
+  public player = () => this.data.player.color
+
   public zenAvailable = () => !this.data.player.spectator &&
     gameApi.playable(this.data)
 
@@ -187,7 +187,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   public goToAnalysis = () => {
     const d = this.data
-    router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}?ply=${this.vm.ply}&curFen=${d.game.fen}`, !this.playableOnInit)
+    router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}?ply=${this.vm.ply}&curFen=${d.game.fen}`)
   }
 
   public openUserPopup = (position: string, userId: string) => {

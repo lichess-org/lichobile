@@ -17,7 +17,7 @@ if (Capacitor.platform === 'web') {
     }
 
     async getMaxMemory(): Promise<number> {
-      return 1024
+      return Promise.resolve(1024)
     }
 
     async start() {

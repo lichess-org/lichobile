@@ -52,4 +52,8 @@ settingsInit()
 .then(themeInit)
 .then(i18nInit)
 .then(() => processWindowLocation())
-.then(() => SplashScreen.hide())
+.then(() => {
+  setTimeout(() => {
+    SplashScreen.hide()
+  }, 500)
+})

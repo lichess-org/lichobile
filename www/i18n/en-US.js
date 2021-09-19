@@ -1119,5 +1119,6 @@ export default {
   "settingsClockPosition": "Clock position",
   "positionRight": "Right",
   "positionLeft": "Left",
-  "landscapeBoardSide": "Board screen side (in landscape mode)"
+  "landscapeBoardSide": "Board screen side (in landscape mode)",
+  "shareGameGIF": "Share as GIF",
 }

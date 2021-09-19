@@ -37,7 +37,8 @@ export default {
   shareLink(ctrl: OnlineRound) {
     return h('button', {
       oncreate: helper.ontap(() => {
-        Share.share({ url: gameApi.publicUrl(ctrl.data) })
+        const orientation = ctrl.chessground.state.orientation
+        Share.share({ url: `${gameApi.publicUrl(ctrl.data)}/${orientation}#${ctrl.vm.ply}` })
       })
     }, [i18n('shareGameURL')])
   },
@@ -222,8 +223,6 @@ export default {
       return h('button[data-icon=r]', {
         oncreate: helper.ontap(() => {
           ctrl.hideActions()
-          router.reload() // hack to avoid websocket sending again messages
-                          // on socket reconnection
           lobby.onNewOpponent(ctrl.data)
         })
       }, i18n('newOpponent'))

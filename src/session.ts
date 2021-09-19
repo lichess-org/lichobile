@@ -25,7 +25,7 @@ interface Prefs {
 export type EmailConfirm = { email_confirm: boolean }
 export type SignupData = Session | EmailConfirm
 
-interface Profile {
+export interface Profile {
   readonly country?: string
   readonly location?: string
   readonly bio?: string
@@ -102,11 +102,6 @@ function nowPlaying(): readonly NowPlayingGame[] {
   return np.filter(e =>
     settings.game.supportedVariants.indexOf(e.variant.key) !== -1
   )
-}
-
-function currentBan(): Date | undefined {
-  const playban = session && session.playban
-  return playban && new Date(playban.date + playban.mins * 60000)
 }
 
 function isKidMode(): boolean {
@@ -371,8 +366,7 @@ export default {
   lichessBackedProp,
   setKidMode,
   confirmEmail,
-  currentBan,
   hasCurrentBan(): boolean {
-    return currentBan() !== undefined
+    return session?.playban !== undefined
   },
 }

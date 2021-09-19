@@ -63,8 +63,10 @@ export class StockfishPlugin {
 
   public setVariant(): Promise<void> {
     if (this.isVariant()) {
-      if (this.variant === 'threeCheck')
+      if (Capacitor.platform !== 'web' && this.variant === 'threeCheck')
         return this.setOption('UCI_Variant', '3check')
+      if (Capacitor.platform === 'web' && this.variant === 'antichess')
+        return this.setOption('UCI_Variant', 'giveaway')
       else
         return this.setOption('UCI_Variant', this.variant.toLowerCase())
     } else {
@@ -85,8 +87,8 @@ export class StockfishPlugin {
   }
 }
 
-export function getMaxMemory(): number {
-  return window.deviceInfo.stockfishMaxMemory
+export async function getMaxMemory(): Promise<number> {
+  return Promise.resolve(window.deviceInfo.stockfishMaxMemory)
 }
 
 export function getNbCores(): number {

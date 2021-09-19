@@ -84,7 +84,7 @@ function renderActionsBar(ctrl: EditorCtrl) {
     }),
     h('button.action_bar_button.fa.fa-upload', {
       oncreate: helper.ontap(ctrl.pasteFenPopup.open,
-        () => Toast.show({ text: i18n('Load position from FEN'), duration: 'short', position: 'bottom' }))
+        () => Toast.show({ text: i18n('loadAPositionFromFen'), duration: 'short', position: 'bottom' }))
     }),
     h('button.action_bar_button.fa.fa-share-alt', {
       oncreate: helper.ontap(

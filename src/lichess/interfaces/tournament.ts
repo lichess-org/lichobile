@@ -36,6 +36,7 @@ export interface Tournament {
 }
 
 interface Perf {
+  readonly key: PerfKey
   readonly icon: string
   readonly name: string
   readonly position?: number
@@ -66,6 +67,7 @@ export interface PodiumPlace {
   readonly rating: number
   readonly ratingDiff: number
   readonly score: number
+  readonly title?: string
 }
 
 interface Quote {
@@ -98,6 +100,7 @@ export interface StandingPlayer {
   readonly score: number
   readonly sheet: Sheet
   readonly team?: string
+  readonly title?: string
   readonly withdraw?: boolean
 }
 
@@ -146,6 +149,7 @@ interface PlayerInfoPlayer {
   readonly rank: number
   readonly rating: number
   readonly ratingDiff: number
+  readonly title?: string
   readonly score: number | ReadonlyArray<number>
 }
 

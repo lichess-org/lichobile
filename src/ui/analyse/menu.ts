@@ -133,6 +133,12 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
         onlinePGNExport(ctrl, true)
       }),
     }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : 'Share raw PGN') : null,
+    isOnlineAnalyseData(ctrl.data) ? h('button', {
+      oncreate: helper.ontap(() => {
+        ctrl.menu.close()
+        Plugins.LiShare.share({ url: gameApi.publicGIFUrl(ctrl.data) })
+      })
+    }, [i18n('shareGameGIF')]) : null,
     ctrl.isOfflineOrNotPlayable() ? h('button', {
       oncreate: helper.ontap(() => {
         ctrl.menu.close()

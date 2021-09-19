@@ -58,7 +58,7 @@ export function makeRatingRange(user: Session, setup: HumanSeekSetup): string | 
       break
   }
   const perf = user.perfs[perfKey]
-  if (perf && ratingRangeMin && ratingRangeMax) {
+  if (perf && ratingRangeMin !== undefined && ratingRangeMax !== undefined) {
     return `${perf.rating + ratingRangeMin}-${perf.rating + ratingRangeMax}`
   } else {
     return null

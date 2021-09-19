@@ -10,7 +10,7 @@
 
 Lichess mobile is the lichess.org official application. It is written
 in [TypeScript](http://www.typescriptlang.org/), with a bit of Kotlin and Swift.
-It is a web application that access native SDK thanks to [Ionic capacitor](https://capacitor.ionicframework.com/).
+It is a web application that accesses the native SDK, thanks to [Ionic capacitor](https://capacitor.ionicframework.com/).
 The rendering library is [mithril.js](http://mithril.js.org/).
 It talks to a native [Stockfish](https://stockfishchess.org/) engine, [supporting multiple variants](https://github.com/ddugovic/Stockfish), through a
 [capacitor plugin](https://github.com/veloce/capacitor-stockfish).
@@ -19,7 +19,7 @@ Multi-variant chess library is brought by [a JavaScript version of scalachess](h
 ## Required dependencies
 
 * [node](http://nodejs.org) latest LTS version
-* [ionic capacitor dependencies](https://capacitor.ionicframework.com/docs/getting-started/dependencies)
+* [ionic capacitor dependencies](https://capacitorjs.com/docs/v2/getting-started/dependencies)
 
 **Android:**
 

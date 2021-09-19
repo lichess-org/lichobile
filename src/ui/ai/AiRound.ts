@@ -15,7 +15,7 @@ import { StoredOfflineGame, setCurrentAIGame } from '../../utils/offlineGames'
 import { OfflineGameData, GameStatus } from '../../lichess/interfaces/game'
 import redraw from '../../utils/redraw'
 
-import promotion from '../shared/offlineRound/promotion'
+import promotion, { Promoting } from '../shared/offlineRound/promotion'
 import ground from '../shared/offlineRound/ground'
 import makeData from '../shared/offlineRound/data'
 import { setResult } from '../shared/offlineRound'
@@ -42,6 +42,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   public newGameMenu: NewAiGameCtrl
   public vm: AiVM
   public moveList: boolean
+  public promoting: Promoting | null = null
 
   public engine?: Engine
 
@@ -225,9 +226,10 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   public onEngineMove = (bestmove: string) => {
     const from = <Key>bestmove.slice(0, 2)
     const to = <Key>bestmove.slice(2, 4)
+    const role = chessFormat.uciToProm(bestmove)
     this.vm.engineSearching = false
     this.chessground.apiMove(from, to)
-    this.replay.addMove(from, to)
+    this.replay.addMove(from, to, role)
     redraw()
   }
 
@@ -265,7 +267,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   }
 
   private userMove = (orig: Key, dest: Key) => {
-    if (!promotion.start(this.chessground, orig, dest, this.onPromotion)) {
+    if (!promotion.start(this, orig, dest, this.onPromotion)) {
       this.replay.addMove(orig, dest)
     }
   }

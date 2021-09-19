@@ -3,8 +3,8 @@
 	"appName": "lichess",
 	"bundledWebRuntime": false,
 	"webDir": "www",
-	"backgroundColor": "ff000000",
-	"appendUserAgent": "Lichobile/7.11.1",
+  "backgroundColor": "000000ff",
+	"appendUserAgent": "Lichobile/7.11.3",
 	"plugins": {
 		"SplashScreen": {
 			"androidSplashResourceName": "launch_splash",

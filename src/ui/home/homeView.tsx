@@ -3,8 +3,8 @@ import router from '../../router'
 import socket from '../../socket'
 import { openExternalBrowser } from '../../utils/browse'
 import { emptyFen } from '../../utils/fen'
-import { hasNetwork } from '../../utils'
-import i18n, { plural, formatNumber, fromNow } from '../../i18n'
+import { gameIcon, hasNetwork } from '../../utils'
+import i18n, { plural, formatNumber, distanceToNowStrict } from '../../i18n'
 import session from '../../session'
 import { PongMessage, CorrespondenceSeek } from '../../lichess/interfaces'
 import spinner from '../../spinner'
@@ -55,7 +55,8 @@ function offline(ctrl: HomeCtrl) {
 }
 
 function online(ctrl: HomeCtrl) {
-  const playbanEndsAt = session.currentBan()
+  const playban = session.get()?.playban
+  const playbanEndsAt = playban && new Date(playban.date + playban.mins * 60000)
 
   return (
     <div className="home">
@@ -238,7 +239,7 @@ function renderSeek(ctrl: HomeCtrl, seek: CorrespondenceSeek) {
     h('td', seek.rating + (seek.provisional ? '?' : '')),
     h('td', seek.days ? plural('nbDays', seek.days) : '∞'),
     h('td', h('span.withIcon', {
-      'data-icon': seek.perf.icon
+      'data-icon': gameIcon(seek.perf.key)
     }, i18n(seek.mode === 1 ? 'rated' : 'casual'))),
   ])
 }
@@ -350,31 +351,29 @@ function renderTimeline(ctrl: HomeCtrl) {
 }
 
 function renderPlayban(endsAt: Date) {
-  const seconds = (endsAt.valueOf() - Date.now()) / 1000
   return (
     <div className="home-playbanInfo">
-      <h2>Sorry :(</h2>
-      <p>We had to time you out for a {seconds < 3600 ? 'little ' : ''}while.</p>
+      <h2>{i18n('sorry')}</h2>
+      <p>{i18n('weHadToTimeYouOutForAWhile')}</p>
       <br />
-      <p>The timeout expires <strong>{fromNow(endsAt)}</strong>.</p>
-      <h2>Why?</h2>
+      <p>{h.trust(i18n('timeoutExpires', `<strong>${distanceToNowStrict(endsAt)}</strong>`))}</p>
+      <h2>{i18n('why')}</h2>
       <p>
-        We aim to provide a pleasant chess experience for everyone.
-        To that effect, we must ensure that all players follow good practices.
-        When a potential problem is detected, we display this message.
+        {i18n('pleasantChessExperience')}<br />
+        {i18n('goodPractice')}<br />
+        {i18n('potentialProblem')}
       </p>
-      <h2>How to avoid this?</h2>
+      <h2>{i18n('howToAvoidThis')}</h2>
       <ul>
-        <li>Play every game you start</li>
-        <li>Try to win (or at least draw) every game you play</li>
-        <li>Resign lost games (don't let the clock run down)</li>
+        <li>{i18n('playEveryGame')}</li>
+        <li>{i18n('tryToWin')}</li>
+        <li>{i18n('resignLostGames')}</li>
       </ul>
       <br />
-      <br />
       <p>
-        We apologize for the temporary inconvenience,<br />
-        and wish you great games on lichess.org.<br />
-        Thank you for reading!
+        {i18n('temporaryInconvenience')}<br />
+        {i18n('wishYouGreatGames')}<br />
+        {i18n('thankYouForReading')}
       </p>
     </div>
   )

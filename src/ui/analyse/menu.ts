@@ -136,7 +136,7 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
     isOnlineAnalyseData(ctrl.data) ? h('button', {
       oncreate: helper.ontap(() => {
         ctrl.menu.close()
-        Plugins.LiShare.share({ url: gameApi.publicGIFUrl(ctrl.data) })
+        Share.share({ url: gameApi.publicGIFUrl(ctrl.data) })
       })
     }, [i18n('shareGameGIF')]) : null,
     ctrl.isOfflineOrNotPlayable() ? h('button', {

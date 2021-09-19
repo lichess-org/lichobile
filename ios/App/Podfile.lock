@@ -1,5 +1,5 @@
 PODS:
-  - Capacitor (3.2.0):
+  - Capacitor (3.2.3):
     - CapacitorCordova
   - CapacitorApp (1.0.2):
     - Capacitor
@@ -9,7 +9,7 @@ PODS:
     - Capacitor
   - CapacitorCommunityKeepAwake (2.1.0):
     - Capacitor
-  - CapacitorCordova (3.2.0)
+  - CapacitorCordova (3.2.3)
   - CapacitorDevice (1.0.2):
     - Capacitor
   - CapacitorDialog (1.0.2):
@@ -177,12 +177,12 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/toast"
 
 SPEC CHECKSUMS:
-  Capacitor: 97ac74f937eb9cd098b067c48f2e00de62c8b3c9
+  Capacitor: 525175245027732c4f9bc7c5209176c1acef854a
   CapacitorApp: 4a7a55cb30ac30af4e4801d4d6e51f4d03aa75e6
   CapacitorBrowser: 78dca7e45adb2f3c8239c44095aeed7582bf0923
   CapacitorClipboard: d8444615cb87293d7a2a2c310df5cf48b05c3620
   CapacitorCommunityKeepAwake: da57047d09e2e02b86e1f81b5d0f83445ace5c77
-  CapacitorCordova: 643fc644c43204cf1a344b19ef0423beae5ae9ff
+  CapacitorCordova: e571f22d5672cea00d703d82eafb09adf257980d
   CapacitorDevice: 4d1a1f44e9f7ee126aa809b89c86c107a13bf898
   CapacitorDialog: 410d570ad02845665836d60606802244fbbbd8ba
   CapacitorFilesystem: a8f258902f03ee602148ad2428e1bad147b8d164
@@ -194,7 +194,7 @@ SPEC CHECKSUMS:
   CapacitorSoundEffect: 00695e533a1aeeff6a958b9aa3539df8c6cab133
   CapacitorSplashScreen: 25fbdbaa5982dfdbfcb2dcbf3757c638a56ebaa9
   CapacitorStatusBar: 5f78c4275b059bf5c0bcf059d9fafc4f1b620d5b
-  CapacitorStockfishVariants: fdf0d12d68e4dbae18453b73f507ee8595fe7bb9
+  CapacitorStockfishVariants: a70adc15588467af79a2f726d39680d2806f4022
   CapacitorStorage: 6854d59dd96ed64e75b46c4b7093d29fc9e83814
   CapacitorToast: 75dc6e65832b6d318558f4e8bbb3cc369cff09db
   Firebase: cd2ab85eec8170dc260186159f21072ecb679ad5

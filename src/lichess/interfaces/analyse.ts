@@ -75,3 +75,5 @@ interface Tournament {
   readonly name: string
   readonly running: boolean
 }
+
+export type GameStage = 'opening' | 'middlegame' | 'endgame'

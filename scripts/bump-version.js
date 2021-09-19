@@ -5,7 +5,7 @@ const path = require('path')
 
 const rootDir = path.join(__dirname, '..')
 
-const capacitorConfPath = path.join(rootDir, 'capacitor.config.json')
+const capacitorConfPath = path.join(rootDir, 'capacitor.config.ts')
 const capacitorConfText = fs.readFileSync(capacitorConfPath).toString()
 
 const androidManifestPath = path.join(rootDir, 'android', 'app', 'src', 'main', 'AndroidManifest.xml')
@@ -25,7 +25,7 @@ const newVersionCode =
 
 // capacitor
 let newCapacitorText = capacitorConfText.replace(
-  /(Lichobile\/)([^"]+)/,
+  /(Lichobile\/)([^']+)/,
   '$1' + newVersion
 )
 fs.writeFileSync(capacitorConfPath, newCapacitorText)

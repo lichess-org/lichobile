@@ -1,6 +1,7 @@
 import h from 'mithril/hyperscript'
 import { parseFen, makeFen } from 'chessops/fen'
 import * as utils from '../utils'
+import tupleOf from '../utils/tupleOf'
 import router from '../router'
 import redraw from '../utils/redraw'
 import i18n from '../i18n'
@@ -154,7 +155,7 @@ function renderForm() {
       ),
       h('div.select_input.inline',
         formWidgets.renderSelect('increment', formName + 'increment',
-          settings.gameSetup.availableIncrements.map(utils.tupleOf), settingsObj.increment, false)
+          settings.gameSetup.availableIncrements.map(tupleOf), settingsObj.increment, false)
       )
     )
   }
@@ -163,7 +164,7 @@ function renderForm() {
     timeFieldset.push(
       h('div.select_input.large_label',
         formWidgets.renderSelect('daysPerTurn', formName + 'days',
-          settings.gameSetup.availableDays.map(utils.tupleOf), settingsObj.days, false)
+          settings.gameSetup.availableDays.map(tupleOf), settingsObj.days, false)
       ))
   }
 

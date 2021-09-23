@@ -3,6 +3,7 @@ import settings from '../../settings'
 import i18n from '../../i18n'
 import router from '../../router'
 import * as utils from '../../utils'
+import tupleOf from '../../utils/tupleOf'
 import { standardFen } from '../../lichess/variant'
 import { TournamentCreateResponse } from '../../lichess/interfaces/tournament'
 import popupWidget from '../shared/popup'
@@ -92,13 +93,13 @@ function renderForm(ctrl: TournamentsListCtrl) {
           {formWidgets.renderSelect('Time', 'time', settings.tournament.availableTimes, settings.tournament.time, false)}
         </div>
         <div className="select_input inline no-margin">
-          {formWidgets.renderSelect('Increment', 'increment', settings.tournament.availableIncrements.map((x: string) => utils.tupleOf(Number(x))), settings.tournament.increment, false)}
+          {formWidgets.renderSelect('Increment', 'increment', settings.tournament.availableIncrements.map((x: string) => tupleOf(Number(x))), settings.tournament.increment, false)}
         </div>
         <div className="select_input inline">
-          {formWidgets.renderSelect('Duration', 'duration', settings.tournament.availableDurations.map((x: string) => utils.tupleOf(Number(x))), settings.tournament.duration, false)}
+          {formWidgets.renderSelect('Duration', 'duration', settings.tournament.availableDurations.map((x: string) => tupleOf(Number(x))), settings.tournament.duration, false)}
         </div>
         <div className="select_input inline no-margin">
-          {formWidgets.renderSelect('Time to Start', 'timeToStart', settings.tournament.availableTimesToStart.map((x: string) => utils.tupleOf(Number(x))), settings.tournament.timeToStart, false)}
+          {formWidgets.renderSelect('Time to Start', 'timeToStart', settings.tournament.availableTimesToStart.map((x: string) => tupleOf(Number(x))), settings.tournament.timeToStart, false)}
         </div>
         <div className="select_input">
           {formWidgets.renderCheckbox(i18n('isPrivate'), 'private', settings.tournament.private)}
@@ -128,7 +129,7 @@ function renderForm(ctrl: TournamentsListCtrl) {
 }
 
 function create(form: HTMLFormElement) {
-  const elements: HTMLCollection = (form[0] as HTMLFieldSetElement).elements as HTMLCollection
+  const elements: HTMLCollection = (form[0] as HTMLFieldSetElement).elements 
   const name = (elements[0] as HTMLInputElement).value
   const variant = (elements[1] as HTMLInputElement).value
   const position = settings.tournament.variant() === '1' ? (elements[2] as HTMLInputElement).value : '---'

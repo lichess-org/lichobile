@@ -1,7 +1,7 @@
 import asyncStorage from './asyncStorage'
 import { getAtPath, setAtPath } from './utils/object'
 import { ClockType } from './ui/shared/clock/interfaces'
-import { increments, incrementTuples } from './utils'
+import { increments, incrementTuples } from './utils/increments'
 
 const STORAGE_KEY = 'settings'
 

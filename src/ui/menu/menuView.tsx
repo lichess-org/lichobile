@@ -221,10 +221,10 @@ function renderLinks(user?: Session) {
         {i18n('playOffline')}
       </li>
       <li className="side_link" data-route="/ai">
-        <span className="fa fa-cogs"/>{i18n('playOfflineComputer')}
+        <span className="fa fa-cogs"/>{i18n('computer')}
       </li>
       <li className="side_link" data-route="/otb">
-        <span className="fa fa-beer"/>{i18n('playOnTheBoardOffline')}
+        <span className="fa fa-beer"/>{i18n('overTheBoard')}
       </li>
       <li className="hr"></li>
       <li className="side_link" data-route="/settings">

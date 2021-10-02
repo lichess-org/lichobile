@@ -53,7 +53,7 @@ export default {
     }
     return (
       <button oncreate={helper.ontap(handler)}>
-        {i18n('sharePGN')}
+        {i18n('sharePgn')}
       </button>
     )
   },

@@ -52,7 +52,7 @@ export default {
     } else {
       const fen = attrs.fen || emptyFen
       const color = fen ? playerFromFen(fen) : 'white'
-      header = renderHeader(i18n('playOnTheBoardOffline'))
+      header = renderHeader(i18n('overTheBoard'))
       content = viewOnlyBoardContent(fen, color, undefined, 'standard', undefined, pieceTheme)
     }
 

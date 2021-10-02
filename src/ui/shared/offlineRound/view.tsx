@@ -93,7 +93,7 @@ export function renderGameActionsBar(ctrl: OfflineRoundInterface) {
       <button className="fa fa-share-alt action_bar_button"
         oncreate={helper.ontap(
           ctrl.sharePGN,
-          () => Plugins.LiToast.show({ text: i18n('sharePGN'), duration: 'short', position: 'bottom' })
+          () => Plugins.LiToast.show({ text: i18n('sharePgn'), duration: 'short', position: 'bottom' })
         )}
       />
       <button className="action_bar_button" data-icon="A"

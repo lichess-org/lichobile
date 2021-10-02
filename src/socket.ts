@@ -8,7 +8,6 @@ import { SESSION_ID_KEY, ErrorResponse } from './http'
 import { newSri, autoredraw, hasNetwork } from './utils'
 import { tellWorker, askWorker } from './utils/worker'
 import * as xhr from './xhr'
-import i18n from './i18n'
 import friendsApi, { Friend } from './lichess/friends'
 import challengesApi from './lichess/challenges'
 import { ChallengesData } from './lichess/interfaces/challenge'
@@ -219,7 +218,7 @@ function createGame(
         xhr.game(gameUrl.substring(1))
         .catch((err: ErrorResponse) => {
           if (err.status === 401) {
-            Plugins.LiToast.show({ text: i18n('unauthorizedError'), duration: 'short' })
+            Plugins.LiToast.show({ text: 'Access is unauthorised.', duration: 'short' })
             router.set('/')
           }
         })

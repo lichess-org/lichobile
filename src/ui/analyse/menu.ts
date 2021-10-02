@@ -122,7 +122,7 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
       oncreate: helper.ontap(() => {
         offlinePgnExport(ctrl)
       }),
-    }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : [i18n('sharePGN')]) : null,
+    }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : [i18n('sharePgn')]) : null,
     ctrl.source === 'online' && !gameApi.playable(ctrl.data) ? h('button', {
       oncreate: helper.ontap(() => {
         onlinePGNExport(ctrl, false)

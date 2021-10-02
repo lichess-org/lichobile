@@ -152,7 +152,7 @@ export function renderBody(ctrl: State) {
           <td class="variantPerf"> {data.stat.playStreak.nb.max.from.at && data.stat.playStreak.nb.max.from.at.substring(0, 10)} </td>
         </tr>
         <tr class={isEmpty(data.stat.resultStreak.win.max.v)}>
-          <th class="variantPerf"> {i18n('winStreak')} </th>
+          <th class="variantPerf"> {i18n('winningStreak')} </th>
           <td class="variantPerf"> <span class="progress positive"> {data.stat.resultStreak.win.max.v ? data.stat.resultStreak.win.max.v : ''} </span> </td>
           <td class="variantPerf"> <span class="progress positive"> {data.stat.resultStreak.win.max.to ? data.stat.resultStreak.win.max.to.at.substring(0, 10) : ''} </span> </td>
         </tr>

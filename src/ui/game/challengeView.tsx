@@ -140,7 +140,7 @@ function awaitInvitePopup(ctrl: ChallengeCtrl, challenge: Challenge) {
             oncreate: helper.ontap(function() {
               Plugins.LiShare.share({ url: publicUrl(challenge) })
             })
-          }, i18n('shareGameURL')),
+          }, i18n('shareUrl')),
           h('button.binary_choice[data-icon=L].withIcon', {
             oncreate: helper.ontap(ctrl.cancelChallenge)
           }, i18n('cancel'))

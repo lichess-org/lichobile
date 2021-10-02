@@ -184,7 +184,7 @@ function renderLinks(user?: Session) {
       }
       {online ?
       <li className="side_link" data-route="/tv">
-        <span data-icon="1"/>{i18n('watchLichessTV')}
+        <span data-icon="1"/>{i18n('watchGames')}
       </li> : null
       }
       {online ?

@@ -117,7 +117,7 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
         ctrl.menu.close()
         Plugins.LiShare.share({ url: gameApi.publicAnalyseUrl(ctrl.data) })
       })
-    }, [i18n('shareGameURL')]) : null,
+    }, [i18n('shareUrl')]) : null,
     ctrl.source === 'offline' ? h('button', {
       oncreate: helper.ontap(() => {
         offlinePgnExport(ctrl)

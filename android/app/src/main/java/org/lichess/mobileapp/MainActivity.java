@@ -17,6 +17,8 @@ import com.getcapacitor.BridgeActivity;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.regex.Pattern;
 
 public class MainActivity extends BridgeActivity {
@@ -28,7 +30,7 @@ public class MainActivity extends BridgeActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    registerPlugin(LiBuildConfig.class);
+    registerPlugins(Arrays.asList(LiBuildConfig.class, FullScreenPlugin.class));
 
     this.versionUpdateActions();
 

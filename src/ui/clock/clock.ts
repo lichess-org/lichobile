@@ -1,3 +1,5 @@
+import { Capacitor, registerPlugin, PluginListenerHandle } from '@capacitor/core'
+import { App, AppState } from '@capacitor/app'
 import { StatusBar } from '@capacitor/status-bar'
 import * as sleepUtils from '../../utils/sleep'
 import * as helper from '../helper'
@@ -8,8 +10,18 @@ import { clockBody, renderClockSettingsOverlay } from './clockView'
 
 interface State {
   ctrl: IChessClockCtrl
+  appStateListener: PluginListenerHandle
 }
 
+interface FullScreenPlugin {
+  hideSystemUI(): Promise<void>
+  showSystemUI(): Promise<void>
+}
+const FullScreenPlugin = registerPlugin<FullScreenPlugin>('FullScreen')
+
+function hideStatusBar() {
+  StatusBar.hide()
+}
 
 const ChessClockScreen: Mithril.Component<Record<string, never>, State> = {
   oncreate: helper.viewFadeIn,
@@ -17,10 +29,17 @@ const ChessClockScreen: Mithril.Component<Record<string, never>, State> = {
   oninit() {
     sleepUtils.keepAwake()
 
-    // TODO find capacitor alternative
-    // if (window.deviceInfo.platform === 'android') {
-    //   window.AndroidFullScreen.immersiveMode()
-    // }
+    if (Capacitor.getPlatform() === 'android') {
+      FullScreenPlugin.hideSystemUI()
+    }
+
+    hideStatusBar()
+
+    this.appStateListener = App.addListener('appStateChange', (state: AppState) => {
+      if (state.isActive) hideStatusBar()
+    })
+
+    window.addEventListener('resize', hideStatusBar)
 
     this.ctrl = ChessClockCtrl()
   },
@@ -32,15 +51,15 @@ const ChessClockScreen: Mithril.Component<Record<string, never>, State> = {
     }
     sleepUtils.allowSleepAgain()
 
-    this.ctrl.appStateListener.remove()
+    this.appStateListener.remove()
 
-    window.removeEventListener('resize', this.ctrl.hideStatusBar)
+    window.removeEventListener('resize', hideStatusBar)
 
     StatusBar.show()
 
-    // if (window.deviceInfo.platform === 'android') {
-    //   window.AndroidFullScreen.showSystemUI()
-    // }
+    if (Capacitor.getPlatform() === 'android') {
+      FullScreenPlugin.showSystemUI()
+    }
   },
 
   view() {

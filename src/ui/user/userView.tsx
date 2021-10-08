@@ -248,7 +248,7 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
       <div className="list_item nav"
         oncreate={helper.ontapY(ctrl.followers)}
       >
-        {plural('nbFollowers', user.nbFollowers)}
+        {i18n('friends')}
       </div>
       { !ctrl.isMe() ? <div className="list_item nav" data-icon="1"
         oncreate={helper.ontapY(ctrl.goToUserTV)}

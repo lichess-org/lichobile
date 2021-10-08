@@ -96,10 +96,6 @@ function renderProfileActions(user: Session) {
         <span data-icon="f" />
         {plural('nbFriendsOnline', friendsApi.count())}
       </li>
-      <li className="side_link" data-route={`/@/${user.id}/related`}>
-        <span className="fa fa-arrow-circle-left" />
-        {plural('nbFollowers', user.nbFollowers || 0)}
-      </li>
       <li className="side_link" data-nocloseaction="logout">
         <span data-icon="w" />
         {i18n('logOut')}

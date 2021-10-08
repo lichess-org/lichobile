@@ -5,7 +5,10 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         configurations.all {
-            resolutionStrategy { force 'androidx.core:core-ktx:1.6.0' }
+          resolutionStrategy {
+            force 'androidx.core:core:1.6.0'
+            force 'androidx.core:core-ktx:1.6.0'
+          }
         }
         applicationId "org.lichess.mobileapp"
         minSdkVersion rootProject.ext.minSdkVersion

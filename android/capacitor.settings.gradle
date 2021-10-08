@@ -57,4 +57,4 @@ include ':capacitor-stockfish'
 project(':capacitor-stockfish').projectDir = new File('../node_modules/capacitor-stockfish/android')
 
 include ':capacitor-stockfish-variants'
-project(':capacitor-stockfish-variants').projectDir = new File('../../capacitor-stockfish-variants/android')
+project(':capacitor-stockfish-variants').projectDir = new File('../node_modules/capacitor-stockfish-variants/android')

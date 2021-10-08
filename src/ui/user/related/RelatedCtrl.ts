@@ -62,13 +62,7 @@ export default class RelatedCtrl {
   }
 
   private getData(userId: string, page: number): Promise<void> {
-    return this.currentTab === 0 ?
-      xhr.followers(userId, page)
-      .then(d => {
-        this.followers = (this.followers || []).concat(d.paginator.currentPageResults)
-        this.followersPaginator = d.paginator
-      }) :
-      xhr.following(userId, page)
+    return xhr.following(userId, page)
       .then(d => {
         this.following = (this.following || []).concat(d.paginator.currentPageResults)
         this.followingPaginator = d.paginator

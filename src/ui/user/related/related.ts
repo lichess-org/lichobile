@@ -8,6 +8,8 @@ import { dropShadowHeader, backButton } from '../../shared/common'
 import RelatedCtrl from './RelatedCtrl'
 import { renderBody } from './relatedView'
 
+import i18n from '../../../i18n'
+
 interface Attrs {
   id: string
   tab?: string
@@ -28,13 +30,10 @@ export default {
       safeStringToNum(vnode.attrs.tab)
     )
   },
-  view({ attrs }) {
-    const name = attrs.username ? h('div.title', [
-      h('span', [
-        ...(attrs.title ? [h('span.userTitle', attrs.title), ' '] : []),
-        attrs.username
-      ])
-    ]) : attrs.id
+  view() {
+    const name = h('div.title', [
+      h('span', i18n('friends'))
+    ])
 
     return layout.free(
       dropShadowHeader(null, backButton(name)),

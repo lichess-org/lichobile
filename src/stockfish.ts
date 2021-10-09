@@ -1,21 +1,17 @@
-import { Capacitor, Plugins } from '@capacitor/core'
-import { Stockfish } from 'capacitor-stockfish'
+import { Capacitor, registerPlugin } from '@capacitor/core'
+import { Stockfish, StockfishPlugin as IStockfishPlugin } from 'capacitor-stockfish'
 import { VariantKey } from './lichess/interfaces/variant'
 
-interface IStockfishPlugin {
-  getMaxMemory(): Promise<{ value: number }>
-  start(): Promise<void>
-  cmd(options: { cmd: string }): Promise<void>
-  exit(): Promise<void>
-}
-const CapacitorStockfishVariants = Plugins.StockfishVariants as IStockfishPlugin
+const StockfishVariants = registerPlugin<IStockfishPlugin>('StockfishVariants', {
+  web: () => import('./stockfishVariantsWeb').then(m => new m.StockfishVariantsWeb()),
+})
 
 export class StockfishPlugin {
   private plugin: IStockfishPlugin
 
   constructor(readonly variant: VariantKey) {
     this.plugin = Capacitor.getPlatform() === 'android' && !this.isVariant() ?
-      Stockfish : CapacitorStockfishVariants
+      Stockfish : StockfishVariants
   }
 
   public async start(): Promise<{ engineName: string }> {
@@ -63,9 +59,9 @@ export class StockfishPlugin {
 
   public setVariant(): Promise<void> {
     if (this.isVariant()) {
-      if (Capacitor.platform !== 'web' && this.variant === 'threeCheck')
+      if (Capacitor.getPlatform() !== 'web' && this.variant === 'threeCheck')
         return this.setOption('UCI_Variant', '3check')
-      if (Capacitor.platform === 'web' && this.variant === 'antichess')
+      if (Capacitor.getPlatform() === 'web' && this.variant === 'antichess')
         return this.setOption('UCI_Variant', 'giveaway')
       else
         return this.setOption('UCI_Variant', this.variant.toLowerCase())
@@ -95,3 +91,4 @@ export function getNbCores(): number {
   const cores = window.deviceInfo.cpuCores
   return cores > 2 ? cores - 1 : 1
 }
+

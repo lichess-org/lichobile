@@ -5,6 +5,12 @@
   flex-flow column nowrap
   justify-content center
   min-height 0 // fix chrome bug
+  .blindfold-true .manipulable piece
+      display none
+  .analyse-boardWrapper .blindfold-true .manipulable piece
+      display initial
+  .editor-board .blindfold-true .manipulable piece
+      display initial
   @media only screen and (orientation: portrait) and (min-width 768px) and (min-height 768px)
     .actions_bar
       width 94vw

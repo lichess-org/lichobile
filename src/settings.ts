@@ -135,6 +135,7 @@ export default {
     magnified: prop<boolean>('pieceMagnified', true),
     pieceNotation: prop<boolean>('pieceNotation', true),
     zenMode: prop<boolean>('zenMode', false),
+    blindfoldChess: prop<boolean>('blindfoldChess', false),
     clockPosition: prop<'right' | 'left'>('game.inversedClockPos', 'right'),
     pieceMove: prop<'tap' | 'drag' | 'both'>('game.pieceMove', 'both'),
     rookCastle: prop<0 | 1>('game.rookCastle', 1),

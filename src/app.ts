@@ -13,7 +13,9 @@ import push from './push'
 import router from './router'
 import socket from './socket'
 import sound from './sound'
+import * as utils from './utils'
 import { isForeground, setForeground, setBackground } from './utils/appMode'
+import { ImportEvent } from './ui/importer/importer'
 
 let firstConnection = true
 
@@ -76,6 +78,13 @@ export default function appInit(
   })
 
   Plugins.App.addListener('backButton', router.backbutton)
+
+  Plugins.LiIntent.addListener('importPGN', (e: ImportEvent) => {
+    const params: Record<string, string> = {
+      pgn: e.pgn,
+    }
+    router.set(`/importer?${utils.serializeQueryParameters(params)}`)
+  })
 
   window.addEventListener('resize', debounce(onResize), false)
 

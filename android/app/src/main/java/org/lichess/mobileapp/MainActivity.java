@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PatternMatcher;
 import android.util.Log;
 import android.webkit.WebView;
 
@@ -17,7 +16,6 @@ import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.Dialogs;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.community.keepawake.KeepAwake;
-import com.getcapacitor.plugin.Storage;
 
 import org.lichess.plugin.SoundEffect;
 import org.lichess.mobileapp.stockfish.Stockfish;
@@ -41,6 +39,7 @@ public class MainActivity extends BridgeActivity {
     // Initializes the Bridge
     this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
       // Additional plugins you've installed go here
+      add(LiIntent.class);
       add(LiToast.class);
       add(LiShare.class);
       add(LiBuildConfig.class);

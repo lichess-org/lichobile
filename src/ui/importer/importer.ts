@@ -13,10 +13,15 @@ interface State {
   ctrl: IImporterCtrl
 }
 
-const ImporterScreen: Mithril.Component<Record<string, never>, State> = {
-  oninit() {
+export interface ImportEvent {
+  pgn: string
+}
+
+const ImporterScreen: Mithril.Component<ImportEvent, State> = {
+  oninit(vnode) {
     socket.createDefault()
     this.ctrl = ImporterCtrl()
+    this.ctrl.pgn(vnode.attrs.pgn)
   },
 
   oncreate: helper.viewFadeIn,
@@ -35,13 +40,17 @@ function renderBody(ctrl: IImporterCtrl) {
     h('form', {
       onsubmit: (e: Event) => {
         e.preventDefault()
-        const target = e.target as HTMLFormElement
-        const pgn: string = (target[0] as HTMLInputElement).value
-        if (pgn) ctrl.importGame(pgn)
+        if (ctrl.pgn()) ctrl.importGame(ctrl.pgn()!)
       }
     }, [
       h('label', i18n('pasteThePgnStringHere') + ' :'),
-      h('textarea.pgnImport'),
+      h('textarea.pgnImport', {
+        value: ctrl.pgn(),
+        onchange(e: Event) {
+          const target = e.target as HTMLTextAreaElement
+          ctrl.pgn(target.value)
+        }
+      }),
       formWidgets.renderCheckbox(i18n('requestAComputerAnalysis'), 'analyse', settings.importer.analyse),
       h('button.fatButton', ctrl.importing() ?
         h('div.fa.fa-hourglass-half') : i18n('importGame'))

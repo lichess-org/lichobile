@@ -27,7 +27,7 @@ PODS:
     - Capacitor
   - CapacitorShare (1.0.3):
     - Capacitor
-  - CapacitorSoundEffect (2.0.0):
+  - CapacitorSoundEffect (2.0.1):
     - Capacitor
   - CapacitorSplashScreen (1.1.0):
     - Capacitor
@@ -191,7 +191,7 @@ SPEC CHECKSUMS:
   CapacitorNetwork: a85f117d3ea0d37864c91adbe0afecb664e7bae7
   CapacitorPushNotifications: 4dbd874ad07c3146bc0195a622f679bd35fd0350
   CapacitorShare: c600e0be9c94e63b15e4009e53f1036dd065a8f2
-  CapacitorSoundEffect: 00695e533a1aeeff6a958b9aa3539df8c6cab133
+  CapacitorSoundEffect: 67795fe53fb7eb7cae6bdd3d863e1233b9d2f5b3
   CapacitorSplashScreen: 25fbdbaa5982dfdbfcb2dcbf3757c638a56ebaa9
   CapacitorStatusBar: 5f78c4275b059bf5c0bcf059d9fafc4f1b620d5b
   CapacitorStockfishVariants: 2b2cf3580f28413faeb1999f6e0a21cd89de37aa

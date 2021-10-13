@@ -17,7 +17,30 @@ const config: CapacitorConfig = {
     PushNotifications: {
       presentationOptions: ['sound', 'alert']
     }
-  }
+  },
+  ios: {
+    includePlugins: [
+      '@capacitor-community/keep-awake',
+      '@capacitor/app',
+      '@capacitor/browser',
+      '@capacitor/clipboard',
+      '@capacitor/device',
+      '@capacitor/dialog',
+      '@capacitor/filesystem',
+      '@capacitor/haptics',
+      '@capacitor/keyboard',
+      '@capacitor/network',
+      '@capacitor/push-notifications',
+      '@capacitor/share',
+      '@capacitor/splash-screen',
+      '@capacitor/status-bar',
+      '@capacitor/storage',
+      '@capacitor/toast',
+      'capacitor-sound-effect',
+      'capacitor-stockfish-variants',
+    ]
+  },
 }
 
 export default config
+

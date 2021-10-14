@@ -1,5 +1,5 @@
 PODS:
-  - Capacitor (3.2.4):
+  - Capacitor (3.2.5):
     - CapacitorCordova
   - CapacitorApp (1.0.2):
     - Capacitor
@@ -9,7 +9,7 @@ PODS:
     - Capacitor
   - CapacitorCommunityKeepAwake (2.1.0):
     - Capacitor
-  - CapacitorCordova (3.2.4)
+  - CapacitorCordova (3.2.5)
   - CapacitorDevice (1.0.2):
     - Capacitor
   - CapacitorDialog (1.0.2):
@@ -177,12 +177,12 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/toast"
 
 SPEC CHECKSUMS:
-  Capacitor: 07f746722420584674243fe6bb2e02d243a02a08
+  Capacitor: 32416638f82066f863d7cd85d6f738b5cc2797d2
   CapacitorApp: 4a7a55cb30ac30af4e4801d4d6e51f4d03aa75e6
   CapacitorBrowser: 78dca7e45adb2f3c8239c44095aeed7582bf0923
   CapacitorClipboard: d8444615cb87293d7a2a2c310df5cf48b05c3620
   CapacitorCommunityKeepAwake: da57047d09e2e02b86e1f81b5d0f83445ace5c77
-  CapacitorCordova: 16f118e79d7c20eb659565b1ed9133e2b730f747
+  CapacitorCordova: e2ae8ac0f7ff5bc7bebaa5fa41afe0300e66837b
   CapacitorDevice: 4d1a1f44e9f7ee126aa809b89c86c107a13bf898
   CapacitorDialog: 410d570ad02845665836d60606802244fbbbd8ba
   CapacitorFilesystem: a8f258902f03ee602148ad2428e1bad147b8d164

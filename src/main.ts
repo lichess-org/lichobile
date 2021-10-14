@@ -6,6 +6,7 @@ import { SplashScreen } from '@capacitor/splash-screen'
 
 import appInit from './app'
 import { init as settingsInit } from './settings'
+import { StockfishVariants } from './stockfish'
 import { init as i18nInit } from './i18n'
 import { init as themeInit } from './theme'
 import routes from './routes'
@@ -35,9 +36,7 @@ settingsInit()
   Capacitor.getPlatform() === 'ios' ?
     CPUInfo.nbCores().then((r: { value: number }) => r.value).catch(() => 1) :
     Promise.resolve((<XNavigator>navigator).hardwareConcurrency || 1),
-  // TODO migrate
-  // Plugins.StockfishVariants.getMaxMemory().then((r: { value: number }) => r.value).catch(() => 16),
-  Promise.resolve(16),
+  StockfishVariants.getMaxMemory().then((r: { value: number }) => r.value).catch(() => 16),
   Capacitor.getPlatform() === 'android' ?
     LiBuildConfig.get() : Promise.resolve({
       NNUE: false

@@ -1,9 +1,9 @@
 import { Capacitor, registerPlugin } from '@capacitor/core'
 import { Stockfish, StockfishPlugin as IStockfishPlugin } from 'capacitor-stockfish'
-import { VariantKey } from './lichess/interfaces/variant'
+import { VariantKey } from '../lichess/interfaces/variant'
 
-const StockfishVariants = registerPlugin<IStockfishPlugin>('StockfishVariants', {
-  web: () => import('./stockfishVariantsWeb').then(m => new m.StockfishVariantsWeb()),
+export const StockfishVariants = registerPlugin<IStockfishPlugin>('StockfishVariants', {
+  web: () => import('./StockfishVariantsWeb').then(m => new m.StockfishVariantsWeb()),
 })
 
 export class StockfishPlugin {

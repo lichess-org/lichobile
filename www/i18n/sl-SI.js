@@ -1317,5 +1317,11 @@ export default {
   "unsupportedVariant": "V tej različici različica %s ni podprta",
   "notesSynchronizationHasFailed": "Sinhronizacija zapiskov z lichess ni uspela, poskusite pozneje.",
   "vibrateOnGameEvents": "Vibriranje na dogodke v igri",
-  "offline": "Brez povezave"
+  "offline": "Brez povezave",
+  "toggleSound": "Preklopi zvok",
+  "overTheBoard": "Proti človeku",
+  "sharePgn": "Deli PGN",
+  "shareGameUrl": "Deli povezavo do igre",
+  "playOnline": "Igraj online",
+  "playOffline": "Igraj offline"
 }

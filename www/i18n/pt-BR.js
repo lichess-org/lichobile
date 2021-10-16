@@ -1225,5 +1225,6 @@ export default {
   "settingsClockPosition": "Posição do relógio",
   "positionRight": "Direita",
   "positionLeft": "Esquerda",
-  "landscapeBoardSide": "Lado da tela do tabuleiro (no modo paisagem)"
+  "landscapeBoardSide": "Lado da tela do tabuleiro (no modo paisagem)",
+  "toggleSound": "Ativar som"
 }

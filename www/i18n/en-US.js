@@ -1224,5 +1224,11 @@ export default {
   "settingsClockPosition": "Clock position",
   "positionRight": "Right",
   "positionLeft": "Left",
-  "landscapeBoardSide": "Board screen side (in landscape mode)"
+  "landscapeBoardSide": "Board screen side (in landscape mode)",
+  "toggleSound": "Toggle sound",
+  "overTheBoard": "Over the board",
+  "sharePgn": "Share PGN",
+  "shareGameUrl": "Share game URL",
+  "playOnline": "Play online",
+  "playOffline": "Play offline"
 }

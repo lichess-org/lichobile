@@ -7,8 +7,8 @@ import { load as loadYaml } from 'js-yaml'
 
 const baseDir = 'tmp/translations'
 const i18nBaseDir = '../www/i18n'
-const lilaTranslationsPath = '[ornicar.lila] master/translation/dest'
-const lichobileTranslationsPath = '[veloce.lichobile] master/translation/dest'
+const lilaTranslationsPath = `${baseDir}/[ornicar.lila] master/translation/dest`
+const lichobileTranslationsPath = '../translation/dest/'
 const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
 const modules = ['site', 'study', 'arena', 'perfStat', 'preferences', 'settings', 'search', 'team', 'tfa', 'puzzle', 'coordinates']
@@ -28,7 +28,7 @@ async function main() {
 
     await unzipTranslations(`${baseDir}/out.zip`)
 
-    const locales = readdirSync(`${baseDir}/${lilaTranslationsPath}/site`)
+    const locales = readdirSync(`${lilaTranslationsPath}/site`)
     .map(fn => fn.split('.')[0])
 
     // load and flatten translations in one object
@@ -98,7 +98,7 @@ function unzipTranslations(zipFilePath: string) {
 
 function loadTranslations(dir: string, locale: string) {
   return parseStringPromise(
-    readFileSync(`${baseDir}/${lilaTranslationsPath}/${dir}/${locale}.xml`)
+    readFileSync(`${lilaTranslationsPath}/${dir}/${locale}.xml`)
   )
 }
 
@@ -148,10 +148,12 @@ async function loadXml(locales: readonly string[], section: string): Promise<Rec
 function loadMobileTranslations(): Map<string, StringMap> {
   const localeMap = new Map()
 
-  for (const locale of readdirSync(`${baseDir}/${lichobileTranslationsPath}`)) {
-    const translations = loadMobileTranslationsForLocale(locale)
-    if (!isEmpty(translations)) {
-      localeMap[locale] = translations
+  for (const locale of readdirSync(lichobileTranslationsPath)) {
+    if (locale !== 'README.md') {
+      const translations = loadMobileTranslationsForLocale(locale)
+      if (!isEmpty(translations)) {
+        localeMap[locale] = translations
+      }
     }
   }
 
@@ -160,7 +162,7 @@ function loadMobileTranslations(): Map<string, StringMap> {
 
 function loadMobileTranslationsForLocale(locale: string): StringMap {
   let translationMap = {}
-  const localeDir = `${baseDir}/${lichobileTranslationsPath}/${locale}`
+  const localeDir = `${lichobileTranslationsPath}/${locale}`
 
   for (const file of readdirSync(localeDir)) {
     const data = <Record<string, string | StringMap>>loadYaml(readFileSync(`${localeDir}/${file}`, 'utf8'))[locale]

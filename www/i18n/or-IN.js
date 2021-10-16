@@ -321,5 +321,10 @@ export default {
   "settingsClockPosition": "ଘଣ୍ଟା ଅବସ୍ଥାନ",
   "positionRight": "ଡାହାଣ",
   "positionLeft": "ବାମ",
-  "landscapeBoardSide": "ବୋର୍ଡ ସ୍କ୍ରିନ୍ ପାର୍ଶ୍ୱ (ଲ୍ୟାଣ୍ଡସ୍କେପ୍ ମୋଡ୍ ରେ)"
+  "landscapeBoardSide": "ବୋର୍ଡ ସ୍କ୍ରିନ୍ ପାର୍ଶ୍ୱ (ଲ୍ୟାଣ୍ଡସ୍କେପ୍ ମୋଡ୍ ରେ)",
+  "toggleSound": "ଧ୍ଵନି ଟୋଗଲ୍ କରନ୍ତୁ",
+  "overTheBoard": "ବୋର୍ଡ ଉପରେ",
+  "shareGameUrl": "ଖେଳ URL ଅଂଶୀଦାର କରନ୍ତୁ",
+  "playOnline": "ଅନଲାଇନ୍ ଖେଳନ୍ତୁ",
+  "playOffline": "ଅଫଲାଇନ୍ ଖେଳନ୍ତୁ"
 }

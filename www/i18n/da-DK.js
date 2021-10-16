@@ -1225,5 +1225,11 @@ export default {
   "settingsClockPosition": "Ur-position",
   "positionRight": "Højre",
   "positionLeft": "Venstre",
-  "landscapeBoardSide": "Brættets placering på skærmen (i landskabsformat)"
+  "landscapeBoardSide": "Brættets placering på skærmen (i landskabsformat)",
+  "toggleSound": "Slå lyd til/fra",
+  "overTheBoard": "Spil offline, brug som bræt",
+  "sharePgn": "Del PGN",
+  "shareGameUrl": "Del spillets URL",
+  "playOnline": "Spil online",
+  "playOffline": "Spil offline"
 }

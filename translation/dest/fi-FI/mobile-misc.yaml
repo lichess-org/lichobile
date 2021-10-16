@@ -1,0 +1,14 @@
+fi-FI:
+  apiUnsupported: "Lichess-sovelluksesi versio on liian vanha! Päivitä ilmaiseksi uusimpaan versioon."
+  apiDeprecated: "Päivitä ilmaiseksi uusimpaan Lichess-sovellukseen! Tämän version tuki päättyy %s."
+  playerisInvitingYou: "%s kutsuu sinut"
+  unsupportedVariant: "Variantti %s ei ole tuettu tässä versiossa"
+  notesSynchronizationHasFailed: "Muistiinpanojen synkronointi Lichessiin epäonnistui, yritä myöhemmin uudelleen."
+  vibrateOnGameEvents: "Värinä pelin tapahtumissa"
+  offline: "Ei yhteyttä"
+  otbUseSymmetricPieces: "Käytä symmetrisiä nappuloita" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Käännä nappulat ja pelaajatiedot ympäri kunkin siirron jälkeen" #Setting for offline over-the-board games
+  settingsClockPosition: "Kellon sijainti" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Oikealla" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Vasemmalla" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Laudan sijainti näytöllä (vaakatilassa)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

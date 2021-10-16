@@ -1,0 +1,14 @@
+ko-KR:
+  apiUnsupported: "Lichess 앱 버전이 너무 오래되었습니다! 최신 버전으로 무료로 업그레이드하세요."
+  apiDeprecated: "Lichess 앱을 업그레이드하세요! 이 버전에 대한 지원은 %s에 종료됩니다."
+  playerisInvitingYou: "%s가 당신을 초대했습니다"
+  unsupportedVariant: "%s는 이 버전에서 지원되지 않습니다."
+  notesSynchronizationHasFailed: "Lichess와의 메모 동기화에 실패했습니다. 나중에 다시 시도하세요."
+  vibrateOnGameEvents: "게임 이벤트에 진동"
+  offline: "오프라인"
+  otbUseSymmetricPieces: "대칭 디자인의 기물 사용" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "수를 둔 뒤 기물과 상대 정보를 뒤집음" #Setting for offline over-the-board games
+  settingsClockPosition: "시계 위치" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "오른쪽" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "왼쪽" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "보드 스크린 위치(가로 모드에서)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

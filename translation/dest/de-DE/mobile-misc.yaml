@@ -1,0 +1,14 @@
+de-DE:
+  apiUnsupported: "Deine Version der Lichess-App ist veraltet! Bitte lade dir die kostenlose neue Version herunter."
+  apiDeprecated: "Aktualisiere kostenlos auf die neueste Lichess-App! Unterstützung für diese Version wird %s eingestellt."
+  playerisInvitingYou: "%s lädt dich ein"
+  unsupportedVariant: "Variante %s wird in dieser Version nicht unterstützt"
+  notesSynchronizationHasFailed: "Die Synchronisation der Anmerkungen mit Lichess ist fehlgeschlagen, bitte versuche es später erneut."
+  vibrateOnGameEvents: "Bei Spielereignissen vibrieren"
+  offline: "Offline"
+  otbUseSymmetricPieces: "Benutze symmetrische Figuren" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Drehe Figuren und Gegnerinfo nach dem Zug" #Setting for offline over-the-board games
+  settingsClockPosition: "Uhrposition" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Rechts" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Links" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Bildschirmseite des Bretts (im Querformat)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

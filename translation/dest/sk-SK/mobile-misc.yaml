@@ -1,0 +1,10 @@
+sk-SK:
+  apiUnsupported: "Verzia Vašej lichess aplikácie je neaktuálna. Aktualizujte si ju na najnovšiu verziu, prosím."
+  playerisInvitingYou: "%s Vás pozýva"
+  unsupportedVariant: "Variant %s nie je podporovaný v tejto verzií"
+  offline: "Offline"
+  otbUseSymmetricPieces: "Použiť symetrické figúrky" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Otočiť figúrky a informácie o súperovi po ťahu" #Setting for offline over-the-board games
+  settingsClockPosition: "Umiestnenie hodín" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Napravo" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Naľavo" #As in "left-hand side"; not political or past participle

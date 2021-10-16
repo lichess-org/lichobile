@@ -1,0 +1,14 @@
+fr-FR:
+  apiUnsupported: "Votre version de l'appli Lichess est trop ancienne. Passez gratuitement à la nouvelle version."
+  apiDeprecated: "Mise à niveau gratuite à la dernière version de l'appli Lichess! Le soutien pour la version courante cessera le %s."
+  playerisInvitingYou: "Vous avez une invitation de %s."
+  unsupportedVariant: "La variante %s n'est pas prise en charge par cette version."
+  notesSynchronizationHasFailed: "La synchronisation des notes avec Lichess a échoué. Réessayez plus tard."
+  vibrateOnGameEvents: "Vibrer lors des événements du jeu"
+  offline: "Hors ligne"
+  otbUseSymmetricPieces: "Utiliser des pièces symétriques" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Retourner les pièces et les infos de l'adversaire après déplacement" #Setting for offline over-the-board games
+  settingsClockPosition: "Position de l'horloge" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Côté droit" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Côté gauche" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Placement de l'échiquier (mode paysage)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

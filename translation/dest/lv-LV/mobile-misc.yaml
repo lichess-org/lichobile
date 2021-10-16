@@ -1,0 +1,14 @@
+lv-LV:
+  apiUnsupported: "Jūsu Lichess aplikācijas versija ir par vecu. Lūdzu, atjauniniet, lai iegūtu jaunāko versiju par brīvu."
+  apiDeprecated: "Atjauniniet uz jaunāko Lichess aplikāciju. Šo versiju vairs neatbalstīs sākot no %s."
+  playerisInvitingYou: "%s jūs uzaicina"
+  unsupportedVariant: "%s variants nav atbalstīts šajā versijā"
+  notesSynchronizationHasFailed: "Pierakstu sinhronizācija ar Lichess neizdevās; lūdzu mēģiniet vēlāk."
+  vibrateOnGameEvents: "Vibrēt, kad noticis gājiens vai cits spēles notikums"
+  offline: "Bezsaistē"
+  otbUseSymmetricPieces: "Lietot simetriskas figūras" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Pagriezt figūras un informāciju par pretinieku pēc gājiena veikšanas" #Setting for offline over-the-board games
+  settingsClockPosition: "Pulksteņa novietojums" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Pa labi" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Pa kreisi" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Galdiņa novietojums ekrānā (ainavas režīmā)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

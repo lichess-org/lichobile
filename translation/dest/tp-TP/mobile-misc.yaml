@@ -1,0 +1,14 @@
+tp-TP:
+  apiUnsupported: "ilo kon \"lichess\" pi ilo toki sina li kama tan tenpo pini mute a! o kama jo e ante sin."
+  apiDeprecated: "o kama jo e ante sin pi ilo kon \"lichess\"! sina pali ala e ni la, ona li pini pali lon tenpo %s."
+  playerisInvitingYou: "jan %s li wile musi lon poka sina"
+  unsupportedVariant: "ante ni pi ilo kon \"lichess\" ni li sona ala e ante \"%s\""
+  notesSynchronizationHasFailed: "mi ken ala linja e sitelen musi pi ilo ni, e sitelen musi pi ilo lawa \"lichess\". o pali sin lon tenpo kama."
+  vibrateOnGameEvents: "ijo li kama la, o tawa nasa lili e ilo"
+  offline: "linja sona ala"
+  otbUseSymmetricPieces: "o kepeken e sitelen pi ilo musi pi nasin sama" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "tawa li pini la, o ante nasin e sitelen ijo" #Setting for offline over-the-board games
+  settingsClockPosition: "ma pi ilo tenpo" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "poka teje" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "poka soto" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "poka sama pi supa musi" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

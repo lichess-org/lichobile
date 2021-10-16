@@ -1,0 +1,14 @@
+lt-LT:
+  apiUnsupported: "Jūsų lichess programėlės versija per sena! Prašome nemokamai atsinaujinti savo programėlės versiją."
+  apiDeprecated: "Nemokamai atsinaujinkite į vėliausią lichess programės versiją! Šios programėlės versijos palaikymas pasibaigs %s."
+  playerisInvitingYou: "%s kviečia jus"
+  unsupportedVariant: "Variantas %s nepalaikomas šioje versijoje"
+  notesSynchronizationHasFailed: "Užrašų sinchronizacija su lichess nepavyko, bandykite dar kartą."
+  vibrateOnGameEvents: "Vibruoti per žaidimo įvykius"
+  offline: "Atsijungta"
+  otbUseSymmetricPieces: "Naudoti simetriškas figūras" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Po ėjimo apsukti figūras ir priešininko informaciją" #Setting for offline over-the-board games
+  settingsClockPosition: "Laikrodžio vieta" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Dešinė" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Kairė" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Lentos ekrano pusė (horizontaliame režime)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

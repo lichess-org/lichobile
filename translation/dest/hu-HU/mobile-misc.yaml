@@ -1,0 +1,14 @@
+hu-HU:
+  apiUnsupported: "A telepített Lichess alkalmazásod már elavult! Kérjük frissíts a legújabb verzióra."
+  apiDeprecated: "Frissíts ingyenesen a legújabb Lichess alkalmazásra. Jelen verzió támogatásának vége %s."
+  playerisInvitingYou: "%s meghívót küldött"
+  unsupportedVariant: "A %s variáns nem támogatott ebben a verzióban"
+  notesSynchronizationHasFailed: "Nem sikerült a feljegyzések szinkronizálása, próbáld újra később."
+  vibrateOnGameEvents: "Rezgö jelzés játék közben"
+  offline: "Nem elérhető"
+  otbUseSymmetricPieces: "Szimmetrikus figurák" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Nézet átfordítása a lépés után" #Setting for offline over-the-board games
+  settingsClockPosition: "Óra helye" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Jobb" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Bal" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Tábla helye a képernyőn (fekvő módban)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

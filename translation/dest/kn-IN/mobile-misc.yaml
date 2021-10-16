@@ -1,0 +1,14 @@
+kn-IN:
+  apiUnsupported: "ನಿಮ್ಮ ಲೀಚೆಸ್ ಅಪ್ಲಿಕೇಶನ್ ನ ಆವೃತ್ತಿ ತುಂಬಾ ಹಳೆಯದಾಗಿದೆ! ದಯವಿಟ್ಟು ಇತ್ತೀಚಿನ ಆವೃತ್ತಿಗೆ ಉಚಿತವಾಗಿ ನವೀಕರಿಸಿಕೊಳ್ಳಿ."
+  apiDeprecated: "ಲೀಚೆಸ್ ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಇತ್ತೀಚಿನ ಆವೃತ್ತಿಗೆ ಉಚಿತವಾಗಿ ನವೀಕರಿಸಿಕೊಳ್ಳಿ! ನಿಮ್ಮ ಸಧ್ಯದ ಆವೃತ್ತಿಯ ತಾಂತ್ರಿಕ ಬೆಂಬಲವನ್ನು %s ರಿಂದ ಕೈ ಬಿಡಲಾಗುವುಗು."
+  playerisInvitingYou: "%s ಅವರು ನಿಮ್ಮನ್ನು ಆಹ್ವಾನಿಸುತ್ತಿದ್ದಾರೆ"
+  unsupportedVariant: "ಈ ಆವೃತ್ತಿಯಲ್ಲಿ ಆಟದ ಪ್ರಕಾರ %s ದಲ್ಲಿ ಆಡಲು ಸಧ್ಯಕ್ಕೆ ಸಾಧ್ಯವಿಲ್ಲ"
+  notesSynchronizationHasFailed: "ಲೀಚೆಸ್ ಸರ್ವರ್ ಜೊತೆ ನಿಮ್ಮ ಟಿಪ್ಪಣಿಯನ್ನು ಸರಿದೂಗಿಸುವ ಪ್ರಯತ್ನ ವಿಫಲವಾಗಿದೆ, ದಯವಿಟ್ಟು ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಪ್ರಯತ್ನಿಸಿ."
+  vibrateOnGameEvents: "ಆಟದ ಪ್ರತಿ ಘಟನೆಯಲ್ಲಿ ಫೋನ್ ಅದುರಲಿ"
+  offline: "ಆಫ್ ಲೈನ್"
+  otbUseSymmetricPieces: "ಚೆಸ್ ಕಾಯಿಗಳು ಸಮಮಿತೀಯವಾಗಿರಲಿ" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "ಪ್ರತಿ ನಡೆಯ ನಂತರ ಚೆಸ್ ಕಾಯಿಗಳು ಮತ್ತು ಎದುರಾಳಿಯ ಮಾಹಿತಿಯನ್ನು ತಿರುವಿ ಹಾಕಿ" #Setting for offline over-the-board games
+  settingsClockPosition: "ಗಡಿಯಾರದ ಸ್ಥಾನ" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "ಬಲಬದಿ" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "ಎಡಬದಿ" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "ಚೆಸ್ ಮಣೆ ಇರಬೇಕಾದ ಭಾಗ (ಲ್ಯಾಂಡ್ ಸ್ಕೇಪ್ ಮೋಡ್ ನಲ್ಲಿ)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

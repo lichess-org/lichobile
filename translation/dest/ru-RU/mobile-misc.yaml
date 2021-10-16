@@ -1,0 +1,14 @@
+ru-RU:
+  apiUnsupported: "Ваше приложение Lichess устарело. Пожалуйста, обновите его до последней версии, это бесплатно."
+  apiDeprecated: "Обновите ваше приложение lichess, это бесплатно! Поддержка текущей версии будет прекращена %s."
+  playerisInvitingYou: "%s приглашает вас"
+  unsupportedVariant: "Вариант %s не поддерживается в этой версии"
+  notesSynchronizationHasFailed: "Не удалось синхронизировать заметки с lichess, повторите попытку позже."
+  vibrateOnGameEvents: "Вибрировать при наступлении событий в игре"
+  offline: "Оффлайн"
+  otbUseSymmetricPieces: "Использовать симметричные фигуры" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Переворачивать фигуры и надписи после хода" #Setting for offline over-the-board games
+  settingsClockPosition: "Расположение часов" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Справа" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Слева" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Расположение доски (при альбомной ориентации)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

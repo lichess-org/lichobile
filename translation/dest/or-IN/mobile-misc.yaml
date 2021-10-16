@@ -10,3 +10,7 @@ or-IN:
   positionLeft: "ବାମ" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "ବୋର୍ଡ ସ୍କ୍ରିନ୍ ପାର୍ଶ୍ୱ (ଲ୍ୟାଣ୍ଡସ୍କେପ୍ ମୋଡ୍ ରେ)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
   toggleSound: "ଧ୍ଵନି ଟୋଗଲ୍ କରନ୍ତୁ" #Settings to enable/disable sound
+  overTheBoard: "ବୋର୍ଡ ଉପରେ"
+  shareGameUrl: 'ଖେଳ URL ଅଂଶୀଦାର କରନ୍ତୁ'
+  playOnline: "ଅନଲାଇନ୍ ଖେଳନ୍ତୁ"
+  playOffline: "ଅଫଲାଇନ୍ ଖେଳନ୍ତୁ"

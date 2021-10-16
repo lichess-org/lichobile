@@ -16,7 +16,7 @@ public class Badge: CAPPlugin {
                     call.resolve()
                 }
             } else {
-                call.error(error?.localizedDescription ?? "Not authorized to set badge")
+                call.reject(error?.localizedDescription ?? "Not authorized to set badge")
             }
         }
     }

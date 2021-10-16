@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core'
 import { Toast } from '@capacitor/toast'
 import { Filesystem, Directory, ReadFileResult } from '@capacitor/filesystem'
 import { StatusBar, Style as StatusBarStyle } from '@capacitor/status-bar'
@@ -164,10 +165,10 @@ function download(
 
 export function setStatusBarStyle(bgTheme: string): Promise<void> {
   return Promise.all([
-    StatusBar.setBackgroundColor({
+    Capacitor.getPlatform() === 'android' ? StatusBar.setBackgroundColor({
       color: bgTheme === 'light' ? '#edebe9' :
         bgTheme === 'dark' ? '#161512' : '#000000'
-    }),
+    }) : Promise.resolve(),
     StatusBar.setStyle({
       style: bgTheme === 'light' ? StatusBarStyle.Light : StatusBarStyle.Dark
     }),

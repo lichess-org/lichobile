@@ -4,12 +4,11 @@ name: Android build
 on:
   workflow_dispatch:
   push:
-    branches: 
-      - master
     paths:
       - '.github/workflows/build.yml'
       - 'android/**'
-      - 'src/**'
+    branches-ignore:
+      - 'l10n_master'
 
 jobs:
   apk:

@@ -57,7 +57,7 @@ export function renderFooter(ctrl: TournamentCtrl) {
       </button>
       <button key="shareButton" className="action_bar_button fa fa-share-alt" oncreate={helper.ontap(
         () => Share.share({ url: tUrl }),
-        () => Toast.show({ text: i18n('shareUrl'), duration: 'short', position: 'bottom' })
+        () => Toast.show({ text: i18n('shareGameUrl'), duration: 'short', position: 'bottom' })
       )}>
       </button>
       {ctrl.chat ?

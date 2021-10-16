@@ -117,7 +117,7 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
         ctrl.menu.close()
         Share.share({ url: gameApi.publicAnalyseUrl(ctrl.data) })
       })
-    }, [i18n('shareUrl')]) : null,
+    }, [i18n('shareGameUrl')]) : null,
     ctrl.source === 'offline' ? h('button', {
       oncreate: helper.ontap(() => {
         offlinePgnExport(ctrl)
@@ -138,7 +138,7 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
         ctrl.menu.close()
         Share.share({ url: gameApi.publicGIFUrl(ctrl.data) })
       })
-    }, [i18n('shareGameGIF')]) : null,
+    }, ['Share game GIF']) : null,
     ctrl.isOfflineOrNotPlayable() ? h('button', {
       oncreate: helper.ontap(() => {
         ctrl.menu.close()

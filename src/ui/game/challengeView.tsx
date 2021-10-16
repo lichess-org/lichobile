@@ -142,7 +142,7 @@ function awaitInvitePopup(ctrl: ChallengeCtrl, challenge: Challenge) {
             oncreate: helper.ontap(function() {
               Share.share({ url: publicUrl(challenge) })
             })
-          }, i18n('shareUrl')),
+          }, i18n('shareGameUrl')),
           h('button.binary_choice[data-icon=L].withIcon', {
             oncreate: helper.ontap(ctrl.cancelChallenge)
           }, i18n('cancel'))

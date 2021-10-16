@@ -1,0 +1,14 @@
+an-ES:
+  apiUnsupported: "La tuya versión de l'app de lichess ye masiau viella! Esviella-la descargando de gratis la zaguera versión."
+  apiDeprecated: "Actualización de gratis a la zaguera app de lichess! Esta versión deixará de tener soporte lo %s."
+  playerisInvitingYou: "%s te ye convidando"
+  unsupportedVariant: "La variant %s no ye compatible con esta versión"
+  notesSynchronizationHasFailed: "La sincronización d'anotacions con Lichess ha fallau. Torna-lo a prebar mas tarde."
+  vibrateOnGameEvents: "Vibrar quan i hai esdevenimiento en a partida"
+  offline: "No connectau"
+  otbUseSymmetricPieces: "Usar piezas simetricas" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Invertir la piezas y la información de l'oponent dimpués de cada movimiento" #Setting for offline over-the-board games
+  settingsClockPosition: "Posición d'o reloch" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Dreita" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Zurda" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Plazamiento de l'escaquero (en modo horizontal)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

@@ -30,9 +30,9 @@ export function renderBody(ctrl: State) {
   const mins = Math.floor(data.stat.count.seconds / 60) - days * 24 * 60 - hours * 60
   const now = Date.now()
   const yearsAgo = now - (ONE_YEAR * 3)
-  const graphData = smoothGraphData(data.graph
-    .map(normalizeGraphData)
-    .filter(d => d.date.getTime() > yearsAgo))
+  const graphData = data.graph.length === 0 ? null : smoothGraphData(data.graph
+      .map(normalizeGraphData)
+      .filter(d => d.date.getTime() > yearsAgo))
 
   const { vw } = helper.viewportDim()
 
@@ -149,7 +149,7 @@ export function renderBody(ctrl: State) {
         <tr class={isEmpty(data.stat.playStreak)}>
           <th class="variantPerf"> {i18n('gamesInARow')} </th>
           <td class="variantPerf"> {data.stat.playStreak.nb.max.v} </td>
-          <td class="variantPerf"> {data.stat.playStreak.nb.max.from.at && data.stat.playStreak.nb.max.from.at.substring(0, 10)} </td>
+          <td class="variantPerf"> {data.stat.playStreak.nb.max.from?.at && data.stat.playStreak.nb.max.from.at.substring(0, 10)} </td>
         </tr>
         <tr class={isEmpty(data.stat.resultStreak.win.max.v)}>
           <th class="variantPerf"> {i18n('winStreak')} </th>

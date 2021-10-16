@@ -1,0 +1,12 @@
+zh-TW:
+  apiUnsupported: "您的 lichess 版本過舊！請更新至最新版本。"
+  apiDeprecated: "免費更新到最新的版本。 對於目前版本的支援會在%s結束"
+  playerisInvitingYou: "%s 邀請了您"
+  unsupportedVariant: "此版本不支援變體 %s"
+  vibrateOnGameEvents: "有新動作時震動"
+  offline: "離線"
+  otbUseSymmetricPieces: "使用對稱棋子" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "下棋後翻轉棋子及對手資訊" #Setting for offline over-the-board games
+  settingsClockPosition: "時鐘位置" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "靠右" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "靠左" #As in "left-hand side"; not political or past participle

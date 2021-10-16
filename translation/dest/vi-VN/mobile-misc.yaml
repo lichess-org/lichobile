@@ -1,0 +1,5 @@
+vi-VN:
+  unsupportedVariant: "Biến thể %s không được hỗ trợ trong phiên bản này"
+  offline: "Ngoại tuyến"
+  positionRight: "Phải" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Trái" #As in "left-hand side"; not political or past participle

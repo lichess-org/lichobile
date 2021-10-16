@@ -1,0 +1,14 @@
+de-CH:
+  apiUnsupported: "Dini Version vode Lichess-App isch veraltet! Bitte lad dir di chostälosi neu Version abe."
+  apiDeprecated: "Upgrade choschtälos uf di neuschte Lichess-App! Underschtützig für dini Version wird %s iigschtellt."
+  playerisInvitingYou: "%s ladet dich i"
+  unsupportedVariant: "Variante %s wird in dere Version nöd underschtützt"
+  notesSynchronizationHasFailed: "D'Synchronisation vo Anmerkigä mit Lichess isch fählgschlagä, bitte versuechs spöter nomol."
+  vibrateOnGameEvents: "Bi Schpiilereignis vibriärä"
+  offline: "Offline"
+  otbUseSymmetricPieces: "Symmetrischi Figuren benutzä" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Figurä und Gegnerinfo nochem Zug flippä" #Setting for offline over-the-board games
+  settingsClockPosition: "Position vode Uhr" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Rächts" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Linggs" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Bildschirmsiitä vom Brett (im Quärformat)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

@@ -1,0 +1,9 @@
+gu-IN:
+  apiUnsupported: "તમારા Lichess એપ્લિકેશનની આવૃત્તિ જૂની છે! કૃપા કરીને મફતમાં નવીનતમ આવૃત્તિ પર અપગ્રેડ કરો."
+  apiDeprecated: "નવીનતમ Lichess એપ્લિકેશન મફતમાં અપગ્રેડ કરો! આ આવૃત્તિ માટેનો સપોર્ટ %s પર છોડી દેવામાં આવશે."
+  playerisInvitingYou: "%s તમને આમંત્રણ આપી રહ્યા છે"
+  vibrateOnGameEvents: "રમતી વખતે કંપન"
+  offline: "ઑફલાઇન"
+  settingsClockPosition: "ઘડિયાળનું સ્થળ" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "જમણી તરફ" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "ડાબી તરફ" #As in "left-hand side"; not political or past participle

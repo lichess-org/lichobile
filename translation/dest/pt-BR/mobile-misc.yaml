@@ -12,3 +12,4 @@ pt-BR:
   positionRight: "Direita" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Esquerda" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Lado da tela do tabuleiro (no modo paisagem)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Ativar som" #Settings to enable/disable sound

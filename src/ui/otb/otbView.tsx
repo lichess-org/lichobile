@@ -87,7 +87,7 @@ function renderGameActionsBar(ctrl: OtbRound) {
       <button className="fa fa-share-alt action_bar_button"
         oncreate={helper.ontap(
           ctrl.sharePGN,
-          () => Toast.show({ text: i18n('sharePGN'), duration: 'short', position: 'bottom' })
+          () => Toast.show({ text: i18n('sharePgn'), duration: 'short', position: 'bottom' })
         )}
       />
       {ctrl.clock ?

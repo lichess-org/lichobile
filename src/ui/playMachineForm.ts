@@ -1,4 +1,5 @@
 import * as utils from '../utils'
+import tupleOf from '../utils/tupleOf'
 import { parseFen, makeFen } from 'chessops/fen'
 import router from '../router'
 import * as xhr from '../xhr'
@@ -126,7 +127,7 @@ function renderForm(formName: string, settingsObj: AiSettings, variants: string[
     h('div.select_input', [
       formWidgets.renderSelect('level', 'ailevel', [
         '1', '2', '3', '4', '5', '6', '7', '8'
-      ].map(utils.tupleOf), settingsObj.level)
+      ].map(tupleOf), settingsObj.level)
     ])
   ]
 
@@ -144,7 +145,7 @@ function renderForm(formName: string, settingsObj: AiSettings, variants: string[
       ]),
       h('div.select_input.inline', [
         formWidgets.renderSelect('increment', formName + 'increment',
-          settings.gameSetup.availableIncrements.map(utils.tupleOf), settingsObj.increment, false)
+          settings.gameSetup.availableIncrements.map(tupleOf), settingsObj.increment, false)
       ])
     )
   }

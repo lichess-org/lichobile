@@ -1,0 +1,8 @@
+sl-SI:
+  apiUnsupported: "Vaša različica lichess aplikacije je prestara! Brezplačno nadgradite na najnovejšo različico."
+  apiDeprecated: "Brezplačno nadgradite na najnovejšo aplikacijo lichess! Podpora za to različico bo ukinjena %s."
+  playerisInvitingYou: "%s vas vabi"
+  unsupportedVariant: "V tej različici različica %s ni podprta"
+  notesSynchronizationHasFailed: "Sinhronizacija zapiskov z lichess ni uspela, poskusite pozneje."
+  vibrateOnGameEvents: "Vibriranje na dogodke v igri"
+  offline: "Brez povezave"

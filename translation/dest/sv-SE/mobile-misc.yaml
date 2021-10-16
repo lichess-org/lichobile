@@ -1,0 +1,4 @@
+sv-SE:
+  apiUnsupported: "Din version av lichess-appen är för gammal! Var god uppdatera till den senaste versionen."
+  playerisInvitingYou: "%s bjuder in dig"
+  settingsClockPosition: "Klockans position" #Determines whether each player's time is shown on the left or right side of the board

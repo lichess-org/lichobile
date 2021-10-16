@@ -16,6 +16,8 @@ import { connectingHeader } from '../shared/common'
 import { syncAndLoadNewPuzzle, puzzleLoadFailure } from './offlineService'
 import { PuzzleData } from '../../lichess/interfaces/training'
 import database from './database'
+import { Plugins } from '@capacitor/core'
+import { ErrorResponse } from '~/http'
 
 interface Attrs {
   id?: string
@@ -32,21 +34,7 @@ const cachedState: State = {}
 
 export default {
   oninit({ attrs }) {
-    const numId = safeStringToNum(attrs.id) || base62ToNumber(attrs.id)
-    if (numId !== undefined) {
-      if (cachedState.ctrl && window.history.state.puzzleId === numId) {
-        this.ctrl = cachedState.ctrl
-        redraw()
-      }
-      else {
-        xhr.loadPuzzle(numId)
-        .then(cfg => {
-          this.ctrl = new TrainingCtrl(cfg, database)
-          cachedState.ctrl = this.ctrl
-        })
-        .catch(handleXhrError)
-      }
-    } else {
+    const loadNewPuzzle = () => {
       const user = session.get()
       if (user) {
         syncAndLoadNewPuzzle(database, user)
@@ -65,6 +53,31 @@ export default {
         })
         .catch(handleXhrError)
       }
+    }
+
+    const numId = safeStringToNum(attrs.id) ?? base62ToNumber(attrs.id)
+    if (numId !== undefined) {
+      if (cachedState.ctrl && window.history.state.puzzleId === numId) {
+        this.ctrl = cachedState.ctrl
+        redraw()
+      }
+      else {
+        xhr.loadPuzzle(numId)
+        .then(cfg => {
+          this.ctrl = new TrainingCtrl(cfg, database)
+          cachedState.ctrl = this.ctrl
+        })
+        .catch((e: ErrorResponse) => {
+          if (e.status === 404) {
+            Plugins.LiToast.show({ text: 'Puzzle not found.', duration: 'short' })
+            loadNewPuzzle()
+          } else {
+            handleXhrError(e)
+          }
+        })
+      }
+    } else {
+      loadNewPuzzle()
     }
 
     socket.createDefault()

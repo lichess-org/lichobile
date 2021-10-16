@@ -117,12 +117,12 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
         ctrl.menu.close()
         Share.share({ url: gameApi.publicAnalyseUrl(ctrl.data) })
       })
-    }, [i18n('shareGameURL')]) : null,
+    }, [i18n('shareUrl')]) : null,
     ctrl.source === 'offline' ? h('button', {
       oncreate: helper.ontap(() => {
         offlinePgnExport(ctrl)
       }),
-    }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : [i18n('sharePGN')]) : null,
+    }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : [i18n('sharePgn')]) : null,
     ctrl.source === 'online' && !gameApi.playable(ctrl.data) ? h('button', {
       oncreate: helper.ontap(() => {
         onlinePGNExport(ctrl, false)

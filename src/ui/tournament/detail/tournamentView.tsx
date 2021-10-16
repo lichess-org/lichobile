@@ -116,7 +116,7 @@ function tournamentTimeInfo(data: Tournament) {
 function tournamentCreatorInfo(data: Tournament, startsAt: string) {
   return (
     <div className="tournamentCreatorInfo">
-      {data.createdBy === 'lichess' ? i18n('tournamentOfficial') : i18n('by', data.createdBy)}
+      {data.createdBy === 'lichess' ? i18n('lichessTournaments') : i18n('by', data.createdBy)}
       &thinsp;•&thinsp;{startsAt}
     </div>
   )

@@ -51,7 +51,7 @@ export default {
     } else {
       const fen = attrs.fen || emptyFen
       const color = playerFromFen(fen)
-      header = renderHeader(i18n('playOfflineComputer'))
+      header = renderHeader(i18n('computer'))
       content = viewOnlyBoardContent(fen, color, undefined)
     }
 

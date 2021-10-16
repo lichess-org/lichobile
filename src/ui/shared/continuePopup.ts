@@ -88,7 +88,7 @@ export default {
                 }
               }
             })
-          }, i18n('playOfflineComputer')),
+          }, i18n('computer')),
           h('button', {
             oncreate: helper.ontap(() => {
               ctrl.close()
@@ -102,7 +102,7 @@ export default {
                 }
               }
             })
-          }, i18n('playOnTheBoardOffline'))
+          }, i18n('overTheBoard'))
         ]
       },
       ctrl.isOpen(),

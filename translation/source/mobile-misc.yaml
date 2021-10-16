@@ -12,3 +12,9 @@ en-US:
   positionRight: "Right" # As in "right-hand side"; not truth, morality, or law
   positionLeft: "Left" # As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Board screen side (in landscape mode)" # Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Toggle sound"
+  noFriendsOnline: "No friends online"
+  overTheBoard: "Over the board"
+  sharePgn: "Share PGN"
+  playOnline: "Play online"
+  playOffline: "Play offline"

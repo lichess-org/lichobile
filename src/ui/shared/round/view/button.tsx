@@ -40,7 +40,7 @@ export default {
         const orientation = ctrl.chessground.state.orientation
         Share.share({ url: `${gameApi.publicUrl(ctrl.data)}/${orientation}#${ctrl.vm.ply}` })
       })
-    }, [i18n('shareGameURL')])
+    }, [i18n('shareUrl')])
   },
   sharePGN(ctrl: OnlineRound) {
     function handler() {
@@ -53,7 +53,7 @@ export default {
     }
     return (
       <button oncreate={helper.ontap(handler)}>
-        {i18n('sharePGN')}
+        {i18n('sharePgn')}
       </button>
     )
   },

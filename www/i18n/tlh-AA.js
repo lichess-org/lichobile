@@ -9,7 +9,6 @@ export default {
   "aiNameLevelAiLevel": "%1$s patlh%2$s",
   "level": "mIw",
   "toggleTheChat": "choH QumwI'",
-  "toggleSound": "choH wab",
   "chat": "QumwI'",
   "resign": "jegh",
   "checkmate": "Doghjey",
@@ -33,7 +32,6 @@ export default {
   "whitePlays": "Quj chISwI'",
   "blackPlays": "Quj HurghwI'",
   "opponentLeftChoices": "mejta' gohollI. bIQap, pagh Qap pagh 'e' DamaqlaH, pagh bIloSlaH.",
-  "makeYourOpponentResign": "ghollI' yIpajmoH",
   "forceResignation": "bIQap 'e' yImaq",
   "forceDraw": "Qap pagh 'e' yImaq",
   "talkInChat": "batlh Sujawchuqjaj!",
@@ -42,9 +40,6 @@ export default {
   "blackResigned": "pajpu' HurghwI'",
   "whiteLeftTheGame": "mejpu' chISwI'",
   "blackLeftTheGame": "mejpu' HurghwI'",
-  "shareThisUrlToLetSpectatorsSeeTheGame": "Qujvam lubejlaHmeH bejwI'pu', tlharwIlvam tInob",
-  "theComputerAnalysisHasFailed": "pojHa'pu' De'wI'",
-  "viewTheComputerAnalysis": "De'wI' poj yIlegh",
   "requestAComputerAnalysis": "poj De'wI' 'e' yItlhob",
   "computerAnalysis": "De'wI' poj",
   "computerAnalysisAvailable": "SaH De'wI' poj",
@@ -52,9 +47,8 @@ export default {
   "depthX": "%s Saw'",
   "usingServerAnalysis": "turwI' poj lo'taH",
   "blunder": "Qagh",
-  "blunders": "Qaghpu'",
   "inaccuracy": "QaghHom",
-  "inaccuracies": "QaghHompu'",
   "opponentLeftCounter:one": "mejpu' ghollI'. bIQap 'e' DamaqmeH, qaStaHvIS %s lup bIloSnIS.",
-  "opponentLeftCounter:other": "mejpu' ghollI'. bIQap 'e' DamaqmeH, qaStaHvIS %s lup bIloSnIS."
+  "opponentLeftCounter:other": "mejpu' ghollI'. bIQap 'e' DamaqmeH, qaStaHvIS %s lup bIloSnIS.",
+  "victories": "yaypu'"
 }

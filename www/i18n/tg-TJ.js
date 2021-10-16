@@ -9,7 +9,6 @@ export default {
   "aiNameLevelAiLevel": "%1$s level %2$s",
   "level": "Дараҷаи",
   "toggleTheChat": "Чатро нишон додан",
-  "toggleSound": "Хомуш кардани садо",
   "chat": "Чат",
   "resign": "Таслим",
   "checkmate": "Мот",
@@ -30,7 +29,6 @@ export default {
   "whitePlays": "Гашти сафедҳо",
   "blackPlays": "Гашти сиеҳҳо",
   "opponentLeftChoices": "Ҳарифи шумо аз бози баромад. Шумо метованед ғалаба ё дуранг эълон кунед.",
-  "makeYourOpponentResign": "Ғалабаро эълон кардан",
   "forceResignation": "Ғалаба",
   "forceDraw": "Дуранг",
   "talkInChat": "Дар диалог якдигарро эҳтиром кунед!",
@@ -38,6 +36,5 @@ export default {
   "whiteResigned": "Сафедҳо таслим кардан",
   "blackResigned": "Сиеҳҳо таслим кардан",
   "whiteLeftTheGame": "Сафедҳо аз бози баромадан",
-  "blackLeftTheGame": "Сиеҳҳо аз бози баромадан",
-  "viewTheComputerAnalysis": "Анализи компютериро тамошо кардан"
+  "blackLeftTheGame": "Сиеҳҳо аз бози баромадан"
 }

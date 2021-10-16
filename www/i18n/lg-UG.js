@@ -9,7 +9,6 @@ export default {
   "aiNameLevelAiLevel": "%1$sEddaala%2$s",
   "level": "Eddaala",
   "toggleTheChat": "Kyuusa emboozi eno",
-  "toggleSound": "Kyuusa eddoboozi",
   "chat": "Emboozi",
   "resign": "Wanika",
   "checkmate": "Checkmate",

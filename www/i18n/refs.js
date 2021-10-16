@@ -1,5 +1,6 @@
 export default [
   "af-ZA",
+  "ak-GH",
   "am-ET",
   "an-ES",
   "ar-SA",
@@ -19,6 +20,7 @@ export default [
   "cv-CU",
   "cy-GB",
   "da-DK",
+  "de-CH",
   "de-DE",
   "el-GR",
   "en-US",
@@ -73,6 +75,7 @@ export default [
   "nl-NL",
   "nn-NO",
   "or-IN",
+  "os-SE",
   "pa-IN",
   "pa-PK",
   "pi-IN",

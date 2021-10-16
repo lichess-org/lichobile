@@ -48,7 +48,7 @@ function renderFriends() {
         {list.map(renderFriend)}
       </ul>
     ) : (
-      <div className="native_scroller nofriend">{i18n('noFriendsOnline')}</div>
+      <div className="native_scroller nofriend"></div>
     )
 }
 

@@ -1,0 +1,14 @@
+la-LA:
+  apiUnsupported: "Haec Lichess versio est obsoletissima! Gratis recentissimam te accipere quaeso."
+  apiDeprecated: "Gratis recentissimam Lichess versionem accipe! Huius versionis fulcimentum desinetur in %s."
+  playerisInvitingYou: "%s te invitat"
+  unsupportedVariant: "Hac in versione varietas %s non fulcitur"
+  notesSynchronizationHasFailed: "Synchronizatio notarum cum Lichess defecta est. Posterius proba."
+  vibrateOnGameEvents: "Vibrare eventis lusoriis"
+  offline: "Inconexus"
+  otbUseSymmetricPieces: "Symmetris uti militibus" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Alveum et adversarii informationes post motum circumagere" #Setting for offline over-the-board games
+  settingsClockPosition: "Horologii positio" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Dextra" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Sinistra" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Quadri latus quo alveum est (positione horizontali)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

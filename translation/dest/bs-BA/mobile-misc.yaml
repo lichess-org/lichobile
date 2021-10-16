@@ -1,0 +1,13 @@
+bs-BA:
+  apiUnsupported: "Vaša verzija aplikacije Lichess zastarjela je! Molimo da je besplatno ažurirate na posljednju verziju."
+  apiDeprecated: "Besplatno ažurirajte aplikaciju Lichess na posljednju verziju! Podrška za ovu verziju bit će obustavljena od %s."
+  playerisInvitingYou: "Poziva Vas %s"
+  unsupportedVariant: "Varijanta %s nije podržana u ovoj verziji"
+  notesSynchronizationHasFailed: "Sinhronizacija bilješki s Lichessom nije uspjela, molimo, pokušajte kasnije."
+  vibrateOnGameEvents: "Vibriranje prilikom događanja u partiji"
+  offline: "Izvan mreže"
+  otbUseSymmetricPieces: "Koristite simetrične figure" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Obrnite figure i informacije o protivniku nakon poteza" #Setting for offline over-the-board games
+  settingsClockPosition: "Pozicija sata" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Desno" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Lijevo" #As in "left-hand side"; not political or past participle

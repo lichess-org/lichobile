@@ -1,5 +1,4 @@
 import { Keyboard } from '@capacitor/keyboard'
-import { Toast } from '@capacitor/toast'
 import h from 'mithril/hyperscript'
 import session from '../session'
 import { ErrorResponse } from '../http'
@@ -106,7 +105,6 @@ function onLogin(e: Event) {
   .then(() => {
     loading = false
     close()
-    Toast.show({ text: i18n('loginSuccessful'), position: 'top', duration: 'short' })
     signals.afterLogin.dispatch()
     redraw()
     // reconnect socket to refresh friends...

@@ -1,8 +1,6 @@
-import { Toast } from '@capacitor/toast'
 import { App } from '@capacitor/app'
 import Rlite from 'rlite-router'
 import router from './router'
-import i18n from './i18n'
 import session, { Session } from './session'
 import signupModal from './ui/signupModal'
 import { handleXhrError } from './utils'
@@ -85,9 +83,6 @@ links.add('signup/confirm/:token', ({ params }) => {
     .then((data: Session) => {
       signupModal.close()
       router.set(`/@/${data.id}`)
-      setTimeout(() => {
-        Toast.show({ text: i18n('loginSuccessful'), position: 'center', duration: 'long' })
-      }, 1000)
     })
     .catch(handleXhrError)
   }

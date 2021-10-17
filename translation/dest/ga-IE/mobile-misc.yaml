@@ -12,3 +12,9 @@ ga-IE:
   positionRight: "Ar dheis" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Ar chlé" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Taobh scáileáin an chlár (i mód tírdhreacha)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Scoránaigh fuaim" #Settings to enable/disable sound
+  overTheBoard: "Thar an gclár"
+  sharePgn: "Roinn PGN"
+  shareGameUrl: 'Comhroinn URL an chluiche'
+  playOnline: "Imir ar líne"
+  playOffline: "Imir as líne"

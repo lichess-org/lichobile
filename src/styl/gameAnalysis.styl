@@ -66,18 +66,24 @@
 .analyse-evalSummary
   display flex
   flex-flow row nowrap
-  justify-content space-around
   padding 10px
   font-size 0.9em
-  > table
-    width 48%
-    > tbody
-      font-size 0.9em
-  th
-    padding-right 1em
-    text-align center
-    > span:before
-      margin 0
+  &__side
+    flex 0 0 calc(50% - 10px)
+  &__player
+    display flex
+    font-weight bold
+    > .color-icon
+      flex 0 1 15%
+      text-align center
+      &:before
+        margin-right 0
+  &__summary
+    display flex
+    font-size 0.9em
+    > strong
+      flex 0 1 15%
+      text-align center
 
 .analyse-requestComputer
   display flex

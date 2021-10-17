@@ -6,22 +6,10 @@ import spinner from '../../../spinner'
 import { Related } from '../../../lichess/interfaces/user'
 import { Paginator } from '../../../lichess/interfaces'
 import * as helper from '../../helper'
-import TabView from '../../shared/TabView'
-import challengeForm from '../../challengeForm'
 import RelatedCtrl from './RelatedCtrl'
 
 export function renderBody(ctrl: RelatedCtrl) {
-  const tabsContent = [
-    { id: 'following', f: () => renderContent(ctrl, ctrl.following, ctrl.followingPaginator) },
-  ]
-
-  return [
-    h(TabView, {
-      selectedIndex: ctrl.currentTab,
-      tabs: tabsContent,
-      onTabChange: ctrl.onTabChange,
-    })
-  ]
+  return renderContent(ctrl, ctrl.following, ctrl.followingPaginator)
 }
 
 function renderContent(
@@ -83,19 +71,6 @@ function renderPlayer(ctrl: RelatedCtrl, obj: Related, i: number) {
           {perf.rating}
         </span> : null
         }
-        <div className="buttons">
-          <span data-icon="U" oncreate={helper.ontapY((e: Event) => {
-            e.stopPropagation()
-            close()
-            challengeForm.open(obj.user)
-          })} />
-          <span>{' '}</span>
-          <span data-icon="c" oncreate={helper.ontapY((e: Event) => {
-            e.stopPropagation()
-            close()
-            router.set(`/inbox/new/${obj.user}`)
-          })} />
-        </div>
       </div>
       {obj.followable ?
         <div className="followingPlayerItem">

@@ -245,11 +245,13 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
         {i18n('preferences')}
       </div> : null
       }
+      { session.isConnected() && ctrl.isMe() ?
       <div className="list_item nav"
         oncreate={helper.ontapY(ctrl.followers)}
       >
         {i18n('friends')}
-      </div>
+      </div> : null
+      }
       { !ctrl.isMe() ? <div className="list_item nav" data-icon="1"
         oncreate={helper.ontapY(ctrl.goToUserTV)}
       >

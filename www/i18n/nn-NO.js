@@ -1247,5 +1247,11 @@ export default {
   "settingsClockPosition": "Urposisjon",
   "positionRight": "Høgre",
   "positionLeft": "Venstre",
-  "landscapeBoardSide": "Skjermsida av brettet (i landskapsformat)"
+  "landscapeBoardSide": "Skjermsida av brettet (i landskapsformat)",
+  "toggleSound": "Lyd av/på",
+  "overTheBoard": "Spel fråkopla, bruk som brett",
+  "sharePgn": "Del PGN",
+  "shareGameUrl": "Del spel-URL",
+  "playOnline": "Spel på nett",
+  "playOffline": "Spel fråkopla"
 }

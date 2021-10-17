@@ -1247,5 +1247,11 @@ export default {
   "settingsClockPosition": "Position de l'horloge",
   "positionRight": "Côté droit",
   "positionLeft": "Côté gauche",
-  "landscapeBoardSide": "Placement de l'échiquier (mode paysage)"
+  "landscapeBoardSide": "Placement de l'échiquier (mode paysage)",
+  "toggleSound": "Activer/désactiver le son",
+  "overTheBoard": "Jouer hors ligne avec un ami",
+  "sharePgn": "Partager le fichier PGN",
+  "shareGameUrl": "Partager l'URL de la partie",
+  "playOnline": "Jouer en ligne",
+  "playOffline": "Jouer hors ligne"
 }

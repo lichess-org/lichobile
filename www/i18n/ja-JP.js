@@ -1194,5 +1194,11 @@ export default {
   "settingsClockPosition": "時計の位置",
   "positionRight": "右",
   "positionLeft": "左",
-  "landscapeBoardSide": "ボードの位置（横長モードで）"
+  "landscapeBoardSide": "ボードの位置（横長モードで）",
+  "toggleSound": "音声のオン・オフ",
+  "overTheBoard": "オフライン（2人対戦）",
+  "sharePgn": "PGN を共有",
+  "shareGameUrl": "ゲーム URLを共有",
+  "playOnline": "オンライン対戦",
+  "playOffline": "オフライン対戦"
 }

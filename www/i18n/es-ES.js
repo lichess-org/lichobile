@@ -1247,5 +1247,10 @@ export default {
   "settingsClockPosition": "Posición del reloj",
   "positionRight": "A la derecha",
   "positionLeft": "A la izquierda",
-  "landscapeBoardSide": "Ubicación del tablero (en modo horizontal)"
+  "landscapeBoardSide": "Ubicación del tablero (en modo horizontal)",
+  "toggleSound": "Activar/Desactivar sonido",
+  "sharePgn": "Compartir PGN",
+  "shareGameUrl": "Compartir enlace de la partida",
+  "playOnline": "Jugar en línea",
+  "playOffline": "Jugar sin conexión"
 }

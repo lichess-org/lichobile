@@ -1349,5 +1349,11 @@ export default {
   "settingsClockPosition": "Расположение часов",
   "positionRight": "Справа",
   "positionLeft": "Слева",
-  "landscapeBoardSide": "Расположение доски (при альбомной ориентации)"
+  "landscapeBoardSide": "Расположение доски (при альбомной ориентации)",
+  "toggleSound": "Вкл/выкл звук",
+  "overTheBoard": "Вдвоём за доской",
+  "sharePgn": "Поделиться PGN",
+  "shareGameUrl": "Поделиться ссылкой на игру",
+  "playOnline": "Играть онлайн",
+  "playOffline": "Играть офлайн"
 }

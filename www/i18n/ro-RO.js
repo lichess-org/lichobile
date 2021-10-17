@@ -1300,5 +1300,11 @@ export default {
   "settingsClockPosition": "Poziția ceasului",
   "positionRight": "Dreapta",
   "positionLeft": "Stânga",
-  "landscapeBoardSide": "Plasarea tablei de joc (in mod peisaj)"
+  "landscapeBoardSide": "Plasarea tablei de joc (in mod peisaj)",
+  "toggleSound": "Comutare sunet",
+  "overTheBoard": "Deasupra tablei",
+  "sharePgn": "Distribuie PGN",
+  "shareGameUrl": "Distribuie URL-ul jocului",
+  "playOnline": "Joacă online",
+  "playOffline": "Joacă offline"
 }

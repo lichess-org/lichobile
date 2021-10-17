@@ -1247,5 +1247,11 @@ export default {
   "settingsClockPosition": "Kellon sijainti",
   "positionRight": "Oikealla",
   "positionLeft": "Vasemmalla",
-  "landscapeBoardSide": "Laudan sijainti näytöllä (vaakatilassa)"
+  "landscapeBoardSide": "Laudan sijainti näytöllä (vaakatilassa)",
+  "toggleSound": "Ääni päälle / pois",
+  "overTheBoard": "Kaveria vastaan offline-tilassa",
+  "sharePgn": "Jaa PGN",
+  "shareGameUrl": "Jaa pelin URL",
+  "playOnline": "Pelaa verkossa",
+  "playOffline": "Pelaa offline-tilassa"
 }

@@ -1243,5 +1243,10 @@ export default {
   "settingsClockPosition": "Saat pozisyonu",
   "positionRight": "Sağ",
   "positionLeft": "Sol",
-  "landscapeBoardSide": "Tahta ekran tarafı (yatay modda)"
+  "landscapeBoardSide": "Tahta ekran tarafı (yatay modda)",
+  "toggleSound": "Sesi aç/kapat",
+  "sharePgn": "PGN 'yi paylaş",
+  "shareGameUrl": "Oyun bağlantısını paylaş",
+  "playOnline": "Çevrimiçi oyna",
+  "playOffline": "Çevrimdışı oyna"
 }

@@ -1248,5 +1248,10 @@ export default {
   "positionRight": "Direita",
   "positionLeft": "Esquerda",
   "landscapeBoardSide": "Lado da tela do tabuleiro (no modo paisagem)",
-  "toggleSound": "Ativar som"
+  "toggleSound": "Ativar som",
+  "overTheBoard": "Xadrez OTB",
+  "sharePgn": "Compartilhar PGN",
+  "shareGameUrl": "Compartilhar URL do jogo",
+  "playOnline": "Jogar online",
+  "playOffline": "Jogar offline"
 }

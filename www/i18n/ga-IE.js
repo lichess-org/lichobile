@@ -1406,5 +1406,11 @@ export default {
   "settingsClockPosition": "Suíomh an chloig",
   "positionRight": "Ar dheis",
   "positionLeft": "Ar chlé",
-  "landscapeBoardSide": "Taobh scáileáin an chlár (i mód tírdhreacha)"
+  "landscapeBoardSide": "Taobh scáileáin an chlár (i mód tírdhreacha)",
+  "toggleSound": "Scoránaigh fuaim",
+  "overTheBoard": "Thar an gclár",
+  "sharePgn": "Roinn PGN",
+  "shareGameUrl": "Comhroinn URL an chluiche",
+  "playOnline": "Imir ar líne",
+  "playOffline": "Imir as líne"
 }

@@ -1217,5 +1217,11 @@ export default {
   "otbFlipPiecesAndInfoAfterMove": "No Zuch Figuren an Géignerinfo dréien",
   "settingsClockPosition": "Auer Positioun",
   "positionRight": "Riets",
-  "positionLeft": "Lénks"
+  "positionLeft": "Lénks",
+  "toggleSound": "Toun umaachen/ausmaachen",
+  "overTheBoard": "Lokal Partie",
+  "sharePgn": "PGN deelen",
+  "shareGameUrl": "URL vun der Partie deelen",
+  "playOnline": "Online spillen",
+  "playOffline": "Offline spillen"
 }

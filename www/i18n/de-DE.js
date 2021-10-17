@@ -1247,5 +1247,11 @@ export default {
   "settingsClockPosition": "Uhrposition",
   "positionRight": "Rechts",
   "positionLeft": "Links",
-  "landscapeBoardSide": "Bildschirmseite des Bretts (im Querformat)"
+  "landscapeBoardSide": "Bildschirmseite des Bretts (im Querformat)",
+  "toggleSound": "Ton ein-/ausschalten",
+  "overTheBoard": "Offline gegen Mensch",
+  "sharePgn": "PGN teilen",
+  "shareGameUrl": "Link zur Partie teilen",
+  "playOnline": "Spiele online",
+  "playOffline": "Spiele offline"
 }

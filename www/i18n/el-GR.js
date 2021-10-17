@@ -1247,5 +1247,11 @@ export default {
   "settingsClockPosition": "Θέση ρολογιού",
   "positionRight": "Δεξιά",
   "positionLeft": "Αριστερά",
-  "landscapeBoardSide": "Θέση σκακιέρας στην οθόνη (στον οριζόντιο προσανατολισμό)"
+  "landscapeBoardSide": "Θέση σκακιέρας στην οθόνη (στον οριζόντιο προσανατολισμό)",
+  "toggleSound": "Ενεργ./Απενεργ. ήχου",
+  "overTheBoard": "Παιχνίδι χωρίς σύνδεση",
+  "sharePgn": "Κοινοποίηση PGN",
+  "shareGameUrl": "Κοινοποίηση URL παιχνιδιού",
+  "playOnline": "Παίξτε σε διαδικτυακά",
+  "playOffline": "Παίξτε χωρίς σύνδεση"
 }

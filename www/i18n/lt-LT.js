@@ -1353,5 +1353,11 @@ export default {
   "settingsClockPosition": "Laikrodžio vieta",
   "positionRight": "Dešinė",
   "positionLeft": "Kairė",
-  "landscapeBoardSide": "Lentos ekrano pusė (horizontaliame režime)"
+  "landscapeBoardSide": "Lentos ekrano pusė (horizontaliame režime)",
+  "toggleSound": "Įjungti garsą",
+  "overTheBoard": "Žaidimas lentoje",
+  "sharePgn": "Pasidalinti PGN",
+  "shareGameUrl": "Pasidalinti žaidimo adresu",
+  "playOnline": "Žaisti tinkle",
+  "playOffline": "Žaisti atsijungus"
 }

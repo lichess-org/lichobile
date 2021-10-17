@@ -1247,5 +1247,11 @@ export default {
   "settingsClockPosition": "Klokkeposisjon",
   "positionRight": "Høyre",
   "positionLeft": "Venstre",
-  "landscapeBoardSide": "Brettet er på denne siden av skjermen (i liggende modus)"
+  "landscapeBoardSide": "Brettet er på denne siden av skjermen (i liggende modus)",
+  "toggleSound": "Lyd av/på",
+  "overTheBoard": "Over brettet",
+  "sharePgn": "Del PGN",
+  "shareGameUrl": "Del URL for partiet",
+  "playOnline": "Spill på nett",
+  "playOffline": "Spill uten nett"
 }

@@ -1247,5 +1247,11 @@ export default {
   "settingsClockPosition": "Posición do reló",
   "positionRight": "Dereita",
   "positionLeft": "Esquerda",
-  "landscapeBoardSide": "Ubicación do taboleiro (en modo horizontal)"
+  "landscapeBoardSide": "Ubicación do taboleiro (en modo horizontal)",
+  "toggleSound": "(Des)activar son",
+  "overTheBoard": "No taboleiro",
+  "sharePgn": "Compartir PGN",
+  "shareGameUrl": "Compartir URL da partida",
+  "playOnline": "Xogar en liña",
+  "playOffline": "Xogar offline"
 }

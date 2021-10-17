@@ -1353,5 +1353,11 @@ export default {
   "settingsClockPosition": "Położenie zegara",
   "positionRight": "Z prawej strony",
   "positionLeft": "Z lewej strony",
-  "landscapeBoardSide": "Położenie szachownicy (w trybie poziomym)"
+  "landscapeBoardSide": "Położenie szachownicy (w trybie poziomym)",
+  "toggleSound": "Włącz/wyłącz dźwięk",
+  "overTheBoard": "Na szachownicy",
+  "sharePgn": "Udostępnij PGN",
+  "shareGameUrl": "Udostępnij link do gry",
+  "playOnline": "Graj online",
+  "playOffline": "Graj offline"
 }

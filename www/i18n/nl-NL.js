@@ -1247,5 +1247,11 @@ export default {
   "settingsClockPosition": "Positie klok",
   "positionRight": "Rechts",
   "positionLeft": "Links",
-  "landscapeBoardSide": "Positie bord (in landschapsmodus)"
+  "landscapeBoardSide": "Positie bord (in landschapsmodus)",
+  "toggleSound": "Geluid aan/uit",
+  "overTheBoard": "Op virtueel bord",
+  "sharePgn": "Pgn delen",
+  "shareGameUrl": "Partij URL delen",
+  "playOnline": "Online spelen",
+  "playOffline": "Offline spelen"
 }

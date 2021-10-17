@@ -20,6 +20,7 @@ export default function view(ctrl: EditorCtrl) {
   const board = h(Board, {
     variant: 'standard',
     chessground: ctrl.chessground,
+    wrapperClasses: 'editor-board',
   })
 
   return layout.board(

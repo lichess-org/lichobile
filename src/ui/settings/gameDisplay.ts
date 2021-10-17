@@ -59,6 +59,9 @@ function renderBody() {
       ),
       h('li.list_item', [
         formWidgets.renderMultipleChoiceButton(i18n('zenMode'), formWidgets.booleanChoice, settings.game.zenMode),
+      ]),
+      h('li.list_item', [
+        formWidgets.renderMultipleChoiceButton(i18n('blindfoldChess'), formWidgets.booleanChoice, settings.game.blindfoldChess),
       ])
    ])
   ]

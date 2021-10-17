@@ -20,6 +20,7 @@ interface State {
   boardOnRemove(): void
   boardTheme: string
   pieceTheme: string
+  blindfoldChess: boolean
   shapesCleared: boolean
   bounds?: ClientRect
   onResize: () => void
@@ -57,6 +58,7 @@ export default {
     this.shapesCleared = false
     this.pieceTheme = settings.general.theme.piece()
     this.boardTheme = settings.general.theme.board()
+    this.blindfoldChess = settings.game.blindfoldChess()
   },
 
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
@@ -76,6 +78,7 @@ export default {
       'orientation-' + chessground.state.orientation,
       `board-${this.boardTheme}`,
       customPieceTheme || this.pieceTheme,
+      `blindfold-${this.blindfoldChess}`,
       variant
     ].join(' ')
 

@@ -12,3 +12,9 @@ nl-NL:
   positionRight: "Rechts" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Links" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Positie bord (in landschapsmodus)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Geluid aan/uit" #Settings to enable/disable sound
+  overTheBoard: "Op virtueel bord"
+  sharePgn: "Pgn delen"
+  shareGameUrl: 'Partij URL delen'
+  playOnline: "Online spelen"
+  playOffline: "Offline spelen"

@@ -75,5 +75,13 @@ export default {
   "rematch": "cheza tena",
   "onlyPublicStudiesCanBeEmbedded": "Masomo tu ya umma yanaweza kupachikwa!",
   "preferences": "Upendeleo",
-  "gameDisplay": "Onyesho la mchezo"
+  "gameDisplay": "Onyesho la mchezo",
+  "challenges": "Mwito wa kuja kushindana",
+  "challengeToPlay": "Mwito wa kuja kushindana kwa mchezo",
+  "challengeDeclined": "Mwito wa kuja kushindana umekataliwa",
+  "challengeAccepted": "Mwito wa kuja kushindana umekubaliwa!",
+  "challengeCanceled": "Mwito wa kuja kushindana umeghairiwa.",
+  "registerToSendChallenges": "Tafadhali jiandikishi ili utume miito ya mashindano.",
+  "youCannotChallengeX": "Hukubaliwi kutuma mwito wa kuja kushindana %s.",
+  "xDoesNotAcceptChallenges": "%s hakubali miito ya mashindano."
 }

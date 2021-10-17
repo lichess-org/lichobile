@@ -770,5 +770,12 @@ export default {
   "quitTeam": "ٹیم چھوڑ دیں",
   "teamRecentMembers": "حالیہ اراکین",
   "nbMembers:one": "%s اراکین",
-  "nbMembers:other": "%s اراکین"
+  "nbMembers:other": "%s اراکین",
+  "challenges": "چیلنجیں",
+  "challengeToPlay": "کھیل پر چیلنج کرنا",
+  "challengeAccepted": "چیلنج منظور!",
+  "declineGeneric": "میں اس وقت چیلنج قبول نہیں کر رہا۔",
+  "declineLater": "یہ میرے لیۓ مناسب وقت نہیں ہے، براۓ مہربانی بعد میں دوبارہ پوچھیں۔",
+  "declineNoBot": "میں بوٹس سے چیلنج قبول نہیں کر رہا۔",
+  "declineOnlyBot": "میں صرف بوٹس سے چیلنجیں منظور کر رہا ہوں۔"
 }

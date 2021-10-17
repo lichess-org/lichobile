@@ -50,5 +50,9 @@ export default {
   "inaccuracy": "QaghHom",
   "opponentLeftCounter:one": "mejpu' ghollI'. bIQap 'e' DamaqmeH, qaStaHvIS %s lup bIloSnIS.",
   "opponentLeftCounter:other": "mejpu' ghollI'. bIQap 'e' DamaqmeH, qaStaHvIS %s lup bIloSnIS.",
-  "victories": "yaypu'"
+  "victories": "yaypu'",
+  "challengeDeclined": "qaD lajQo'ta'",
+  "challengeAccepted": "qaD lajta'!",
+  "challengeCanceled": "qaD qIlta'.",
+  "youCannotChallengeX": "%s vIqaDlaHbe'."
 }

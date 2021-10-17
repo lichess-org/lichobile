@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - '.github/workflows/build.yml'
+      - '.github/workflows/android.yml'
       - 'android/**'
     branches-ignore:
       - 'l10n_master'
@@ -42,7 +42,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
           cache: 'gradle'
       - name: Sync android capacitor
         run: npx cap update android

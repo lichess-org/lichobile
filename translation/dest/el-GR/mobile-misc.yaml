@@ -12,3 +12,9 @@ el-GR:
   positionRight: "Δεξιά" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Αριστερά" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Θέση σκακιέρας στην οθόνη (στον οριζόντιο προσανατολισμό)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Ενεργ./Απενεργ. ήχου" #Settings to enable/disable sound
+  overTheBoard: "Παιχνίδι χωρίς σύνδεση"
+  sharePgn: "Κοινοποίηση PGN"
+  shareGameUrl: 'Κοινοποίηση URL παιχνιδιού'
+  playOnline: "Παίξτε σε διαδικτυακά"
+  playOffline: "Παίξτε χωρίς σύνδεση"

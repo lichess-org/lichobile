@@ -12,3 +12,9 @@ nb-NO:
   positionRight: "Høyre" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Venstre" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Brettet er på denne siden av skjermen (i liggende modus)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Lyd av/på" #Settings to enable/disable sound
+  overTheBoard: "Over brettet"
+  sharePgn: "Del PGN"
+  shareGameUrl: 'Del URL for partiet'
+  playOnline: "Spill på nett"
+  playOffline: "Spill uten nett"

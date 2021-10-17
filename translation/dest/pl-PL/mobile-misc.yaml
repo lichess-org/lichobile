@@ -12,3 +12,9 @@ pl-PL:
   positionRight: "Z prawej strony" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Z lewej strony" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Położenie szachownicy (w trybie poziomym)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Włącz/wyłącz dźwięk" #Settings to enable/disable sound
+  overTheBoard: "Na szachownicy"
+  sharePgn: "Udostępnij PGN"
+  shareGameUrl: 'Udostępnij link do gry'
+  playOnline: "Graj online"
+  playOffline: "Graj offline"

@@ -9,3 +9,9 @@ lb-LU:
   settingsClockPosition: "Auer Positioun" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "Riets" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Lénks" #As in "left-hand side"; not political or past participle
+  toggleSound: "Toun umaachen/ausmaachen" #Settings to enable/disable sound
+  overTheBoard: "Lokal Partie"
+  sharePgn: "PGN deelen"
+  shareGameUrl: 'URL vun der Partie deelen'
+  playOnline: "Online spillen"
+  playOffline: "Offline spillen"

@@ -12,3 +12,9 @@ pt-PT:
   positionRight: "Direita" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Esquerda" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Lado do tabuleiro no ecrã (no modo horizontal)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Ativar/Desativar som" #Settings to enable/disable sound
+  overTheBoard: "Jogar offline contra um amigo"
+  sharePgn: "Partilhar PGN"
+  shareGameUrl: 'Partilhar o link do jogo'
+  playOnline: "Jogar online"
+  playOffline: "Jogar offline"

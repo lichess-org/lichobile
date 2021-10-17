@@ -12,3 +12,9 @@ ru-RU:
   positionRight: "Справа" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Слева" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Расположение доски (при альбомной ориентации)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Вкл/выкл звук" #Settings to enable/disable sound
+  overTheBoard: "Вдвоём за доской"
+  sharePgn: "Поделиться PGN"
+  shareGameUrl: 'Поделиться ссылкой на игру'
+  playOnline: "Играть онлайн"
+  playOffline: "Играть офлайн"

@@ -1015,6 +1015,7 @@ export default {
   "chessPieceSymbol": "Chess piece symbol",
   "pgnLetter": "Letter (K, Q, R, B, N)",
   "zenMode": "Zen mode",
+  "showPlayerRatings": "Show player ratings",
   "displayBoardResizeHandle": "Show board resize handle",
   "onlyOnInitialPosition": "Only on initial position",
   "blindfoldChess": "Blindfold chess (invisible pieces)",

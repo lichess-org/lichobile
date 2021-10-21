@@ -59,11 +59,6 @@ async function main() {
 
   const allKeys = Object.keys(everything)
 
-  writeFileSync(`${i18nBaseDir}/refs.js`, 'export default ' + JSON.stringify(allKeys, null, 2))
-  console.log(
-    'Generated locales: ', allKeys.join(', ')
-  )
-
   // Write flattened translation objects to file. Skip if it would remove one or more keys.
   allKeys.forEach(locale => {
     const newData = everything[locale]

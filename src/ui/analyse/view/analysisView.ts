@@ -87,7 +87,7 @@ const AcplSummary: Mithril.Component<{
           advices.map(a => {
             const nb = analysis && analysis[color][a[0]]
             return h('div.analyse-evalSummary__summary', [
-              h.trust(plural('nbBlunders', nb, `<strong>${nb}</strong>`)),
+              h.trust(plural(a[1], nb, `<strong>${nb}</strong>`)),
             ])
           }),
           h('div.analyse-evalSummary__summary', [
@@ -160,7 +160,7 @@ function renderMoveTimes(ctrl: AnalyseCtrl, moveCentis: number[]) {
 }
 
 const advices = [
-  ['inaccuracy', 'inaccuracies'],
-  ['mistake', 'mistakes'],
-  ['blunder', 'blunders']
+  ['inaccuracy', 'nbInaccuracies'],
+  ['mistake', 'nbMistakes'],
+  ['blunder', 'nbBlunders']
 ]

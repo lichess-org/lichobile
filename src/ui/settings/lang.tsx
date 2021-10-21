@@ -1,39 +1,32 @@
 import h from 'mithril/hyperscript'
 import { dropShadowHeader, backButton } from '../shared/common'
 import redraw from '../../utils/redraw'
-import { getLanguageNativeName } from '../../utils/langs'
-import spinner from '../../spinner'
 import * as helper from '../helper'
 import layout from '../layout'
-import i18n, { loadLanguage, getAvailableLocales, getIsoCodeFromLocale } from '../../i18n'
+import i18n, { loadLanguage, allLocales, allKeys } from '../../i18n'
 import settings from '../../settings'
 import { setServerLang } from '../../xhr'
 
 interface State {
-  locales?: ReadonlyArray<string>
-  lang?: string | null
+  locale?: string | null
 }
 
 export default {
   oncreate: helper.viewSlideIn,
 
   oninit() {
-    this.lang = settings.general.lang()
-    getAvailableLocales().then(locales => {
-      this.locales = locales
-      redraw()
-    })
+    this.locale = settings.general.locale()
   },
 
   view() {
     const header = dropShadowHeader(null, backButton(i18n('language')))
-    const currentLang = this.lang
+    const currentLang = this.locale
 
-    function renderLang(l: string) {
-      const name = getLanguageNativeName(getIsoCodeFromLocale(l))
+    function renderLocale(l: string) {
+      const name = allLocales[l]
       const selected = l === currentLang
       return (
-        <li className={'list_item' + (selected ? ' selected' : '')} data-lang={l}>
+        <li className={'list_item' + (selected ? ' selected' : '')} data-locale={l}>
           {name}
           {selected ?
             <span className="fa fa-check" /> : null
@@ -44,30 +37,25 @@ export default {
 
     const onTap = (e: Event) => {
       const el = helper.getLI(e)
-      const lang = el && el.dataset.lang
-      if (lang) {
-        setServerLang(lang)
-        loadLanguage(lang).then(() => {
-          this.lang = lang
+      const locale = el && el.dataset.locale
+      if (locale) {
+        setServerLang(locale)
+        loadLanguage(locale).then(() => {
+          this.locale = locale
           redraw()
         })
       }
     }
 
     const renderBody = () => {
-      return this.locales ?
+      return (
         <ul
           className="native_scroller page settings_list"
           oncreate={helper.ontapY(onTap, undefined, helper.getLI)}
         >
-          {this.locales.map(l => renderLang(l))}
-        </ul> :
-        <div
-          className="loader_container"
-          oncreate={helper.ontapY(onTap, undefined, helper.getLI)}
-        >
-          {spinner.getVdom('monochrome')}
-        </div>
+          {allKeys.map(l => renderLocale(l))}
+        </ul>
+      )
     }
 
     return layout.free(header, renderBody())

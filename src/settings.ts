@@ -39,7 +39,7 @@ export async function init(): Promise<void> {
 
 export default {
   general: {
-    lang: prop<string | null>('lang', null),
+    locale: prop<string | null>('lang', null),
     sound: prop<boolean>('sound', true),
     theme: {
       availableBackgroundThemes: [

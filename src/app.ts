@@ -8,7 +8,6 @@ import { hasNetwork, requestIdleCallback } from './utils'
 import redraw from './utils/redraw'
 import session from './session'
 import settings from './settings'
-import { ensureLocaleIsAvailable, loadLanguage, getCurrentLocale } from './i18n'
 import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
 import * as helper from './ui/helper'
@@ -112,20 +111,13 @@ function onOnline() {
       getPools()
 
       session.rememberLogin()
-      .then((user) => {
-        const serverLocale = user.language
-        if (serverLocale && getCurrentLocale() !== serverLocale) {
-          console.debug('Locale from server differs from app: ', serverLocale)
-          ensureLocaleIsAvailable(serverLocale)
-          .then(loadLanguage)
-        }
+      .then(() => {
         push.register()
         challengesApi.refresh()
         if (Capacitor.getPlatform() === 'ios') {
           Badge.setNumber({ badge: session.myTurnGames().length })
         }
         redraw()
-
       })
       .catch(() => {
         console.log('connected as anonymous')

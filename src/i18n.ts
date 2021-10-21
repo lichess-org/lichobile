@@ -8,14 +8,12 @@ import formatDistanceToNowStrict from 'date-fns/esm/formatDistanceToNowStrict'
 
 type Quantity = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other'
 
-const refFile = 'refs.js'
-
-const defaultCode = 'en-US'
+const defaultLocale = 'en-GB'
 const englishMessages: StringMap = {}
 const dateFormatOpts = { day: '2-digit', month: 'long', year: 'numeric' }
 const dateTimeFormatOpts = { ...dateFormatOpts, hour: '2-digit', minute: '2-digit' }
 
-let currentLocale: string = defaultCode
+let currentLocale: string = defaultLocale
 let dateLocale: Locale | undefined
 let messages: StringMap = {} as StringMap
 let numberFormat: Intl.NumberFormat = new Intl.NumberFormat()
@@ -101,8 +99,12 @@ export function distanceToNowStrict(date: Date, addSuffix = false): string {
   })
 }
 
-export function getIsoCodeFromLocale(locale: string): string {
+function getLanguage(locale: string): string {
   return locale.split('-')[0]
+}
+
+function getDefaultLocaleForLang(code: string): string | undefined {
+  return defaultRegions[code] || allKeys.find(k => getLanguage(k) === code)
 }
 
 export function getCurrentLocale(): string {
@@ -118,93 +120,74 @@ export function getCurrentLocale(): string {
  */
 export async function init(): Promise<string> {
 
-  // must use concat with defaultCode const to force runtime module resolution
-  const englishPromise = import('./i18n/' + defaultCode + '.js')
+  // must use concat with defaultLocale const to force runtime module resolution
+  const englishPromise = import('./i18n/' + defaultLocale + '.js')
   .then(({ default: data }) => {
     Object.assign(englishMessages, data)
   })
 
-  const fromSettings = settings.general.lang()
+  const fromSettings = settings.general.locale()
 
-  if (fromSettings) {
+  if (fromSettings && allLocales[fromSettings] !== undefined) {
     return englishPromise.then(() => loadLanguage(fromSettings))
   } else {
     return englishPromise
     .then(() => Device.getLanguageCode())
-    .then(({ value }) => loadLanguage(value))
+    .then(({ value }) => loadLanguage(getDefaultLocaleForLang(value) || defaultLocale))
   }
 }
 
-export function getAvailableLocales(): Promise<ReadonlyArray<string>> {
-  // must use this const to force module resolution at runtime
-  return import('./i18n/' + refFile).then(({ default: data }) => data)
+export function isLocaleAvailable(locale: string): boolean {
+  return allLocales[locale] !== undefined
 }
 
-export function ensureLocaleIsAvailable(locale: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    getAvailableLocales()
-    .then(locales => {
-      const l = locales.find(l => l === locale)
-      if (l !== undefined) resolve(l)
-      else reject(new Error(`locale ${l} is not available in the application.`))
-    })
-  })
+export function loadLanguage(locale: string): Promise<string> {
+  return loadFile(locale)
+  .then(settings.general.locale)
+  .then(() => loadDateLocale(locale))
 }
 
-export function loadLanguage(lang: string): Promise<string> {
-  return loadFile(lang)
-  .then(settings.general.lang)
-  .then(() => loadDateLocale(lang))
-}
-
-function loadFile(code: string): Promise<string> {
-  return getAvailableLocales()
-  .then(locales => {
-    return locales.find(l =>
-      getIsoCodeFromLocale(l) === getIsoCodeFromLocale(code)
-    ) || defaultCode
-  })
-  .then(availCode => {
-    console.info('Load language', availCode)
-    return import('./i18n/' + availCode + '.js')
-    .then(({ default: data }) => {
-      currentLocale = availCode
-      // some translation files don't have all the keys, merge with english
-      // messages to keep a fallback to english
-      messages = {
-        ...englishMessages,
-        ...data,
-      }
-      numberFormat = new Intl.NumberFormat(availCode)
-      dateFormat = new Intl.DateTimeFormat(availCode, dateFormatOpts)
-      dateTimeFormat = new Intl.DateTimeFormat(availCode, dateTimeFormatOpts)
-      return availCode
-    })
+function loadFile(locale: string): Promise<string> {
+  const availLocale = allLocales[locale] ? locale : defaultLocale
+  console.info('Load language', availLocale)
+  return import('./i18n/' + availLocale + '.js')
+  .then(({ default: data }) => {
+    currentLocale = availLocale
+    // some translation files don't have all the keys, merge with english
+    // messages to keep a fallback to english
+    messages = {
+      ...englishMessages,
+      ...data,
+    }
+    numberFormat = new Intl.NumberFormat(availLocale)
+    dateFormat = new Intl.DateTimeFormat(availLocale, dateFormatOpts)
+    dateTimeFormat = new Intl.DateTimeFormat(availLocale, dateTimeFormatOpts)
+    return availLocale
   })
 }
 
 // supported date-fns locales with region
 const supportedDateLocales = ['ar-DZ', 'ar-MA', 'ar-SA', 'en-AU', 'en-CA', 'en-GB', 'en-IN', 'en-US', 'fa-IR', 'fr-CA', 'fr-CH', 'nl-BE', 'pt-BR', 'zh-CN', 'zh-TW']
 
-function loadDateLocale(code: string): Promise<string> {
-  if (code === defaultCode) return Promise.resolve(code)
+function loadDateLocale(locale: string): Promise<string> {
+  if (locale === defaultLocale) return Promise.resolve(locale)
 
-  const lCode = supportedDateLocales.includes(code) ? code : getIsoCodeFromLocale(code)
+  const lCode = supportedDateLocales.includes(locale) ? locale : getLanguage(locale)
   return import(`./i18n/date/${lCode}.js`)
   .then(module => {
     dateLocale = module.default || undefined
-    return code
+    return locale
   })
   .catch(() => {
     dateLocale = undefined
-    return code
+    return locale
   })
 }
 
 function quantity(locale: string, c: number): Quantity {
   const rem100 = c % 100
   const rem10 = c % 10
-  const code = getIsoCodeFromLocale(locale)
+  const code = getLanguage(locale)
   switch (code) {
     // french
     case 'fr':
@@ -342,6 +325,114 @@ function quantity(locale: string, c: number): Quantity {
     default:
       return c === 1 ? 'one' : 'other'
   }
+}
+
+export const allLocales: StringMap = {
+  'af-ZA': 'Afrikaans',
+  'an-ES': 'aragonés',
+  'ar-SA': 'العربية',
+  'as-IN': 'অসমীয়া',
+  'az-AZ': 'Azərbaycanca',
+  'be-BY': 'Беларуская',
+  'bg-BG': 'български език',
+  'bn-BD': 'বাংলা',
+  'br-FR': 'brezhoneg',
+  'bs-BA': 'bosanski',
+  'ca-ES': 'Català, valencià',
+  'cs-CZ': 'čeština',
+  'cv-CU': 'чӑваш чӗлхи',
+  'cy-GB': 'Cymraeg',
+  'da-DK': 'Dansk',
+  'de-CH': 'Schwiizerdüütsch',
+  'de-DE': 'Deutsch',
+  'el-GR': 'Ελληνικά',
+  'en-GB': 'English',
+  'en-US': 'English (US)',
+  'eo-UY': 'Esperanto',
+  'es-ES': 'español',
+  'et-EE': 'eesti keel',
+  'eu-ES': 'Euskara',
+  'fa-IR': 'فارسی',
+  'fi-FI': 'suomen kieli',
+  'fo-FO': 'føroyskt',
+  'fr-FR': 'français',
+  'frp-IT': 'arpitan',
+  'fy-NL': 'Frysk',
+  'ga-IE': 'Gaeilge',
+  'gd-GB': 'Gàidhlig',
+  'gl-ES': 'Galego',
+  'gu-IN': 'ગુજરાતી',
+  'he-IL': 'עִבְרִית',
+  'hi-IN': 'हिन्दी, हिंदी',
+  'hr-HR': 'hrvatski',
+  'hu-HU': 'Magyar',
+  'hy-AM': 'Հայերեն',
+  'ia-IA': 'Interlingua',
+  'id-ID': 'Bahasa Indonesia',
+  'io-EN': 'Ido',
+  'is-IS': 'Íslenska',
+  'it-IT': 'Italiano',
+  'ja-JP': '日本語',
+  'jbo-EN': 'lojban',
+  'jv-ID': 'basa Jawa',
+  'ka-GE': 'ქართული',
+  'kab-DZ': 'Taqvaylit',
+  'kk-KZ': 'қазақша',
+  'kmr-TR': 'Kurdî (Kurmancî)',
+  'kn-IN': 'ಕನ್ನಡ',
+  'ko-KR': '한국어',
+  'ky-KG': 'кыргызча',
+  'la-LA': 'lingua Latina',
+  'lb-LU': 'Lëtzebuergesch',
+  'lt-LT': 'lietuvių kalba',
+  'lv-LV': 'latviešu valoda',
+  'mg-MG': 'fiteny malagasy',
+  'mk-MK': 'македонски јази',
+  'ml-IN': 'മലയാളം',
+  'mn-MN': 'монгол',
+  'mr-IN': 'मराठी',
+  'nb-NO': 'Norsk bokmål',
+  'ne-NP': 'नेपाली',
+  'nl-NL': 'Nederlands',
+  'nn-NO': 'Norsk nynorsk',
+  'pi-IN': 'पालि',
+  'pl-PL': 'polski',
+  'ps-AF': 'پښتو',
+  'pt-PT': 'Português',
+  'pt-BR': 'Português (BR)',
+  'ro-RO': 'Română',
+  'ru-RU': 'русский язык',
+  'sa-IN': 'संस्कृत',
+  'sk-SK': 'slovenčina',
+  'sl-SI': 'slovenščina',
+  'sq-AL': 'Shqip',
+  'sr-SP': 'Српски језик',
+  'sv-SE': 'svenska',
+  'sw-KE': 'Kiswahili',
+  'ta-IN': 'தமிழ்',
+  'tg-TJ': 'тоҷикӣ',
+  'th-TH': 'ไทย',
+  'tk-TM': 'Türkmençe',
+  'tl-PH': 'Tagalog',
+  'tp-TP': 'toki pona',
+  'tr-TR': 'Türkçe',
+  'uk-UA': 'українська',
+  'ur-PK': 'اُردُو',
+  'uz-UZ': 'oʻzbekcha',
+  'vi-VN': 'Tiếng Việt',
+  'yo-NG': 'Yorùbá',
+  'zh-CN': '中文',
+  'zh-TW': '繁體中文',
+  'zu-ZA': 'isiZulu'
+}
+
+export const allKeys = Object.keys(allLocales)
+
+const defaultRegions: StringMap = {
+  'de': 'de-DE',
+  'en': 'en-US',
+  'pt': 'pt-PT',
+  'zh': 'zh-CN',
 }
 
 const untranslated: StringMap = {

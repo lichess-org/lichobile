@@ -1,4 +1,5 @@
 export default [
+  "en-GB",
   "af-ZA",
   "ak-GH",
   "am-ET",

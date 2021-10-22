@@ -12,3 +12,9 @@ zh-CN:
   positionRight: "右" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "左" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "棋盘方向(横向模式)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "声音开关" #Settings to enable/disable sound
+  overTheBoard: "面对面"
+  sharePgn: "分享 PGN"
+  shareGameUrl: '分享棋局链接'
+  playOnline: "在线下棋"
+  playOffline: "离线下棋"

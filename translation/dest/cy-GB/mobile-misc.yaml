@@ -2,3 +2,9 @@ cy-GB:
   playerisInvitingYou: "Mae %s yn eich gwahodd chi"
   positionRight: "Dde" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Chwith" #As in "left-hand side"; not political or past participle
+  toggleSound: "Toglo sain" #Settings to enable/disable sound
+  overTheBoard: "Dros y bwrdd"
+  sharePgn: "Rhannu PGN"
+  shareGameUrl: 'Rhannu URL gêm'
+  playOnline: "Chwarae ar-lein"
+  playOffline: "Chwarae all-lein"

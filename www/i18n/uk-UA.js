@@ -1341,5 +1341,8 @@ export default {
   "settingsClockPosition": "Розташування годинника",
   "positionRight": "Праворуч",
   "positionLeft": "Ліворуч",
-  "landscapeBoardSide": "Розташування дошки (в альбомній орієнтації)"
+  "landscapeBoardSide": "Розташування дошки (в альбомній орієнтації)",
+  "shareGameUrl": "Ділитись посиланням на гру",
+  "playOnline": "Грай онлайн",
+  "playOffline": "Грай офлайн"
 }

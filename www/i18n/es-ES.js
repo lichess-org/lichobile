@@ -1249,6 +1249,7 @@ export default {
   "positionLeft": "A la izquierda",
   "landscapeBoardSide": "Ubicación del tablero (en modo horizontal)",
   "toggleSound": "Activar/Desactivar sonido",
+  "overTheBoard": "Tablero virtual",
   "sharePgn": "Compartir PGN",
   "shareGameUrl": "Compartir enlace de la partida",
   "playOnline": "Jugar en línea",

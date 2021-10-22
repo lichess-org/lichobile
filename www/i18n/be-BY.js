@@ -1349,5 +1349,11 @@ export default {
   "settingsClockPosition": "Размяшчэнне гадзінніка",
   "positionRight": "Зправа",
   "positionLeft": "Злева",
-  "landscapeBoardSide": "Бок дошкі на экране (пры альбомным рэжыме)"
+  "landscapeBoardSide": "Бок дошкі на экране (пры альбомным рэжыме)",
+  "toggleSound": "Укл./адкл. гук",
+  "overTheBoard": "За дошкай",
+  "sharePgn": "Падзяліцца PGN",
+  "shareGameUrl": "Падзяліцца спасылкай на гульню",
+  "playOnline": "Гуляць анлайн",
+  "playOffline": "Гуляць афлайн"
 }

@@ -1250,7 +1250,7 @@ export default {
   "landscapeBoardSide": "Positie bord (in landschapsmodus)",
   "toggleSound": "Geluid aan/uit",
   "overTheBoard": "Op virtueel bord",
-  "sharePgn": "Pgn delen",
+  "sharePgn": "PGN delen",
   "shareGameUrl": "Partij URL delen",
   "playOnline": "Online spelen",
   "playOffline": "Offline spelen"

@@ -849,5 +849,11 @@ export default {
   "declineOnlyBot": "Rwy'n ddim ond yn derbyn heriau wrth bots.",
   "playerisInvitingYou": "Mae %s yn eich gwahodd chi",
   "positionRight": "Dde",
-  "positionLeft": "Chwith"
+  "positionLeft": "Chwith",
+  "toggleSound": "Toglo sain",
+  "overTheBoard": "Dros y bwrdd",
+  "sharePgn": "Rhannu PGN",
+  "shareGameUrl": "Rhannu URL gêm",
+  "playOnline": "Chwarae ar-lein",
+  "playOffline": "Chwarae all-lein"
 }

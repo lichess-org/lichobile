@@ -1172,5 +1172,11 @@ export default {
   "declineStandard": "Ne prihvaćam izazove u ovoj varijanti.",
   "declineVariant": "Trenutačno ne želim igrati ovu varijantu.",
   "declineNoBot": "Ne prihvaćam izazove od botova.",
-  "declineOnlyBot": "Prihvaćam izazove isključivo od botova."
+  "declineOnlyBot": "Prihvaćam izazove isključivo od botova.",
+  "toggleSound": "Uključi/isključi zvuk",
+  "overTheBoard": "Igraj bez mreže, preko uređaja",
+  "sharePgn": "Podijeli PGN",
+  "shareGameUrl": "Podijeli URL partije",
+  "playOnline": "Igraj na mreži",
+  "playOffline": "Igraj izvan mreže"
 }

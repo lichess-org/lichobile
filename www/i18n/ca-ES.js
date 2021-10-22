@@ -1218,5 +1218,11 @@ export default {
   "settingsClockPosition": "Posició del rellotge",
   "positionRight": "Dreta",
   "positionLeft": "Esquerra",
-  "landscapeBoardSide": "Ubicació del tauler (en mode horitzontal)"
+  "landscapeBoardSide": "Ubicació del tauler (en mode horitzontal)",
+  "toggleSound": "Activa/Desactiva el so",
+  "overTheBoard": "Juga offline, sobre el tauler",
+  "sharePgn": "Comparteix PGN",
+  "shareGameUrl": "Comparteix l'enllaç a la partida",
+  "playOnline": "Juga online",
+  "playOffline": "Juga sense connexió"
 }

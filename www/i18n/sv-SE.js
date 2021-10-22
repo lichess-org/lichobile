@@ -1184,6 +1184,22 @@ export default {
   "declineNoBot": "Jag antar inte utmaningar från bottar.",
   "declineOnlyBot": "Jag antar endast utmaningar från bottar.",
   "apiUnsupported": "Din version av lichess-appen är för gammal! Var god uppdatera till den senaste versionen.",
+  "apiDeprecated": "Uppgradera gratis till den senaste lichess appen! Stöd för denna version kommer att sluta den %s.",
   "playerisInvitingYou": "%s bjuder in dig",
-  "settingsClockPosition": "Klockans position"
+  "unsupportedVariant": "Varianten %s är inte stödd i denna verision",
+  "notesSynchronizationHasFailed": "Synkning av anteckningar med lichess har misslyckats, försök igen senare.",
+  "vibrateOnGameEvents": "Vibrera vid partihändelser",
+  "offline": "Frånkopplad",
+  "otbUseSymmetricPieces": "Använd symmetriska pjäser",
+  "otbFlipPiecesAndInfoAfterMove": "Vänd pjäser och motståndarinfo efter varje drag",
+  "settingsClockPosition": "Klockans position",
+  "positionRight": "Höger",
+  "positionLeft": "Vänster",
+  "landscapeBoardSide": "Brädskärmens sida (i liggande läge)",
+  "toggleSound": "Växla ljud",
+  "overTheBoard": "Spela 2 på samma enhet",
+  "sharePgn": "Dela PGN",
+  "shareGameUrl": "Dela parti-URL",
+  "playOnline": "Spela online",
+  "playOffline": "Spela offline"
 }

@@ -1300,5 +1300,11 @@ export default {
   "settingsClockPosition": "Pulksteņa novietojums",
   "positionRight": "Pa labi",
   "positionLeft": "Pa kreisi",
-  "landscapeBoardSide": "Galdiņa novietojums ekrānā (ainavas režīmā)"
+  "landscapeBoardSide": "Galdiņa novietojums ekrānā (ainavas režīmā)",
+  "toggleSound": "Ieslēgt/Izslēgt skaņu",
+  "overTheBoard": "Šaha galdiņš",
+  "sharePgn": "Dalīties ar PGN",
+  "shareGameUrl": "Dalīties ar spēles URL",
+  "playOnline": "Spēlēt tiešsaistē",
+  "playOffline": "Spēlēt bezsaistē"
 }

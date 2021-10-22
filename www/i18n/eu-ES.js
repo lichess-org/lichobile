@@ -1247,5 +1247,11 @@ export default {
   "settingsClockPosition": "Erlojuaren posizioa",
   "positionRight": "Eskuma",
   "positionLeft": "Ezkerra",
-  "landscapeBoardSide": "Taula pantailaren aldean (modu zabalean)"
+  "landscapeBoardSide": "Taula pantailaren aldean (modu zabalean)",
+  "toggleSound": "Aktibatu/desaktibatu soinua",
+  "overTheBoard": "Taula gainean",
+  "sharePgn": "Partekatu PGNa",
+  "shareGameUrl": "Partekatu partidaren helbidea",
+  "playOnline": "Jokatu online",
+  "playOffline": "Jokatu offline"
 }

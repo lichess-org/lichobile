@@ -1326,5 +1326,9 @@ export default {
   "otbFlipPiecesAndInfoAfterMove": "Otočit šachovnici po zahrání tahu",
   "settingsClockPosition": "Pozice hodin",
   "positionRight": "Vpravo",
-  "positionLeft": "Vlevo"
+  "positionLeft": "Vlevo",
+  "sharePgn": "Sdílet PGN",
+  "shareGameUrl": "Sdílet URL hry",
+  "playOnline": "Hrát online",
+  "playOffline": "Hrát offline"
 }

@@ -1190,5 +1190,11 @@ export default {
   "settingsClockPosition": "棋钟位置",
   "positionRight": "右",
   "positionLeft": "左",
-  "landscapeBoardSide": "棋盘方向(横向模式)"
+  "landscapeBoardSide": "棋盘方向(横向模式)",
+  "toggleSound": "声音开关",
+  "overTheBoard": "面对面",
+  "sharePgn": "分享 PGN",
+  "shareGameUrl": "分享棋局链接",
+  "playOnline": "在线下棋",
+  "playOffline": "离线下棋"
 }

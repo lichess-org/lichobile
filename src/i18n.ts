@@ -103,8 +103,8 @@ function getLanguage(locale: string): string {
   return locale.split('-')[0]
 }
 
-function getDefaultLocaleForLang(code: string): string | undefined {
-  return defaultRegions[code] || allKeys.find(k => getLanguage(k) === code)
+export function getDefaultLocaleForLang(lang: string): string | undefined {
+  return defaultRegions[lang] || allKeys.find(k => getLanguage(k) === lang)
 }
 
 export function getCurrentLocale(): string {

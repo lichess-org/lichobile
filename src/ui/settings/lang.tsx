@@ -3,25 +3,30 @@ import { dropShadowHeader, backButton } from '../shared/common'
 import redraw from '../../utils/redraw'
 import * as helper from '../helper'
 import layout from '../layout'
-import i18n, { loadLanguage, allLocales, allKeys } from '../../i18n'
-import settings from '../../settings'
+import i18n, { getCurrentLocale, loadLanguage, allLocales, allKeys, getDefaultLocaleForLang } from '../../i18n'
 import { setServerLang } from '../../xhr'
 
 interface State {
-  locale?: string | null
+  browserLangs: Set<string>
 }
 
 export default {
   oncreate: helper.viewSlideIn,
 
   oninit() {
-    this.locale = settings.general.locale()
+    this.browserLangs = navigator.languages.reduce((langSet, l) => {
+      if (allLocales[l] !== undefined) return new Set([...langSet, l])
+      else {
+        const localeForLang = getDefaultLocaleForLang(l)
+        if (localeForLang) return new Set([...langSet, localeForLang])
+      }
+      return langSet
+    }, new Set<string>())
   },
 
   view() {
     const header = dropShadowHeader(null, backButton(i18n('language')))
-    const currentLang = this.locale
-
+    const currentLang = getCurrentLocale()
     function renderLocale(l: string) {
       const name = allLocales[l]
       const selected = l === currentLang
@@ -40,10 +45,7 @@ export default {
       const locale = el && el.dataset.locale
       if (locale) {
         setServerLang(locale)
-        loadLanguage(locale).then(() => {
-          this.locale = locale
-          redraw()
-        })
+        loadLanguage(locale).then(redraw)
       }
     }
 
@@ -53,7 +55,7 @@ export default {
           className="native_scroller page settings_list"
           oncreate={helper.ontapY(onTap, undefined, helper.getLI)}
         >
-          {allKeys.map(l => renderLocale(l))}
+          {[...this.browserLangs].concat(allKeys).map(l => renderLocale(l))}
         </ul>
       )
     }

@@ -18,6 +18,7 @@ import playerInfo from './playerInfo'
 import teamInfo from './teamInfo'
 import joinForm from './joinForm'
 import TournamentCtrl from './TournamentCtrl'
+import { previouslyJoined } from '~/lichess/tournament'
 
 export function renderOverlay(ctrl: TournamentCtrl): Mithril.ChildArray {
   return [
@@ -188,7 +189,7 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
     (t.teamBattle && t.teamBattle.joinWith.length === 0)) {
     return h.fragment({key: 'noJoinButton'}, [])
   }
-  const action = (t.private || t.teamBattle) ?
+  const action = ((t.private || t.teamBattle) && !previouslyJoined(t)) ?
     () => joinForm.open(ctrl) :
     () => ctrl.join()
 

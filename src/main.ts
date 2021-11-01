@@ -23,10 +23,6 @@ interface CPUInfoPlugin {
   nbCores(): Promise<{ value: number }>
 }
 const CPUInfo = registerPlugin<CPUInfoPlugin>('CPUInfo')
-interface LiBuildConfigPlugin {
-  get(): Promise<{ NNUE: boolean }>
-}
-const LiBuildConfig = registerPlugin<LiBuildConfigPlugin>('LiBuildConfig')
 
 settingsInit()
 .then(() => Promise.all([
@@ -37,12 +33,9 @@ settingsInit()
     CPUInfo.nbCores().then((r: { value: number }) => r.value).catch(() => 1) :
     Promise.resolve((<XNavigator>navigator).hardwareConcurrency || 1),
   StockfishVariants.getMaxMemory().then((r: { value: number }) => r.value).catch(() => 16),
-  Capacitor.getPlatform() === 'android' ?
-    LiBuildConfig.get() : Promise.resolve({
-      NNUE: false
-    })
+  StockfishVariants.getCPUArch().then((r: { value: string }) => r.value).catch(() => 'x86'),
 ]))
-.then(([ai, di, did, c, m, b]) => appInit(ai, di, did, c, m, b))
+.then(([ai, di, did, c, m, cpu]) => appInit(ai, di, did, c, m, cpu))
 .then(() => {
   routes.init()
   deepLinks.init()

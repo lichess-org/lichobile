@@ -10,7 +10,9 @@ export class StockfishPlugin {
   private plugin: IStockfishPlugin
 
   constructor(readonly variant: VariantKey) {
-    this.plugin = Capacitor.getPlatform() === 'android' && !this.isVariant() ?
+    this.plugin = Capacitor.getPlatform() === 'android' &&
+      !this.isVariant() &&
+      window.lichess.cpuArch === 'arm64-v8a' ?
       Stockfish : StockfishVariants
   }
 

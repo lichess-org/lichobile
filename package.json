@@ -77,7 +77,7 @@
         "@types/lodash-es": "4.17.3",
         "capacitor-sound-effect": "2.0.1",
         "capacitor-stockfish": "git+https://github.com/veloce/capacitor-stockfish.git#v2.0.0",
-        "capacitor-stockfish-variants": "git+https://github.com/veloce/capacitor-stockfish.git#variants",
+        "capacitor-stockfish-variants": "git+https://github.com/veloce/capacitor-stockfish-variants.git",
         "chessops": "0.8.1",
         "d3-axis": "1.0.8",
         "d3-scale": "1.0.6",

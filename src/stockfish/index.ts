@@ -1,6 +1,7 @@
 import { Capacitor, registerPlugin } from '@capacitor/core'
 import { Stockfish, StockfishPlugin as IStockfishPlugin } from 'capacitor-stockfish'
 import { VariantKey } from '../lichess/interfaces/variant'
+import settings from '../settings'
 
 export const StockfishVariants = registerPlugin<IStockfishPlugin>('StockfishVariants', {
   web: () => import('./StockfishVariantsWeb').then(m => new m.StockfishVariantsWeb()),
@@ -10,10 +11,9 @@ export class StockfishPlugin {
   private plugin: IStockfishPlugin
 
   constructor(readonly variant: VariantKey) {
-    this.plugin = Capacitor.getPlatform() === 'android' &&
-      !this.isVariant() &&
-      window.lichess.cpuArch === 'arm64-v8a' ?
-      Stockfish : StockfishVariants
+    this.plugin = !this.isVariant() &&
+      canUseNNUE() &&
+      settings.analyse.cevalUseNNUE() ? Stockfish : StockfishVariants
   }
 
   public async start(): Promise<{ engineName: string }> {
@@ -94,3 +94,12 @@ export function getNbCores(): number {
   return cores > 2 ? cores - 1 : 1
 }
 
+export function canUseNNUE(): boolean {
+  if (Capacitor.getPlatform() === 'android') {
+    return window.lichess.cpuArch === 'arm64-v8a'
+  } else if (Capacitor.getPlatform() === 'ios') {
+    return window.lichess.cpuArch === 'arm64'
+  } else {
+    return false
+  }
+}

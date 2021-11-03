@@ -7,7 +7,6 @@ import debounce from 'lodash-es/debounce'
 import { hasNetwork, requestIdleCallback } from './utils'
 import redraw from './utils/redraw'
 import session from './session'
-import settings from './settings'
 import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
 import * as helper from './ui/helper'
@@ -29,10 +28,6 @@ export default function appInit(
   sfMaxMem: number,
   cpuArch: string,
 ): void {
-  if (settings.analyse.cevalHashSize() === 0) {
-    settings.analyse.cevalHashSize(sfMaxMem)
-  }
-
   window.lichess.cpuArch = cpuArch
 
   window.deviceInfo = {

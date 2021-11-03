@@ -30,7 +30,7 @@ export default class Engine {
         await this.stockfish.setVariant()
         await this.stockfish.setOption('Threads', getNbCores())
         const mem = await getMaxMemory()
-        if (Capacitor.platform !== 'web') {
+        if (Capacitor.getPlatform() !== 'web') {
           await this.stockfish.setOption('Hash', mem)
         }
         await this.newGame()

@@ -130,7 +130,7 @@ export default class CevalCtrl {
     return this.engine.engineName
   }
 
-  public getEngineEvaluation(): string {
+  public getEngineEvaluation(): string | undefined {
     return this.engine.evaluation
   }
 

@@ -37,6 +37,7 @@ const config: CapacitorConfig = {
       '@capacitor/storage',
       '@capacitor/toast',
       'capacitor-sound-effect',
+      'capacitor-stockfish',
       'capacitor-stockfish-variants',
     ]
   },

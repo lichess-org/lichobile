@@ -29,7 +29,7 @@ export default class StockfishClient {
   private stopped = false
 
   public engineName = 'Stockfish'
-  public evaluation = 'classical'
+  public evaluation?: string
 
   constructor(
     variant: VariantKey,

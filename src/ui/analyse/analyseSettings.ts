@@ -5,7 +5,7 @@ import router from '../../router'
 import * as gameApi from '../../lichess/game'
 import { isOnlineAnalyseData } from '../../lichess/interfaces/analyse'
 import settings from '../../settings'
-import { getNbCores } from '../../stockfish'
+import { getNbCores, canUseNNUE } from '../../stockfish'
 import { oppositeColor } from '../../utils'
 import formWidgets from '../shared/form'
 import AnalyseCtrl from './AnalyseCtrl'
@@ -35,11 +35,13 @@ export default {
     let isOpen = false
     let cevalCoresOnOpen = settings.analyse.cevalCores()
     let cevalHashSizeOnOpen = settings.analyse.cevalHashSize()
+    let cevalUseNNUEOnOpen = settings.analyse.cevalUseNNUE()
 
     function open() {
       router.backbutton.stack.push(close)
       cevalCoresOnOpen = settings.analyse.cevalCores()
       cevalHashSizeOnOpen = settings.analyse.cevalHashSize()
+      cevalUseNNUEOnOpen = settings.analyse.cevalUseNNUE()
       isOpen = true
     }
 
@@ -47,7 +49,8 @@ export default {
       if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
       isOpen = false
       if ((settings.analyse.cevalCores() !== cevalCoresOnOpen) ||
-        (settings.analyse.cevalHashSize() !== cevalHashSizeOnOpen)) {
+        (settings.analyse.cevalHashSize() !== cevalHashSizeOnOpen) ||
+        (settings.analyse.cevalUseNNUE() !== cevalUseNNUEOnOpen)) {
         router.reload()
       }
     }
@@ -92,7 +95,7 @@ export default {
       },
       cevalToggleInfinite() {
         root.ceval.toggleInfinite()
-      }
+      },
     }
   },
 
@@ -153,6 +156,13 @@ function renderAnalyseSettings(ctrl: AnalyseCtrl) {
         !ctrl.ceval.allowed
       ),
     ]),
+    canUseNNUE() ? h('div.action', [
+      formWidgets.renderCheckbox(
+        i18n('Use NNUE'), 'ceval.useNNUE', settings.analyse.cevalUseNNUE,
+        undefined,
+        !ctrl.ceval.allowed
+      ),
+    ]) : null,
     h('div.action', [
       formWidgets.renderSlider(
         i18n('multipleLines'), 'ceval.multipv', 1, 5, 1, settings.analyse.cevalMultiPvs,

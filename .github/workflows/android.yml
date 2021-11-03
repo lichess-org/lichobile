@@ -52,11 +52,9 @@ jobs:
       - name: Build APKs
         working-directory: ./android
         run: |
-          ./gradlew assembleWithoutNNUEDebug
-          ./gradlew assembleWithNNUEDebug
+          ./gradlew assembleDebug
       - uses: actions/upload-artifact@v2
         with:
-          name: debugApks
+          name: debugApk
           path: |
-            ./android/app/build/outputs/apk/withoutNNUE/debug/
-            ./android/app/build/outputs/apk/withNNUE/debug/
+            ./android/app/build/outputs/apk/debug/

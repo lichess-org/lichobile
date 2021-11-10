@@ -15,6 +15,6 @@ de-DE:
   toggleSound: "Ton ein-/ausschalten" #Settings to enable/disable sound
   overTheBoard: "Offline gegen Mensch"
   sharePgn: "PGN teilen"
-  shareGameUrl: 'Link zur Partie teilen'
+  shareGameUrl: 'Link der Partie teilen'
   playOnline: "Spiele online"
   playOffline: "Spiele offline"

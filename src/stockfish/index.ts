@@ -98,7 +98,7 @@ export function canUseNNUE(): boolean {
   if (Capacitor.getPlatform() === 'android') {
     return window.lichess.cpuArch === 'arm64-v8a'
   } else if (Capacitor.getPlatform() === 'ios') {
-    return window.lichess.cpuArch === 'arm64'
+    return true
   } else {
     return false
   }

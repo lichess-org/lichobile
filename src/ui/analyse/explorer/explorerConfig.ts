@@ -123,7 +123,7 @@ export default {
       ]),
       d.db.selected() === 'masters' ? h('div.masters.message', [
         h('i[data-icon=C]'),
-        h('p', i18n('masterDbExplanation', '2200', '1952', '2019')),
+        h('p', i18n('masterDbExplanation', '2200', '1952', '2020')),
       ]) : h('div', [
         h('section.rating', [
           h('label', i18n('averageElo')),

@@ -11,30 +11,23 @@ export interface OpeningConf {
 }
 
 export function openingXhr(variant: VariantKey, fen: string, config: OpeningConf, withGames: boolean): Promise<OpeningData> {
-  let url: string
-  const params: any = {
-    fen,
-    moves: 12
-  }
+  const query: any = { fen, variant }
   if (!withGames) {
-    params.topGames = 0
-    params.recentGames = 0
+    query.topGames = 0
+    query.recentGames = 0
   }
-  if (config.db === 'masters') url = '/master'
-  else {
-    url = '/lichess'
-    params.variant = variant
-    params['speeds[]'] = config.speeds
-    params['ratings[]'] = config.ratings
+  if (config.db === 'lichess') {
+    if (config.speeds) query.speeds = config.speeds.join(',')
+    if (config.ratings) query.ratings = config.ratings.join(',')
   }
-  return fetchJSON(explorerEndpoint + url, {
+  return fetchJSON(explorerEndpoint + '/' + config.db, {
     headers: {
-      'Accept': 'application/json, text/*',
+      'Accept': 'application/json',
       'X-Requested-With': '__delete',
       [SESSION_ID_KEY]: '__delete',
     },
     credentials: 'omit',
-    query: params
+    query
   })
 }
 

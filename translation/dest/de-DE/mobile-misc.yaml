@@ -1,5 +1,5 @@
 de-DE:
-  apiUnsupported: "Deine Version der Lichess-App ist veraltet! Bitte lade dir die kostenlose neue Version herunter."
+  apiUnsupported: "Deine Version der Lichess-App ist zu alt! Bitte aktualisiere kostenlos auf die neueste Version."
   apiDeprecated: "Aktualisiere kostenlos auf die neueste Lichess-App! Unterstützung für diese Version wird %s eingestellt."
   playerisInvitingYou: "%s lädt dich ein"
   unsupportedVariant: "Variante %s wird in dieser Version nicht unterstützt"

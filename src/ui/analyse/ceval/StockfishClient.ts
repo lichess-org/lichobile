@@ -29,7 +29,7 @@ export default class StockfishClient {
   private stopped = false
 
   public engineName = 'Stockfish'
-  public evaluation = 'classical'
+  public evaluation?: string
 
   constructor(
     variant: VariantKey,
@@ -51,9 +51,8 @@ export default class StockfishClient {
       this.engineName = obj.engineName
       await this.stockfish.setVariant()
       await this.stockfish.setOption('UCI_AnalyseMode', 'true')
-      await this.stockfish.setOption('Analysis Contempt', 'Off')
       await this.stockfish.setOption('Threads', this.threads)
-      if (Capacitor.platform !== 'web') {
+      if (Capacitor.getPlatform() !== 'web') {
         await this.stockfish.setOption('Hash', this.hash)
       }
     } catch (err: unknown) {

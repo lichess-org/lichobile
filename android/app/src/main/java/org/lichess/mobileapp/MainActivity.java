@@ -30,7 +30,7 @@ public class MainActivity extends BridgeActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    registerPlugins(Arrays.asList(LiBuildConfig.class, FullScreenPlugin.class));
+    registerPlugins(Arrays.asList(FullScreenPlugin.class));
 
     this.versionUpdateActions();
 

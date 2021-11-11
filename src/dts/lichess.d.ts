@@ -52,6 +52,7 @@ interface LichessOptions {
   mode: string
   buildConfig: BuildConfig
   packageVersion: string
+  cpuArch: string
 }
 
 type RequestIdleCallbackHandle = any

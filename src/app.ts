@@ -7,7 +7,6 @@ import debounce from 'lodash-es/debounce'
 import { hasNetwork, requestIdleCallback } from './utils'
 import redraw from './utils/redraw'
 import session from './session'
-import settings from './settings'
 import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
 import * as helper from './ui/helper'
@@ -27,11 +26,9 @@ export default function appInit(
   deviceId: DeviceId,
   cpuCores: number,
   sfMaxMem: number,
-  buildConfig: BuildConfig,
+  cpuArch: string,
 ): void {
-  if (settings.analyse.cevalHashSize() === 0) {
-    settings.analyse.cevalHashSize(sfMaxMem)
-  }
+  window.lichess.cpuArch = cpuArch
 
   window.deviceInfo = {
     platform: deviceInfo.platform,
@@ -40,7 +37,6 @@ export default function appInit(
     cpuCores,
     stockfishMaxMemory: Math.ceil(sfMaxMem / 16.0) * 16,
   }
-  window.lichess.buildConfig = buildConfig
 
   if (Capacitor.getPlatform() === 'ios') {
     Keyboard.setAccessoryBarVisible({ isVisible: true })

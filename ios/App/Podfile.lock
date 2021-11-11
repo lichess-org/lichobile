@@ -33,9 +33,9 @@ PODS:
     - Capacitor
   - CapacitorStatusBar (1.0.2):
     - Capacitor
-  - CapacitorStockfish (2.0.1):
+  - CapacitorStockfish (3.0.0):
     - Capacitor
-  - CapacitorStockfishVariants (2.0.0):
+  - CapacitorStockfishVariants (1.0.0):
     - Capacitor
   - CapacitorStorage (1.0.3):
     - Capacitor
@@ -197,8 +197,8 @@ SPEC CHECKSUMS:
   CapacitorSoundEffect: 67795fe53fb7eb7cae6bdd3d863e1233b9d2f5b3
   CapacitorSplashScreen: 25fbdbaa5982dfdbfcb2dcbf3757c638a56ebaa9
   CapacitorStatusBar: 5f78c4275b059bf5c0bcf059d9fafc4f1b620d5b
-  CapacitorStockfish: 0231aed7c2ddcafef254bb7d74252c472a13ad53
-  CapacitorStockfishVariants: 2b2cf3580f28413faeb1999f6e0a21cd89de37aa
+  CapacitorStockfish: 9c03162a05dd2c627d28bee697ed8802da38ce55
+  CapacitorStockfishVariants: 4d14a4a311a7ecaa65d84bebee20f1419add25c9
   CapacitorStorage: 6854d59dd96ed64e75b46c4b7093d29fc9e83814
   CapacitorToast: 75dc6e65832b6d318558f4e8bbb3cc369cff09db
   Firebase: 629510f1a9ddb235f3a7c5c8ceb23ba887f0f814

@@ -4,6 +4,8 @@ import { noop, formatTimeInSecs } from '../../utils'
 import { FeaturedGame2 } from '../../lichess/interfaces'
 import ViewOnlyBoard from './ViewOnlyBoard'
 import CountdownTimer from './CountdownTimer'
+import { parseFen } from 'chessops/fen'
+import { Chess } from 'chessops'
 
 export interface Attrs {
   readonly fen: string
@@ -33,6 +35,9 @@ const MiniBoard: Mithril.Component<Attrs, State> = {
 
     const { gameObj, topText, bottomText } = attrs
     const isWhite = gameObj?.orientation === 'white'
+    const checkColor = parseFen(attrs.fen)
+      .chain(setup => Chess.fromSetup(setup))
+      .unwrap(position => position.isCheck() ? position.turn : undefined)
 
     return (
       <div className="mini_board_container">
@@ -43,7 +48,7 @@ const MiniBoard: Mithril.Component<Attrs, State> = {
         <div className="mini_board" oncreate={helper.ontapY(() => this.link())}>
           <div className="mini_board_helper">
             <div className="mini_board_wrapper">
-              {h(ViewOnlyBoard, attrs)}
+              {h(ViewOnlyBoard, {...attrs, check: checkColor})}
             </div>
           </div>
         </div>

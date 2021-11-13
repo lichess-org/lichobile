@@ -12,6 +12,7 @@ export interface Attrs {
   readonly variant?: VariantKey
   readonly fixed?: boolean
   readonly delay?: Millis
+  readonly check?: Color
 }
 
 interface Config {

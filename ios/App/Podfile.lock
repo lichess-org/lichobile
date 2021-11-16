@@ -33,62 +33,62 @@ PODS:
     - Capacitor
   - CapacitorStatusBar (1.0.2):
     - Capacitor
-  - CapacitorStockfish (3.0.0):
+  - CapacitorStockfish (3.0.1):
     - Capacitor
-  - CapacitorStockfishVariants (1.0.0):
+  - CapacitorStockfishVariants (1.0.1):
     - Capacitor
   - CapacitorStorage (1.0.3):
     - Capacitor
   - CapacitorToast (1.0.2):
     - Capacitor
-  - Firebase/CoreOnly (8.8.0):
-    - FirebaseCore (= 8.8.0)
-  - Firebase/Messaging (8.8.0):
+  - Firebase/CoreOnly (8.9.1):
+    - FirebaseCore (= 8.9.1)
+  - Firebase/Messaging (8.9.1):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 8.8.0)
-  - FirebaseCore (8.8.0):
+    - FirebaseMessaging (~> 8.9.0)
+  - FirebaseCore (8.9.1):
     - FirebaseCoreDiagnostics (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.4)
-    - GoogleUtilities/Logger (~> 7.4)
-  - FirebaseCoreDiagnostics (8.8.0):
-    - GoogleDataTransport (~> 9.0)
-    - GoogleUtilities/Environment (~> 7.4)
-    - GoogleUtilities/Logger (~> 7.4)
+    - GoogleUtilities/Environment (~> 7.6)
+    - GoogleUtilities/Logger (~> 7.6)
+  - FirebaseCoreDiagnostics (8.9.0):
+    - GoogleDataTransport (~> 9.1)
+    - GoogleUtilities/Environment (~> 7.6)
+    - GoogleUtilities/Logger (~> 7.6)
     - nanopb (~> 2.30908.0)
-  - FirebaseInstallations (8.8.0):
+  - FirebaseInstallations (8.9.0):
     - FirebaseCore (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.4)
-    - GoogleUtilities/UserDefaults (~> 7.4)
+    - GoogleUtilities/Environment (~> 7.6)
+    - GoogleUtilities/UserDefaults (~> 7.6)
     - PromisesObjC (< 3.0, >= 1.2)
-  - FirebaseMessaging (8.8.0):
+  - FirebaseMessaging (8.9.0):
     - FirebaseCore (~> 8.0)
     - FirebaseInstallations (~> 8.0)
-    - GoogleDataTransport (~> 9.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
-    - GoogleUtilities/Environment (~> 7.4)
-    - GoogleUtilities/Reachability (~> 7.4)
-    - GoogleUtilities/UserDefaults (~> 7.4)
+    - GoogleDataTransport (~> 9.1)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.6)
+    - GoogleUtilities/Environment (~> 7.6)
+    - GoogleUtilities/Reachability (~> 7.6)
+    - GoogleUtilities/UserDefaults (~> 7.6)
     - nanopb (~> 2.30908.0)
-  - GoogleDataTransport (9.1.0):
+  - GoogleDataTransport (9.1.2):
     - GoogleUtilities/Environment (~> 7.2)
     - nanopb (~> 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/AppDelegateSwizzler (7.5.2):
+  - GoogleUtilities/AppDelegateSwizzler (7.6.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (7.5.2):
+  - GoogleUtilities/Environment (7.6.0):
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.5.2):
+  - GoogleUtilities/Logger (7.6.0):
     - GoogleUtilities/Environment
-  - GoogleUtilities/Network (7.5.2):
+  - GoogleUtilities/Network (7.6.0):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (7.5.2)"
-  - GoogleUtilities/Reachability (7.5.2):
+  - "GoogleUtilities/NSData+zlib (7.6.0)"
+  - GoogleUtilities/Reachability (7.6.0):
     - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (7.5.2):
+  - GoogleUtilities/UserDefaults (7.6.0):
     - GoogleUtilities/Logger
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
@@ -181,33 +181,33 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Capacitor: 32416638f82066f863d7cd85d6f738b5cc2797d2
-  CapacitorApp: 4a7a55cb30ac30af4e4801d4d6e51f4d03aa75e6
-  CapacitorBrowser: 78dca7e45adb2f3c8239c44095aeed7582bf0923
-  CapacitorClipboard: d8444615cb87293d7a2a2c310df5cf48b05c3620
-  CapacitorCommunityKeepAwake: da57047d09e2e02b86e1f81b5d0f83445ace5c77
+  CapacitorApp: 5304b36f52350ceede0d0c3355def71d9516e704
+  CapacitorBrowser: bf33760ca0f39c064ff4be9d0b89fe02b8f5a0df
+  CapacitorClipboard: ead602b8d8ff7f4a4fe53d922eda769a526a5bfe
+  CapacitorCommunityKeepAwake: d134a04746a6707b0e9ea3ffd5a1ba9516f8b186
   CapacitorCordova: e2ae8ac0f7ff5bc7bebaa5fa41afe0300e66837b
-  CapacitorDevice: 4d1a1f44e9f7ee126aa809b89c86c107a13bf898
-  CapacitorDialog: 410d570ad02845665836d60606802244fbbbd8ba
-  CapacitorFilesystem: a8f258902f03ee602148ad2428e1bad147b8d164
-  CapacitorHaptics: 2ba8b0f0fd40d5590baa756cd2c91a3d082106f8
-  CapacitorKeyboard: 25f67ec7f6c3ae9a956af8bb6ea0bade18257005
-  CapacitorNetwork: a85f117d3ea0d37864c91adbe0afecb664e7bae7
-  CapacitorPushNotifications: 4dbd874ad07c3146bc0195a622f679bd35fd0350
-  CapacitorShare: c600e0be9c94e63b15e4009e53f1036dd065a8f2
-  CapacitorSoundEffect: 67795fe53fb7eb7cae6bdd3d863e1233b9d2f5b3
-  CapacitorSplashScreen: 25fbdbaa5982dfdbfcb2dcbf3757c638a56ebaa9
-  CapacitorStatusBar: 5f78c4275b059bf5c0bcf059d9fafc4f1b620d5b
-  CapacitorStockfish: 9c03162a05dd2c627d28bee697ed8802da38ce55
-  CapacitorStockfishVariants: 4d14a4a311a7ecaa65d84bebee20f1419add25c9
-  CapacitorStorage: 6854d59dd96ed64e75b46c4b7093d29fc9e83814
-  CapacitorToast: 75dc6e65832b6d318558f4e8bbb3cc369cff09db
-  Firebase: 629510f1a9ddb235f3a7c5c8ceb23ba887f0f814
-  FirebaseCore: 98b29e3828f0a53651c363937a7f7d92a19f1ba2
-  FirebaseCoreDiagnostics: fe77f42da6329d6d83d21fd9d621a6b704413bfc
-  FirebaseInstallations: 2563cb18a723ef9c6ef18318a49519b75dce613c
-  FirebaseMessaging: 419b5c9d84f294a753c6501d8cfb9ced1ce37304
-  GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
-  GoogleUtilities: 8de2a97a17e15b6b98e38e8770e2d129a57c0040
+  CapacitorDevice: 6001e1ed6370a2766f37f7f240391cc89e83693c
+  CapacitorDialog: 5deb3bfb7604756191fd7e163180f48f940dc5dc
+  CapacitorFilesystem: edbf65398299c245352abc751b81d049f86d2184
+  CapacitorHaptics: 9a5091caae4738300d3288cc32f0d34af273f040
+  CapacitorKeyboard: ac97fcb309a69ec4233c3e44bcc19ffb4c707dda
+  CapacitorNetwork: 1a7c68428594ffe0b9399366474116787150a527
+  CapacitorPushNotifications: e82b6815d880a3cffd637038ad610fa03bf658b4
+  CapacitorShare: ebf6f22c47d8bbd81b7fe8401efcd4b3e5229268
+  CapacitorSoundEffect: 0bd5b46e3b964fc546a52b885c556eda82f923da
+  CapacitorSplashScreen: 7c01fc95436b1c5f0110c8bac9e7802b722bbc58
+  CapacitorStatusBar: 3b510c79fbefb2dce24002d8473dca80abbceb44
+  CapacitorStockfish: 5e70fac7e65c1c6b6f38f9ed9b072ad0f08eb38e
+  CapacitorStockfishVariants: 44c1a294c05a342c26023516e7df996edca9d609
+  CapacitorStorage: 8790c86b7d1697f6a58b6674a3554ee16867c4c6
+  CapacitorToast: 75dac13118c96095500a3026438cfd2cc04c989b
+  Firebase: fb5114cd2bf96e2ff7bcb01d0d9a156cf5fd2f07
+  FirebaseCore: c5aab092d9c4b8efea894946166b04c9d9ef0e68
+  FirebaseCoreDiagnostics: 5daa63f1c1409d981a2d5007daa100b36eac6a34
+  FirebaseInstallations: caa7c8e0d3e2345b8829d2fa9ca1b4dfbf2fcc85
+  FirebaseMessaging: 82c4a48638f53f7b184f3cc9f6cd2cbe533ab316
+  GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
+  GoogleUtilities: 684ee790a24f73ebb2d1d966e9711c203f2a4237
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825

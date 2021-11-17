@@ -1,45 +1,45 @@
 PODS:
-  - Capacitor (3.2.5):
+  - Capacitor (3.3.1):
     - CapacitorCordova
-  - CapacitorApp (1.0.2):
+  - CapacitorApp (1.0.6):
     - Capacitor
-  - CapacitorBrowser (1.0.2):
+  - CapacitorBrowser (1.0.6):
     - Capacitor
-  - CapacitorClipboard (1.0.2):
+  - CapacitorClipboard (1.0.6):
     - Capacitor
   - CapacitorCommunityKeepAwake (2.1.0):
     - Capacitor
-  - CapacitorCordova (3.2.5)
-  - CapacitorDevice (1.0.2):
+  - CapacitorCordova (3.3.1)
+  - CapacitorDevice (1.0.6):
     - Capacitor
-  - CapacitorDialog (1.0.2):
+  - CapacitorDialog (1.0.6):
     - Capacitor
-  - CapacitorFilesystem (1.0.2):
+  - CapacitorFilesystem (1.0.6):
     - Capacitor
-  - CapacitorHaptics (1.0.2):
+  - CapacitorHaptics (1.1.3):
     - Capacitor
-  - CapacitorKeyboard (1.0.2):
+  - CapacitorKeyboard (1.1.3):
     - Capacitor
-  - CapacitorNetwork (1.0.2):
+  - CapacitorNetwork (1.0.6):
     - Capacitor
     - ReachabilitySwift (~> 5.0)
-  - CapacitorPushNotifications (1.0.3):
+  - CapacitorPushNotifications (1.0.7):
     - Capacitor
-  - CapacitorShare (1.0.3):
+  - CapacitorShare (1.0.7):
     - Capacitor
   - CapacitorSoundEffect (2.0.1):
     - Capacitor
-  - CapacitorSplashScreen (1.1.0):
+  - CapacitorSplashScreen (1.1.6):
     - Capacitor
-  - CapacitorStatusBar (1.0.2):
+  - CapacitorStatusBar (1.0.6):
     - Capacitor
   - CapacitorStockfish (3.0.1):
     - Capacitor
   - CapacitorStockfishVariants (1.0.1):
     - Capacitor
-  - CapacitorStorage (1.0.3):
+  - CapacitorStorage (1.2.3):
     - Capacitor
-  - CapacitorToast (1.0.2):
+  - CapacitorToast (1.0.6):
     - Capacitor
   - Firebase/CoreOnly (8.9.1):
     - FirebaseCore (= 8.9.1)
@@ -180,27 +180,27 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/toast"
 
 SPEC CHECKSUMS:
-  Capacitor: 32416638f82066f863d7cd85d6f738b5cc2797d2
-  CapacitorApp: 5304b36f52350ceede0d0c3355def71d9516e704
-  CapacitorBrowser: bf33760ca0f39c064ff4be9d0b89fe02b8f5a0df
-  CapacitorClipboard: ead602b8d8ff7f4a4fe53d922eda769a526a5bfe
+  Capacitor: 03a45821c64411719140ba9fb39a895d026e597c
+  CapacitorApp: ec2e26a50713d175fd1680053500b63bfdc2af5f
+  CapacitorBrowser: dd3a22b097c6e006db7d4e97438f95a8bb546619
+  CapacitorClipboard: 279847f021ee49cb903316f536fd8d77721e9c04
   CapacitorCommunityKeepAwake: d134a04746a6707b0e9ea3ffd5a1ba9516f8b186
-  CapacitorCordova: e2ae8ac0f7ff5bc7bebaa5fa41afe0300e66837b
-  CapacitorDevice: 6001e1ed6370a2766f37f7f240391cc89e83693c
-  CapacitorDialog: 5deb3bfb7604756191fd7e163180f48f940dc5dc
-  CapacitorFilesystem: edbf65398299c245352abc751b81d049f86d2184
-  CapacitorHaptics: 9a5091caae4738300d3288cc32f0d34af273f040
-  CapacitorKeyboard: ac97fcb309a69ec4233c3e44bcc19ffb4c707dda
-  CapacitorNetwork: 1a7c68428594ffe0b9399366474116787150a527
-  CapacitorPushNotifications: e82b6815d880a3cffd637038ad610fa03bf658b4
-  CapacitorShare: ebf6f22c47d8bbd81b7fe8401efcd4b3e5229268
+  CapacitorCordova: 6c6127c6ee31a7a808705bf4ac17fb5f80ed63f6
+  CapacitorDevice: 7a8470b20026c75083a9e95b074c25d779bdcb89
+  CapacitorDialog: 8df49a4809efbd28bd29e381c041fd07191c7ad4
+  CapacitorFilesystem: 7db4b74c45bf34ad5f100182c3ffb2492f688149
+  CapacitorHaptics: 02ed2c6a2410f80fb37dc508e2c5aa9cd2c684e0
+  CapacitorKeyboard: 5d75fe0a14b5c79ba044b8eded8881d7608008b6
+  CapacitorNetwork: 4e1a2085f335c9e024d1cd0537c057e00a874fe2
+  CapacitorPushNotifications: f973b2dca19aef3dfbe13ca41b77b22c340d93b4
+  CapacitorShare: be9d87857694b2118e47fe0d7d1e050f6a2f48e9
   CapacitorSoundEffect: 0bd5b46e3b964fc546a52b885c556eda82f923da
-  CapacitorSplashScreen: 7c01fc95436b1c5f0110c8bac9e7802b722bbc58
-  CapacitorStatusBar: 3b510c79fbefb2dce24002d8473dca80abbceb44
+  CapacitorSplashScreen: 5d85a4559c61e29b713576c8b82b1d2d82a06ae1
+  CapacitorStatusBar: 18a81121a25117a50a9ca3be0d0de85a1e49c7e5
   CapacitorStockfish: 5e70fac7e65c1c6b6f38f9ed9b072ad0f08eb38e
   CapacitorStockfishVariants: 44c1a294c05a342c26023516e7df996edca9d609
-  CapacitorStorage: 8790c86b7d1697f6a58b6674a3554ee16867c4c6
-  CapacitorToast: 75dac13118c96095500a3026438cfd2cc04c989b
+  CapacitorStorage: 229dbc333a93764ba0a1b99c4fa22bbb37b47e45
+  CapacitorToast: ac17b569d5c4fcffa2be1e4b2da3b3012a02c690
   Firebase: fb5114cd2bf96e2ff7bcb01d0d9a156cf5fd2f07
   FirebaseCore: c5aab092d9c4b8efea894946166b04c9d9ef0e68
   FirebaseCoreDiagnostics: 5daa63f1c1409d981a2d5007daa100b36eac6a34

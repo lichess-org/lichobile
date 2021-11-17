@@ -4,7 +4,7 @@ import { parseUci } from 'chessops/util'
 import { makeSanVariation } from 'chessops/san'
 import { parseFen } from 'chessops/fen'
 import { setupPosition } from 'chessops/variant'
-import { lichessVariantRules } from 'chessops/compat'
+import { lichessRules } from 'chessops/compat'
 
 import settings from '../../../settings'
 import i18n from '../../../i18n'
@@ -77,7 +77,7 @@ function renderCevalPvs(ctrl: AnalyseCtrl) {
       oncreate: helper.ontapXY(e => onLineTap(ctrl, e), undefined, helper.getLI)
     }, [...Array(multiPv).keys()].map((i) => {
       if (!pvs[i]) return h('li.pv')
-      const pos = setupPosition(lichessVariantRules(ctrl.ceval.variant), parseFen(node.fen).unwrap())
+      const pos = setupPosition(lichessRules(ctrl.ceval.variant), parseFen(node.fen).unwrap())
       return h('li.ceval-pv', {
         'data-uci': pvs[i].moves[0],
         className: (i % 2 === 0) ? 'even' : 'odd'

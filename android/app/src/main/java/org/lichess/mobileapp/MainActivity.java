@@ -34,6 +34,11 @@ public class MainActivity extends BridgeActivity {
 
     this.versionUpdateActions();
 
+    try {
+      // some reports show app becomes unresponsive until cache is cleared
+      this.getBridge().getWebView().clearCache(true);
+    } catch (Exception e) { }
+
     PackageInfo pInfo = getCurrentWebViewPackageInfo();
     if (pInfo != null) {
       try {

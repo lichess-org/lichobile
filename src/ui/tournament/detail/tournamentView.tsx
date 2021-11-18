@@ -18,8 +18,9 @@ import playerInfo from './playerInfo'
 import teamInfo from './teamInfo'
 import joinForm from './joinForm'
 import TournamentCtrl from './TournamentCtrl'
+import { previouslyJoined } from '~/lichess/tournament'
 
-export function renderOverlay(ctrl: TournamentCtrl) {
+export function renderOverlay(ctrl: TournamentCtrl): Mithril.ChildArray {
   return [
     faq.view(ctrl.faqCtrl),
     playerInfo.view(ctrl.playerInfoCtrl),
@@ -43,7 +44,7 @@ export function tournamentBody(ctrl: TournamentCtrl) {
   ])
 }
 
-export function renderFooter(ctrl: TournamentCtrl) {
+export function renderFooter(ctrl: TournamentCtrl): Mithril.Child {
   const t = ctrl.tournament
   if (!t) return null
   const tUrl = 'https://lichess.org/tournament/' + t.id
@@ -72,7 +73,7 @@ export function renderFooter(ctrl: TournamentCtrl) {
             { ctrl.chat.nbUnread <= 99 ? ctrl.chat.nbUnread : 99 }
           </span> : null
           }
-        </button> : null
+        </button> : h.fragment({key: 'noChat'}, [])
       }
       { ctrl.hasJoined ? withdrawButton(ctrl, t) : joinButton(ctrl, t) }
     </div>
@@ -188,7 +189,7 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
     (t.teamBattle && t.teamBattle.joinWith.length === 0)) {
     return h.fragment({key: 'noJoinButton'}, [])
   }
-  const action = (t.private || t.teamBattle) ?
+  const action = ((t.private || t.teamBattle) && !previouslyJoined(t)) ?
     () => joinForm.open(ctrl) :
     () => ctrl.join()
 

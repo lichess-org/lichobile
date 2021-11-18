@@ -16,6 +16,8 @@ import faq, { FaqCtrl } from '../faq'
 import playerInfo, { PlayerInfoCtrl } from './playerInfo'
 import teamInfo, { TeamInfoCtrl } from './teamInfo'
 import socketHandler from './socketHandler'
+import { ErrorResponse } from '~/http'
+import { Toast } from '@capacitor/toast'
 
 const MAX_PER_PAGE = 10
 
@@ -95,7 +97,13 @@ export default class TournamentCtrl {
       this.focusOnMe = true
       redraw()
     })
-    .catch(utils.handleXhrError)
+    .catch((e: ErrorResponse) => {
+      if (e.body != null && 'error' in e.body) {
+        void Toast.show({ text: (e.body as {error: string}).error, duration: 'short' })
+      } else {
+        utils.handleXhrError(e)
+      }
+    })
   }, 1000)
 
   withdraw = throttle(() => {

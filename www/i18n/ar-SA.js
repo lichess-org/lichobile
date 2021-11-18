@@ -1449,6 +1449,10 @@ export default {
   "declineOnlyBot": "أنا أقبل التحديات فقط من البوت.",
   "apiUnsupported": "إصدار نسختك من تطبيق Lichess قديم جدا! يرجى تحديثها بالمجان إلى الإصدار الجديد.",
   "apiDeprecated": "حدث بالمجان تطبيق Lichess إلى آخر إصدار! دعامة هذه النسخة ستنشر في %s.",
+  "comments": "التعليقات",
+  "gameInformation": "معلومات اللعبة",
+  "home": "الصفحة الرئيسية",
+  "lastScore": "النقاط الأخيرة:%s",
   "playerisInvitingYou": "%s يدعوك",
   "unsupportedVariant": "خيار %s غير مدعوم في هذا الإصدار",
   "notesSynchronizationHasFailed": "مزامنة الملاحظات مع Lichess قد فشلت، يرجى المحاولة لاحقاً.",
@@ -1459,5 +1463,11 @@ export default {
   "settingsClockPosition": "موضع الساعة",
   "positionRight": "يمين",
   "positionLeft": "يسار",
-  "landscapeBoardSide": "موضع الرقعة (على الوضع الأفقي)"
+  "landscapeBoardSide": "موضع الرقعة (على الوضع الأفقي)",
+  "toggleSound": "تعطيل/تشغيل الصوت",
+  "overTheBoard": "على الرقعة",
+  "sharePgn": "مشاركة PGN",
+  "shareGameUrl": "شارك رابط المباراة",
+  "playOnline": "العب على الإنترنت",
+  "playOffline": "العب دون اتصال"
 }

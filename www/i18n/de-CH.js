@@ -1237,6 +1237,10 @@ export default {
   "declineOnlyBot": "Ich nimm nur Usäfoderig vo Bots a.",
   "apiUnsupported": "Dini Version vode Lichess-App isch veraltet! Bitte lad dir di chostälosi neu Version abe.",
   "apiDeprecated": "Upgrade choschtälos uf di neuschte Lichess-App! Underschtützig für dini Version wird %s iigschtellt.",
+  "comments": "Kommentär",
+  "gameInformation": "Schpiel Info",
+  "home": "Startsiite",
+  "lastScore": "Aktuellä Punktestand: %s",
   "playerisInvitingYou": "%s ladet dich i",
   "unsupportedVariant": "Variante %s wird in dere Version nöd underschtützt",
   "notesSynchronizationHasFailed": "D'Synchronisation vo Anmerkigä mit Lichess isch fählgschlagä, bitte versuechs spöter nomol.",
@@ -1247,5 +1251,11 @@ export default {
   "settingsClockPosition": "Position vode Uhr",
   "positionRight": "Rächts",
   "positionLeft": "Linggs",
-  "landscapeBoardSide": "Bildschirmsiitä vom Brett (im Quärformat)"
+  "landscapeBoardSide": "Bildschirmsiitä vom Brett (im Quärformat)",
+  "toggleSound": "Ton ein-/ausschalten",
+  "overTheBoard": "Offline gegen Mensch",
+  "sharePgn": "PGN teilen",
+  "shareGameUrl": "Link der Partie teilen",
+  "playOnline": "Spiele online",
+  "playOffline": "Spiele offline"
 }

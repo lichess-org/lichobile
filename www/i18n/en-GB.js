@@ -1217,7 +1217,7 @@ export default {
   "challengeToPlay": "Challenge to a game",
   "challengeDeclined": "Challenge declined",
   "challengeAccepted": "Challenge accepted!",
-  "challengeCanceled": "Challenge canceled.",
+  "challengeCanceled": "Challenge cancelled.",
   "registerToSendChallenges": "Please register to send challenges.",
   "youCannotChallengeX": "You cannot challenge %s.",
   "xDoesNotAcceptChallenges": "%s does not accept challenges.",

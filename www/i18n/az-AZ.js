@@ -1156,5 +1156,11 @@ export default {
   "settingsClockPosition": "Saat mövqeyi",
   "positionRight": "Sağ",
   "positionLeft": "Sol",
-  "landscapeBoardSide": "Lövhə ekran tərəfi (üfüqi rejimdə)"
+  "landscapeBoardSide": "Lövhə ekran tərəfi (üfüqi rejimdə)",
+  "toggleSound": "Səsi aç/bağla",
+  "overTheBoard": "Taxta üzərində",
+  "sharePgn": "PGN Paylaş",
+  "shareGameUrl": "Oyun URL-sini paylaş",
+  "playOnline": "Onlayn oyna",
+  "playOffline": "Oflayn oyna"
 }

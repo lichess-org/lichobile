@@ -1143,8 +1143,13 @@ export default {
   "declineVariant": "Tôi sẽ không chơi biến thể này bây giờ.",
   "declineNoBot": "Tôi không chấp nhận thách đấu từ bot.",
   "declineOnlyBot": "Tôi chỉ chấp nhận thách đấu từ bot.",
+  "apiUnsupported": "Phiên bản ứng dụng lichess của bạn quá cũ! Vui lòng nâng cấp miễn phí lên phiên bản mới nhất.",
+  "playerisInvitingYou": "%s đang mời bạn",
   "unsupportedVariant": "Biến thể %s không được hỗ trợ trong phiên bản này",
   "offline": "Ngoại tuyến",
   "positionRight": "Phải",
-  "positionLeft": "Trái"
+  "positionLeft": "Trái",
+  "toggleSound": "Bật/Tắt âm thanh",
+  "playOnline": "Chơi trực tuyến",
+  "playOffline": "Chơi ngoại tuyến"
 }

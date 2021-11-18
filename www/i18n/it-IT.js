@@ -1237,6 +1237,10 @@ export default {
   "declineOnlyBot": "Accetto solo sfide da bot.",
   "apiUnsupported": "La tua versione dell'app lichess è troppo vecchia! Per favore aggiornala gratuitamente all'ultima versione.",
   "apiDeprecated": "Aggiorna gratuitamente all'ultima app lichess! Il supporto per questa versione terminerà il %s.",
+  "comments": "Commenti",
+  "gameInformation": "Informazioni sulla partita",
+  "home": "Home",
+  "lastScore": "Ultimo punteggio: %s",
   "playerisInvitingYou": "%s ti sta invitando",
   "unsupportedVariant": "La variante %s non è supportata in questa versione",
   "notesSynchronizationHasFailed": "La sincronizzazione delle note con lichess non è riuscita, riprova più tardi.",
@@ -1247,5 +1251,10 @@ export default {
   "settingsClockPosition": "Posizione dell'orologio",
   "positionRight": "Destra",
   "positionLeft": "Sinistra",
-  "landscapeBoardSide": "Lato dello schermo della scacchiera (in modalità orizzontale)"
+  "landscapeBoardSide": "Lato dello schermo della scacchiera (in modalità orizzontale)",
+  "toggleSound": "Attiva/disattiva audio",
+  "sharePgn": "Condividi PGN",
+  "shareGameUrl": "Condividi URL della partita",
+  "playOnline": "Gioca online",
+  "playOffline": "Gioca offline"
 }

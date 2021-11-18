@@ -1201,5 +1201,11 @@ export default {
   "settingsClockPosition": "מיקום השעון",
   "positionRight": "ימין",
   "positionLeft": "שמאל",
-  "landscapeBoardSide": "צד הלוח במסך (בתצוגה לרוחב)"
+  "landscapeBoardSide": "צד הלוח במסך (בתצוגה לרוחב)",
+  "toggleSound": "הדלק/כבה צלילים",
+  "overTheBoard": "שח-חי (על הלוח!)",
+  "sharePgn": "שתף קובץ משחק (PGN)",
+  "shareGameUrl": "שתף כתובת משחק (URL)",
+  "playOnline": "שחק (מקוון)",
+  "playOffline": "שחק (לא מקוון)"
 }

@@ -316,7 +316,7 @@ export default {
   "apiDeprecated": "ନବୀନତ୍ତମ lichess ଆପ୍ ପାଇଁ ମାଗଣାରେ ଅପଗ୍ରେଡ୍ କରନ୍ତୁ! ଏହି ସଂସ୍କରଣ ପାଇଁ ସମର୍ଥନ %s ରେ ସମାପ୍ତ ହେବ।",
   "playerisInvitingYou": "%s ଆପଣଙ୍କୁ ନିମନ୍ତ୍ରଣ କରୁଛନ୍ତି",
   "unsupportedVariant": "ଏହି ସଂସ୍କରଣରେ %s variant ଟି ସମର୍ଥିତ ନୁହେଁ",
-  "vibrateOnGameEvents": "ଖେଳ ଇଭେଣ୍ଟଗୁଡ଼ିକରେ କମ୍ପନ",
+  "vibrateOnGameEvents": "ଖେଳ ଇଭେଣ୍ଟଗୁଡ଼ିକରେ କମ୍ପନ",
   "offline": "ଅଫଲାଇନ୍‌",
   "settingsClockPosition": "ଘଣ୍ଟା ଅବସ୍ଥାନ",
   "positionRight": "ଡାହାଣ",

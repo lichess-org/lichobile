@@ -1235,8 +1235,12 @@ export default {
   "declineVariant": "Ich bin derzeit nicht bereit, diese Variante zu spielen.",
   "declineNoBot": "Ich nehme keine Herausforderungen von Bots an.",
   "declineOnlyBot": "Ich nehme nur Herausforderungen von Bots an.",
-  "apiUnsupported": "Deine Version der Lichess-App ist veraltet! Bitte lade dir die kostenlose neue Version herunter.",
+  "apiUnsupported": "Deine Version der Lichess-App ist zu alt! Bitte aktualisiere kostenlos auf die neueste Version.",
   "apiDeprecated": "Aktualisiere kostenlos auf die neueste Lichess-App! Unterstützung für diese Version wird %s eingestellt.",
+  "comments": "Kommentare",
+  "gameInformation": "Partie-Information",
+  "home": "Startseite",
+  "lastScore": "Aktueller Punktestand: %s",
   "playerisInvitingYou": "%s lädt dich ein",
   "unsupportedVariant": "Variante %s wird in dieser Version nicht unterstützt",
   "notesSynchronizationHasFailed": "Die Synchronisation der Anmerkungen mit Lichess ist fehlgeschlagen, bitte versuche es später erneut.",
@@ -1251,7 +1255,7 @@ export default {
   "toggleSound": "Ton ein-/ausschalten",
   "overTheBoard": "Offline gegen Mensch",
   "sharePgn": "PGN teilen",
-  "shareGameUrl": "Link zur Partie teilen",
+  "shareGameUrl": "Link der Partie teilen",
   "playOnline": "Spiele online",
   "playOffline": "Spiele offline"
 }

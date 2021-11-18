@@ -181,5 +181,9 @@ export default {
   "improvementAreas": "တိုးတက်စေနိုင်မည့် အပိုင်းများ",
   "strengths": "အားသာချက်များ",
   "solved": "ဖြေပြီး",
-  "playedXTimes:other": "%s ကြိမ်း ကစားခဲ့သည်"
+  "playedXTimes:other": "%s ကြိမ်း ကစားခဲ့သည်",
+  "comments": "မှတ်ချက်",
+  "gameInformation": "ကစားပွဲ ဆိုင်ရာ အချက်အလက်များ",
+  "home": "ပင္မစာမ်က္ႏွာ",
+  "lastScore": "ရမှတ် နောက်ဆုံး အခြေအနေ - %s"
 }

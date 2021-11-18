@@ -1151,5 +1151,16 @@ export default {
   "declineVariant": "मैं अभी इस संस्करण को नहीं खेलना चाहता हूं।",
   "declineNoBot": "मैं कंप्यूटर से चुनौतियों को स्वीकार नहीं कर रहा हूँ",
   "declineOnlyBot": "मैं केवल कंप्यूटर से चुनौतियों को स्वीकार कर रहा हूं",
-  "apiUnsupported": "Aapka lichess version bahut purana hai usko muft mein upgrade karo"
+  "apiUnsupported": "आपका lichess version बहुत पुराना ह​ै | क्ृप्या उसे मुफ़्त मे Upgrade करे।",
+  "apiDeprecated": "Lichess के नुतन सन्सकरण से मुफ़्त मे जुड़े | यह सन्सकरण %s के पश्चात कार्य नही करेगा।",
+  "playerisInvitingYou": "%s ने आपको न्योता दिया है।",
+  "offline": "ऑफलाइन",
+  "settingsClockPosition": "घड़ी के लिए स्थान",
+  "positionRight": "दाएँ",
+  "positionLeft": "बाएँ",
+  "toggleSound": "ध्वनि को चालू या बंद करें",
+  "sharePgn": "PGN शेयर करें",
+  "shareGameUrl": "खेल के URL को साझा करें",
+  "playOnline": "ऑनलाइन खेलें",
+  "playOffline": "ऑफ़लाइन खेलें"
 }

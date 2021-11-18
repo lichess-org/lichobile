@@ -1,5 +1,10 @@
 vi-VN:
+  apiUnsupported: "Phiên bản ứng dụng lichess của bạn quá cũ! Vui lòng nâng cấp miễn phí lên phiên bản mới nhất."
+  playerisInvitingYou: "%s đang mời bạn"
   unsupportedVariant: "Biến thể %s không được hỗ trợ trong phiên bản này"
   offline: "Ngoại tuyến"
   positionRight: "Phải" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Trái" #As in "left-hand side"; not political or past participle
+  toggleSound: "Bật/Tắt âm thanh" #Settings to enable/disable sound
+  playOnline: "Chơi trực tuyến"
+  playOffline: "Chơi ngoại tuyến"

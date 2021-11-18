@@ -12,3 +12,9 @@ az-AZ:
   positionRight: "Sağ" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Sol" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Lövhə ekran tərəfi (üfüqi rejimdə)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Səsi aç/bağla" #Settings to enable/disable sound
+  overTheBoard: "Taxta üzərində"
+  sharePgn: "PGN Paylaş"
+  shareGameUrl: 'Oyun URL-sini paylaş'
+  playOnline: "Onlayn oyna"
+  playOffline: "Oflayn oyna"

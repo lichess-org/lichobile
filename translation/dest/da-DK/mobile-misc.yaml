@@ -1,6 +1,10 @@
 da-DK:
   apiUnsupported: "Din version af lichess-app'en er for gammel! Opgradér venligst gratis til den nyeste version."
   apiDeprecated: "Opgrader gratis til den seneste lichess-app! Understøttelse af denne version vil blive droppet den %s."
+  comments: "Kommentarer"
+  gameInformation: "Parti-information"
+  home: "Hjem"
+  lastScore: "Sidste score: %s"
   playerisInvitingYou: "%s inviterer dig"
   unsupportedVariant: "Variant %s er ikke understøttet i denne version"
   notesSynchronizationHasFailed: "Synkronisering af noter med lichess mislykkedes. Prøv venligst senere."

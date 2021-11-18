@@ -12,3 +12,9 @@ he-IL:
   positionRight: "ימין" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "שמאל" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "צד הלוח במסך (בתצוגה לרוחב)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "הדלק/כבה צלילים" #Settings to enable/disable sound
+  overTheBoard: "שח-חי (על הלוח!)"
+  sharePgn: "שתף קובץ משחק (PGN)"
+  shareGameUrl: 'שתף כתובת משחק (URL)'
+  playOnline: "שחק (מקוון)"
+  playOffline: "שחק (לא מקוון)"

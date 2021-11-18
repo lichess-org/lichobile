@@ -8,7 +8,7 @@ export interface Tab {
 
 export const gameInfos: Tab = {
   id: 'infos',
-  title: 'Game information',
+  title: i18n('gameInformation'),
   className: 'fa fa-info-circle',
 }
 
@@ -38,12 +38,12 @@ export const charts: Tab = {
 
 export const pgnTags: Tab = {
   id: 'pgnTags',
-  title: 'PGN tags',
+  title: i18n('pgnTags'),
   className: 'fa fa-tags'
 }
 
 export const comments: Tab = {
   id: 'comments',
-  title: 'Comments',
+  title: i18n('comments'),
   className: 'fa fa-comment-o'
 }

@@ -1,6 +1,10 @@
 uk-UA:
   apiUnsupported: "Ваша версія Lichess занадто застаріла! Будь ласка, оновіть програму до останньої версії."
   apiDeprecated: "Оновлення до останньої версії Lichess безкоштовне! Підтримка поточної версії буде зупинена %s."
+  comments: "Коментарі"
+  gameInformation: "Інформація про гру"
+  home: "Головна"
+  lastScore: "Ваш результат: %s"
   playerisInvitingYou: "%s запрошує вас"
   unsupportedVariant: "Варіант %s не підтримується у цій версії"
   notesSynchronizationHasFailed: "Помилка синхронізації нотаток з lichess, будь ласка, спробуйте пізніше."

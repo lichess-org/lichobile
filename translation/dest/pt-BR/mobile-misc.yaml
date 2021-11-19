@@ -1,6 +1,10 @@
 pt-BR:
   apiUnsupported: "Sua versão do aplicativo lichess é muito antiga! Por favor, atualize gratuitamente para a versão mais recente."
   apiDeprecated: "Atualize gratuitamente para o mais recente aplicativo do lichess! O suporte para esta versão acabará em %s."
+  comments: "Comentários"
+  gameInformation: "Informação da partida"
+  home: "Início"
+  lastScore: "Última pontuação: %s"
   playerisInvitingYou: "%s está convidando você"
   unsupportedVariant: "Variante %s não é suportada nesta versão"
   notesSynchronizationHasFailed: "A sincronização de notas com o lichess falhou. Por favor, tente mais tarde."

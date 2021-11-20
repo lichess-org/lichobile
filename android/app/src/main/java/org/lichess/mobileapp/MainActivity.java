@@ -34,11 +34,6 @@ public class MainActivity extends BridgeActivity {
 
     this.versionUpdateActions();
 
-    try {
-      // some reports show app becomes unresponsive until cache is cleared
-      this.getBridge().getWebView().clearCache(true);
-    } catch (Exception e) { }
-
     PackageInfo pInfo = getCurrentWebViewPackageInfo();
     if (pInfo != null) {
       try {
@@ -70,6 +65,16 @@ public class MainActivity extends BridgeActivity {
         Log.e(LOGTAG, "Cannot parse packageinfo version");
       }
     }
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+
+    try {
+      // some reports show app becomes unresponsive until cache is cleared
+      this.getBridge().getWebView().clearCache(true);
+    } catch (Exception e) { }
   }
 
   private PackageInfo getCurrentWebViewPackageInfo() {

@@ -1344,7 +1344,7 @@ export default {
   "apiUnsupported": "Twoja wersja aplikacji Lichess jest za stara! Proszę, zaktualizuj za darmo do najnowszej wersji.",
   "apiDeprecated": "Uaktualnij za darmo do najnowszej aplikacji Lichess! Wsparcie tej wersji zostanie zakończone %s.",
   "comments": "Komentarze",
-  "gameInformation": "Informacje o grze",
+  "gameInformation": "Informacje o partii",
   "home": "Strona główna",
   "lastScore": "Ostatni wynik: %s",
   "playerisInvitingYou": "%s zaprasza Cię",

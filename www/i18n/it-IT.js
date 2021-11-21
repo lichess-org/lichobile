@@ -1253,6 +1253,7 @@ export default {
   "positionLeft": "Sinistra",
   "landscapeBoardSide": "Lato dello schermo della scacchiera (in modalità orizzontale)",
   "toggleSound": "Attiva/disattiva audio",
+  "overTheBoard": "Gioca offline",
   "sharePgn": "Condividi PGN",
   "shareGameUrl": "Condividi URL della partita",
   "playOnline": "Gioca online",

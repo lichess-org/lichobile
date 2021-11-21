@@ -1,6 +1,10 @@
 ja-JP:
   apiUnsupported: "Lichess アプリのバージョンが古すぎます。最新版にアップグレードを（無料です）。"
   apiDeprecated: "最新の Lichess アプリに無料でアップグレードを！このバージョンは %s にサポート終了します。"
+  comments: "コメント"
+  gameInformation: "ゲーム情報"
+  home: "ホーム"
+  lastScore: "最後のスコア：%s"
   playerisInvitingYou: "%s から招待です"
   unsupportedVariant: "%s はこのバージョンでは対応していません"
   notesSynchronizationHasFailed: "Lichess との同期に失敗しました。後でもう一度どうぞ。"

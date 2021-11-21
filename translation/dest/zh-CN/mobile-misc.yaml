@@ -1,6 +1,7 @@
 zh-CN:
   apiUnsupported: "您的 lichess 应用程序版本太旧了！请免费升级到最新版本。"
   apiDeprecated: "免费升级到最新的 lichess 应用！此版本将在 %s 之后停止支持。"
+  home: "主页"
   playerisInvitingYou: "%s 邀请你"
   unsupportedVariant: "此版本不支持变体 %s"
   notesSynchronizationHasFailed: "同步棋谱到 lichess 失败，请稍后重试"

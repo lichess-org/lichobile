@@ -1,6 +1,10 @@
 ca-ES:
   apiUnsupported: "La teva versió de l'aplicació Lichess és massa antiga! Si us plau, actualitza gratuïtament la darrera versió."
   apiDeprecated: "Instal·la de franc la darrera versió de Lichess! Aquesta versió deixarà de tenir suport el %s."
+  comments: "Comentaris"
+  gameInformation: "Informació del joc"
+  home: "Inici"
+  lastScore: "Últim resultat: %s"
   playerisInvitingYou: "Tens una invitació de %s"
   unsupportedVariant: "La variant %s no és compatible amb aquesta versió"
   notesSynchronizationHasFailed: "La sincronització d'anotacions amb Lichess ha fallat. Torna-ho a provar més tard."

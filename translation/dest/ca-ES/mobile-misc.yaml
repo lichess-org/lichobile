@@ -1,0 +1,24 @@
+ca-ES:
+  apiUnsupported: "La teva versió de l'aplicació Lichess és massa antiga! Si us plau, actualitza gratuïtament la darrera versió."
+  apiDeprecated: "Instal·la de franc la darrera versió de Lichess! Aquesta versió deixarà de tenir suport el %s."
+  comments: "Comentaris"
+  gameInformation: "Informació del joc"
+  home: "Inici"
+  lastScore: "Últim resultat: %s"
+  playerisInvitingYou: "Tens una invitació de %s"
+  unsupportedVariant: "La variant %s no és compatible amb aquesta versió"
+  notesSynchronizationHasFailed: "La sincronització d'anotacions amb Lichess ha fallat. Torna-ho a provar més tard."
+  vibrateOnGameEvents: "Vibrar en els esdeveniments de la partida"
+  offline: "Desconnectat"
+  otbUseSymmetricPieces: "Utilitzar peces simètriques" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Capgirar peces i informació del rival després de cada moviment" #Setting for offline over-the-board games
+  settingsClockPosition: "Posició del rellotge" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Dreta" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Esquerra" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Ubicació del tauler (en mode horitzontal)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Activa/Desactiva el so" #Settings to enable/disable sound
+  overTheBoard: "Juga offline, sobre el tauler"
+  sharePgn: "Comparteix PGN"
+  shareGameUrl: 'Comparteix l''enllaç a la partida'
+  playOnline: "Juga online"
+  playOffline: "Juga sense connexió"

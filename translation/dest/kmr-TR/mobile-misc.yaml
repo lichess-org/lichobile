@@ -1,0 +1,4 @@
+kmr-TR:
+  settingsClockPosition: "Ciyê saetê" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Rast" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Çep" #As in "left-hand side"; not political or past participle

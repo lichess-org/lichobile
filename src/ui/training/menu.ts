@@ -115,6 +115,6 @@ function renderUserInfosOffline(user: OfflineUser, ctrl: IMenuCtrl) {
 function renderUserInfosOnline(user: PuzzleUserData) {
   const rating = user.rating
   return [
-    h('p.trainingRatingHeader', h.trust(i18n('yourPuzzleRatingX', `<strong>${rating}</strong>`)))
+    h('p.trainingRatingHeader', h.trust(i18n('xRating', `<strong>${rating}</strong>`)))
   ]
 }

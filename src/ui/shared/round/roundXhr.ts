@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
 import { SESSION_ID_KEY, fetchJSON, fetchText } from '../../../http'
 import { serializeQueryParameters } from '../../../utils'
 import i18n from '../../../i18n'
@@ -38,7 +38,7 @@ export function syncNote(gameId: string, notes: string) {
     body: serializeQueryParameters({ text: notes })
   }, false)
   .catch(err => {
-    Plugins.LiToast.show({ text: i18n('notesSynchronizationHasFailed'), duration: 'short' })
+    Toast.show({ text: i18n('notesSynchronizationHasFailed'), duration: 'short' })
     throw err
   })
 }

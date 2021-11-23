@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
 import h from 'mithril/hyperscript'
 import * as utils from '../../utils'
 import socket from '../../socket'
@@ -96,10 +96,6 @@ function renderProfileActions(user: Session) {
         <span data-icon="f" />
         {plural('nbFriendsOnline', friendsApi.count())}
       </li>
-      <li className="side_link" data-route={`/@/${user.id}/related`}>
-        <span className="fa fa-arrow-circle-left" />
-        {plural('nbFollowers', user.nbFollowers || 0)}
-      </li>
       <li className="side_link" data-nocloseaction="logout">
         <span data-icon="w" />
         {i18n('logOut')}
@@ -143,7 +139,7 @@ function renderLinks(user?: Session) {
       oncreate={helper.ontapXY(onLinkTap, undefined, helper.getLI)}
     >
       <li className="side_link" data-route="/">
-        <span className="fa fa-home" />Home
+        <span className="fa fa-home" />{i18n('home')}
       </li>
       {online ?
       <li className="sep_link">{i18n('playOnline')}</li> : null
@@ -184,7 +180,7 @@ function renderLinks(user?: Session) {
       }
       {online ?
       <li className="side_link" data-route="/tv">
-        <span data-icon="1"/>{i18n('watchLichessTV')}
+        <span data-icon="1"/>{i18n('watchGames')}
       </li> : null
       }
       {online ?
@@ -221,10 +217,10 @@ function renderLinks(user?: Session) {
         {i18n('playOffline')}
       </li>
       <li className="side_link" data-route="/ai">
-        <span className="fa fa-cogs"/>{i18n('playOfflineComputer')}
+        <span className="fa fa-cogs"/>{i18n('computer')}
       </li>
       <li className="side_link" data-route="/otb">
-        <span className="fa fa-beer"/>{i18n('playOnTheBoardOffline')}
+        <span className="fa fa-beer"/>{i18n('overTheBoard')}
       </li>
       <li className="hr"></li>
       <li className="side_link" data-route="/settings">
@@ -242,7 +238,7 @@ function networkStatus(user?: Session) {
   const server = menu.mlat()
   const showToast = (e: Event) => {
     e.stopPropagation()
-    Plugins.LiToast.show({ text: pingHelp, duration: 'long', position: 'top' })
+    Toast.show({ text: pingHelp, duration: 'long', position: 'top' })
   }
   return (
     <div className="pingServer">

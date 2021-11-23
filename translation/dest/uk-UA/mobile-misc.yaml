@@ -1,0 +1,24 @@
+uk-UA:
+  apiUnsupported: "Ваша версія Lichess занадто застаріла! Будь ласка, оновіть програму до останньої версії."
+  apiDeprecated: "Оновлення до останньої версії Lichess безкоштовне! Підтримка поточної версії буде зупинена %s."
+  comments: "Коментарі"
+  gameInformation: "Інформація про гру"
+  home: "Головна"
+  lastScore: "Ваш результат: %s"
+  playerisInvitingYou: "%s запрошує вас"
+  unsupportedVariant: "Варіант %s не підтримується у цій версії"
+  notesSynchronizationHasFailed: "Помилка синхронізації нотаток з lichess, будь ласка, спробуйте пізніше."
+  vibrateOnGameEvents: "Вібрувати при ігрових подіях"
+  offline: "Офлайн"
+  otbUseSymmetricPieces: "Використовувати симетричні фігури" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Перевертати фігури та інформацію про суперника після ходу" #Setting for offline over-the-board games
+  settingsClockPosition: "Розташування годинника" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Справа" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Зліва" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Розташування дошки (в альбомній орієнтації)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Увімк./вимк. звук" #Settings to enable/disable sound
+  overTheBoard: "За дошкою"
+  sharePgn: "Поділитись PGN"
+  shareGameUrl: 'Ділитись посиланням на гру'
+  playOnline: "Грати онлайн"
+  playOffline: "Грати офлайн"

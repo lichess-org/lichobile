@@ -8,6 +8,7 @@ import i18n from '../../../i18n'
 import { closeIcon } from '../../shared/icons'
 
 import * as xhr from '../tournamentXhr'
+import { renderPlayerTitle } from './tournamentView'
 import TournamentCtrl from './TournamentCtrl'
 
 export interface PlayerInfoCtrl {
@@ -100,7 +101,9 @@ export default {
             { closeIcon }
           </button>
           <h2 className="tournamentModalHeader">
-            {player.rank + '. ' + player.name + ' (' + player.rating + ') '}
+            {player.rank + '. '}
+            {renderPlayerTitle(player)}
+            {player.name + ' (' + player.rating + ') '}
           </h2>
         </header>
         <div className="modal_content">

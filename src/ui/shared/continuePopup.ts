@@ -1,5 +1,5 @@
 import h from 'mithril/hyperscript'
-import { Plugins } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
 import i18n from '../../i18n'
 import router from '../../router'
 import { validateFen, positionLooksLegit } from '../../utils/fen'
@@ -84,11 +84,11 @@ export default {
                 if (validateFen(f, v) && positionLooksLegit(f)) {
                   router.set(`/ai/variant/${v}/fen/${encodeURIComponent(f)}/color/${c}`)
                 } else {
-                  Plugins.LiToast.show({ text: 'Invalid FEN', duration: 'short' })
+                  Toast.show({ text: 'Invalid FEN', position: 'center', duration: 'short' })
                 }
               }
             })
-          }, i18n('playOfflineComputer')),
+          }, i18n('computer')),
           h('button', {
             oncreate: helper.ontap(() => {
               ctrl.close()
@@ -98,11 +98,11 @@ export default {
                 if (validateFen(f, v) && positionLooksLegit(f)) {
                   router.set(`/otb/variant/${v}/fen/${encodeURIComponent(f)}`)
                 } else {
-                  Plugins.LiToast.show({ text: 'Invalid FEN', duration: 'short' })
+                  Toast.show({ text: 'Invalid FEN', position: 'center', duration: 'short' })
                 }
               }
             })
-          }, i18n('playOnTheBoardOffline'))
+          }, i18n('overTheBoard'))
         ]
       },
       ctrl.isOpen(),

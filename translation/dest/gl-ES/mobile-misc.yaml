@@ -1,0 +1,20 @@
+gl-ES:
+  apiUnsupported: "A túa versión da app de Lichess é moi antiga! Por favor actualiza gratuitamente á última versión."
+  apiDeprecated: "Instala gratis a versión máis recente da app de Lichess! O soporte para esta versión eliminarase o %s."
+  playerisInvitingYou: "%s estáche convidando"
+  unsupportedVariant: "A variante %s non é compatíbel con esta versión"
+  notesSynchronizationHasFailed: "Produciuse un erro ao sincronizar as notas con Lichess. Por favor, volve intentalo máis tarde."
+  vibrateOnGameEvents: "Vibrar en eventos da partida"
+  offline: "Non conectado"
+  otbUseSymmetricPieces: "Usa pezas simétricas" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Invirte as pezas e a información do opoñente despois dun movemento" #Setting for offline over-the-board games
+  settingsClockPosition: "Posición do reló" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Dereita" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Esquerda" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Ubicación do taboleiro (en modo horizontal)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "(Des)activar son" #Settings to enable/disable sound
+  overTheBoard: "No taboleiro"
+  sharePgn: "Compartir PGN"
+  shareGameUrl: 'Compartir URL da partida'
+  playOnline: "Xogar en liña"
+  playOffline: "Xogar offline"

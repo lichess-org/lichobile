@@ -1,0 +1,24 @@
+nn-NO:
+  apiUnsupported: "Din versjon av lichess-appen er for gammal! Ver venleg å oppgradere til den nyaste, fritt tilgjengelege versjonen."
+  apiDeprecated: "Oppgrader gratis til den nyaste lichess-appen! Den versjonen du brukar vert ikkje støtta etter %s."
+  comments: "Kommentarar"
+  gameInformation: "Parti-informasjon"
+  home: "Startside"
+  lastScore: "Gjeldande poengsum: %s"
+  playerisInvitingYou: "%s inviterar deg"
+  unsupportedVariant: "Variant %s er ikkje støtta i denne versjonen"
+  notesSynchronizationHasFailed: "Merknads-synkroniseringa med Lichess feila. Ver venleg å prøva igjen seinare."
+  vibrateOnGameEvents: "Vibrér ved spelhendingar"
+  offline: "Offline"
+  otbUseSymmetricPieces: "Bruk symmetriske brikker" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Snu brikker og motstandar-info etter trekket" #Setting for offline over-the-board games
+  settingsClockPosition: "Urposisjon" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Høgre" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Venstre" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Skjermsida av brettet (i landskapsformat)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Lyd av/på" #Settings to enable/disable sound
+  overTheBoard: "Spel fråkopla, bruk som brett"
+  sharePgn: "Del PGN"
+  shareGameUrl: 'Del spel-URL'
+  playOnline: "Spel på nett"
+  playOffline: "Spel fråkopla"

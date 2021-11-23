@@ -1,4 +1,5 @@
-import { Plugins } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
+import { Device } from '@capacitor/device'
 import throttle from 'lodash-es/throttle'
 import redraw from './utils/redraw'
 import signals from './signals'
@@ -24,7 +25,7 @@ interface Prefs {
 export type EmailConfirm = { email_confirm: boolean }
 export type SignupData = Session | EmailConfirm
 
-interface Profile {
+export interface Profile {
   readonly country?: string
   readonly location?: string
   readonly bio?: string
@@ -103,11 +104,6 @@ function nowPlaying(): readonly NowPlayingGame[] {
   )
 }
 
-function currentBan(): Date | undefined {
-  const playban = session && session.playban
-  return playban && new Date(playban.date + playban.mins * 60000)
-}
-
 function isKidMode(): boolean {
   return !!(session && session.kid)
 }
@@ -121,7 +117,7 @@ function myTurnGames(): readonly NowPlayingGame[] {
 }
 
 function showSavedPrefToast(data: string): string {
-  Plugins.LiToast.show({ text: '✓ lichess.org: ' + i18n('yourPreferencesHaveBeenSaved'), duration: 'short' })
+  Toast.show({ text: '✓ lichess.org: ' + i18n('yourPreferencesHaveBeenSaved'), position: 'center', duration: 'short' })
   return data
 }
 
@@ -319,7 +315,7 @@ async function refresh(): Promise<void> {
       session = undefined
       onLogout()
       redraw()
-      Plugins.LiToast.show({ text: i18n('signedOut'), duration: 'short' })
+      Toast.show({ text: 'You have been signed out', position: 'center', duration: 'short' })
     }
   }
 }
@@ -338,10 +334,10 @@ async function backgroundRefresh(): Promise<void> {
 }
 
 function sendUUID(): void {
-  Plugins.Device.getInfo()
-  .then(info => {
-    if (info.uuid !== 'web') {
-      fetchText(`/auth/set-fp/${info.uuid}/0`, { method: 'POST' })
+  Device.getId()
+  .then(({ uuid }) => {
+    if (uuid !== 'web') {
+      fetchText(`/auth/set-fp/${uuid}/0`, { method: 'POST' })
     }
   })
 }
@@ -370,8 +366,7 @@ export default {
   lichessBackedProp,
   setKidMode,
   confirmEmail,
-  currentBan,
   hasCurrentBan(): boolean {
-    return currentBan() !== undefined
+    return session?.playban !== undefined
   },
 }

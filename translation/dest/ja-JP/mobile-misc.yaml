@@ -1,0 +1,24 @@
+ja-JP:
+  apiUnsupported: "Lichess アプリのバージョンが古すぎます。最新版にアップグレードを（無料です）。"
+  apiDeprecated: "最新の Lichess アプリに無料でアップグレードを！このバージョンは %s にサポート終了します。"
+  comments: "コメント"
+  gameInformation: "ゲーム情報"
+  home: "ホーム"
+  lastScore: "最後のスコア：%s"
+  playerisInvitingYou: "%s から招待です"
+  unsupportedVariant: "%s はこのバージョンでは対応していません"
+  notesSynchronizationHasFailed: "Lichess との同期に失敗しました。後でもう一度どうぞ。"
+  vibrateOnGameEvents: "対局の進行によるバイブ機能"
+  offline: "オフライン"
+  otbUseSymmetricPieces: "上下対称デザインの駒" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "1 手ごとに駒と情報を上下反転" #Setting for offline over-the-board games
+  settingsClockPosition: "時計の位置" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "右" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "左" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "ボードの位置（横長モードで）" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "音声のオン・オフ" #Settings to enable/disable sound
+  overTheBoard: "オフライン（2人対戦）"
+  sharePgn: "PGN を共有"
+  shareGameUrl: 'ゲーム URLを共有'
+  playOnline: "オンライン対戦"
+  playOffline: "オフライン対戦"

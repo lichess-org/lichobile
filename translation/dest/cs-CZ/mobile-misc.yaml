@@ -1,0 +1,17 @@
+cs-CZ:
+  apiUnsupported: "Vaše verze aplikace je příliš stará. Aktualizujte ji prosím zdarma na nejnovější verzi."
+  apiDeprecated: "Aktualizujte zdarma na nejnovější lichess aplikaci! Tato verze nebude podporována po %s."
+  playerisInvitingYou: "%s vás zve"
+  unsupportedVariant: "Varianta %s není v této verzi aplikace podporována"
+  notesSynchronizationHasFailed: "Synchronizace poznámek se nezdařila, zkuste to prosím později."
+  vibrateOnGameEvents: "Vibrovat při herních událostech"
+  offline: "Odpojeno"
+  otbUseSymmetricPieces: "Použít oboustranné figury" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Otočit šachovnici po zahrání tahu" #Setting for offline over-the-board games
+  settingsClockPosition: "Pozice hodin" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Vpravo" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Vlevo" #As in "left-hand side"; not political or past participle
+  sharePgn: "Sdílet PGN"
+  shareGameUrl: 'Sdílet URL hry'
+  playOnline: "Hrát online"
+  playOffline: "Hrát offline"

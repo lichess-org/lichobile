@@ -1,0 +1,21 @@
+zh-CN:
+  apiUnsupported: "您的 lichess 应用程序版本太旧了！请免费升级到最新版本。"
+  apiDeprecated: "免费升级到最新的 lichess 应用！此版本将在 %s 之后停止支持。"
+  home: "主页"
+  playerisInvitingYou: "%s 邀请你"
+  unsupportedVariant: "此版本不支持变体 %s"
+  notesSynchronizationHasFailed: "同步棋谱到 lichess 失败，请稍后重试"
+  vibrateOnGameEvents: "走棋时震动"
+  offline: "离线"
+  otbUseSymmetricPieces: "使用对称的棋子" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "走棋后翻转棋子和对手信息" #Setting for offline over-the-board games
+  settingsClockPosition: "棋钟位置" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "右" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "左" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "棋盘方向(横向模式)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "声音开关" #Settings to enable/disable sound
+  overTheBoard: "面对面"
+  sharePgn: "分享 PGN"
+  shareGameUrl: '分享棋局链接'
+  playOnline: "在线下棋"
+  playOffline: "离线下棋"

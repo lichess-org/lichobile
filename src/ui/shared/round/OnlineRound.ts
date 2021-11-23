@@ -1,4 +1,7 @@
-import { Capacitor, Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
+import { App, AppState } from '@capacitor/app'
+import { Toast } from '@capacitor/toast'
+import { Capacitor, PluginListenerHandle } from '@capacitor/core'
+import Badge from '~/badge'
 import Chessground from '../../../chessground/Chessground'
 import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
@@ -32,6 +35,7 @@ import atomic from './atomic'
 import * as xhr from './roundXhr'
 import crazyValid from './crazy/crazyValid'
 import { OnlineRoundInterface } from './'
+import { Promoting } from '../offlineRound/promotion'
 
 interface VM {
   ply: number
@@ -67,14 +71,13 @@ export default class OnlineRound implements OnlineRoundInterface {
   public tv!: string
   public score?: Score
   public socket: RoundSocket
+  public promoting: Promoting | null = null
 
   private zenModeEnabled: boolean
   private lastMoveMillis?: number
   private lastDrawOfferAtPly!: number
   private clockIntervId!: number
   private blur: boolean
-
-  private readonly playableOnInit: boolean
 
   private transientMove: TransientMove
   private appStateListener: PluginListenerHandle
@@ -86,14 +89,13 @@ export default class OnlineRound implements OnlineRoundInterface {
     flipped = false,
     readonly onFeatured?: () => void,
     userTv?: string,
+    ply?: number,
   ) {
     this.setData(cfg)
     this.data.userTV = userTv
 
     this.zenModeEnabled = settings.game.zenMode()
     this.blur = false
-
-    this.playableOnInit = gameApi.isPlayerPlaying(this.data)
 
     this.vm = {
       ply: this.lastPly(),
@@ -158,14 +160,20 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.makeCorrespondenceClock()
     if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick, 6000)
 
-    this.appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
+    this.appStateListener = App.addListener('appStateChange', (state: AppState) => {
       if (state.isActive) this.onResume()
     })
 
     this.transientMove = new TransientMove(this)
 
+    if (ply !== undefined) {
+      this.jump(ply)
+    }
+
     redraw()
   }
+
+  public player = () => this.data.player.color
 
   public zenAvailable = () => !this.data.player.spectator &&
     gameApi.playable(this.data)
@@ -179,7 +187,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   public goToAnalysis = () => {
     const d = this.data
-    router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}?ply=${this.vm.ply}&curFen=${d.game.fen}`, !this.playableOnInit)
+    router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}?ply=${this.vm.ply}&curFen=${d.game.fen}`)
   }
 
   public openUserPopup = (position: string, userId: string) => {
@@ -337,7 +345,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     } else {
       this.actualSendMove(move, isPremove, sendBlur)
       if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
-        Plugins.LiToast.show({ text: 'You need to be connected to Internet to send your move.', duration: 'short' })
+        Toast.show({ text: 'You need to be connected to Internet to send your move.', position: 'bottom', duration: 'short' })
       }
     }
   }
@@ -382,7 +390,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         this.actualSendMove(this.vm.dropToSubmit)
       }
       if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
-        Plugins.LiToast.show({ text: 'You need to be connected to Internet to send your move.', duration: 'short' })
+        Toast.show({ text: 'You need to be connected to Internet to send your move.', position: 'bottom', duration: 'short' })
       }
       this.vm.moveToSubmit = null
       this.vm.dropToSubmit = null
@@ -560,7 +568,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       session.refresh()
       .then(() => {
         if (Capacitor.platform === 'ios') {
-          Plugins.Badge.setNumber({ badge: session.myTurnGames().length })
+          Badge.setNumber({ badge: session.myTurnGames().length })
         }
       })
     }
@@ -628,9 +636,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (!this.data.player.spectator) {
       session.backgroundRefresh()
       sleepUtils.allowSleepAgain()
-      if (gameStatusApi.resigned(this.data) && this.data.player.color === o.winner) {
-        Plugins.LiToast.show({ text: this.gameStatus(), duration: 'short' })
-      }
+      Toast.show({ text: this.gameStatus(), position: 'center', duration: 'short' })
     }
     this.score === undefined
   }

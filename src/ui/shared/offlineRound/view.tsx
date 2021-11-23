@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
 import h from 'mithril/hyperscript'
 import * as utils from '../../../utils'
 import i18n from '../../../i18n'
@@ -87,13 +87,13 @@ export function renderGameActionsBar(ctrl: OfflineRoundInterface) {
       <button className="action_bar_button fa fa-plus-circle"
         oncreate={helper.ontap(
           ctrl.newGameMenu.open,
-          () => Plugins.LiToast.show({ text: i18n('createAGame'), duration: 'short', position: 'bottom' })
+          () => Toast.show({ text: i18n('createAGame'), duration: 'short', position: 'bottom' })
         )}
       />
       <button className="fa fa-share-alt action_bar_button"
         oncreate={helper.ontap(
           ctrl.sharePGN,
-          () => Plugins.LiToast.show({ text: i18n('sharePGN'), duration: 'short', position: 'bottom' })
+          () => Toast.show({ text: i18n('sharePgn'), duration: 'short', position: 'bottom' })
         )}
       />
       <button className="action_bar_button" data-icon="A"

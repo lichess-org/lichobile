@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Share } from '@capacitor/share'
 import h from 'mithril/hyperscript'
 import router from '../../../router'
 import redraw from '../../../utils/redraw'
@@ -122,7 +122,7 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
     ctrl.study!.actionMenu.s.loadingChapterPGN = false
     ctrl.study!.actionMenu.s.loadingStudyPGN = false
     redraw()
-    Plugins.LiShare.share({ text: pgn })
+    Share.share({ text: pgn })
   }
 
   function onPgnError(e: ErrorResponse) {
@@ -136,13 +136,13 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
     h('button', {
       oncreate: helper.ontap(() => {
         const url = baseUrl + `study/${ctrl.study!.data.id}`
-        Plugins.LiShare.share({ url })
+        Share.share({ url })
       })
     }, [i18n('studyUrl')]),
     h('button', {
       oncreate: helper.ontap(() => {
         const url = baseUrl + `study/${ctrl.study!.data.id}/${ctrl.study!.data.chapter.id}`
-        Plugins.LiShare.share({ url })
+        Share.share({ url })
       })
     }, [i18n('currentChapterUrl')]),
     h('button', {

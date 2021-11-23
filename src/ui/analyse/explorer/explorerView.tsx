@@ -3,6 +3,7 @@ import i18n, { plural } from '../../../i18n'
 import * as helper from '../../helper'
 import explorerConfig from './explorerConfig'
 import { isTablebaseData, isOpeningData, TablebaseMoveStats } from './interfaces'
+import { colorOf, winnerBeforeMove } from './util'
 import AnalyseCtrl from '../AnalyseCtrl'
 import OpeningTable, { showEmpty, getTR } from './OpeningTable'
 
@@ -55,8 +56,8 @@ function onTablebaseTap(ctrl: AnalyseCtrl, e: Event) {
 }
 
 function showTablebase(ctrl: AnalyseCtrl, title: string, moves: readonly TablebaseMoveStats[], fen: string) {
-  const stm = fen.split(/\s/)[1]
   if (!moves.length) return null
+  const stm = colorOf(fen)
   return [
     <div className="title">{title}</div>,
     <table className="explorerTablebase"
@@ -77,37 +78,28 @@ function showTablebase(ctrl: AnalyseCtrl, title: string, moves: readonly Tableba
   ]
 }
 
-function winner(stm: string, move: TablebaseMoveStats) {
-  if ((stm[0] === 'w' && Number(move.wdl) < 0) || (stm[0] === 'b' && Number(move.wdl) > 0))
-    return 'white'
-  else if ((stm[0] === 'b' && Number(move.wdl) < 0) || (stm[0] === 'w' && Number(move.wdl) > 0))
-    return 'black'
-  else
-    return null
-}
-
-function showDtm(stm: string, move: TablebaseMoveStats) {
-  if (move.dtm) return h('result.' + winner(stm, move), {
+function showDtm(stm: Color, move: TablebaseMoveStats) {
+  if (move.dtm) return h('result.' + winnerBeforeMove(stm, move.category), {
     title: plural('mateInXHalfMoves', Math.abs(move.dtm)),
   }, 'DTM ' + Math.abs(move.dtm))
   else return null
 }
 
-function showDtz(stm: string, move: TablebaseMoveStats) {
-  if (move.checkmate) return h('result.' + winner(stm, move), i18n('checkmate'))
+function showDtz(stm: Color, move: TablebaseMoveStats) {
+  if (move.checkmate) return h('result.' + winnerBeforeMove(stm, move.category), i18n('checkmate'))
   else if (move.stalemate) return h('result.draws', i18n('stalemate'))
-  else if (move.variant_win) return h('result.' + winner(stm, move), i18n('variantWin'))
-  else if (move.variant_loss) return h('result.' + winner(stm, move), i18n('variantLoss'))
+  else if (move.variant_win) return h('result.' + winnerBeforeMove(stm, move.category), i18n('variantWin'))
+  else if (move.variant_loss) return h('result.' + winnerBeforeMove(stm, move.category), i18n('variantLoss'))
   else if (move.insufficient_material) return h('result.draws', i18n('insufficientMaterial'))
   else if (move.dtz === null) return null
   else if (move.dtz === 0) return h('result.draws', i18n('draw'))
   else if (move.zeroing) {
     const capture = move.san.indexOf('x') !== -1
-    if (capture) return h('result.' + winner(stm, move), i18n('capture'))
-    else return h('result.' + winner(stm, move), i18n('pawnMove'))
+    if (capture) return h('result.' + winnerBeforeMove(stm, move.category), i18n('capture'))
+    else return h('result.' + winnerBeforeMove(stm, move.category), i18n('pawnMove'))
   }
-  else return h('result.' + winner(stm, move), {
-    title: plural('nextCaptureOrPawnMoveInXHalfMoves', Math.abs(move.dtz))
+  else return h('result.' + winnerBeforeMove(stm, move.category), {
+    title: i18n('dtzWithRounding') + ' (Distance To Zeroing)'
   }, 'DTZ ' + Math.abs(move.dtz))
 }
 
@@ -132,12 +124,14 @@ function show(ctrl: AnalyseCtrl) {
     if (moves.length) {
       return (
         <div className="explorer-data">
-          {showTablebase(ctrl, i18n('winning'), moves.filter((move) => move.wdl === -2), data.fen)}
-          {showTablebase(ctrl, i18n('unknown'), moves.filter((move) => move.wdl === null), data.fen)}
-          {showTablebase(ctrl, i18n('winPreventedBy50MoveRule'), moves.filter((move) => move.wdl === -1), data.fen)}
-          {showTablebase(ctrl, i18n('drawn'), moves.filter((move) => move.wdl === 0), data.fen)}
-          {showTablebase(ctrl, i18n('lossSavedBy50MoveRule'), moves.filter((move) => move.wdl === 1), data.fen)}
-          {showTablebase(ctrl, i18n('losing'), moves.filter((move) => move.wdl === 2), data.fen)}
+          {showTablebase(ctrl, i18n('winning'), moves.filter((move) => move.category === 'loss'), data.fen)}
+          {showTablebase(ctrl, i18n('unknown'), moves.filter((move) => move.category === 'unknown'), data.fen)}
+          {showTablebase(ctrl, i18n('winOr50MovesByPriorMistake'), moves.filter((move) => move.category === 'maybe-loss'), data.fen)}
+          {showTablebase(ctrl, i18n('winPreventedBy50MoveRule'), moves.filter((move) => move.category === 'blessed-loss'), data.fen)}
+          {showTablebase(ctrl, i18n('drawn'), moves.filter((move) => move.category === 'draw'), data.fen)}
+          {showTablebase(ctrl, i18n('lossSavedBy50MoveRule'), moves.filter((move) => move.category === 'cursed-win'), data.fen)}
+          {showTablebase(ctrl, i18n('lossOr50MovesByPriorMistake'), moves.filter((move) => move.category === 'maybe-win'), data.fen)}
+          {showTablebase(ctrl, i18n('losing'), moves.filter((move) => move.category === 'win'), data.fen)}
         </div>
       )
     }

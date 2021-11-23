@@ -6,6 +6,7 @@ const Mustache = require('mustache')
 
 const rootDir = path.join(__dirname, '..')
 
+
 // dev | release
 const mode = process.env.APP_MODE || 'dev'
 
@@ -19,7 +20,9 @@ if (!['dev', 'release'].includes(mode)) {
 const confKey = process.env.APP_CONFIG || 'dev'
 
 const config = require(path.join(rootDir, 'appconfig.' + confKey + '.json'))
+const pjson = require(path.join(rootDir, 'package.json'))
 config.appMode = mode
+config.packageVersion = pjson.version
 
 console.log('Will inject config:')
 console.log(config)

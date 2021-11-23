@@ -1,15 +1,21 @@
-import { Plugins } from '@capacitor/core'
+import { Storage } from '@capacitor/storage'
 
 export default {
   get,
   set,
   remove(key: string): Promise<void> {
-    return Plugins.Storage.remove({ key })
-  }
+    return Storage.remove({ key })
+  },
+  // migration from capacitor 2.0 to 3.0
+  // TODO remove after
+  async migrate(): Promise<void> {
+    const result = await Storage.migrate()
+    console.log(result)
+  },
 }
 
 function get<T>(key: string): Promise<T | null> {
-  return Plugins.Storage.get({ key }).then(({ value }) => {
+  return Storage.get({ key }).then(({ value }) => {
     if (value !== null) {
       return JSON.parse(value)
     }
@@ -18,6 +24,6 @@ function get<T>(key: string): Promise<T | null> {
 }
 
 function set<T>(key: string, value: T): Promise<T> {
-  return Plugins.Storage.set({ key, value: JSON.stringify(value) })
+  return Storage.set({ key, value: JSON.stringify(value) })
   .then(() => value)
 }

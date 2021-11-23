@@ -1,4 +1,3 @@
-import { Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
 import { prop, Prop } from '~/utils'
 import router from '../../router'
 import settings from '../../settings'
@@ -8,7 +7,6 @@ import clockSet from '../shared/clock/clockSet'
 import { ClockType, IChessClock } from '../shared/clock/interfaces'
 
 export interface IChessClockCtrl {
-  hideStatusBar: () => void
   startStop: () => void
   clockSettingsCtrl: any
   clockObj: Prop<IChessClock>
@@ -16,7 +14,6 @@ export interface IChessClockCtrl {
   goHome: () => void
   clockTap: (side: 'white' | 'black') => void
   clockType: Prop<ClockType>
-  appStateListener: PluginListenerHandle
 }
 
 function noop() { /* noop */ }
@@ -48,24 +45,7 @@ export default function ChessClockCtrl(): IChessClockCtrl {
     }
   }
 
-  function hideStatusBar() {
-    Plugins.StatusBar.hide()
-  }
-
-  hideStatusBar()
-
-  if (window.deviceInfo.platform === 'android') {
-    window.AndroidFullScreen.immersiveMode()
-  }
-
-  const appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
-    if (state.isActive) hideStatusBar()
-  })
-
-  window.addEventListener('resize', hideStatusBar)
-
   return {
-    hideStatusBar,
     startStop,
     clockSettingsCtrl,
     clockObj,
@@ -73,6 +53,5 @@ export default function ChessClockCtrl(): IChessClockCtrl {
     goHome,
     clockTap,
     clockType,
-    appStateListener
   }
 }

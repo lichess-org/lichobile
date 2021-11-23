@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Keyboard } from '@capacitor/keyboard'
 import h from 'mithril/hyperscript'
 import debounce from 'lodash-es/debounce'
 import session, { SignupData, EmailConfirm } from '../session'
@@ -161,9 +161,9 @@ function onSignup(e: Event) {
   const form: HTMLFormElement = e.target as HTMLFormElement
   const login = (form[0] as HTMLInputElement).value.trim()
   const email = (form[1] as HTMLInputElement).value.trim()
-  const pass = (form[2] as HTMLInputElement).value.trim()
+  const pass = (form[2] as HTMLInputElement).value
   if (loading || !login || !email || !pass) return
-  Plugins.Keyboard.hide()
+  Keyboard.hide()
   loading = true
   formError = null
   redraw()
@@ -175,7 +175,6 @@ function onSignup(e: Event) {
       checkEmail = true
       redraw()
     } else {
-      Plugins.LiToast.show({ text: i18n('loginSuccessful'), duration: 'short' })
       socket.reconnectCurrent()
       redraw()
       loginModal.close()
@@ -207,7 +206,7 @@ function open() {
 
 function close(fromBB?: string) {
   if (checkEmail === true) loginModal.close()
-  Plugins.Keyboard.hide()
+  Keyboard.hide()
   if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
   isOpen = false
 }

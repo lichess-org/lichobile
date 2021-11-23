@@ -1,14 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
-    ndkVersion '21.3.6528147'
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
+        configurations.all {
+          resolutionStrategy {
+            force 'androidx.core:core:1.6.0'
+            force 'androidx.core:core-ktx:1.6.0'
+          }
+        }
         applicationId "org.lichess.mobileapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField 'Boolean', 'NNUE', 'false'
     }
     signingConfigs {
         release {
@@ -29,17 +33,6 @@ android {
     packagingOptions {
         pickFirst 'lib/**/libc++_shared.so'
     }
-    flavorDimensions 'nnue'
-    productFlavors {
-        withoutNNUE {
-            isDefault true
-            dimension 'nnue'
-        }
-        withNNUE {
-            buildConfigField 'Boolean', 'NNUE', 'true'
-            dimension 'nnue'
-        }
-    }
 }
 
 
@@ -59,7 +52,6 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
-    implementation project(':capacitor-cordova-android-plugins')
     implementation('com.google.firebase:firebase-messaging:21.0.1') {
       exclude group: 'com.google.firebase', module: 'firebase-core'
       exclude group: 'com.google.firebase', module: 'firebase-analytics'

@@ -1,0 +1,11 @@
+hr-HR:
+  comments: "Komentari"
+  gameInformation: "Informacije o igri"
+  home: "Početna"
+  lastScore: "Tvoj rezultat: %s"
+  toggleSound: "Uključi/isključi zvuk" #Settings to enable/disable sound
+  overTheBoard: "Igraj bez mreže, preko uređaja"
+  sharePgn: "Podijeli PGN"
+  shareGameUrl: 'Podijeli URL partije'
+  playOnline: "Igraj na mreži"
+  playOffline: "Igraj izvan mreže"

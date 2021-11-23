@@ -7,7 +7,8 @@ import { isSynthetic } from '../util'
 import AnalyseCtrl from '../AnalyseCtrl'
 import explorerConfig from './explorerConfig'
 import { openingXhr, tablebaseXhr } from './explorerXhr'
-import { IExplorerCtrl, ExplorerData, OpeningData, SimpleTablebaseHit, TablebaseData, TablebaseMoveStats } from './interfaces'
+import { winnerBeforeMove } from './util'
+import { IExplorerCtrl, ExplorerData, OpeningData, SimpleTablebaseHit, TablebaseData } from './interfaces'
 
 export default function ExplorerCtrl(
   root: AnalyseCtrl,
@@ -130,16 +131,13 @@ export default function ExplorerCtrl(
     })(),
     fetchTablebaseHit(fen: string): Promise<SimpleTablebaseHit> {
       return tablebaseXhr(effectiveVariant, fen, 2000).then((res: TablebaseData) => {
-        const move = res.moves[0]
-        // eslint-disable-next-line eqeqeq
-        if (move && move.dtz == null) throw 'unknown tablebase position'
+        if (res.category === 'unknown') throw 'unknown tablebase position'
+        const after = colorOf(fen)
         return {
           fen: fen,
-          best: move && move.uci,
-          winner: res.checkmate ? oppositeColor(colorOf(fen)) : (
-            res.stalemate ? undefined : winnerOf(fen, move!)
-          )
-        } as SimpleTablebaseHit
+          best: res.moves[0]?.uci,
+          winner: winnerBeforeMove(oppositeColor(after), res.category)
+        }
       })
     }
   }
@@ -152,12 +150,4 @@ function tablebaseRelevant(variant: VariantKey, fen: string) {
   if (variant === 'standard' || variant === 'chess960') return pieceCount <= 8
   else if (variant === 'atomic' || variant === 'antichess') return pieceCount <= 7
   else return false
-}
-
-export function winnerOf(fen: Fen, move: TablebaseMoveStats): Color | undefined {
-  const stm = fen.split(' ')[1]
-  if ((stm[0] === 'w' && move.wdl! < 0) || (stm[0] === 'b' && move.wdl! > 0))
-    return 'white'
-  if ((stm[0] === 'b' && move.wdl! < 0) || (stm[0] === 'w' && move.wdl! > 0))
-    return 'black'
 }

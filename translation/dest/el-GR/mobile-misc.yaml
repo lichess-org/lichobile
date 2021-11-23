@@ -1,0 +1,24 @@
+el-GR:
+  apiUnsupported: "Η έκδοση της εφαρμογής lichess είναι πολύ παλιά! Μπορείτε αναβαθμίστε δωρεάν στην τελευταία έκδοση."
+  apiDeprecated: "Αναβαθμίστε δωρεάν στην τελευταία έκδοση της εφαρμογής lichess! Η υποστήριξη για αυτήν την έκδοση θα λήξει στις %s."
+  comments: "Σχόλια"
+  gameInformation: "Πληροφορίες παιχνιδιού"
+  home: "Αρχική"
+  lastScore: "Τελευταία βαθμολογία: %s"
+  playerisInvitingYou: "Ο χρήστης %s σας προσκαλεί"
+  unsupportedVariant: "Η παραλλαγή %s δεν υποστηρίζεται σε αυτήν την έκδοση"
+  notesSynchronizationHasFailed: "Ο συγχρονισμός με το Lichess απέτυχε, προσπαθήστε αργότερα."
+  vibrateOnGameEvents: "Δόνηση συσκευής σε κάθε κίνηση και όταν το παιχνίδι αρχίζει και τελειώνει"
+  offline: "Εκτός σύνδεσης"
+  otbUseSymmetricPieces: "Χρήση συμμετρικών κομματιών" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Να αναποδογυρίζονται τα κομμάτια και οι πληροφορίες του αντιπάλου μου μετά από κάθε κίνηση" #Setting for offline over-the-board games
+  settingsClockPosition: "Θέση ρολογιού" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Δεξιά" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Αριστερά" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Θέση σκακιέρας στην οθόνη (στον οριζόντιο προσανατολισμό)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Ενεργ./Απενεργ. ήχου" #Settings to enable/disable sound
+  overTheBoard: "Παιχνίδι χωρίς σύνδεση"
+  sharePgn: "Κοινοποίηση PGN"
+  shareGameUrl: 'Κοινοποίηση URL παιχνιδιού'
+  playOnline: "Παίξτε σε διαδικτυακά"
+  playOffline: "Παίξτε χωρίς σύνδεση"

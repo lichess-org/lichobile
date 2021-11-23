@@ -1,5 +1,5 @@
 import h from 'mithril/hyperscript'
-import i18n  from '../../../i18n'
+import i18n, { plural } from '../../../i18n'
 import { handleXhrError } from '../../../utils'
 import { shallowEqual } from '../../../utils/object'
 import redraw from '../../../utils/redraw'
@@ -78,22 +78,21 @@ const AcplSummary: Mithril.Component<{
       const p = gameApi.getPlayer(d, color)
       const pName = study ? findTag(study, color) || 'Anonymous' : playerName(p)
 
-      return h('table', [
-        h('thead', h('tr', [
-          h('th', h('span.color-icon.' + color)),
-          h('td', [pName, p ? helper.renderRatingDiff(p) : null])
-        ])),
-        h('tbody', [
+      return h('div.analyse-evalSummary__side', [
+        h('div.analyse-evalSummary__player', [
+          h('span.color-icon.' + color),
+          h('span', [pName, p ? helper.renderRatingDiff(p) : null])
+        ]),
+        h('div', [
           advices.map(a => {
             const nb = analysis && analysis[color][a[0]]
-            return h('tr', [
-              h('th', nb),
-              h('td', i18n(a[1]))
+            return h('div.analyse-evalSummary__summary', [
+              h.trust(plural(a[1], nb, `<strong>${nb}</strong>`)),
             ])
           }),
-          h('tr', [
-            h('th', analysis && analysis[color].acpl),
-            h('td', i18n('averageCentipawnLoss'))
+          h('div.analyse-evalSummary__summary', [
+            h('strong', analysis && analysis[color].acpl),
+            h('span', i18n('averageCentipawnLoss'))
           ])
         ])
       ])
@@ -161,7 +160,7 @@ function renderMoveTimes(ctrl: AnalyseCtrl, moveCentis: number[]) {
 }
 
 const advices = [
-  ['inaccuracy', 'inaccuracies'],
-  ['mistake', 'mistakes'],
-  ['blunder', 'blunders']
+  ['inaccuracy', 'nbInaccuracies'],
+  ['mistake', 'nbMistakes'],
+  ['blunder', 'nbBlunders']
 ]

@@ -1,4 +1,5 @@
-import { Plugins } from '@capacitor/core'
+import h from 'mithril/hyperscript'
+import { App } from '@capacitor/app'
 import router from '../../router'
 import redraw from '../../utils/redraw'
 import * as helper from '../helper'
@@ -6,7 +7,6 @@ import { dropShadowHeader, backButton } from '../shared/common'
 import layout from '../layout'
 import i18n from '../../i18n'
 import socket from '../../socket'
-import h from 'mithril/hyperscript'
 
 interface State {
   appVersion?: string
@@ -17,9 +17,9 @@ export default {
 
   oninit() {
     socket.createDefault()
-    Plugins.Device.getInfo()
+    App.getInfo()
     .then(info => {
-      this.appVersion = info.appVersion
+      this.appVersion = info.version
       redraw()
     })
   },

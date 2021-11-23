@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
 import h from 'mithril/hyperscript'
 import { Study } from '../../lichess/interfaces/study'
 import { header, backButton } from '../shared/common'
@@ -20,7 +20,7 @@ export function studyHeader(study: Study) {
     }, [
       h('h1.header-gameTitle', {
         oncreate: helper.ontap(() => {
-          Plugins.LiToast.show({ text: `${title}: ${subTitle}`, duration: 'long', position: 'top' })
+          Toast.show({ text: `${title}: ${subTitle}`, duration: 'long', position: 'top' })
         })
       }, title),
       h('h2.header-subTitle', subTitle)

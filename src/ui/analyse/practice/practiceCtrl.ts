@@ -4,7 +4,7 @@ import { Position, PositionError } from 'chessops/chess'
 import { parseFen } from 'chessops/fen'
 import { Result } from '@badrap/result'
 import { setupPosition } from 'chessops/variant'
-import { lichessVariantRules } from 'chessops/compat'
+import { lichessRules } from 'chessops/compat'
 import settings from '../../../settings'
 import redraw from '../../../utils/redraw'
 import { requestIdleCallback, prop, Prop } from '../../../utils'
@@ -135,7 +135,7 @@ export function make(root: AnalyseCtrl, playableDepth: () => number): PracticeCt
 
   function position(node: Tree.Node): Result<Position, PositionError> {
     const setup = parseFen(node.fen).unwrap()
-    return setupPosition(lichessVariantRules(root.data.game.variant.key), setup)
+    return setupPosition(lichessRules(root.data.game.variant.key), setup)
   }
 
   function isMyTurn(): boolean {

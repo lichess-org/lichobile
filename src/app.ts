@@ -1,14 +1,17 @@
-import { Capacitor, Plugins, AppState, DeviceInfo, NetworkStatus } from '@capacitor/core'
+import { Capacitor } from '@capacitor/core'
+import { Network } from '@capacitor/network'
+import { Keyboard } from '@capacitor/keyboard'
+import { App, AppState, AppInfo } from '@capacitor/app'
+import { DeviceInfo, DeviceId } from '@capacitor/device'
 import debounce from 'lodash-es/debounce'
 import { hasNetwork, requestIdleCallback } from './utils'
 import redraw from './utils/redraw'
 import session from './session'
-import settings from './settings'
-import { ensureLocaleIsAvailable, loadLanguage, getCurrentLocale } from './i18n'
 import * as xhr from './xhr'
 import challengesApi from './lichess/challenges'
 import * as helper from './ui/helper'
 import lobby from './ui/lobby'
+import Badge from './badge'
 import push from './push'
 import router from './router'
 import socket from './socket'
@@ -18,41 +21,40 @@ import { isForeground, setForeground, setBackground } from './utils/appMode'
 let firstConnection = true
 
 export default function appInit(
-  info: DeviceInfo,
+  appInfo: Pick<AppInfo, 'version'>,
+  deviceInfo: DeviceInfo,
+  deviceId: DeviceId,
   cpuCores: number,
   sfMaxMem: number,
-  buildConfig: BuildConfig,
+  cpuArch: string,
 ): void {
-  if (settings.analyse.cevalHashSize() === 0) {
-    settings.analyse.cevalHashSize(sfMaxMem)
-  }
+  window.lichess.cpuArch = cpuArch
 
   window.deviceInfo = {
-    platform: info.platform,
-    uuid: info.uuid,
-    appVersion: info.appVersion,
+    platform: deviceInfo.platform,
+    uuid: deviceId.uuid,
+    appVersion: appInfo.version,
     cpuCores,
     stockfishMaxMemory: Math.ceil(sfMaxMem / 16.0) * 16,
   }
-  window.lichess.buildConfig = buildConfig
 
-  if (Capacitor.platform === 'ios') {
-    Plugins.Keyboard.setAccessoryBarVisible({ isVisible: true })
+  if (Capacitor.getPlatform() === 'ios') {
+    Keyboard.setAccessoryBarVisible({ isVisible: true })
   }
 
   requestIdleCallback(() => {
     // cache viewport dims
     helper.viewportDim()
-    sound.load(info)
+    sound.load(deviceInfo)
   })
 
-  Plugins.App.addListener('appStateChange', (state: AppState) => {
+  App.addListener('appStateChange', (state: AppState) => {
     if (state.isActive) {
       setForeground()
       session.refresh()
       .then(() => {
-        if (Capacitor.platform === 'ios') {
-          Plugins.Badge.setNumber({ badge: session.myTurnGames().length })
+        if (Capacitor.getPlatform() === 'ios') {
+          Badge.setNumber({ badge: session.myTurnGames().length })
         }
       })
       socket.cancelDelayedDisconnect()
@@ -66,7 +68,7 @@ export default function appInit(
     }
   })
 
-  Plugins.Network.addListener('networkStatusChange', (s: NetworkStatus) => {
+  Network.addListener('networkStatusChange', s => {
     if (s.connected) {
       onOnline()
     }
@@ -75,7 +77,7 @@ export default function appInit(
     }
   })
 
-  Plugins.App.addListener('backButton', router.backbutton)
+  App.addListener('backButton', router.backbutton)
 
   window.addEventListener('resize', debounce(onResize), false)
 
@@ -105,25 +107,18 @@ function onOnline() {
       getPools()
 
       session.rememberLogin()
-      .then((user) => {
-        const serverLocale = user.language
-        if (serverLocale && getCurrentLocale() !== serverLocale) {
-          console.debug('Locale from server differs from app: ', serverLocale)
-          ensureLocaleIsAvailable(serverLocale)
-          .then(loadLanguage)
-        }
+      .then(() => {
         push.register()
         challengesApi.refresh()
-        if (Capacitor.platform === 'ios') {
-          Plugins.Badge.setNumber({ badge: session.myTurnGames().length })
+        if (Capacitor.getPlatform() === 'ios') {
+          Badge.setNumber({ badge: session.myTurnGames().length })
         }
         redraw()
-
       })
       .catch(() => {
         console.log('connected as anonymous')
-        if (Capacitor.platform === 'ios') {
-          Plugins.Badge.setNumber({ badge: 0 })
+        if (Capacitor.getPlatform() === 'ios') {
+          Badge.setNumber({ badge: 0 })
         }
       })
 

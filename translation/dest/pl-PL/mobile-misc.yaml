@@ -1,0 +1,24 @@
+pl-PL:
+  apiUnsupported: "Twoja wersja aplikacji Lichess jest za stara! Proszę, zaktualizuj za darmo do najnowszej wersji."
+  apiDeprecated: "Uaktualnij za darmo do najnowszej aplikacji Lichess! Wsparcie tej wersji zostanie zakończone %s."
+  comments: "Komentarze"
+  gameInformation: "Informacje o partii"
+  home: "Strona główna"
+  lastScore: "Ostatni wynik: %s"
+  playerisInvitingYou: "%s zaprasza Cię"
+  unsupportedVariant: "Wariant %s nie jest obsługiwany w tej wersji"
+  notesSynchronizationHasFailed: "Synchronizacja notatek z lichess nie powiodła się, spróbuj później."
+  vibrateOnGameEvents: "Wibruj podczas zdarzeń w grze"
+  offline: "Nieaktywny"
+  otbUseSymmetricPieces: "Użyj symetrycznych bierek" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Odwróć bierki i informacje o przeciwniku po wykonaniu ruchu" #Setting for offline over-the-board games
+  settingsClockPosition: "Położenie zegara" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Z prawej strony" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Z lewej strony" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Położenie szachownicy (w trybie poziomym)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Włącz/wyłącz dźwięk" #Settings to enable/disable sound
+  overTheBoard: "Na szachownicy"
+  sharePgn: "Udostępnij PGN"
+  shareGameUrl: 'Udostępnij link do gry'
+  playOnline: "Graj online"
+  playOffline: "Graj offline"

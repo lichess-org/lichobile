@@ -1,4 +1,5 @@
-import { Plugins } from '@capacitor/core'
+import { Share } from '@capacitor/share'
+import { Toast } from '@capacitor/toast'
 import h from 'mithril/hyperscript'
 import router from '../../../router'
 import session from '../../../session'
@@ -17,8 +18,9 @@ import playerInfo from './playerInfo'
 import teamInfo from './teamInfo'
 import joinForm from './joinForm'
 import TournamentCtrl from './TournamentCtrl'
+import { previouslyJoined } from '~/lichess/tournament'
 
-export function renderOverlay(ctrl: TournamentCtrl) {
+export function renderOverlay(ctrl: TournamentCtrl): Mithril.ChildArray {
   return [
     faq.view(ctrl.faqCtrl),
     playerInfo.view(ctrl.playerInfoCtrl),
@@ -42,7 +44,7 @@ export function tournamentBody(ctrl: TournamentCtrl) {
   ])
 }
 
-export function renderFooter(ctrl: TournamentCtrl) {
+export function renderFooter(ctrl: TournamentCtrl): Mithril.Child {
   const t = ctrl.tournament
   if (!t) return null
   const tUrl = 'https://lichess.org/tournament/' + t.id
@@ -51,19 +53,19 @@ export function renderFooter(ctrl: TournamentCtrl) {
     <div className="actions_bar">
       <button key="faqButton" className="action_bar_button fa fa-question-circle" oncreate={helper.ontap(
         ctrl.faqCtrl.open,
-        () => Plugins.LiToast.show({ text: i18n('tournamentFAQ'), duration: 'short', position: 'bottom' })
+        () => Toast.show({ text: i18n('tournamentFAQ'), duration: 'short', position: 'bottom' })
       )}>
       </button>
       <button key="shareButton" className="action_bar_button fa fa-share-alt" oncreate={helper.ontap(
-        () => Plugins.LiShare.share({ url: tUrl }),
-        () => Plugins.LiToast.show({ text: i18n('shareUrl'), duration: 'short', position: 'bottom' })
+        () => Share.share({ url: tUrl }),
+        () => Toast.show({ text: i18n('shareGameUrl'), duration: 'short', position: 'bottom' })
       )}>
       </button>
       {ctrl.chat ?
         <button key="chatButton" className="action_bar_button fa fa-comments withChip"
           oncreate={helper.ontap(
             ctrl.chat.open,
-            () => Plugins.LiToast.show({ text: i18n('chatRoom'), duration: 'short', position: 'bottom' })
+            () => Toast.show({ text: i18n('chatRoom'), duration: 'short', position: 'bottom' })
           )}
         >
           { ctrl.chat.nbUnread > 0 ?
@@ -71,7 +73,7 @@ export function renderFooter(ctrl: TournamentCtrl) {
             { ctrl.chat.nbUnread <= 99 ? ctrl.chat.nbUnread : 99 }
           </span> : null
           }
-        </button> : null
+        </button> : h.fragment({key: 'noChat'}, [])
       }
       { ctrl.hasJoined ? withdrawButton(ctrl, t) : joinButton(ctrl, t) }
     </div>
@@ -115,7 +117,7 @@ function tournamentTimeInfo(data: Tournament) {
 function tournamentCreatorInfo(data: Tournament, startsAt: string) {
   return (
     <div className="tournamentCreatorInfo">
-      {data.createdBy === 'lichess' ? i18n('tournamentOfficial') : i18n('by', data.createdBy)}
+      {data.createdBy === 'lichess' ? i18n('lichessTournaments') : i18n('by', data.createdBy)}
       &thinsp;•&thinsp;{startsAt}
     </div>
   )
@@ -187,14 +189,14 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
     (t.teamBattle && t.teamBattle.joinWith.length === 0)) {
     return h.fragment({key: 'noJoinButton'}, [])
   }
-  const action = (t.private || t.teamBattle) ?
+  const action = ((t.private || t.teamBattle) && !previouslyJoined(t)) ?
     () => joinForm.open(ctrl) :
     () => ctrl.join()
 
   return (
     <button key="joinButton" className="action_bar_button fa fa-play" oncreate={helper.ontap(
       action,
-      () => Plugins.LiToast.show({ text: i18n('join'), duration: 'short', position: 'bottom' })
+      () => Toast.show({ text: i18n('join'), duration: 'short', position: 'bottom' })
     )}>
     </button>
   )
@@ -207,7 +209,7 @@ function withdrawButton(ctrl: TournamentCtrl, t: Tournament) {
   return (
     <button key="withdrawButton" className="action_bar_button fa fa-flag" oncreate={helper.ontap(
       ctrl.withdraw,
-      () => Plugins.LiToast.show({ text: i18n('withdraw'), duration: 'short', position: 'bottom' })
+      () => Toast.show({ text: i18n('withdraw'), duration: 'short', position: 'bottom' })
     )}>
     </button>
   )
@@ -274,17 +276,28 @@ function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
   })
 }
 
-function renderPlayerEntry(userName: string, player: StandingPlayer, i: number, teamColor?: number, teamName?: string) {
+export function renderPlayerTitle(player: {title?: string}): Mithril.Child {
+  if (player.title == null) {
+    return null
+  }
+
+  return h('span.userTitle', [player.title, h.trust('&nbsp;')])
+}
+
+function renderPlayerEntry(userName: string, player: StandingPlayer, i: number, teamColor?: number, teamName?: string): Mithril.Child {
   const evenOrOdd = i % 2 === 0 ? 'even' : 'odd'
   const isMe = player.name === userName
-  const ttc = teamColor ? teamColor : 0
+  const ttc = teamColor ?? 0
 
   return (
     <li key={player.name} data-player={player.name} className={`list_item tournament-list-item ${evenOrOdd}` + (isMe ? ' tournament-me' : '')} >
       <div className="tournamentIdentity">
-        <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '.')} &thinsp; </span>
-        <span className="playerName"> {player.name + ' (' + player.rating + ')'}</span>
-        <span className={'playerTeam ttc-' + ttc}> {teamName ? teamName : '' } </span>
+        <span className="flagRank" data-icon={player.withdraw === true ? 'b' : ''}> {player.withdraw === true ? '' : (`${player.rank}.`)} &thinsp; </span>
+        <span className="playerName">
+          {renderPlayerTitle(player)}
+          {`${player.name} (${player.rating})`}
+        </span>
+        <span className={`playerTeam ttc-${ttc}`}> {teamName ?? ''} </span>
       </div>
       <div className={'tournamentPoints ' + (player.sheet.fire ? 'on-fire' : 'off-fire')} data-icon="Q">
         {player.score}
@@ -333,6 +346,7 @@ function renderPlace(data: PodiumPlace) {
     <div className={'place' + rank}>
       <div className="trophy"> </div>
       <div className="username" oncreate={helper.ontap(() => router.set('/@/' + data.name))}>
+        {renderPlayerTitle(data)}
         {data.name}
       </div>
       <div className="rating"> {data.rating} </div>

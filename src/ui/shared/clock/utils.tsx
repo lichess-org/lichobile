@@ -4,7 +4,7 @@ import { ClockType, IChessClock, IStageClock, StageSetting } from './interfaces'
 import settings, { Prop } from '../../../settings'
 import redraw from '../../../utils/redraw'
 import * as helper from '../../helper'
-import * as utils from '../../../utils'
+import tupleOf from '../../../utils/tupleOf'
 import formWidgets from '../../shared/form'
 
 export const MILLIS = 1000
@@ -61,7 +61,7 @@ export function clockSettingsView (clockType: ClockType | 'none', onChange: () =
         {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.increment.time, false, onChange)}
         </div>
         <div className="select_input">
-        {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.increment.increment, false, onChange)}
+        {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(tupleOf), settings.clock.increment.increment, false, onChange)}
         </div>
         </div>
       )
@@ -75,7 +75,7 @@ export function clockSettingsView (clockType: ClockType | 'none', onChange: () =
         {formWidgets.renderSelect('Time', 'topTime', settings.clock.availableTimes, settings.clock.handicapInc.topTime, false, onChange)}
         </div>
         <div className="select_input inline handicapRowMember">
-        {formWidgets.renderSelect('Increment', 'topIncrement', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.handicapInc.topIncrement, false, onChange)}
+        {formWidgets.renderSelect('Increment', 'topIncrement', settings.clock.availableIncrements.map(tupleOf), settings.clock.handicapInc.topIncrement, false, onChange)}
         </div>
         </div>
         <div className="handicapRow">
@@ -84,7 +84,7 @@ export function clockSettingsView (clockType: ClockType | 'none', onChange: () =
         {formWidgets.renderSelect('Time', 'bottomTime', settings.clock.availableTimes, settings.clock.handicapInc.bottomTime, false, onChange)}
         </div>
         <div className="select_input inline handicapRowMember">
-        {formWidgets.renderSelect('Increment', 'bottomIncrement', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.handicapInc.bottomIncrement, false, onChange)}
+        {formWidgets.renderSelect('Increment', 'bottomIncrement', settings.clock.availableIncrements.map(tupleOf), settings.clock.handicapInc.bottomIncrement, false, onChange)}
         </div>
         </div>
         </div>
@@ -97,7 +97,7 @@ export function clockSettingsView (clockType: ClockType | 'none', onChange: () =
         {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.delay.time, false, onChange)}
         </div>
         <div className="select_input">
-        {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.delay.increment, false, onChange)}
+        {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(tupleOf), settings.clock.delay.increment, false, onChange)}
         </div>
         </div>
       )
@@ -109,7 +109,7 @@ export function clockSettingsView (clockType: ClockType | 'none', onChange: () =
         {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.bronstein.time, false, onChange)}
         </div>
         <div className="select_input">
-        {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.bronstein.increment, false, onChange)}
+        {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(tupleOf), settings.clock.bronstein.increment, false, onChange)}
         </div>
         </div>
       )
@@ -128,7 +128,7 @@ export function clockSettingsView (clockType: ClockType | 'none', onChange: () =
         <div className="clockSettingParameters">
         { settings.clock.stage.stages().map((_, index) => renderStage(onChange, index)) }
         <div className="select_input">
-        {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.stage.increment, false, onChange)}
+        {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(tupleOf), settings.clock.stage.increment, false, onChange)}
         </div>
         </div>
       )
@@ -150,7 +150,7 @@ function renderStage(onChange: () => void, index: number) {
         {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, timeProp, false, onChange)}
       </div>
       <div className={'select_input inline stage stageRowMember' + ((index === settings.clock.stage.stages().length - 1 ) ? ' lastStage' : '')}>
-        {formWidgets.renderSelect('Moves', 'moves', settings.clock.availableMoves.map(utils.tupleOf), moves, false, onChange)}
+        {formWidgets.renderSelect('Moves', 'moves', settings.clock.availableMoves.map(tupleOf), moves, false, onChange)}
       </div>
       <div className={'stageRowMember addSubtractStage' + ((index === settings.clock.stage.stages().length - 1 ) ? ' lastStage' : '')}>
         <span  className={'fa fa-plus-square-o' + (hidePlus ? ' hiddenButton' : '')} oncreate={helper.ontap(() => addStage(settings.clock.stage.stages))}/> <span className={'fa fa-minus-square-o' + (hideMinus ? ' hiddenButton' : '')} oncreate={helper.ontap(() => removeStage(settings.clock.stage.stages))}/>

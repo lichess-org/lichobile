@@ -1,0 +1,14 @@
+tt-RU:
+  apiUnsupported: "Сезнең Lichess әсбабы версиясе бик иске! Зинһар, бушлай соңгы версиягә күтәрегез."
+  apiDeprecated: "Соңгы Lichess әсбабын бушлай яңарту бар! Бу версиягә ярдәм %s -ка төшереләчәк."
+  playerisInvitingYou: "%s сезне чакырды"
+  unsupportedVariant: "Вариант %s бу версиядә булышынмый"
+  notesSynchronizationHasFailed: "Искәрмәләр Lichess белән синхронизация уңышсыз калды, зинһар, соңрак карагыз."
+  vibrateOnGameEvents: "Тибрәнергә уен вакыйгасы булса"
+  offline: "Тоташтырылмаган"
+  otbUseSymmetricPieces: "Симметрик сөякләрне кулланырга" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Күчкәннән соң сөякләр һәм көндәш турында мәгълүмат" #Setting for offline over-the-board games
+  settingsClockPosition: "Сәгать позициясе" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Уң" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Сул" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Такта экран ягы (дала осулында)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

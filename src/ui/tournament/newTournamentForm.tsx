@@ -3,6 +3,7 @@ import settings from '../../settings'
 import i18n from '../../i18n'
 import router from '../../router'
 import * as utils from '../../utils'
+import tupleOf from '../../utils/tupleOf'
 import { standardFen } from '../../lichess/variant'
 import { TournamentCreateResponse } from '../../lichess/interfaces/tournament'
 import popupWidget from '../shared/popup'
@@ -47,7 +48,7 @@ function renderForm(ctrl: TournamentsListCtrl) {
       <fieldset>
         <div className="select_input no_arrow_after">
           <div className="text_input_container">
-            <label>Name </label>
+            <label>{i18n('name')} </label>
             <input type="text"
               id="name"
               className="textField"
@@ -60,8 +61,7 @@ function renderForm(ctrl: TournamentsListCtrl) {
           </div>
         </div>
         <div className="tournament_name_warning">
-        Pick a very safe name for the tournament. Anything even slightly inappropriate could get your account closed.
-        Leave empty to name the tournament after a random Grandmaster.
+          {i18n('safeTournamentName')} {i18n('inappropriateNameWarning')} {i18n('emptyTournamentName')}
         </div>
         <div className="select_input">
           {formWidgets.renderSelect('Variant', 'variant', settings.tournament.availableVariants, settings.tournament.variant, false)}
@@ -86,19 +86,19 @@ function renderForm(ctrl: TournamentsListCtrl) {
           </div> : null
         }
         <div className="select_input">
-          {formWidgets.renderSelect('Mode', 'mode', settings.tournament.availableModes, settings.tournament.mode, false)}
+          {formWidgets.renderSelect(i18n('mode'), 'mode', settings.tournament.availableModes, settings.tournament.mode, false)}
         </div>
         <div className="select_input inline">
-          {formWidgets.renderSelect('Time', 'time', settings.tournament.availableTimes, settings.tournament.time, false)}
+          {formWidgets.renderSelect(i18n('time'), 'time', settings.tournament.availableTimes, settings.tournament.time, false)}
         </div>
         <div className="select_input inline no-margin">
-          {formWidgets.renderSelect('Increment', 'increment', settings.tournament.availableIncrements.map((x: string) => utils.tupleOf(Number(x))), settings.tournament.increment, false)}
+          {formWidgets.renderSelect(i18n('increment'), 'increment', settings.tournament.availableIncrements.map((x: string) => tupleOf(Number(x))), settings.tournament.increment, false)}
         </div>
         <div className="select_input inline">
-          {formWidgets.renderSelect('Duration', 'duration', settings.tournament.availableDurations.map((x: string) => utils.tupleOf(Number(x))), settings.tournament.duration, false)}
+          {formWidgets.renderSelect(i18n('duration'), 'duration', settings.tournament.availableDurations.map((x: string) => tupleOf(Number(x))), settings.tournament.duration, false)}
         </div>
         <div className="select_input inline no-margin">
-          {formWidgets.renderSelect('Time to Start', 'timeToStart', settings.tournament.availableTimesToStart.map((x: string) => utils.tupleOf(Number(x))), settings.tournament.timeToStart, false)}
+          {formWidgets.renderSelect('Time to Start', 'timeToStart', settings.tournament.availableTimesToStart.map((x: string) => tupleOf(Number(x))), settings.tournament.timeToStart, false)}
         </div>
         <div className="select_input">
           {formWidgets.renderCheckbox(i18n('isPrivate'), 'private', settings.tournament.private)}
@@ -128,7 +128,7 @@ function renderForm(ctrl: TournamentsListCtrl) {
 }
 
 function create(form: HTMLFormElement) {
-  const elements: HTMLCollection = (form[0] as HTMLFieldSetElement).elements as HTMLCollection
+  const elements: HTMLCollection = (form[0] as HTMLFieldSetElement).elements 
   const name = (elements[0] as HTMLInputElement).value
   const variant = (elements[1] as HTMLInputElement).value
   const position = settings.tournament.variant() === '1' ? (elements[2] as HTMLInputElement).value : '---'

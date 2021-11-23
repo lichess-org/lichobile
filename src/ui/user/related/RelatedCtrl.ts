@@ -7,18 +7,12 @@ import { Paginator } from '../../../lichess/interfaces'
 import challengeForm from '../../challengeForm'
 
 export default class RelatedCtrl {
-  currentTab: number
-
   isLoadingNextPage = false
-
-  followers?: readonly Related[]
-  followersPaginator?: Paginator<Related>
 
   following?: readonly Related[]
   followingPaginator?: Paginator<Related>
 
   constructor(readonly userId: string, readonly defaultTab?: number) {
-    this.currentTab = defaultTab || 0
     socket.createDefault()
 
     this.getData(this.userId, 1)
@@ -46,29 +40,8 @@ export default class RelatedCtrl {
     challengeForm.open(id)
   }
 
-  public onTabChange = (tabIndex: number) => {
-    const loc = window.location.search.replace(/\?tab=\w+$/, '')
-    try {
-      window.history.replaceState(window.history.state, '', loc + '?tab=' + tabIndex)
-    } catch (e) { console.error(e) }
-    this.currentTab = tabIndex
-    if ((this.currentTab === 0 && !this.followers) ||
-      (this.currentTab === 1 && !this.following)) {
-      this.getData(this.userId, 1)
-      .then(redraw)
-    }
-
-    redraw()
-  }
-
   private getData(userId: string, page: number): Promise<void> {
-    return this.currentTab === 0 ?
-      xhr.followers(userId, page)
-      .then(d => {
-        this.followers = (this.followers || []).concat(d.paginator.currentPageResults)
-        this.followersPaginator = d.paginator
-      }) :
-      xhr.following(userId, page)
+    return xhr.following(userId, page)
       .then(d => {
         this.following = (this.following || []).concat(d.paginator.currentPageResults)
         this.followingPaginator = d.paginator

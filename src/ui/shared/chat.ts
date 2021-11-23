@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Keyboard } from '@capacitor/keyboard'
 import h from 'mithril/hyperscript'
 import * as helper from '../helper'
 import redraw from '../../utils/redraw'
@@ -45,7 +45,7 @@ export class Chat {
   }
 
   public close = (fromBB?: string): void => {
-    Plugins.Keyboard.hide()
+    Keyboard.hide()
     if (fromBB !== 'backbutton' && this.showing) router.backbutton.stack.pop()
     this.showing = false
     this.nbUnread = 0
@@ -84,7 +84,7 @@ export class Chat {
   // --
 
   private isLegitMsg = (msg: ChatMsg) => {
-    return !msg.d && (!msg.r || this.isShadowban) && !isSpam(msg.t)
+    return !msg.d && (!msg.r || msg.u === this.player?.user?.username) && !isSpam(msg.t)
   }
 
   private nbLines(): number {

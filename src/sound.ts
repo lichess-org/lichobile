@@ -1,4 +1,5 @@
-import { DeviceInfo, Plugins } from '@capacitor/core'
+import { SoundEffect } from 'capacitor-sound-effect'
+import { DeviceInfo } from '@capacitor/device'
 import settings from './settings'
 import throttle from 'lodash-es/throttle'
 
@@ -10,48 +11,48 @@ export default {
     const ext = info.platform === 'ios' ? '.aifc' : '.mp3'
 
     return Promise.all([
-      Plugins.SoundEffect.loadSound({ id: 'move', path: `sounds/move${ext}` }),
-      Plugins.SoundEffect.loadSound({ id: 'capture', path: `sounds/capture${ext}` }),
-      Plugins.SoundEffect.loadSound({ id: 'explosion', path: `sounds/explosion${ext}` }),
-      Plugins.SoundEffect.loadSound({ id: 'lowtime', path: `sounds/lowtime${ext}` }),
-      Plugins.SoundEffect.loadSound({ id: 'dong', path: `sounds/dong${ext}` }),
-      Plugins.SoundEffect.loadSound({ id: 'berserk', path: `sounds/berserk${ext}` }),
-      Plugins.SoundEffect.loadSound({ id: 'clock', path: `sounds/clock${ext}` }),
-      Plugins.SoundEffect.loadSound({ id: 'confirmation', path: `sounds/confirmation${ext}` }),
+      SoundEffect.loadSound({ id: 'move', path: `sounds/move${ext}` }),
+      SoundEffect.loadSound({ id: 'capture', path: `sounds/capture${ext}` }),
+      SoundEffect.loadSound({ id: 'explosion', path: `sounds/explosion${ext}` }),
+      SoundEffect.loadSound({ id: 'lowtime', path: `sounds/lowtime${ext}` }),
+      SoundEffect.loadSound({ id: 'dong', path: `sounds/dong${ext}` }),
+      SoundEffect.loadSound({ id: 'berserk', path: `sounds/berserk${ext}` }),
+      SoundEffect.loadSound({ id: 'clock', path: `sounds/clock${ext}` }),
+      SoundEffect.loadSound({ id: 'confirmation', path: `sounds/confirmation${ext}` }),
     ]).then(() => { /* noop */ })
   },
   move() {
-    if (shouldPlay) Plugins.SoundEffect.play({ id: 'move' })
+    if (shouldPlay) SoundEffect.play({ id: 'move' })
   },
   throttledMove: throttle(() => {
-    if (shouldPlay) Plugins.SoundEffect.play({ id: 'move' })
+    if (shouldPlay) SoundEffect.play({ id: 'move' })
   }, 50),
   capture() {
-    if (shouldPlay) Plugins.SoundEffect.play({ id: 'capture' })
+    if (shouldPlay) SoundEffect.play({ id: 'capture' })
   },
   throttledCapture: throttle(() => {
-    if (shouldPlay) Plugins.SoundEffect.play({ id: 'capture' })
+    if (shouldPlay) SoundEffect.play({ id: 'capture' })
   }, 50),
   explosion() {
-    if (shouldPlay) Plugins.SoundEffect.play({ id: 'explosion' })
+    if (shouldPlay) SoundEffect.play({ id: 'explosion' })
   },
   throttledExplosion: throttle(() => {
-    if (shouldPlay) Plugins.SoundEffect.play({ id: 'explosion' })
+    if (shouldPlay) SoundEffect.play({ id: 'explosion' })
   }, 50),
   lowtime() {
-    if (shouldPlay) Plugins.SoundEffect.play({ id: 'lowtime' })
+    if (shouldPlay) SoundEffect.play({ id: 'lowtime' })
   },
   dong() {
-    if (shouldPlay) Plugins.SoundEffect.play({ id: 'dong' })
+    if (shouldPlay) SoundEffect.play({ id: 'dong' })
   },
   berserk() {
-    if (shouldPlay) Plugins.SoundEffect.play({ id: 'berserk' })
+    if (shouldPlay) SoundEffect.play({ id: 'berserk' })
   },
   clock() {
-    if (shouldPlay) Plugins.SoundEffect.play({ id: 'clock' })
+    if (shouldPlay) SoundEffect.play({ id: 'clock' })
   },
   confirmation() {
-    if (shouldPlay) Plugins.SoundEffect.play({ id: 'confirmation' })
+    if (shouldPlay) SoundEffect.play({ id: 'confirmation' })
   },
   onSettingChange(v: boolean) {
     shouldPlay = v

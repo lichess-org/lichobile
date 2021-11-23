@@ -1,0 +1,14 @@
+uz-UZ:
+  apiUnsupported: "Sizning lichess ilovangiz talqini oldingi ekan! Iltimos uni bepul uangilab oling."
+  apiDeprecated: "Lichess ilovangizni yangilab oling, bu bepul! Ushbu talqinni qo‘llab quvvatlash %s da bekor qilinadi."
+  playerisInvitingYou: "%s sizni taklif qilayabdi"
+  unsupportedVariant: "%s variant ushbu talqinda qo‘llab quvvatlanmaydi"
+  notesSynchronizationHasFailed: "Lichess belgilashlari bilan sinronlab bo‘lmadi, biroz turib urininb ko‘ring."
+  vibrateOnGameEvents: "O‘yin vaqti kelganda vibratsiya berish"
+  offline: "Oflayn"
+  otbUseSymmetricPieces: "Simmetrik sipohlardan foydalanish" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Yurishdan so‘ng opppnent haqidagi ma‘lumotlar va sipohlarni o‘girish" #Setting for offline over-the-board games
+  settingsClockPosition: "Soatlar joylashuvi" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "O‘ng" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Chap" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Doska joylashuvi (Albomli holatga o‘tilganda)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

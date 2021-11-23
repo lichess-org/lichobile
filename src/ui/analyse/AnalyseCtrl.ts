@@ -1,5 +1,8 @@
-import { Plugins } from '@capacitor/core'
+import { Dialog } from '@capacitor/dialog'
+import { Toast } from '@capacitor/toast'
 import debounce from 'lodash-es/debounce'
+import { parseFen } from 'chessops/fen'
+import { setupPosition } from 'chessops/variant'
 import router from '../../router'
 import { formatDateTime } from '../../i18n'
 import Chessground from '../../chessground/Chessground'
@@ -15,13 +18,13 @@ import vibrate from '../../vibrate'
 import sound from '../../sound'
 import { toggleGameBookmark } from '../../xhr'
 import socket, { SocketIFace } from '../../socket'
-import { openingSensibleVariants } from '../../lichess/variant'
+import { openingSensibleVariants, chessopRulesFromVariant } from '../../lichess/variant'
 import { playerName as gamePlayerName } from '../../lichess/player'
 import * as gameApi from '../../lichess/game'
 import { AnalyseData, AnalyseDataWithTree, isOnlineAnalyseData } from '../../lichess/interfaces/analyse'
 import { Study, findTag } from '../../lichess/interfaces/study'
 import { Opening } from '../../lichess/interfaces/game'
-import promotion from '../shared/offlineRound/promotion'
+import promotion, { Promoting } from '../shared/offlineRound/promotion'
 import continuePopup, { Controller as ContinuePopupController } from '../shared/continuePopup'
 import { NotesCtrl } from '../shared/round/notes'
 
@@ -42,8 +45,9 @@ import { Source } from './interfaces'
 import * as tabs from './tabs'
 import StudyCtrl from './study/StudyCtrl'
 import ForecastCtrl from './forecast/ForecastCtrl'
+import { PromotingInterface } from '../shared/round'
 
-export default class AnalyseCtrl {
+export default class AnalyseCtrl implements PromotingInterface {
 
   settings: ISettingsCtrl
   menu: IMainMenuCtrl
@@ -59,6 +63,7 @@ export default class AnalyseCtrl {
   evalCache: EvalCache
   study?: StudyCtrl
   forecast?: ForecastCtrl
+  promoting: Promoting | null = null
 
   socket: SocketIFace
 
@@ -107,7 +112,7 @@ export default class AnalyseCtrl {
     this._currentTabIndex = (!this.study || this.study.data.chapter.tags.length === 0) && this.synthetic ? 0 : 1
 
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
-      Plugins.LiToast.show({ text: `Analysis board does not support ${this.data.game.variant.name} variant.`, duration: 'short' })
+      Toast.show({ text: `Analysis board does not support ${this.data.game.variant.name} variant.`, position: 'center', duration: 'short' })
       router.set('/')
     }
 
@@ -131,6 +136,17 @@ export default class AnalyseCtrl {
       }
 
       if (study && !(study.chapter.features.computer || study.chapter.practice)) {
+        return false
+      }
+
+      const isPosValid = parseFen(this.data.game.fen).unwrap(
+        setup => setupPosition(chessopRulesFromVariant(this.data.game.variant.key), setup).unwrap(
+          () => true,
+          () => false
+        ),
+        () => false
+      )
+      if (!isPosValid) {
         return false
       }
 
@@ -296,7 +312,7 @@ export default class AnalyseCtrl {
     if (!node) return
     const count = treeOps.countChildrenAndComments(node)
     if (count.nodes >= 10 || count.comments > 0) {
-      Plugins.Modals.confirm({
+      Dialog.confirm({
         title: 'Confirm',
         message: `Delete ${count.nodes} move(s)` + (count.comments ? ` and ${count.comments} comment(s)` : '') + '?',
       })
@@ -380,7 +396,6 @@ export default class AnalyseCtrl {
     this.ceval.stop()
     this.debouncedExplorerSetStep()
     this.updateHref()
-    promotion.cancel(this.chessground, this.cgConfig)
     if (pathChanged) {
       if (this.retro) this.retro.onJump()
       if (this.practice) this.practice.onJump()
@@ -594,7 +609,7 @@ export default class AnalyseCtrl {
   private userMove = (orig: Key, dest: Key, captured?: Piece) => {
     if (captured) sound.capture()
     else sound.move()
-    if (!promotion.start(this.chessground, orig, dest, this.sendMove)) this.sendMove(orig, dest)
+    if (!promotion.start(this, orig, dest, this.sendMove)) this.sendMove(orig, dest)
   }
 
   private userNewPiece = (piece: Piece, pos: Key) => {

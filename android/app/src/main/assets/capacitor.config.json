@@ -1,14 +1,21 @@
 {
-  "appId": "org.lichess.mobileapp",
-  "appName": "lichess",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "www",
-  "backgroundColor": "ff000000",
-  "appendUserAgent": "Lichobile/7.11.1",
-  "plugins": {
-    "PushNotifications": {
-      "presentationOptions": ["sound", "alert"]
-    }
-  }
+	"appId": "org.lichess.mobileapp",
+	"appName": "lichess",
+	"bundledWebRuntime": false,
+	"webDir": "www",
+	"backgroundColor": "000000ff",
+	"appendUserAgent": "Lichobile/7.14.0",
+	"plugins": {
+		"SplashScreen": {
+			"androidSplashResourceName": "launch_splash",
+			"launchAutoHide": false,
+			"useDialog": false
+		},
+		"PushNotifications": {
+			"presentationOptions": [
+				"sound",
+				"alert"
+			]
+		}
+	}
 }

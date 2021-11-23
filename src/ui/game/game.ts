@@ -1,4 +1,5 @@
-import { Plugins } from '@capacitor/core'
+import { Dialog } from '@capacitor/dialog'
+import { Toast } from '@capacitor/toast'
 import router from '../../router'
 import storage from '../../storage'
 import sound from '../../sound'
@@ -28,6 +29,7 @@ interface Attrs {
   id: string
   color?: Color
   goingBack?: string
+  ply?: string
 }
 
 interface State {
@@ -105,7 +107,7 @@ function loadRound(
   data: OnlineGameData
 ): void {
   if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
-    Plugins.LiToast.show({ text: i18n('unsupportedVariant', data.game.variant.name), duration: 'short' })
+    Toast.show({ text: i18n('unsupportedVariant', data.game.variant.name), position: 'center', duration: 'short' })
     router.set('/')
   }
   else {
@@ -121,7 +123,7 @@ function loadRound(
         variant.alert && [1, 3].indexOf(variant.id) === -1 &&
         !storage.get(storageKey)
       ) {
-        Plugins.Modals.alert({
+        Dialog.alert({
           title: 'Alert',
           message: variant.alert
         }).then(() => {
@@ -133,7 +135,9 @@ function loadRound(
     const elapsed = performance.now() - time
 
     setTimeout(() => {
-      vnode.state.round = new OnlineRound(!!vnode.attrs.goingBack, vnode.attrs.id, data)
+      const plyCast = Number(vnode.attrs.ply)
+      const ply = isNaN(plyCast) ? undefined : plyCast
+      vnode.state.round = new OnlineRound(!!vnode.attrs.goingBack, vnode.attrs.id, data, false, undefined, undefined, ply)
     }, Math.max(400 - elapsed, 0))
 
     gamesMenu.resetLastJoined()

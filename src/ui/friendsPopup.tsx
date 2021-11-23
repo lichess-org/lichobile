@@ -2,7 +2,7 @@ import h from 'mithril/hyperscript'
 import * as helper from './helper'
 import router from '../router'
 import popupWidget from './shared/popup'
-import i18n, { plural } from '../i18n'
+import { plural } from '../i18n'
 import friendsApi, { Friend } from '../lichess/friends'
 import challengeForm from './challengeForm'
 
@@ -48,7 +48,7 @@ function renderFriends() {
         {list.map(renderFriend)}
       </ul>
     ) : (
-      <div className="native_scroller nofriend">{i18n('noFriendsOnline')}</div>
+      <div className="native_scroller nofriend"></div>
     )
 }
 

@@ -1,6 +1,7 @@
 import asyncStorage from './asyncStorage'
 import { getAtPath, setAtPath } from './utils/object'
 import { ClockType } from './ui/shared/clock/interfaces'
+import { increments, incrementTuples } from './utils/increments'
 
 const STORAGE_KEY = 'settings'
 
@@ -30,16 +31,15 @@ const ratingRanges = [...Array(11).keys()].map(x => x * 50)
 
 const settingsStore = {}
 
-export function init(): Promise<void> {
-  return asyncStorage.get(STORAGE_KEY)
-  .then(data => {
-    Object.assign(settingsStore, data)
-  })
+export async function init(): Promise<void> {
+  await asyncStorage.migrate()
+  const data = await asyncStorage.get(STORAGE_KEY)
+  Object.assign(settingsStore, data)
 }
 
 export default {
   general: {
-    lang: prop<string | null>('lang', null),
+    locale: prop<string | null>('lang', null),
     sound: prop<boolean>('sound', true),
     theme: {
       availableBackgroundThemes: [
@@ -100,11 +100,14 @@ export default {
         ['maestro'],
         ['fresca'],
         ['cardinal'],
+	['gioco'],
         ['tatiana' ],
         ['staunty' ],
         ['governor'],
         ['symmetric' ],
         ['dubrovny' ],
+	['icpieces'],
+	['libra'],
         ['shapes' ],
         ['letter' ],
         ['horsey'],
@@ -115,7 +118,7 @@ export default {
     },
     vibrateOnGameEvents: prop('vibrateOnGameEvents', false),
     notifications: {
-      allow: prop<boolean>('notifications', true),
+      enable: prop<boolean>('notifications', true),
       vibrate: prop<boolean>('notifications.vibrate', true),
       sound: prop<boolean>('notifications.sound', true)
     }
@@ -132,6 +135,7 @@ export default {
     magnified: prop<boolean>('pieceMagnified', true),
     pieceNotation: prop<boolean>('pieceNotation', true),
     zenMode: prop<boolean>('zenMode', false),
+    blindfoldChess: prop<boolean>('blindfoldChess', false),
     clockPosition: prop<'right' | 'left'>('game.inversedClockPos', 'right'),
     pieceMove: prop<'tap' | 'drag' | 'both'>('game.pieceMove', 'both'),
     rookCastle: prop<0 | 1>('game.rookCastle', 1),
@@ -148,7 +152,8 @@ export default {
     enableCeval: prop<boolean>('analyse.enableCeval', false),
     cevalMultiPvs: prop<number>('ceval.multipv', 1),
     cevalCores: prop<number>('ceval.cores', 1),
-    cevalHashSize: prop<number>('ceval.hashSize', 0),
+    cevalHashSize: prop<number>('ceval.hashSize', 16),
+    cevalUseNNUE: prop<boolean>('ceval.useNNUE', true),
     cevalInfinite: prop<boolean>('ceval.infinite', false),
     cevalMaxDepth: prop<number>('ceval.maxDepth', 18),
     showBestMove: prop('analyse.showBestMove', true),
@@ -350,9 +355,19 @@ export default {
       ['Casual', '0'],
       ['Rated', '1']
     ],
-    availableTimes: [['0', '0'], ['½', '0.5'], ['¾', '0.75'], ['1', '1'], ['1.5', '1.5'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'], ['6', '6'], ['7', '7']],
-    availableIncrements: ['0', '1', '2'],
-    availableDurations: ['20', '25', '30', '35', '40', '45', '50', '55', '60', '70', '80', '90', '100', '110', '120'],
+    availableTimes: [
+      ['0', '0'], ['½', '0.5'], ['¾', '0.75'], ['1', '1'], ['1.5', '1.5'],
+    ].concat(incrementTuples(2, 7, 1))
+     .concat(incrementTuples(10, 25, 5))
+     .concat(incrementTuples(30, 60, 10)),
+    availableIncrements: increments(0, 7, 1)
+      .concat(increments(10, 25, 5))
+      .concat(increments(30, 60, 10)),
+    availableDurations: increments(20, 55, 5)
+      .concat(increments(60, 110, 10))
+      .concat(increments(120, 360, 30))
+      .concat(increments(420, 540, 60))
+      .concat(['600', '720']),
     availableTimesToStart: ['1', '2', '3', '5', '10', '15', '20', '30', '45', '60'],
     variant: prop('tournament.variant', '1'),
     mode: prop('tournament.mode', '0'),
@@ -416,8 +431,6 @@ export interface GameSettings {
   readonly color: Prop<string>
   readonly mode?: Prop<string>
   readonly variant: Prop<string>
-  readonly ratingMin?: Prop<string>
-  readonly ratingMax?: Prop<string>
   readonly days?: Prop<string>
   readonly level?: Prop<string>
 }

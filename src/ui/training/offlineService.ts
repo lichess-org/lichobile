@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
 import router from '../../router'
 import { Session } from '../../session'
 import settings from '../../settings'
@@ -87,9 +87,9 @@ export function syncAndClearCache(database: Database, user: Session): Promise<Pu
 
 export function puzzleLoadFailure(reason: any) {
   if (typeof reason === 'string') {
-    Plugins.LiToast.show({ text: reason, duration: 'long' })
+    Toast.show({ text: reason, position: 'center', duration: 'long' })
   } else {
-    Plugins.LiToast.show({ text: 'Could not load puzzle', duration: 'short' })
+    Toast.show({ text: 'Could not load puzzle', position: 'center', duration: 'short' })
   }
   router.set('/')
 }

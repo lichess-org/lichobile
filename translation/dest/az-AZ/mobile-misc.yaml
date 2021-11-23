@@ -1,0 +1,20 @@
+az-AZ:
+  apiUnsupported: "Lichess tətbiqinizin versiyası köhnəlib! Zəhmət olmasa ödənişsiz olaraq ən son versiyaya yüksəldin."
+  apiDeprecated: "Ödənişsiz olaraq Lichess tətbiqinin son versiyasını yükləyin! Bu versiya %s tarixindən etibarən dəstəklənməyəcək."
+  playerisInvitingYou: "%s sizi dəvət edir"
+  unsupportedVariant: "%s variantı bu versiyada dəstəklənmir"
+  notesSynchronizationHasFailed: "Lichess ilə notların eyniləşdirilməsi uğursuz oldu, zəhmət olmasa daha sonra yenidən sınayın."
+  vibrateOnGameEvents: "Oyun tədbirlərində titrəmə"
+  offline: "Xətdən kənarda"
+  otbUseSymmetricPieces: "Simmetrik fiqurları istifadə et" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Gedişdən sonra fiqur və rəqib məlumatlarını çevir" #Setting for offline over-the-board games
+  settingsClockPosition: "Saat mövqeyi" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Sağ" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Sol" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Lövhə ekran tərəfi (üfüqi rejimdə)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Səsi aç/bağla" #Settings to enable/disable sound
+  overTheBoard: "Taxta üzərində"
+  sharePgn: "PGN Paylaş"
+  shareGameUrl: 'Oyun URL-sini paylaş'
+  playOnline: "Onlayn oyna"
+  playOffline: "Oflayn oyna"

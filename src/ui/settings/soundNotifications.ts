@@ -20,7 +20,7 @@ function renderBody() {
     })),
     h('li.list_item', {
     }, formWidgets.renderCheckbox(i18n('vibrateOnGameEvents'), 'vibrate', settings.general.vibrateOnGameEvents, vibrate.onSettingChange)),
-    h('li.list_item', formWidgets.renderCheckbox(i18n('notifications'), 'notifications', settings.general.notifications.allow, isOn => {
+    h('li.list_item', formWidgets.renderCheckbox(i18n('notifications'), 'notifications', settings.general.notifications.enable, isOn => {
       if (isOn) {
         push.register()
       } else {

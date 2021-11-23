@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Keyboard } from '@capacitor/keyboard'
 import h from 'mithril/hyperscript'
 import session from '../session'
 import { ErrorResponse } from '../http'
@@ -94,18 +94,17 @@ function onLogin(e: Event) {
   if (loading) return false
   e.preventDefault()
   const form = e.target as HTMLFormElement
-  const username = form['username'].value
+  const username = form['username'].value.trim()
   const password = form['password'].value
   const token = form['token'] ? form['token'].value : null
   if (!username || !password) return
   redraw()
-  Plugins.Keyboard.hide()
+  Keyboard.hide()
   loading = true
   session.login(username, password, token)
   .then(() => {
     loading = false
     close()
-    Plugins.LiToast.show({ text: i18n('loginSuccessful'), duration: 'short' })
     signals.afterLogin.dispatch()
     redraw()
     // reconnect socket to refresh friends...
@@ -142,7 +141,7 @@ function open() {
 }
 
 function close(fromBB?: string) {
-  Plugins.Keyboard.hide()
+  Keyboard.hide()
   if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
   isOpen = false
 }

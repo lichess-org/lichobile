@@ -1,9 +1,9 @@
 import {
-  Plugins,
-  PushNotification,
-  PushNotificationToken,
-  PushNotificationActionPerformed
-} from '@capacitor/core'
+  PushNotifications,
+  PushNotificationSchema,
+  Token,
+  ActionPerformed
+} from '@capacitor/push-notifications'
 import { fetchText } from './http'
 import challengesApi from './lichess/challenges'
 import router from './router'
@@ -12,12 +12,10 @@ import settings from './settings'
 import { handleXhrError } from './utils'
 import { isForeground } from './utils/appMode'
 
-const { PushNotifications } = Plugins
-
 export default {
   init() {
     PushNotifications.addListener('registration',
-      ({ value }: PushNotificationToken) => {
+      ({ value }: Token) => {
         console.debug('Push registration success, FCM token: ' + value)
 
         fetchText(`/mobile/register/firebase/${value}`, {
@@ -34,7 +32,7 @@ export default {
     )
 
     PushNotifications.addListener('pushNotificationReceived',
-      (notification: PushNotification) => {
+      (notification: PushNotificationSchema) => {
         if (isForeground()) {
           switch (notification.data['lichess.type']) {
             case 'corresAlarm':
@@ -51,7 +49,7 @@ export default {
     )
 
     PushNotifications.addListener('pushNotificationActionPerformed',
-      (action: PushNotificationActionPerformed) => {
+      (action: ActionPerformed) => {
         if (action.actionId === 'tap') {
           switch (action.notification.data['lichess.type']) {
             case 'challengeAccept':
@@ -77,10 +75,10 @@ export default {
     )
   },
 
-  register(): Promise<void> {
-    if (settings.general.notifications.allow()) {
-      PushNotifications.requestPermission().then(result => {
-        if (result.granted) {
+  async register(): Promise<void> {
+    if (settings.general.notifications.enable()) {
+      PushNotifications.requestPermissions().then(result => {
+        if (result.receive === 'granted') {
           return PushNotifications.register()
         } else {
           return Promise.reject('Permission to use push denied')

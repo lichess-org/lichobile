@@ -1,3 +1,4 @@
+import { Profile } from '~/session'
 import { GameSource, GameStatus, ClockData, Opening } from './game'
 
 export type GameFilter = 'all' | 'rated' | 'win' | 'loss' | 'draw' | 'bookmark' | 'me' | 'import' | 'playing'
@@ -64,7 +65,15 @@ export interface User extends BaseUser {
   readonly seenAt: Timestamp
   readonly perfs: Perfs
   readonly playTime?: PlayTime
-  readonly profile?: any
+  readonly profile?: Profile
+}
+
+export interface SearchUser {
+  readonly id: string
+  readonly name: string
+  readonly online?: boolean
+  readonly patron?: boolean
+  readonly title?: string
 }
 
 export interface PlayTime {
@@ -129,12 +138,81 @@ export interface UserGameWithDate extends UserGame {
 
 export type GraphPoint = [number, number, number, number]
 
+interface StatCount {
+  all: number
+  rated: number
+  win: number
+  loss: number
+  draw: number
+  tour: number
+  berserk: number
+  opAvg: {avg: number, pop: number}
+  seconds: number
+  disconnects: number
+}
+
+interface StatGameAt {
+  at: string
+  gameId: string
+}
+
+interface StatPlayStreak {
+  nb: StatStreaks
+  time: StatStreaks
+  lastDate?: string
+}
+
+interface StatRatingAt {
+  int: number
+  at: string
+  gameId: string
+}
+
+interface StatResult {
+  opInt: number
+  opId: LightUser
+  at: string
+  gameId: string
+}
+
+interface StatResults {
+  results: StatResult[]
+}
+
+interface StatResultStreak {
+  win: StatStreaks
+  loss: StatStreaks
+}
+
+interface StatStreak {
+  v: number
+  from?: StatGameAt
+  to?: StatGameAt
+}
+
+interface StatStreaks {
+  cur: StatStreak
+  max: StatStreak
+}
+
+export interface Stats {
+  userId: unknown
+  perfType: unknown
+  highest?: StatRatingAt
+  lowest?: StatRatingAt
+  bestWins: StatResults
+  worstLosses: StatResults
+  count: StatCount
+  resultStreak: StatResultStreak
+  playStreak: StatPlayStreak
+}
+
 export interface PerfStats {
   readonly user: LightUser
   readonly perf: any
   readonly rank: number
   readonly percentile: number
-  readonly stat: any
+  readonly stat: Stats
   readonly graph: ReadonlyArray<GraphPoint>
 }
 

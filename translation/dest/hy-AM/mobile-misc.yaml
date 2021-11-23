@@ -1,0 +1,14 @@
+hy-AM:
+  apiUnsupported: "Ձեր Lichess հավելվածը հնացել է։ Խնդրում ենք, թարմացրեք այն մինչև վերջին թարմացումը, դա անվճար է։"
+  apiDeprecated: "Թարմացրեք ձեր Lichess հավելվածը, դա անվճար է։ Ընթացիկ տարբերակի աջակցումը կդադարեցվի %s-ին։"
+  playerisInvitingYou: "%s-ը հրավիրում է Ձեզ"
+  unsupportedVariant: "%s տարբերակն այս թարմացումը չի ապահովում"
+  notesSynchronizationHasFailed: "Չհաջողվեց գրառումները համաժամանակացնել lichess-ի հետ, կրկնեք քիչ ուշ։"
+  vibrateOnGameEvents: "Խաղում իրադարձություններ սկսվելիս թրթռացնել սարքը։"
+  offline: "Ոչ առցանց"
+  otbUseSymmetricPieces: "Օգտագործել համաչափ խաղաքարեր" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Քայլից հետո շրջել խաղաքարերը և գրառումները" #Setting for offline over-the-board games
+  settingsClockPosition: "Ժամացույցի դիրքը" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Աջից" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Ձախից" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Տախտակի դիրքը (ալբոմային կողմնորոշման դեպքում)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.

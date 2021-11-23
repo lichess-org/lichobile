@@ -1,0 +1,48 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Android build
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/android.yml'
+      - 'android/**'
+    branches-ignore:
+      - 'l10n_master'
+
+jobs:
+  apk:
+    name: Generate debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build web
+        run: npm run build
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+      - name: Sync android capacitor
+        run: npx cap update android
+      - name: Prepare build
+        working-directory: ./node_modules/capacitor-stockfish/stockfish/src
+        run: make net
+      - name: Build APKs
+        working-directory: ./android
+        run: |
+          ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v2
+        with:
+          name: debugApk
+          path: |
+            ./android/app/build/outputs/apk/debug/

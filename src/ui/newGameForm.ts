@@ -1,5 +1,6 @@
 import h from 'mithril/hyperscript'
 import * as utils from '../utils'
+import tupleOf from '../utils/tupleOf'
 import i18n from '../i18n'
 import router from '../router'
 import { humanSetupFromSettings } from '../lichess/setup'
@@ -255,7 +256,7 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
       ),
       h('div.select_input.inline',
         formWidgets.renderSelect('increment', formName + 'increment',
-          settings.gameSetup.availableIncrements.map(utils.tupleOf), settingsObj.increment, false)
+          settings.gameSetup.availableIncrements.map(tupleOf), settingsObj.increment, false)
       )
     )
   }
@@ -263,7 +264,7 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
   if (hasDays) {
     timeFieldset.push(
       h('div.select_input.large_label', formWidgets.renderSelect('daysPerTurn', formName + 'days',
-          settings.gameSetup.availableDays.map(utils.tupleOf), settingsObj.days!, false)
+          settings.gameSetup.availableDays.map(tupleOf), settingsObj.days, false)
       ))
   }
 

@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Share } from '@capacitor/share'
 import h from 'mithril/hyperscript'
 import { handleXhrError, hasNetwork } from '../../../../utils'
 import * as gameApi from '../../../../lichess/game'
@@ -37,9 +37,10 @@ export default {
   shareLink(ctrl: OnlineRound) {
     return h('button', {
       oncreate: helper.ontap(() => {
-        Plugins.LiShare.share({ url: gameApi.publicUrl(ctrl.data) })
+        const orientation = ctrl.chessground.state.orientation
+        Share.share({ url: `${gameApi.publicUrl(ctrl.data)}/${orientation}#${ctrl.vm.ply}` })
       })
-    }, [i18n('shareGameURL')])
+    }, [i18n('shareGameUrl')])
   },
   sharePGN(ctrl: OnlineRound) {
     function handler() {
@@ -48,11 +49,11 @@ export default {
         handleXhrError(err)
         throw err
       })
-      .then((PGN: string) => Plugins.LiShare.share({ text: PGN }))
+      .then((PGN: string) => Share.share({ text: PGN }))
     }
     return (
       <button oncreate={helper.ontap(handler)}>
-        {i18n('sharePGN')}
+        {i18n('sharePgn')}
       </button>
     )
   },

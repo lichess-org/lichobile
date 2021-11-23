@@ -1,0 +1,6 @@
+br-FR:
+  playerisInvitingYou: "%s en deus pedet ac'hanoc'h"
+  offline: "Ezlinenn"
+  settingsClockPosition: "Lec'hiadur an horolaj" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "A-zehoù" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "A-gleiz" #As in "left-hand side"; not political or past participle

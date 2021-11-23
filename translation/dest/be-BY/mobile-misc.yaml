@@ -1,0 +1,20 @@
+be-BY:
+  apiUnsupported: "Ваша версія lichess састарэла! Калі ласка, абнавіцеся бясплатна да апошняй версіі."
+  apiDeprecated: "Бясплатна абнавіцеся да апошняй версіі прылады lichess! Падтрымка гэтай версіі будзе скончана %s."
+  playerisInvitingYou: "%s запрошвае вас"
+  unsupportedVariant: "Варыянт %s не падтрымліваецца гэтай версіяй"
+  notesSynchronizationHasFailed: "Не атрымалася сінхранізаваць нататкі з lichess. Паспрабуйце пазней."
+  vibrateOnGameEvents: "Вібраваць пры падзеях у гульне"
+  offline: "Афлайн"
+  otbUseSymmetricPieces: "Выкарыстоўваць сіметрычныя фігуры" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Пераварочваць фігуры і надпісы пасля ходу" #Setting for offline over-the-board games
+  settingsClockPosition: "Размяшчэнне гадзінніка" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Зправа" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Злева" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Бок дошкі на экране (пры альбомным рэжыме)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Укл./адкл. гук" #Settings to enable/disable sound
+  overTheBoard: "За дошкай"
+  sharePgn: "Падзяліцца PGN"
+  shareGameUrl: 'Падзяліцца спасылкай на гульню'
+  playOnline: "Гуляць анлайн"
+  playOffline: "Гуляць афлайн"

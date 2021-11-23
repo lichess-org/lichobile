@@ -1,0 +1,24 @@
+da-DK:
+  apiUnsupported: "Din version af lichess-app'en er for gammel! Opgradér venligst gratis til den nyeste version."
+  apiDeprecated: "Opgrader gratis til den seneste lichess-app! Understøttelse af denne version vil blive droppet den %s."
+  comments: "Kommentarer"
+  gameInformation: "Parti-information"
+  home: "Hjem"
+  lastScore: "Sidste score: %s"
+  playerisInvitingYou: "%s inviterer dig"
+  unsupportedVariant: "Variant %s er ikke understøttet i denne version"
+  notesSynchronizationHasFailed: "Synkronisering af noter med lichess mislykkedes. Prøv venligst senere."
+  vibrateOnGameEvents: "Vibrér ved partibegivenheder"
+  offline: "Offline"
+  otbUseSymmetricPieces: "Brug symmetriske brikker" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Vend brikker og modstander-oplysninger efter træk" #Setting for offline over-the-board games
+  settingsClockPosition: "Ur-position" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Højre" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Venstre" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Brættets placering på skærmen (i landskabsformat)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Slå lyd til/fra" #Settings to enable/disable sound
+  overTheBoard: "Spil offline, brug som bræt"
+  sharePgn: "Del PGN"
+  shareGameUrl: 'Del spillets URL'
+  playOnline: "Spil online"
+  playOffline: "Spil offline"

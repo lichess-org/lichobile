@@ -1,4 +1,5 @@
-import { Plugins } from '@capacitor/core'
+import { Keyboard } from '@capacitor/keyboard'
+import { Toast } from '@capacitor/toast'
 import h from 'mithril/hyperscript'
 import debounce from 'lodash-es/debounce'
 import redraw from '../../../utils/redraw'
@@ -33,7 +34,7 @@ export class NotesCtrl {
     .catch(() => {
       this.syncing = false
       redraw()
-      Plugins.LiToast.show({ text: 'Could not read notes from server.', duration: 'short' })
+      Toast.show({ text: 'Could not read notes from server.', position: 'bottom', duration: 'short' })
     })
 
   }
@@ -55,7 +56,7 @@ export class NotesCtrl {
   }
 
   public close = (fromBB?: string) => {
-    Plugins.Keyboard.hide()
+    Keyboard.hide()
     if (fromBB !== 'backbutton' && this.showing) {
       router.backbutton.stack.pop()
     }

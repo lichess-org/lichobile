@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Share } from '@capacitor/share'
 import h from 'mithril/hyperscript'
 import router from '../../router'
 import i18n from '../../i18n'
@@ -115,14 +115,14 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
     isOnlineAnalyseData(ctrl.data) ? h('button', {
       oncreate: helper.ontap(() => {
         ctrl.menu.close()
-        Plugins.LiShare.share({ url: gameApi.publicAnalyseUrl(ctrl.data) })
+        Share.share({ url: gameApi.publicAnalyseUrl(ctrl.data) })
       })
-    }, [i18n('shareGameURL')]) : null,
+    }, [i18n('shareGameUrl')]) : null,
     ctrl.source === 'offline' ? h('button', {
       oncreate: helper.ontap(() => {
         offlinePgnExport(ctrl)
       }),
-    }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : [i18n('sharePGN')]) : null,
+    }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : [i18n('sharePgn')]) : null,
     ctrl.source === 'online' && !gameApi.playable(ctrl.data) ? h('button', {
       oncreate: helper.ontap(() => {
         onlinePGNExport(ctrl, false)
@@ -133,10 +133,16 @@ function renderShareMenu(ctrl: AnalyseCtrl) {
         onlinePGNExport(ctrl, true)
       }),
     }, ctrl.menu.s.computingPGN ? spinner.getVdom('monochrome') : 'Share raw PGN') : null,
+    isOnlineAnalyseData(ctrl.data) ? h('button', {
+      oncreate: helper.ontap(() => {
+        ctrl.menu.close()
+        Share.share({ url: gameApi.publicGIFUrl(ctrl.data) })
+      })
+    }, ['Share game GIF']) : null,
     ctrl.isOfflineOrNotPlayable() ? h('button', {
       oncreate: helper.ontap(() => {
         ctrl.menu.close()
-        Plugins.LiShare.share({ text: ctrl.node.fen })
+        Share.share({ text: ctrl.node.fen })
       }),
     }, 'Share current FEN') : null,
   ]))
@@ -152,7 +158,7 @@ function onlinePGNExport(ctrl: AnalyseCtrl, raw: boolean) {
       ctrl.menu.s.computingPGNAnnotated = false
       ctrl.menu.close()
       redraw()
-      Plugins.LiShare.share({ text: pgn })
+      Share.share({ text: pgn })
     })
     .catch(e => {
       ctrl.menu.s.computingPGN = false
@@ -184,7 +190,7 @@ function offlinePgnExport(ctrl: AnalyseCtrl) {
       ctrl.menu.s.computingPGN = false
       ctrl.menu.close()
       redraw()
-      Plugins.LiShare.share({ text: res.pgn })
+      Share.share({ text: res.pgn })
     })
     .catch(e => {
       ctrl.menu.s.computingPGN = false

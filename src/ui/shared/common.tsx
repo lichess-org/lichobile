@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
 import h from 'mithril/hyperscript'
 import * as menu from '../menu'
 import router from '../../router'
@@ -31,7 +31,7 @@ export function bookmarkButton(action: () => void, flag: boolean): Mithril.Child
   return session.isConnected() ? h('button.main_header_button.bookmarkButton', {
     oncreate: helper.ontap(
       action,
-      () => Plugins.LiToast.show({ text: i18n('bookmarkThisGame'), duration: 'short', position: 'top' })
+      () => Toast.show({ text: i18n('bookmarkThisGame'), duration: 'short', position: 'top' })
     ),
   }, h('span', {
     'data-icon': flag ? 't' : 's'

@@ -1,0 +1,8 @@
+ia-IA:
+  apiUnsupported: "Tu version del application Lichess es troppo ancian! Per favor modernisa al ultime version."
+  apiDeprecated: "Modernisa gratuitemente al ultime version del application Lichess! Supporto pro iste version finira in %s."
+  playerisInvitingYou: "%s invita tu"
+  unsupportedVariant: "Variante %s non es supportate in iste version"
+  notesSynchronizationHasFailed: "Synchronisation de notas con Lichess ha fallite, per favor tenta novemente plus tarde."
+  vibrateOnGameEvents: "Vibrar in eventos de un partita"
+  offline: "Disconnectite"

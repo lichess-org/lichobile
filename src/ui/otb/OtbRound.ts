@@ -1,4 +1,6 @@
-import { Plugins, AppState, PluginListenerHandle } from '@capacitor/core'
+import { App, AppState } from '@capacitor/app'
+import { Share } from '@capacitor/share'
+import { PluginListenerHandle } from '@capacitor/core'
 import sound from '../../sound'
 import router from '../../router'
 import Chessground from '../../chessground/Chessground'
@@ -11,7 +13,7 @@ import { oppositeColor } from '../../utils'
 import { StoredOfflineGame, setCurrentOTBGame } from '../../utils/offlineGames'
 import redraw from '../../utils/redraw'
 
-import promotion from '../shared/offlineRound/promotion'
+import promotion, { Promoting } from '../shared/offlineRound/promotion'
 import ground from '../shared/offlineRound/ground'
 import makeData from '../shared/offlineRound/data'
 import { setResult } from '../shared/offlineRound'
@@ -43,6 +45,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public vm: OtbVM
   public clock?: IChessClock
   public moveList: boolean
+  public promoting: Promoting | null = null
 
   private appStateListener: PluginListenerHandle
 
@@ -88,7 +91,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
       }
     }
 
-    this.appStateListener = Plugins.App.addListener('appStateChange', (state: AppState) => {
+    this.appStateListener = App.addListener('appStateChange', (state: AppState) => {
       if (!state.isActive) this.saveClock()
     })
   }
@@ -203,7 +206,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public sharePGN = () => {
     this.replay.pgn('White', 'Black')
     .then((data: chess.PgnDumpResponse) =>
-      Plugins.LiShare.share({ text: data.pgn })
+      Share.share({ text: data.pgn })
     )
   }
 
@@ -212,7 +215,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   }
 
   private userMove = (orig: Key, dest: Key) => {
-    if (!promotion.start(this.chessground, orig, dest, this.onPromotion)) {
+    if (!promotion.start(this, orig, dest, this.onPromotion)) {
       this.replay.addMove(orig, dest)
     }
   }

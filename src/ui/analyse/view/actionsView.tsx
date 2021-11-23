@@ -1,5 +1,5 @@
 import h from 'mithril/hyperscript'
-import { Plugins } from '@capacitor/core'
+import { Toast } from '@capacitor/toast'
 import * as helper from '../../helper'
 
 import AnalyseCtrl from '../AnalyseCtrl'
@@ -36,7 +36,7 @@ export default function renderActionsBar(ctrl: AnalyseCtrl, isPortrait: boolean)
         <button className={'action_bar_button fa fa-' + (ctrl.settings.s.smallBoard ? 'expand' : 'compress')}
           oncreate={helper.ontap(
             ctrl.settings.toggleBoardSize,
-            () => Plugins.LiToast.show({ text: 'Expand/compress board', duration: 'short', position: 'bottom' })
+            () => Toast.show({ text: 'Expand/compress board', duration: 'short', position: 'bottom' })
           )}
         /> : null
       }

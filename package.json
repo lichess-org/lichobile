@@ -76,7 +76,7 @@
         "@types/d3": "4.5.0",
         "@types/lodash-es": "4.17.3",
         "capacitor-sound-effect": "2.0.1",
-        "capacitor-stockfish": "3.0.1",
+        "capacitor-stockfish": "3.0.2",
         "capacitor-stockfish-variants": "1.0.1",
         "chessops": "0.10.3",
         "d3-axis": "1.0.8",
@@ -108,6 +108,6 @@
         "watch": "node scripts/inject-conf && concurrently 'npm:compile-watch' 'rollup -w -c' 'npm:styles-watch'",
         "prebuild": "npm run clean && npm run compile",
         "build": "node scripts/inject-conf && concurrently 'npm:compile-date-locales' 'npm:styles' 'rollup -c' && npx cap copy",
-        "run-android": "npm run build && cd android && ./gradlew installDebug"
+        "fetch-nnue": "cd node_modules/capacitor-stockfish/stockfish/src && make net && cp *.nnue ../../../../ios/App/Pods"
     }
 }

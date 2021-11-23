@@ -18,6 +18,9 @@ const config: CapacitorConfig = {
       presentationOptions: ['sound', 'alert']
     }
   },
+  ios: {
+    scheme: 'lichess',
+  }
 }
 
 export default config

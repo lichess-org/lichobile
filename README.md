@@ -19,41 +19,78 @@ Multi-variant chess library is brought by [a JavaScript version of scalachess](h
 ## Required dependencies
 
 * [node](http://nodejs.org) latest LTS version
-* [ionic capacitor dependencies](https://capacitorjs.com/docs/v2/getting-started/dependencies)
+* [ionic capacitor dependencies](https://capacitorjs.com/docs/getting-started/environment-setup)
 
 **Android:**
 
 * in addition to capacitor dependencies, [android ndk](http://developer.android.com/tools/sdk/ndk/index.html) for stockfish compilation (to install with Android Studio).
 
-## Initialize build
+## Setup project
 
-Make sure you installed all deps:
+Make sure to install all dependencies:
 
     $ npm install
 
-Capacitor needs the web app before update, so build it:
+Capacitor needs the web app before sync, so build it:
 
     $ npm run build
 
-Update capacitor:
+Sync capacitor:
 
-    $ npx cap update
+    $ npx cap sync
 
-## Run in a browser
+## Running in the browser
 
     $ npm run serve
 
 Will serve assets at `http://localhost:8080`.
-Once the server is running, browse to [http://localhost:8080/www](http://localhost:8080/www).
+Once the server is up, browse to [http://localhost:8080/www](http://localhost:8080/www).
 
-Be sure to [Toggle Device Mode](https://developers.google.com/web/tools/chrome-devtools/device-mode/) in your browser, or else you won't be able to click on anything.
+You should use a chromium based browser to be close to the android webview which
+is based on chrome.
 
-## Run in a device/emulator
+Be sure to [Toggle Device Mode](https://developers.google.com/web/tools/chrome-devtools/device-mode/)
+or else you won't be able to click on anything.
 
-The easiest way to do it is to open the native IDE. Capacitor has a command
-for that:
+## Running in a device/emulator
 
-    $ npx cap open
+Be sure to install all the dependencies and follow the steps above in the [Setup
+project section](#setup-project).
+
+In order to build Stockfish, you need to download the current stockfish plugin
+NNUE file and save it to the proper location for each platform:
+
+    $ npm run fetch-nnue
+
+### Android
+
+Using command line:
+
+    $ npx cap run android
+
+Using android studio:
+
+    $ npx cap open android
+
+More information available [here](https://capacitorjs.com/docs/android).
+
+### iOS
+
+You will need a `GoogleService-Info.plist` file in order to compile iOS project.
+You can download a dummy one from the [firebase open-source project](https://raw.githubusercontent.com/firebase/firebase-ios-sdk/master/Firestore/Example/App/GoogleService-Info.plist).
+Put it in the `ios/App/App/` folder.
+Only debug builds are allowed with that example file. Push notifications
+won't work, but you will be able to run the app on a simulator just fine.
+
+Using command line:
+
+    $ npx cap run ios
+
+Using Xcode:
+
+    $ npx cap open ios
+
+More information available [here](https://capacitorjs.com/docs/ios).
 
 ## Advanced setup
 

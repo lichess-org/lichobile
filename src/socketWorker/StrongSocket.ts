@@ -116,7 +116,7 @@ export default class StrongSocket {
         this.ackable.resend()
       }
       ws.onmessage = e => {
-        if (e.data == 0) return this.pong()
+        if (e.data === 0) return this.pong()
         const m = JSON.parse(e.data)
         if (m.t === 'n') this.pong()
         this.handle(m)
@@ -169,7 +169,7 @@ export default class StrongSocket {
   private pingNow = () => {
     clearTimeout(this.pingSchedule)
     clearTimeout(this.connectSchedule)
-    const pingData = (this.options.isAuth && this.pongCount % 8 == 2) ? JSON.stringify({
+    const pingData = (this.options.isAuth && this.pongCount % 8 === 2) ? JSON.stringify({
       t: 'p',
       l: Math.round(0.1 * this.averageLag)
     }) : 'null'

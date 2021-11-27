@@ -1,6 +1,10 @@
 be-BY:
   apiUnsupported: "Ваша версія lichess састарэла! Калі ласка, абнавіцеся бясплатна да апошняй версіі."
   apiDeprecated: "Бясплатна абнавіцеся да апошняй версіі прылады lichess! Падтрымка гэтай версіі будзе скончана %s."
+  comments: "Каментары"
+  gameInformation: "Інфармацыя пра гульню"
+  home: "Галоўная"
+  lastScore: "Апошні вынік: %s"
   playerisInvitingYou: "%s запрошвае вас"
   unsupportedVariant: "Варыянт %s не падтрымліваецца гэтай версіяй"
   notesSynchronizationHasFailed: "Не атрымалася сінхранізаваць нататкі з lichess. Паспрабуйце пазней."

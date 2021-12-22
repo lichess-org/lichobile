@@ -37,13 +37,10 @@ export function renderInlineReplay(ctrl: OnlineRound) {
     return null
   }
 
-  if (ctrl.isZen()) {
-    return h('div.replay_inline.hidden')
-  }
-
   return h('div.replay_inline', {
     className: helper.classSet({
       displayPieces: !!pieceNotation,
+      hidden: ctrl.isZen(),
     }),
     oncreate: (vnode: Mithril.VnodeDOM) => {
       setTimeout(() => autoScrollInline(vnode.dom as HTMLElement), 100)

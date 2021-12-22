@@ -40,8 +40,8 @@ export default {
     return h('div', {
       className,
       oncreate: this.clockOnCreate,
-      onupdate: this.clockOnUpdate
-    })
+      onupdate: this.clockOnUpdate,
+    }, formatClockTime(time, false))
   }
 } as Mithril.Component<ClockAttrs, ClockState>
 

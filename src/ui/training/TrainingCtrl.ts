@@ -78,6 +78,28 @@ export default class TrainingCtrl implements PromotingInterface {
     redraw()
   }
 
+  public setDifficulty(difficulty?: Difficulty) {
+    const user = session.get()
+    if (user) {
+      if (this.data.user !== undefined){
+          // Default user requested difficulty to user puzzle rating
+          this.data.user.requested_difficulty = this.data.user.rating
+          if (difficulty === 'easiest') {
+            this.data.user.requested_difficulty = this.data.user.rating - 600
+          }
+          else if (difficulty === 'easier') {
+            this.data.user.requested_difficulty = this.data.user.rating - 300
+          }
+          else if (difficulty === 'harder') {
+            this.data.user.requested_difficulty = this.data.user.rating + 300
+          }
+          else if (difficulty === 'hardest') {
+            this.data.user.requested_difficulty = this.data.user.rating + 600
+        }
+      }
+    }
+  }
+
   public setPath = (path: Tree.Path): void => {
     this.path = path
     this.nodeList = this.tree.getNodeList(path)
@@ -127,9 +149,11 @@ export default class TrainingCtrl implements PromotingInterface {
       this.vm.loading = true
       redraw()
       const onSuccess = (cfg: PuzzleData) => {
-        this.vm.loading = false
-        this.init(cfg)
-        redraw()
+        if (cfg.puzzle.rating) {
+          this.vm.loading = false
+          this.init(cfg)
+          redraw()
+        }
       }
       syncAndClearCache(this.database, user)
       .then(onSuccess)
@@ -158,9 +182,20 @@ export default class TrainingCtrl implements PromotingInterface {
     redraw()
 
     const onSuccess = (cfg: PuzzleData) => {
+      if (this.data.user && this.data.user.requested_difficulty) {
+        const maxDifficulty = this.data.user.requested_difficulty + 100
+        const minDifficulty = this.data.user.requested_difficulty - 100
+        if (minDifficulty <= cfg.puzzle.rating && cfg.puzzle.rating <= maxDifficulty) {
+          this.vm.loading = false
+          this.init(cfg)
+          redraw()
+        }
+      }
+      else if (cfg.puzzle.rating) {
       this.vm.loading = false
       this.init(cfg)
       redraw()
+      }
     }
     const user = session.get()
     if (user) {

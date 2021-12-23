@@ -77,9 +77,9 @@ export function viewOnlyBoardContent(fen: string, orientation: Color, lastMove?:
   if (isPortrait) {
     return h.fragment({}, [
       showMoveList ? h('div.replay_inline') : null,
-      h('section.playTable'),
+      h('section.playTable.opponent'),
       board,
-      h('section.playTable'),
+      h('section.playTable.player'),
       h('section.actions_bar'),
     ])
   } else {

@@ -116,7 +116,7 @@ export default class StrongSocket {
         this.ackable.resend()
       }
       ws.onmessage = e => {
-        if (e.data === 0) return this.pong()
+        if (e.data == 0) return this.pong()
         const m = JSON.parse(e.data)
         if (m.t === 'n') this.pong()
         this.handle(m)
@@ -184,7 +184,7 @@ export default class StrongSocket {
 
   computePingDelay = () => this.options.pingDelay + (this.options.idle ? 1000 : 0)
 
-  private pong() {
+  private pong = () => {
     clearTimeout(this.connectSchedule)
     this.schedulePing(this.computePingDelay())
     const currentLag = Math.min(performance.now() - this.lastPingTime, 10000)
@@ -233,6 +233,7 @@ export default class StrongSocket {
   }
 
   public delayedDisconnect(delay: number): void {
+    this.debug(`Will disconnect in ${delay}...`)
     this.delayedDisconnectTimeoutId = setTimeout(() => {
       this.disconnect()
     }, delay)

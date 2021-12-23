@@ -82,20 +82,13 @@ export default class TrainingCtrl implements PromotingInterface {
     const user = session.get()
     if (user) {
       if (this.data.user !== undefined){
-          // Default user requested difficulty to user puzzle rating
-          this.data.user.requested_difficulty = this.data.user.rating
-          if (difficulty === 'easiest') {
-            this.data.user.requested_difficulty = this.data.user.rating - 600
-          }
-          else if (difficulty === 'easier') {
-            this.data.user.requested_difficulty = this.data.user.rating - 300
-          }
-          else if (difficulty === 'harder') {
-            this.data.user.requested_difficulty = this.data.user.rating + 300
-          }
-          else if (difficulty === 'hardest') {
-            this.data.user.requested_difficulty = this.data.user.rating + 600
+        if (difficulty === undefined) {
+          this.data.user.requested_difficulty = 'normal'
         }
+        else {
+          this.data.user.requested_difficulty = difficulty
+        }
+        this.newPuzzle()
       }
     }
   }
@@ -182,16 +175,34 @@ export default class TrainingCtrl implements PromotingInterface {
     redraw()
 
     const onSuccess = (cfg: PuzzleData) => {
+      console.log(this.data.user)
       if (this.data.user && this.data.user.requested_difficulty) {
-        const maxDifficulty = this.data.user.requested_difficulty + 100
-        const minDifficulty = this.data.user.requested_difficulty - 100
+        var maxDifficulty = this.data.user.rating + 100
+        var minDifficulty = this.data.user.rating - 100
+        if (this.data.user.requested_difficulty === 'easiest') {
+          maxDifficulty -= 600
+          minDifficulty -= 600
+        }
+        else if (this.data.user.requested_difficulty === 'easier') {
+          maxDifficulty -= 300
+          minDifficulty -= 300
+        }
+        else if (this.data.user.requested_difficulty === 'harder') {
+          maxDifficulty += 300
+          minDifficulty += 300
+        }
+        else if (this.data.user.requested_difficulty === 'hardest') {
+          maxDifficulty += 600
+          minDifficulty += 600
+        }
         if (minDifficulty <= cfg.puzzle.rating && cfg.puzzle.rating <= maxDifficulty) {
+          console.log('new puzzle success')
           this.vm.loading = false
           this.init(cfg)
           redraw()
         }
       }
-      else if (cfg.puzzle.rating) {
+      if (cfg.puzzle.rating && this.vm.loading) {
       this.vm.loading = false
       this.init(cfg)
       redraw()

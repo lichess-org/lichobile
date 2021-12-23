@@ -76,37 +76,17 @@ export default {
 
 function renderTrainingMenu(ctrl: IMenuCtrl) {
   const puzzleUser = ctrl.user()
-  var headerList = [
-    h('div.select_input', [
-      h('label', i18n('difficultyLevel')),
-      h('select', {
-        id: 'select_puzzle_difficulty',
-        value: ctrl.root.data.user?.requested_difficulty || '',
-        onchange(e: Event) {
-          ctrl.root.setDifficulty((e.target as HTMLInputElement).value as Difficulty)
-          ctrl.root.newPuzzle()
-          ctrl.close()
-        },
-      }, [
-        h('option[value=easiest]', i18n('easiest')),
-        h('option[value=easier]', i18n('easier')),
-        h('option[value=normal]', i18n('normal')),
-        h('option[value=harder]', i18n('harder')),
-        h('option[value=hardest]', i18n('hardest'))
-      ])
-    ])
-  ]
   if (ctrl.root.data && ctrl.root.data.user && hasNetwork()) {
-    return headerList.concat(renderUserInfosOnline(ctrl.root.data.user))
+    return renderUserInfosOnline(ctrl.root.data.user, ctrl)
   }
   else if (puzzleUser !== null && hasNetwork()) {
-    return headerList.concat(renderUserInfosOnline(puzzleUser.data))
+    return renderUserInfosOnline(puzzleUser.data, ctrl)
   }
   else if (puzzleUser !== null) {
-    return headerList.concat(renderUserInfosOffline(puzzleUser, ctrl))
+    return renderUserInfosOffline(puzzleUser, ctrl)
   }
   else {
-    return headerList.concat(renderSigninBox())
+    return renderSigninBox()
   }
 }
 
@@ -131,9 +111,29 @@ function renderUserInfosOffline(user: OfflineUser, ctrl: IMenuCtrl) {
   ])
 }
 
-function renderUserInfosOnline(user: PuzzleUserData) {
+function renderUserInfosOnline(user: PuzzleUserData, ctrl: IMenuCtrl) {
+  // TODO: Isn't having ctrl as a parameter redundant?
   const rating = user.rating
   return [
-    h('p.trainingRatingHeader', h.trust(i18n('xRating', `<strong>${rating}</strong>`)))
+    h('p.trainingRatingHeader', h.trust(i18n('xRating', `<strong>${rating}</strong>`))),
+        h('div.select_input', [
+      // FIXME: Why is the ":" missing?
+      h('label', [i18n('difficultyLevel'), ': ']),
+      h('select', {
+        id: 'select_puzzle_difficulty',
+        // value: ctrl.root.data.user?.requested_difficulty || 'normal',
+        value: ctrl.root.data.user?.requested_difficulty || '',
+        onchange(e: Event) {
+          ctrl.root.setDifficulty((e.target as HTMLInputElement).value as Difficulty)
+          ctrl.close()
+        },
+      }, [
+        h('option[value=easiest]', i18n('easiest')),
+        h('option[value=easier]', i18n('easier')),
+        h('option[value=normal]', i18n('normal')),
+        h('option[value=harder]', i18n('harder')),
+        h('option[value=hardest]', i18n('hardest'))
+      ])
+    ])
   ]
 }

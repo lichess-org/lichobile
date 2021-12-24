@@ -161,11 +161,9 @@ export default class TrainingCtrl implements PromotingInterface {
       this.vm.loading = true
       redraw()
       const onSuccess = (cfg: PuzzleData) => {
-        if (cfg.puzzle.rating) {
-          this.vm.loading = false
-          this.init(cfg)
-          redraw()
-        }
+        this.vm.loading = false
+        this.init(cfg)
+        redraw()
       }
       if (difficulty === undefined) {
         difficulty = 'normal'

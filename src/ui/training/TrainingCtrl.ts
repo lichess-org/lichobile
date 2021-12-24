@@ -153,22 +153,30 @@ export default class TrainingCtrl implements PromotingInterface {
   }
 
   public setDifficulty(difficulty: PuzzleDifficulty) {
-    const difficulties: [PuzzleDifficulty, number][] = [
-      ['easiest', -600],
-      ['easier', -300],
-      ['normal', 0],
-      ['harder', 300],
-      ['hardest', 600],
-    ];
-    // find the index of the difficulty in the difficulties array
-    const index = difficulties.findIndex(d => d[0] === difficulty)
-    if (this.data.user !== undefined) {
-      this.data.user.requested_difficulty = difficulty
-      const maxDifficulty = difficulties[index][1] + this.data.user.rating + 100
-      const minDifficulty = difficulties[index][1] + this.data.user.rating - 100
-      if (minDifficulty > this.data.puzzle.rating || this.data.puzzle.rating > maxDifficulty) {
-        this.resync()
+    const user = session.get()
+    if (hasNetwork() && user) {
+      if (this.vm.loading) {
+        return
       }
+      this.vm.loading = true
+      redraw()
+      const onSuccess = (cfg: PuzzleData) => {
+        if (cfg.puzzle.rating) {
+          this.vm.loading = false
+          this.init(cfg)
+          redraw()
+        }
+      }
+      if (difficulty === undefined) {
+        difficulty = 'normal'
+      }
+      syncAndClearCache(this.database, user, difficulty)
+      .then(onSuccess)
+      .catch(error => {
+        this.vm.loading = false
+        redraw()
+        puzzleLoadFailure(error)
+      })
     }
   }
 

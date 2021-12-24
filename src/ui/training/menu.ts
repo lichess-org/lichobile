@@ -119,8 +119,7 @@ function renderUserInfosOnline(user: PuzzleUserData, ctrl?: IMenuCtrl) {
   if (ctrl){
   return headerList.concat([
     h('div.select_input', [
-      // FIXME: Why is the ":" missing?
-      h('label', [i18n('difficultyLevel'), ': ']),
+      h('label', i18n('difficultyLevel')),
       h('select', {
         id: 'select_puzzle_difficulty',
         value: ctrl.root.data.user?.requested_difficulty || '',

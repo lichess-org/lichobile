@@ -118,32 +118,31 @@ export function puzzleLoadFailure(reason: any) {
  * and synchronization could not be performed (when offline for instance).
  */
 function syncPuzzles(database: Database, user: Session, difficulty?: PuzzleDifficulty): Promise<UserOfflineData | null> {
-  if (difficulty === undefined) {
-    difficulty = 'normal'
-  }
-  const difficulties: [PuzzleDifficulty, number][] = [
-    ['easiest', -600],
-    ['easier', -300],
-    ['normal', 0],
-    ['harder', 300],
-    ['hardest', 600],
-  ];
-  // find the index of the difficulty in the difficulties array
-  const index = difficulties.findIndex(d => d[0] === difficulty)
-  const maxDifficulty = difficulties[index][1] + user.perfs.puzzle.rating + 100
-  const minDifficulty = difficulties[index][1] + user.perfs.puzzle.rating - 100
-  console.log(`syncPuzzles: minDifficulty=${minDifficulty}, maxDifficulty=${maxDifficulty}`)
   return database.fetch(user.id)
   .then(stored => {
-    const unsolved = stored ? stored.unsolved : []
+    const unsolved = stored ? stored.unsolved.filter(p => {
+      // Look through all unsolved puzzles to find the ones that are in the range
+      // of difficulty we want to play.
+      const rating = p.puzzle.rating
+      if (difficulty !== undefined) {
+        const difficulties: [PuzzleDifficulty, number][] = [
+          ['easiest', -600],
+          ['easier', -300],
+          ['normal', 0],
+          ['harder', 300],
+          ['hardest', 600],
+        ];
+        // find the index of the difficulty in the difficulties array
+        const index = difficulties.findIndex(d => d[0] === difficulty)
+        const maxDifficulty = difficulties[index][1] + user.perfs.puzzle.rating + 100
+        const minDifficulty = difficulties[index][1] + user.perfs.puzzle.rating - 100
+        return rating >= minDifficulty && rating <= maxDifficulty
+      }
+      else {
+        return true
+      }
+    }) : []
     const solved = stored ? stored.solved : []
-    // Look through all unsolved puzzles to find the ones that are in the range
-    // of difficulty we want to play.
-    const puzzles = unsolved.filter(p => {
-      const puzzleDifficulty = p.puzzle.rating
-      return puzzleDifficulty >= minDifficulty && puzzleDifficulty <= maxDifficulty
-    })
-    console.log(`syncPuzzles: found ${puzzles.length} puzzles in range`)
 
     const puzzleDeficit = Math.max(
       settings.training.puzzleBufferLen - unsolved.length,

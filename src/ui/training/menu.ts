@@ -80,7 +80,7 @@ function renderTrainingMenu(ctrl: IMenuCtrl) {
     return renderUserInfosOnline(ctrl.root.data.user, ctrl)
   }
   else if (puzzleUser !== null && hasNetwork()) {
-    return renderUserInfosOnline(puzzleUser.data, ctrl)
+    return renderUserInfosOnline(puzzleUser.data)
   }
   else if (puzzleUser !== null) {
     return renderUserInfosOffline(puzzleUser, ctrl)
@@ -111,20 +111,21 @@ function renderUserInfosOffline(user: OfflineUser, ctrl: IMenuCtrl) {
   ])
 }
 
-function renderUserInfosOnline(user: PuzzleUserData, ctrl: IMenuCtrl) {
-  // TODO: Isn't having ctrl as a parameter redundant?
+function renderUserInfosOnline(user: PuzzleUserData, ctrl?: IMenuCtrl) {
   const rating = user.rating
-  return [
-    h('p.trainingRatingHeader', h.trust(i18n('xRating', `<strong>${rating}</strong>`))),
-        h('div.select_input', [
+  var headerList = [
+    h('p.trainingRatingHeader', h.trust(i18n('xRating', `<strong>${rating}</strong>`)))
+  ]
+  if (ctrl){
+  return headerList.concat([
+    h('div.select_input', [
       // FIXME: Why is the ":" missing?
       h('label', [i18n('difficultyLevel'), ': ']),
       h('select', {
         id: 'select_puzzle_difficulty',
-        // value: ctrl.root.data.user?.requested_difficulty || 'normal',
         value: ctrl.root.data.user?.requested_difficulty || '',
         onchange(e: Event) {
-          ctrl.root.setDifficulty((e.target as HTMLInputElement).value as Difficulty)
+          ctrl.root.setDifficulty((e.target as HTMLInputElement).value as PuzzleDifficulty)
           ctrl.close()
         },
       }, [
@@ -135,5 +136,7 @@ function renderUserInfosOnline(user: PuzzleUserData, ctrl: IMenuCtrl) {
         h('option[value=hardest]', i18n('hardest'))
       ])
     ])
-  ]
+  ])
+  }
+  return headerList
 }

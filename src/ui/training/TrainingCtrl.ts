@@ -78,21 +78,6 @@ export default class TrainingCtrl implements PromotingInterface {
     redraw()
   }
 
-  public setDifficulty(difficulty?: Difficulty) {
-    const user = session.get()
-    if (user) {
-      if (this.data.user !== undefined){
-        if (difficulty === undefined) {
-          this.data.user.requested_difficulty = 'normal'
-        }
-        else {
-          this.data.user.requested_difficulty = difficulty
-        }
-        this.newPuzzle()
-      }
-    }
-  }
-
   public setPath = (path: Tree.Path): void => {
     this.path = path
     this.nodeList = this.tree.getNodeList(path)
@@ -167,6 +152,26 @@ export default class TrainingCtrl implements PromotingInterface {
     return false
   }
 
+  public setDifficulty(difficulty: PuzzleDifficulty) {
+    const difficulties: [PuzzleDifficulty, number][] = [
+      ['easiest', -600],
+      ['easier', -300],
+      ['normal', 0],
+      ['harder', 300],
+      ['hardest', 600],
+    ];
+    // find the index of the difficulty in the difficulties array
+    const index = difficulties.findIndex(d => d[0] === difficulty)
+    if (this.data.user !== undefined) {
+      this.data.user.requested_difficulty = difficulty
+      const maxDifficulty = difficulties[index][1] + this.data.user.rating + 100
+      const minDifficulty = difficulties[index][1] + this.data.user.rating - 100
+      if (minDifficulty > this.data.puzzle.rating || this.data.puzzle.rating > maxDifficulty) {
+        this.resync()
+      }
+    }
+  }
+
   public newPuzzle = (): void => {
     if (this.vm.loading) {
       return
@@ -175,34 +180,7 @@ export default class TrainingCtrl implements PromotingInterface {
     redraw()
 
     const onSuccess = (cfg: PuzzleData) => {
-      console.log(this.data.user)
-      if (this.data.user && this.data.user.requested_difficulty) {
-        var maxDifficulty = this.data.user.rating + 100
-        var minDifficulty = this.data.user.rating - 100
-        if (this.data.user.requested_difficulty === 'easiest') {
-          maxDifficulty -= 600
-          minDifficulty -= 600
-        }
-        else if (this.data.user.requested_difficulty === 'easier') {
-          maxDifficulty -= 300
-          minDifficulty -= 300
-        }
-        else if (this.data.user.requested_difficulty === 'harder') {
-          maxDifficulty += 300
-          minDifficulty += 300
-        }
-        else if (this.data.user.requested_difficulty === 'hardest') {
-          maxDifficulty += 600
-          minDifficulty += 600
-        }
-        if (minDifficulty <= cfg.puzzle.rating && cfg.puzzle.rating <= maxDifficulty) {
-          console.log('new puzzle success')
-          this.vm.loading = false
-          this.init(cfg)
-          redraw()
-        }
-      }
-      if (cfg.puzzle.rating && this.vm.loading) {
+      if (cfg.puzzle.rating) {
       this.vm.loading = false
       this.init(cfg)
       redraw()
@@ -210,6 +188,7 @@ export default class TrainingCtrl implements PromotingInterface {
     }
     const user = session.get()
     if (user) {
+      console.log(user)
       syncAndLoadNewPuzzle(this.database, user)
       .then(onSuccess)
       .catch(error => {

@@ -19,7 +19,7 @@ declare type VariantKey = 'standard' | 'chess960' | 'antichess' | 'fromPosition'
 
 declare type Speed = 'ultraBullet' | 'bullet' | 'blitz' | 'rapid' | 'classical' | 'correspondence' | 'unlimited'
 declare type PerfKey = Speed | 'chess960' | 'antichess' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse' | 'puzzle'
-declare type Difficulty = 'easiest' | 'easier' | 'normal' | 'harder' | 'hardest'
+declare type PuzzleDifficulty = 'easiest' | 'easier' | 'normal' | 'harder' | 'hardest'
 
 declare type Role = 'king' | 'queen' | 'knight' | 'bishop' | 'rook' | 'pawn'
 

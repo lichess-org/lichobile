@@ -66,7 +66,7 @@ type RecentPuzzleStats = [number, number, number]
 export interface UserData {
   readonly recent: ReadonlyArray<RecentPuzzleStats>
   readonly rating: number
-  requested_difficulty?: Difficulty
+  requested_difficulty?: PuzzleDifficulty
 }
 
 export type LineFeedback = 'win' | 'retry'

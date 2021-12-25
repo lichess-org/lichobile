@@ -4,6 +4,7 @@ mr-IN:
   comments: "टिप्पण्या"
   gameInformation: "खेळा संबंधित माहिती"
   home: "गृह"
+  lastScore: "तुमचे गुण: %s"
   playerisInvitingYou: "%s आपल्याला आमंत्रित करत आहे"
   unsupportedVariant: "%s खेळ प्रकार या आवृत्ती मध्ये समाविष्ट नाही"
   notesSynchronizationHasFailed: "नोंद: लीचेससह सिंक्रोनाइझेशन अयशस्वी झाले, कृपया नंतर प्रयत्न करा."

@@ -125,7 +125,7 @@ export default class TournamentCtrl {
         .then(this.onReload)
         .catch(utils.handleXhrError)
     )
-  );
+  )
 
   loadPage = throttle((page: number) => {
     xhr.loadPage(this.id, page)

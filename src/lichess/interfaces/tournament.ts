@@ -106,7 +106,6 @@ export interface StandingPlayer {
 
 interface Sheet {
   readonly fire: boolean
-  readonly scores: ReadonlyArray<ReadonlyArray<number>>
   readonly total: number
 }
 

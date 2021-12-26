@@ -214,7 +214,7 @@ export default class TournamentCtrl {
     else if (data.featured && (!oldData || !oldData.featured || (data.featured.id === oldData.featured.id))) {
       data.featured = oldData.featured
     }
-    this.tournament = data
+    this.tournament = { ...this.tournament, ...data, ...{ me: data.me } } // to account for removal on withdraw
     this.setPageCache(data.standing)
     if (this.pagesCache[this.page] !== undefined) {
       this.currentPageResults = this.pagesCache[this.page]

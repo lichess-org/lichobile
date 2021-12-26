@@ -15,7 +15,10 @@ export function reload(id: string, page?: number): Promise<Tournament> {
   return fetchJSON('/tournament/' + id,
   {
     method: 'GET',
-    query: page ? { page } : {}
+    query: {
+      partial: true,
+      ...(page ? { page } : {})
+    },
   })
 }
 

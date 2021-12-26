@@ -116,7 +116,7 @@ export default class StrongSocket {
         this.ackable.resend()
       }
       ws.onmessage = e => {
-        if (e.data == 0) return this.pong()
+        if (e.data === '0') return this.pong()
         const m = JSON.parse(e.data)
         if (m.t === 'n') this.pong()
         this.handle(m)

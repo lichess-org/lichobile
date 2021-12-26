@@ -87,7 +87,7 @@ export default class StrongSocket {
   }
 
   public connect = () => {
-    this.destroy()
+    this.disconnect()
     this.autoReconnect = true
     const fullUrl = makeUrl(this.baseUrl + this.path, {
       ...this.settings.params,
@@ -244,27 +244,16 @@ export default class StrongSocket {
     this.delayedDisconnectTimeoutId = undefined
   }
 
-  public destroy = (): void => {
+  public disconnect = (onDisconnected?: () => void): void => {
     clearTimeout(this.pingSchedule)
     clearTimeout(this.connectSchedule)
-    this.disconnect()
-    this.ws = undefined
-  }
-
-  public disconnect = (onDisconnected?: () => void): void => {
     const ws = this.ws
     if (ws) {
-      // if all messages are not sent before closed just retry until so
-      if (ws.readyState === WebSocket.OPEN && ws.bufferedAmount > 0) {
-        this.debug('Queued messages are waiting to being sent, retrying to close...', true)
-        setTimeout(() => this.disconnect(onDisconnected), 2)
-      } else {
-        this.debug('Disconnect', true)
-        this.autoReconnect = false
-        ws.onerror = ws.onclose = ws.onopen = ws.onmessage = () => { }
-        ws.close()
-        if (onDisconnected) setTimeout(onDisconnected, 0)
-      }
+      this.debug('Disconnect', true)
+      this.autoReconnect = false
+      ws.onerror = ws.onclose = ws.onopen = ws.onmessage = () => { }
+      ws.close()
+      if (onDisconnected) setTimeout(onDisconnected, 0)
     }
   }
 
@@ -275,7 +264,7 @@ export default class StrongSocket {
    * The added random allows sampling reconnections nicely.
    */
   public deploy(): void {
-    this.destroy()
+    this.disconnect()
     // we don't want to possibly reconnect in background, so make sure there
     // is no disconnect scheduled
     if (this.delayedDisconnectTimeoutId === null) {

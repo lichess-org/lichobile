@@ -1,8 +1,8 @@
 en-US:
   apiUnsupported: "Your version of Lichess app is too old! Please upgrade for free to the latest version."
   apiDeprecated: "Upgrade for free to the latest Lichess app! Support for this version will be dropped on %s."
-  comments: "English"
-  gameInformation: "?"
+  comments: "Comments"
+  gameInformation: "Game information"
   home: "Home"
   lastScore: "Last score: %s"
   playerisInvitingYou: "%s is inviting you"

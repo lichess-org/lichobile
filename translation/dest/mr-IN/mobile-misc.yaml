@@ -1,6 +1,10 @@
 mr-IN:
   apiUnsupported: "आपली लीचेस ॲपची आवृत्ती खूप जुनी आहे! कृपया नवीनतम आवृत्तीवर विनामूल्य श्रेणीसुधारित करा."
   apiDeprecated: "नवीनतम लिचेस अ‍ॅपवर विनामूल्य श्रेणीसुधारित करा! या आवृत्तीचे सेवा %s ला बंद होईल."
+  comments: "टिप्पण्या"
+  gameInformation: "खेळा संबंधित माहिती"
+  home: "गृह"
+  lastScore: "तुमचे गुण: %s"
   playerisInvitingYou: "%s आपल्याला आमंत्रित करत आहे"
   unsupportedVariant: "%s खेळ प्रकार या आवृत्ती मध्ये समाविष्ट नाही"
   notesSynchronizationHasFailed: "नोंद: लीचेससह सिंक्रोनाइझेशन अयशस्वी झाले, कृपया नंतर प्रयत्न करा."
@@ -12,3 +16,9 @@ mr-IN:
   positionRight: "उजवा" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "डावा" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "बोर्ड स्क्रीन साइड (लँडस्केप मोडमध्ये)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "आवाज" #Settings to enable/disable sound
+  overTheBoard: "पटावर खेळा"
+  sharePgn: "PGN पाठवा"
+  shareGameUrl: 'खेळाची URL पाठवा'
+  playOnline: "ऑनलाइन खेळा"
+  playOffline: "ऑफलाईन खेळा"

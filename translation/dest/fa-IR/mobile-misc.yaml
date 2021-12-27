@@ -1,6 +1,10 @@
 fa-IR:
   apiUnsupported: "نسخه برنامه lichess شما قدیمی است! لطفا آنرا بصورت رایگان به آخرین نسخه ارتقا دهید."
   apiDeprecated: "به صورت رایگان به آخرین نسخه lichess ارتقا دهید! پشتیبانی از این نسخه در %s متوقف میشود."
+  comments: "نظرات"
+  gameInformation: "اطلاعات بازی"
+  home: "صفحه اصلی"
+  lastScore: "آخرین امتیاز %s"
   playerisInvitingYou: "%s شما را دعوت میکند"
   unsupportedVariant: "نوع %s در این نسخه پشتیبانی نمیشود"
   notesSynchronizationHasFailed: "همگام‌سازی یادداشت‌ها با lichess شکست خورد، لطفا بعدا تلاش کنید."
@@ -12,3 +16,4 @@ fa-IR:
   positionRight: "راست" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "چپ" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "جهت صفحه (در حالت افقی)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "صدا روشن/خاموش" #Settings to enable/disable sound

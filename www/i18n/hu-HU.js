@@ -1229,6 +1229,10 @@ export default {
   "declineOnlyBot": "Csak botoktól fogadok el kihívást.",
   "apiUnsupported": "A telepített Lichess alkalmazásod már elavult! Kérjük frissíts a legújabb verzióra.",
   "apiDeprecated": "Frissíts ingyenesen a legújabb Lichess alkalmazásra. Jelen verzió támogatásának vége %s.",
+  "comments": "Hozzászólások",
+  "gameInformation": "Játszma részletei",
+  "home": "Kezdőlap",
+  "lastScore": "Legutóbbi pontszám: %s",
   "playerisInvitingYou": "%s meghívót küldött",
   "unsupportedVariant": "A %s variáns nem támogatott ebben a verzióban",
   "notesSynchronizationHasFailed": "Nem sikerült a feljegyzések szinkronizálása, próbáld újra később.",
@@ -1239,5 +1243,11 @@ export default {
   "settingsClockPosition": "Óra helye",
   "positionRight": "Jobb",
   "positionLeft": "Bal",
-  "landscapeBoardSide": "Tábla helye a képernyőn (fekvő módban)"
+  "landscapeBoardSide": "Tábla helye a képernyőn (fekvő módban)",
+  "toggleSound": "Hang ki-be",
+  "overTheBoard": "Játék a táblán",
+  "sharePgn": "PGN megosztása",
+  "shareGameUrl": "Játék linkjének megosztása",
+  "playOnline": "Online játék",
+  "playOffline": "Offline játék"
 }

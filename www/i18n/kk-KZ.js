@@ -1149,5 +1149,7 @@ export default {
   "comments": "Пікірлер",
   "gameInformation": "Ойын мәліметтері",
   "home": "Басты бет",
-  "lastScore": "Жетістік: %s"
+  "lastScore": "Жетістік: %s",
+  "unsupportedVariant": "Бұл нұсқада %s шахмат түрі қамтылмаған",
+  "settingsClockPosition": "Сағат орны"
 }

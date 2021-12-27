@@ -1343,13 +1343,13 @@ export default {
   "otbUseSymmetricPieces": "Використовувати симетричні фігури",
   "otbFlipPiecesAndInfoAfterMove": "Перевертати фігури та інформацію про суперника після ходу",
   "settingsClockPosition": "Розташування годинника",
-  "positionRight": "Справа",
-  "positionLeft": "Зліва",
-  "landscapeBoardSide": "Розташування дошки (в альбомній орієнтації)",
+  "positionRight": "Праворуч",
+  "positionLeft": "Ліворуч",
+  "landscapeBoardSide": "Відображення дошки (в альбомній орієнтації)",
   "toggleSound": "Увімк./вимк. звук",
   "overTheBoard": "За дошкою",
   "sharePgn": "Поділитись PGN",
-  "shareGameUrl": "Ділитись посиланням на гру",
+  "shareGameUrl": "Поділитись посиланням на гру",
   "playOnline": "Грати онлайн",
   "playOffline": "Грати офлайн"
 }

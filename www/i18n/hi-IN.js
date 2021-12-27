@@ -1153,6 +1153,7 @@ export default {
   "declineOnlyBot": "मैं केवल कंप्यूटर से चुनौतियों को स्वीकार कर रहा हूं",
   "apiUnsupported": "आपका lichess version बहुत पुराना ह​ै | क्ृप्या उसे मुफ़्त मे Upgrade करे।",
   "apiDeprecated": "Lichess के नुतन सन्सकरण से मुफ़्त मे जुड़े | यह सन्सकरण %s के पश्चात कार्य नही करेगा।",
+  "home": "घर",
   "playerisInvitingYou": "%s ने आपको न्योता दिया है।",
   "offline": "ऑफलाइन",
   "settingsClockPosition": "घड़ी के लिए स्थान",

@@ -1218,6 +1218,10 @@ export default {
   "declineOnlyBot": "من فقط از ربات ها چالش قبول می کنم.",
   "apiUnsupported": "نسخه برنامه lichess شما قدیمی است! لطفا آنرا بصورت رایگان به آخرین نسخه ارتقا دهید.",
   "apiDeprecated": "به صورت رایگان به آخرین نسخه lichess ارتقا دهید! پشتیبانی از این نسخه در %s متوقف میشود.",
+  "comments": "نظرات",
+  "gameInformation": "اطلاعات بازی",
+  "home": "صفحه اصلی",
+  "lastScore": "آخرین امتیاز %s",
   "playerisInvitingYou": "%s شما را دعوت میکند",
   "unsupportedVariant": "نوع %s در این نسخه پشتیبانی نمیشود",
   "notesSynchronizationHasFailed": "همگام‌سازی یادداشت‌ها با lichess شکست خورد، لطفا بعدا تلاش کنید.",
@@ -1228,5 +1232,6 @@ export default {
   "settingsClockPosition": "موقعیت ساعت",
   "positionRight": "راست",
   "positionLeft": "چپ",
-  "landscapeBoardSide": "جهت صفحه (در حالت افقی)"
+  "landscapeBoardSide": "جهت صفحه (در حالت افقی)",
+  "toggleSound": "صدا روشن/خاموش"
 }

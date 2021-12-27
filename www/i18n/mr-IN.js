@@ -842,6 +842,10 @@ export default {
   "declineOnlyBot": "मी फक्त बॉट्सकडून आव्हाने स्वीकारतो.",
   "apiUnsupported": "आपली लीचेस ॲपची आवृत्ती खूप जुनी आहे! कृपया नवीनतम आवृत्तीवर विनामूल्य श्रेणीसुधारित करा.",
   "apiDeprecated": "नवीनतम लिचेस अ‍ॅपवर विनामूल्य श्रेणीसुधारित करा! या आवृत्तीचे सेवा %s ला बंद होईल.",
+  "comments": "टिप्पण्या",
+  "gameInformation": "खेळा संबंधित माहिती",
+  "home": "गृह",
+  "lastScore": "तुमचे गुण: %s",
   "playerisInvitingYou": "%s आपल्याला आमंत्रित करत आहे",
   "unsupportedVariant": "%s खेळ प्रकार या आवृत्ती मध्ये समाविष्ट नाही",
   "notesSynchronizationHasFailed": "नोंद: लीचेससह सिंक्रोनाइझेशन अयशस्वी झाले, कृपया नंतर प्रयत्न करा.",
@@ -852,5 +856,11 @@ export default {
   "settingsClockPosition": "घड्याळ स्थिती",
   "positionRight": "उजवा",
   "positionLeft": "डावा",
-  "landscapeBoardSide": "बोर्ड स्क्रीन साइड (लँडस्केप मोडमध्ये)"
+  "landscapeBoardSide": "बोर्ड स्क्रीन साइड (लँडस्केप मोडमध्ये)",
+  "toggleSound": "आवाज",
+  "overTheBoard": "पटावर खेळा",
+  "sharePgn": "PGN पाठवा",
+  "shareGameUrl": "खेळाची URL पाठवा",
+  "playOnline": "ऑनलाइन खेळा",
+  "playOffline": "ऑफलाईन खेळा"
 }

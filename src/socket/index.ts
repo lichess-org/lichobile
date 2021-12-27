@@ -1,82 +1,25 @@
 import { Toast } from '@capacitor/toast'
-import router from './router'
-import globalConfig from './config'
-import redraw from './utils/redraw'
-import signals from './signals'
-import storage from './storage'
-import { SESSION_ID_KEY, ErrorResponse } from './http'
-import { newSri, autoredraw, hasNetwork } from './utils'
-import { tellWorker, askWorker } from './utils/worker'
-import * as xhr from './xhr'
-import friendsApi, { Friend } from './lichess/friends'
-import challengesApi from './lichess/challenges'
-import { ChallengesData } from './lichess/interfaces/challenge'
-import session from './session'
-import announce, { Announcement } from './announce'
+import router from '../router'
+import globalConfig from '../config'
+import redraw from '../utils/redraw'
+import signals from '../signals'
+import storage from '../storage'
+import { SESSION_ID_KEY, ErrorResponse } from '../http'
+import { newSri, autoredraw, hasNetwork } from '../utils'
+import { tellWorker, askWorker } from '../utils/worker'
+import * as xhr from '../xhr'
+import friendsApi from '../lichess/friends'
+import challengesApi from '../lichess/challenges'
+import { ChallengesData } from '../lichess/interfaces/challenge'
+import session from '../session'
+import announce, { Announcement } from '../announce'
+import { ConnectionSetup, MessageHandlers, FollowingOnlinePayload, FollowingEntersPayload, SocketSetup, SocketHandlers, SocketIFace, SocketConfig, LichessMessageAny } from './interfaces'
 
-export interface LichessMessage<T> {
-  t: string
-  d?: T
-}
-
-export type LichessMessageAny = LichessMessage<unknown>
-
-interface Options {
-  name: string
-  debug?: boolean
-  pingDelay?: number
-  sendOnOpen?: ReadonlyArray<LichessMessageAny>
-  registeredEvents: string[]
-  isAuth?: boolean
-}
-
-interface SocketConfig {
-  options: Options
-  params?: StringMap
-}
-
-type MessageHandler<D, P extends LichessMessage<D>> = (data?: D, payload?: P) => void
-type MessageHandlerGeneric = MessageHandler<any, any>
-
-export interface SocketIFace {
-  send: <D, O>(t: string, data?: D, opts?: O) => void
-  ask: <R>(t: string, listenTo: string, data?: any, opts?: any) => Promise<R>
-}
-
-export interface MessageHandlers {
-  [index: string]: MessageHandlerGeneric
-}
-
-interface SocketHandlers {
-  onOpen: () => void
-  onError?: () => void
-  events: MessageHandlers
-}
-
-interface SocketSetup {
-  clientId: string
-  socketEndPoint: string
-  url: string
-  version?: number
-  opts: SocketConfig
-}
-
-interface ConnectionSetup {
-  setup: SocketSetup
-  handlers: SocketHandlers
-}
-
-interface FollowingEntersPayload extends LichessMessage<Friend> {
-  playing: boolean
-  patron: boolean
-}
-
-interface FollowingOnlinePayload extends LichessMessage<Array<string>> {
-  playing: Array<string>
-  patrons: Array<string>
-}
+export { SocketIFace, LichessMessageAny, MessageHandlers }
 
 export const SEEKING_SOCKET_NAME = 'seekLobby'
+
+const worker = new Worker('socketWorker.js')
 
 // connectedWS means connection is established and server ping/pong
 // is working normally
@@ -85,7 +28,6 @@ let currentMoveLatency = 0
 let currentPingInterval = 2000
 let currentSetup: ConnectionSetup
 
-const worker = new Worker('lib/socketWorker.js')
 const defaultHandlers: MessageHandlers = {
   following_onlines: handleFollowingOnline,
   following_enters: (name: string, payload: FollowingEntersPayload) =>
@@ -152,6 +94,9 @@ function setupConnection(setup: SocketSetup, socketHandlers: SocketHandlers) {
         break
       case 'onError':
         if (socketHandlers.onError) socketHandlers.onError()
+        break
+      case 'resync':
+        router.reload()
         break
       case 'handle': {
         const h = socketHandlers.events[msg.data.payload.t]
@@ -430,7 +375,7 @@ function createStudy(
   return socketIfaceFactory(url)
 }
 
-function createDefault() {
+function createDefault(): void {
   if (hasNetwork()) {
     const socketHandlers = {
       events: defaultHandlers,
@@ -463,7 +408,7 @@ export interface RedirectObj {
     maxAge: string
   }
 }
-function redirectToGame(obj: string | RedirectObj) {
+function redirectToGame(obj: string | RedirectObj): void {
   let url: string
   if (typeof obj === 'string') url = obj
   else {
@@ -497,7 +442,7 @@ function onDisconnected() {
 }
 
 // reconnect current socket giving a chance to refresh sessionId
-function reconnectCurrent() {
+function reconnectCurrent(): void {
   if (currentSetup) {
     setupConnection(currentSetup.setup, currentSetup.handlers)
   } else {
@@ -519,45 +464,47 @@ export default {
   redirectToGame,
   // send a message to socket, not checking if sending to the proper url
   // use sparingly
-  // TODO: whitelist of authorized message types
-  sendNoCheck<D, O>(t: string, data?: D, opts?: O): void {
-    tellWorker(worker, 'send', ['noCheck', t, data, opts])
+  sendWithNoCheck<D, O>(t: string, data?: D, opts?: O): void {
+    const whitelist = ['moveLat']
+    if (whitelist.includes(t)) {
+      tellWorker(worker, 'send', ['noCheck', t, data, opts])
+    }
   },
-  setVersion(version: number) {
+  setVersion(version: number): void {
     tellWorker(worker, 'setVersion', version)
   },
-  connect() {
+  connect(): void {
     tellWorker(worker, 'connect')
   },
   reconnectCurrent,
-  disconnect() {
+  disconnect(): void {
     tellWorker(worker, 'disconnect')
   },
-  delayedDisconnect(delay: number) {
+  delayedDisconnect(delay: number): void {
     tellWorker(worker, 'delayedDisconnect', delay)
   },
-  cancelDelayedDisconnect() {
+  cancelDelayedDisconnect(): void {
     tellWorker(worker, 'cancelDelayedDisconnect')
   },
-  isConnected() {
+  isConnected(): boolean {
     return connectedWS
   },
-  destroy() {
+  destroy(): void {
     tellWorker(worker, 'destroy')
   },
   getVersion(): Promise<number | null> {
     return askWorker(worker, { topic: 'getVersion' })
   },
   getCurrentPing(): Promise<number> {
-    return askWorker(worker, { topic: 'currentLag' })
+    return askWorker(worker, { topic: 'averageLag' })
   },
-  getCurrentMoveLatency() {
+  getCurrentMoveLatency(): number {
     return currentMoveLatency
   },
   getCurrentPingInterval(): number {
     return currentPingInterval
   },
-  terminate() {
+  terminate(): void {
     if (worker) worker.terminate()
   }
 }

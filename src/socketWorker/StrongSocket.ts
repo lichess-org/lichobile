@@ -47,7 +47,6 @@ export default class StrongSocket {
   pongCount = 0
   averageLag = 0
   autoReconnect = true
-  nbConnects = 0
 
   static defaultOptions: Options = {
     name: 'unnamed',
@@ -281,7 +280,6 @@ export default class StrongSocket {
   }
 
   private onSuccess = () => {
-    this.nbConnects++
     this.ctx.postMessage({ topic: 'connected' })
   }
 

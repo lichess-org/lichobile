@@ -18,6 +18,7 @@ import teamInfo, { TeamInfoCtrl } from './teamInfo'
 import socketHandler from './socketHandler'
 import { ErrorResponse } from '~/http'
 import { Toast } from '@capacitor/toast'
+import {finallyDelay, throttlePromise} from '~/utils/throttle'
 
 const MAX_PER_PAGE = 10
 
@@ -116,11 +117,15 @@ export default class TournamentCtrl {
     .catch(utils.handleXhrError)
   }, 1000)
 
-  reload = throttle(() => {
-    xhr.reload(this.id, this.focusOnMe ? this.page : undefined)
-    .then(this.onReload)
-    .catch(utils.handleXhrError)
-  }, 5000)
+  reload = throttlePromise(
+    finallyDelay(
+      () => 5000 + Math.floor(Math.random() * 1000),
+      () => xhr
+        .reload(this.id, this.focusOnMe ? undefined : this.page)
+        .then(this.onReload)
+        .catch(utils.handleXhrError)
+    )
+  )
 
   loadPage = throttle((page: number) => {
     xhr.loadPage(this.id, page)
@@ -214,7 +219,7 @@ export default class TournamentCtrl {
     else if (data.featured && (!oldData || !oldData.featured || (data.featured.id === oldData.featured.id))) {
       data.featured = oldData.featured
     }
-    this.tournament = data
+    this.tournament = { ...this.tournament, ...data, ...{ me: data.me } } // to account for removal on withdraw
     this.setPageCache(data.standing)
     if (this.pagesCache[this.page] !== undefined) {
       this.currentPageResults = this.pagesCache[this.page]

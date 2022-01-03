@@ -5,3 +5,5 @@ kk-KZ:
   gameInformation: "Ойын мәліметтері"
   home: "Басты бет"
   lastScore: "Жетістік: %s"
+  unsupportedVariant: "Бұл нұсқада %s шахмат түрі қамтылмаған"
+  settingsClockPosition: "Сағат орны" #Determines whether each player's time is shown on the left or right side of the board

@@ -8,19 +8,23 @@ export function currentTournaments(): Promise<TournamentLists> {
 }
 
 export function tournament(id: string): Promise<Tournament> {
-  return fetchJSON('/tournament/' + id, {query: {socketVersion: 1}}, true)
+  return fetchJSON('/tournament/' + id, {query: {socketVersion: 1, scores: 0}}, true)
 }
 
 export function reload(id: string, page?: number): Promise<Tournament> {
   return fetchJSON('/tournament/' + id,
   {
     method: 'GET',
-    query: page ? { page } : {}
+    query: {
+      partial: 1,
+      scores: 0,
+      ...(page ? { page } : {})
+    },
   })
 }
 
 export function loadPage(id: string, p: number): Promise<StandingPage> {
-  return fetchJSON('/tournament/' + id + '/standing/' + p)
+  return fetchJSON('/tournament/' + id + '/standing/' + p, { query: { scores: 0 } })
 }
 
 export function join(id: string, password?: string, team?: string): Promise<EmptyObject> {

@@ -223,7 +223,7 @@ function getLeaderboardItemEl(e: Event) {
 
 function handlePlayerInfoTap(ctrl: TournamentCtrl, e: Event) {
   const el = getLeaderboardItemEl(e)
-  const playerId = el.dataset['player']
+  const playerId = el.dataset['player']?.toLowerCase()
 
   if (playerId) ctrl.playerInfoCtrl.open(playerId)
 }

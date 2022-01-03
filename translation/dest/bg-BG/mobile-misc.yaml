@@ -1,6 +1,10 @@
 bg-BG:
   apiUnsupported: "Вашата версия на lichess е стара! Моля обновете приложението до последната версия."
   apiDeprecated: "Подновете безплатно до най-новата версия на Lichess! Поддръжката на сегашната Ви версия ще бъде прекратена на %s."
+  comments: "Коментари"
+  gameInformation: "За партията"
+  home: "Начало"
+  lastScore: "Последен резултат: %s"
   playerisInvitingYou: "%s Ви кани"
   unsupportedVariant: "Вариант %s не се поддържа в тази версия"
   notesSynchronizationHasFailed: "Синхронизирането на бележки с lichess не беше успешно, моля опитайте пак по-късно."
@@ -12,3 +16,9 @@ bg-BG:
   positionRight: "Дясно" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Ляво" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Разположение на дъската (в хоризонтална позиция)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Вкл./Изкл. звук" #Settings to enable/disable sound
+  overTheBoard: "Двама над дъската"
+  sharePgn: "Сподели PGN"
+  shareGameUrl: 'Сподели URL на партията'
+  playOnline: "Играй онлайн"
+  playOffline: "Играй офлайн"

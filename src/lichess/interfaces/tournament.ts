@@ -1,4 +1,4 @@
-import { FeaturedGame } from '.'
+import { FeaturedGame2 } from '.'
 import { ChatData } from './chat'
 import { Opening } from './game'
 
@@ -6,7 +6,7 @@ export interface Tournament {
   readonly chat?: ChatData
   readonly clock: TournamentClock
   readonly createdBy: string
-  featured?: FeaturedGame
+  featured?: FeaturedGame2
   readonly fullName: string
   readonly id: string
   readonly isFinished: boolean
@@ -49,7 +49,6 @@ export interface TournamentClock {
 
 interface TournamentMe {
   rank: number
-  readonly username: string
   readonly withdraw: boolean
 }
 
@@ -106,7 +105,6 @@ export interface StandingPlayer {
 
 interface Sheet {
   readonly fire: boolean
-  readonly scores: ReadonlyArray<ReadonlyArray<number>>
   readonly total: number
 }
 

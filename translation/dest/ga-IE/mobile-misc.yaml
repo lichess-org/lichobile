@@ -1,6 +1,10 @@
 ga-IE:
   apiUnsupported: "Tá do leagan den aip Lichess ró-aosta! Uasghrádú saor in aisce don leagan is déanaí."
   apiDeprecated: "Uasghrádú saor in aisce ar an aip Lichess is déanaí! Beidh tacaíocht don leagan seo tite ar %s."
+  comments: "Nótaí tráchta"
+  gameInformation: "Eolas cluiche"
+  home: "Baile"
+  lastScore: "Scór deireanach: %s"
   playerisInvitingYou: "Fuair tú cuireadh ó %s"
   unsupportedVariant: "Ní thacaítear le leagan %s sa leagan seo"
   notesSynchronizationHasFailed: "Theip ar shioncronú nótaí le Lichess, déan iarracht níos déanaí."

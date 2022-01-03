@@ -1,6 +1,10 @@
 hu-HU:
   apiUnsupported: "A telepített Lichess alkalmazásod már elavult! Kérjük frissíts a legújabb verzióra."
   apiDeprecated: "Frissíts ingyenesen a legújabb Lichess alkalmazásra. Jelen verzió támogatásának vége %s."
+  comments: "Hozzászólások"
+  gameInformation: "Játszma részletei"
+  home: "Kezdőlap"
+  lastScore: "Legutóbbi pontszám: %s"
   playerisInvitingYou: "%s meghívót küldött"
   unsupportedVariant: "A %s variáns nem támogatott ebben a verzióban"
   notesSynchronizationHasFailed: "Nem sikerült a feljegyzések szinkronizálása, próbáld újra később."
@@ -12,3 +16,9 @@ hu-HU:
   positionRight: "Jobb" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Bal" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Tábla helye a képernyőn (fekvő módban)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Hang ki-be" #Settings to enable/disable sound
+  overTheBoard: "Játék a táblán"
+  sharePgn: "PGN megosztása"
+  shareGameUrl: 'Játék linkjének megosztása'
+  playOnline: "Online játék"
+  playOffline: "Offline játék"

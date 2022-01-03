@@ -1175,6 +1175,10 @@ export default {
   "declineOnlyBot": "Saya hanya menerima tantangan dari bot.",
   "apiUnsupported": "Versi aplikasi lichess Anda telalu tua! Silakan perbarui secara gratis ke versi terbaru.",
   "apiDeprecated": "Perbarui secara gratis ke aplikasi lichess terbaru! Dukungan versi ini akan dihentikan pada %s.",
+  "comments": "Komentar",
+  "gameInformation": "Informasi permainan",
+  "home": "Beranda",
+  "lastScore": "Skor terakhir: %s",
   "playerisInvitingYou": "%s mengundang Anda",
   "unsupportedVariant": "Versi ini tidak mendukung varian %s",
   "notesSynchronizationHasFailed": "Sinkronisasi catatan dengan lichess telah gagal, silakan ulangi kembali.",
@@ -1185,5 +1189,11 @@ export default {
   "settingsClockPosition": "Posisi jam",
   "positionRight": "Kanan",
   "positionLeft": "Kiri",
-  "landscapeBoardSide": "Sisi layar papan (dalam mode lanskap)"
+  "landscapeBoardSide": "Sisi layar papan (dalam mode lanskap)",
+  "toggleSound": "Aktifkan/nonaktifkan suara",
+  "overTheBoard": "Di atas papan",
+  "sharePgn": "Bagikan PGN",
+  "shareGameUrl": "Bagikan URL permainan",
+  "playOnline": "Main Online",
+  "playOffline": "Main Offline"
 }

@@ -1176,7 +1176,7 @@ export default {
   "comments": "Komentari",
   "gameInformation": "Informacije o igri",
   "home": "Početna",
-  "lastScore": "Tvoj rezultat: %s",
+  "lastScore": "Zadnji rezultat: %s",
   "toggleSound": "Uključi/isključi zvuk",
   "overTheBoard": "Igraj bez mreže, preko uređaja",
   "sharePgn": "Podijeli PGN",

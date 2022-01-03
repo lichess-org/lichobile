@@ -1279,12 +1279,16 @@ export default {
   "declineNoBot": "Neprijímam výzvy od botov.",
   "declineOnlyBot": "Prijímam výlučne výzvy od botov.",
   "apiUnsupported": "Verzia Vašej lichess aplikácie je neaktuálna. Aktualizujte si ju na najnovšiu verziu, prosím.",
+  "comments": "Komentáre",
+  "gameInformation": "Informácie o partii",
   "playerisInvitingYou": "%s Vás pozýva",
   "unsupportedVariant": "Variant %s nie je podporovaný v tejto verzií",
   "offline": "Offline",
   "otbUseSymmetricPieces": "Použiť symetrické figúrky",
   "otbFlipPiecesAndInfoAfterMove": "Otočiť figúrky a informácie o súperovi po ťahu",
   "settingsClockPosition": "Umiestnenie hodín",
-  "positionRight": "Napravo",
-  "positionLeft": "Naľavo"
+  "positionRight": "Vpravo",
+  "positionLeft": "Vľavo",
+  "playOnline": "Hrať v režime online",
+  "playOffline": "Hrať v režime offline"
 }

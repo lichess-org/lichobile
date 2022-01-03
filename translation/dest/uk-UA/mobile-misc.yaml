@@ -13,12 +13,12 @@ uk-UA:
   otbUseSymmetricPieces: "Використовувати симетричні фігури" #Setting for offline over-the-board games
   otbFlipPiecesAndInfoAfterMove: "Перевертати фігури та інформацію про суперника після ходу" #Setting for offline over-the-board games
   settingsClockPosition: "Розташування годинника" #Determines whether each player's time is shown on the left or right side of the board
-  positionRight: "Справа" #As in "right-hand side"; not truth, morality, or law
-  positionLeft: "Зліва" #As in "left-hand side"; not political or past participle
-  landscapeBoardSide: "Розташування дошки (в альбомній орієнтації)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  positionRight: "Праворуч" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Ліворуч" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Відображення дошки (в альбомній орієнтації)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
   toggleSound: "Увімк./вимк. звук" #Settings to enable/disable sound
   overTheBoard: "За дошкою"
   sharePgn: "Поділитись PGN"
-  shareGameUrl: 'Ділитись посиланням на гру'
+  shareGameUrl: 'Поділитись посиланням на гру'
   playOnline: "Грати онлайн"
   playOffline: "Грати офлайн"

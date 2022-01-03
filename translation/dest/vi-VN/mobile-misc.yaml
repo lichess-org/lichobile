@@ -1,8 +1,14 @@
 vi-VN:
   apiUnsupported: "Phiên bản ứng dụng lichess của bạn quá cũ! Vui lòng nâng cấp miễn phí lên phiên bản mới nhất."
+  apiDeprecated: "Nâng cấp miễn phí lên phiên bản mới nhất của lichess! Hỗ trợ cho phiên bản này có ở %s."
+  gameInformation: "Thông tin ván đấu"
+  home: "Trang chủ"
+  lastScore: "Điểm số lần cuối: %s"
   playerisInvitingYou: "%s đang mời bạn"
   unsupportedVariant: "Biến thể %s không được hỗ trợ trong phiên bản này"
   offline: "Ngoại tuyến"
+  otbFlipPiecesAndInfoAfterMove: "Đảo chiều và thông tin đối thủ sau nước đi" #Setting for offline over-the-board games
+  settingsClockPosition: "Vị trí đồng hồ" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "Phải" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Trái" #As in "left-hand side"; not political or past participle
   toggleSound: "Bật/Tắt âm thanh" #Settings to enable/disable sound

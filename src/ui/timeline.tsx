@@ -12,7 +12,7 @@ import { TimelineData, TimelineEntry } from '../lichess/interfaces'
 import { userTitle } from './user/userView'
 import { LightUser } from '~/lichess/interfaces/user'
 
-export const supportedTypes = ['follow', 'game-end', 'tour-join', 'study-create', 'study-like', 'forum-post', 'blog-post']
+export const supportedTypes = ['follow', 'game-end', 'tour-join', 'study-create', 'study-like', 'forum-post', 'blog-post', 'ublog-post']
 
 type LightUserMap = {[username: string]: LightUser}
 interface State {
@@ -81,6 +81,8 @@ export function renderTimelineEntry(e: TimelineEntry, users: LightUserMap) {
       return renderForum(e, users)
     case 'blog-post':
       return renderBlog(e)
+    case 'ublog-post':
+      return renderUblog(e, users)
     default:
       return null
   }
@@ -94,6 +96,20 @@ function renderBlog(entry: TimelineEntry) {
   }, [
     h('span[data-icon=6].withIcon'),
     h('span', data.title),
+    ' ',
+    h('small', h('em', entry.fromNow)),
+  ])
+}
+
+function renderUblog(entry: TimelineEntry, users: LightUserMap) {
+  const data = entry.data
+  const actor = users[data.userId]
+  return h('li.list_item.timelineEntry', {
+    key: `ublog-post${data.id}`,
+    'data-external': `/@/${data.userId}/blog/${data.slug}/${data.id}`,
+  }, [
+    userTitle(false, actor.patron ?? false, actor.id, actor.title),
+    h.trust(i18n('xPublishedY', '', `<strong>${data.title}</strong>`)),
     ' ',
     h('small', h('em', entry.fromNow)),
   ])

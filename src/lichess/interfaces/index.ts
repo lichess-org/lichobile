@@ -82,7 +82,7 @@ export interface PongMessage {
   readonly r: number
 }
 
-export type TimelineEntryType = 'follow' | 'game-end' | 'tour-join' | 'study-create' | 'study-like' | 'forum-post' | 'blog-post'
+export type TimelineEntryType = 'follow' | 'game-end' | 'tour-join' | 'study-create' | 'study-like' | 'forum-post' | 'blog-post' | 'ublog-post'
 
 export interface TimelineEntry {
   readonly data: any

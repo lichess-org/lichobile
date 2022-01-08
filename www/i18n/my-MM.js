@@ -182,6 +182,7 @@ export default {
   "strengths": "အားသာချက်များ",
   "solved": "ဖြေပြီး",
   "playedXTimes:other": "%s ကြိမ်း ကစားခဲ့သည်",
+  "saveDraft": "ရေးလက်စကို သိမ်းပါ",
   "comments": "မှတ်ချက်",
   "gameInformation": "ကစားပွဲ ဆိုင်ရာ အချက်အလက်များ",
   "home": "ပင္မစာမ်က္ႏွာ",

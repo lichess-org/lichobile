@@ -12,7 +12,7 @@ import { TimelineData, TimelineEntry } from '../lichess/interfaces'
 import { userTitle } from './user/userView'
 import { LightUser } from '~/lichess/interfaces/user'
 
-export const supportedTypes = ['follow', 'game-end', 'tour-join', 'study-create', 'study-like', 'forum-post', 'blog-post', 'ublog-post']
+export const supportedTypes = ['follow', 'game-end', 'tour-join', 'study-create', 'study-like', 'forum-post', 'blog-post', 'ublog-post', 'ublog-post-like']
 
 type LightUserMap = {[username: string]: LightUser}
 interface State {
@@ -83,6 +83,8 @@ export function renderTimelineEntry(e: TimelineEntry, users: LightUserMap) {
       return renderBlog(e)
     case 'ublog-post':
       return renderUblog(e, users)
+    case 'ublog-post-like':
+      return renderUblogLike(e, users)
     default:
       return null
   }
@@ -110,6 +112,20 @@ function renderUblog(entry: TimelineEntry, users: LightUserMap) {
   }, [
     userTitle(false, actor.patron ?? false, actor.id, actor.title),
     h.trust(i18n('xPublishedY', '', `<strong>${data.title}</strong>`)),
+    ' ',
+    h('small', h('em', entry.fromNow)),
+  ])
+}
+
+function renderUblogLike(entry: TimelineEntry, users: LightUserMap) {
+  const data = entry.data
+  const actor = users[data.userId]
+  return h('li.list_item.timelineEntry', {
+    key: `ublog-post${data.id}`,
+    'data-external': `/ublog/${data.id}/redirect`,
+  }, [
+    userTitle(false, actor.patron ?? false, actor.id, actor.title),
+    h.trust(i18n('xLikesY', '', `<strong>${data.title}</strong>`)),
     ' ',
     h('small', h('em', entry.fromNow)),
   ])

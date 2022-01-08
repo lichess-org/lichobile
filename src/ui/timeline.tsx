@@ -8,41 +8,48 @@ import { dropShadowHeader as headerWidget, backButton } from './shared/common'
 import * as helper from './helper'
 import layout from './layout'
 import i18n, { fromNow } from '../i18n'
-import { TimelineEntry } from '../lichess/interfaces'
+import { TimelineData, TimelineEntry } from '../lichess/interfaces'
+import { userTitle } from './user/userView'
+import { LightUser } from '~/lichess/interfaces/user'
 
 export const supportedTypes = ['follow', 'game-end', 'tour-join', 'study-create', 'study-like', 'forum-post', 'blog-post']
 
+type LightUserMap = {[username: string]: LightUser}
 interface State {
-  timeline: Prop<ReadonlyArray<TimelineEntry>>
+  timelineData: Prop<TimelineData>
 }
 
 export default {
   oninit() {
-    this.timeline = prop<ReadonlyArray<TimelineEntry>>([])
+    this.timelineData = prop<TimelineData>({ entries: [], users: {} })
 
     timelineXhr()
-    .then(data => {
-      this.timeline(
-        data.entries
-        .filter(o => supportedTypes.indexOf(o.type) !== -1)
-        .map(o => {
-          o.fromNow = fromNow(new Date(o.date))
-          return o
-        })
-      )
-      redraw()
-    })
-    .catch(handleXhrError)
+      .then((data: TimelineData) => {
+        this.timelineData(
+          {
+            users: data.users,
+            entries: data.entries
+              .filter(o => supportedTypes.indexOf(o.type) !== -1)
+              .map(o => {
+                o.fromNow = fromNow(new Date(o.date))
+                return o
+              })
+          }
+        )
+        redraw()
+      })
+      .catch(handleXhrError)
   },
 
   oncreate: helper.viewFadeIn,
 
   view() {
     const header = headerWidget(null, backButton(i18n('timeline')))
+    const timelineData = this.timelineData()
     return layout.free(header, [
       h('ul.timeline.native_scroller.page', {
         oncreate: helper.ontapY(timelineOnTap, undefined, helper.getLI)
-      }, this.timeline().map(renderTimelineEntry))
+      }, timelineData.entries.map(entry => renderTimelineEntry(entry, timelineData.users)))
     ])
   }
 } as Mithril.Component<Record<string, never>, State>
@@ -59,7 +66,7 @@ export function timelineOnTap(e: Event) {
   }
 }
 
-export function renderTimelineEntry(e: TimelineEntry) {
+export function renderTimelineEntry(e: TimelineEntry, users: LightUserMap) {
   switch (e.type) {
     case 'follow':
       return renderFollow(e)
@@ -71,7 +78,7 @@ export function renderTimelineEntry(e: TimelineEntry) {
     case 'study-like':
       return renderStudy(e)
     case 'forum-post':
-      return renderForum(e)
+      return renderForum(e, users)
     case 'blog-post':
       return renderBlog(e)
     default:
@@ -92,13 +99,15 @@ function renderBlog(entry: TimelineEntry) {
   ])
 }
 
-function renderForum(entry: TimelineEntry) {
+function renderForum(entry: TimelineEntry, users: LightUserMap) {
   const data = entry.data
+  const actor = users[data.userId]
   return h('li.list_item.timelineEntry', {
     key: 'forum-post' + data.postId,
     'data-external': `/forum/redirect/post/${data.postId}`,
   }, [
-    h.trust(i18n('xPostedInForumY', `<strong>${data.userId}</strong>`, `<strong>${data.topicName}</strong>`)),
+    userTitle(false, actor.patron ?? false, actor.id, actor.title),
+    h.trust(i18n('xPostedInForumY', '', `<strong>${data.topicName}</strong>`)),
     ' ',
     h('small', h('em', entry.fromNow)),
   ])

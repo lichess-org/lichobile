@@ -94,6 +94,7 @@ export interface TimelineEntry {
 
 export interface TimelineData {
   readonly entries: ReadonlyArray<TimelineEntry>
+  readonly users: {[username: string]: LightUser}
 }
 
 export interface DailyPuzzle {

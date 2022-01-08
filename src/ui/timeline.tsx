@@ -8,11 +8,11 @@ import { dropShadowHeader as headerWidget, backButton } from './shared/common'
 import * as helper from './helper'
 import layout from './layout'
 import i18n, { fromNow } from '../i18n'
-import { TimelineData, TimelineEntry } from '../lichess/interfaces'
+import { TimelineData, TimelineEntry, TimelineEntryType } from '../lichess/interfaces'
 import { userTitle } from './user/userView'
 import { LightUser } from '~/lichess/interfaces/user'
 
-export const supportedTypes = ['follow', 'game-end', 'tour-join', 'study-create', 'study-like', 'forum-post', 'blog-post', 'ublog-post', 'ublog-post-like']
+export const supportedTypes: TimelineEntryType[] = ['follow', 'game-end', 'tour-join', 'study-create', 'study-like', 'forum-post', 'blog-post', 'ublog-post', 'ublog-post-like', 'stream-start']
 
 type LightUserMap = {[username: string]: LightUser}
 interface State {
@@ -85,6 +85,8 @@ export function renderTimelineEntry(e: TimelineEntry, users: LightUserMap) {
       return renderUblog(e, users)
     case 'ublog-post-like':
       return renderUblogLike(e, users)
+    case 'stream-start':
+      return renderStreamStart(e)
     default:
       return null
   }
@@ -121,7 +123,7 @@ function renderUblogLike(entry: TimelineEntry, users: LightUserMap) {
   const data = entry.data
   const actor = users[data.userId]
   return h('li.list_item.timelineEntry', {
-    key: `ublog-post${data.id}`,
+    key: `ublog-post-like${data.id}`,
     'data-external': `/ublog/${data.id}/redirect`,
   }, [
     userTitle(false, actor.patron ?? false, actor.id, actor.title),
@@ -202,4 +204,17 @@ function renderGameEnd(entry: TimelineEntry) {
       <small><em> {entry.fromNow}</em></small>
     </li>
   )
+}
+
+function renderStreamStart(entry: TimelineEntry) {
+  const data = entry.data
+  return h('li.list_item.timelineEntry', {
+    key: `stream-start${data.date}`,
+    'data-path': `/streamer/${data.id}/redirect`
+  }, [
+    h('span[data-icon=].withIcon'),
+    h('strong', i18n('xStartedStreaming', data.name)),
+    ' ',
+    h('small', h('em', entry.fromNow)),
+  ])
 }

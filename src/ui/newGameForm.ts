@@ -199,18 +199,11 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
   ]
 
   // if mode is rated only allow random color
-  let colors: string[][]
-  if (mode === '1') {
-    settingsObj.color('random')
-    colors = [
-      ['randomColor', 'random']
-    ]
-  } else {
-    colors = [
-      ['randomColor', 'random'],
-      ['white', 'white'],
-      ['black', 'black']
-    ]
+  // if mode is rated only allow random color for three-check, atomic, antichess
+  // horde variants
+  const colors = utils.getColorOptionsFromModeAndVariant(mode, settingsObj.variant())
+  if (colors.length === 1) {
+    settingsObj.color(colors[0][1])
   }
 
   const generalFieldset = [

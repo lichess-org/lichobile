@@ -56,9 +56,9 @@ export function overlay(ctrl: TrainingCtrl): Mithril.ChildArray {
 
 function renderActionsBar(ctrl: TrainingCtrl) {
   return h('section#training_actions.actions_bar', [
-    h('button.action_bar_button.training_action.fa.fa-area-chart', {
+    session.isConnected() ?  h('button.action_bar_button.training_action.fa.fa-area-chart', {
       oncreate: helper.ontap(ctrl.menu.open)
-    }),
+    }) : null,
     h('button.action_bar_button.training_action.fa.fa-share-alt', {
       oncreate: helper.ontap(ctrl.share, () => Toast.show({ text: 'Share this puzzle', duration: 'short', position: 'bottom' }))
     }),

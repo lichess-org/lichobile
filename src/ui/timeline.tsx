@@ -210,7 +210,7 @@ function renderStreamStart(entry: TimelineEntry) {
   const data = entry.data
   return h('li.list_item.timelineEntry', {
     key: `stream-start${data.date}`,
-    'data-path': `/streamer/${data.id}/redirect`
+    'data-external': `/streamer/${data.id}/redirect`
   }, [
     h('span[data-icon=].withIcon'),
     h('strong', i18n('xStartedStreaming', data.name)),

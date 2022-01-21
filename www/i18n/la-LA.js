@@ -672,6 +672,8 @@ export default {
   "averageScoreAsBlackX": "Cum mediocris commodum nigra: %s",
   "aSquareNameAppears": "A quadratum nomen apparet tabulam in recta et quadratum est per click. XXX secunda, in quadrato quot tu agnoscis?",
   "startTraining": "Incipere exercitium",
+  "imageAlt": "Alternata imaginis inscriptio",
+  "imageCredit": "Imaginis auctoritas",
   "apiUnsupported": "Haec Lichess versio est obsoletissima! Gratis recentissimam te accipere quaeso.",
   "apiDeprecated": "Gratis recentissimam Lichess versionem accipe! Huius versionis fulcimentum desinetur in %s.",
   "playerisInvitingYou": "%s te invitat",

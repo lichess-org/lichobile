@@ -1,13 +1,13 @@
 import h from 'mithril/hyperscript'
 import { fixCrazySan } from '../../../utils/chessFormat'
-import { linkify } from '../../../utils/html'
 import * as gameApi from '../../../lichess/game'
-import { Glyph, CommentAuthor } from '../../../lichess/interfaces/analyse'
+import { Glyph } from '../../../lichess/interfaces/analyse'
 import { ops as treeOps, path as treePath, Tree } from '../../shared/tree'
 import * as helper from '../../helper'
 import { plyToTurn, empty } from '../util'
 
 import AnalyseCtrl from '../AnalyseCtrl'
+import RichText from './richTextView'
 
 type MaybeVNode = Mithril.Child | null
 
@@ -46,7 +46,7 @@ export default function renderTree(ctrl: AnalyseCtrl): Mithril.Children {
     showGlyphs: true,
     showEval: true
   }
-  const commentTags = renderInlineCommentsOf(ctx, root, true)
+  const commentTags = renderInlineCommentsOf(ctx, root)
   return h('div.analyse-moveList', {
     className: window.deviceInfo.platform === 'ios' ? 'ios' : ''
   }, [
@@ -58,26 +58,12 @@ export default function renderTree(ctrl: AnalyseCtrl): Mithril.Children {
   ])
 }
 
-function renderInlineCommentsOf(ctx: Ctx, node: Tree.Node, rich?: boolean): MaybeVNode[] {
+function renderInlineCommentsOf(ctx: Ctx, node: Tree.Node): MaybeVNode[] {
   if (!ctx.ctrl.settings.s.showComments || empty(node.comments)) return []
   return node.comments!.map(comment => {
     if (comment.by === 'lichess' && !ctx.showComputer) return null
-    const by = comment.by ? h('span.by', commentAuthorText(comment.by)) : null
-    return rich ? h('comment', h.trust(linkify(comment.text))) : h('comment', [
-      by,
-      truncateComment(comment.text, 300, ctx)
-    ])
+    return h('comment', h(RichText, {text: comment.text}))
   }).filter(x => !!x)
-}
-
-function commentAuthorText(author?: CommentAuthor): string {
-  if (!author) return 'Unknown'
-  if (typeof author === 'string') return author
-  return author.name
-}
-
-function truncateComment(text: string, len: number, ctx: Ctx) {
-  return ctx.truncateComments && text.length > len ? text.slice(0, len - 10) + ' [...]' : text
 }
 
 function renderChildrenOf(ctx: Ctx, node: Tree.Node, opts: Opts): MaybeVNode[] | null {
@@ -96,7 +82,7 @@ function renderChildrenOf(ctx: Ctx, node: Tree.Node, opts: Opts): MaybeVNode[] |
         isMainline: true,
         withIndex: opts.withIndex
       }),
-      renderInlineCommentsOf(ctx, main, true),
+      renderInlineCommentsOf(ctx, main),
       h('interrupt', renderLines(ctx, cs.slice(1), {
         parentPath: opts.parentPath,
         isMainline: true
@@ -137,7 +123,7 @@ function renderLines(ctx: Ctx, nodes: Tree.Node[], opts: Opts): Mithril.Child {
 
 function renderMoveAndChildrenOf(ctx: Ctx, node: Tree.Node, opts: Opts): MaybeVNode[] {
   const path = opts.parentPath + node.id,
-  comments = renderInlineCommentsOf(ctx, node, true)
+  comments = renderInlineCommentsOf(ctx, node)
   if (opts.truncate === 0) return [
     h('move', { 'data-path': path }, '[...]')
   ]

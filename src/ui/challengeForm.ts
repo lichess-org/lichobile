@@ -63,21 +63,9 @@ function renderForm() {
   const hasClock = timeMode === '1'
   const hasDays = timeMode === '2'
 
-  // if mode is rated only allow random color for three-check, atomic, antichess
-  // horde variants
-  let colors: string[][]
-  if (settingsObj.mode() === '1' &&
-    ['5', '6', '7', '8', '9'].indexOf(settingsObj.variant()) !== -1) {
-    settingsObj.color('random')
-    colors = [
-      ['randomColor', 'random']
-    ]
-  } else {
-    colors = [
-      ['randomColor', 'random'],
-      ['white', 'white'],
-      ['black', 'black']
-    ]
+  const colors = utils.getColorOptionsFromModeAndVariant(settingsObj.mode(), settingsObj.variant())
+  if (colors.length === 1) {
+    settingsObj.color(colors[0][1])
   }
 
   const modes = session.isConnected() ? [

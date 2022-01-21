@@ -93,7 +93,7 @@ function renderTrainingMenu(ctrl: IMenuCtrl) {
 
 function renderSigninBox() {
   return h('div.trainingMenuContent', [
-    h('p', i18n('toTrackYourProgress')),
+    h('p', i18n('toGetPersonalizedPuzzles')),
     h('p.signin',
       h('button.defaultButton', {
         oncreate: helper.ontap(loginModal.open)

@@ -37,7 +37,6 @@ export interface Tournament {
 
 interface Perf {
   readonly key: PerfKey
-  readonly icon: string
   readonly name: string
   readonly position?: number
 }

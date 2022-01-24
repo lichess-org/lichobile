@@ -6,7 +6,7 @@ import session from '../../../session'
 import i18n from '../../../i18n'
 import { Tournament, StandingPlayer, PodiumPlace, Spotlight, Verdicts, TeamStanding } from '../../../lichess/interfaces/tournament'
 import { Opening } from '../../../lichess/interfaces/game'
-import { formatTournamentDuration, formatTournamentTimeControl } from '../../../utils'
+import { formatTournamentDuration, formatTournamentTimeControl, gameIcon } from '../../../utils'
 import * as helper from '../../helper'
 import settings from '../../../settings'
 import MiniBoard from '../../shared/miniBoard'
@@ -107,7 +107,7 @@ function tournamentTimeInfo(data: Tournament) {
   const control = formatTournamentTimeControl(data.clock)
   return (
     <div className="tournamentTimeInfo">
-      <strong className="tournamentInfo withIcon" data-icon={data.perf.icon}>
+      <strong className="tournamentInfo withIcon" data-icon={gameIcon(data.perf.key)}>
         {variant + ' • ' + control + ' • ' + formatTournamentDuration(data.minutes)}
       </strong>
     </div>

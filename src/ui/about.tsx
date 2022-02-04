@@ -31,7 +31,7 @@ export default {
 
         <ul>
 
-          <li>Lichess would not exist without the thousands of hours of time from volunteers, both from {externalLink('website devs', 'https://github.com/ornicar/lila/graphs/contributors')} and {externalLink('mobile devs', 'https://github.com/veloce/lichobile/graphs/contributors')}, who create new features and/or bugs, as well as our administrative team, who police the site and help with long-term vision.</li>
+          <li>Lichess would not exist without the thousands of hours of time from volunteers, both from {externalLink('website devs', 'https://github.com/ornicar/lila/graphs/contributors')} and {externalLink('mobile devs', 'https://github.com/lichess-org/lichobile/graphs/contributors')}, who create new features and/or bugs, as well as our administrative team, who police the site and help with long-term vision.</li>
 
           <li>{externalLink('Patrons', 'https://lichess.org/patron')} provide a steady stream of income to our site, sufficient to run our servers and handle expenses.</li>
 
@@ -42,7 +42,7 @@ export default {
         <h2>Links</h2>
 
           <ul className="about_links">
-            <li>{externalLink('Github', 'https://github.com/veloce/lichobile')}</li>
+            <li>{externalLink('Github', 'https://github.com/lichess-org/lichobile')}</li>
             <li>{externalLink('Contribute', 'https://lichess.org/help/contribute')}</li>
             { Capacitor.platform !== 'ios' ?
               <li>{externalLink('Donate', 'https://lichess.org/patron')}</li> :

@@ -4,7 +4,7 @@
     "description": "lichess.org mobile application",
     "repository": {
         "type": "git",
-        "url": "https://github.com/veloce/lichobile.git"
+        "url": "https://github.com/lichess-org/lichobile.git"
     },
     "keywords": [
         "lichess",
@@ -18,9 +18,9 @@
     "author": "Vincent Velociter (https://github.com/veloce)",
     "license": "GPL-3.0-or-later",
     "bugs": {
-        "url": "https://github.com/veloce/lichobile/issues"
+        "url": "https://github.com/lichess-org/lichobile/issues"
     },
-    "homepage": "https://github.com/veloce/lichobile",
+    "homepage": "https://github.com/lichess-org/lichobile",
     "engines": {
         "node": "^16.13",
         "npm": "^8.1"

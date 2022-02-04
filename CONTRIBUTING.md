@@ -2,7 +2,7 @@
 
 ## Reporting bug
 
-Please report the bug you find on veloce/lichobile/issues. Be sure to search
+Please report the bug you find on lichess-org/lichobile/issues. Be sure to search
 in the existing issues before in order to avoid duplicates.
 
 Bug reports MUST contain:

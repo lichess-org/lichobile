@@ -7,7 +7,7 @@ exception below is part of *lichobile*, the mobile app for
 and lichobile contributors.
 
 For a list of the authors see the commit log or
-https://github.com/veloce/lichobile/graphs/contributors.
+https://github.com/lichess-org/lichobile/graphs/contributors.
 
 Lichobile is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

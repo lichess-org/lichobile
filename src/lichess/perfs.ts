@@ -34,5 +34,5 @@ export function shortPerfTitle(key: PerfKey) {
   return p ? p.shortName : ''
 }
 
-// https://github.com/ornicar/lila/blob/master/modules/rating/src/main/Glicko.scala#L31
+// https://github.com/lichess-org/lila/blob/master/modules/rating/src/main/Glicko.scala#L31
 export const provisionalDeviation = 110

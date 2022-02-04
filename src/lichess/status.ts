@@ -1,4 +1,4 @@
-// https://github.com/ornicar/scalachess/blob/master/src/main/scala/Status.scala
+// https://github.com/lichess-org/scalachess/blob/master/src/main/scala/Status.scala
 
 import i18n from '../i18n'
 import { GameData } from './interfaces/game'

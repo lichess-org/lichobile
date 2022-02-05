@@ -165,7 +165,7 @@ export function makeShapeRenderer(
   }
 }
 
-// taken from https://github.com/ornicar/lila/blob/master/ui/analyse/src/autoShape.ts
+// taken from https://github.com/lichess-org/lila/blob/master/ui/analyse/src/autoShape.ts
 // adapted to lichobile
 const glyphToSvg: {[k: string]: Mithril.Child} = {
   // Inaccuracy

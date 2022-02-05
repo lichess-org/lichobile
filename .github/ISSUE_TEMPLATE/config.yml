@@ -1,7 +1,7 @@
 blank_issues_enabled: false
 contact_links:
   - name: Web app
-    url: https://github.com/ornicar/lila/issues
+    url: https://github.com/lichess-org/lila/issues
     about: Issues for the web app are tracked in a separate repository. Please check for duplicates first.
   - name: Support
     url: https://discord.gg/lichess

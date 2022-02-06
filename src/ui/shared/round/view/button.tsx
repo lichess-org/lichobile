@@ -179,7 +179,7 @@ export default {
     ])
     return null
   },
-  answerOpponentTakebackProposition(ctrl: OnlineRound): Mithril.Child {
+  answerOpponentTakebackProposition(ctrl: OnlineRound) {
     if (ctrl.data.opponent.proposingTakeback) return h('div.negotiation', [
       h('div.notice', i18n('yourOpponentProposesATakeback')),
       h('div.binary_choice_wrapper', [

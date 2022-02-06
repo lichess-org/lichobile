@@ -1,5 +1,5 @@
 declare namespace JSX {
-  type Element = any
+  type Element = Mithril.Vnode
   interface IntrinsicElements {
     [type: string]: Mithril.Attributes
   }

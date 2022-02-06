@@ -702,6 +702,12 @@ export default class OnlineRound implements OnlineRoundInterface {
       blur
     }
 
+    // Pauses both clocks. When the server echoes back this move, the clocks will resume.
+    // This prevents a confusing user experience where a laggy network makes it appear that
+    // it's still the user's turn; see #2000.
+    this.clock?.stopClock()
+    redraw()
+
     if (isMoveRequest(moveOrDropReq)) {
       this.socket.iface.send('move', moveOrDropReq, opts)
     }

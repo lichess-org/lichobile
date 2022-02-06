@@ -4,7 +4,5 @@ declare namespace JSX {
     [type: string]: Element
   }
 
-  interface ElementClass {
-    view: any
-  }
+  type ElementClass = Mithril.ClassComponent
 }

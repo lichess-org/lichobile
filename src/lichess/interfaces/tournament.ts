@@ -127,7 +127,7 @@ export interface PlayerInfoPairing {
   readonly color: Color
   readonly id: string
   readonly op: PlayerInfoOpponent
-  readonly score: [number, number] | number | null
+  readonly score: number | null
   readonly status: number
   readonly win: boolean | null
 }

@@ -220,22 +220,24 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
     myTurn ? renderExpiration(ctrl, 'player', myTurn) : null,
   ] : [])
 
+  const flip = !ctrl.data.tv && ctrl.vm.flip
+
   if (isPortrait) {
     return [
       helper.hasSpaceForInlineReplay(vd, isPortrait) ? renderInlineReplay(ctrl) : null,
-      opponent,
+      flip ? player : opponent,
       board,
-      player,
+      flip ? opponent : player,
       renderGameActionsBar(ctrl)
     ]
   } else {
     return [
       board,
       h('section.table', [
-        opponent,
+        flip ? player : opponent,
         renderReplay(ctrl),
         renderGameActionsBar(ctrl),
-        player,
+        flip ? opponent : player,
       ]),
     ]
   }
@@ -384,7 +386,6 @@ function renderPlayTable(
     playTable: true,
     crazy: isCrazy,
     clockOnLeft: ctrl.vm.clockPosition === 'left',
-    flip: !ctrl.data.tv && ctrl.vm.flip,
   })
 
   return (

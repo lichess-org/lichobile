@@ -88,6 +88,7 @@ export default class AnalyseCtrl implements PromotingInterface {
   cgConfig?: cg.SetConfig
   analysisProgress = false
   retroGlowing = false
+  showThreat = false
   formattedDate?: string
 
   private _currentTabIndex = 0
@@ -335,7 +336,7 @@ export default class AnalyseCtrl implements PromotingInterface {
   startCeval = () => {
     if (this.ceval.enabled() && this.canUseCeval()) {
       const forceMaxLv = !!this.retro || !!this.practice
-      this.ceval.start(this.path, this.nodeList, forceMaxLv, false)
+      this.ceval.start(this.showThreat, this.path, this.nodeList, forceMaxLv, false)
       this.evalCache.fetch(this.path, forceMaxLv ? 1 : this.ceval.getMultiPv())
     }
   }
@@ -374,6 +375,12 @@ export default class AnalyseCtrl implements PromotingInterface {
       this.practice = makePractice(this, () => {
         return 18
       })
+    }
+  }
+
+  toggleShowThreat = (): void => {
+    if (this.ceval.allowed) {
+      this.showThreat = true
     }
   }
 

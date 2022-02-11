@@ -1,3 +1,4 @@
+import h from 'mithril/hyperscript'
 import * as helper from '../helper'
 import { dropShadowHeader, backButton } from '../shared/common'
 import formWidgets from '../shared/form'
@@ -6,9 +7,7 @@ import layout from '../layout'
 import push from '../../push'
 import i18n from '../../i18n'
 import settings from '../../settings'
-import sound from '../../sound'
 import vibrate from '../../vibrate'
-import h from 'mithril/hyperscript'
 
 function renderBody() {
   return h('ul.native_scroller.page.settings_list.game', [
@@ -16,7 +15,6 @@ function renderBody() {
       label: i18n('toggleSound'),
       name: 'sound',
       prop: settings.general.sound,
-      callback: sound.onSettingChange
     })),
     h('li.list_item', {
     }, formWidgets.renderCheckbox(i18n('vibrateOnGameEvents'), 'vibrate', settings.general.vibrateOnGameEvents, vibrate.onSettingChange)),

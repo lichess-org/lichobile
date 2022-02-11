@@ -88,7 +88,7 @@ export default class RoundSocket {
          ctrl.data.player.offeringRematch = by === ctrl.data.player.color
          const fromOp = ctrl.data.opponent.offeringRematch = by === ctrl.data.opponent.color
          if (fromOp) {
-           Toast.show({ text: i18n('yourOpponentWantsToPlayANewGameWithYou'), position: 'top', duration: 'short' })
+           Toast.show({ text: i18n('yourOpponentWantsToPlayANewGameWithYou'), position: 'center', duration: 'short' })
          }
          redraw()
        },
@@ -100,7 +100,7 @@ export default class RoundSocket {
          ctrl.data.player.offeringDraw = by === ctrl.data.player.color
          const fromOp = ctrl.data.opponent.offeringDraw = by === ctrl.data.opponent.color
          if (fromOp) {
-           Toast.show({ text: i18n('yourOpponentOffersADraw'), position: 'top', duration: 'short' })
+           Toast.show({ text: i18n('yourOpponentOffersADraw'), position: 'center', duration: 'short' })
          }
          redraw()
        },

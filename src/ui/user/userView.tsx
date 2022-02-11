@@ -249,6 +249,7 @@ function renderActions(ctrl: IUserCtrl, user: ProfileUser) {
       <div className="list_item nav"
         oncreate={helper.ontapY(ctrl.followers)}
       >
+        <span className="fa fa-users" />
         {i18n('friends')}
       </div> : null
       }

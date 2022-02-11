@@ -63,7 +63,18 @@ export default {
     const player = playerData.player
     const pairings = playerData.pairings
     const avgOpRating = pairings.length ? (pairings.reduce((prev, x) => prev + x.op.rating, 0) / pairings.length).toFixed(0) : '0'
-
+    let streak = 0
+    const scoreClasses = [...pairings].reverse().map(v => {
+      const s = v.score
+      if (s !== null) {
+        const win = s === 2 ? streak < 2 : s > 2
+        const klass = streak > 1 && s > 1 ? 'double' : win ? 'streak' : 'score'
+        if (win) streak++
+        else streak = 0
+        return klass
+      }
+      return s
+    }).reverse()
 
     function renderPlayerGame(game: PlayerInfoPairing, index: number) {
       let outcome: string | number
@@ -71,15 +82,11 @@ export default {
       if (game.score === undefined || game.score === null) {
         outcome = '*'
       }
-      else if (Array.isArray(game.score)) {
-        outcome = game.score[0]
-        if (game.score[1] === 2)
-          outcomeClass += ' streak'
-        else if (game.score[1] === 3)
-          outcomeClass += ' double'
-      }
       else {
         outcome = game.score
+      }
+      if (scoreClasses[index] !== null) {
+        outcomeClass += ' ' + scoreClasses[index]
       }
       return (
         <tr className="list_item" data-id={game.id} data-color={game.color} key={game.id}>

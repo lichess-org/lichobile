@@ -11,14 +11,13 @@ interface Attrs {
   rightTabActive: boolean
 }
 
-let pieceNotation: boolean
 export default {
   onbeforeupdate({ attrs }) {
     return !attrs.ctrl.replaying
   },
   view({ attrs }) {
     const { ctrl, rightTabActive } = attrs
-    pieceNotation = pieceNotation || settings.game.pieceNotation()
+    const pieceNotation = settings.game.pieceNotation()
     const className = [
       pieceNotation ? 'displayPieces' : '',
       rightTabActive ? 'rta' : '',

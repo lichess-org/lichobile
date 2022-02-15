@@ -14,8 +14,6 @@ import Replay from './Replay'
 import { IChessClock, IStageClock } from '../clock/interfaces'
 import { autoScroll, autoScrollInline, onReplayTap, getMoveEl } from '../round/util'
 
-let pieceNotation: boolean
-
 function getChecksCount(ctrl: OfflineRoundInterface, color: Color) {
   const sit = ctrl.replay.situation()
   if (sit.checkCount)
@@ -133,7 +131,7 @@ export function renderClaimDrawButton(ctrl: OfflineRoundInterface) {
 }
 
 export function renderReplay(ctrl: OfflineRoundInterface) {
-  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
+  const pieceNotation = settings.game.pieceNotation()
   return h('div.replay.box', {
     className: pieceNotation ? ' displayPieces' : '',
     oncreate: (vnode: Mithril.VnodeDOM<any, any>) => {
@@ -146,7 +144,7 @@ export function renderReplay(ctrl: OfflineRoundInterface) {
 
 
 export function renderInlineReplay(ctrl: OfflineRoundInterface) {
-  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
+  const pieceNotation = settings.game.pieceNotation()
 
   if (!ctrl.moveList) {
     return null

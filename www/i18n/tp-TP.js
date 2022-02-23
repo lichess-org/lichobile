@@ -981,6 +981,10 @@ export default {
   "declineOnlyBot": "mi wile e ni: jan ilo li utala musi e mi.",
   "apiUnsupported": "ilo kon \"lichess\" pi ilo toki sina li kama tan tenpo pini mute a! o kama jo e ante sin.",
   "apiDeprecated": "o kama jo e ante sin pi ilo kon \"lichess\"! sina pali ala e ni la, ona li pini pali lon tenpo %s.",
+  "comments": "toki sin",
+  "gameInformation": "sona musi",
+  "home": "lipu lawa",
+  "lastScore": "nanpa pi musi pini: %s",
   "playerisInvitingYou": "jan %s li wile musi lon poka sina",
   "unsupportedVariant": "ante ni pi ilo kon \"lichess\" ni li sona ala e ante \"%s\"",
   "notesSynchronizationHasFailed": "mi ken ala linja e sitelen musi pi ilo ni, e sitelen musi pi ilo lawa \"lichess\". o pali sin lon tenpo kama.",
@@ -991,5 +995,11 @@ export default {
   "settingsClockPosition": "ma pi ilo tenpo",
   "positionRight": "poka teje",
   "positionLeft": "poka soto",
-  "landscapeBoardSide": "poka sama pi supa musi"
+  "landscapeBoardSide": "poka sama pi supa musi",
+  "toggleSound": "o ante: kalama li lon ala lon?",
+  "overTheBoard": "musi pi jan tu pi ilo toki wan",
+  "sharePgn": "o pana e lipu PGN tawa jan ante",
+  "shareGameUrl": "o pana e nimi nasin musi",
+  "playOnline": "o musi kepeken linja sona",
+  "playOffline": "o musi kepeken linja sona ala"
 }

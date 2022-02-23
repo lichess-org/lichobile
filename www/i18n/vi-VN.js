@@ -1159,7 +1159,7 @@ export default {
   "uploadAnImageForYourPost": "Tải một bức ảnh cho bài viết của bạn",
   "publishedNbBlogPosts:other": "Đã đăng %s bài",
   "nbViews:other": "%s lượt xem",
-  "apiUnsupported": "Phiên bản ứng dụng lichess của bạn quá cũ! Vui lòng nâng cấp miễn phí lên phiên bản mới nhất.",
+  "apiUnsupported": "Phiên bản ứng dụng lichess của bạn quá cũ! Vui lòng cập nhật miễn phí lên phiên bản mới nhất.",
   "apiDeprecated": "Nâng cấp miễn phí lên phiên bản mới nhất của lichess! Hỗ trợ cho phiên bản này có ở %s.",
   "gameInformation": "Thông tin ván đấu",
   "home": "Trang chủ",

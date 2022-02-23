@@ -11,7 +11,7 @@ import { request as octokitRequest } from '@octokit/request'
 const baseDir = 'tmp/translations'
 const i18nBaseDir = '../www/i18n'
 const lilaSourcePath = `${baseDir}/source`
-const lilaTranslationsPath = `${baseDir}/[lichess-org.lila] master/translation/dest`
+const lilaTranslationsPath = `${baseDir}/[ornicar.lila] master/translation/dest`
 const lichobileTranslationsPath = '../translation/dest/'
 const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 

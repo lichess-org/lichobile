@@ -1,6 +1,9 @@
 he-IL:
   apiUnsupported: "גרסת אפליקציית ליצ'ס שברשותך ישנה מדי! אנא שדרג לגרסה העדכנית ביותר בחינם."
   apiDeprecated: "שדרג בחינם לאפליקציית ליצ'ס העדכנית ביותר! תמיכה בגרסה זו תוסר ב-%s."
+  comments: "תגובה"
+  gameInformation: "מידע על המשחק"
+  home: "בית"
   playerisInvitingYou: "%s מזמין אותך"
   unsupportedVariant: "%s לא נתמך בגרסה זו"
   notesSynchronizationHasFailed: "סנכרון הערות עם ליצ'ס נכשל, אנא נסה שנית מאוחר יותר."

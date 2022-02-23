@@ -1,2 +1,22 @@
 sq-AL:
-  offline: "Offline"
+  apiUnsupported: "Versioni juaj i lichess-it është shumë i vjetër! Ju lutemi, përmirësojeni falas me versionin më të ri."
+  apiDeprecated: "Përmirësojeni falas me aplikacionin më të ri për lichess! Mbulimi i këtij versioni do të reshtë më %s."
+  comments: "Komente"
+  gameInformation: "Hollësi loje"
+  home: "Kreu"
+  lastScore: "Pikët e fundit: %s"
+  playerisInvitingYou: "%s po ju fton"
+  unsupportedVariant: "Varianti %s nuk mbulohet në këtë version"
+  notesSynchronizationHasFailed: "Njëkohësimi i shënimeve me lichess-in dështoi, ju lutemi, riprovoni më vonë."
+  vibrateOnGameEvents: "Dridhu kur diçka ndodh në lojë"
+  offline: "Jashtë linje"
+  otbUseSymmetricPieces: "Përdor pjesë simetrike" #Setting for offline over-the-board games
+  settingsClockPosition: "Pozicion sahati" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Djathtas" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Majtas" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Anë skene fushe (nën mënyrën peizazh)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Aktivizoni/Çaktivizoni zërin" #Settings to enable/disable sound
+  sharePgn: "Ndani PGN me të tjerë"
+  shareGameUrl: 'Ndani URL loje me të tjerë'
+  playOnline: "Luani në internet"
+  playOffline: "Luani jashtë interneti"

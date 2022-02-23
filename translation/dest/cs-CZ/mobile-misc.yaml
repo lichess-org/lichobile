@@ -1,6 +1,10 @@
 cs-CZ:
   apiUnsupported: "Vaše verze aplikace je příliš stará. Aktualizujte ji prosím zdarma na nejnovější verzi."
   apiDeprecated: "Aktualizujte zdarma na nejnovější lichess aplikaci! Tato verze nebude podporována po %s."
+  comments: "Komentáře"
+  gameInformation: "Informace o hře"
+  home: "Hlavní stránka"
+  lastScore: "Poslední skóre: %s"
   playerisInvitingYou: "%s vás zve"
   unsupportedVariant: "Varianta %s není v této verzi aplikace podporována"
   notesSynchronizationHasFailed: "Synchronizace poznámek se nezdařila, zkuste to prosím později."
@@ -11,6 +15,9 @@ cs-CZ:
   settingsClockPosition: "Pozice hodin" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "Vpravo" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Vlevo" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Strana se šachovnicí (v režímu na šířku)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Zapnout/vypnout zvuk" #Settings to enable/disable sound
+  overTheBoard: "Jako na šachovnici"
   sharePgn: "Sdílet PGN"
   shareGameUrl: 'Sdílet URL hry'
   playOnline: "Hrát online"

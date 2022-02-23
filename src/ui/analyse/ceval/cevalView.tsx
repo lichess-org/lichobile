@@ -9,9 +9,8 @@ import { lichessRules } from 'chessops/compat'
 import settings from '../../../settings'
 import i18n from '../../../i18n'
 import * as helper from '../../helper'
-import { isClientEval } from '../../shared/tree/interfaces'
 import AnalyseCtrl from '../AnalyseCtrl'
-import { renderEval } from '../util'
+import { getBestEval, renderEval } from '../util'
 
 export default function renderCeval(ctrl: AnalyseCtrl) {
   if (!ctrl.ceval.enabled()) return h('div.ceval-notEnabled', 'Computer eval is disabled')
@@ -24,7 +23,7 @@ export default function renderCeval(ctrl: AnalyseCtrl) {
 
 function renderCevalInfos(ctrl: AnalyseCtrl) {
   const node = ctrl.node
-  const ceval = node.ceval
+  const ceval = node.threat || node.ceval
   const isInfinite = settings.analyse.cevalInfinite()
 
   if (!ceval) return null
@@ -65,14 +64,15 @@ function formatTime(millis: number) {
 function onLineTap(ctrl: AnalyseCtrl, e: Event) {
   const el = helper.getLI(e)
   const uci = el && el.dataset['uci']
-  if (uci) ctrl.playUci(uci)
+  if (!ctrl.showThreat && uci) ctrl.playUci(uci)
 }
 
 function renderCevalPvs(ctrl: AnalyseCtrl) {
   const multiPv = ctrl.ceval.getMultiPv()
   const node = ctrl.node
-  if (node.ceval && !ctrl.gameOver()) {
-    const pvs = node.ceval.pvs
+  const ceval = node.threat || node.ceval
+  if (ceval && !ctrl.gameOver()) {
+    const pvs = ceval.pvs
     return h('ul.ceval-pv_box.native_scroller', {
       oncreate: helper.ontapXY(e => onLineTap(ctrl, e), undefined, helper.getLI)
     }, [...Array(multiPv).keys()].map((i) => {
@@ -102,18 +102,19 @@ export const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }> = {
   view({ attrs }) {
     const { ctrl } = attrs
     const node = ctrl.node
-    const { ceval } = node
-    const fav = node.eval || ceval
+    const threatMode = ctrl.showThreat
+    const threat = threatMode && ctrl.node.threat
+    const bestEv = threat || getBestEval({ client: node.ceval, server: node.eval })
 
-    if (!ctrl.ceval.enabled() && !fav) return null
+    if (!ctrl.ceval.enabled() && !bestEv) return null
 
     let pearl: Mithril.Children
 
-    if (fav && (!isClientEval(fav) || fav.depth >= ctrl.ceval.minDepth) && fav.cp !== undefined) {
-      pearl = renderEval(fav.cp)
+    if (bestEv && bestEv.cp !== undefined) {
+      pearl = renderEval(bestEv.cp)
     }
-    else if (fav && fav.mate !== undefined) {
-      pearl = '#' + fav.mate
+    else if (bestEv && bestEv.mate !== undefined) {
+      pearl = '#' + bestEv.mate
     }
     else if (ctrl.gameOver()) {
       pearl = '-'

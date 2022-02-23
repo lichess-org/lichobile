@@ -101,7 +101,7 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
     }, [h('span.fa.fa-bullseye'), i18n('practiceWithComputer')]) : null,
     ctrl.ceval.allowed ? h('button', {
       className: helper.classSet({
-        active: ctrl.showThreat,
+        on: ctrl.showThreat,
       }),
       oncreate: helper.ontap(() => {
         ctrl.menu.close()

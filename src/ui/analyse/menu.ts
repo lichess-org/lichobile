@@ -99,6 +99,15 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
         ctrl.togglePractice()
       }),
     }, [h('span.fa.fa-bullseye'), i18n('practiceWithComputer')]) : null,
+    ctrl.ceval.allowed ? h('button', {
+      className: helper.classSet({
+        on: ctrl.showThreat,
+      }),
+      oncreate: helper.ontap(() => {
+        ctrl.menu.close()
+        ctrl.toggleShowThreat()
+      }),
+    }, [h('span.fa.fa-crosshairs'), i18n('showThreat')]) : null,
     ctrl.notes ? h('button', {
       oncreate: helper.ontap(() => {
         if (ctrl.notes) {

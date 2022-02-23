@@ -88,6 +88,7 @@ export default class AnalyseCtrl implements PromotingInterface {
   cgConfig?: cg.SetConfig
   analysisProgress = false
   retroGlowing = false
+  showThreat = false
   formattedDate?: string
 
   private _currentTabIndex = 0
@@ -335,7 +336,7 @@ export default class AnalyseCtrl implements PromotingInterface {
   startCeval = () => {
     if (this.ceval.enabled() && this.canUseCeval()) {
       const forceMaxLv = !!this.retro || !!this.practice
-      this.ceval.start(this.path, this.nodeList, forceMaxLv, false)
+      this.ceval.start(this.showThreat, this.path, this.nodeList, forceMaxLv, false)
       this.evalCache.fetch(this.path, forceMaxLv ? 1 : this.ceval.getMultiPv())
     }
   }
@@ -375,6 +376,13 @@ export default class AnalyseCtrl implements PromotingInterface {
         return 18
       })
     }
+  }
+
+  toggleShowThreat = (): void => {
+    if (!this.ceval.allowed) return
+    if (!this.ceval.enabled()) this.ceval.toggle()
+    this.showThreat = !this.showThreat
+    this.startCeval()
   }
 
   restartPractice() {
@@ -664,37 +672,30 @@ export default class AnalyseCtrl implements PromotingInterface {
     redraw()
   }
 
-  private onCevalMsg = (path: string, ceval?: Tree.ClientEval) => {
-    if (ceval) {
+  private onCevalMsg = (path: string, ev?: Tree.ClientEval, isThreat?: boolean) => {
+    if (ev) {
       this.tree.updateAt(path, (node: Tree.Node) => {
-        if (node.ceval && node.ceval.depth >= ceval.depth) return
+        if (node.fen !== ev.fen && !isThreat) return
 
-        if (node.ceval === undefined) {
-          node.ceval = { ...ceval }
+        if (isThreat) {
+          const threat = ev as Tree.ClientEval
+          if (!node.threat || util.isEvalBetter(threat, node.threat) || node.threat?.maxDepth! < threat.maxDepth!)
+            node.threat = threat
         }
-        else {
-          node.ceval = { ...node.ceval, ...ceval }
-          // hitting a cloud eval after a local eval, we don't want maxDepth,
-          // knps and millis
-          if (ceval.cloud) {
-            node.ceval.maxDepth = undefined
-            node.ceval.knps = undefined
-            node.ceval.millis = undefined
-          }
-          // hitting a local eval after cloud, let's, just remove cloud flag
-          else {
-            node.ceval.cloud = false
-          }
+        else if (!node.ceval || util.isEvalBetter(ev, node.ceval)) node.ceval = ev
+        else if (!ev.cloud) {
+          if (node.ceval.cloud && this.ceval.isDeeper) node.ceval = ev
+          else if (ev.maxDepth! > node.ceval.maxDepth!) node.ceval.maxDepth = ev.maxDepth
         }
 
-        if (node.ceval.pvs.length > 0) {
+        if (node.ceval && node.ceval.pvs.length > 0) {
           node.ceval.best = node.ceval.pvs[0].moves[0]
         }
 
         if (path === this.path) {
           if (this.retro) this.retro.onCeval()
           if (this.practice) this.practice.onCeval()
-          if (ceval.cloud && ceval.depth >= this.ceval.effectiveMaxDepth()) {
+          if (ev.cloud && ev.depth >= this.ceval.effectiveMaxDepth()) {
             this.ceval.stop()
           }
           redraw()

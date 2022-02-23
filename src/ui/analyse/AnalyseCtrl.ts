@@ -379,7 +379,6 @@ export default class AnalyseCtrl implements PromotingInterface {
   }
 
   toggleShowThreat = (): void => {
-    if (this.node.check) return
     if (!this.ceval.allowed) return
     if (!this.ceval.enabled()) this.ceval.toggle()
     this.showThreat = !this.showThreat

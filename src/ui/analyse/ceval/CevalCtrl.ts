@@ -43,7 +43,8 @@ export default class CevalCtrl {
     this.isDeeper = deeper
     const step = nodes[nodes.length - 1]
     const maxDepth = this.effectiveMaxDepth(deeper)
-    if (step.ceval && step.ceval.depth >= maxDepth) {
+    const existing = threatMode ? step.threat : step.ceval
+    if (existing && existing.depth >= maxDepth) {
       return
     }
     const work: Work = {

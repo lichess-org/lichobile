@@ -16,9 +16,9 @@ de-CH:
   positionRight: "Rächts" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Linggs" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Bildschirmsiitä vom Brett (im Quärformat)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
-  toggleSound: "Ton ein-/ausschalten" #Settings to enable/disable sound
-  overTheBoard: "Offline gegen Mensch"
-  sharePgn: "PGN teilen"
-  shareGameUrl: 'Link der Partie teilen'
-  playOnline: "Spiele online"
-  playOffline: "Spiele offline"
+  toggleSound: "Ton ii/uus schalte" #Settings to enable/disable sound
+  overTheBoard: "Schpill offline gäg än Mänsch"
+  sharePgn: "PGN teilä"
+  shareGameUrl: 'Partiä-URL teilä'
+  playOnline: "Online schpilä"
+  playOffline: "Offline schpilä"

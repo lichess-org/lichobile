@@ -32,6 +32,7 @@ export interface Work {
 }
 
 export interface Started {
+  threatMode: boolean
   path: Tree.Path
   nodes: Tree.Node[]
 }

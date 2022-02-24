@@ -1,8 +1,21 @@
 hr-HR:
+  apiUnsupported: "Tvoja verzija lichess aplikacije je zastarjela! Molimo da ju besplatno ažuriraš na posljednju verziju."
+  apiDeprecated: "Besplatno ažuriraj lichess aplikaciju na posljednju verziju! Podrška za ovu verziju bit će obustavljena od %s."
   comments: "Komentari"
   gameInformation: "Informacije o igri"
   home: "Početna"
   lastScore: "Zadnji rezultat: %s"
+  playerisInvitingYou: "Poziva te %s"
+  unsupportedVariant: "Varijanta %s nije podržana u ovoj verziji"
+  notesSynchronizationHasFailed: "Sinkronizacija bilješki s lichessom nije uspjela, molimo pokušaj kasnije."
+  vibrateOnGameEvents: "Vibriranje prilikom događanja u partiji"
+  offline: "Izvan mreže"
+  otbUseSymmetricPieces: "Koristi simetrične figure" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Obrni figure i informacije o protivniku nakon poteza" #Setting for offline over-the-board games
+  settingsClockPosition: "Pozicija sata" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Desno" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Lijevo" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Strana zaslona ploče (u pejzažnom načinu)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
   toggleSound: "Uključi/isključi zvuk" #Settings to enable/disable sound
   overTheBoard: "Igraj bez mreže, preko uređaja"
   sharePgn: "Podijeli PGN"

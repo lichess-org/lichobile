@@ -676,6 +676,7 @@ export default {
   "imageCredit": "Imaginis auctoritas",
   "apiUnsupported": "Haec Lichess versio est obsoletissima! Gratis recentissimam te accipere quaeso.",
   "apiDeprecated": "Gratis recentissimam Lichess versionem accipe! Huius versionis fulcimentum desinetur in %s.",
+  "lastScore": "Status proximus: %s",
   "playerisInvitingYou": "%s te invitat",
   "unsupportedVariant": "Hac in versione varietas %s non fulcitur",
   "notesSynchronizationHasFailed": "Synchronizatio notarum cum Lichess defecta est. Posterius proba.",

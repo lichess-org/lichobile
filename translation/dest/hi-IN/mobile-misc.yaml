@@ -1,7 +1,10 @@
 hi-IN:
   apiUnsupported: "आपका lichess version बहुत पुराना ह​ै | क्ृप्या उसे मुफ़्त मे Upgrade करे।"
   apiDeprecated: "Lichess के नुतन सन्सकरण से मुफ़्त मे जुड़े | यह सन्सकरण %s के पश्चात कार्य नही करेगा।"
+  comments: "टिप्पणियाँ"
+  gameInformation: "खेल की जानकारी ।"
   home: "घर"
+  lastScore: "पिछला स्कोर​ %s"
   playerisInvitingYou: "%s ने आपको न्योता दिया है।"
   offline: "ऑफलाइन"
   settingsClockPosition: "घड़ी के लिए स्थान" #Determines whether each player's time is shown on the left or right side of the board

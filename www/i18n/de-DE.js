@@ -1273,7 +1273,7 @@ export default {
   "notesSynchronizationHasFailed": "Die Synchronisation der Anmerkungen mit Lichess ist fehlgeschlagen, bitte versuche es später erneut.",
   "vibrateOnGameEvents": "Bei Spielereignissen vibrieren",
   "offline": "Offline",
-  "otbUseSymmetricPieces": "Benutze symmetrische Figuren",
+  "otbUseSymmetricPieces": "Verwende symmetrische Figuren",
   "otbFlipPiecesAndInfoAfterMove": "Drehe Figuren und Gegnerinfo nach dem Zug",
   "settingsClockPosition": "Uhrposition",
   "positionRight": "Rechts",

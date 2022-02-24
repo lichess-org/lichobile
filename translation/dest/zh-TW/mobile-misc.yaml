@@ -1,8 +1,13 @@
 zh-TW:
   apiUnsupported: "您的 lichess 版本過舊！請更新至最新版本。"
   apiDeprecated: "免費更新到最新的版本。 對於目前版本的支援會在%s結束"
+  comments: "評論"
+  gameInformation: "對局信息"
+  home: "主頁"
+  lastScore: "上次得分： %s"
   playerisInvitingYou: "%s 邀請了您"
   unsupportedVariant: "此版本不支援變體 %s"
+  notesSynchronizationHasFailed: "同步棋譜到 Lichess 失敗，請稍後重試。"
   vibrateOnGameEvents: "有新動作時震動"
   offline: "離線"
   otbUseSymmetricPieces: "使用對稱棋子" #Setting for offline over-the-board games
@@ -10,3 +15,10 @@ zh-TW:
   settingsClockPosition: "時鐘位置" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "靠右" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "靠左" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "棋盤方向(橫向模式)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "聲音開關" #Settings to enable/disable sound
+  overTheBoard: "面對面"
+  sharePgn: "分享PGN"
+  shareGameUrl: '分享對局網址'
+  playOnline: "線上對弈"
+  playOffline: "離線對弈"

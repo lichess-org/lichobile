@@ -1,1 +1,24 @@
 te-IN:
+  apiUnsupported: "లిచెస్ యాప్ యొక్క మీ వెర్షన్ చాలా పాతది! దయచేసి తాజా వెర్షన్ కు ఉచితంగా అప్ గ్రేడ్ చేయండి."
+  apiDeprecated: "తాజా లైచెస్ యాప్ కు ఉచితంగా అప్ గ్రేడ్ చేయండి! ఈ వెర్షన్ కు మద్దతు డ్రాప్ చేయబడుతుంది"
+  comments: "వ్యాఖ్యలు"
+  gameInformation: "ఆట సమాచారం"
+  home: "హోమ్"
+  lastScore: "చివరి స్కోరు: %s"
+  playerisInvitingYou: "%s మిమ్మల్ని ఆహ్వానిస్తున్నారు"
+  unsupportedVariant: "వేరియంట్ %s ఈ వెర్షన్ లో మద్దతు లేదు"
+  notesSynchronizationHasFailed: "లైచెస్ తో నోట్స్ సింక్రనైజేషన్ విఫలమైంది, దయచేసి తరువాత ప్రయత్నించండి."
+  vibrateOnGameEvents: "గేమ్ ఈవెంట్ లపై వైబ్రేట్"
+  offline: "ఆఫ్ లైన్"
+  otbUseSymmetricPieces: "సౌష్టవ ముక్కలను ఉపయోగించండి" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "తరలించిన తరువాత పీస్ లు మరియు ప్రత్యర్థి సమాచారాన్ని ఫ్లిప్ చేయండి" #Setting for offline over-the-board games
+  settingsClockPosition: "గడియారం స్థానం" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "కుడివైపు" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "ఎడమవైపు" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "బోర్డ్ స్క్రీన్ సైడ్ (ల్యాండ్ స్కేప్ మోడ్ లో)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "టోగుల్ ధ్వని" #Settings to enable/disable sound
+  overTheBoard: "బోర్డు పై"
+  sharePgn: "పిజిఎన్ పంచుకోండి"
+  shareGameUrl: 'గేమ్ యుఆర్ఎల్ పంచుకోండి'
+  playOnline: "ఆన్ లైన్ లో ప్లే చేయండి"
+  playOffline: "ఆఫ్ లైన్ ప్లే చేయండి"

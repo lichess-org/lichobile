@@ -1279,10 +1279,10 @@ export default {
   "positionRight": "Rächts",
   "positionLeft": "Linggs",
   "landscapeBoardSide": "Bildschirmsiitä vom Brett (im Quärformat)",
-  "toggleSound": "Ton ein-/ausschalten",
-  "overTheBoard": "Offline gegen Mensch",
-  "sharePgn": "PGN teilen",
-  "shareGameUrl": "Link der Partie teilen",
-  "playOnline": "Spiele online",
-  "playOffline": "Spiele offline"
+  "toggleSound": "Ton ii/uus schalte",
+  "overTheBoard": "Schpill offline gäg än Mänsch",
+  "sharePgn": "PGN teilä",
+  "shareGameUrl": "Partiä-URL teilä",
+  "playOnline": "Online schpilä",
+  "playOffline": "Offline schpilä"
 }

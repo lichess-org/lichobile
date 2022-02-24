@@ -97,3 +97,7 @@ export function defined<A>(v: A | undefined): v is A {
 export function plyColor(ply: number): Color {
   return (ply % 2 === 0) ? 'white' : 'black'
 }
+
+export function isEvalBetter(a: Tree.ClientEval, b: Tree.ClientEval): boolean {
+  return a.depth > b.depth || (a.depth === b.depth && a.nodes > b.nodes)
+}

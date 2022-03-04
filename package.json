@@ -73,6 +73,7 @@
         "@capacitor/status-bar": "1.0.6",
         "@capacitor/storage": "1.2.3",
         "@capacitor/toast": "1.0.6",
+        "@robingenz/capacitor-android-dark-mode-support": "1.0.1",
         "@types/d3": "4.5.0",
         "@types/lodash-es": "4.17.3",
         "capacitor-sound-effect": "2.0.1",

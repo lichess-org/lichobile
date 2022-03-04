@@ -83,7 +83,6 @@ function renderBody(ctrl: State) {
                   redraw()
                   loadImage('bg', val, ctrl.onProgress)
                   .then(() => {
-                    layout.onBackgroundChange(val)
                     ctrl.stopLoading()
                     resolve(val)
                   })
@@ -94,7 +93,6 @@ function renderBody(ctrl: State) {
                     resolve(prevTheme)
                   })
                 } else {
-                  layout.onBackgroundChange(val)
                   redraw()
                   resolve(val)
                 }

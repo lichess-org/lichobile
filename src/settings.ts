@@ -45,6 +45,7 @@ export default {
       availableBackgroundThemes: [
         { key: 'dark', name: 'dark', ext: '' },
         { key: 'light', name: 'light', ext: '' },
+        { key: 'system', name: 'bgThemeSyncWithSystem', ext: '' },
         { key: 'bgshapes', name: 'Shapes', ext: 'jpg' },
         { key: 'anthracite', name: 'Anthracite', ext: 'jpg' },
         { key: 'blue-maze', name: 'Blue Maze', ext: 'jpg' },

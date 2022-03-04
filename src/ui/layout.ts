@@ -2,6 +2,7 @@ import { Capacitor } from '@capacitor/core'
 import h from 'mithril/hyperscript'
 import settings from '../settings'
 import Gesture from '../utils/Gesture'
+import { getSystemTheme } from '../theme'
 import { viewportDim } from './helper'
 import * as menu from './menu'
 import MenuView from './menu/menuView'
@@ -18,13 +19,7 @@ import MainBoard from './shared/layout/MainBoard'
 import renderAnnouncement from './announceView'
 import announce from '~/announce'
 
-let background: string
-
 export default {
-
-  onBackgroundChange(bg: string) {
-    background = bg
-  },
 
   board(
     header: Mithril.Children,
@@ -35,7 +30,7 @@ export default {
     color?: string,
     klass?: string,
   ) {
-    background = background || settings.general.theme.background()
+    const background = settings.general.theme.background()
     const opts = key ? {
       key,
       ...containerOpts(background)
@@ -62,7 +57,7 @@ export default {
     overlay?: Mithril.Children,
     scrollListener?: (e: Event) => void
   ): Mithril.Vnode {
-    background = background || settings.general.theme.background()
+    const background = settings.general.theme.background()
     return h('div.view-container', containerOpts(background), [
       h('main#page', { oncreate: handleMenuOpen }, [
         h('header.main_header', header),
@@ -92,7 +87,7 @@ export default {
   },
 
   clock(content: () => Mithril.Children, overlay?: () => Mithril.Children) {
-    background = background || settings.general.theme.background()
+    const background = settings.general.theme.background()
     return h('div.view-container', containerOpts(background), [
       h('main#page', [
         h('div.content.fullScreen', content())
@@ -114,8 +109,10 @@ function handleMenuOpen({ dom }: Mithril.VnodeDOM<any, any>) {
   }
 }
 
-function bgClass(bgTheme: string) {
-  return bgTheme === 'dark' || bgTheme === 'light' ? bgTheme : 'transp ' + bgTheme
+function bgClass(key: string) {
+  return key === 'dark' || key === 'light' ? key :
+    key === 'system' ? getSystemTheme() :
+    'transp ' + key
 }
 
 function containerOpts(bgTheme: string) {

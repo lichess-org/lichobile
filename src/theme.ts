@@ -15,8 +15,8 @@ interface ThemeEntry {
   ext: string
 }
 
-export function isTransparent(bgTheme: string) {
-  return bgTheme !== 'dark' && bgTheme !== 'light'
+export function isTransparent(key: string) {
+  return key !== 'dark' && key !== 'light' && key !== 'system'
 }
 
 export function init() {
@@ -163,7 +163,18 @@ function download(
   })
 }
 
-export function setStatusBarStyle(bgTheme: string): Promise<void> {
+let systemTheme: string
+export function getSystemTheme(): string {
+  if (systemTheme === undefined) {
+    systemTheme = window.matchMedia('(prefers-color-scheme: light)').matches ?
+      'light' : 'dark'
+  }
+
+  return systemTheme
+}
+
+export function setStatusBarStyle(key: string): Promise<void> {
+  const bgTheme = key === 'system' ? getSystemTheme() : key
   return Promise.all([
     Capacitor.getPlatform() === 'android' ? StatusBar.setBackgroundColor({
       color: bgTheme === 'light' ? '#edebe9' :

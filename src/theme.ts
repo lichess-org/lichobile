@@ -166,8 +166,11 @@ function download(
 let systemTheme: string
 export function getSystemTheme(): string {
   if (systemTheme === undefined) {
-    systemTheme = window.matchMedia('(prefers-color-scheme: light)').matches ?
-      'light' : 'dark'
+    const mql = window.matchMedia('(prefers-color-scheme: light)')
+    systemTheme = mql.matches ? 'light' : 'dark'
+    mql.addEventListener('change', e => {
+      systemTheme = e.matches ? 'light' : 'dark'
+    })
   }
 
   return systemTheme

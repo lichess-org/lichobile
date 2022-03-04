@@ -16,6 +16,7 @@ export default class StockfishClient {
   private stopTimeoutId?: number
   private work?: Work
   private curEval?: Tree.ClientEval
+  private expectedPvs = 1
 
   // after a 'go' command, stockfish will be continue to emit until the 'bestmove'
   // message, reached by depth or after a 'stop' command
@@ -114,6 +115,7 @@ export default class StockfishClient {
     if (work) {
       this.work = work
       this.curEval = undefined
+      this.expectedPvs = 1
       this.stopped = false
       this.startQueue = []
       this.ready = defer()
@@ -162,6 +164,9 @@ export default class StockfishClient {
     // Sometimes we get #0. Let's just skip it.
     if (isMate && !povEv) return
 
+    // Track max pv index to determine when pv prints are done.
+    if (this.expectedPvs < multiPv) this.expectedPvs = multiPv
+
     const pivot = this.work.threatMode ? 0 : 1
     const ev = (this.work.ply % 2 === pivot) ? -povEv : povEv
 
@@ -178,36 +183,26 @@ export default class StockfishClient {
       depth
     }
 
-    const knps = nodes / elapsedMs
-
-    if (this.curEval === undefined) {
+    if (multiPv === 1) {
       this.curEval = {
         fen: this.work.currentFen,
         maxDepth: this.work.maxDepth,
         depth,
-        knps,
+        knps: nodes / elapsedMs,
         nodes,
         cp: pvData.cp,
         mate: pvData.mate,
         pvs: [pvData],
-        millis: elapsedMs
+        millis: elapsedMs,
       }
-    } else {
-      this.curEval.depth = depth
-      this.curEval.knps = knps
-      this.curEval.nodes = nodes
-      this.curEval.cp = pvData.cp
-      this.curEval.mate = pvData.mate
-      this.curEval.millis = elapsedMs
-      const multiPvIdx = multiPv - 1
-      if (this.curEval.pvs.length > multiPvIdx) {
-        this.curEval.pvs[multiPvIdx] = pvData
-      } else {
-        this.curEval.pvs.push(pvData)
-      }
+    } else if (this.curEval) {
+      this.curEval.pvs.push(pvData)
+      this.curEval.depth = Math.min(this.curEval.depth, depth)
     }
 
-    this.work.emit(this.curEval)
+    if (multiPv === this.expectedPvs && this.curEval) {
+      this.work.emit(this.curEval)
+    }
   }
 
   private listener = (e: Event) => {

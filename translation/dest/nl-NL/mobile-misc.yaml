@@ -22,3 +22,4 @@ nl-NL:
   shareGameUrl: 'Partij URL delen'
   playOnline: "Online spelen"
   playOffline: "Offline spelen"
+  bgThemeSyncWithSystem: "Synchroniseren met server"

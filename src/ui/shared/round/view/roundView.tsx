@@ -31,6 +31,7 @@ import CrazyPocket from '../crazy/CrazyPocket'
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView'
 import { renderInlineReplay, renderReplay } from './replay'
 import OnlineRound from '../OnlineRound'
+import { countChecks, NO_CHECKS } from '../util'
 import { Position, Material } from '../'
 
 export default function view(ctrl: OnlineRound) {
@@ -48,17 +49,17 @@ export default function view(ctrl: OnlineRound) {
 }
 
 export function renderMaterial(material: Material) {
-  const tomb = Object.keys(material.pieces).map((role: string) =>
-    h('div.tomb', Array.from(Array(material.pieces[role]).keys())
+  const ret = Object.keys(material.pieces).map((role: string) =>
+    h('div.material', [...Array(material.pieces[role]).keys()]
       .map(_ => h('piece', { className: role }))
     )
   )
 
   if (material.score > 0) {
-    tomb.push(h('span', '+' + material.score))
+    ret.push(h('span', '+' + material.score))
   }
 
-  return tomb
+  return ret
 }
 
 export function viewOnlyBoardContent(fen: string, orientation: Color, lastMove?: string, variant?: VariantKey, wrapperClass?: string, customPieceTheme?: string) {
@@ -206,8 +207,11 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
 
   const material = ctrl.chessground.getMaterialDiff()
 
-  const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')
-  const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')
+  const checksCount = ctrl.data.player.checks || ctrl.data.opponent.checks ?
+    countChecks(ctrl.data.steps, ctrl.vm.ply) : NO_CHECKS
+
+  const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], checksCount[ctrl.data.player.color], 'player')
+  const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], checksCount[ctrl.data.opponent.color], 'opponent')
 
   const playable = gameApi.playable(ctrl.data)
   const myTurn = gameApi.isPlayerTurn(ctrl.data)
@@ -259,11 +263,6 @@ function renderExpiration(ctrl: OnlineRound, position: Position, myTurn: boolean
   )
 }
 
-function getChecksCount(ctrl: OnlineRound, color: Color) {
-  const player = color === ctrl.data.player.color ? ctrl.data.opponent : ctrl.data.player
-  return player.checks
-}
-
 function renderSubmitMovePopup(ctrl: OnlineRound) {
   if (ctrl.vm.moveToSubmit || ctrl.vm.dropToSubmit || ctrl.vm.submitFeedback) {
     return (
@@ -307,7 +306,14 @@ function renderPlayerName(player: Player) {
   return 'Anonymous'
 }
 
-function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Material, position: Position, isCrazy: boolean) {
+function renderAntagonistInfo(
+  ctrl: OnlineRound,
+  player: Player,
+  material: Material,
+  checkCount: number,
+  position: Position,
+  isCrazy: boolean
+) {
   const user = player.user
   const playerName = renderPlayerName(player)
   const togglePopup = user ? () => ctrl.openUserPopup(position, user.id) : utils.noop
@@ -315,12 +321,12 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
     helper.ontap(togglePopup, () => userInfos(user, player, playerApi.playerName(player))) :
     helper.ontap(utils.noop, () => Toast.show({ text: (player.name || player.username || player.user?.username)!, position: 'center', duration: 'short' }))
 
-  const checksNb = getChecksCount(ctrl, player.color)
-
   const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
     '#' + ctrl.data.tournament.ranks[player.color] + ' ' : null
 
   const isBerserk = ctrl.vm.goneBerserk[player.color]
+
+  const checksNb = ctrl.data.game.variant.key === 'threeCheck' ? checkCount : undefined
 
   return (
     <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '') + (ctrl.isZen() ? ' zen' : '')} oncreate={vConf}>
@@ -349,7 +355,9 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
           </h3> : null
         }
         {checksNb !== undefined ?
-          <div className="checkCount">+{checksNb}</div> : null
+          [...Array(checksNb).keys()].map(_ =>
+            h('div.material', h('piece', { className: 'king' }))
+          ) : null
         }
         {!ctrl.vm.showCaptured || ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
       </div> : null
@@ -373,6 +381,7 @@ function renderPlayTable(
   ctrl: OnlineRound,
   player: Player,
   material: Material,
+  checkCount: number,
   position: Position,
 ) {
   const step = ctrl.plyStep(ctrl.vm.ply)
@@ -386,7 +395,7 @@ function renderPlayTable(
 
   return (
     <section className={classN + ' ' + position}>
-      {renderAntagonistInfo(ctrl, player, material, position, isCrazy)}
+      {renderAntagonistInfo(ctrl, player, material, checkCount, position, isCrazy)}
       { step.crazy ?
         h(CrazyPocket, {
           ctrl,

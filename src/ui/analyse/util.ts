@@ -8,14 +8,6 @@ export function readDrops(line?: string | null): string[] | null {
   return line.match(/.{2}/g) || []
 }
 
-export function readCheckCount(fen: string) {
-  const counts = fen.substr(fen.length - 4)
-  return {
-    white: parseInt(counts[3], 10),
-    black: parseInt(counts[1], 10)
-  }
-}
-
 export function empty(a?: any) {
   return !a || a.length === 0
 }

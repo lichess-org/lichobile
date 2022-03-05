@@ -201,9 +201,8 @@ export interface GameStatus {
 }
 
 export interface CheckCount {
-  readonly white: number
-  readonly black: number
-  readonly [color: string]: number
+  white: number
+  black: number
 }
 
 export interface Pocket {

@@ -11,6 +11,7 @@ hi-IN:
   positionRight: "दाएँ" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "बाएँ" #As in "left-hand side"; not political or past participle
   toggleSound: "ध्वनि को चालू या बंद करें" #Settings to enable/disable sound
+  overTheBoard: "बोर्ड पर"
   sharePgn: "PGN शेयर करें"
   shareGameUrl: 'खेल के URL को साझा करें'
   playOnline: "ऑनलाइन खेलें"

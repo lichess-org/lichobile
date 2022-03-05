@@ -5,6 +5,14 @@ export function positionLooksLegit(fen: string): boolean {
   return (pieces.match(/k/g) || []).length === 1 && (pieces.match(/K/g) || []).length === 1
 }
 
+export function readCheckCount(fen: string): { white: number, black: number } {
+  const counts = fen.substr(fen.length - 4)
+  return {
+    white: parseInt(counts[3], 10),
+    black: parseInt(counts[1], 10)
+  }
+}
+
 export function playerFromFen(fen?: string): Color {
   if (fen) {
     const { color } = readFen(fen)

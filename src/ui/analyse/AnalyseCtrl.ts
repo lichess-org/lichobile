@@ -8,6 +8,7 @@ import { formatDateTime } from '../../i18n'
 import Chessground from '../../chessground/Chessground'
 import * as cg from '../../chessground/interfaces'
 import * as chess from '../../chess'
+import { readCheckCount } from '../../utils/fen'
 import * as chessFormat from '../../utils/chessFormat'
 import { build as makeTree, path as treePath, ops as treeOps, TreeWrapper, Tree } from '../shared/tree'
 import redraw from '../../utils/redraw'
@@ -714,7 +715,7 @@ export default class AnalyseCtrl implements PromotingInterface {
     const node = this.node
 
     if (this.data.game.variant.key === 'threeCheck' && !node.checkCount) {
-      node.checkCount = util.readCheckCount(node.fen)
+      node.checkCount = readCheckCount(node.fen)
     }
 
     const color: Color = util.plyColor(node.ply)

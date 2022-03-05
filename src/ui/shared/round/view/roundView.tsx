@@ -207,7 +207,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
 
   const material = ctrl.chessground.getMaterialDiff()
 
-  const checksCount = !!(ctrl.data.player.checks || ctrl.data.opponent.checks) ?
+  const checksCount = ctrl.data.player.checks || ctrl.data.opponent.checks ?
     countChecks(ctrl.data.steps, ctrl.vm.ply) : NO_CHECKS
 
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], checksCount[ctrl.data.player.color], 'player')

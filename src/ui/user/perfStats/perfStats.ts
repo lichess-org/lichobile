@@ -58,7 +58,7 @@ export default {
     const header = headerWidget(null,
       backButton(h('div.main_header_title', [
         h('span.withIcon', { 'data-icon': gameIcon(perf) }),
-        userId + ' ' + i18n('perfStats',shortPerfTitle(perf as PerfKey))
+        userId + ' ' + i18n('perfStats',shortPerfTitle(perf ))
       ]))
     )
 

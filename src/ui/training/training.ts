@@ -99,10 +99,10 @@ export default {
 
     if (this.ctrl) {
       return layout.board(
-        renderHeader(this.ctrl!),
-        renderContent(this.ctrl!, key),
+        renderHeader(this.ctrl),
+        renderContent(this.ctrl, key),
         undefined,
-        overlay(this.ctrl!)
+        overlay(this.ctrl)
       )
     }
     else {

@@ -70,7 +70,7 @@ function renderForm() {
 }
 
 function join(form: HTMLFormElement) {
-  const elements: HTMLCollection = (form[0] as HTMLFieldSetElement).elements as HTMLCollection
+  const elements: HTMLCollection = (form[0] as HTMLFieldSetElement).elements 
   const password = (elements[0] as HTMLInputElement).value
   const team = (elements[1] as HTMLTextAreaElement).value
 

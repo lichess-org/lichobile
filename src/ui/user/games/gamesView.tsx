@@ -57,7 +57,7 @@ function renderAllGames(ctrl: IUserGamesCtrl) {
   const { games, paginator } = ctrl.scrollState
   return (
     <div id="scroller-wrapper" className="native_scroller userGame-scroller box"
-      oncreate={helper.ontapY(e => onTap(ctrl, e!), undefined, helper.getLI)}
+      oncreate={helper.ontapY(e => onTap(ctrl, e), undefined, helper.getLI)}
       onscroll={throttle(ctrl.onScroll, 30)}
     >
       { paginator ?

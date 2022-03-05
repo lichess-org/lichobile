@@ -90,7 +90,7 @@ function studyList(ctrl: StudyIndexCtrl) {
 
   return h('div#scroller-wrapper.native_scroller.study-pagerScroller.box', {
     onscroll: throttle(ctrl.onScroll, 30),
-    oncreate: helper.ontapY(e => onTap(ctrl, e!), undefined, helper.closestHandler('.study-pagerItem'))
+    oncreate: helper.ontapY(e => onTap(ctrl, e), undefined, helper.closestHandler('.study-pagerItem'))
   },
     ctrl.state.paginator ?
       studies.length ?

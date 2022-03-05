@@ -58,7 +58,7 @@ export function read(fen: string): cg.Pieces {
           const role = c.toLowerCase()
           pieces.set(util.pos2key([col, row] as cg.Pos), {
             role: roles[role],
-            color: (c === role ? 'black' : 'white') as Color
+            color: (c === role ? 'black' : 'white')
           })
         }
       }

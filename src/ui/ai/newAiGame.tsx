@@ -107,7 +107,7 @@ export default {
               <div className="popupActionWrapper">
                 <button className="defaultButton"
                   oncreate={helper.ontap(() => {
-                    ctrl.root.startNewGame(settings.ai.variant() as VariantKey, ctrl.root.vm.setupFen)
+                    ctrl.root.startNewGame(settings.ai.variant() , ctrl.root.vm.setupFen)
                   })}>
                   {i18n('play')}
                 </button>

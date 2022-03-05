@@ -138,7 +138,7 @@ export default class StockfishClient {
   private processOutput(text: string) {
     console.debug('[stockfish >>] ' + text)
 
-    const evalMatch = text.match(/^info string (classical|NNUE) evaluation/)
+    const evalMatch = /^info string (classical|NNUE) evaluation/.exec(text)
     if (evalMatch) {
       this.evaluation = evalMatch[1]
     }
@@ -149,7 +149,7 @@ export default class StockfishClient {
     }
     if (this.stopped || this.work === undefined) return
 
-    const matches = text.match(EVAL_REGEX)
+    const matches = EVAL_REGEX.exec(text)
     if (!matches) return
 
     const depth = parseInt(matches[1]),

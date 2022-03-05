@@ -25,7 +25,7 @@ export default {
     return h('div#replay.analyse-replay.native_scroller', {
       className,
       oncreate: helper.ontapXY(e => onReplayTap(ctrl, e), (e: TouchEvent) => {
-        const el = getMoveEl(e!)
+        const el = getMoveEl(e)
         const ds = el.dataset
         if (el && ds.path) {
           ctrl.contextMenu = ds.path

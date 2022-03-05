@@ -107,7 +107,7 @@ function showGameTable(ctrl: AnalyseCtrl, title: string, games: readonly Game[])
   if (!ctrl.explorer.withGames || !games.length) return null
   return (
     <table className="games"
-      oncreate={helper.ontapXY(e => link(ctrl, e!), undefined, getTR)}
+      oncreate={helper.ontapXY(e => link(ctrl, e), undefined, getTR)}
     >
       <thead>
         <tr>
@@ -149,7 +149,7 @@ function showMoveTable(ctrl: AnalyseCtrl, moves: readonly OpeningMoveStats[]) {
 
   return (
     <table className="moves"
-      oncreate={helper.ontapXY(e => onTableTap(ctrl, e!), undefined, getTR)}
+      oncreate={helper.ontapXY(e => onTableTap(ctrl, e), undefined, getTR)}
     >
       <thead>
         <tr>

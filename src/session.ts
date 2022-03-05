@@ -227,7 +227,7 @@ function login(username: string, password: string, token: string | null): Promis
   }, true)
   .then(data => {
     if (isSession(data)) {
-      session = <Session>data
+      session = data
       if (session.sessionId) {
         storage.set(SESSION_ID_KEY, session.sessionId)
       }

@@ -78,7 +78,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     }
     else if (!saved || saved.ply === 0) this.newGameMenu.open()
 
-    const currentVariant = <VariantKey>settings.otb.variant()
+    const currentVariant = settings.otb.variant()
     if (!setupFen) {
       if (saved) {
         try {

@@ -210,8 +210,10 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const checksCount = ctrl.data.player.checks || ctrl.data.opponent.checks ?
     countChecks(ctrl.data.steps, ctrl.vm.ply) : NO_CHECKS
 
-  const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], checksCount[ctrl.data.player.color], 'player')
-  const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], checksCount[ctrl.data.opponent.color], 'opponent')
+  const flip = !ctrl.data.tv && ctrl.vm.flip
+
+  const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], checksCount[ctrl.data.player.color], 'player', flip)
+  const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], checksCount[ctrl.data.opponent.color], 'opponent', flip)
 
   const playable = gameApi.playable(ctrl.data)
   const myTurn = gameApi.isPlayerTurn(ctrl.data)
@@ -223,8 +225,6 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
     !myTurn ? renderExpiration(ctrl, 'opponent', myTurn) : null,
     myTurn ? renderExpiration(ctrl, 'player', myTurn) : null,
   ] : [])
-
-  const flip = !ctrl.data.tv && ctrl.vm.flip
 
   if (isPortrait) {
     return [
@@ -306,11 +306,12 @@ function renderPlayerName(player: Player) {
   return 'Anonymous'
 }
 
-function renderAntagonistInfo(
+function renderPlayer(
   ctrl: OnlineRound,
   player: Player,
   material: Material,
   checkCount: number,
+  flipped: boolean,
   position: Position,
   isCrazy: boolean
 ) {
@@ -363,11 +364,13 @@ function renderAntagonistInfo(
       </div> : null
       }
       {isCrazy && ctrl.clock ?
-        h(Clock, {
+        // must reset clock with a single-child keyed fragment when flipped
+        [h(Clock, {
+          key: flipped.toString(),
           ctrl: ctrl.clock,
           color: player.color,
           isBerserk,
-        }) :
+        })] :
         isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
@@ -383,6 +386,7 @@ function renderPlayTable(
   material: Material,
   checkCount: number,
   position: Position,
+  flipped: boolean,
 ) {
   const step = ctrl.plyStep(ctrl.vm.ply)
   const isCrazy = !!step.crazy
@@ -395,7 +399,7 @@ function renderPlayTable(
 
   return (
     <section className={classN + ' ' + position}>
-      {renderAntagonistInfo(ctrl, player, material, checkCount, position, isCrazy)}
+      {renderPlayer(ctrl, player, material, checkCount, flipped, position, isCrazy)}
       { step.crazy ?
         h(CrazyPocket, {
           ctrl,
@@ -405,11 +409,13 @@ function renderPlayTable(
         }) : null
       }
       { !isCrazy && ctrl.clock ?
-        h(Clock, {
+        // must reset clock with a single-child keyed fragment when flipped
+        [h(Clock, {
+          key: flipped.toString(),
           ctrl: ctrl.clock,
           color: player.color,
           isBerserk: ctrl.vm.goneBerserk[player.color],
-        }) :
+        })] :
         !isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player

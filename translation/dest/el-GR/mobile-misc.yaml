@@ -22,3 +22,4 @@ el-GR:
   shareGameUrl: 'Κοινοποίηση URL παιχνιδιού'
   playOnline: "Παίξτε σε διαδικτυακά"
   playOffline: "Παίξτε χωρίς σύνδεση"
+  bgThemeSyncWithSystem: "Συγχρονισμός με το σύστημα" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

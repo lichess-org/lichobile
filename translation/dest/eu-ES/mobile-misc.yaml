@@ -22,3 +22,4 @@ eu-ES:
   shareGameUrl: 'Partekatu partidaren helbidea'
   playOnline: "Jokatu online"
   playOffline: "Jokatu offline"
+  bgThemeSyncWithSystem: "Zerbitzariarekin sinkronizatu" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

@@ -22,3 +22,4 @@ fi-FI:
   shareGameUrl: 'Jaa pelin URL'
   playOnline: "Pelaa verkossa"
   playOffline: "Pelaa offline-tilassa"
+  bgThemeSyncWithSystem: "Käyttöjärjestelmäni mukainen" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

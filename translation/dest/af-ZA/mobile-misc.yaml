@@ -22,4 +22,4 @@ af-ZA:
   shareGameUrl: 'Deel spel URL'
   playOnline: "Speel aanlyn"
   playOffline: "Speel vanlyn"
-  bgThemeSyncWithSystem: "Sinchroniseer met stelsel"
+  bgThemeSyncWithSystem: "Sinchroniseer met stelsel" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

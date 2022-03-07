@@ -39,19 +39,7 @@ export function view(ctrl: CorresClockCtrl, color: Color, runningColor: Color) {
     'emerg': time < ctrl.data.emerg,
     'offline': !hasNetwork()
   })
-  function cOnCreate(vnode: Mithril.VnodeDOM<any, any>) {
-    const el = vnode.dom as HTMLElement
-    el.textContent = formatClockTime(time * 1000)
-    ctrl.els[color] = el
-  }
-  function cOnUpdate(vnode: Mithril.VnodeDOM<any, any>) {
-    const el = vnode.dom as HTMLElement
-    el.textContent = formatClockTime(time * 1000)
-    ctrl.els[color] = el
-  }
   return h('div', {
     className,
-    oncreate: cOnCreate,
-    onupdate: cOnUpdate
-  })
+  }, formatClockTime(time * 1000))
 }

@@ -1210,5 +1210,6 @@ export default {
   "sharePgn": "שתף קובץ משחק (PGN)",
   "shareGameUrl": "שתף כתובת משחק (URL)",
   "playOnline": "שחק (מקוון)",
-  "playOffline": "שחק (לא מקוון)"
+  "playOffline": "שחק (לא מקוון)",
+  "bgThemeSyncWithSystem": "סנכרן עם המערכת"
 }

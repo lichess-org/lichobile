@@ -1182,5 +1182,6 @@ export default {
   "otbFlipPiecesAndInfoAfterMove": "Obrnite figure i informacije o protivniku nakon poteza",
   "settingsClockPosition": "Pozicija sata",
   "positionRight": "Desno",
-  "positionLeft": "Lijevo"
+  "positionLeft": "Lijevo",
+  "bgThemeSyncWithSystem": "Sinhronizirati sa sistemom"
 }

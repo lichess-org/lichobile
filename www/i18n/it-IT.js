@@ -1284,5 +1284,6 @@ export default {
   "sharePgn": "Condividi PGN",
   "shareGameUrl": "Condividi URL della partita",
   "playOnline": "Gioca online",
-  "playOffline": "Gioca offline"
+  "playOffline": "Gioca offline",
+  "bgThemeSyncWithSystem": "Sincronizza"
 }

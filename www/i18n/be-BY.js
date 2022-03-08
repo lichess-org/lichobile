@@ -1392,5 +1392,6 @@ export default {
   "sharePgn": "Падзяліцца PGN",
   "shareGameUrl": "Падзяліцца спасылкай на гульню",
   "playOnline": "Гуляць анлайн",
-  "playOffline": "Гуляць афлайн"
+  "playOffline": "Гуляць афлайн",
+  "bgThemeSyncWithSystem": "Сінхранізацыя з сістэмай"
 }

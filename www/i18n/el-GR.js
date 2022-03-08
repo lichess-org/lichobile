@@ -1284,5 +1284,6 @@ export default {
   "sharePgn": "Κοινοποίηση PGN",
   "shareGameUrl": "Κοινοποίηση URL παιχνιδιού",
   "playOnline": "Παίξτε σε διαδικτυακά",
-  "playOffline": "Παίξτε χωρίς σύνδεση"
+  "playOffline": "Παίξτε χωρίς σύνδεση",
+  "bgThemeSyncWithSystem": "Συγχρονισμός με το σύστημα"
 }

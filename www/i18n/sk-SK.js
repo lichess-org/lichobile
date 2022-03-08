@@ -1323,5 +1323,6 @@ export default {
   "positionRight": "Vpravo",
   "positionLeft": "Vľavo",
   "playOnline": "Hrať v režime online",
-  "playOffline": "Hrať v režime offline"
+  "playOffline": "Hrať v režime offline",
+  "bgThemeSyncWithSystem": "Synchronizovať so systémom"
 }

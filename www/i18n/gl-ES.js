@@ -1284,5 +1284,6 @@ export default {
   "sharePgn": "Compartir PGN",
   "shareGameUrl": "Compartir URL da partida",
   "playOnline": "Xogar en liña",
-  "playOffline": "Xogar offline"
+  "playOffline": "Xogar offline",
+  "bgThemeSyncWithSystem": "Sincronizar co sistema"
 }

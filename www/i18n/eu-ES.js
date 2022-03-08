@@ -1284,5 +1284,6 @@ export default {
   "sharePgn": "Partekatu PGNa",
   "shareGameUrl": "Partekatu partidaren helbidea",
   "playOnline": "Jokatu online",
-  "playOffline": "Jokatu offline"
+  "playOffline": "Jokatu offline",
+  "bgThemeSyncWithSystem": "Zerbitzariarekin sinkronizatu"
 }

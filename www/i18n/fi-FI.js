@@ -1284,5 +1284,6 @@ export default {
   "sharePgn": "Jaa PGN",
   "shareGameUrl": "Jaa pelin URL",
   "playOnline": "Pelaa verkossa",
-  "playOffline": "Pelaa offline-tilassa"
+  "playOffline": "Pelaa offline-tilassa",
+  "bgThemeSyncWithSystem": "Käyttöjärjestelmäni mukainen"
 }

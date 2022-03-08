@@ -1163,6 +1163,7 @@ export default {
   "positionRight": "दाएँ",
   "positionLeft": "बाएँ",
   "toggleSound": "ध्वनि को चालू या बंद करें",
+  "overTheBoard": "बोर्ड पर",
   "sharePgn": "PGN शेयर करें",
   "shareGameUrl": "खेल के URL को साझा करें",
   "playOnline": "ऑनलाइन खेलें",

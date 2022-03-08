@@ -1284,5 +1284,6 @@ export default {
   "sharePgn": "PGN delen",
   "shareGameUrl": "Partij URL delen",
   "playOnline": "Online spelen",
-  "playOffline": "Offline spelen"
+  "playOffline": "Offline spelen",
+  "bgThemeSyncWithSystem": "Synchroniseren met systeem"
 }

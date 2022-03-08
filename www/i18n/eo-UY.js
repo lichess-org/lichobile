@@ -1060,10 +1060,16 @@ export default {
   "declineOnlyBot": "Mi nur akceptas defiojn de robotoj.",
   "apiUnsupported": "Via versio de Lichess apon estas tro malnova! Bonvolu senpage aktualigi al la lasta versio.",
   "apiDeprecated": "Senpage aktualiĝu al la lasta lichess apo! Apogo por tiu ĉi versio finiĝos la %s.",
+  "comments": "Komentoj",
+  "gameInformation": "Informo de la ludo",
+  "lastScore": "Lasta poentaro: %s",
   "playerisInvitingYou": "%s invitas vin",
   "vibrateOnGameEvents": "Vibri en eventaj ludoj",
   "offline": "Nekonektita",
   "settingsClockPosition": "Horloĝa pozicio",
   "positionRight": "Dekstra",
-  "positionLeft": "Maldekstra"
+  "positionLeft": "Maldekstra",
+  "overTheBoard": "Ludi fizike kun aliulo",
+  "sharePgn": "Disdoni PGN",
+  "shareGameUrl": "Disdoni URL de la ludo"
 }

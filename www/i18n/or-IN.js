@@ -340,5 +340,6 @@ export default {
   "sharePgn": "PGN ଅଂଶୀଦାର କରନ୍ତୁ",
   "shareGameUrl": "ଖେଳ URL ଅଂଶୀଦାର କରନ୍ତୁ",
   "playOnline": "ଅନଲାଇନ୍ ଖେଳନ୍ତୁ",
-  "playOffline": "ଅଫଲାଇନ୍ ଖେଳନ୍ତୁ"
+  "playOffline": "ଅଫଲାଇନ୍ ଖେଳନ୍ତୁ",
+  "bgThemeSyncWithSystem": "ସିଷ୍ଟମ୍ ସହ ଖାପ ଖୁଆଇବା"
 }

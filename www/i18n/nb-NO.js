@@ -1284,5 +1284,6 @@ export default {
   "sharePgn": "Del PGN",
   "shareGameUrl": "Del URL for partiet",
   "playOnline": "Spill på nett",
-  "playOffline": "Spill uten nett"
+  "playOffline": "Spill uten nett",
+  "bgThemeSyncWithSystem": "Synkroniser med systemet"
 }

@@ -1284,5 +1284,6 @@ export default {
   "sharePgn": "PGN teilä",
   "shareGameUrl": "Partiä-URL teilä",
   "playOnline": "Online schpilä",
-  "playOffline": "Offline schpilä"
+  "playOffline": "Offline schpilä",
+  "bgThemeSyncWithSystem": "Mit em Syschtem synchronisiere"
 }

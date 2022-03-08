@@ -1340,5 +1340,6 @@ export default {
   "sharePgn": "Dalīties ar PGN",
   "shareGameUrl": "Dalīties ar spēles URL",
   "playOnline": "Spēlēt tiešsaistē",
-  "playOffline": "Spēlēt bezsaistē"
+  "playOffline": "Spēlēt bezsaistē",
+  "bgThemeSyncWithSystem": "Saskaņot ar sistēmu"
 }

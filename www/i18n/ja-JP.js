@@ -1228,5 +1228,6 @@ export default {
   "sharePgn": "PGN を共有",
   "shareGameUrl": "ゲーム URLを共有",
   "playOnline": "オンライン対戦",
-  "playOffline": "オフライン対戦"
+  "playOffline": "オフライン対戦",
+  "bgThemeSyncWithSystem": "システムと同期"
 }

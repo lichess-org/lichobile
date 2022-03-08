@@ -1340,5 +1340,6 @@ export default {
   "sharePgn": "Distribuie PGN",
   "shareGameUrl": "Distribuie URL-ul jocului",
   "playOnline": "Joacă online",
-  "playOffline": "Joacă offline"
+  "playOffline": "Joacă offline",
+  "bgThemeSyncWithSystem": "Sincronizare cu sistemul"
 }

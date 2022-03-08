@@ -22,3 +22,4 @@ de-CH:
   shareGameUrl: 'Partiä-URL teilä'
   playOnline: "Online schpilä"
   playOffline: "Offline schpilä"
+  bgThemeSyncWithSystem: "Mit em Syschtem synchronisiere" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

@@ -1,1 +1,2 @@
 tlh-AA:
+  bgThemeSyncWithSystem: "pat meymoH" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

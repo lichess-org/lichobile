@@ -22,3 +22,4 @@ lv-LV:
   shareGameUrl: 'Dalīties ar spēles URL'
   playOnline: "Spēlēt tiešsaistē"
   playOffline: "Spēlēt bezsaistē"
+  bgThemeSyncWithSystem: "Saskaņot ar sistēmu" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

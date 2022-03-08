@@ -21,3 +21,4 @@ he-IL:
   shareGameUrl: 'שתף כתובת משחק (URL)'
   playOnline: "שחק (מקוון)"
   playOffline: "שחק (לא מקוון)"
+  bgThemeSyncWithSystem: "סנכרן עם המערכת" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

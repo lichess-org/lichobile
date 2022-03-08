@@ -22,3 +22,4 @@ gl-ES:
   shareGameUrl: 'Compartir URL da partida'
   playOnline: "Xogar en liña"
   playOffline: "Xogar offline"
+  bgThemeSyncWithSystem: "Sincronizar co sistema" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

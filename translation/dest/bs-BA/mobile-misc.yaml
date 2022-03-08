@@ -11,3 +11,4 @@ bs-BA:
   settingsClockPosition: "Pozicija sata" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "Desno" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Lijevo" #As in "left-hand side"; not political or past participle
+  bgThemeSyncWithSystem: "Sinhronizirati sa sistemom" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

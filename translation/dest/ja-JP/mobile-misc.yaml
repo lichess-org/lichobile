@@ -22,3 +22,4 @@ ja-JP:
   shareGameUrl: 'ゲーム URLを共有'
   playOnline: "オンライン対戦"
   playOffline: "オフライン対戦"
+  bgThemeSyncWithSystem: "システムと同期" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

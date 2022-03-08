@@ -12,3 +12,4 @@ sk-SK:
   positionLeft: "Vľavo" #As in "left-hand side"; not political or past participle
   playOnline: "Hrať v režime online"
   playOffline: "Hrať v režime offline"
+  bgThemeSyncWithSystem: "Synchronizovať so systémom" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

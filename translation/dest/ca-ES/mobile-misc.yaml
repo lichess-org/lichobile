@@ -22,3 +22,4 @@ ca-ES:
   shareGameUrl: 'Comparteix l''enllaç a la partida'
   playOnline: "Juga online"
   playOffline: "Juga sense connexió"
+  bgThemeSyncWithSystem: "Sincronitzar amb el sistema" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

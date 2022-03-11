@@ -22,3 +22,4 @@ kn-IN:
   shareGameUrl: 'ಆಟದ URL ಹಂಚಿ'
   playOnline: "ಆನ್ಲೈನ್ ಆಡಿ"
   playOffline: "ಓಫ್ಲೈನ್ ಆಡಿ"
+  bgThemeSyncWithSystem: "ಸಿಸ್ಟಮ್ ಅನುಸಾರವಾಗಿ" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

@@ -41,7 +41,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public newGameMenu: NewOtbGameCtrl
   public importGamePopup: ImportGameController
   public chessground!: Chessground
-  public replay!: Replay
+  public replay?: Replay
   public vm: OtbVM
   public clock?: IChessClock
   public moveList: boolean
@@ -68,7 +68,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     this.moveList = !!settings.game.moveList()
 
     if (setupFen) {
-      this.newGameMenu.open()
+      this.newGameMenu.isOpen(true)
 
       if (setupVariant) {
         settings.otb.variant(setupVariant)
@@ -174,15 +174,19 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   }
 
   public goToAnalysis = () => {
-    router.set(`/analyse/offline/otb/${this.data.player.color}?ply=${this.replay.ply}&curFen=${this.replay.situation().fen}`)
+    if (this.replay) {
+      router.set(`/analyse/offline/otb/${this.data.player.color}?ply=${this.replay.ply}&curFen=${this.replay.situation().fen}`)
+    }
   }
 
   public save = () => {
-    setCurrentOTBGame({
-      data: this.data,
-      situations: this.replay.situations,
-      ply: this.replay.ply
-    })
+    if (this.replay) {
+      setCurrentOTBGame({
+        data: this.data,
+        situations: this.replay.situations,
+        ply: this.replay.ply
+      })
+    }
   }
 
   public saveClock = () => {
@@ -204,19 +208,19 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   }
 
   public sharePGN = () => {
-    this.replay.pgn('White', 'Black')
+    this.replay?.pgn('White', 'Black')
     .then((data: chess.PgnDumpResponse) =>
       Share.share({ text: data.pgn })
     )
   }
 
   private onPromotion = (orig: Key, dest: Key, role: Role) => {
-    this.replay.addMove(orig, dest, role)
+    this.replay?.addMove(orig, dest, role)
   }
 
   private userMove = (orig: Key, dest: Key) => {
     if (!promotion.start(this, orig, dest, this.onPromotion)) {
-      this.replay.addMove(orig, dest)
+      this.replay?.addMove(orig, dest)
     }
   }
 
@@ -231,11 +235,11 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   }
 
   private onUserNewPiece = (role: Role, key: Key) => {
-    const sit = this.replay.situation()
+    const sit = this.replay!.situation()
     if (crazyValid.drop(this.data, role, key, sit.drops)) {
-      this.replay.addDrop(role, key)
+      this.replay?.addDrop(role, key)
     } else {
-      this.apply(this.replay.situation())
+      this.apply(this.replay!.situation())
     }
   }
 
@@ -302,27 +306,27 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   }
 
   public player = () => {
-    return this.replay.situation().player
+    return this.replay?.situation().player || 'white'
   }
 
   public jump = (ply: number): false => {
     this.chessground.cancelMove()
-    if (ply < 0 || ply >= this.replay.situations.length) return false
-    this.replay.ply = ply
-    this.apply(this.replay.situation())
+    if (ply < 0 || ply >= this.replay!.situations.length) return false
+    this.replay!.ply = ply
+    this.apply(this.replay!.situation())
     return false
   }
 
-  public jumpNext = () => this.jump(this.replay.ply + 1)
-  public jumpPrev = () => this.jump(this.replay.ply - 1)
+  public jumpNext = () => this.jump(this.replay!.ply + 1)
+  public jumpPrev = () => this.jump(this.replay!.ply - 1)
   public jumpFirst = () => this.jump(this.firstPly())
   public jumpLast = () => this.jump(this.lastPly())
 
   public firstPly = () => 0
-  public lastPly = () => this.replay.situations.length - 1
+  public lastPly = () => this.replay!.situations.length - 1
 
   public replaying = () => {
-    return this.replay.ply !== this.lastPly()
+    return this.replay!.ply !== this.lastPly()
   }
 
   public canDrop = () => true

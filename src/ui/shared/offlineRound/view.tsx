@@ -15,8 +15,8 @@ import { IChessClock, IStageClock } from '../clock/interfaces'
 import { autoScroll, autoScrollInline, onReplayTap, getMoveEl } from '../round/util'
 
 function getChecksCount(ctrl: OfflineRoundInterface, color: Color) {
-  const sit = ctrl.replay.situation()
-  if (sit.checkCount)
+  const sit = ctrl.replay?.situation()
+  if (sit?.checkCount)
     return utils.oppositeColor(color) === 'white' ?
       sit.checkCount.white : sit.checkCount.black
   else
@@ -32,8 +32,8 @@ export function renderAntagonist(
   customPieceTheme?: string,
   clock?: IChessClock,
 ) {
-  const sit = ctrl.replay.situation()
-  const isCrazy = !!sit.crazyhouse
+  const sit = ctrl.replay?.situation()
+  const isCrazy = !!sit?.crazyhouse
   const antagonist = position === 'player' ? ctrl.data.player : ctrl.data.opponent
   const antagonistColor = antagonist.color
 
@@ -61,7 +61,7 @@ export function renderAntagonist(
         </div> : null
         }
       </div>
-      {sit.crazyhouse ?
+      {sit?.crazyhouse ?
         h(CrazyPocket, {
           ctrl,
           crazyData: sit.crazyhouse,
@@ -126,27 +126,27 @@ export function renderEndedGameStatus(ctrl: OfflineRoundInterface) {
 
 export function renderClaimDrawButton(ctrl: OfflineRoundInterface) {
   return gameApi.playable(ctrl.data) ? h('button.draw-yes', {
-    oncreate: helper.ontap(() => ctrl.replay.claimDraw())
+    oncreate: helper.ontap(() => ctrl.replay?.claimDraw())
   }, h('span', '½'), i18n('threefoldRepetition')) : null
 }
 
 export function renderReplay(ctrl: OfflineRoundInterface) {
   const pieceNotation = settings.game.pieceNotation()
-  return h('div.replay.box', {
+  return ctrl.replay ? h('div.replay.box', {
     className: pieceNotation ? ' displayPieces' : '',
     oncreate: (vnode: Mithril.VnodeDOM<any, any>) => {
       setTimeout(() => autoScroll(vnode.dom as HTMLElement), 100)
       helper.ontapY((e: Event) => onReplayTap(ctrl, e), undefined, getMoveEl)(vnode)
     },
     onupdate: (vnode: Mithril.VnodeDOM<any, any>) => autoScroll(vnode.dom as HTMLElement),
-  }, renderMoves(ctrl.replay))
+  }, renderMoves(ctrl.replay)) : null
 }
 
 
 export function renderInlineReplay(ctrl: OfflineRoundInterface) {
   const pieceNotation = settings.game.pieceNotation()
 
-  if (!ctrl.moveList) {
+  if (!ctrl.replay || !ctrl.moveList) {
     return null
   }
 
@@ -162,21 +162,21 @@ export function renderInlineReplay(ctrl: OfflineRoundInterface) {
 
 
 export function renderBackwardButton(ctrl: OfflineRoundInterface) {
-  return h('button.action_bar_button.fa.fa-chevron-left', {
+  return ctrl.replay ? h('button.action_bar_button.fa.fa-chevron-left', {
     oncreate: helper.ontap(ctrl.jumpPrev, ctrl.jumpFirst),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply > ctrl.firstPly())
     })
-  })
+  }) : null
 }
 
 export function renderForwardButton(ctrl: OfflineRoundInterface) {
-  return h('button.action_bar_button.fa.fa-chevron-right', {
+  return ctrl.replay ? h('button.action_bar_button.fa.fa-chevron-right', {
     oncreate: helper.ontap(ctrl.jumpNext, ctrl.jumpLast),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply < ctrl.lastPly())
     })
-  })
+  }) : null
 }
 
 function renderMoves(replay: Replay) {

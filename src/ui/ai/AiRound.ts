@@ -37,7 +37,7 @@ interface InitPayload {
 export default class AiRound implements AiRoundInterface, PromotingInterface {
   public data!: OfflineGameData
   public chessground!: Chessground
-  public replay!: Replay
+  public replay?: Replay
   public actions: AiActionsCtrl
   public newGameMenu: NewAiGameCtrl
   public vm: AiVM
@@ -171,19 +171,23 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   }
 
   public goToAnalysis = () => {
-    router.set(`/analyse/offline/ai/${this.data.player.color}?ply=${this.replay.ply}&curFen=${this.replay.situation().fen}`)
+    if (this.replay) {
+      router.set(`/analyse/offline/ai/${this.data.player.color}?ply=${this.replay.ply}&curFen=${this.replay.situation().fen}`)
+    }
   }
 
   public save() {
-    setCurrentAIGame({
-      data: this.data,
-      situations: this.replay.situations,
-      ply: this.replay.ply
-    })
+    if (this.replay) {
+      setCurrentAIGame({
+        data: this.data,
+        situations: this.replay.situations,
+        ply: this.replay.ply
+      })
+    }
   }
 
   public sharePGN = () => {
-    this.replay.pgn(this.white(), this.black())
+    this.replay?.pgn(this.white(), this.black())
     .then((data: chess.PgnDumpResponse) =>
       Share.share({ text: data.pgn })
     )
@@ -229,7 +233,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     const role = chessFormat.uciToProm(bestmove)
     this.vm.engineSearching = false
     this.chessground.apiMove(from, to)
-    this.replay.addMove(from, to, role)
+    this.replay?.addMove(from, to, role)
     redraw()
   }
 
@@ -239,13 +243,13 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     const piece = { role, color: this.data.opponent.color }
     this.vm.engineSearching = false
     this.chessground.apiNewPiece(piece, pos)
-    this.replay.addDrop(role, pos)
+    this.replay?.addDrop(role, pos)
     redraw()
   }
 
   private engineMove = () => {
     this.vm.engineSearching = true
-    const sit = this.replay.situation()
+    const sit = this.replay!.situation()
     setTimeout(() => {
       const l = this.getOpponent().level
       this.data.opponent.name = aiName({
@@ -258,17 +262,17 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   }
 
   private isEngineToMove = () => {
-    const sit = this.replay.situation()
+    const sit = this.replay!.situation()
     return !sit.end && sit.player !== this.data.player.color
   }
 
   private onPromotion = (orig: Key, dest: Key, role: Role) => {
-    this.replay.addMove(orig, dest, role)
+    this.replay?.addMove(orig, dest, role)
   }
 
   private userMove = (orig: Key, dest: Key) => {
     if (!promotion.start(this, orig, dest, this.onPromotion)) {
-      this.replay.addMove(orig, dest)
+      this.replay?.addMove(orig, dest)
     }
   }
 
@@ -286,11 +290,11 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   }
 
   private onUserNewPiece = (role: Role, key: Key) => {
-    const sit = this.replay.situation()
+    const sit = this.replay!.situation()
     if (crazyValid.drop(this.data, role, key, sit.drops)) {
-      this.replay.addDrop(role, key)
+      this.replay?.addDrop(role, key)
     } else {
-      this.apply(this.replay.situation())
+      this.apply(this.replay!.situation())
     }
   }
 
@@ -355,21 +359,21 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   }
 
   public lastPly = () => {
-    return this.replay.situations.length - 1
+    return this.replay!.situations.length - 1
   }
 
   public jump = (ply: number) => {
     this.chessground.cancelMove()
-    if (this.replay.ply === ply || ply < 0 || ply >= this.replay.situations.length) return false
-    this.replay.ply = ply
-    this.apply(this.replay.situation())
+    if (this.replay!.ply === ply || ply < 0 || ply >= this.replay!.situations.length) return false
+    this.replay!.ply = ply
+    this.apply(this.replay!.situation())
     return false
   }
 
   public jumpFirst = () => this.jump(this.firstPly())
 
   public jumpPrev = () => {
-    const ply = this.replay.ply
+    const ply = this.replay!.ply
     if (this.data.player.color === oppositeColor(this.firstPlayerColor())) {
       const offset = ply % 2 === 0 ? 1 : 2
       return this.jump(ply - offset)
@@ -380,8 +384,8 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   }
 
   public jumpNext = () => {
-    const ply = this.replay.ply
-    return this.jump(ply + (ply + 2 >= this.replay.situations.length ? 1 : 2))
+    const ply = this.replay!.ply
+    return this.jump(ply + (ply + 2 >= this.replay!.situations.length ? 1 : 2))
   }
 
   public jumpLast = () => this.jump(this.lastPly())

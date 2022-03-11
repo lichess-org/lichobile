@@ -168,7 +168,10 @@ const backbutton: Backbutton = (() => {
 
   return <Backbutton>x
 
-})()
+})();
+
+// for debug purposes
+(window as any)['backButton'] = backbutton
 
 function doSet(path: string, replace = false) {
   // reset backbutton stack when changing route

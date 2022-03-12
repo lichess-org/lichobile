@@ -22,3 +22,4 @@ tr-TR:
   shareGameUrl: 'Oyun bağlantısını paylaş'
   playOnline: "Çevrimiçi oyna"
   playOffline: "Çevrimdışı oyna"
+  bgThemeSyncWithSystem: "Cihazın ayarlarını kullan" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

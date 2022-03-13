@@ -1,8 +1,18 @@
 ml-IN:
   apiUnsupported: "നിങ്ങളുടെ ലിചെസ്സ് ആപ്പിന്റെ വേർഷൻ പഴയതാണ് ദയവുചെയ്ത് പുതിയത്തിലേക് അപ്ഗ്രേഡ് ചെയുക."
   apiDeprecated: "ഫ്രീ ലിചെസ്സ് ആപ്പിലേക്കു (പുതിയ വേർഷൻ) അപ്ഗ്രേഡ ചെയുക, ഈ വേർഷന്റെ സപ്പോർട്ട് %s ഇൽ നിർത്തുന്നതാണ്."
+  gameInformation: "കളി വിവരങ്ങൾ"
+  lastScore: "അവസാനത്തെ സ്കോർ: %s"
   playerisInvitingYou: "%s നിങ്ങളെ ക്ഷണിക്കുന്നു"
   unsupportedVariant: "%s എന്ന വരിയന്റ് ഇത് സപ്പോർട് ചെയ്യുന്നില്ല"
   notesSynchronizationHasFailed: "ലിചെസ്സുമായുള എഴുത്തുക്കളുടെ സമന്വയം പരാജയപ്പെട്ടിരിക്കുന്നു ദയവിചെയ്തു പിനീട് ശ്രമികുക."
   vibrateOnGameEvents: "ഗെയിം ഇവന്റ്റുകളിൽ വൈബ്രേറ്റ് ചെയുക"
   offline: "ഓഫ്‌ലൈൻ"
+  settingsClockPosition: "ക്ലോക്ക് സ്ഥാനം" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "വലത്" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "ഇടത്" #As in "left-hand side"; not political or past participle
+  toggleSound: "ശബ്ദം തുടങ്ങുകയോ നിർത്തുകയോ ചെയ്യുന്നതിന്" #Settings to enable/disable sound
+  sharePgn: "PGN പങ്കുവെക്കുക"
+  shareGameUrl: 'കളിയുടെ URL പങ്കു വെക്കൂ'
+  playOnline: "ഓൺലൈൻ കളി"
+  playOffline: "ഓഫ്‌ലൈൻ കളി"

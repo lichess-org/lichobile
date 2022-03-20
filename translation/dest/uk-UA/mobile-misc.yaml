@@ -1,5 +1,5 @@
 uk-UA:
-  apiUnsupported: "Ваша версія Lichess занадто застаріла! Будь ласка, оновіть програму до останньої версії."
+  apiUnsupported: "Ваша версія Lichess занадто стара! Будь ласка, оновіть програму до останньої версії."
   apiDeprecated: "Оновлення до останньої версії Lichess безкоштовне! Підтримка поточної версії буде зупинена %s."
   comments: "Коментарі"
   gameInformation: "Інформація про гру"
@@ -22,3 +22,4 @@ uk-UA:
   shareGameUrl: 'Поділитись посиланням на гру'
   playOnline: "Грати онлайн"
   playOffline: "Грати офлайн"
+  bgThemeSyncWithSystem: "Синхронізація з системою" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

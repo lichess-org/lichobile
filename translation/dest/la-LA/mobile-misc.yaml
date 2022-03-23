@@ -1,6 +1,9 @@
 la-LA:
   apiUnsupported: "Haec Lichess versio est obsoletissima! Gratis recentissimam te accipere quaeso."
   apiDeprecated: "Gratis recentissimam Lichess versionem accipe! Huius versionis fulcimentum desinetur in %s."
+  comments: "Annotationes"
+  gameInformation: "Scientia luderis"
+  home: "Atrium"
   lastScore: "Status proximus: %s"
   playerisInvitingYou: "%s te invitat"
   unsupportedVariant: "Hac in versione varietas %s non fulcitur"
@@ -13,3 +16,10 @@ la-LA:
   positionRight: "Dextra" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Sinistra" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Quadri latus quo alveum est (positione horizontali)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Sonum permitte aut nega" #Settings to enable/disable sound
+  overTheBoard: "Trans tabulam"
+  sharePgn: "Praebe PGN"
+  shareGameUrl: 'Praebe URL ludi'
+  playOnline: "Ludere conexus"
+  playOffline: "Ludere extra"
+  bgThemeSyncWithSystem: "Simul systema" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

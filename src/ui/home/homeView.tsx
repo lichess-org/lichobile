@@ -6,6 +6,7 @@ import { emptyFen } from '../../utils/fen'
 import { gameIcon, hasNetwork } from '../../utils'
 import i18n, { plural, formatNumber, distanceToNowStrict } from '../../i18n'
 import session from '../../session'
+import settings from '../../settings'
 import { PongMessage, CorrespondenceSeek } from '../../lichess/interfaces'
 import spinner from '../../spinner'
 import * as helper from '../helper'
@@ -277,7 +278,8 @@ function renderFeaturedGame(ctrl: HomeCtrl) {
     orientation: featured.orientation,
     lastMove: featured.lastMove,
     link: () => {
-      router.set('/tv?channel=best')
+      settings.tv.channel('best')
+      router.set('/tv')
     },
     gameObj: featured,
   } : {

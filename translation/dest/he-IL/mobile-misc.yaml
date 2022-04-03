@@ -4,6 +4,7 @@ he-IL:
   comments: "תגובה"
   gameInformation: "מידע על המשחק"
   home: "בית"
+  lastScore: "התוצאה האחרונה שלך: %s"
   playerisInvitingYou: "%s מזמין אותך"
   unsupportedVariant: "%s לא נתמך בגרסה זו"
   notesSynchronizationHasFailed: "סנכרון הערות עם ליצ'ס נכשל, אנא נסה שנית מאוחר יותר."

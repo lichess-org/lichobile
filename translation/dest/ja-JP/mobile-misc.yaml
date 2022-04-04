@@ -15,7 +15,7 @@ ja-JP:
   settingsClockPosition: "時計の位置" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "右" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "左" #As in "left-hand side"; not political or past participle
-  landscapeBoardSide: "ボードの位置（横長モードで）" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  landscapeBoardSide: "ボードの位置(横長モード時)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
   toggleSound: "音声のオン・オフ" #Settings to enable/disable sound
   overTheBoard: "オフライン（2人対戦）"
   sharePgn: "PGN を共有"

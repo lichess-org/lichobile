@@ -13,7 +13,6 @@ interface TVAttrs {
   id: string
   color: Color
   flip: boolean
-  channel?: string
 }
 
 interface State {
@@ -23,10 +22,6 @@ interface State {
 const TV: Mithril.Component<TVAttrs, State> = {
   oninit(vnode) {
     sleepUtils.keepAwake()
-
-    if (vnode.attrs.channel) {
-      settings.tv.channel(vnode.attrs.channel)
-    }
 
     xhr.featured(settings.tv.channel(), vnode.attrs.flip)
     .then(d => {

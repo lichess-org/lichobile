@@ -9,7 +9,7 @@ export default {
       if (window.navigator.vibrate) {
         window.navigator.vibrate(150)
       } else {
-          void Haptics.vibrate()
+          void Haptics.vibrate({ duration: 150 })
       }
     }
   },
@@ -20,7 +20,7 @@ export default {
       } else {
         void Haptics.impact({ style: ImpactStyle.Medium })
       }
-    }    
+    }
   },
   heavy() {
     if (shouldVibrate) {
@@ -29,20 +29,20 @@ export default {
       } else {
         void Haptics.impact({ style: ImpactStyle.Heavy })
       }
-    }    
-  },    
+    }
+  },
   doubleTap() {
     if (shouldVibrate) {
       if (window.navigator.vibrate) {
         window.navigator.vibrate(50)
-      } else {        
+      } else {
         void Haptics.impact({ style: ImpactStyle.Medium }).then(() => {
           void new Promise(r => setTimeout(r, 150)).then(() => {
-            void Haptics.impact({ style: ImpactStyle.Medium })  
+            void Haptics.impact({ style: ImpactStyle.Medium })
           })
         })
       }
-    }    
+    }
   },
   warn() {
     if (shouldVibrate) {
@@ -51,7 +51,7 @@ export default {
       } else {
         void Haptics.notification({ type: NotificationType.Warning })
       }
-    }    
+    }
   },
   bad() {
     if (shouldVibrate) {
@@ -60,7 +60,7 @@ export default {
       } else {
         void Haptics.notification({ type: NotificationType.Error })
       }
-    }    
+    }
   },
   good() {
     if (shouldVibrate) {
@@ -69,7 +69,7 @@ export default {
       } else {
         void Haptics.notification({ type: NotificationType.Success })
       }
-    }    
+    }
   },
   onSettingChange(v: boolean) {
     shouldVibrate = v

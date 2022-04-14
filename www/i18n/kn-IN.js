@@ -914,5 +914,6 @@ export default {
   "sharePgn": "PGN ಫೈಲ್ ಹಂಚಿ",
   "shareGameUrl": "ಆಟದ URL ಹಂಚಿ",
   "playOnline": "ಆನ್ಲೈನ್ ಆಡಿ",
-  "playOffline": "ಓಫ್ಲೈನ್ ಆಡಿ"
+  "playOffline": "ಓಫ್ಲೈನ್ ಆಡಿ",
+  "bgThemeSyncWithSystem": "ಸಿಸ್ಟಮ್ ಅನುಸಾರವಾಗಿ"
 }

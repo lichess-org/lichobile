@@ -1151,5 +1151,6 @@ export default {
   "sharePgn": "Ndani PGN me të tjerë",
   "shareGameUrl": "Ndani URL loje me të tjerë",
   "playOnline": "Luani në internet",
-  "playOffline": "Luani jashtë interneti"
+  "playOffline": "Luani jashtë interneti",
+  "bgThemeSyncWithSystem": "Njëkohësoje me sistemin"
 }

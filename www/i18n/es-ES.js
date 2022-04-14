@@ -1284,5 +1284,6 @@ export default {
   "sharePgn": "Compartir PGN",
   "shareGameUrl": "Compartir enlace de la partida",
   "playOnline": "Jugar en línea",
-  "playOffline": "Jugar sin conexión"
+  "playOffline": "Jugar sin conexión",
+  "bgThemeSyncWithSystem": "Usar el tema del sistema"
 }

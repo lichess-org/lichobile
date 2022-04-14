@@ -1168,8 +1168,10 @@ export default {
   "declineOnlyBot": "봇의 도전만 받고 있습니다.",
   "apiUnsupported": "Lichess 앱 버전이 너무 오래되었습니다! 최신 버전으로 무료로 업그레이드하세요.",
   "apiDeprecated": "Lichess 앱을 업그레이드하세요! 이 버전에 대한 지원은 %s에 종료됩니다.",
+  "comments": "댓글",
   "gameInformation": "게임 정보",
   "home": "홈",
+  "lastScore": "최종 점수: %s",
   "playerisInvitingYou": "%s가 당신을 초대했습니다",
   "unsupportedVariant": "%s는 이 버전에서 지원되지 않습니다.",
   "notesSynchronizationHasFailed": "Lichess와의 메모 동기화에 실패했습니다. 나중에 다시 시도하세요.",
@@ -1181,8 +1183,10 @@ export default {
   "positionRight": "오른쪽",
   "positionLeft": "왼쪽",
   "landscapeBoardSide": "보드 스크린 위치(가로 모드에서)",
+  "toggleSound": "소리 켜기/끄기",
   "sharePgn": "PGN 공유",
   "shareGameUrl": "게임 URL 공유",
   "playOnline": "온라인 플레이",
-  "playOffline": "오프라인 플레이"
+  "playOffline": "오프라인 플레이",
+  "bgThemeSyncWithSystem": "기기와 동기화"
 }

@@ -1362,7 +1362,7 @@ export default {
   "viewAllNbPosts:few": "Переглянути %s дописи",
   "viewAllNbPosts:many": "Переглянути %s дописів",
   "viewAllNbPosts:other": "Переглянути %s дописів",
-  "apiUnsupported": "Ваша версія Lichess занадто застаріла! Будь ласка, оновіть програму до останньої версії.",
+  "apiUnsupported": "Ваша версія Lichess занадто стара! Будь ласка, оновіть програму до останньої версії.",
   "apiDeprecated": "Оновлення до останньої версії Lichess безкоштовне! Підтримка поточної версії буде зупинена %s.",
   "comments": "Коментарі",
   "gameInformation": "Інформація про гру",
@@ -1384,5 +1384,6 @@ export default {
   "sharePgn": "Поділитись PGN",
   "shareGameUrl": "Поділитись посиланням на гру",
   "playOnline": "Грати онлайн",
-  "playOffline": "Грати офлайн"
+  "playOffline": "Грати офлайн",
+  "bgThemeSyncWithSystem": "Синхронізація з системою"
 }

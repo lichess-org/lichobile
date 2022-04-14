@@ -676,6 +676,9 @@ export default {
   "imageCredit": "Imaginis auctoritas",
   "apiUnsupported": "Haec Lichess versio est obsoletissima! Gratis recentissimam te accipere quaeso.",
   "apiDeprecated": "Gratis recentissimam Lichess versionem accipe! Huius versionis fulcimentum desinetur in %s.",
+  "comments": "Annotationes",
+  "gameInformation": "Scientia luderis",
+  "home": "Atrium",
   "lastScore": "Status proximus: %s",
   "playerisInvitingYou": "%s te invitat",
   "unsupportedVariant": "Hac in versione varietas %s non fulcitur",
@@ -687,5 +690,12 @@ export default {
   "settingsClockPosition": "Horologii positio",
   "positionRight": "Dextra",
   "positionLeft": "Sinistra",
-  "landscapeBoardSide": "Quadri latus quo alveum est (positione horizontali)"
+  "landscapeBoardSide": "Quadri latus quo alveum est (positione horizontali)",
+  "toggleSound": "Sonum permitte aut nega",
+  "overTheBoard": "Trans tabulam",
+  "sharePgn": "Praebe PGN",
+  "shareGameUrl": "Praebe URL ludi",
+  "playOnline": "Ludere conexus",
+  "playOffline": "Ludere extra",
+  "bgThemeSyncWithSystem": "Simul systema"
 }

@@ -1272,5 +1272,6 @@ export default {
   "sharePgn": "PGN megosztása",
   "shareGameUrl": "Játék linkjének megosztása",
   "playOnline": "Online játék",
-  "playOffline": "Offline játék"
+  "playOffline": "Offline játék",
+  "bgThemeSyncWithSystem": "Rendszer alapértelmezett"
 }

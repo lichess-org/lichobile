@@ -1099,5 +1099,6 @@ export default {
   "sharePgn": "分享PGN",
   "shareGameUrl": "分享對局網址",
   "playOnline": "線上對弈",
-  "playOffline": "離線對弈"
+  "playOffline": "離線對弈",
+  "bgThemeSyncWithSystem": "與系統同步"
 }

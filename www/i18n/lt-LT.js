@@ -1396,5 +1396,6 @@ export default {
   "sharePgn": "Pasidalinti PGN",
   "shareGameUrl": "Pasidalinti žaidimo adresu",
   "playOnline": "Žaisti tinkle",
-  "playOffline": "Žaisti atsijungus"
+  "playOffline": "Žaisti atsijungus",
+  "bgThemeSyncWithSystem": "Sinchronizuoti su sistema"
 }

@@ -1238,5 +1238,6 @@ export default {
   "sharePgn": "Сподели PGN",
   "shareGameUrl": "Сподели URL на партията",
   "playOnline": "Играй онлайн",
-  "playOffline": "Играй офлайн"
+  "playOffline": "Играй офлайн",
+  "bgThemeSyncWithSystem": "Синхронизирай със системата"
 }

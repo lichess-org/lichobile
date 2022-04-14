@@ -1280,5 +1280,6 @@ export default {
   "sharePgn": "PGN 'yi paylaş",
   "shareGameUrl": "Oyun bağlantısını paylaş",
   "playOnline": "Çevrimiçi oyna",
-  "playOffline": "Çevrimdışı oyna"
+  "playOffline": "Çevrimdışı oyna",
+  "bgThemeSyncWithSystem": "Cihazın ayarlarını kullan"
 }

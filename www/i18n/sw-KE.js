@@ -83,5 +83,6 @@ export default {
   "challengeCanceled": "Mwito wa kuja kushindana umeghairiwa.",
   "registerToSendChallenges": "Tafadhali jiandikishi ili utume miito ya mashindano.",
   "youCannotChallengeX": "Hukubaliwi kutuma mwito wa kuja kushindana %s.",
-  "xDoesNotAcceptChallenges": "%s hakubali miito ya mashindano."
+  "xDoesNotAcceptChallenges": "%s hakubali miito ya mashindano.",
+  "apiUnsupported": "Toleo lako la programu ya lichess ni la zamani sana! Tafadhali pata toleo jipya zaidi bila malipo."
 }

@@ -1222,7 +1222,7 @@ export default {
   "settingsClockPosition": "時計の位置",
   "positionRight": "右",
   "positionLeft": "左",
-  "landscapeBoardSide": "ボードの位置（横長モードで）",
+  "landscapeBoardSide": "ボードの位置(横長モード時)",
   "toggleSound": "音声のオン・オフ",
   "overTheBoard": "オフライン（2人対戦）",
   "sharePgn": "PGN を共有",

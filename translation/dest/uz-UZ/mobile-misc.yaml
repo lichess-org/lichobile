@@ -1,9 +1,13 @@
 uz-UZ:
-  apiUnsupported: "Sizning lichess ilovangiz talqini oldingi ekan! Iltimos uni bepul uangilab oling."
+  apiUnsupported: "Ilova kullanmidi."
   apiDeprecated: "Lichess ilovangizni yangilab oling, bu bepul! Ushbu talqinni qo‘llab quvvatlash %s da bekor qilinadi."
+  comments: "Изохлар"
+  gameInformation: "Uyin haqida"
+  home: "Bosh sahifa"
+  lastScore: "Ohirgi ochkolar"
   playerisInvitingYou: "%s sizni taklif qilayabdi"
   unsupportedVariant: "%s variant ushbu talqinda qo‘llab quvvatlanmaydi"
-  notesSynchronizationHasFailed: "Lichess belgilashlari bilan sinronlab bo‘lmadi, biroz turib urininb ko‘ring."
+  notesSynchronizationHasFailed: "Lichess belgilashlari bilan sinhronlab bo‘lmadi."
   vibrateOnGameEvents: "O‘yin vaqti kelganda vibratsiya berish"
   offline: "Oflayn"
   otbUseSymmetricPieces: "Simmetrik sipohlardan foydalanish" #Setting for offline over-the-board games
@@ -12,3 +16,10 @@ uz-UZ:
   positionRight: "O‘ng" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Chap" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Doska joylashuvi (Albomli holatga o‘tilganda)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Ovozni toqish/uchirish" #Settings to enable/disable sound
+  overTheBoard: "Shahmat taxtasini sozlash"
+  sharePgn: "PGN ni ulashish"
+  shareGameUrl: 'O''yin URL ini ulashish'
+  playOnline: "Online o'ynash"
+  playOffline: "Offline o'ynash"
+  bgThemeSyncWithSystem: "Telefon tizimi bilan temani boshqarish" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

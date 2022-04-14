@@ -1,11 +1,13 @@
 vi-VN:
   apiUnsupported: "Phiên bản ứng dụng lichess của bạn quá cũ! Vui lòng cập nhật miễn phí lên phiên bản mới nhất."
   apiDeprecated: "Nâng cấp miễn phí lên phiên bản mới nhất của lichess! Hỗ trợ cho phiên bản này có ở %s."
+  comments: "Bình luận"
   gameInformation: "Thông tin ván đấu"
   home: "Trang chủ"
   lastScore: "Điểm số lần cuối: %s"
   playerisInvitingYou: "%s đang mời bạn"
   unsupportedVariant: "Biến thể %s không được hỗ trợ trong phiên bản này"
+  notesSynchronizationHasFailed: "Đồng bộ hóa ghi chú với lichess không thành công, vui lòng thử lại sau."
   offline: "Ngoại tuyến"
   otbFlipPiecesAndInfoAfterMove: "Đảo chiều và thông tin đối thủ sau nước đi" #Setting for offline over-the-board games
   settingsClockPosition: "Vị trí đồng hồ" #Determines whether each player's time is shown on the left or right side of the board

@@ -1,6 +1,16 @@
 br-FR:
+  apiUnsupported: "Re gozh eo ho stumm arload Lichess! Pellgargit mar plij stumm nevesañ digoust."
+  apiDeprecated: "Pellgargit stumm nevesañ eus arload Lichess digoust! Echuiñ a raio skoazell evit ar stumm-mañ d’ar %s."
+  home: "Degemer"
+  lastScore: "Disoc’h diwezhañ: %s"
   playerisInvitingYou: "%s en deus pedet ac'hanoc'h"
   offline: "Ezlinenn"
+  otbFlipPiecesAndInfoAfterMove: "Eskemmañ titouroù ar pezhioù hag an enebour goude pep taol" #Setting for offline over-the-board games
   settingsClockPosition: "Lec'hiadur an horolaj" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "A-zehoù" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "A-gleiz" #As in "left-hand side"; not political or past participle
+  toggleSound: "Enaouiñ/lazhañ ar son" #Settings to enable/disable sound
+  sharePgn: "Skignañ ur PGN"
+  shareGameUrl: 'Skignañ URL ar c''hrogad'
+  playOnline: "C'hoari enlinenn"
+  playOffline: "C'hoari ezlinenn"

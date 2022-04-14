@@ -22,3 +22,4 @@ bg-BG:
   shareGameUrl: 'Сподели URL на партията'
   playOnline: "Играй онлайн"
   playOffline: "Играй офлайн"
+  bgThemeSyncWithSystem: "Синхронизирай със системата" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

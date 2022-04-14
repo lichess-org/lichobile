@@ -1,19 +1,25 @@
 fa-IR:
   apiUnsupported: "نسخه برنامه lichess شما قدیمی است! لطفا آنرا بصورت رایگان به آخرین نسخه ارتقا دهید."
-  apiDeprecated: "به صورت رایگان به آخرین نسخه lichess ارتقا دهید! پشتیبانی از این نسخه در %s متوقف میشود."
+  apiDeprecated: "به صورت رایگان به آخرین نسخه lichess ارتقا دهید! پشتیبانی از این نسخه در %s متوقف می شود."
   comments: "نظرات"
   gameInformation: "اطلاعات بازی"
   home: "صفحه اصلی"
   lastScore: "آخرین امتیاز %s"
   playerisInvitingYou: "%s شما را دعوت میکند"
-  unsupportedVariant: "نوع %s در این نسخه پشتیبانی نمیشود"
+  unsupportedVariant: "واریانت %s در این نسخه پشتیبانی نمیشود"
   notesSynchronizationHasFailed: "همگام‌سازی یادداشت‌ها با lichess شکست خورد، لطفا بعدا تلاش کنید."
-  vibrateOnGameEvents: "لرزش برای رویدادهای بازی"
+  vibrateOnGameEvents: "لرزش برای رویدادهای بازی (شروع شدن و پایان یافتن بازی)"
   offline: "آفلاین"
-  otbUseSymmetricPieces: "استفاده از مهره‌های متقارن" #Setting for offline over-the-board games
+  otbUseSymmetricPieces: "استفاده از مهره‌های هم جهت" #Setting for offline over-the-board games
   otbFlipPiecesAndInfoAfterMove: "چرخش مهره‌ها و اطلاعات حریف بعد از حرکت" #Setting for offline over-the-board games
   settingsClockPosition: "موقعیت ساعت" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "راست" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "چپ" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "جهت صفحه (در حالت افقی)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
   toggleSound: "صدا روشن/خاموش" #Settings to enable/disable sound
+  overTheBoard: "پوزیشن را انتخاب کنید"
+  sharePgn: "اشتراک PGN"
+  shareGameUrl: 'اشتراک لینک بازی'
+  playOnline: "بازی انلاین"
+  playOffline: "بازی افلاین"
+  bgThemeSyncWithSystem: "هماهنگ با تم دستگاه" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

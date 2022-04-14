@@ -20,3 +20,4 @@ sq-AL:
   shareGameUrl: 'Ndani URL loje me të tjerë'
   playOnline: "Luani në internet"
   playOffline: "Luani jashtë interneti"
+  bgThemeSyncWithSystem: "Njëkohësoje me sistemin" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

@@ -7,8 +7,11 @@ or-IN:
   lastScore: "ଗତ ସ୍କୋର୍: %s"
   playerisInvitingYou: "%s ଆପଣଙ୍କୁ ନିମନ୍ତ୍ରଣ କରୁଛନ୍ତି"
   unsupportedVariant: "ଏହି ସଂସ୍କରଣରେ %s variant ଟି ସମର୍ଥିତ ନୁହେଁ"
+  notesSynchronizationHasFailed: "Lichess ସହିତ ନୋଟ୍ ସିଙ୍କ୍ରୋନାଇଜେସନ୍ ବିଫଳ ହୋଇଛି, ଦୟାକରି ପରେ ଚେଷ୍ଟା କରନ୍ତୁ।"
   vibrateOnGameEvents: "ଖେଳ ଇଭେଣ୍ଟଗୁଡ଼ିକରେ କମ୍ପନ"
-  offline: "ଅଫଲାଇନ୍‌"
+  offline: "ଅଫଲାଇନ୍"
+  otbUseSymmetricPieces: "ସମଞ୍ଜସ ଗୋଟି ବ୍ୟବହାର କରିବା" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "ଚାଲ୍ ଚାଲିବା ପରେ ଗୋଟି ଏବଂ ପ୍ରତିଦ୍ୱନ୍ଦ୍ୱୀ ସୂଚନା ଫ୍ଲିପ୍ କରିବା" #Setting for offline over-the-board games
   settingsClockPosition: "ଘଣ୍ଟା ଅବସ୍ଥାନ" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "ଡାହାଣ" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "ବାମ" #As in "left-hand side"; not political or past participle

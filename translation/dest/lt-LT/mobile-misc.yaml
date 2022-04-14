@@ -22,3 +22,4 @@ lt-LT:
   shareGameUrl: 'Pasidalinti žaidimo adresu'
   playOnline: "Žaisti tinkle"
   playOffline: "Žaisti atsijungus"
+  bgThemeSyncWithSystem: "Sinchronizuoti su sistema" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

@@ -22,3 +22,4 @@ zh-TW:
   shareGameUrl: '分享對局網址'
   playOnline: "線上對弈"
   playOffline: "離線對弈"
+  bgThemeSyncWithSystem: "與系統同步" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

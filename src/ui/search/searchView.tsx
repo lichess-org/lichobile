@@ -139,7 +139,7 @@ function renderResult(ctrl: ISearchCtrl) {
 
   return h('ul.searchGamesList', {
     className: ctrl.searchState.searching ? 'searching' : '',
-    oncreate: helper.ontapY(e => onTap(ctrl, e!), undefined, helper.closestHandler('.userGame'))
+    oncreate: helper.ontapY(e => onTap(ctrl, e), undefined, helper.closestHandler('.userGame'))
   }, children)
 }
 

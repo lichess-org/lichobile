@@ -414,7 +414,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         this.vm.submitFeedback = undefined
         if (playing) {
           sound.confirmation()
-          vibrate.quick()
+          vibrate.tap()
         }
         redraw()
       }, feebackDuration)
@@ -434,15 +434,19 @@ export default class OnlineRound implements OnlineRoundInterface {
       d.game.winner = o.winner
     }
 
+    if (o.check) {
+      vibrate.doubleTap()
+    }
+
     const wDraw = white.offeringDraw
     const bDraw = black.offeringDraw
     if (!wDraw && o.wDraw) {
       sound.dong()
-      vibrate.quick()
+      vibrate.warn()
     }
     if (!bDraw && o.bDraw) {
       sound.dong()
-      vibrate.quick()
+      vibrate.warn()
     }
     white.offeringDraw = o.wDraw
     black.offeringDraw = o.bDraw
@@ -556,7 +560,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       (this.chessground.state.premovable.current || this.chessground.state.predroppable.current)) {
       // atrocious hack to prevent race condition
       // with explosions and premoves
-      // https://github.com/ornicar/lila/issues/343
+      // https://github.com/lichess-org/lila/issues/343
       const premoveDelay = d.game.variant.key === 'atomic' ? 100 : 1
       setTimeout(() => {
         this.chessground.playPremove()
@@ -631,7 +635,11 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     if (d.game.turns > 1) {
       sound.dong()
-      vibrate.quick()
+      if (d.player.color === d.game.winner) {
+        vibrate.good()
+      } else {
+        vibrate.bad()
+      }
     }
     if (!this.data.player.spectator) {
       session.backgroundRefresh()
@@ -702,6 +710,12 @@ export default class OnlineRound implements OnlineRoundInterface {
       blur
     }
 
+    // Pauses both clocks. When the server echoes back this move, the clocks will resume.
+    // This prevents a confusing user experience where a laggy network makes it appear that
+    // it's still the user's turn; see #2000.
+    this.clock?.stopClock()
+    redraw()
+
     if (isMoveRequest(moveOrDropReq)) {
       this.socket.iface.send('move', moveOrDropReq, opts)
     }
@@ -736,12 +750,14 @@ export default class OnlineRound implements OnlineRoundInterface {
       else {
         sound.capture()
       }
+      if (!this.data.player.spectator) {
+        vibrate.heavy()
+      }
     } else {
       sound.move()
-    }
-
-    if (!this.data.player.spectator) {
-      vibrate.quick()
+      if (!this.data.player.spectator) {
+        vibrate.tap()
+      }
     }
   }
 

@@ -1150,6 +1150,10 @@ export default {
   "declineOnlyBot": "Nomás accepto desafíos de bots.",
   "apiUnsupported": "La tuya versión de l'app de lichess ye masiau viella! Esviella-la descargando de gratis la zaguera versión.",
   "apiDeprecated": "Actualización de gratis a la zaguera app de lichess! Esta versión deixará de tener soporte lo %s.",
+  "comments": "Comentarios",
+  "gameInformation": "Información d'o chuego",
+  "home": "Inicio",
+  "lastScore": "Zaguera puntuación: %s",
   "playerisInvitingYou": "%s te ye convidando",
   "unsupportedVariant": "La variant %s no ye compatible con esta versión",
   "notesSynchronizationHasFailed": "La sincronización d'anotacions con Lichess ha fallau. Torna-lo a prebar mas tarde.",
@@ -1160,5 +1164,12 @@ export default {
   "settingsClockPosition": "Posición d'o reloch",
   "positionRight": "Dreita",
   "positionLeft": "Zurda",
-  "landscapeBoardSide": "Plazamiento de l'escaquero (en modo horizontal)"
+  "landscapeBoardSide": "Plazamiento de l'escaquero (en modo horizontal)",
+  "toggleSound": "Activar/Desactivar sons",
+  "overTheBoard": "Chugar sobre lo escaquero",
+  "sharePgn": "Compartir PGN",
+  "shareGameUrl": "Compartir lo vinclo d'a partida",
+  "playOnline": "Chugar en linia",
+  "playOffline": "Chugar sin connexión",
+  "bgThemeSyncWithSystem": "Sincronizar con o sistema"
 }

@@ -3,6 +3,7 @@ import { linkify } from '../../../utils/html'
 import * as helper from '../../helper'
 
 import AnalyseCtrl from '../AnalyseCtrl'
+import RichText from '../view/richTextView'
 import StudyCtrl from './StudyCtrl'
 
 export function renderReadonlyComments(ctrl: AnalyseCtrl) {
@@ -10,7 +11,7 @@ export function renderReadonlyComments(ctrl: AnalyseCtrl) {
   return h('div.native_scroller.study-comments', comments.map(c =>
     h('div.study-comment', [
       h('div.by', (typeof c.by === 'string' ? c.by : c.by.name) + ':'),
-      h('div', h.trust(linkify(c.text)))
+      h('div', h(RichText, {text: c.text}))
     ])
   ))
 }

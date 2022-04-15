@@ -51,6 +51,10 @@
     width var(--board-side-land-tablet)
     margin auto
     margin-left 3vh
+  @media only screen and (min-aspect-ratio: 665/716) and (max-aspect-ratio: 716/665)
+    height 60vw
+    width 60vw
+    margin auto
 
   > svg
     overflow: visible
@@ -96,9 +100,9 @@
       white-space nowrap
       overflow hidden
       text-overflow ellipsis
+      margin-left 5px
     > .result
       padding 0 5px
-      margin-right 5px
       border-right 1px solid borderColor
   > .player_bar_clock
     flex 0 0 auto

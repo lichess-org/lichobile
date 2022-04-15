@@ -44,7 +44,7 @@ export interface OnlineRoundInterface extends RoundInterface, PromotingInterface
 
 export interface OfflineRoundInterface extends RoundInterface {
   data: OfflineGameData
-  replay: Replay
+  replay?: Replay
   actions: any
   newGameMenu: any
   moveList: boolean

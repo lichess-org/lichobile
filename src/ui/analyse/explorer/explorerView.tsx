@@ -61,7 +61,7 @@ function showTablebase(ctrl: AnalyseCtrl, title: string, moves: readonly Tableba
   return [
     <div className="title">{title}</div>,
     <table className="explorerTablebase"
-      oncreate={helper.ontapXY(e => onTablebaseTap(ctrl, e!), undefined, getTR)}
+      oncreate={helper.ontapXY(e => onTablebaseTap(ctrl, e), undefined, getTR)}
     >
       <tbody>
       {moves.map((move: TablebaseMoveStats) => {

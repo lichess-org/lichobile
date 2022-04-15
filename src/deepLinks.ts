@@ -22,10 +22,10 @@ export default {
         const matched = links.run(path)
         if (!matched) {
           // it can be a game or challenge but we want to do an exact regex match
-          const found = path.match(gamePattern)
+          const found = gamePattern.exec(path)
           if (found) {
             const color = found[2]
-            const plyMatch = urlObject.hash.match(plyHashPattern)
+            const plyMatch = plyHashPattern.exec(urlObject.hash)
 
             const queryParams = {} as Record<string, string>
             if (color) {

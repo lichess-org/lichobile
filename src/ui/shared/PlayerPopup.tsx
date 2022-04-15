@@ -86,7 +86,7 @@ function content(mini: MiniUser, player: Player, opponent: Player, score?: Score
       }
       { sessionUserId !== undefined && showYourScore ?
         <div className="score_wrapper">
-          {i18nVdom('yourScore', <span className="score">{`${mini.crosstable!.users[sessionUserId]} - ${mini.crosstable!.users[user.id]}`}</span>)}
+          {i18nVdom('yourScore', <span className="score">{`${mini.crosstable.users[sessionUserId]} - ${mini.crosstable.users[user.id]}`}</span>)}
         </div> : null
       }
       { !showYourScore && oppUser && score && score.nbGames > 0 ?

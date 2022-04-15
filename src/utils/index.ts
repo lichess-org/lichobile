@@ -157,7 +157,7 @@ export function serializeQueryParameters(obj: Record<string, string>): string {
 
 export function noop(): void { /* noop */ }
 
-const perfIconsMap: {[index: string]: string} = {
+const perfIconsMap: { [index: string]: string } = {
   bullet: 'T',
   blitz: ')',
   rapid: '#',
@@ -220,9 +220,9 @@ export function boardOrientation(data: GameData, flip?: boolean): 'black' | 'whi
 }
 
 export function pad(num: number, size: number): string {
-    let s = num + ''
-    while (s.length < size) s = '0' + s
-    return s
+  let s = num + ''
+  while (s.length < size) s = '0' + s
+  return s
 }
 
 export function formatTimeInSecs(
@@ -356,4 +356,26 @@ export function animationDuration(pref: boolean): number {
 
 export function randomColor(): Color {
   return Math.random() > 0.5 ? 'white' : 'black'
+}
+
+/**
+ * Gets the legal color options from a given mode (casual/rated) and variant.
+ * 
+ * @param modeNum the mode represented by '0' (casual) or '1' (rated)
+ * @param variantNum the variant represented by a number string
+ * @returns a list of (i18n key, color key) tuples
+ */
+export function getColorOptionsFromModeAndVariant(modeNum: string, variantNum: string): [string, string][] {
+  // if mode is rated only allow random color for three-check, atomic, antichess, horde variants
+  if (modeNum === '1' && ['5', '6', '7', '8', '9'].indexOf(variantNum) !== -1) {
+    return [
+      ['randomColor', 'random']
+    ]
+  } else {
+    return [
+      ['randomColor', 'random'],
+      ['white', 'white'],
+      ['black', 'black']
+    ]
+  }
 }

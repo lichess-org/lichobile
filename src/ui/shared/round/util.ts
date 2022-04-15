@@ -1,4 +1,4 @@
-import { OnlineGameData, GameStep } from '../../../lichess/interfaces/game'
+import { OnlineGameData, GameStep, CheckCount } from '../../../lichess/interfaces/game'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import * as helper from '../../helper'
 import { RoundInterface } from '.'
@@ -42,4 +42,24 @@ export function onReplayTap(ctrl: RoundInterface, e: Event) {
   if (el && el.dataset.ply) {
     ctrl.jump(Number(el.dataset.ply))
   }
+}
+
+export const NO_CHECKS: CheckCount = {
+  white: 0,
+  black: 0,
+}
+interface CheckState {
+  ply: number
+  check?: boolean | Key
+}
+export function countChecks(steps: CheckState[], ply: Ply): CheckCount {
+  const checks: CheckCount = { ...NO_CHECKS }
+  for (const step of steps) {
+    if (ply < step.ply) break
+    if (step.check) {
+      if (step.ply % 2 === 1) checks.white++
+      else checks.black++
+    }
+  }
+  return checks
 }

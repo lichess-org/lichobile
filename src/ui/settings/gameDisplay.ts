@@ -4,7 +4,6 @@ import settings from '../../settings'
 import * as helper from '../helper'
 import { dropShadowHeader, backButton } from '../shared/common'
 import formWidgets from '../shared/form'
-import { onPieceNotationChange } from '../shared/round/view/replay'
 import layout from '../layout'
 
 export default {
@@ -53,8 +52,6 @@ function renderBody() {
             { label: i18n('pgnLetter'), value: false },
           ],
           settings.game.pieceNotation,
-          false,
-          onPieceNotationChange,
         )
       ),
       h('li.list_item', [

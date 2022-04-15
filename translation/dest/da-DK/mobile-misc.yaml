@@ -22,3 +22,4 @@ da-DK:
   shareGameUrl: 'Del spillets URL'
   playOnline: "Spil online"
   playOffline: "Spil offline"
+  bgThemeSyncWithSystem: "Synkroniser med system" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

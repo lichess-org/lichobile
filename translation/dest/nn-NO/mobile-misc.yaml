@@ -22,3 +22,4 @@ nn-NO:
   shareGameUrl: 'Del spel-URL'
   playOnline: "Spel på nett"
   playOffline: "Spel fråkopla"
+  bgThemeSyncWithSystem: "Synkroniser med systemet" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

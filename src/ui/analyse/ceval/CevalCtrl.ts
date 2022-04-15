@@ -12,13 +12,13 @@ export default class CevalCtrl {
   private initialized = false
   private engine: StockfishClient
   private started = false
-  private isDeeper = false
+  public isDeeper = false
   private lastStarted: Started | undefined = undefined
   private isEnabled: boolean
 
   constructor(
     readonly opts: Opts,
-    readonly emit: (path: string, ev?: Tree.ClientEval) => void,
+    readonly emit: (path: string, ev?: Tree.ClientEval, isThreat?: boolean) => void,
   ) {
     this.allowed = opts.allowed
     this.variant = opts.variant
@@ -36,33 +36,51 @@ export default class CevalCtrl {
     })
   }
 
-  public async start(path: Tree.Path, nodes: Tree.Node[], forceMaxLevel: boolean, deeper: boolean): Promise<void> {
+  public async start(threatMode: boolean, path: Tree.Path, nodes: Tree.Node[], forceMaxLevel: boolean, deeper: boolean): Promise<void> {
     if (!this.enabled()) {
       return
     }
     this.isDeeper = deeper
     const step = nodes[nodes.length - 1]
     const maxDepth = this.effectiveMaxDepth(deeper)
-    if (step.ceval && step.ceval.depth >= maxDepth) {
+    const existing = threatMode ? step.threat : step.ceval
+    if (existing && existing.depth >= maxDepth) {
       return
     }
-    const work = {
+    const work: Work = {
       initialFen: nodes[0].fen,
       currentFen: step.fen,
-      moves: nodes.slice(1).map((s) => fixCastle(s.uci!, s.san!)),
+      moves: [],
       maxDepth: forceMaxLevel ? settings.analyse.cevalMaxDepth() : this.effectiveMaxDepth(deeper),
       path,
       ply: step.ply,
       multiPv: forceMaxLevel ? 1 : this.opts.multiPv,
-      threatMode: false,
+      threatMode,
       emit: (ev?: Tree.ClientEval) => {
         if (this.enabled()) this.onEmit(work, ev)
       },
     }
 
+    if (threatMode) {
+      const c = step.ply % 2 === 1 ? 'w' : 'b'
+      const fen = step.fen.replace(/ (w|b) /, ' ' + c + ' ')
+      work.currentFen = fen
+      work.initialFen = fen
+    } else {
+      // send fen after latest castling move and the following moves
+      for (let i = 1; i < nodes.length; i++) {
+        const s = nodes[i]
+        if (sanIrreversible(this.variant, s.san!)) {
+          work.moves = []
+          work.initialFen = s.fen
+        } else work.moves.push(s.uci!)
+      }
+    }
+
     this.engine.start(work)
     this.started = true
     this.lastStarted = {
+      threatMode,
       path,
       nodes,
     }
@@ -71,7 +89,7 @@ export default class CevalCtrl {
   // Useful if/when options change while analysis is running.
   public restart(): void {
     if (this.lastStarted) {
-      void this.start(this.lastStarted.path, this.lastStarted.nodes, false, false)
+      void this.start(this.lastStarted.threatMode, this.lastStarted.path, this.lastStarted.nodes, false, false)
     }
   }
 
@@ -127,7 +145,7 @@ export default class CevalCtrl {
 
   public goDeeper = (): void => {
     if (this.lastStarted) {
-      this.start(this.lastStarted.path, this.lastStarted.nodes, false, true)
+      this.start(this.lastStarted.threatMode, this.lastStarted.path, this.lastStarted.nodes, false, true)
     }
   }
 
@@ -150,7 +168,7 @@ export default class CevalCtrl {
   private onEmit = (work: Work, ev?: Tree.ClientEval) => {
     if (ev) sortPvsInPlace(ev.pvs, (work.ply % 2 === 0) ? 'white' : 'black')
     if (ev) npsRecorder(ev)
-    this.emit(work.path, ev)
+    this.emit(work.path, ev, work.threatMode)
   }
 }
 
@@ -197,17 +215,10 @@ const npsRecorder = (() => {
   }
 })()
 
-function fixCastle(uci: string, san: string) {
-  if (san.indexOf('O-O') !== 0) return uci
-  switch (uci) {
-    case 'e1h1':
-      return 'e1g1'
-    case 'e1a1':
-      return 'e1c1'
-    case 'e8h8':
-      return 'e8g8'
-    case 'e8a8':
-      return 'e8c8'
-  }
-  return uci
+export function sanIrreversible(variant: VariantKey, san: string): boolean {
+  if (san.startsWith('O-O')) return true
+  if (variant === 'crazyhouse') return false
+  if (san.includes('x')) return true // capture
+  if (san.toLowerCase() === san) return true // pawn move
+  return variant === 'threeCheck' && san.includes('+')
 }

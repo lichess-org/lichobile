@@ -117,7 +117,7 @@ function renderOnMyTurnView(ctrl: AnalyseCtrl, candidate: ForecastStep[]): Maybe
   if (!ctrl.forecast?.isMyTurn) return
   const firstNode = candidate[0]
   if (!firstNode) return
-  const candidates = ctrl.forecast!.findStartingWithNode(firstNode)
+  const candidates = ctrl.forecast.findStartingWithNode(firstNode)
   if (!candidates.length) return
 
   const lineCount = candidates.filter((candidate) => {

@@ -59,7 +59,7 @@ export default class CoordCtrl {
   }
 
   public getOrientation(color: Color | 'random'): Color {
-    return color === 'random' ? randomColor() : color as Color
+    return color === 'random' ? randomColor() : color 
   }
 
   public updateOrientation() {

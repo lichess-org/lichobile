@@ -77,16 +77,13 @@ export function piece(theme: string, pos: BoardPos, piece: Piece, bounds: Client
   let name = piece.color === 'white' ? 'w' : 'b'
   name += (piece.role === 'knight' ? 'n' : piece.role[0]).toUpperCase()
   const href = `images/pieces/${theme}/${name}.svg`
-  return {
-    tag: 'image',
-    attrs: {
-      x: o[0] - size / 2,
-      y: o[1] - size / 2,
-      width: size,
-      height: size,
-      'xlink:href': href,
-    }
-  }
+  return h('image', {
+    x: o[0] - size / 2,
+    y: o[1] - size / 2,
+    width: size,
+    height: size,
+    'xlink:href': href,
+  })
 }
 
 export function annotation(pos: BoardPos, glyph: Glyph, bounds: ClientRect) {
@@ -165,7 +162,7 @@ export function makeShapeRenderer(
   }
 }
 
-// taken from https://github.com/ornicar/lila/blob/master/ui/analyse/src/autoShape.ts
+// taken from https://github.com/lichess-org/lila/blob/master/ui/analyse/src/autoShape.ts
 // adapted to lichobile
 const glyphToSvg: {[k: string]: Mithril.Child} = {
   // Inaccuracy

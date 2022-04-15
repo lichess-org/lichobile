@@ -22,3 +22,4 @@ ru-RU:
   shareGameUrl: 'Поделиться ссылкой на игру'
   playOnline: "Играть онлайн"
   playOffline: "Играть офлайн"
+  bgThemeSyncWithSystem: "Синхронизировать с системой" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

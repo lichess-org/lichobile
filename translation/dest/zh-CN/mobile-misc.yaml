@@ -22,3 +22,4 @@ zh-CN:
   shareGameUrl: '分享棋局链接'
   playOnline: "在线下棋"
   playOffline: "离线下棋"
+  bgThemeSyncWithSystem: "跟随系统" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

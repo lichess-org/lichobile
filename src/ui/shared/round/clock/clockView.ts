@@ -5,7 +5,6 @@ import ClockCtrl from './ClockCtrl'
 export interface ClockAttrs {
   ctrl: ClockCtrl
   color: Color
-  runningColor?: Color
   isBerserk: boolean
 }
 
@@ -28,9 +27,9 @@ export default {
   },
 
   view({ attrs }) {
-    const { ctrl, color, runningColor, isBerserk } = attrs
+    const { ctrl, color, isBerserk } = attrs
     const time = ctrl.millisOf(color)
-    const isRunning = runningColor === color
+    const isRunning = color === ctrl.times.activeColor
     const className = helper.classSet({
       clock: true,
       outoftime: !time,

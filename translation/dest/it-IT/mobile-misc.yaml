@@ -22,3 +22,4 @@ it-IT:
   shareGameUrl: 'Condividi URL della partita'
   playOnline: "Gioca online"
   playOffline: "Gioca offline"
+  bgThemeSyncWithSystem: "Sincronizza" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

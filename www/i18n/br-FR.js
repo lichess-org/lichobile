@@ -1115,9 +1115,19 @@ export default {
   "youCanAnalyseAGameMoreEffectively": "Efedusoc'h eo an dielfennañ pa ouzer diouzhtu pelec'h emaomp war an dachenn emgann.",
   "aSquareNameAppears": "Un daveenn a zeuy war wel ha deoc'h-c'hwi da glikañ war ar garrezenn a glot ganti. 30 eilenn ho po evit adkavout ar muiañ a garrezennoù ma c'hallit!",
   "startTraining": "Kregiñ ganti",
+  "apiUnsupported": "Re gozh eo ho stumm arload Lichess! Pellgargit mar plij stumm nevesañ digoust.",
+  "apiDeprecated": "Pellgargit stumm nevesañ eus arload Lichess digoust! Echuiñ a raio skoazell evit ar stumm-mañ d’ar %s.",
+  "home": "Degemer",
+  "lastScore": "Disoc’h diwezhañ: %s",
   "playerisInvitingYou": "%s en deus pedet ac'hanoc'h",
   "offline": "Ezlinenn",
+  "otbFlipPiecesAndInfoAfterMove": "Eskemmañ titouroù ar pezhioù hag an enebour goude pep taol",
   "settingsClockPosition": "Lec'hiadur an horolaj",
   "positionRight": "A-zehoù",
-  "positionLeft": "A-gleiz"
+  "positionLeft": "A-gleiz",
+  "toggleSound": "Enaouiñ/lazhañ ar son",
+  "sharePgn": "Skignañ ur PGN",
+  "shareGameUrl": "Skignañ URL ar c'hrogad",
+  "playOnline": "C'hoari enlinenn",
+  "playOffline": "C'hoari ezlinenn"
 }

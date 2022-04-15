@@ -121,7 +121,7 @@ function deleteQueryParam(name: string, newState = false): void {
 
 function getQueryParams(): Record<string, string> {
   const path = getPath()
-  const match = path.match(/\?.+$/)
+  const match = /\?.+$/.exec(path)
   const params: Record<string, string> = {}
   if (match && match[0]) {
     for (const [k, v] of new URLSearchParams(match[0])) {
@@ -168,7 +168,10 @@ const backbutton: Backbutton = (() => {
 
   return <Backbutton>x
 
-})()
+})();
+
+// for debug purposes
+(window as any)['backButton'] = backbutton
 
 function doSet(path: string, replace = false) {
   // reset backbutton stack when changing route

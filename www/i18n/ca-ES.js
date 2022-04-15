@@ -1206,6 +1206,9 @@ export default {
   "declineVariant": "No vull jugar aquesta variant en aquest moment.",
   "declineNoBot": "No accepto desafiaments de bots.",
   "declineOnlyBot": "Només accepto desafiaments de bots.",
+  "published": "Publicat",
+  "latestBlogPosts": "Les últimes publicacions en el blog",
+  "imageCredit": "Crèdits de la imatge",
   "apiUnsupported": "La teva versió de l'aplicació Lichess és massa antiga! Si us plau, actualitza gratuïtament la darrera versió.",
   "apiDeprecated": "Instal·la de franc la darrera versió de Lichess! Aquesta versió deixarà de tenir suport el %s.",
   "comments": "Comentaris",
@@ -1228,5 +1231,6 @@ export default {
   "sharePgn": "Comparteix PGN",
   "shareGameUrl": "Comparteix l'enllaç a la partida",
   "playOnline": "Juga online",
-  "playOffline": "Juga sense connexió"
+  "playOffline": "Juga sense connexió",
+  "bgThemeSyncWithSystem": "Sincronitzar amb el sistema"
 }

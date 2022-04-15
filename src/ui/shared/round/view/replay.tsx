@@ -5,14 +5,8 @@ import settings from '../../../../settings'
 import { autoScroll, autoScrollInline, onReplayTap, getMoveEl } from '../util'
 import OnlineRound from '../OnlineRound'
 
-let pieceNotation: boolean
-
-export function onPieceNotationChange(pn: boolean) {
-  pieceNotation = pn
-}
-
 export function renderReplay(ctrl: OnlineRound) {
-  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
+  const pieceNotation = settings.game.pieceNotation()
 
   if (!ctrl.vm.moveList || ctrl.isZen()) {
     return null
@@ -31,7 +25,7 @@ export function renderReplay(ctrl: OnlineRound) {
 }
 
 export function renderInlineReplay(ctrl: OnlineRound) {
-  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
+  const pieceNotation = settings.game.pieceNotation()
 
   if (!ctrl.vm.moveList) {
     return null

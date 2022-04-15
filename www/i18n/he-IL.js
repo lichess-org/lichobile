@@ -1190,7 +1190,11 @@ export default {
   "declineNoBot": "אני לא מאשר הזמנות מבוטים.",
   "declineOnlyBot": "מאשר הזמנות למשחק רק מבוטים.",
   "apiUnsupported": "גרסת אפליקציית ליצ'ס שברשותך ישנה מדי! אנא שדרג לגרסה העדכנית ביותר בחינם.",
-  "apiDeprecated": "שדרג בחינם לאפליקציית ליצ'ס העדכנית ביותר! תמיכה בגרסה זו תוסר ב-%s.",
+  "apiDeprecated": "שדרג בחינם לאפליקציית ליצ'ס העדכנית ביותר! תמיכה בגרסה זו תוסר ב־%s.",
+  "comments": "תגובה",
+  "gameInformation": "מידע על המשחק",
+  "home": "בית",
+  "lastScore": "התוצאה האחרונה שלך: %s",
   "playerisInvitingYou": "%s מזמין אותך",
   "unsupportedVariant": "%s לא נתמך בגרסה זו",
   "notesSynchronizationHasFailed": "סנכרון הערות עם ליצ'ס נכשל, אנא נסה שנית מאוחר יותר.",
@@ -1207,5 +1211,6 @@ export default {
   "sharePgn": "שתף קובץ משחק (PGN)",
   "shareGameUrl": "שתף כתובת משחק (URL)",
   "playOnline": "שחק (מקוון)",
-  "playOffline": "שחק (לא מקוון)"
+  "playOffline": "שחק (לא מקוון)",
+  "bgThemeSyncWithSystem": "סנכרן עם המערכת"
 }

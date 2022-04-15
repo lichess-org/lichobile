@@ -47,7 +47,7 @@ export default class PlayersCtrl {
 
   public onSearchInput = (e: Event) => {
     const term = (e.target as HTMLInputElement).value.trim()
-    if (!term.match(/^[a-z0-9][\w-]{2,29}$/i)) return
+    if (!(/^[a-z0-9][\w-]{2,29}$/i.exec(term))) return
     if (term.length >= 3) this.searchXhr(term)
   }
 

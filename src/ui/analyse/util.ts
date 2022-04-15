@@ -8,14 +8,6 @@ export function readDrops(line?: string | null): string[] | null {
   return line.match(/.{2}/g) || []
 }
 
-export function readCheckCount(fen: string) {
-  const counts = fen.substr(fen.length - 4)
-  return {
-    white: parseInt(counts[3], 10),
-    black: parseInt(counts[1], 10)
-  }
-}
-
 export function empty(a?: any) {
   return !a || a.length === 0
 }
@@ -96,4 +88,8 @@ export function defined<A>(v: A | undefined): v is A {
 
 export function plyColor(ply: number): Color {
   return (ply % 2 === 0) ? 'white' : 'black'
+}
+
+export function isEvalBetter(a: Tree.ClientEval, b: Tree.ClientEval): boolean {
+  return a.depth > b.depth || (a.depth === b.depth && a.nodes > b.nodes)
 }

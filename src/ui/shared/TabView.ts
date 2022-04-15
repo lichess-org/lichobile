@@ -28,7 +28,7 @@ export default {
     this.gesture.on('swiperight', (e: TouchEvent) => {
       const tab = findParentBySelector(e.target as HTMLElement, '.tab-content')
       if (tab) {
-        const ds = tab.dataset as DOMStringMap
+        const ds = tab.dataset 
         const index = Number(ds.index)
         if (index !== undefined && index > 0) {
           attrs.onTabChange(index - 1)
@@ -39,7 +39,7 @@ export default {
     this.gesture.on('swipeleft', (e: TouchEvent) => {
       const tab = findParentBySelector(e.target as HTMLElement, '.tab-content')
       if (tab) {
-        const ds = tab.dataset as DOMStringMap
+        const ds = tab.dataset 
         const index = Number(ds.index)
         if (index !== undefined) {
           if (index < this.nbTabs - 1) {

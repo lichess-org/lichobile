@@ -1,1 +1,25 @@
 af-ZA:
+  apiUnsupported: "Jou weergawe van lichess-app is te oud! Gradeer asseblief gratis op na die nuutste weergawe."
+  apiDeprecated: "Gradeer gratis op na die nuutste lichess-app! Ondersteuning vir hierdie weergawe sal gedeaktiveer word %s."
+  comments: "Kommentaar"
+  gameInformation: "Spel inligting"
+  home: "Tuiste"
+  lastScore: "Laaste telling: %s"
+  playerisInvitingYou: "%s Nooi jou"
+  unsupportedVariant: "Variant %s word nie in hierdie weergawe ondersteun nie"
+  notesSynchronizationHasFailed: "Notas-sinkronisering met lichess het misluk, probeer asseblief later weer."
+  vibrateOnGameEvents: "Vibreer op speletjie-gebeurtenisse"
+  offline: "Vanlyn"
+  otbUseSymmetricPieces: "Gebruik simmetriese stukke" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Flip stukke en teenstander inligting na skuif" #Setting for offline over-the-board games
+  settingsClockPosition: "Horlosie posisie" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Reg" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Links" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Tafelskermrand (in landskapmodus)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Wissel klank" #Settings to enable/disable sound
+  overTheBoard: "Oor die bord"
+  sharePgn: "Deel PGN"
+  shareGameUrl: 'Deel spel URL'
+  playOnline: "Speel aanlyn"
+  playOffline: "Speel vanlyn"
+  bgThemeSyncWithSystem: "Sinchroniseer met stelsel" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

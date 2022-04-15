@@ -217,7 +217,7 @@ function withdrawButton(ctrl: TournamentCtrl, t: Tournament) {
 
 function getLeaderboardItemEl(e: Event) {
   const target = e.target as HTMLElement
-  return (target as HTMLElement).classList.contains('list_item') ? target :
+  return target.classList.contains('list_item') ? target :
     helper.findParentBySelector(target, '.list_item')
 }
 
@@ -245,7 +245,7 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
 
       <ul
         className={'tournamentStandings box' + (ctrl.isLoadingPage ? ' loading' : '')}
-        oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e!), undefined, undefined, getLeaderboardItemEl)}
+        oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e), undefined, undefined, getLeaderboardItemEl)}
       >
         {players.map((p, i) => renderPlayerEntry(userName, p, i, p.team ? ctrl.teamColorMap[p.team] : 0, p.team && tb ? tb.teams[p.team] : ''))}
       </ul>
@@ -399,7 +399,7 @@ function tournamentTeamLeaderboard(ctrl: TournamentCtrl) {
     <div className="tournamentTeamLeaderboard">
       <ul
         className={'tournamentTeamStandings box'}
-        oncreate={helper.ontap(e => handleTeamInfoTap(ctrl, e!), undefined, undefined, getTeamLeaderboardItemEl)}
+        oncreate={helper.ontap(e => handleTeamInfoTap(ctrl, e), undefined, undefined, getTeamLeaderboardItemEl)}
       >
         {standings.map((team, i) => renderTeamEntry(tb.teams[team.id], ctrl.teamColorMap[team.id], team, i))}
       </ul>
@@ -427,7 +427,7 @@ function renderTeamEntry(teamName: string | undefined, teamColor: number | undef
 
 function getTeamLeaderboardItemEl(e: Event) {
   const target = e.target as HTMLElement
-  return (target as HTMLElement).classList.contains('list_item') ? target :
+  return target.classList.contains('list_item') ? target :
     helper.findParentBySelector(target, '.list_item')
 }
 

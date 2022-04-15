@@ -98,7 +98,7 @@ export default {
                   () => {
                     const white = settings.otb.whitePlayer
                     const black = settings.otb.blackPlayer
-                    ctrl.root.replay.pgn(white(), black())
+                    ctrl.root.replay?.pgn(white(), black())
                     .then(data => {
                       ctrl.importer.importGame(data.pgn)
                     })

@@ -99,7 +99,7 @@ export default {
                 <button className="defaultButton"
                   oncreate={helper.ontap(() => {
                     ctrl.close()
-                    ctrl.root.startNewGame(settings.otb.variant() as VariantKey, ctrl.root.vm.setupFen, settings.otb.clockType())
+                    ctrl.root.startNewGame(settings.otb.variant() , ctrl.root.vm.setupFen, settings.otb.clockType())
                   })}>
                   {i18n('play')}
                 </button>

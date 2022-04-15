@@ -1211,6 +1211,11 @@ export default {
   "declineVariant": "Не желая да играя този вариант в момента.",
   "declineNoBot": "Не приемам предизвикателства от ботове.",
   "declineOnlyBot": "Приемам предизвикателства само от ботове.",
+  "saveDraft": "Запазване на черновата",
+  "xPublishedY": "%1$s публикува %2$s",
+  "latestBlogPosts": "Последни публикации в блога",
+  "nbViews:one": "Едно преглеждане",
+  "nbViews:other": "%s преглеждания",
   "apiUnsupported": "Вашата версия на lichess е стара! Моля обновете приложението до последната версия.",
   "apiDeprecated": "Подновете безплатно до най-новата версия на Lichess! Поддръжката на сегашната Ви версия ще бъде прекратена на %s.",
   "comments": "Коментари",
@@ -1233,5 +1238,6 @@ export default {
   "sharePgn": "Сподели PGN",
   "shareGameUrl": "Сподели URL на партията",
   "playOnline": "Играй онлайн",
-  "playOffline": "Играй офлайн"
+  "playOffline": "Играй офлайн",
+  "bgThemeSyncWithSystem": "Синхронизирай със системата"
 }

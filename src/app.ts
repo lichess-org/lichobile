@@ -32,6 +32,7 @@ export default function appInit(
 
   window.deviceInfo = {
     platform: deviceInfo.platform,
+    osVersion: deviceInfo.osVersion,
     uuid: deviceId.uuid,
     appVersion: appInfo.version,
     cpuCores,

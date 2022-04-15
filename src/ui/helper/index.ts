@@ -289,7 +289,7 @@ export function isPortrait(): boolean {
 
 let cachedSafeAreaInset: SafeAreaInset | null = null
 function nbFromPropValue(p: string): number {
-  const f = p.match(/\d{1,3}/)
+  const f = /\d{1,3}/.exec(p)
   const r = f && f[0]
   const n = Number(r)
   return isNaN(n) ? 0 : n

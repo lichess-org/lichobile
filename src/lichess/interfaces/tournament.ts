@@ -49,7 +49,7 @@ export interface TournamentClock {
 
 interface TournamentMe {
   rank: number
-  readonly withdraw: boolean
+  readonly withdraw?: boolean
 }
 
 interface TournamentPairing {
@@ -105,7 +105,6 @@ export interface StandingPlayer {
 
 interface Sheet {
   readonly fire: boolean
-  readonly total: number
 }
 
 export interface Verdicts {
@@ -128,7 +127,7 @@ export interface PlayerInfoPairing {
   readonly color: Color
   readonly id: string
   readonly op: PlayerInfoOpponent
-  readonly score: [number, number] | number | null
+  readonly score: number | null
   readonly status: number
   readonly win: boolean | null
 }

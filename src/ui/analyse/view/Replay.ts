@@ -11,14 +11,13 @@ interface Attrs {
   rightTabActive: boolean
 }
 
-let pieceNotation: boolean
 export default {
   onbeforeupdate({ attrs }) {
     return !attrs.ctrl.replaying
   },
   view({ attrs }) {
     const { ctrl, rightTabActive } = attrs
-    pieceNotation = pieceNotation || settings.game.pieceNotation()
+    const pieceNotation = settings.game.pieceNotation()
     const className = [
       pieceNotation ? 'displayPieces' : '',
       rightTabActive ? 'rta' : '',
@@ -26,7 +25,7 @@ export default {
     return h('div#replay.analyse-replay.native_scroller', {
       className,
       oncreate: helper.ontapXY(e => onReplayTap(ctrl, e), (e: TouchEvent) => {
-        const el = getMoveEl(e!)
+        const el = getMoveEl(e)
         const ds = el.dataset
         if (el && ds.path) {
           ctrl.contextMenu = ds.path

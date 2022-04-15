@@ -8,8 +8,6 @@ import AnalyseCtrl from '../AnalyseCtrl'
 import settings from '../../../settings'
 import * as xhr from '../../../xhr'
 
-let pieceNotation: boolean
-
 export interface Attrs {
   ctrl: AnalyseCtrl
   data: OpeningData
@@ -109,7 +107,7 @@ function showGameTable(ctrl: AnalyseCtrl, title: string, games: readonly Game[])
   if (!ctrl.explorer.withGames || !games.length) return null
   return (
     <table className="games"
-      oncreate={helper.ontapXY(e => link(ctrl, e!), undefined, getTR)}
+      oncreate={helper.ontapXY(e => link(ctrl, e), undefined, getTR)}
     >
       <thead>
         <tr>
@@ -146,10 +144,12 @@ function showGameTable(ctrl: AnalyseCtrl, title: string, games: readonly Game[])
 
 function showMoveTable(ctrl: AnalyseCtrl, moves: readonly OpeningMoveStats[]) {
   if (!moves.length) return null
-  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
+
+  const pieceNotation = settings.game.pieceNotation()
+
   return (
     <table className="moves"
-      oncreate={helper.ontapXY(e => onTableTap(ctrl, e!), undefined, getTR)}
+      oncreate={helper.ontapXY(e => onTableTap(ctrl, e), undefined, getTR)}
     >
       <thead>
         <tr>

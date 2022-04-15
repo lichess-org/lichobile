@@ -22,3 +22,4 @@ ro-RO:
   shareGameUrl: 'Distribuie URL-ul jocului'
   playOnline: "Joacă online"
   playOffline: "Joacă offline"
+  bgThemeSyncWithSystem: "Sincronizare cu sistemul" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

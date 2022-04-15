@@ -1,9 +1,10 @@
 [lichess.org/mobile](http://lichess.org/mobile)
 --------------------
 
-[![Build Status](https://travis-ci.org/veloce/lichobile.svg?branch=master)](https://travis-ci.org/veloce/lichobile)
-![GitHub contributors](https://img.shields.io/github/contributors/veloce/lichobile?cacheSeconds=600)
-![GitHub All Releases](https://img.shields.io/github/downloads/veloce/lichobile/total?cacheSeconds=600)
+[![Android build](https://github.com/lichess-org/lichobile/actions/workflows/android.yml/badge.svg)](https://github.com/lichess-org/lichobile/actions/workflows/android.yml)
+[![Lint and unit tests](https://github.com/lichess-org/lichobile/actions/workflows/checks.yml/badge.svg)](https://github.com/lichess-org/lichobile/actions/workflows/checks.yml)
+![GitHub contributors](https://img.shields.io/github/contributors/lichess-org/lichobile?cacheSeconds=600)
+![GitHub All Releases](https://img.shields.io/github/downloads/lichess-org/lichobile/total?cacheSeconds=600)
 ![GitHub](https://img.shields.io/badge/license-GPL--3.0-orange)
 
 ![lichess mobile screenshots](portfolio.png)
@@ -94,4 +95,4 @@ More information available [here](https://capacitorjs.com/docs/ios).
 
 ## Advanced setup
 
-See the [wiki](https://github.com/veloce/lichobile/wiki/Setting-a-lichess-dev-server-for-the-app).
+See the [wiki](https://github.com/veloce/lichobile/wiki/Setting-up-the-app-using-a-local-setup-of-lichess).

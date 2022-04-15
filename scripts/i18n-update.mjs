@@ -15,7 +15,7 @@ const lilaTranslationsPath = `${baseDir}/[ornicar.lila] master/translation/dest`
 const lichobileTranslationsPath = '../translation/dest/'
 const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
-const modules = ['site', 'study', 'arena', 'perfStat', 'preferences', 'settings', 'search', 'team', 'tfa', 'puzzle', 'coordinates', 'challenge']
+const modules = ['site', 'study', 'arena', 'perfStat', 'preferences', 'settings', 'search', 'team', 'tfa', 'puzzle', 'coordinates', 'challenge', 'ublog']
 
 async function main() {
   mkdirSync(`${baseDir}`, {recursive: true})
@@ -95,7 +95,7 @@ async function unzipTranslations(zipFilePath) {
 async function downloadLilaSourcesTo(dir) {
   console.log(colors.blue('Downloading lila source translations...'))
   const response = await octokitRequest('GET /repos/{owner}/{repo}/contents/{path}', {
-    owner: 'ornicar',
+    owner: 'lichess-org',
     repo: 'lila',
     path: 'translation/source'
   })

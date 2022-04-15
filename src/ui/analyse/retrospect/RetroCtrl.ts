@@ -95,7 +95,7 @@ export default function RetroCtrl(root: AnalyseCtrl): IRetroCtrl {
       root.explorer.fetchMasterOpening(prev.node.fen).then((res: OpeningData) => {
         const cur = vm.current
         const ucis: Uci[] = []
-        res!.moves.forEach((m) => {
+        res.moves.forEach((m) => {
           if (m.white + m.draws + m.black > 1) ucis.push(m.uci)
         })
         if (ucis.find((uci) => {

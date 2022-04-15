@@ -54,5 +54,6 @@ export default {
   "challengeDeclined": "qaD lajQo'ta'",
   "challengeAccepted": "qaD lajta'!",
   "challengeCanceled": "qaD qIlta'.",
-  "youCannotChallengeX": "%s vIqaDlaHbe'."
+  "youCannotChallengeX": "%s vIqaDlaHbe'.",
+  "bgThemeSyncWithSystem": "pat meymoH"
 }

@@ -31,6 +31,7 @@ import CrazyPocket from '../crazy/CrazyPocket'
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView'
 import { renderInlineReplay, renderReplay } from './replay'
 import OnlineRound from '../OnlineRound'
+import { countChecks, NO_CHECKS } from '../util'
 import { Position, Material } from '../'
 
 export default function view(ctrl: OnlineRound) {
@@ -48,17 +49,17 @@ export default function view(ctrl: OnlineRound) {
 }
 
 export function renderMaterial(material: Material) {
-  const tomb = Object.keys(material.pieces).map((role: string) =>
-    h('div.tomb', Array.from(Array(material.pieces[role]).keys())
+  const ret = Object.keys(material.pieces).map((role: string) =>
+    h('div.material', [...Array(material.pieces[role]).keys()]
       .map(_ => h('piece', { className: role }))
     )
   )
 
   if (material.score > 0) {
-    tomb.push(h('span', '+' + material.score))
+    ret.push(h('span', '+' + material.score))
   }
 
-  return tomb
+  return ret
 }
 
 export function viewOnlyBoardContent(fen: string, orientation: Color, lastMove?: string, variant?: VariantKey, wrapperClass?: string, customPieceTheme?: string) {
@@ -206,8 +207,13 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
 
   const material = ctrl.chessground.getMaterialDiff()
 
-  const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')
-  const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')
+  const checksCount = ctrl.data.player.checks || ctrl.data.opponent.checks ?
+    countChecks(ctrl.data.steps, ctrl.vm.ply) : NO_CHECKS
+
+  const flip = !ctrl.data.tv && ctrl.vm.flip
+
+  const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], checksCount[ctrl.data.player.color], 'player', flip)
+  const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], checksCount[ctrl.data.opponent.color], 'opponent', flip)
 
   const playable = gameApi.playable(ctrl.data)
   const myTurn = gameApi.isPlayerTurn(ctrl.data)
@@ -223,19 +229,19 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   if (isPortrait) {
     return [
       helper.hasSpaceForInlineReplay(vd, isPortrait) ? renderInlineReplay(ctrl) : null,
-      opponent,
+      flip ? player : opponent,
       board,
-      player,
+      flip ? opponent : player,
       renderGameActionsBar(ctrl)
     ]
   } else {
     return [
       board,
       h('section.table', [
-        opponent,
+        flip ? player : opponent,
         renderReplay(ctrl),
         renderGameActionsBar(ctrl),
-        player,
+        flip ? opponent : player,
       ]),
     ]
   }
@@ -255,11 +261,6 @@ function renderExpiration(ctrl: OnlineRound, position: Position, myTurn: boolean
       showOnlySecs: true
     })
   )
-}
-
-function getChecksCount(ctrl: OnlineRound, color: Color) {
-  const player = color === ctrl.data.player.color ? ctrl.data.opponent : ctrl.data.player
-  return player.checks
 }
 
 function renderSubmitMovePopup(ctrl: OnlineRound) {
@@ -305,7 +306,15 @@ function renderPlayerName(player: Player) {
   return 'Anonymous'
 }
 
-function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Material, position: Position, isCrazy: boolean) {
+function renderPlayer(
+  ctrl: OnlineRound,
+  player: Player,
+  material: Material,
+  checkCount: number,
+  flipped: boolean,
+  position: Position,
+  isCrazy: boolean
+) {
   const user = player.user
   const playerName = renderPlayerName(player)
   const togglePopup = user ? () => ctrl.openUserPopup(position, user.id) : utils.noop
@@ -313,14 +322,12 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
     helper.ontap(togglePopup, () => userInfos(user, player, playerApi.playerName(player))) :
     helper.ontap(utils.noop, () => Toast.show({ text: (player.name || player.username || player.user?.username)!, position: 'center', duration: 'short' }))
 
-  const checksNb = getChecksCount(ctrl, player.color)
-
-  const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : undefined
-
   const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
     '#' + ctrl.data.tournament.ranks[player.color] + ' ' : null
 
   const isBerserk = ctrl.vm.goneBerserk[player.color]
+
+  const checksNb = ctrl.data.game.variant.key === 'threeCheck' ? checkCount : undefined
 
   return (
     <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '') + (ctrl.isZen() ? ' zen' : '')} oncreate={vConf}>
@@ -349,18 +356,21 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
           </h3> : null
         }
         {checksNb !== undefined ?
-          <div className="checkCount">+{checksNb}</div> : null
+          [...Array(checksNb).keys()].map(_ =>
+            h('div.material', h('piece', { className: 'king' }))
+          ) : null
         }
         {!ctrl.vm.showCaptured || ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
       </div> : null
       }
       {isCrazy && ctrl.clock ?
-        h(Clock, {
+        // must reset clock with a single-child keyed fragment when flipped
+        [h(Clock, {
+          key: flipped.toString(),
           ctrl: ctrl.clock,
           color: player.color,
           isBerserk,
-          runningColor
-        }) :
+        })] :
         isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
@@ -374,9 +384,10 @@ function renderPlayTable(
   ctrl: OnlineRound,
   player: Player,
   material: Material,
+  checkCount: number,
   position: Position,
+  flipped: boolean,
 ) {
-  const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : undefined
   const step = ctrl.plyStep(ctrl.vm.ply)
   const isCrazy = !!step.crazy
 
@@ -384,12 +395,11 @@ function renderPlayTable(
     playTable: true,
     crazy: isCrazy,
     clockOnLeft: ctrl.vm.clockPosition === 'left',
-    flip: !ctrl.data.tv && ctrl.vm.flip,
   })
 
   return (
     <section className={classN + ' ' + position}>
-      {renderAntagonistInfo(ctrl, player, material, position, isCrazy)}
+      {renderPlayer(ctrl, player, material, checkCount, flipped, position, isCrazy)}
       { step.crazy ?
         h(CrazyPocket, {
           ctrl,
@@ -399,12 +409,13 @@ function renderPlayTable(
         }) : null
       }
       { !isCrazy && ctrl.clock ?
-        h(Clock, {
+        // must reset clock with a single-child keyed fragment when flipped
+        [h(Clock, {
+          key: flipped.toString(),
           ctrl: ctrl.clock,
           color: player.color,
           isBerserk: ctrl.vm.goneBerserk[player.color],
-          runningColor
-        }) :
+        })] :
         !isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player

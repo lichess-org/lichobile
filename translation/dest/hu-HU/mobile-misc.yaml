@@ -22,3 +22,4 @@ hu-HU:
   shareGameUrl: 'Játék linkjének megosztása'
   playOnline: "Online játék"
   playOffline: "Offline játék"
+  bgThemeSyncWithSystem: "Rendszer alapértelmezett" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

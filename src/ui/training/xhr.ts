@@ -19,6 +19,15 @@ export function vote(id: number, v: boolean): Promise<[boolean, number]> {
   })
 }
 
+export function setDifficulty(d: PuzzleDifficulty): Promise<PuzzleDifficulty> {
+  return fetchJSON(`/training/difficulty/${d}`, {
+    method: 'POST',
+    body: JSON.stringify({
+      difficulty: d
+    })
+  })
+}
+
 export function loadPuzzle(id: number): Promise<PuzzleData> {
   return fetchJSON<PuzzleData>(`/training/${id}/load`, { cache: 'reload' })
 }

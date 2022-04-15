@@ -17,10 +17,10 @@ export function vote(id: number, v: boolean): Promise<[boolean, number]> {
       vote: v ? 1 : 0
     })
   })
-}
 
+}
 export function setDifficulty(d: PuzzleDifficulty): Promise<PuzzleDifficulty> {
-  return fetchJSON(`/training/difficulty/${d}`, {
+  return fetchJSON(`/training/difficulty/mix/`, {
     method: 'POST',
     body: JSON.stringify({
       difficulty: d

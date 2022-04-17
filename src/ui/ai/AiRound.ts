@@ -286,7 +286,6 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     } else {
       sound.move()
     }
-    vibrate.quick()
   }
 
   private onUserNewPiece = (role: Role, key: Key) => {
@@ -313,6 +312,12 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
         movableColor: sit.player === this.data.player.color ? sit.player : null,
         check: sit.check
       })
+
+      if (sit.check) {
+        vibrate.doubleTap()
+      } else {
+        vibrate.tap()
+      }
     }
   }
 

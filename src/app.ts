@@ -46,14 +46,14 @@ export default function appInit(
   requestIdleCallback(() => {
     // cache viewport dims
     helper.viewportDim()
-    sound.load(deviceInfo)
+    sound.load()
   })
 
   App.addListener('appStateChange', (state: AppState) => {
     if (state.isActive) {
+      sound.resume()
       setForeground()
-      session.refresh()
-      .then(() => {
+      session.refresh().then(() => {
         if (Capacitor.getPlatform() === 'ios') {
           Badge.setNumber({ badge: session.myTurnGames().length })
         }

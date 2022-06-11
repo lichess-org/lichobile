@@ -8,6 +8,7 @@ import fen from './fen'
 import { renderBoard, makeCoords, makeSymmCoords } from './render'
 import { anim, skip as skipAnim } from './anim'
 import * as drag from './drag'
+import {placePieceInHand} from "./drag";
 
 const pieceScores: { [id: string]: number } = {
   pawn: 1,
@@ -69,7 +70,11 @@ export default class Chessground {
     if (!isViewOnly) {
       board.addEventListener('touchstart', (e: TouchEvent) => drag.start(this, e))
       board.addEventListener('touchmove', (e: TouchEvent) => drag.move(this, e))
-      board.addEventListener('touchend', (e: TouchEvent) => drag.end(this, e))
+      board.addEventListener('touchend', (e: TouchEvent) => {
+        const { clientX, clientY } = e.changedTouches[0];
+        placePieceInHand(this, [clientX, clientY], bounds);
+        drag.end(this, e)
+      });
       board.addEventListener('touchcancel', () => drag.cancel(this))
     }
 

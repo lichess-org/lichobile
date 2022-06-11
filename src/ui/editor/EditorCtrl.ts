@@ -18,7 +18,7 @@ import continuePopup, { Controller as ContinuePopupCtrl } from '../shared/contin
 import i18n from '../../i18n'
 import drag from './drag'
 import { EditorState, BoardPosition, BoardPositionCategory, CastlingToggle, CastlingToggles, CASTLING_TOGGLES } from './interfaces'
-import {setPieceInHand} from "~/chessground/board";
+import {setPieceInHand} from '../../chessground/board'
 
 export default class EditorCtrl {
   public menu: MenuInterface
@@ -136,11 +136,11 @@ export default class EditorCtrl {
       color: (color as Color)
     }
 
-    setPieceInHand(this.chessground.state, piece, true);
+    setPieceInHand(this.chessground.state, piece, true)
   }
 
   public onstart = (e: TouchEvent): void => {
-    this.pickUp(e);
+    this.pickUp(e)
     drag(this, e)
   }
   public onmove = (e: TouchEvent): void => cgDrag.move(this.chessground, e)

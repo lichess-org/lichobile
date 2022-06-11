@@ -137,7 +137,7 @@ export function unselect(state: State): void {
 }
 
 export function setPieceInHand(state: State, piece: Piece | null, force = false): void {
-  state.pieceInHand = piece ? { ...piece, force } : null;
+  state.pieceInHand = piece ? { ...piece, force } : null
 }
 
 export function isMovable(state: State, orig: Key): boolean {

@@ -1,8 +1,25 @@
 et-EE:
-  apiUnsupported: "Sinu Lichessi äpi versioon on liiga vana! Palun uuenda uuemale versioonile."
-  playerisInvitingYou: "%s kutsub sind"
+  apiUnsupported: "Teie Lichessi äpi versioon on liiga vana! Palun värskendage uusimale versioonile."
+  apiDeprecated: "Värskendage Lichess äpp uusimale versioonile tasuta! Selle versiooni toetamine lõpetatakse %s."
+  comments: "Kommentaarid"
+  gameInformation: "Mängu informatsioon"
+  home: "Kodu"
+  lastScore: "Viimane skoor: %s"
+  playerisInvitingYou: "%s kutsub teid"
+  unsupportedVariant: "Variant %s ei ole toetatud sellel versioonil"
+  notesSynchronizationHasFailed: "Märkuste sünkroniseerimine Lichessiga ebaõnnestus, palun proovige hiljem uuesti."
+  vibrateOnGameEvents: "Vibreeri mängu sündmustel"
   offline: "Ühenduseta"
   otbUseSymmetricPieces: "Kasuta sümmeetrilisi nuppe" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Pööra malendid ja vastase info peale käiku" #Setting for offline over-the-board games
   settingsClockPosition: "Kella asukoht" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "Paremal" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Vasakul" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Laua ekraani pool (rõhtvaates)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Luba heli" #Settings to enable/disable sound
+  overTheBoard: "Üle laua"
+  sharePgn: "Jaga PGN"
+  shareGameUrl: 'Jaga mängu URL'
+  playOnline: "Mängi võrgus"
+  playOffline: "Mängi võrguta"
+  bgThemeSyncWithSystem: "Kasuta süsteemi valikut" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

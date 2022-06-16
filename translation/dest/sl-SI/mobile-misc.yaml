@@ -10,9 +10,16 @@ sl-SI:
   notesSynchronizationHasFailed: "Sinhronizacija zapiskov z lichess ni uspela, poskusite pozneje."
   vibrateOnGameEvents: "Vibriranje na dogodke v igri"
   offline: "Brez povezave"
+  otbUseSymmetricPieces: "Uporabi simetrične figure" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Obrni figure in nasprotnikove informacije po potezi" #Setting for offline over-the-board games
+  settingsClockPosition: "Pozicija ure" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Desna" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Leva" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Velikost šahovnice (v ležečem načinu)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
   toggleSound: "Preklopi zvok" #Settings to enable/disable sound
   overTheBoard: "Proti človeku"
   sharePgn: "Deli PGN"
   shareGameUrl: 'Deli povezavo do igre'
   playOnline: "Igraj online"
   playOffline: "Igraj offline"
+  bgThemeSyncWithSystem: "Sinhroniziraj s sistemom" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

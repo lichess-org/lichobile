@@ -1195,5 +1195,6 @@ export default {
   "sharePgn": "Bagikan PGN",
   "shareGameUrl": "Bagikan URL permainan",
   "playOnline": "Main Online",
-  "playOffline": "Main Offline"
+  "playOffline": "Main Offline",
+  "bgThemeSyncWithSystem": "Sinkronkan dengan sistem"
 }

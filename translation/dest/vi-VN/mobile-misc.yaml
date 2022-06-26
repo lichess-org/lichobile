@@ -8,11 +8,15 @@ vi-VN:
   playerisInvitingYou: "%s đang mời bạn"
   unsupportedVariant: "Biến thể %s không được hỗ trợ trong phiên bản này"
   notesSynchronizationHasFailed: "Đồng bộ hóa ghi chú với lichess không thành công, vui lòng thử lại sau."
+  vibrateOnGameEvents: "Rung khi có sự kiện mới"
   offline: "Ngoại tuyến"
   otbFlipPiecesAndInfoAfterMove: "Đảo chiều và thông tin đối thủ sau nước đi" #Setting for offline over-the-board games
   settingsClockPosition: "Vị trí đồng hồ" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "Phải" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Trái" #As in "left-hand side"; not political or past participle
   toggleSound: "Bật/Tắt âm thanh" #Settings to enable/disable sound
+  overTheBoard: "Thiết lập bàn cờ"
+  sharePgn: "Chia sẻ tập tin PGN"
+  shareGameUrl: 'Chia sẻ liên kết game'
   playOnline: "Chơi trực tuyến"
   playOffline: "Chơi ngoại tuyến"

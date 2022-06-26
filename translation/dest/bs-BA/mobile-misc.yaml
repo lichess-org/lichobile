@@ -1,7 +1,11 @@
 bs-BA:
   apiUnsupported: "Vaša verzija aplikacije Lichess zastarjela je! Molimo da je besplatno ažurirate na posljednju verziju."
   apiDeprecated: "Besplatno ažurirajte aplikaciju Lichess na posljednju verziju! Podrška za ovu verziju bit će obustavljena od %s."
-  playerisInvitingYou: "Poziva Vas %s"
+  comments: "Komentari"
+  gameInformation: "Informacije o partiji"
+  home: "Početna strana"
+  lastScore: "Vaš posljednji rezultat: %s"
+  playerisInvitingYou: "Poziva vas %s"
   unsupportedVariant: "Varijanta %s nije podržana u ovoj verziji"
   notesSynchronizationHasFailed: "Sinhronizacija bilješki s Lichessom nije uspjela, molimo, pokušajte kasnije."
   vibrateOnGameEvents: "Vibriranje prilikom događanja u partiji"
@@ -11,4 +15,11 @@ bs-BA:
   settingsClockPosition: "Pozicija sata" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "Desno" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Lijevo" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Strana na kojoj je tabla (u horizontalnom načinu)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Uključi/isključi zvuk" #Settings to enable/disable sound
+  overTheBoard: "Igraj u dvoje"
+  sharePgn: "Podijeli PGN"
+  shareGameUrl: 'Podijeli link partije'
+  playOnline: "Igraj na mreži"
+  playOffline: "Igraj bez mreže"
   bgThemeSyncWithSystem: "Sinhronizirati sa sistemom" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

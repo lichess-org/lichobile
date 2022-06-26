@@ -17,7 +17,7 @@ es-ES:
   positionLeft: "A la izquierda" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Ubicación del tablero (en modo horizontal)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
   toggleSound: "Activar/Desactivar sonido" #Settings to enable/disable sound
-  overTheBoard: "Tablero virtual"
+  overTheBoard: "Jugar con tablero virtual"
   sharePgn: "Compartir PGN"
   shareGameUrl: 'Compartir enlace de la partida'
   playOnline: "Jugar en línea"

@@ -1,16 +1,16 @@
 mr-IN:
   apiUnsupported: "आपली लीचेस ॲपची आवृत्ती खूप जुनी आहे! कृपया नवीनतम आवृत्तीवर विनामूल्य श्रेणीसुधारित करा."
-  apiDeprecated: "नवीनतम लिचेस अ‍ॅपवर विनामूल्य श्रेणीसुधारित करा! या आवृत्तीचे सेवा %s ला बंद होईल."
+  apiDeprecated: "नवीनतम लिचेस अ‍ॅप विनामूल्य श्रेणीसुधारित करा! या आवृत्तीची सेवा %s ला बंद होईल."
   comments: "टिप्पण्या"
   gameInformation: "खेळा संबंधित माहिती"
-  home: "गृह"
+  home: "घर"
   lastScore: "तुमचे गुण: %s"
   playerisInvitingYou: "%s आपल्याला आमंत्रित करत आहे"
   unsupportedVariant: "%s खेळ प्रकार या आवृत्ती मध्ये समाविष्ट नाही"
   notesSynchronizationHasFailed: "नोंद: लीचेससह सिंक्रोनाइझेशन अयशस्वी झाले, कृपया नंतर प्रयत्न करा."
   vibrateOnGameEvents: "खेळाच्या घटनांवर व्हायब्रेट करा"
   offline: "ऑफलाइन"
-  otbUseSymmetricPieces: "Use symmetric pieces" #Setting for offline over-the-board games
+  otbUseSymmetricPieces: "सममितीय नग वापरा" #Setting for offline over-the-board games
   otbFlipPiecesAndInfoAfterMove: "Flip pieces and opponent info after move" #Setting for offline over-the-board games
   settingsClockPosition: "घड्याळ स्थिती" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "उजवा" #As in "right-hand side"; not truth, morality, or law
@@ -22,3 +22,4 @@ mr-IN:
   shareGameUrl: 'खेळाची URL पाठवा'
   playOnline: "ऑनलाइन खेळा"
   playOffline: "ऑफलाईन खेळा"
+  bgThemeSyncWithSystem: "सर्व्हर समक्रमित" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

@@ -1,4 +1,25 @@
 kmr-TR:
+  apiUnsupported: "Versiyona sepana te ya Lichessê pir kevin e! Ji kerema xwe bi belaşî li versiyona dawî rojane bike."
+  apiDeprecated: "Bi belaşî li versiyona dawîn a Lichessê rojane bike! Desteka ji bo vê versiyonê wê ji %s û pê de xilas bibe."
+  comments: "Şîrove"
+  gameInformation: "Agahiya lîstikê"
+  home: "Destpêk"
+  lastScore: "Skora dawîn: %s"
+  playerisInvitingYou: "%s te dawet dike"
+  unsupportedVariant: "Varyanta %s di vê versiyonê de nayê piştgirîkirin"
+  notesSynchronizationHasFailed: "Senkronîzasyona notan ya bi Lichessê re bi ser neket, ji kerama xwe paşê dîsa biceribîne."
+  vibrateOnGameEvents: "Hejandinê aktîv bike ji bo çalakiyên lîstikê"
+  offline: "Offline"
+  otbUseSymmetricPieces: "Kabikên sîmetrîk bi kar bîne" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Piştî hemlekirinê kabikan û agahiya dijberê biguherîne" #Setting for offline over-the-board games
   settingsClockPosition: "Ciyê saetê" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "Rast" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Çep" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Aliyê ekrana texteyê (di moda asoyî de)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Dengê bigire/veke" #Settings to enable/disable sound
+  overTheBoard: "Li ser texteyê"
+  sharePgn: "PGNê parve bike"
+  shareGameUrl: 'URLya lîstikê parve bike'
+  playOnline: "Online bilîze"
+  playOffline: "Offline bilîze"
+  bgThemeSyncWithSystem: "Bi sîstemê re senkronîze bike" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

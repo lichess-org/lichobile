@@ -6,13 +6,20 @@ hi-IN:
   home: "घर"
   lastScore: "पिछला स्कोर​ %s"
   playerisInvitingYou: "%s ने आपको न्योता दिया है।"
+  unsupportedVariant: "वैरिएंट %s इस संस्करण में समर्थित नहीं है"
+  notesSynchronizationHasFailed: "लीचेस के साथ नोट्स सिंक्रनाइज़ेशन विफल हो गया है, कृपया बाद में प्रयास करें।"
+  vibrateOnGameEvents: "खेल आयोजनों पर कंपन करें"
   offline: "ऑफलाइन"
+  otbUseSymmetricPieces: "सममित टुकड़ों का प्रयोग करें" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "चाल के बाद टुकड़े और प्रतिद्वंद्वी जानकारी फ्लिप करें" #Setting for offline over-the-board games
   settingsClockPosition: "घड़ी के लिए स्थान" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "दाएँ" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "बाएँ" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "बोर्ड स्क्रीन साइड (लैंडस्केप मोड में)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
   toggleSound: "ध्वनि को चालू या बंद करें" #Settings to enable/disable sound
   overTheBoard: "बोर्ड पर"
   sharePgn: "PGN शेयर करें"
   shareGameUrl: 'खेल के URL को साझा करें'
   playOnline: "ऑनलाइन खेलें"
   playOffline: "ऑफ़लाइन खेलें"
+  bgThemeSyncWithSystem: "सिस्टम के साथ सिंक करें" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

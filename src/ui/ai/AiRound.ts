@@ -286,7 +286,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     } else {
       sound.move()
     }
-    vibrate.quick()
+    vibrate.tap()
   }
 
   private onUserNewPiece = (role: Role, key: Key) => {

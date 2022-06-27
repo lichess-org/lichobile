@@ -1375,10 +1375,17 @@ export default {
   "notesSynchronizationHasFailed": "Sinhronizacija zapiskov z lichess ni uspela, poskusite pozneje.",
   "vibrateOnGameEvents": "Vibriranje na dogodke v igri",
   "offline": "Brez povezave",
+  "otbUseSymmetricPieces": "Uporabi simetrične figure",
+  "otbFlipPiecesAndInfoAfterMove": "Obrni figure in nasprotnikove informacije po potezi",
+  "settingsClockPosition": "Pozicija ure",
+  "positionRight": "Desna",
+  "positionLeft": "Leva",
+  "landscapeBoardSide": "Velikost šahovnice (v ležečem načinu)",
   "toggleSound": "Preklopi zvok",
   "overTheBoard": "Proti človeku",
   "sharePgn": "Deli PGN",
   "shareGameUrl": "Deli povezavo do igre",
   "playOnline": "Igraj online",
-  "playOffline": "Igraj offline"
+  "playOffline": "Igraj offline",
+  "bgThemeSyncWithSystem": "Sinhroniziraj s sistemom"
 }

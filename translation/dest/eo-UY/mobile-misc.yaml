@@ -1,15 +1,23 @@
 eo-UY:
-  apiUnsupported: "Via versio de Lichess apon estas tro malnova! Bonvolu senpage aktualigi al la lasta versio."
+  apiUnsupported: "Via versio de lichess apo estas tro malnova! Bonvolu senpage aktualigi al la lasta versio."
   apiDeprecated: "Senpage aktualiĝu al la lasta lichess apo! Apogo por tiu ĉi versio finiĝos la %s."
   comments: "Komentoj"
   gameInformation: "Informo de la ludo"
+  home: "Hejmo"
   lastScore: "Lasta poentaro: %s"
   playerisInvitingYou: "%s invitas vin"
+  notesSynchronizationHasFailed: "Notaj sinkronigoj kun lichess malsukcesis, bonvolu provi poste."
   vibrateOnGameEvents: "Vibri en eventaj ludoj"
   offline: "Nekonektita"
+  otbUseSymmetricPieces: "Uzi simetriajn ŝakpecojn" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Inversigi ŝakpecojn kaj kontraŭulajn informojn post movo" #Setting for offline over-the-board games
   settingsClockPosition: "Horloĝa pozicio" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "Dekstra" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Maldekstra" #As in "left-hand side"; not political or past participle
+  toggleSound: "(Mal)ŝalti sonon" #Settings to enable/disable sound
   overTheBoard: "Ludi fizike kun aliulo"
   sharePgn: "Disdoni PGN"
   shareGameUrl: 'Disdoni URL de la ludo'
+  playOnline: "Ludi enrete"
+  playOffline: "Ludi eksterrete"
+  bgThemeSyncWithSystem: "Uzi la sisteman temon" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

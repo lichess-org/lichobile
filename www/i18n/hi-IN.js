@@ -1158,14 +1158,21 @@ export default {
   "home": "घर",
   "lastScore": "पिछला स्कोर​ %s",
   "playerisInvitingYou": "%s ने आपको न्योता दिया है।",
+  "unsupportedVariant": "वैरिएंट %s इस संस्करण में समर्थित नहीं है",
+  "notesSynchronizationHasFailed": "लीचेस के साथ नोट्स सिंक्रनाइज़ेशन विफल हो गया है, कृपया बाद में प्रयास करें।",
+  "vibrateOnGameEvents": "खेल आयोजनों पर कंपन करें",
   "offline": "ऑफलाइन",
+  "otbUseSymmetricPieces": "सममित टुकड़ों का प्रयोग करें",
+  "otbFlipPiecesAndInfoAfterMove": "चाल के बाद टुकड़े और प्रतिद्वंद्वी जानकारी फ्लिप करें",
   "settingsClockPosition": "घड़ी के लिए स्थान",
   "positionRight": "दाएँ",
   "positionLeft": "बाएँ",
+  "landscapeBoardSide": "बोर्ड स्क्रीन साइड (लैंडस्केप मोड में)",
   "toggleSound": "ध्वनि को चालू या बंद करें",
   "overTheBoard": "बोर्ड पर",
   "sharePgn": "PGN शेयर करें",
   "shareGameUrl": "खेल के URL को साझा करें",
   "playOnline": "ऑनलाइन खेलें",
-  "playOffline": "ऑफ़लाइन खेलें"
+  "playOffline": "ऑफ़लाइन खेलें",
+  "bgThemeSyncWithSystem": "सिस्टम के साथ सिंक करें"
 }

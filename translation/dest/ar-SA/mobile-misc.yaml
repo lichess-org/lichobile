@@ -1,24 +1,25 @@
 ar-SA:
-  apiUnsupported: "إصدار نسختك من تطبيق Lichess قديم جدا! يرجى تحديثها بالمجان إلى الإصدار الجديد."
-  apiDeprecated: "حدث بالمجان تطبيق Lichess إلى آخر إصدار! دعامة هذه النسخة ستنشر في %s."
+  apiUnsupported: "إصدارك الحالي لتطبيق Lichess قديم جدا, يرجى التحديث إلى الإصدار الجديد."
+  apiDeprecated: "حدث تطبيق Lichess إلى آخر إصداربالمجان! سيتم رفع الدعم لهذه النسخة في %s."
   comments: "التعليقات"
   gameInformation: "معلومات اللعبة"
   home: "الصفحة الرئيسية"
-  lastScore: "النقاط الأخيرة:%s"
+  lastScore: "النتيجة الأخيرة:%s"
   playerisInvitingYou: "%s يدعوك"
-  unsupportedVariant: "خيار %s غير مدعوم في هذا الإصدار"
+  unsupportedVariant: "الخيار %s غير مدعوم في هذا الإصدار"
   notesSynchronizationHasFailed: "مزامنة الملاحظات مع Lichess قد فشلت، يرجى المحاولة لاحقاً."
-  vibrateOnGameEvents: "يهتز على إيقاع أحداث اللعبة"
+  vibrateOnGameEvents: "الاهتزاز عند وقوع أحداث اللعبة"
   offline: "غير متصل"
   otbUseSymmetricPieces: "استخدام قطع متماثلة" #Setting for offline over-the-board games
-  otbFlipPiecesAndInfoAfterMove: "قلب القطع و معلومات الخصم بعد النقلة" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "قلب القطع و معلومات الخصم بعد النقل" #Setting for offline over-the-board games
   settingsClockPosition: "موضع الساعة" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "يمين" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "يسار" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "موضع الرقعة (على الوضع الأفقي)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
   toggleSound: "تعطيل/تشغيل الصوت" #Settings to enable/disable sound
   overTheBoard: "على الرقعة"
-  sharePgn: "مشاركة PGN"
+  sharePgn: "مشاركة الPGN"
   shareGameUrl: 'شارك رابط المباراة'
   playOnline: "العب على الإنترنت"
   playOffline: "العب دون اتصال"
+  bgThemeSyncWithSystem: "المزامنة مع الخادم" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

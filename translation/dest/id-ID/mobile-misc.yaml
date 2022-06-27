@@ -22,3 +22,4 @@ id-ID:
   shareGameUrl: 'Bagikan URL permainan'
   playOnline: "Main Online"
   playOffline: "Main Offline"
+  bgThemeSyncWithSystem: "Sinkronkan dengan sistem" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

@@ -1184,6 +1184,7 @@ export default {
   "positionLeft": "왼쪽",
   "landscapeBoardSide": "보드 스크린 위치(가로 모드에서)",
   "toggleSound": "소리 켜기/끄기",
+  "overTheBoard": "로컬 게임",
   "sharePgn": "PGN 공유",
   "shareGameUrl": "게임 URL 공유",
   "playOnline": "온라인 플레이",

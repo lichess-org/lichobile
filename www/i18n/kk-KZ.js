@@ -1150,6 +1150,22 @@ export default {
   "gameInformation": "Ойын мәліметтері",
   "home": "Басты бет",
   "lastScore": "Жетістік: %s",
+  "playerisInvitingYou": "%s сізді шақырып тұр",
   "unsupportedVariant": "Бұл нұсқада %s шахмат түрі қамтылмаған",
-  "settingsClockPosition": "Сағат орны"
+  "notesSynchronizationHasFailed": "Жазбаларды Личес-тен жүктеу ақауға ұшырады! Кейін қайталап көріңіз.",
+  "vibrateOnGameEvents": "Ойынның әр оқиғасында діріл ету",
+  "offline": "Желіде емес",
+  "otbUseSymmetricPieces": "Тастарды симметриялы бұру",
+  "otbFlipPiecesAndInfoAfterMove": "Әр жүрістен кейін тақта мен мәліметтерді бұрып аудару",
+  "settingsClockPosition": "Сағат орны",
+  "positionRight": "Оң",
+  "positionLeft": "Сол",
+  "landscapeBoardSide": "Тақтаның экрандағы орны (көлденең көріністе)",
+  "toggleSound": "Дыбыс батырмасы",
+  "overTheBoard": "Тақтаны жаю",
+  "sharePgn": "PGN-ды бөлісу",
+  "shareGameUrl": "Ойын сілтемесін бөлісу",
+  "playOnline": "Желіде ойнау",
+  "playOffline": "Желіден тыс ойнау",
+  "bgThemeSyncWithSystem": "Құрылғы жүйесіне сәйкес"
 }

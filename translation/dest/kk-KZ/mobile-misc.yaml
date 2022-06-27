@@ -5,5 +5,21 @@ kk-KZ:
   gameInformation: "Ойын мәліметтері"
   home: "Басты бет"
   lastScore: "Жетістік: %s"
+  playerisInvitingYou: "%s сізді шақырып тұр"
   unsupportedVariant: "Бұл нұсқада %s шахмат түрі қамтылмаған"
+  notesSynchronizationHasFailed: "Жазбаларды Личес-тен жүктеу ақауға ұшырады! Кейін қайталап көріңіз."
+  vibrateOnGameEvents: "Ойынның әр оқиғасында діріл ету"
+  offline: "Желіде емес"
+  otbUseSymmetricPieces: "Тастарды симметриялы бұру" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Әр жүрістен кейін тақта мен мәліметтерді бұрып аудару" #Setting for offline over-the-board games
   settingsClockPosition: "Сағат орны" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Оң" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Сол" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Тақтаның экрандағы орны (көлденең көріністе)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Дыбыс батырмасы" #Settings to enable/disable sound
+  overTheBoard: "Тақтаны жаю"
+  sharePgn: "PGN-ды бөлісу"
+  shareGameUrl: 'Ойын сілтемесін бөлісу'
+  playOnline: "Желіде ойнау"
+  playOffline: "Желіден тыс ойнау"
+  bgThemeSyncWithSystem: "Құрылғы жүйесіне сәйкес" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

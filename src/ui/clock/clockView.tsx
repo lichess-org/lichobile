@@ -21,7 +21,6 @@ export function clockBody(ctrl: IChessClockCtrl) {
   const whiteFlagged = clock.flagged() === 'white'
   const blackFlagged = clock.flagged() === 'black'
   const flagged = whiteFlagged || blackFlagged
-
   const whiteClockClass = [
     'clockTapArea',
     'white',
@@ -79,6 +78,7 @@ export function clockBody(ctrl: IChessClockCtrl) {
         <button className={'fa fa-refresh' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={helper.ontap(ctrl.reload)} />
         <button className={'fa fa-cog' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={helper.ontap(ctrl.clockSettingsCtrl.open)} />
         <button hey="home" className={'fa fa-home' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={helper.ontap(ctrl.goHome)} />
+        <span className="moveNumber">{ctrl.getMove()}</span>
       </div>
       <div className={blackClockClass} oncreate={helper.ontouch(() => onClockTouch(ctrl, 'black'))}>
         <div className="clockTapAreaContent">

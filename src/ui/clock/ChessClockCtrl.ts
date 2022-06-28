@@ -14,6 +14,7 @@ export interface IChessClockCtrl {
   goHome: () => void
   clockTap: (side: 'white' | 'black') => void
   clockType: Prop<ClockType>
+  getMove: () => number
 }
 
 function noop() { /* noop */ }
@@ -22,17 +23,20 @@ export default function ChessClockCtrl(): IChessClockCtrl {
 
   const clockType: Prop<ClockType> = prop(settings.clock.clockType())
   const clockObj: Prop<IChessClock> = prop(clockSet[clockType()](noop))
-
+  let currentMove: number= 1
+  
   function reload() {
     if (clockObj() && clockObj().isRunning() && !clockObj().flagged()) return
     clockType(settings.clock.clockType())
     clockObj(clockSet[clockType()](noop))
+    currentMove = 1
   }
 
   const clockSettingsCtrl = clockSettings.controller(reload, clockObj)
 
   function clockTap(side: 'white' | 'black') {
     clockObj().clockHit(side)
+    currentMove += 0.5
   }
 
   function startStop () {
@@ -45,6 +49,10 @@ export default function ChessClockCtrl(): IChessClockCtrl {
     }
   }
 
+  function getMove() {
+    return Math.floor(currentMove)
+  }
+
   return {
     startStop,
     clockSettingsCtrl,
@@ -53,5 +61,6 @@ export default function ChessClockCtrl(): IChessClockCtrl {
     goHome,
     clockTap,
     clockType,
+    getMove
   }
 }

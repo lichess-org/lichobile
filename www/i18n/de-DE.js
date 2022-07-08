@@ -1,5 +1,5 @@
 export default {
-  "playWithAFriend": "Spiele mit einem Freund",
+  "playWithAFriend": "Spiele mit einem Lieblingsmensch",
   "playWithTheMachine": "Spiele mit dem Computer",
   "toInviteSomeoneToPlayGiveThisUrl": "Versende diese URL, um jemanden zum Spiel einzuladen",
   "gameOver": "Partie beendet",

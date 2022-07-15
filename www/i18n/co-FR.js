@@ -848,5 +848,7 @@ export default {
   "declineStandard": "Ùn accettu e sfide cù e variante per u mumentu.",
   "declineVariant": "Ùn vogliu micca ghjucà cù sta variante per u mumentu.",
   "declineNoBot": "Ùn accettu micca e sfide chì venenu di l' urdinatori.",
-  "declineOnlyBot": "Ùn accettu chì e sfide chì venenu di l' autumati."
+  "declineOnlyBot": "Ùn accettu chì e sfide chì venenu di l' autumati.",
+  "comments": "Cummentarii",
+  "home": "Accoltu"
 }

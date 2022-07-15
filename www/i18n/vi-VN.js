@@ -1168,12 +1168,16 @@ export default {
   "playerisInvitingYou": "%s đang mời bạn",
   "unsupportedVariant": "Biến thể %s không được hỗ trợ trong phiên bản này",
   "notesSynchronizationHasFailed": "Đồng bộ hóa ghi chú với lichess không thành công, vui lòng thử lại sau.",
+  "vibrateOnGameEvents": "Rung khi có sự kiện mới",
   "offline": "Ngoại tuyến",
   "otbFlipPiecesAndInfoAfterMove": "Đảo chiều và thông tin đối thủ sau nước đi",
   "settingsClockPosition": "Vị trí đồng hồ",
   "positionRight": "Phải",
   "positionLeft": "Trái",
   "toggleSound": "Bật/Tắt âm thanh",
+  "overTheBoard": "Thiết lập bàn cờ",
+  "sharePgn": "Chia sẻ tập tin PGN",
+  "shareGameUrl": "Chia sẻ liên kết game",
   "playOnline": "Chơi trực tuyến",
   "playOffline": "Chơi ngoại tuyến"
 }

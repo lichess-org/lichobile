@@ -844,17 +844,17 @@ export default {
   "editYourBlogPost": "आपली ब्लॉग पोस्ट संपादित करा",
   "saveDraft": "मसुदा वाचवा",
   "apiUnsupported": "आपली लीचेस ॲपची आवृत्ती खूप जुनी आहे! कृपया नवीनतम आवृत्तीवर विनामूल्य श्रेणीसुधारित करा.",
-  "apiDeprecated": "नवीनतम लिचेस अ‍ॅपवर विनामूल्य श्रेणीसुधारित करा! या आवृत्तीचे सेवा %s ला बंद होईल.",
+  "apiDeprecated": "नवीनतम लिचेस अ‍ॅप विनामूल्य श्रेणीसुधारित करा! या आवृत्तीची सेवा %s ला बंद होईल.",
   "comments": "टिप्पण्या",
   "gameInformation": "खेळा संबंधित माहिती",
-  "home": "गृह",
+  "home": "घर",
   "lastScore": "तुमचे गुण: %s",
   "playerisInvitingYou": "%s आपल्याला आमंत्रित करत आहे",
   "unsupportedVariant": "%s खेळ प्रकार या आवृत्ती मध्ये समाविष्ट नाही",
   "notesSynchronizationHasFailed": "नोंद: लीचेससह सिंक्रोनाइझेशन अयशस्वी झाले, कृपया नंतर प्रयत्न करा.",
   "vibrateOnGameEvents": "खेळाच्या घटनांवर व्हायब्रेट करा",
   "offline": "ऑफलाइन",
-  "otbUseSymmetricPieces": "Use symmetric pieces",
+  "otbUseSymmetricPieces": "सममितीय नग वापरा",
   "otbFlipPiecesAndInfoAfterMove": "Flip pieces and opponent info after move",
   "settingsClockPosition": "घड्याळ स्थिती",
   "positionRight": "उजवा",
@@ -865,5 +865,6 @@ export default {
   "sharePgn": "PGN पाठवा",
   "shareGameUrl": "खेळाची URL पाठवा",
   "playOnline": "ऑनलाइन खेळा",
-  "playOffline": "ऑफलाईन खेळा"
+  "playOffline": "ऑफलाईन खेळा",
+  "bgThemeSyncWithSystem": "सर्व्हर समक्रमित"
 }

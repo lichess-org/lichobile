@@ -22,3 +22,4 @@ en-US:
   shareGameUrl: 'Share game URL'
   playOnline: "Play online"
   playOffline: "Play offline"
+  bgThemeSyncWithSystem: "Sync with System" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

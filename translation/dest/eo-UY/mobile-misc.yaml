@@ -14,7 +14,7 @@ eo-UY:
   settingsClockPosition: "Horloĝa pozicio" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "Dekstra" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Maldekstra" #As in "left-hand side"; not political or past participle
-  toggleSound: "(Mal)ŝalti sonon" #Settings to enable/disable sound
+  toggleSound: "Baskuligu sonon" #Settings to enable/disable sound
   overTheBoard: "Ludi fizike kun aliulo"
   sharePgn: "Disdoni PGN"
   shareGameUrl: 'Disdoni URL de la ludo'

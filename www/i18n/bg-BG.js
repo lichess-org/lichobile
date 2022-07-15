@@ -1216,8 +1216,8 @@ export default {
   "latestBlogPosts": "Последни публикации в блога",
   "nbViews:one": "Едно преглеждане",
   "nbViews:other": "%s преглеждания",
-  "apiUnsupported": "Вашата версия на lichess е стара! Моля обновете приложението до последната версия.",
-  "apiDeprecated": "Подновете безплатно до най-новата версия на Lichess! Поддръжката на сегашната Ви версия ще бъде прекратена на %s.",
+  "apiUnsupported": "Вашата версия на приложението lichess е остаряла! Надградете безплатно до последната версия.",
+  "apiDeprecated": "Надградете безплатно до най-новата версия на Lichess! Поддръжката на тази версия ще се прекрати на %s.",
   "comments": "Коментари",
   "gameInformation": "За партията",
   "home": "Начало",
@@ -1235,9 +1235,9 @@ export default {
   "landscapeBoardSide": "Разположение на дъската (в хоризонтална позиция)",
   "toggleSound": "Вкл./Изкл. звук",
   "overTheBoard": "Двама над дъската",
-  "sharePgn": "Сподели PGN",
+  "sharePgn": "Споделияне на PGN",
   "shareGameUrl": "Сподели URL на партията",
   "playOnline": "Играй онлайн",
   "playOffline": "Играй офлайн",
-  "bgThemeSyncWithSystem": "Синхронизирай със системата"
+  "bgThemeSyncWithSystem": "Синхронизиране със системата"
 }

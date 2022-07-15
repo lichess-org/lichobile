@@ -1073,7 +1073,7 @@ export default {
   "settingsClockPosition": "Horloĝa pozicio",
   "positionRight": "Dekstra",
   "positionLeft": "Maldekstra",
-  "toggleSound": "(Mal)ŝalti sonon",
+  "toggleSound": "Baskuligu sonon",
   "overTheBoard": "Ludi fizike kun aliulo",
   "sharePgn": "Disdoni PGN",
   "shareGameUrl": "Disdoni URL de la ludo",

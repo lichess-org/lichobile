@@ -1,59 +1,90 @@
-import throttle from 'lodash-es/throttle'
+import { Capacitor } from '@capacitor/core'
 import { SoundEffect } from 'capacitor-sound-effect'
-import { DeviceInfo } from '@capacitor/device'
+import throttle from 'lodash-es/throttle'
 import settings from './settings'
 import { isForeground } from './utils/appMode'
 
-function shouldPlay(): boolean {
-  return settings.general.sound() && isForeground()
-}
+let ctx = typeof(window.AudioContext) !== 'undefined' ? new AudioContext() : null
 
 export default {
-  load(info: DeviceInfo): Promise<void> {
-    const ext = info.platform === 'ios' ? '.aifc' : '.mp3'
-
+  load(): Promise<void> {
     return Promise.all([
-      SoundEffect.loadSound({ id: 'move', path: `sounds/move${ext}` }),
-      SoundEffect.loadSound({ id: 'capture', path: `sounds/capture${ext}` }),
-      SoundEffect.loadSound({ id: 'explosion', path: `sounds/explosion${ext}` }),
-      SoundEffect.loadSound({ id: 'lowtime', path: `sounds/lowtime${ext}` }),
-      SoundEffect.loadSound({ id: 'dong', path: `sounds/dong${ext}` }),
-      SoundEffect.loadSound({ id: 'berserk', path: `sounds/berserk${ext}` }),
-      SoundEffect.loadSound({ id: 'clock', path: `sounds/clock${ext}` }),
-      SoundEffect.loadSound({ id: 'confirmation', path: `sounds/confirmation${ext}` }),
-    ]).then(() => { /* noop */ })
+      loadSound('move'),
+      loadSound('capture'),
+      loadSound('explosion'),
+      loadSound('lowtime'),
+      loadSound('dong'),
+      loadSound('berserk'),
+      loadSound('clock'),
+      loadSound('confirmation'),
+    ]).then(() => console.log('all sounds loaded.'))
   },
-  move() {
-    if (shouldPlay()) SoundEffect.play({ id: 'move' })
+
+  resume(): void {
+    if (ctx != null) {
+      void ctx.close() // should be able to reuse these. However, webkit.
+      ctx = new AudioContext()
+    }
+  },
+  move(): void {
+    play('move')
   },
   throttledMove: throttle(() => {
-    if (shouldPlay()) SoundEffect.play({ id: 'move' })
+    play('move')
   }, 50),
-  capture() {
-    if (shouldPlay()) SoundEffect.play({ id: 'capture' })
+  capture(): void {
+    play('capture')
   },
   throttledCapture: throttle(() => {
-    if (shouldPlay()) SoundEffect.play({ id: 'capture' })
+    play('capture')
   }, 50),
-  explosion() {
-    if (shouldPlay()) SoundEffect.play({ id: 'explosion' })
+  explosion(): void {
+    play('explosion')
   },
   throttledExplosion: throttle(() => {
-    if (shouldPlay()) SoundEffect.play({ id: 'explosion' })
+    play('explosion')
   }, 50),
-  lowtime() {
-    if (shouldPlay()) SoundEffect.play({ id: 'lowtime' })
+  lowtime(): void {
+    play('lowtime')
   },
-  dong() {
-    if (shouldPlay()) SoundEffect.play({ id: 'dong' })
+  dong(): void {
+    play('dong')
   },
-  berserk() {
-    if (shouldPlay()) SoundEffect.play({ id: 'berserk' })
+  berserk(): void {
+    play('berserk')
   },
-  clock() {
-    if (shouldPlay()) SoundEffect.play({ id: 'clock' })
+  clock(): void {
+    play('clock')
   },
-  confirmation() {
-    if (shouldPlay()) SoundEffect.play({ id: 'confirmation' })
+  confirmation(): void {
+    play('confirmation')
   },
+}
+
+const iosBuffers: {[id: string]: AudioBuffer } = {}
+
+async function loadSound(id: string): Promise<void> {
+  const path = `sounds/${id}.mp3`
+  if (Capacitor.getPlatform() === 'ios' && ctx != null) {
+    window
+      .fetch(path)
+      .then(rsp => rsp.arrayBuffer())
+      .then(buf => ctx!.decodeAudioData(buf))
+      .then(audio => iosBuffers[id] = audio)
+  } else {
+    SoundEffect.loadSound({ id, path })
+  }
+}
+
+function play(id: string): void {
+  if (settings.general.sound() && isForeground()) {
+    if (Capacitor.getPlatform() === 'ios' && ctx != null) {
+      const mv = ctx.createBufferSource()
+      mv.buffer = iosBuffers[id]
+      mv.connect(ctx.destination)
+      mv.start()
+    } else {
+      SoundEffect.play({ id })
+    }
+  }
 }

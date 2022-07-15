@@ -340,7 +340,7 @@ export default {
         })
       })
 
-      router.add('study/:id/chapter/:chapterId', ({ params }) => {
+      router.add('study/:id/:chapterId', ({ params }) => {
         import('./ui/study/study').then(m => {
           onRouteMatch(m.default, params)
         })

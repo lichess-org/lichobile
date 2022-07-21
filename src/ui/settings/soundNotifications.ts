@@ -11,13 +11,26 @@ import vibrate from '../../vibrate'
 
 function renderBody() {
   return h('ul.native_scroller.page.settings_list.game', [
-    h('li.list_item', h(Checkbox, {
-      label: i18n('toggleSound'),
-      name: 'sound',
-      prop: settings.general.sound,
-    })),
-    h('li.list_item', {
-    }, formWidgets.renderCheckbox(i18n('vibrateOnGameEvents'), 'vibrate', settings.general.vibrateOnGameEvents, vibrate.onSettingChange)),
+    h(
+      'li.list_item',
+      h(
+        Checkbox,
+        {
+          label: i18n('toggleSound'),
+          name: 'sound',
+          prop: settings.general.sound,
+        }
+      ),
+    ),
+    h(
+      'li.list_item',
+      {},
+      formWidgets.renderCheckbox(
+        i18n('vibrateOnGameEvents'),
+        'vibrate',
+        settings.general.vibrateOnGameEvents, vibrate.onSettingChange
+      ),
+    ),
     ...(push.isStub ? [] : [
       h(
         'li.list_item',

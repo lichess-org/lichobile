@@ -18,13 +18,23 @@ function renderBody() {
     })),
     h('li.list_item', {
     }, formWidgets.renderCheckbox(i18n('vibrateOnGameEvents'), 'vibrate', settings.general.vibrateOnGameEvents, vibrate.onSettingChange)),
-    h('li.list_item', formWidgets.renderCheckbox(i18n('notifications'), 'notifications', settings.general.notifications.enable, isOn => {
-      if (isOn) {
-        push.register()
-      } else {
-        push.unregister()
-      }
-    })),
+    ...(push.isStub ? [] : [
+      h(
+        'li.list_item',
+        formWidgets.renderCheckbox(
+          i18n('notifications'),
+          'notifications',
+          settings.general.notifications.enable,
+          isOn => {
+            if (isOn) {
+              push.register()
+            } else {
+              push.unregister()
+            }
+          }
+        ),
+      ),
+    ]),
   ])
 }
 
@@ -32,7 +42,8 @@ export default {
   oncreate: helper.viewSlideIn,
 
   view() {
-    const header = dropShadowHeader(null, backButton(i18n('sound') + ' | ' + i18n('notifications')))
+    const headerTitle = i18n('sound') + (push.isStub ? '' : ' | ' + i18n('notifications'))
+    const header = dropShadowHeader(null, backButton(headerTitle))
     return layout.free(header, renderBody())
   }
 }

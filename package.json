@@ -109,6 +109,7 @@
         "watch": "node scripts/inject-conf && concurrently 'npm:compile-watch' 'rollup -w -c' 'npm:styles-watch'",
         "prebuild": "npm run clean && npm run compile",
         "build": "node scripts/inject-conf && concurrently 'npm:compile-date-locales' 'npm:styles' 'rollup -c' && npx cap copy",
-        "fetch-nnue": "cd node_modules/capacitor-stockfish/stockfish/src && make net && cp *.nnue ../../../../ios/App/Pods"
+        "fetch-nnue": "cd node_modules/capacitor-stockfish/stockfish/src && make net && cp *.nnue ../../../../ios/App/Pods",
+        "patch-nonfree": "node ./scripts/patch-nonfree"
     }
 }

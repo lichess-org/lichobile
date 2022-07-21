@@ -46,3 +46,22 @@ jobs:
           name: debugApk
           path: |
             ./android/app/build/outputs/apk/debug/
+      - name: Patch nonfree
+        env:
+          PATCH_NONFREE_FORCE: "1"
+        run: npm run patch-nonfree
+      - name: Sync android capacitor
+        run: npx cap update android
+      - name: Build Free APKs
+        working-directory: ./android
+        run: ./gradlew assembleDebug
+      - name: Check non-free dependencies
+        working-directory: ./android/app/build/outputs/apk/debug/
+        run: |
+          dexdump=$(find $ANDROID_HOME/build-tools/ -name 'dexdump' | sort -r | head -1)
+          ! $dexdump app-debug.apk | grep 'Class descriptor' | grep com\/google\/firebase
+          ! $dexdump app-debug.apk | grep 'Class descriptor' | grep com\/google\/android\/gms
+      - uses: actions/upload-artifact@v2
+        with:
+          name: freeDebugApk
+          path: ./android/app/build/outputs/apk/debug/

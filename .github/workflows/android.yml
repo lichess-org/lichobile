@@ -6,6 +6,7 @@ on:
   push:
     paths:
       - '.github/workflows/android.yml'
+      - '.github/actions/build-lichobile-apk.yml'
       - 'android/**'
     branches-ignore:
       - 'l10n_master'
@@ -14,54 +15,22 @@ jobs:
   apk:
     name: Generate debug APK
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - uses: ./.github/actions/build-lichobile-apk
+
+  freeApk:
+    name: Generate free debug APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/build-lichobile-apk
         with:
-          node-version: '16'
-          cache: 'npm'
-      - name: Install Dependencies
-        run: npm ci
-      - name: Build web
-        run: npm run build
-      - name: Setup JDK
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'gradle'
-      - name: Sync android capacitor
-        run: npx cap update android
-      - name: Prepare build
-        working-directory: ./node_modules/capacitor-stockfish/stockfish/src
-        run: make net
-      - name: Build APKs
-        working-directory: ./android
-        run: |
-          ./gradlew assembleDebug
-      - uses: actions/upload-artifact@v2
-        with:
-          name: debugApk
-          path: |
-            ./android/app/build/outputs/apk/debug/
-      - name: Patch nonfree
-        env:
-          PATCH_NONFREE_FORCE: "1"
-        run: npm run patch-nonfree
-      - name: Sync android capacitor
-        run: npx cap update android
-      - name: Build Free APKs
-        working-directory: ./android
-        run: ./gradlew assembleDebug
+          artifactName: "debugFreeApk"
+          patchNonFree: "true"
       - name: Check non-free dependencies
         working-directory: ./android/app/build/outputs/apk/debug/
         run: |
           dexdump=$(find $ANDROID_HOME/build-tools/ -name 'dexdump' | sort -r | head -1)
           ! $dexdump app-debug.apk | grep 'Class descriptor' | grep com\/google\/firebase
           ! $dexdump app-debug.apk | grep 'Class descriptor' | grep com\/google\/android\/gms
-      - uses: actions/upload-artifact@v2
-        with:
-          name: freeDebugApk
-          path: ./android/app/build/outputs/apk/debug/

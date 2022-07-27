@@ -1,0 +1,58 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Lichobile APK
+description: Build a Debug APK of Lichobile Android app
+
+inputs:
+  artifactName:
+    description: "The name of the output artifact for the APK."
+    required: false
+    default: "debugApk"
+  patchNonFree:
+    description: "Whether nonfree dependencies should be patched out."
+    required: false
+    default: "false"
+
+runs:
+  using: "composite"
+  steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+      - name: Install Dependencies
+        shell: bash
+        run: npm ci
+      - name: Patch nonfree
+        if: inputs.patchNonFree == 'true'
+        env:
+          PATCH_NONFREE_FORCE: "1"
+        shell: bash
+        run: |
+          npm run patch-nonfree
+          git diff
+      - name: Build web
+        shell: bash
+        run: npm run build
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+      - name: Sync android capacitor
+        shell: bash
+        run: npx cap update android
+      - name: Prepare build
+        shell: bash
+        run: npm run fetch-nnue
+      - name: Build APKs
+        working-directory: ./android
+        shell: bash
+        run: |
+          ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ inputs.artifactName }}
+          path: |
+            ./android/app/build/outputs/apk/debug/

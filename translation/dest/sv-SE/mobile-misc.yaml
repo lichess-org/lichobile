@@ -6,7 +6,7 @@ sv-SE:
   home: "Startsida"
   lastScore: "Senaste resultat: %s"
   playerisInvitingYou: "%s bjuder in dig"
-  unsupportedVariant: "Varianten %s är inte stödd i denna verision"
+  unsupportedVariant: "Varianten %s är inte stödd i denna version"
   notesSynchronizationHasFailed: "Synkning av anteckningar med Lichess har misslyckats, försök igen senare."
   vibrateOnGameEvents: "Vibrera vid partihändelser"
   offline: "Frånkopplad"

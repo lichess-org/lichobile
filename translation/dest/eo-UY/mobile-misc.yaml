@@ -6,6 +6,7 @@ eo-UY:
   home: "Hejmo"
   lastScore: "Lasta poentaro: %s"
   playerisInvitingYou: "%s invitas vin"
+  unsupportedVariant: "Varianto %s ne estas subtenata en ĉi tiu versio"
   notesSynchronizationHasFailed: "Notaj sinkronigoj kun lichess malsukcesis, bonvolu provi poste."
   vibrateOnGameEvents: "Vibri en eventaj ludoj"
   offline: "Nekonektita"
@@ -14,6 +15,7 @@ eo-UY:
   settingsClockPosition: "Horloĝa pozicio" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "Dekstra" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Maldekstra" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Flanko de la tabulo (en horizontala reĝimo)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
   toggleSound: "Baskuligu sonon" #Settings to enable/disable sound
   overTheBoard: "Ludi fizike kun aliulo"
   sharePgn: "Disdoni PGN"

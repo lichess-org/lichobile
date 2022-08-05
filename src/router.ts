@@ -7,6 +7,7 @@ import isFunction from 'lodash-es/isFunction'
 
 import signals from './signals'
 import session from './session'
+import settings from './settings'
 import { serializeQueryParameters } from './utils'
 import redraw from './utils/redraw'
 
@@ -145,17 +146,22 @@ const backbutton: Backbutton = (() => {
       b('backbutton')
       redraw()
     } else if (!/^\/$/.test(getPath())) {
-      // if playing a game as anon ask for confirmation because there is no way
-      // back!
-      if (/^\/game\/[a-zA-Z0-9]{12}/.test(getPath()) && !session.isConnected()) {
-        Dialog.confirm({
-          title: 'Confirmation',
-          message: 'Do you really want to leave the game? You can\'t go back to it after.',
-        }).then(({ value }) => {
-          if (value) {
-            backHistory()
-          }
-        })
+      if (/^\/game\/[a-zA-Z0-9]{12}/.test(getPath())) {
+        if (settings.game.disableBackButton()) {
+          return
+        }
+        // if playing a game as anon ask for confirmation because there is
+        // no way back!
+        if (!session.isConnected()) {
+          Dialog.confirm({
+            title: 'Confirmation',
+            message: 'Do you really want to leave the game? You can\'t go back to it after.',
+          }).then(({ value }) => {
+            if (value) {
+              backHistory()
+            }
+          })
+        }
       } else {
         backHistory()
       }

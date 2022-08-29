@@ -22,3 +22,4 @@ hr-HR:
   shareGameUrl: 'Podijeli URL partije'
   playOnline: "Igraj na mreži"
   playOffline: "Igraj izvan mreže"
+  bgThemeSyncWithSystem: "Sinkronizacija s telefonom" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

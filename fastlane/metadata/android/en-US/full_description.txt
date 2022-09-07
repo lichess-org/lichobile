@@ -1,0 +1,3 @@
+<i>lichess</i> is built for the love of chess. The chess server has 150 000 individual users daily and growing fast. Several chess variants are supported (Crazyhouse, Chess 960, King Of The Hill, Three-check, Antichess, Atomic chess, Horde, Racing Kings), either in online and offline modes!
+
+For screenshots, please visit the project’s Github presence. For help and more details, see its website.

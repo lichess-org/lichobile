@@ -11,20 +11,43 @@ import vibrate from '../../vibrate'
 
 function renderBody() {
   return h('ul.native_scroller.page.settings_list.game', [
-    h('li.list_item', h(Checkbox, {
-      label: i18n('toggleSound'),
-      name: 'sound',
-      prop: settings.general.sound,
-    })),
-    h('li.list_item', {
-    }, formWidgets.renderCheckbox(i18n('vibrateOnGameEvents'), 'vibrate', settings.general.vibrateOnGameEvents, vibrate.onSettingChange)),
-    h('li.list_item', formWidgets.renderCheckbox(i18n('notifications'), 'notifications', settings.general.notifications.enable, isOn => {
-      if (isOn) {
-        push.register()
-      } else {
-        push.unregister()
-      }
-    })),
+    h(
+      'li.list_item',
+      h(
+        Checkbox,
+        {
+          label: i18n('toggleSound'),
+          name: 'sound',
+          prop: settings.general.sound,
+        }
+      ),
+    ),
+    h(
+      'li.list_item',
+      {},
+      formWidgets.renderCheckbox(
+        i18n('vibrateOnGameEvents'),
+        'vibrate',
+        settings.general.vibrateOnGameEvents, vibrate.onSettingChange
+      ),
+    ),
+    ...(push.isStub ? [] : [
+      h(
+        'li.list_item',
+        formWidgets.renderCheckbox(
+          i18n('notifications'),
+          'notifications',
+          settings.general.notifications.enable,
+          isOn => {
+            if (isOn) {
+              push.register()
+            } else {
+              push.unregister()
+            }
+          }
+        ),
+      ),
+    ]),
   ])
 }
 
@@ -32,7 +55,8 @@ export default {
   oncreate: helper.viewSlideIn,
 
   view() {
-    const header = dropShadowHeader(null, backButton(i18n('sound') + ' | ' + i18n('notifications')))
+    const headerTitle = i18n('sound') + (push.isStub ? '' : ' | ' + i18n('notifications'))
+    const header = dropShadowHeader(null, backButton(headerTitle))
     return layout.free(header, renderBody())
   }
 }

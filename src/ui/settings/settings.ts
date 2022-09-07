@@ -6,6 +6,7 @@ import * as helper from '../helper'
 import { dropShadowHeader, backButton } from '../shared/common'
 import layout from '../layout'
 import i18n from '../../i18n'
+import push from '../../push'
 import socket from '../../socket'
 
 interface State {
@@ -56,7 +57,7 @@ function renderBody(appVersion?: string) {
       }, i18n('pieceSet')),
       h('li.list_item.nav', {
         oncreate: helper.ontapY(() => router.set('/settings/soundNotifications'))
-      }, i18n('sound') + ' | ' + i18n('notifications'))
+      }, i18n('sound') + (push.isStub ? '' : ' | ' + i18n('notifications')))
     ]),
     appVersion ? h('section.app_version', 'v' + appVersion) : null
   ]

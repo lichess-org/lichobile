@@ -75,6 +75,20 @@ Using android studio:
 
 More information available [here](https://capacitorjs.com/docs/android).
 
+#### Free version
+
+By default, the output APK will rely on [Firebase Cloud
+Messaging](https://firebase.google.com/docs/cloud-messaging) to support push
+notifications. However, it is possible to remove this dependency if you don't
+care about push notifications.
+
+To build the free version:
+
+    $ npm run patch-nonfree
+    $ npx cap update android
+    $ cd ./android
+    $ ./gradlew assembleDebug
+
 ### iOS
 
 You will need a `GoogleService-Info.plist` file in order to compile iOS project.

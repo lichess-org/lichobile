@@ -13,6 +13,8 @@ import { handleXhrError } from './utils'
 import { isForeground } from './utils/appMode'
 
 export default {
+  isStub: false,
+
   init() {
     PushNotifications.addListener('registration',
       ({ value }: Token) => {
@@ -93,4 +95,3 @@ export default {
     return fetchText('/mobile/unregister', { method: 'POST' })
   }
 }
-

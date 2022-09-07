@@ -255,13 +255,22 @@
   @media only screen and (orientation landscape)
     fluid-type(20px, 35px)
 
+$material-piece-size = 16px
+
+.materials
+  display flex
+  max-height $material-piece-size
+  overflow hidden
+
 .material
   margin-left 6px
+  display flex
+  flex-wrap wrap
   piece
     position initial
     margin-left -6px
-    width 18px
-    height 18px
+    width $material-piece-size
+    height $material-piece-size
     background-size cover
     display inline-block
     @media only screen and (min-width 768px) and (min-height 768px)

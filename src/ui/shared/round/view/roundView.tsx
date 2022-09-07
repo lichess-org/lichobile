@@ -33,6 +33,7 @@ import { renderInlineReplay, renderReplay } from './replay'
 import OnlineRound from '../OnlineRound'
 import { countChecks, NO_CHECKS } from '../util'
 import { Position, Material } from '../'
+import times from 'lodash-es/times'
 
 export default function view(ctrl: OnlineRound) {
   const isPortrait = helper.isPortrait()
@@ -49,17 +50,21 @@ export default function view(ctrl: OnlineRound) {
 }
 
 export function renderMaterial(material: Material) {
-  const ret = Object.keys(material.pieces).map((role: string) =>
-    h('div.material', [...Array(material.pieces[role]).keys()]
-      .map(_ => h('piece', { className: role }))
-    )
+  return h.fragment(
+    {},
+    [
+      h(
+        'div.materials',
+        Object.keys(material.pieces).map((role: string) =>
+          h('div.material', times(
+            material.pieces[role],
+            _ => h('piece', { className: role })
+          ))
+        ),
+      ),
+      material.score > 0 ? h('span', `+${material.score}`) : null,
+    ]
   )
-
-  if (material.score > 0) {
-    ret.push(h('span', '+' + material.score))
-  }
-
-  return ret
 }
 
 export function viewOnlyBoardContent(fen: string, orientation: Color, lastMove?: string, variant?: VariantKey, wrapperClass?: string, customPieceTheme?: string) {

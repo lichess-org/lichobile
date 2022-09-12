@@ -70,4 +70,3 @@ External services
 Lichobile relies on these external services:
 
 * [lichess.org](https://lichess.org)
-* [Sentry](https://sentry.io)

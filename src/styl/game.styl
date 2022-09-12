@@ -302,9 +302,11 @@ $material-piece-size = 16px
   column-gap 5px
   piece
     position relative
+    width 60px // fallback
     width calc(min(12.5%, var(--overlay-height)))
     // CSS hack: padding-bottom is calculated based on width of parent, so we can get a square div here
-    height 0
+    height 60px // fallback
+    height calc(min(0px, 60px))
     padding-bottom calc(min(12.5%, var(--overlay-height)))
 
 .tableHeader

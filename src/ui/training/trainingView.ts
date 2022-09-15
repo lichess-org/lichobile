@@ -66,7 +66,7 @@ function renderActionsBar(ctrl: TrainingCtrl) {
       oncreate: helper.ontap(ctrl.goToAnalysis, () => Toast.show({ text: i18n('analysis'), duration: 'short', position: 'bottom' })),
       disabled: ctrl.vm.mode !== 'view'
     }),
-    session.isConnected() ? h('button.action_bar_button.training_action.fa.fa-refresh', {
+    session.isConnected() ? h('button.action_bar_button.training_action.fa.fa-random', {
       oncreate: helper.ontap(ctrl.resync, () => Toast.show({ text: 'Sync and refresh saved puzzles', duration: 'short', position: 'bottom' }))
     }) : null,
     h('button.action_bar_button.training_action.fa.fa-backward', {

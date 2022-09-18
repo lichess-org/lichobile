@@ -78,25 +78,30 @@ function renderForm() {
       h('div.field', [
         formError && formError.username ?
           h('div.form-error', formError.username[0]) : null,
-        h('input#pseudo[type=text]', {
+        h('input#username[type=text]', {
           className: formError && formError.username ? 'form-error' : '',
+          onfocus: scrollToTop,
+          oninput: debounce(oninput, 500),
+          name: 'username',
+          'aria-label': 'Username',
           placeholder: i18n('username'),
-          autocomplete: 'off',
+          autocomplete: 'username',
           autocapitalize: 'off',
           autocorrect: 'off',
           spellcheck: false,
-          required: true,
-          onfocus: scrollToTop,
-          oninput: debounce(oninput, 500),
+          required: true
         }),
       ]),
       h('div.field', [
         formError && formError.email ?
           h('div.form-error', formError.email[0]) : null,
         h('input#email[type=email]', {
-          onfocus: scrollToTop,
           className: formError && formError.email ? 'form-error' : '',
+          onfocus: scrollToTop,
+          name: 'email',
+          'aria-label': 'Email',
           placeholder: i18n('email'),
+          autocomplete: 'email',
           autocapitalize: 'off',
           autocorrect: 'off',
           spellcheck: false,
@@ -107,15 +112,21 @@ function renderForm() {
         formError && formError.password ?
           h('div.form-error', formError.password[0]) : null,
         h('input#password[type=password]', {
-          onfocus: scrollToTop,
           className: formError && formError.password ? 'form-error' : '',
+          onfocus: scrollToTop,
+          name: 'password',
+          'aria-label': 'Password',
           placeholder: i18n('password'),
-          required: true
+          autocomplete: 'new-password',
+          required: true,
+          passwordrules: 'minlength: 20; required: lower; required: upper; required: digit; required: [-];'
         })
       ]),
       h('div.submit', [
-        h('button.defaultButton', {
-          disabled: loading
+        h('button.defaultButton[type=submit]', {
+          disabled: loading,
+          value: 'SIGNUP',
+          'aria-label': 'Sign Up',
         }, i18n('signUp'))
       ])
     ])

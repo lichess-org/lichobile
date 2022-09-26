@@ -17,6 +17,17 @@ It talks to a native [Stockfish](https://stockfishchess.org/) engine, [supportin
 [capacitor plugin](https://github.com/veloce/capacitor-stockfish).
 Multi-variant chess library is brought by [a JavaScript version of scalachess](https://github.com/veloce/scalachessjs).
 
+## Download
+
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/org.lichess.mobileapp.free/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=org.lichess.mobileapp)
+
+or get the APK from the [Releases section](https://github.com/lichess-org/lichobile/releases/latest)
+
 ## Required dependencies
 
 * [node](http://nodejs.org) latest LTS version

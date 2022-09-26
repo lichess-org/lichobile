@@ -10,8 +10,10 @@ export async function autocomplete(term: string): Promise<SearchResult> {
   return data.result
 }
 
-export function onlinePlayers(): Promise<ReadonlyArray<User>> {
-  return fetchJSON('/player/online', { query: { nb: 50 }})
+export async function onlinePlayers(): Promise<ReadonlyArray<User>> {
+  const data = await fetchJSON<Array<User>>('/player/online', { query: { nb: 50 } })
+  data.forEach(user => user.online = true) // every player returned from this endpoint is implicitly online
+  return data
 }
 
 export function ranking(): Promise<Rankings> {

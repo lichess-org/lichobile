@@ -1,5 +1,5 @@
 ru-RU:
-  apiUnsupported: "Ваше приложение Lichess устарело. Пожалуйста, обновите его до последней версии, это бесплатно."
+  apiUnsupported: "Ваше приложение lichess устарело. Пожалуйста, обновите его до последней версии бесплатно."
   apiDeprecated: "Обновите ваше приложение lichess, это бесплатно! Поддержка текущей версии будет прекращена %s."
   comments: "Комментарии"
   gameInformation: "О партии"
@@ -8,8 +8,8 @@ ru-RU:
   playerisInvitingYou: "%s приглашает вас"
   unsupportedVariant: "Вариант %s не поддерживается в этой версии"
   notesSynchronizationHasFailed: "Не удалось синхронизировать заметки с lichess, повторите попытку позже."
-  vibrateOnGameEvents: "Вибрировать при наступлении событий в игре"
-  offline: "Оффлайн"
+  vibrateOnGameEvents: "Вибрировать при игровых событиях"
+  offline: "Офлайн"
   otbUseSymmetricPieces: "Использовать симметричные фигуры" #Setting for offline over-the-board games
   otbFlipPiecesAndInfoAfterMove: "Переворачивать фигуры и надписи после хода" #Setting for offline over-the-board games
   settingsClockPosition: "Расположение часов" #Determines whether each player's time is shown on the left or right side of the board

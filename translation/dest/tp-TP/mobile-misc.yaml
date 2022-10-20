@@ -22,3 +22,4 @@ tp-TP:
   shareGameUrl: 'o pana e nimi nasin musi'
   playOnline: "o musi kepeken linja sona"
   playOffline: "o musi kepeken linja sona ala"
+  bgThemeSyncWithSystem: "o kama sama ilo" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

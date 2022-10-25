@@ -289,23 +289,20 @@ $material-piece-size = 16px
     background-image url(../../images/pieces/mono/K.svg)
 
 #promotion_choice
-  --overlay-height 100px
   border 1px solid black
   background-color rgba(255,255,255, 0.7)
   position absolute
-  top calc((100vh - var(--overlay-height)) / 2)
-  height var(--overlay-height)
+  top calc((100vh - 100px) / 2)
+  height 100px
   width 100%
-  display flex
-  justify-content center
-  align-items center
-  column-gap 5px
+  text-align center
   piece
     position relative
-    width calc(min(12.5%, var(--overlay-height)))
-    // CSS hack: padding-bottom is calculated based on width of parent, so we can get a square div here
-    height 0
-    padding-bottom calc(min(12.5%, var(--overlay-height)))
+    display inline-block
+    width 60px
+    height 60px
+    margin 0 5px
+    top 17px
 
 .tableHeader
   display flex

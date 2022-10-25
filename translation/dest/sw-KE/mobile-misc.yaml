@@ -3,7 +3,7 @@ sw-KE:
   comments: "Maoni"
   gameInformation: "Habari ya mchezo"
   home: "Nyumbani"
-  playerisInvitingYou: "%s anakukarabisha wewe"
+  playerisInvitingYou: "%s anakualika"
   notesSynchronizationHasFailed: "Usawazika wa noti kwa Lichess umeshindwa, tafadhali jaribu tena baadaye."
   vibrateOnGameEvents: "Tikisika kwa matukio ya mchezo"
   offline: "Nje ya mtandao"

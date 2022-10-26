@@ -22,3 +22,4 @@ ga-IE:
   shareGameUrl: 'Comhroinn URL an chluiche'
   playOnline: "Imir ar líne"
   playOffline: "Imir as líne"
+  bgThemeSyncWithSystem: "Sioncrónaigh leis an gcóras" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

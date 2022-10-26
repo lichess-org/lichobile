@@ -1,5 +1,5 @@
 uz-UZ:
-  apiUnsupported: "Ilova kullanmidi."
+  apiUnsupported: "Sizning lichess ilovangiz talqini oldingi ekan! Iltimos uni bepul uangilab oling."
   apiDeprecated: "Lichess ilovangizni yangilab oling, bu bepul! Ushbu talqinni qo‘llab quvvatlash %s da bekor qilinadi."
   comments: "Изохлар"
   gameInformation: "Uyin haqida"

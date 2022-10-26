@@ -16,3 +16,10 @@ hy-AM:
   positionRight: "Աջից" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Ձախից" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "Տախտակի դիրքը (ալբոմային կողմնորոշման դեպքում)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Միացնել/անջատել ձայնը" #Settings to enable/disable sound
+  overTheBoard: "Երկուսով խաղատախտակի առջև"
+  sharePgn: "Տարածել PGN-ը"
+  shareGameUrl: 'Տարածել խաղի հղումը'
+  playOnline: "Խաղալ առցանց"
+  playOffline: "Խաղալ օֆլայն"
+  bgThemeSyncWithSystem: "Սինքրոնացնել համակարգի հետ" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

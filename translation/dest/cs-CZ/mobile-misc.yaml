@@ -22,3 +22,4 @@ cs-CZ:
   shareGameUrl: 'Sdílet URL hry'
   playOnline: "Hrát online"
   playOffline: "Hrát offline"
+  bgThemeSyncWithSystem: "Systémové nastaveníi" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

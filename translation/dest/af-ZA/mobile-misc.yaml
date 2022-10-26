@@ -1,6 +1,6 @@
 af-ZA:
-  apiUnsupported: "Jou weergawe van lichess-app is te oud! Gradeer asseblief gratis op na die nuutste weergawe."
-  apiDeprecated: "Gradeer gratis op na die nuutste lichess-app! Ondersteuning vir hierdie weergawe sal gedeaktiveer word %s."
+  apiUnsupported: "Jou weergawe van Lichess-app is te oud! Gradeer asseblief gratis op na die nuutste weergawe."
+  apiDeprecated: "Gradeer gratis op na die nuutste Lichess-app! Ondersteuning vir hierdie weergawe sal gedeaktiveer word op %s."
   comments: "Kommentaar"
   gameInformation: "Spel inligting"
   home: "Tuiste"

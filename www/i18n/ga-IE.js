@@ -1452,5 +1452,6 @@ export default {
   "sharePgn": "Roinn PGN",
   "shareGameUrl": "Comhroinn URL an chluiche",
   "playOnline": "Imir ar líne",
-  "playOffline": "Imir as líne"
+  "playOffline": "Imir as líne",
+  "bgThemeSyncWithSystem": "Sioncrónaigh leis an gcóras"
 }

@@ -8,7 +8,7 @@ export default {
   "playerisInvitingYou": "%s ladet dich i",
   "unsupportedVariant": "Variante %s wird in dere Version nöd underschtützt",
   "notesSynchronizationHasFailed": "D'Synchronisation vu Amerkige mit Lichess isch fählgschlage, bitte versuechs spöter nomal.",
-  "vibrateOnGameEvents": "Bi Schpilereignis vibriere",
+  "vibrateOnGameEvents": "Bi Schpielereignis vibriere",
   "offline": "Offline",
   "otbUseSymmetricPieces": "benutz symmetrischi Figure",
   "otbFlipPiecesAndInfoAfterMove": "Figurä und Gegnerinfo nochem Zug flippä",
@@ -20,7 +20,7 @@ export default {
   "overTheBoard": "Schpill offline gäge en Mänsch",
   "sharePgn": "PGN teilä",
   "shareGameUrl": "Partiä-URL teilä",
-  "playOnline": "Online schpilä",
-  "playOffline": "Offline schpilä",
+  "playOnline": "Online schpille",
+  "playOffline": "Offline schpille",
   "bgThemeSyncWithSystem": "Mit em Syschtem synchronisiere"
 }

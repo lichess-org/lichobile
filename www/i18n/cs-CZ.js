@@ -1342,5 +1342,6 @@ export default {
   "sharePgn": "Sdílet PGN",
   "shareGameUrl": "Sdílet URL hry",
   "playOnline": "Hrát online",
-  "playOffline": "Hrát offline"
+  "playOffline": "Hrát offline",
+  "bgThemeSyncWithSystem": "Systémové nastaveníi"
 }

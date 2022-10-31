@@ -8,7 +8,7 @@ import { dropShadowHeader as headerWidget, backButton } from './shared/common'
 import * as helper from './helper'
 import layout from './layout'
 import i18n, { fromNow, i18nVdom } from '../i18n'
-import { TimelineData, TimelineEntry, TimelineEntryType } from '../lichess/interfaces'
+import { BlogPostTimelineEntry, FollowTimelineEntry, ForumPostTimelineEntry, GameEndTimelineEntry, StreamStartTimelineEntry, StudyCreateTimelineEntry, StudyLikeTimelineEntry, TimelineData, TimelineEntry, TimelineEntryType, TourJoinTimelineEntry, UblogLikeTimelineEntry, UblogPostTimelineEntry } from '../lichess/interfaces'
 import { userTitle } from './user/userView'
 import { LightUser } from '~/lichess/interfaces/user'
 
@@ -92,7 +92,7 @@ export function renderTimelineEntry(e: TimelineEntry, users: LightUserMap) {
   }
 }
 
-function renderBlog(entry: TimelineEntry) {
+function renderBlog(entry: BlogPostTimelineEntry) {
   const data = entry.data
   return h('li.list_item.timelineEntry.blogEntry', {
     key: 'blog-post' + data.id,
@@ -105,7 +105,7 @@ function renderBlog(entry: TimelineEntry) {
   ])
 }
 
-function renderUblog(entry: TimelineEntry, users: LightUserMap) {
+function renderUblog(entry: UblogPostTimelineEntry, users: LightUserMap) {
   const data = entry.data
   const actor = users[data.userId]
   return h('li.list_item.timelineEntry', {
@@ -119,7 +119,7 @@ function renderUblog(entry: TimelineEntry, users: LightUserMap) {
   ])
 }
 
-function renderUblogLike(entry: TimelineEntry, users: LightUserMap) {
+function renderUblogLike(entry: UblogLikeTimelineEntry, users: LightUserMap) {
   const data = entry.data
   const actor = users[data.userId]
   return h('li.list_item.timelineEntry', {
@@ -133,7 +133,7 @@ function renderUblogLike(entry: TimelineEntry, users: LightUserMap) {
   ])
 }
 
-function renderForum(entry: TimelineEntry, users: LightUserMap) {
+function renderForum(entry: ForumPostTimelineEntry, users: LightUserMap) {
   const data = entry.data
   const actor = users[data.userId]
   return h('li.list_item.timelineEntry', {
@@ -147,7 +147,7 @@ function renderForum(entry: TimelineEntry, users: LightUserMap) {
   ])
 }
 
-function renderStudy(entry: TimelineEntry) {
+function renderStudy(entry: StudyCreateTimelineEntry | StudyLikeTimelineEntry) {
   const data = entry.data
   const eType = entry.type === 'study-create' ? 'hosts' : 'likes'
   return h('li.list_item.timelineEntry', {
@@ -161,7 +161,7 @@ function renderStudy(entry: TimelineEntry) {
   ])
 }
 
-function renderTourJoin(entry: TimelineEntry) {
+function renderTourJoin(entry: TourJoinTimelineEntry) {
   const entryText = i18nVdom('xCompetesInY', h('strong', entry.data.userId), entry.data.tourName)
   const key = 'tour' + entry.date
 
@@ -176,7 +176,7 @@ function renderTourJoin(entry: TimelineEntry) {
   )
 }
 
-function renderFollow(entry: TimelineEntry) {
+function renderFollow(entry: FollowTimelineEntry) {
   const entryText = i18nVdom('xStartedFollowingY', h('strong', entry.data.u1), entry.data.u2)
   const key = 'follow' + entry.date
 
@@ -191,7 +191,7 @@ function renderFollow(entry: TimelineEntry) {
   )
 }
 
-function renderGameEnd(entry: TimelineEntry) {
+function renderGameEnd(entry: GameEndTimelineEntry) {
   const icon = gameIcon(entry.data.perf)
   const result = typeof entry.data.win === 'undefined' ? i18n('draw') : (entry.data.win ? 'Victory' : 'Defeat')
   const key = 'game-end' + entry.date
@@ -206,7 +206,7 @@ function renderGameEnd(entry: TimelineEntry) {
   )
 }
 
-function renderStreamStart(entry: TimelineEntry) {
+function renderStreamStart(entry: StreamStartTimelineEntry) {
   const data = entry.data
   return h('li.list_item.timelineEntry', {
     key: `stream-start${data.date}`,

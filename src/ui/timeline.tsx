@@ -7,7 +7,7 @@ import { openWebsitePage } from '../utils/browse'
 import { dropShadowHeader as headerWidget, backButton } from './shared/common'
 import * as helper from './helper'
 import layout from './layout'
-import i18n, { fromNow } from '../i18n'
+import i18n, { fromNow, i18nVdom } from '../i18n'
 import { TimelineData, TimelineEntry, TimelineEntryType } from '../lichess/interfaces'
 import { userTitle } from './user/userView'
 import { LightUser } from '~/lichess/interfaces/user'
@@ -113,7 +113,7 @@ function renderUblog(entry: TimelineEntry, users: LightUserMap) {
     'data-external': `/@/${data.userId}/blog/${data.slug}/${data.id}`,
   }, [
     userTitle(false, actor.patron ?? false, actor.id, actor.title),
-    h.trust(i18n('xPublishedY', '', `<strong>${data.title}</strong>`)),
+    i18nVdom('xPublishedY', '', h('strong', data.title)),
     ' ',
     h('small', h('em', entry.fromNow)),
   ])
@@ -127,7 +127,7 @@ function renderUblogLike(entry: TimelineEntry, users: LightUserMap) {
     'data-external': `/ublog/${data.id}/redirect`,
   }, [
     userTitle(false, actor.patron ?? false, actor.id, actor.title),
-    h.trust(i18n('xLikesY', '', `<strong>${data.title}</strong>`)),
+    i18nVdom('xLikesY', '', h('strong', data.title)),
     ' ',
     h('small', h('em', entry.fromNow)),
   ])
@@ -141,7 +141,7 @@ function renderForum(entry: TimelineEntry, users: LightUserMap) {
     'data-external': `/forum/redirect/post/${data.postId}`,
   }, [
     userTitle(false, actor.patron ?? false, actor.id, actor.title),
-    h.trust(i18n('xPostedInForumY', '', `<strong>${data.topicName}</strong>`)),
+    i18nVdom('xPostedInForumY', '', h('strong', data.topicName)),
     ' ',
     h('small', h('em', entry.fromNow)),
   ])
@@ -162,7 +162,7 @@ function renderStudy(entry: TimelineEntry) {
 }
 
 function renderTourJoin(entry: TimelineEntry) {
-  const entryText = i18n('xCompetesInY', entry.data.userId, entry.data.tourName)
+  const entryText = i18nVdom('xCompetesInY', h('strong', entry.data.userId), entry.data.tourName)
   const key = 'tour' + entry.date
 
   return (
@@ -170,14 +170,14 @@ function renderTourJoin(entry: TimelineEntry) {
       data-path={`/tournament/${entry.data.tourId}`}
     >
       <span className="fa fa-trophy" />
-      {h.trust(entryText.replace(/^(\w+)\s/, '<strong>$1&nbsp;</strong>'))}
+        {entryText}
       <small><em> {entry.fromNow}</em></small>
     </li>
   )
 }
 
 function renderFollow(entry: TimelineEntry) {
-  const entryText = i18n('xStartedFollowingY', entry.data.u1, entry.data.u2)
+  const entryText = i18nVdom('xStartedFollowingY', h('strong', entry.data.u1), entry.data.u2)
   const key = 'follow' + entry.date
 
   return (
@@ -185,7 +185,7 @@ function renderFollow(entry: TimelineEntry) {
       data-path={`/@/${entry.data.u2}`}
     >
       <span className="fa fa-arrow-circle-right" />
-      {h.trust(entryText.replace(/^(\w+)\s/, '<strong>$1&nbsp;</strong>'))}
+        {entryText}
       <small><em> {entry.fromNow}</em></small>
     </li>
   )

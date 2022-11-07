@@ -13,7 +13,7 @@ export default {
     PushNotifications.addListener('registration', ({ value }: Token) => {
       console.debug('Push registration success, FCM token: ' + value)
 
-      fetchText(`/mobile/register/firebase/${value}`, {
+      fetchText(`/mobile/register/${value}`, {
         method: 'POST',
       }).catch(handleXhrError)
     })
@@ -31,8 +31,6 @@ export default {
           case 'challengeAccept':
           case 'gameMove':
           case 'gameFinish':
-          case 'forumMention':
-          case 'streamStart':
             session.refresh()
             break
         }
@@ -60,15 +58,19 @@ export default {
             router.set(`/inbox/${action.notification.data['lichess.threadId']}`)
             break
           case 'forumMention':
-            openExternalBrowser(
+            void openExternalBrowser(
               `https://lichess.org/forum/redirect/post/${action.notification.data['lichess.postId']}`
             )
             break
           case 'streamStart':
-            openExternalBrowser(
+            void openExternalBrowser(
               `https://lichess.org/streamer/${action.notification.data['lichess.streamerId']}/redirect`
             )
             break
+          case 'invitedStudy':
+            void openExternalBrowser(
+              `https://lichess.org/study/${action.notification.data['lichess.studyId']}`
+            )
         }
       }
     })

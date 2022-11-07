@@ -1034,7 +1034,7 @@ export default {
   "declineVariant": "Ayni damda ushbu variantda oʻynashga men tayyor emasman.",
   "declineNoBot": "Ayni damda men botlardan chorlovlarni qabul qila olmayman.",
   "declineOnlyBot": "Men faqat botlardan chorlovlarni qabul qila olaman.",
-  "apiUnsupported": "Ilova kullanmidi.",
+  "apiUnsupported": "Sizning lichess ilovangiz talqini oldingi ekan! Iltimos uni bepul uangilab oling.",
   "apiDeprecated": "Lichess ilovangizni yangilab oling, bu bepul! Ushbu talqinni qo‘llab quvvatlash %s da bekor qilinadi.",
   "comments": "Изохлар",
   "gameInformation": "Uyin haqida",

@@ -1,2 +1,20 @@
 sw-KE:
   apiUnsupported: "Toleo lako la programu ya lichess ni la zamani sana! Tafadhali pata toleo jipya zaidi bila malipo."
+  comments: "Maoni"
+  gameInformation: "Habari ya mchezo"
+  home: "Nyumbani"
+  playerisInvitingYou: "%s anakualika"
+  notesSynchronizationHasFailed: "Usawazika wa noti kwa Lichess umeshindwa, tafadhali jaribu tena baadaye."
+  vibrateOnGameEvents: "Tikisika kwa matukio ya mchezo"
+  offline: "Nje ya mtandao"
+  otbUseSymmetricPieces: "Tumia vipande vya ulinganifu" #Setting for offline over-the-board games
+  settingsClockPosition: "Nafasi ya saa" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Kulia" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Kushoto" #As in "left-hand side"; not political or past participle
+  toggleSound: "Badili Sauti" #Settings to enable/disable sound
+  overTheBoard: "Juu ya bodi"
+  sharePgn: "Shiriki PGN"
+  shareGameUrl: 'Shiriki URL ya mchezo'
+  playOnline: "Cheza mtandaoni"
+  playOffline: "Cheza nje ya mtandaoni"
+  bgThemeSyncWithSystem: "Sawazisha kwa seva" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

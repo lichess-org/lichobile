@@ -1001,5 +1001,6 @@ export default {
   "sharePgn": "o pana e lipu PGN tawa jan ante",
   "shareGameUrl": "o pana e nimi nasin musi",
   "playOnline": "o musi kepeken linja sona",
-  "playOffline": "o musi kepeken linja sona ala"
+  "playOffline": "o musi kepeken linja sona ala",
+  "bgThemeSyncWithSystem": "o kama sama ilo"
 }

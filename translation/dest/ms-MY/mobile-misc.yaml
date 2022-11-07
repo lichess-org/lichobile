@@ -1,1 +1,25 @@
 ms-MY:
+  apiUnsupported: "Versi app lichess anda terlalu lama! Sila naik taraf secara percuma kepada versi terkini."
+  apiDeprecated: "Naik taraf secara percuma kepada aplikasi lichess terbaru! Sokongan versi ini akan dihentikan pada %s."
+  comments: "Komen"
+  gameInformation: "Maklumat permainan"
+  home: "Halaman"
+  lastScore: "Markah terakhir: %s"
+  playerisInvitingYou: "%s menjemput anda"
+  unsupportedVariant: "Variasi %s tidak disokong dalam versi ini"
+  notesSynchronizationHasFailed: "Penyegerakan catatan dengan lichess telah gagal, sila cuba kemudian."
+  vibrateOnGameEvents: "Getaran pada acara permainan"
+  offline: "Luar talian"
+  otbUseSymmetricPieces: "Guna buah simetri" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Terbalikkan buah catur dan maklumat lawan selepas bergerak" #Setting for offline over-the-board games
+  settingsClockPosition: "Kedudukan jam" #Determines whether each player's time is shown on the left or right side of the board
+  positionRight: "Kanan" #As in "right-hand side"; not truth, morality, or law
+  positionLeft: "Kiri" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Sisi layar papan (dalam mod landskap)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "Togol bunyi" #Settings to enable/disable sound
+  overTheBoard: "Atas papan"
+  sharePgn: "Kongsi PGN"
+  shareGameUrl: 'Kongsi URL permainan'
+  playOnline: "Main dalam talian"
+  playOffline: "Main luar talian"
+  bgThemeSyncWithSystem: "Segerak dengan sistem" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

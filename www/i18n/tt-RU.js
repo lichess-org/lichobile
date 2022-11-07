@@ -960,6 +960,10 @@ export default {
   "declineOnlyBot": "Мин алам сынаулар боттан гына.",
   "apiUnsupported": "Сезнең Lichess әсбабы версиясе бик иске! Зинһар, бушлай соңгы версиягә күтәрегез.",
   "apiDeprecated": "Соңгы Lichess әсбабын бушлай яңарту бар! Бу версиягә ярдәм %s -ка төшереләчәк.",
+  "comments": "Аңлатмалар",
+  "gameInformation": "Уен турында мәгълүмат",
+  "home": "Өй",
+  "lastScore": "Соңгы исәп: %s",
   "playerisInvitingYou": "%s сезне чакырды",
   "unsupportedVariant": "Вариант %s бу версиядә булышынмый",
   "notesSynchronizationHasFailed": "Искәрмәләр Lichess белән синхронизация уңышсыз калды, зинһар, соңрак карагыз.",
@@ -970,5 +974,12 @@ export default {
   "settingsClockPosition": "Сәгать позициясе",
   "positionRight": "Уң",
   "positionLeft": "Сул",
-  "landscapeBoardSide": "Такта экран ягы (дала осулында)"
+  "landscapeBoardSide": "Такта экран ягы (дала осулында)",
+  "toggleSound": "Тавышны кабызу/сүндерү",
+  "overTheBoard": "Тактада",
+  "sharePgn": "PNG бүлешү",
+  "shareGameUrl": "Уен URL бүлешү",
+  "playOnline": "Челтәрдә уйнау",
+  "playOffline": "Челтәрсез уйнау",
+  "bgThemeSyncWithSystem": "Система белән синхронлаштырырга"
 }

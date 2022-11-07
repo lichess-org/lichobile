@@ -1184,10 +1184,14 @@ export default {
   "declineNoBot": "Jag antar inte utmaningar från bottar.",
   "declineOnlyBot": "Jag antar endast utmaningar från bottar.",
   "apiUnsupported": "Din version av lichess-appen är för gammal! Var god uppdatera till den senaste versionen.",
-  "apiDeprecated": "Uppgradera gratis till den senaste lichess appen! Stöd för denna version kommer att sluta den %s.",
+  "apiDeprecated": "Uppgradera gratis till den senaste Lichess-appen! Stödet för den här versionen kommer att upphöra den %s.",
+  "comments": "Kommentarer",
+  "gameInformation": "Parti-information",
+  "home": "Startsida",
+  "lastScore": "Senaste resultat: %s",
   "playerisInvitingYou": "%s bjuder in dig",
-  "unsupportedVariant": "Varianten %s är inte stödd i denna verision",
-  "notesSynchronizationHasFailed": "Synkning av anteckningar med lichess har misslyckats, försök igen senare.",
+  "unsupportedVariant": "Varianten %s är inte stödd i denna version",
+  "notesSynchronizationHasFailed": "Synkning av anteckningar med Lichess har misslyckats, försök igen senare.",
   "vibrateOnGameEvents": "Vibrera vid partihändelser",
   "offline": "Frånkopplad",
   "otbUseSymmetricPieces": "Använd symmetriska pjäser",
@@ -1201,5 +1205,6 @@ export default {
   "sharePgn": "Dela PGN",
   "shareGameUrl": "Dela parti-URL",
   "playOnline": "Spela online",
-  "playOffline": "Spela offline"
+  "playOffline": "Spela offline",
+  "bgThemeSyncWithSystem": "Synkronisera med systemet"
 }

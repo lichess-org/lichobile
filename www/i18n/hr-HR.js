@@ -1195,5 +1195,6 @@ export default {
   "sharePgn": "Podijeli PGN",
   "shareGameUrl": "Podijeli URL partije",
   "playOnline": "Igraj na mreži",
-  "playOffline": "Igraj izvan mreže"
+  "playOffline": "Igraj izvan mreže",
+  "bgThemeSyncWithSystem": "Sinkronizacija s telefonom"
 }

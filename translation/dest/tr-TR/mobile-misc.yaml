@@ -11,14 +11,14 @@ tr-TR:
   vibrateOnGameEvents: "Oyun içi titreşimleri aç"
   offline: "Çevrimdışı"
   otbUseSymmetricPieces: "Simetrik taşlar kullan" #Setting for offline over-the-board games
-  otbFlipPiecesAndInfoAfterMove: "Hamle yaptıktan sonra taşları ve karşı tarafın bilgilerini çevir" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "Hamle yaptıktan sonra taşları ve rakip bilgilerini döndür" #Setting for offline over-the-board games
   settingsClockPosition: "Saat pozisyonu" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "Sağ" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Sol" #As in "left-hand side"; not political or past participle
-  landscapeBoardSide: "Tahta ekran tarafı (yatay modda)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  landscapeBoardSide: "Tahtanın ekrandaki yeri (yatay modda)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
   toggleSound: "Sesi aç/kapat" #Settings to enable/disable sound
-  overTheBoard: "Ekranı tahta olarak kullan"
-  sharePgn: "PGN 'yi paylaş"
+  overTheBoard: "Sanal tahta"
+  sharePgn: "PGN'yi paylaş"
   shareGameUrl: 'Oyun bağlantısını paylaş'
   playOnline: "Çevrimiçi oyna"
   playOffline: "Çevrimdışı oyna"

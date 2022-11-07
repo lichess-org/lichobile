@@ -1,25 +1,25 @@
 he-IL:
   apiUnsupported: "גרסת אפליקציית ליצ'ס שברשותך ישנה מדי! אנא שדרג לגרסה העדכנית ביותר בחינם."
-  apiDeprecated: "שדרג בחינם לאפליקציית ליצ'ס העדכנית ביותר! תמיכה בגרסה זו תוסר ב־%s."
+  apiDeprecated: "שדרג/י בחינם לאפליקציית לִיצֶ'ס העדכנית ביותר! תמיכה בגרסה זו תוסר ב־%s."
   comments: "תגובה"
   gameInformation: "מידע על המשחק"
   home: "בית"
   lastScore: "התוצאה האחרונה שלך: %s"
-  playerisInvitingYou: "%s מזמין אותך"
+  playerisInvitingYou: "%s מזמין/ה אותך"
   unsupportedVariant: "%s לא נתמך בגרסה זו"
-  notesSynchronizationHasFailed: "סנכרון הערות עם ליצ'ס נכשל, אנא נסה שנית מאוחר יותר."
+  notesSynchronizationHasFailed: "סנכרון הערות עם ליצ'ס נכשל, אנא נסו שנית מאוחר יותר."
   vibrateOnGameEvents: "רטט בזמן אירועים במשחק"
   offline: "לא מקוון"
   otbUseSymmetricPieces: "שימוש בכלים סימטריים" #Setting for offline over-the-board games
-  otbFlipPiecesAndInfoAfterMove: "החלף כלים ופרטי שחקן בסיום מסע" #Setting for offline over-the-board games
+  otbFlipPiecesAndInfoAfterMove: "החליפו כלים ופרטי שחקן בסיום מסע" #Setting for offline over-the-board games
   settingsClockPosition: "מיקום השעון" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "ימין" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "שמאל" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "צד הלוח במסך (בתצוגה לרוחב)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
-  toggleSound: "הדלק/כבה צלילים" #Settings to enable/disable sound
-  overTheBoard: "שח-חי (על הלוח!)"
-  sharePgn: "שתף קובץ משחק (PGN)"
-  shareGameUrl: 'שתף כתובת משחק (URL)'
-  playOnline: "שחק (מקוון)"
-  playOffline: "שחק (לא מקוון)"
-  bgThemeSyncWithSystem: "סנכרן עם המערכת" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)
+  toggleSound: "הדלקה/כיבוי הצלילים" #Settings to enable/disable sound
+  overTheBoard: "שח-חי (על גבי לוח!)"
+  sharePgn: "שתף/י קובץ משחק (PGN)"
+  shareGameUrl: 'שתף/י כתובת משחק (URL)'
+  playOnline: "שחק/י (מקוון)"
+  playOffline: "שחק/י (לא מקוון)"
+  bgThemeSyncWithSystem: "סנכרון עם המערכת" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

@@ -1,10 +1,14 @@
 th-TH:
   apiUnsupported: "เวอร์ชั่นแอป lichess ของคุณเก่าเกินไป! โปรดอัพเกรดเป็นเวอร์ชั่นล่าสุดฟรี"
   apiDeprecated: "อัพเกรดฟรีเป็น lichess เวอร์ชั่นล่าสุด! เวอร์ชั่นนี้จะถูกเลิกสนับสนุนตั้งแต่ %s"
+  comments: "ความคิดเห็น"
+  gameInformation: "ข้อมูลเกม"
+  home: "หน้าหลัก"
+  lastScore: "คะแนนล่าสุด: %s"
   playerisInvitingYou: "%s กำลังเชิญคุณ"
   unsupportedVariant: "ตัวแปรกติกา %s ไม่รองรับในเวอร์ชั่นนี้"
   notesSynchronizationHasFailed: "การซิงค์โน้ตกับ lichess ล้มเหลว โปรดลองในภายหลัง"
-  vibrateOnGameEvents: "สั่นเมื่อเกมเรี่ม จบ หรือมีการเดินหมาก"
+  vibrateOnGameEvents: "สั่นตามเหตุการณ์ของเกม"
   offline: "ออฟไลน์"
   otbUseSymmetricPieces: "ใช้หมากแบบสมมาตรกัน" #Setting for offline over-the-board games
   otbFlipPiecesAndInfoAfterMove: "พลิกหมากและข้อมูลคู่แข่งหลังจากเดินหมาก" #Setting for offline over-the-board games
@@ -12,3 +16,10 @@ th-TH:
   positionRight: "ขวา" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "ซ้าย" #As in "left-hand side"; not political or past participle
   landscapeBoardSide: "กระดานข้างจอ (ในโหมดแนวนอน)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
+  toggleSound: "เปิด/ปิดเสียง" #Settings to enable/disable sound
+  overTheBoard: "เล่นกระดานเดียวกัน"
+  sharePgn: "แบ่งปัน PGN"
+  shareGameUrl: 'แบ่งปัน URL เกม'
+  playOnline: "เล่นออนไลน์"
+  playOffline: "เล่นออฟไลน์"
+  bgThemeSyncWithSystem: "ที่ตรงกับระบบ" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

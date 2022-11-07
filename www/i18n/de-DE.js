@@ -1274,7 +1274,7 @@ export default {
   "vibrateOnGameEvents": "Bei Spielereignissen vibrieren",
   "offline": "Offline",
   "otbUseSymmetricPieces": "Verwende symmetrische Figuren",
-  "otbFlipPiecesAndInfoAfterMove": "Drehe den Bildschirm nach jedem Zug",
+  "otbFlipPiecesAndInfoAfterMove": "Drehe Figuren und Gegnerinfo nach dem Zug",
   "settingsClockPosition": "Uhrposition",
   "positionRight": "Rechts",
   "positionLeft": "Links",

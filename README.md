@@ -17,6 +17,17 @@ It talks to a native [Stockfish](https://stockfishchess.org/) engine, [supportin
 [capacitor plugin](https://github.com/veloce/capacitor-stockfish).
 Multi-variant chess library is brought by [a JavaScript version of scalachess](https://github.com/veloce/scalachessjs).
 
+## Download
+
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/org.lichess.mobileapp.free/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=org.lichess.mobileapp)
+
+or get the APK from the [Releases section](https://github.com/lichess-org/lichobile/releases/latest)
+
 ## Required dependencies
 
 * [node](http://nodejs.org) latest LTS version
@@ -74,6 +85,20 @@ Using android studio:
     $ npx cap open android
 
 More information available [here](https://capacitorjs.com/docs/android).
+
+#### Free version
+
+By default, the output APK will rely on [Firebase Cloud
+Messaging](https://firebase.google.com/docs/cloud-messaging) to support push
+notifications. However, it is possible to remove this dependency if you don't
+care about push notifications.
+
+To build the free version:
+
+    $ npm run patch-nonfree
+    $ npx cap update android
+    $ cd ./android
+    $ ./gradlew assembleDebug
 
 ### iOS
 

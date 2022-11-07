@@ -1042,5 +1042,12 @@ export default {
   "settingsClockPosition": "Ժամացույցի դիրքը",
   "positionRight": "Աջից",
   "positionLeft": "Ձախից",
-  "landscapeBoardSide": "Տախտակի դիրքը (ալբոմային կողմնորոշման դեպքում)"
+  "landscapeBoardSide": "Տախտակի դիրքը (ալբոմային կողմնորոշման դեպքում)",
+  "toggleSound": "Միացնել/անջատել ձայնը",
+  "overTheBoard": "Երկուսով խաղատախտակի առջև",
+  "sharePgn": "Տարածել PGN-ը",
+  "shareGameUrl": "Տարածել խաղի հղումը",
+  "playOnline": "Խաղալ առցանց",
+  "playOffline": "Խաղալ օֆլայն",
+  "bgThemeSyncWithSystem": "Սինքրոնացնել համակարգի հետ"
 }

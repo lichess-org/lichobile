@@ -9,6 +9,8 @@ import { handleXhrError } from './utils'
 import { isForeground } from './utils/appMode'
 
 export default {
+  isStub: false,
+
   init() {
     PushNotifications.addListener('registration', ({ value }: Token) => {
       console.debug('Push registration success, FCM token: ' + value)

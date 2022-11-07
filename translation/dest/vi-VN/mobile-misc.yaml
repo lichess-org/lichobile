@@ -1,6 +1,6 @@
 vi-VN:
-  apiUnsupported: "Phiên bản ứng dụng lichess của bạn quá cũ! Vui lòng cập nhật miễn phí lên phiên bản mới nhất."
-  apiDeprecated: "Nâng cấp miễn phí lên phiên bản mới nhất của lichess! Hỗ trợ cho phiên bản này có ở %s."
+  apiUnsupported: "Phiên bản ứng dụng lichess của bạn quá cũ! Vui lòng cập nhật lên phiên bản mới nhất."
+  apiDeprecated: "Vui lòng nâng cấp lên phiên bản mới nhất của lichess! Phiên bản này sẽ ngừng hỗ trợ vào %s."
   comments: "Bình luận"
   gameInformation: "Thông tin ván đấu"
   home: "Trang chủ"
@@ -10,13 +10,16 @@ vi-VN:
   notesSynchronizationHasFailed: "Đồng bộ hóa ghi chú với lichess không thành công, vui lòng thử lại sau."
   vibrateOnGameEvents: "Rung khi có sự kiện mới"
   offline: "Ngoại tuyến"
+  otbUseSymmetricPieces: "Dùng các quân đối xứng" #Setting for offline over-the-board games
   otbFlipPiecesAndInfoAfterMove: "Đảo chiều và thông tin đối thủ sau nước đi" #Setting for offline over-the-board games
   settingsClockPosition: "Vị trí đồng hồ" #Determines whether each player's time is shown on the left or right side of the board
   positionRight: "Phải" #As in "right-hand side"; not truth, morality, or law
   positionLeft: "Trái" #As in "left-hand side"; not political or past participle
+  landscapeBoardSide: "Vị trí bàn cờ (Khi màn hình xoay ngang)" #Side of the screen the board appears on in analysis or online rounds when the device is in landscape mode.
   toggleSound: "Bật/Tắt âm thanh" #Settings to enable/disable sound
   overTheBoard: "Thiết lập bàn cờ"
   sharePgn: "Chia sẻ tập tin PGN"
   shareGameUrl: 'Chia sẻ liên kết game'
   playOnline: "Chơi trực tuyến"
   playOffline: "Chơi ngoại tuyến"
+  bgThemeSyncWithSystem: "Đồng bộ với hệ thống" #Settings to synchronise background theme (dark or light) with the operating system (to support daynight automatic switch)

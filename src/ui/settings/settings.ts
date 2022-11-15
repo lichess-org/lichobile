@@ -56,6 +56,9 @@ function renderBody(appVersion?: string) {
         oncreate: helper.ontapY(() => router.set('/settings/themes/piece'))
       }, i18n('pieceSet')),
       h('li.list_item.nav', {
+        oncreate: helper.ontapY(() => router.set('/settings/bluetooth'))
+      }, i18n('bluetooth')),
+      h('li.list_item.nav', {
         oncreate: helper.ontapY(() => router.set('/settings/soundNotifications'))
       }, i18n('sound') + (push.isStub ? '' : ' | ' + i18n('notifications')))
     ]),

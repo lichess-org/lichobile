@@ -119,6 +119,10 @@ export default {
       piece: prop('theme.piece', 'cburnett')
     },
     vibrateOnGameEvents: prop('vibrateOnGameEvents', false),
+    bluetooth: {
+      useDevice: prop('bluetooth.useDevice', false),
+      deviceId: prop<string | undefined>('bluetooth.deviceId', undefined)
+    },
     notifications: {
       enable: prop<boolean>('notifications', true),
       vibrate: prop<boolean>('notifications.vibrate', true),

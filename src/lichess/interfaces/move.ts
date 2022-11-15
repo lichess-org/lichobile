@@ -57,6 +57,7 @@ export interface Drop extends MoveOrDrop {
 export interface AfterMoveMeta {
   readonly premove?: boolean
   readonly predrop?: boolean
+  readonly promote?: Role
 }
 
 export function isMove(o: MoveOrDrop): o is Move {

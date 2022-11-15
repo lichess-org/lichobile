@@ -8,6 +8,7 @@ import fen from './fen'
 import { renderBoard, makeCoords, makeSymmCoords } from './render'
 import { anim, skip as skipAnim } from './anim'
 import * as drag from './drag'
+import external from '../externalDevice'
 
 const pieceScores: { [id: string]: number } = {
   pawn: 1,
@@ -73,10 +74,16 @@ export default class Chessground {
       board.addEventListener('touchcancel', () => drag.cancel(this))
     }
 
+    if (!isViewOnly) {
+      external.subscribeToDeviceMoves((orig: Key, dest: Key, prom?: Role) => this.externalMove(orig, dest, prom))
+      external.onBoardConfigured(this.state)
+    }
+
     window.addEventListener('resize', this.onOrientationChange)
   }
 
   detach = () => {
+    external.unsubscribeFromDeviceMoves()
     this.dom = undefined
     window.removeEventListener('resize', this.onOrientationChange)
   }
@@ -151,10 +158,12 @@ export default class Chessground {
 
   set(config: cg.SetConfig): void {
     anim(state => setNewBoardState(state, config), this)
+    external.onBoardStateChanged(this.state)
   }
 
   reconfigure(config: cg.InitConfig): void {
     anim(state => configureBoard(state, config), this)
+    external.onBoardConfigured(this.state)
   }
 
   toggleOrientation = (): void => {
@@ -169,6 +178,10 @@ export default class Chessground {
 
   setPieces(pieces: cg.PiecesDiff): void {
     anim(state => board.setPieces(state, pieces), this)
+  }
+
+  setLastPromotion(role?: Role) {
+    this.state.lastPromotion = role ? role : null
   }
 
   promote(key: Key, role: Role): void {
@@ -205,6 +218,7 @@ export default class Chessground {
 
       if (config) {
         setNewBoardState(state, config)
+        external.onBoardStateChanged(state)
       }
 
     }, this)
@@ -217,6 +231,14 @@ export default class Chessground {
         setNewBoardState(state, config)
       }
     }, this)
+  }
+
+  externalMove(orig: Key, dest: Key, prom?: Role): void {
+    const result = anim(state => {
+      return board.userMove(state, orig, dest, prom)
+    }, this)
+    if (!result)
+      external.onMoveRejectedFromBoard(this.state)
   }
 
   playPremove = (): boolean => {

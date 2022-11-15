@@ -13,9 +13,10 @@ import { playerFromFen } from '../../utils/fen'
 import { oppositeColor, getRandomArbitrary } from '../../utils'
 import { StoredOfflineGame, setCurrentAIGame } from '../../utils/offlineGames'
 import { OfflineGameData, GameStatus } from '../../lichess/interfaces/game'
+import { AfterMoveMeta } from '../../lichess/interfaces/move'
 import redraw from '../../utils/redraw'
 
-import promotion, { Promoting } from '../shared/offlineRound/promotion'
+import promotion, { Promoting, canPromote } from '../shared/offlineRound/promotion'
 import ground from '../shared/offlineRound/ground'
 import makeData from '../shared/offlineRound/data'
 import { setResult } from '../shared/offlineRound'
@@ -233,7 +234,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     const role = chessFormat.uciToProm(bestmove)
     this.vm.engineSearching = false
     this.chessground.apiMove(from, to)
-    this.replay?.addMove(from, to, role)
+    this.addMove(from, to, role)
     redraw()
   }
 
@@ -266,13 +267,20 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     return !sit.end && sit.player !== this.data.player.color
   }
 
-  private onPromotion = (orig: Key, dest: Key, role: Role) => {
+  private addMove = (orig: Key, dest: Key, role?: Role) => {
     this.replay?.addMove(orig, dest, role)
+    this.chessground.setLastPromotion(role)
   }
 
-  private userMove = (orig: Key, dest: Key) => {
-    if (!promotion.start(this, orig, dest, this.onPromotion)) {
-      this.replay?.addMove(orig, dest)
+  private onPromotion = (orig: Key, dest: Key, role: Role) => {
+    this.addMove(orig, dest, role)
+  }
+
+  private userMove = (orig: Key, dest: Key, meta: AfterMoveMeta) => {
+    if (meta.promote && canPromote(this.chessground.state, dest))
+      this.addMove(orig, dest, meta.promote)
+    else if (!promotion.start(this, orig, dest, this.onPromotion)) {
+      this.addMove(orig, dest)
     }
   }
 

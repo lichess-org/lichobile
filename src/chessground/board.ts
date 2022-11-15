@@ -9,6 +9,7 @@ export function toggleOrientation(state: State): void {
 
 export function reset(state: State): void {
   state.lastMove = null
+  state.lastPromotion = null
   setSelected(state, null)
   unsetPremove(state)
   unsetPredrop(state)
@@ -70,12 +71,15 @@ export function apiNewPiece(state: State, piece: Piece, key: Key): boolean {
   return baseNewPiece(state, piece, key)
 }
 
-export function userMove(state: State, orig: Key, dest: Key): boolean {
+export function userMove(state: State, orig: Key, dest: Key, prom?: Role): boolean {
   if (canMove(state, orig, dest)) {
     const result = baseUserMove(state, orig, dest)
     if (result) {
       setSelected(state, null)
-      util.callUserFunction(state.movable.events.after, orig, dest, { premove: false })
+      util.callUserFunction(state.movable.events.after, orig, dest, {
+        premove: false,
+        promote: prom
+      })
       return true
     }
   }

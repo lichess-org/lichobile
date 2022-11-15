@@ -443,6 +443,7 @@ const untranslated: StringMap = {
   notesSynchronizationHasFailed: 'Notes synchronization with lichess has failed, please try later.',
   localEvalCaution: 'Caution: intensive usage will drain battery.',
   incorrectThreefoldClaim: 'Incorrect threefold repetition claim.',
+  useBluetoothDevice: 'Use bluetooth device',
   vibrateOnGameEvents: 'Vibrate on game events',
   offline: 'Offline'
 }

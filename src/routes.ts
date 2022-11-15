@@ -262,6 +262,12 @@ export default {
         })
       })
 
+      router.add('settings/bluetooth', ({ params }) => {
+        import('./ui/settings/bluetooth').then(m => {
+          onRouteMatch(m.default, params)
+        })
+      })
+
       router.add('settings/soundNotifications', ({ params }) => {
         import('./ui/settings/soundNotifications').then(m => {
           onRouteMatch(m.default, params)

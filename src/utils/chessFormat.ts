@@ -1,6 +1,15 @@
 import isObject from 'lodash-es/isObject'
 
-const uciRoleMap: {[k: string]: Role } = {
+const roleToUciMap = {
+  pawn: 'p',
+  rook: 'r',
+  knight: 'n',
+  bishop: 'b',
+  queen: 'q',
+  king: 'k'
+}
+
+const uciToRoleMap: {[k: string]: Role } = {
   P: 'pawn',
   B: 'bishop',
   N: 'knight',
@@ -10,7 +19,7 @@ const uciRoleMap: {[k: string]: Role } = {
   b: 'bishop',
   n: 'knight',
   r: 'rook',
-  q: 'queen',
+  q: 'queen'
 }
 
 export interface SanToRole {
@@ -32,6 +41,15 @@ export const altCastles: StringMap = {
   e8h8: 'e8g8'
 }
 
+export function roleToUci(role: Role, color: Color): string {
+  return color === 'black' ? roleToUciMap[role] : roleToUciMap[role].toUpperCase()
+}
+
+export function moveToUci(orig: Key, dest: Key, prom?: Role): string {
+  if (prom) return orig + dest + roleToUciMap[prom]
+  return orig + dest
+}
+
 export function uciToMove(uci: string): KeyPair {
   return [<Key>uci.substr(0, 2), <Key>uci.substr(2, 2)]
 }
@@ -43,7 +61,7 @@ export function uciToMoveOrDrop(uci: string): KeyPair {
 
 export function uciToProm(uci: string): Role | undefined {
   const p = uci.substr(4, 1)
-  return uciRoleMap[p]
+  return uciToRoleMap[p]
 }
 
 export function uciToDropPos(uci: string): Key {
@@ -51,7 +69,7 @@ export function uciToDropPos(uci: string): Key {
 }
 
 export function uciToDropRole(uci: string): Role {
-  return uciRoleMap[uci.substr(0, 1)]
+  return uciToRoleMap[uci.substr(0, 1)]
 }
 
 export function uciTolastDrop(uci: string): KeyPair {

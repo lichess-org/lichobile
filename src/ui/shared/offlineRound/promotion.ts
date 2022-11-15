@@ -5,6 +5,7 @@ import settings from '../../../settings'
 import h from 'mithril/hyperscript'
 import { PromotingInterface } from '../round'
 import { noop } from '~/utils'
+import { State } from '../../../chessground/state'
 
 type PromoteCallback = (orig: Key, dest: Key, prom: Role) => void
 export interface Promoting {
@@ -13,11 +14,15 @@ export interface Promoting {
   callback: PromoteCallback
 }
 
+export function canPromote(state: State, dest: Key) {
+  const piece = state.pieces.get(dest)
+  return piece && piece.role === 'pawn' &&
+         ((dest[1] === '1' && state.turnColor === 'white') ||
+          (dest[1] === '8' && state.turnColor === 'black'))
+}
+
 function start(ctrl: PromotingInterface, orig: Key, dest: Key, callback: PromoteCallback) {
-  const piece = ctrl.chessground.state.pieces.get(dest)
-  if (piece && piece.role === 'pawn' && (
-    (dest[1] === '1' && ctrl.chessground.state.turnColor === 'white') ||
-    (dest[1] === '8' && ctrl.chessground.state.turnColor === 'black'))) {
+  if (canPromote(ctrl.chessground.state, dest)) {
     ctrl.promoting = {
       orig: orig,
       dest: dest,
@@ -80,6 +85,7 @@ export function view<T extends PromotingInterface>(ctrl: T, cancelCallback: (ctr
 }
 
 export default {
+  canPromote,
   start,
   cancel,
   view

@@ -8,6 +8,7 @@ export interface State {
   turnColor: Color // turn to play. white | black
   check: Key | null // square currently in check "a2"
   lastMove: KeyPair | null // squares part of the last move ["c3", "c4"]
+  lastPromotion: Role | null
   selected: Key | null // square currently selected "a1"
   coordinates: boolean // include coords attributes
   symmetricCoordinates: boolean // symmetric coords for otb
@@ -89,6 +90,7 @@ export function makeDefaults(): State {
     turnColor: 'white' as Color,
     check: null,
     lastMove: null,
+    lastPromotion: null,
     selected: null,
     coordinates: true,
     symmetricCoordinates: false,

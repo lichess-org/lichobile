@@ -105,6 +105,7 @@ export interface MoveMetadata {
   holdTime?: number
   captured?: Piece
   predrop?: boolean
+  promote?: Role
 }
 
 export interface SetPremoveMetadata {

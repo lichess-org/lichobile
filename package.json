@@ -53,6 +53,7 @@
     },
     "dependencies": {
         "@badrap/result": "0.2.6",
+        "@capacitor-community/bluetooth-le": "1.8.3",
         "@capacitor-community/keep-awake": "2.1.0",
         "@capacitor/android": "3.6.0",
         "@capacitor/app": "1.1.1",

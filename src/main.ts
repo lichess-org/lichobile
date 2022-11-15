@@ -9,6 +9,7 @@ import { init as settingsInit } from './settings'
 import { StockfishVariants } from './stockfish'
 import { init as i18nInit } from './i18n'
 import { init as themeInit } from './theme'
+import bluetooth from './externalDevice/bluetooth'
 import routes from './routes'
 import { processWindowLocation } from './router'
 import push from './push'
@@ -43,6 +44,7 @@ settingsInit()
 })
 .then(themeInit)
 .then(i18nInit)
+.then(bluetooth.init)
 .then(() => processWindowLocation())
 .then(() => {
   setTimeout(() => {

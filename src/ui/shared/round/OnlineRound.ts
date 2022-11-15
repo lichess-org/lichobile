@@ -35,7 +35,7 @@ import atomic from './atomic'
 import * as xhr from './roundXhr'
 import crazyValid from './crazy/crazyValid'
 import { OnlineRoundInterface } from './'
-import { Promoting } from '../offlineRound/promotion'
+import { Promoting, canPromote } from '../offlineRound/promotion'
 
 interface VM {
   ply: number
@@ -337,6 +337,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (prom) {
       move.u += (prom === 'knight' ? 'n' : prom[0])
     }
+    this.chessground.setLastPromotion(prom)
     const sendBlur = this.getBlurAndReset()
     if (this.data.pref.submitMove && !isPremove) {
       router.backbutton.stack.push(this.cancelMove)
@@ -515,6 +516,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       if (o.promotion) {
         this.chessground.promote(o.promotion.key, o.promotion.pieceClass)
       }
+      this.chessground.setLastPromotion(o.promotion ? o.promotion.pieceClass : undefined)
 
       if (o.enpassant) {
         const p = o.enpassant
@@ -728,7 +730,9 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   private userMove = (orig: Key, dest: Key, meta: AfterMoveMeta) => {
     const hasPremove = !!meta.premove
-    if (!promotion.start(this, orig, dest, hasPremove)) {
+    if (meta.promote && canPromote(this.chessground.state, dest))
+      this.sendMove(orig, dest, meta.promote, hasPremove)
+    else if (!promotion.start(this, orig, dest, hasPremove)) {
       this.sendMove(orig, dest, undefined, hasPremove)
     }
   }

@@ -1,4 +1,3 @@
-import { Dialog } from '@capacitor/dialog'
 import { App } from '@capacitor/app'
 import Rlite from 'rlite-router'
 import render from 'mithril/render'
@@ -6,7 +5,6 @@ import Vnode from 'mithril/render/vnode'
 import isFunction from 'lodash-es/isFunction'
 
 import signals from './signals'
-import session from './session'
 import { serializeQueryParameters } from './utils'
 import redraw from './utils/redraw'
 
@@ -145,17 +143,11 @@ const backbutton: Backbutton = (() => {
       b('backbutton')
       redraw()
     } else if (!/^\/$/.test(getPath())) {
-      // if playing a game as anon ask for confirmation because there is no way
-      // back!
-      if (/^\/game\/[a-zA-Z0-9]{12}/.test(getPath()) && !session.isConnected()) {
-        Dialog.confirm({
-          title: 'Confirmation',
-          message: 'Do you really want to leave the game? You can\'t go back to it after.',
-        }).then(({ value }) => {
-          if (value) {
-            backHistory()
-          }
-        })
+      // disable back history on game to prevent accidental quitting of a game
+      // see src/ui/shared/round/OnlineRound.ts for the backbutton behavior during
+      // a game
+      if (/^\/game\/[a-zA-Z0-9]{12}/.test(getPath())) {
+        signals.gameBackButton.dispatch(event);
       } else {
         backHistory()
       }

@@ -59,7 +59,7 @@ export function getLocalFiles(theme: Theme): Promise<readonly string[]> {
   return Filesystem.readdir({
     path: '',
     directory: Directory.Data
-  }).then(({ files }) => files.filter(f => f.startsWith(theme)))
+  }).then(({ files }) => files.map(f => f.name).filter(f => f.startsWith(theme)))
 }
 
 export function filename(entry: ThemeEntry): string {

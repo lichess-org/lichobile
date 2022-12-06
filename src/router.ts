@@ -147,7 +147,7 @@ const backbutton: Backbutton = (() => {
       // see src/ui/shared/round/OnlineRound.ts for the backbutton behavior during
       // a game
       if (/^\/game\/[a-zA-Z0-9]{12}/.test(getPath())) {
-        signals.gameBackButton.dispatch(event);
+        signals.gameBackButton.dispatch(event)
       } else {
         backHistory()
       }

@@ -167,7 +167,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     signals.gameBackButton.add(() => {
       if (router.backbutton.stack.length === 0 && !gameApi.isPlayerPlaying(this.data)) {
-        router.backHistory();
+        router.backHistory()
       }
     })
 
@@ -687,7 +687,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (this.clock) this.clock.unload()
     clearInterval(this.clockIntervId)
     this.appStateListener.remove()
-    signals.gameBackButton.removeAll();
+    signals.gameBackButton.removeAll()
   }
 
   public acceptTakeback(): void {

@@ -7,6 +7,7 @@ import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
 import { hasNetwork, boardOrientation, handleXhrError } from '../../../utils'
 import * as sleepUtils from '../../../utils/sleep'
+import signals from '../../../signals'
 import session from '../../../session'
 import settings from '../../../settings'
 import socket from '../../../socket'
@@ -162,6 +163,12 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     this.appStateListener = App.addListener('appStateChange', (state: AppState) => {
       if (state.isActive) this.onResume()
+    })
+
+    signals.gameBackButton.add(() => {
+      if (router.backbutton.stack.length === 0 && !gameApi.isPlayerPlaying(this.data)) {
+        router.backHistory()
+      }
     })
 
     this.transientMove = new TransientMove(this)
@@ -680,6 +687,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (this.clock) this.clock.unload()
     clearInterval(this.clockIntervId)
     this.appStateListener.remove()
+    signals.gameBackButton.removeAll()
   }
 
   public acceptTakeback(): void {

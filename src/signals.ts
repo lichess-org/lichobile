@@ -1,3 +1,4 @@
+import { BackButtonListenerEvent } from '@capacitor/app'
 import { Signal } from 'signals'
 import { PongMessage } from './lichess/interfaces'
 
@@ -17,4 +18,8 @@ export default {
 
   // signal fired on websocket pong in homepage
   homePong: new Signal<PongMessage>(),
+
+  // signal fired when a backbutton requesting a back history was called in a
+  // game screen
+  gameBackButton: new Signal<BackButtonListenerEvent>(),
 }

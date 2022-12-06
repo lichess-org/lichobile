@@ -3,12 +3,12 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        configurations.all {
-          resolutionStrategy {
-            force 'androidx.core:core:1.6.0'
-            force 'androidx.core:core-ktx:1.6.0'
-          }
-        }
+        // configurations.all {
+        //   resolutionStrategy {
+        //     force 'androidx.core:core:1.6.0'
+        //     force 'androidx.core:core-ktx:1.6.0'
+        //   }
+        // }
         applicationId "org.lichess.mobileapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
@@ -36,13 +36,9 @@ android {
 }
 
 
-repositories {
-    flatDir{
-        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
-    }
-}
-
 dependencies {
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation project(':capacitor-android')

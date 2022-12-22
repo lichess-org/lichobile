@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // but if you want the App API to support tracking app url opens, make sure to keep this call
     return ApplicationDelegateProxy.shared.application(app, open: url, options: options)
   }
-  
+
   func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
     // Called when the app was launched with an activity, including Universal Links.
     // Feel free to add additional processing here, but if you want the App API to support
@@ -52,16 +52,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     return ApplicationDelegateProxy.shared.application(application, continue: userActivity, restorationHandler: restorationHandler)
   }
 
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    super.touchesBegan(touches, with: event)
-
-    let statusBarRect = UIApplication.shared.statusBarFrame
-    guard let touchPoint = event?.allTouches?.first?.location(in: self.window) else { return }
-
-    if statusBarRect.contains(touchPoint) {
-        NotificationCenter.default.post(name: .capacitorStatusBarTapped, object: nil)
-    }
-  }
 
   func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
     Messaging.messaging().apnsToken = deviceToken
@@ -73,9 +63,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       }
     })
   }
-  
+
   func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
     NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
   }
 
 }
+

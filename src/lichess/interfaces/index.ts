@@ -82,14 +82,114 @@ export interface PongMessage {
   readonly r: number
 }
 
+export type TimelineEntry =
+  BlogPostTimelineEntry
+  | FollowTimelineEntry
+  | ForumPostTimelineEntry
+  | GameEndTimelineEntry
+  | TourJoinTimelineEntry
+  | StudyCreateTimelineEntry
+  | StudyLikeTimelineEntry
+  | StreamStartTimelineEntry
+  | UblogPostTimelineEntry
+  | UblogLikeTimelineEntry
+
 export type TimelineEntryType = 'follow' | 'game-end' | 'tour-join' | 'study-create' | 'study-like' | 'forum-post' | 'blog-post' | 'ublog-post' | 'ublog-post-like' | 'stream-start'
 
-export interface TimelineEntry {
-  readonly data: any
+interface BaseTimelineEntry {
+  readonly type: TimelineEntryType
   readonly date: number
   // added dynamically
   fromNow: string
-  readonly type: TimelineEntryType
+}
+
+export interface BlogPostTimelineEntry extends BaseTimelineEntry {
+  readonly type: 'blog-post'
+  readonly data: {
+    readonly id: string
+    readonly slug: string
+    readonly title: string
+  }
+}
+
+export interface FollowTimelineEntry extends BaseTimelineEntry {
+  readonly type: 'follow'
+  readonly data: {
+    readonly u1: string
+    readonly u2: string
+  }
+}
+
+export interface ForumPostTimelineEntry extends BaseTimelineEntry {
+  readonly type: 'forum-post'
+  readonly data: {
+    readonly postId: string
+    readonly topicName: string
+    readonly userId: string
+  }
+}
+
+export interface GameEndTimelineEntry extends BaseTimelineEntry {
+  readonly type: 'game-end'
+  readonly data: {
+    readonly perf: PerfKey
+    readonly win?: string
+    readonly opponent: string
+    readonly playerId: string
+  }
+}
+
+export interface StreamStartTimelineEntry extends BaseTimelineEntry {
+  readonly type: 'stream-start'
+  readonly data: {
+    readonly date: number
+    readonly id: string
+    readonly name: string
+  }
+}
+
+type StudyTimelineEntryData = {
+  readonly studyId: string
+  readonly studyName: string
+  readonly userId: string
+}
+
+export interface StudyCreateTimelineEntry extends BaseTimelineEntry {
+  readonly type: 'study-create'
+  readonly data: StudyTimelineEntryData
+}
+
+export interface StudyLikeTimelineEntry extends BaseTimelineEntry {
+  readonly type: 'study-like'
+  readonly data: StudyTimelineEntryData
+}
+
+export interface TourJoinTimelineEntry extends BaseTimelineEntry {
+  readonly type: 'tour-join'
+  readonly data: {
+    readonly userId: string
+    readonly tourName: string
+    readonly tourId: string
+  }
+}
+
+export interface UblogPostTimelineEntry extends BaseTimelineEntry {
+  readonly type: 'ublog-post'
+  readonly data: {
+    readonly userId: string
+    readonly id: string
+    readonly slug: string
+    readonly title: string
+  }
+}
+
+export interface UblogLikeTimelineEntry extends BaseTimelineEntry {
+  readonly type: 'ublog-post-like'
+  readonly data: {
+    readonly id: string
+    readonly title: string
+    readonly userId: string
+  }
 }
 
 export interface TimelineData {

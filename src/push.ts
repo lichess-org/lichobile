@@ -43,26 +43,26 @@ export default {
       if (action.actionId === 'tap') {
         switch (action.notification.data['lichess.type']) {
           case 'challengeAccept':
-            challengesApi.refresh();
+            challengesApi.refresh()
             router.set(`/game/${action.notification.data['lichess.challengeId']}`)
-            break;
+            break
           case 'challengeCreate':
             router.set(`/game/${action.notification.data['lichess.challengeId']}`)
-            break;
+            break
           case 'corresAlarm':
           case 'gameMove':
           case 'gameFinish':
           case 'gameTakebackOffer':
           case 'gameDrawOffer':
             router.set(`/game/${action.notification.data['lichess.fullId']}`)
-            break;
+            break
           case 'newMessage':
             router.set(`/inbox/${action.notification.data['lichess.threadId']}`)
-            break;
+            break
           default:
             const url: string = action.notification.data['lichess.url']
             if (url?.startsWith('https://lichess.org')) {
-              openExternalBrowser(url)
+              void openExternalBrowser(url)
             }
         }
       }

@@ -61,7 +61,7 @@ export default {
             break
           default: {
             const url = action.notification.data['lichess.url'] as string
-            if (url?.startsWith('https://lichess.org')) {
+            if (url?.startsWith('https://lichess.org/')) {
               void openExternalBrowser(url)
             }
           }

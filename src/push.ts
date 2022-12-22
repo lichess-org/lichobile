@@ -43,36 +43,27 @@ export default {
       if (action.actionId === 'tap') {
         switch (action.notification.data['lichess.type']) {
           case 'challengeAccept':
-            challengesApi.refresh()
+            challengesApi.refresh();
             router.set(`/game/${action.notification.data['lichess.challengeId']}`)
-            break
+            break;
           case 'challengeCreate':
             router.set(`/game/${action.notification.data['lichess.challengeId']}`)
-            break
+            break;
           case 'corresAlarm':
           case 'gameMove':
           case 'gameFinish':
           case 'gameTakebackOffer':
           case 'gameDrawOffer':
             router.set(`/game/${action.notification.data['lichess.fullId']}`)
-            break
+            break;
           case 'newMessage':
             router.set(`/inbox/${action.notification.data['lichess.threadId']}`)
-            break
-          case 'forumMention':
-            void openExternalBrowser(
-              `https://lichess.org/forum/redirect/post/${action.notification.data['lichess.postId']}`
-            )
-            break
-          case 'streamStart':
-            void openExternalBrowser(
-              `https://lichess.org/streamer/${action.notification.data['lichess.streamerId']}/redirect`
-            )
-            break
-          case 'invitedStudy':
-            void openExternalBrowser(
-              `https://lichess.org/study/${action.notification.data['lichess.studyId']}`
-            )
+            break;
+          default:
+            const url: string = action.notification.data['lichess.url']
+            if (url?.startsWith('https://lichess.org')) {
+              openExternalBrowser(url)
+            }
         }
       }
     })

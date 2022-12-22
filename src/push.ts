@@ -59,11 +59,12 @@ export default {
           case 'newMessage':
             router.set(`/inbox/${action.notification.data['lichess.threadId']}`)
             break
-          default:
-            const url: string = action.notification.data['lichess.url']
+          default: {
+            const url = action.notification.data['lichess.url'] as string
             if (url?.startsWith('https://lichess.org')) {
               void openExternalBrowser(url)
             }
+          }
         }
       }
     })

@@ -96,6 +96,7 @@ export default {
         ['leipzig' ],
         ['fantasy' ],
         ['spatial' ],
+        ['celtic' ],
         ['california'],
         ['pixel'],
         ['maestro'],

@@ -235,5 +235,5 @@ export interface Opening {
   readonly eco: string
   readonly name: string
   readonly fen?: string
-  readonly wikiPath?: string
+  readonly url?: string
 }

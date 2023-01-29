@@ -4,6 +4,7 @@ import router from './router'
 import session, { Session } from './session'
 import signupModal from './ui/signupModal'
 import { handleXhrError } from './utils'
+import { extractGameReference } from './utils/gameId'
 import { buildQueryString } from './utils/querystring'
 
 const fenParams = ':r1/:r2/:r3/:r4/:r5/:r6/:r7/:r8'
@@ -15,28 +16,27 @@ function fenFromParams(params: any): string {
 
 export default {
   init() {
-    App.addListener('appUrlOpen', ({ url }) => {
+    void App.addListener('appUrlOpen', ({ url }) => {
       setTimeout(() => {
         const urlObject = new URL(url)
         const path = urlObject.pathname
         const matched = links.run(path)
         if (!matched) {
           // it can be a game or challenge but we want to do an exact regex match
-          const found = gamePattern.exec(path)
-          if (found) {
-            const color = found[2]
-            const plyMatch = plyHashPattern.exec(urlObject.hash)
-
+          const gameIdParts = extractGameReference(urlObject)
+          if (gameIdParts !== null) {
+            const {color, gameId, ply} = gameIdParts
             const queryParams = {} as Record<string, string>
-            if (color) {
-              queryParams['color'] = color.substring(1)
+
+            if (color !== undefined) {
+              queryParams['color'] = color
             }
-            if (plyMatch) {
-              queryParams['ply'] = plyMatch[1]
+            if (ply !== undefined) {
+              queryParams['ply'] = ply
             }
 
             const queryString = buildQueryString(queryParams)
-            router.set(`/game/${found[1]}?${queryString}`)
+            router.set(`/game/${gameId}?${queryString}`)
           } else {
             console.warn('Could not handle deep link', path)
           }
@@ -47,8 +47,6 @@ export default {
 }
 
 const links = new Rlite()
-const gamePattern = /^\/(\w{8})(\/black|\/white)?$/
-const plyHashPattern = /^#(\d+)$/
 
 links.add('analysis', () => router.set('/analyse'))
 links.add(`analysis/${fenParams}`, ({ params }) => {

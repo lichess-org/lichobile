@@ -212,7 +212,7 @@ function close(fromBB?: string) {
 }
 
 function testUserName(term: string): Promise<boolean> {
-  return fetchJSON('/player/autocomplete?exists=1', {
+  return fetchJSON('/api/player/autocomplete?exists=1', {
     query: { term },
   })
 }

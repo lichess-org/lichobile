@@ -28,9 +28,10 @@ public class MainActivity extends BridgeActivity {
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
 
     registerPlugins(Arrays.asList(FullScreenPlugin.class));
+
+    super.onCreate(savedInstanceState);
 
     this.versionUpdateActions();
 

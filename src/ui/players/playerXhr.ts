@@ -4,7 +4,7 @@ import { User, Rankings, SearchUser } from '../../lichess/interfaces/user'
 type SearchResult = ReadonlyArray<SearchUser>
 
 export async function autocomplete(term: string): Promise<SearchResult> {
-  const data = await fetchJSON<{result: SearchResult}>('/player/autocomplete?friend=1&object=1', {
+  const data = await fetchJSON<{result: SearchResult}>('/api/player/autocomplete?friend=1&object=1', {
     query: { term },
   })
   return data.result

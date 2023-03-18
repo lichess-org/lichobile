@@ -44,6 +44,8 @@ class BluetoothConnection {
   }
 
   private async onDisconnect(_deviceId: string) {
+    if (!this.isConnected)
+      return
     this.isConnected = false
     this.protocol = dummyProtocol
     Toast.show({ text: i18n('disconnectedFromBluetoothDevice') })

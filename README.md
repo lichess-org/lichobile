@@ -18,14 +18,16 @@ It talks to a native [Stockfish](https://stockfishchess.org/) engine, [supportin
 Multi-variant chess library is brought by [a JavaScript version of scalachess](https://github.com/veloce/scalachessjs).
 
 ## Download
+<table>
+  <tr>
+<td valign="top"><a href="https://f-droid.org/packages/org.lichess.mobileapp.free/"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" style="height: 80px"></a></td>
 
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-     alt="Get it on F-Droid"
-     height="80">](https://f-droid.org/packages/org.lichess.mobileapp.free/)
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
-     alt="Get it on Google Play"
-     height="80">](https://play.google.com/store/apps/details?id=org.lichess.mobileapp)
 
+<td valign="top"><a href="https://play.google.com/store/apps/details?id=org.lichess.mobileapp"><img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" style="height: 80px"></a></td>
+
+<td "><a href="https://apps.apple.com/us/app/lichess-online-chess/id968371784?itsct=apps_box_badge&amp;itscg=30200"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1425427200" alt="Download on the App Store" style="height: 52px; padding: 14px;"></a></td>
+  </tr>
+</table>
 or get the APK from the [Releases section](https://github.com/lichess-org/lichobile/releases/latest)
 
 ## Required dependencies

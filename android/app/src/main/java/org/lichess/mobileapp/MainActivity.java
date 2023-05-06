@@ -37,6 +37,11 @@ public class MainActivity extends BridgeActivity {
 
     PackageInfo pInfo = getCurrentWebViewPackageInfo();
     if (pInfo != null) {
+      // Skip check for Huawei phones
+      if (info.packageName.startsWith("com.huawei.")) {
+        return;
+      }
+
       try {
         Integer majorVersion = Integer.parseInt(pInfo.versionName.split(Pattern.quote("."))[0]);
         if (majorVersion < MIN_VERSION) {
@@ -80,11 +85,6 @@ public class MainActivity extends BridgeActivity {
 
   private PackageInfo getCurrentWebViewPackageInfo() {
     try {
-      // Skip check for Huawei phones
-      if (info.packageName.equals("com.huawei.webview")) {
-        return true;
-      }
-
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         /* Starting with Android O (API 26) they added a new method specific for this */
         return WebView.getCurrentWebViewPackage();

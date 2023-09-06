@@ -5,6 +5,7 @@ import router from '../../../router'
 import TournamentCtrl from './TournamentCtrl'
 import formWidgets from '../../shared/form'
 import settings from '../../../settings'
+import * as helper from '../../helper'
 
 let isOpen = false
 let tournamentCtrl: TournamentCtrl
@@ -52,7 +53,7 @@ function renderForm() {
         <div className={'select_input no_arrow_after' + (t.private ? '' : ' notVisible')}>
           <div className="text_input_container">
             <label>Password: </label>
-            <input type="text" id="tournamentPassword" className="passwordField" />
+            <input type="text" id="tournamentPassword" className="passwordField" autocapitalize="off" autocomplete="off" oncreate={helper.autofocus} />
           </div>
         </div>
         <div className={'select_input no_arrow_after' + (t.teamBattle ? '' : ' notVisible')}>

@@ -5,5 +5,5 @@ export function isIn(data: Tournament): boolean {
 }
 
 export function previouslyJoined(data: Tournament): boolean {
-  return data.me != null
+  return !!data.me
 }

@@ -6,6 +6,7 @@ const countries: StringMap = {
   AI: 'Anguilla',
   AL: 'Albania',
   AM: 'Armenia',
+  'AM-RA': 'Artsakh',
   AO: 'Angola',
   AQ: 'Antarctica',
   AR: 'Argentina',
@@ -37,6 +38,7 @@ const countries: StringMap = {
   BY: 'Belarus',
   BZ: 'Belize',
   CA: 'Canada',
+  'CA-QC': 'Quebec',
   CC: 'Cocos (Keeling) Islands',
   CD: 'Congo (Democratic Rep.)',
   CF: 'Central African Republic',
@@ -67,8 +69,10 @@ const countries: StringMap = {
   EH: 'Western Sahara',
   ER: 'Eritrea',
   ES: 'Spain',
+  'ES-AN': 'Andalusia',
   'ES-CT': 'Catalonia',
   'ES-EU': 'Basque',
+  'ES-GA': 'Galicia',
   ET: 'Ethiopia',
   FI: 'Finland',
   FJ: 'Fiji',
@@ -196,6 +200,7 @@ const countries: StringMap = {
   RO: 'Romania',
   RS: 'Serbia',
   RU: 'Russia',
+  'RU-TAT': 'Tatarstan',
   RW: 'Rwanda',
   SA: 'Saudi Arabia',
   SB: 'Solomon Islands',
@@ -262,8 +267,10 @@ const countries: StringMap = {
   '_lichess': 'Lichess',
   '_pirate': 'Pirate',
   '_rainbow': 'Rainbow',
+  '_russia-wbw': 'Russia White-blue-white',
   '_united-nations': 'United Nations',
-  '_earth': 'Earth'
+  '_earth': 'Earth',
+  '_transgender': 'Transgender'
 }
 
 export default countries

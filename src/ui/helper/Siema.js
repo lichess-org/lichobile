@@ -14,8 +14,8 @@ export default class Siema {
     // Resolve selector's type
     this.selector = typeof this.config.selector === 'string' ? document.querySelector(this.config.selector) : this.config.selector
 
-    // Early throw if selector doesn't exists
-    if (this.selector === null) {
+    // Early throw if selector or sliderframe don't exist
+    if (this.selector === null || this.selector.firstElementChild === null) {
       throw new Error('Something wrong with your selector ??')
     }
 
@@ -24,7 +24,7 @@ export default class Siema {
 
     // Create global references
     this.selectorWidth = this.selector.offsetWidth
-    this.innerElements = [].slice.call(this.selector.children)
+    this.innerElements = [].slice.call(this.selector.firstElementChild.children)
     this.currentSlide =
       Math.max(0, Math.min(this.config.startIndex, this.innerElements.length - this.perPage))
     this.transformProperty = 'transform';
@@ -134,36 +134,22 @@ export default class Siema {
     const widthItem = this.selectorWidth / this.perPage
     const itemsToBuild = this.innerElements.length
 
-    // Create frame and apply styling
-    this.sliderFrame = document.createElement('div')
+    // Get frame and apply styling
+    this.sliderFrame = this.selector.firstElementChild
     this.sliderFrame.style.width = `${widthItem * itemsToBuild}px`
 
-    // Create a document fragment to put slides into it
-    const docFragment = document.createDocumentFragment()
-
     for (let i = 0; i < this.innerElements.length; i++) {
-      const element = this.buildSliderFrameItem(this.innerElements[i])
-      docFragment.appendChild(element)
+      this.buildSliderFrameItem(this.innerElements[i])
     }
-
-    // Add fragment to the frame
-    this.sliderFrame.appendChild(docFragment)
-
-    // Clear selector (just in case something is there) and insert a frame
-    this.selector.innerHTML = ''
-    this.selector.appendChild(this.sliderFrame)
 
     // Go to currently active slide after initial build
     this.slideToCurrent()
   }
 
-  buildSliderFrameItem(elm) {
-    const elementContainer = document.createElement('div')
+  buildSliderFrameItem(elementContainer) {
     elementContainer.style.cssFloat = this.config.rtl ? 'right' : 'left'
     elementContainer.style.float = this.config.rtl ? 'right' : 'left'
     elementContainer.style.width = `${100 / (this.innerElements.length)}%`
-    elementContainer.appendChild(elm)
-    return elementContainer
   }
 
 
@@ -463,12 +449,12 @@ export default class Siema {
     this.selector.style.cursor = 'auto'
 
     if (restoreMarkup) {
-      const slides = document.createDocumentFragment()
       for (let i = 0; i < this.innerElements.length; i++) {
-        slides.appendChild(this.innerElements[i])
+        this.innerElements[i].removeAttribute('style')
       }
-      this.selector.innerHTML = ''
-      this.selector.appendChild(slides)
+      if (this.sliderFrame) {
+        this.sliderFrame.removeAttribute('style')
+      }
       this.selector.removeAttribute('style')
     }
 

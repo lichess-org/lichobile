@@ -43,6 +43,9 @@
                   android:pathPrefix="/analysis" />
                 <data
                   android:host="lichess.org" android:scheme="https"
+                  android:pathPrefix="/@" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
                   android:pathPrefix="/editor" />
                 <data
                   android:host="lichess.org" android:scheme="https"

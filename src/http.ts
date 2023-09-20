@@ -159,6 +159,30 @@ export function fetchJSON<T>(url: string, opts?: RequestOpts, feedback = false):
   return request<T>(url, 'json', opts, feedback)
 }
 
+type ExpiringCacheEntry = {expires: ReturnType<DateConstructor['now']>, data: any}
+const responseCache = new Map<string, ExpiringCacheEntry>()
+
+async function getFromCacheOr<T>(cacheKey: string, cacheSeconds: number, getData: () => Promise<T>): Promise<T> {
+  const cacheEntry = responseCache.get(cacheKey)
+  if (cacheEntry && cacheEntry.expires >= Date.now()) {
+    return cacheEntry.data as T
+  } else {
+    responseCache.delete(cacheKey)
+  }
+
+  const newExpirationTime = Date.now() + (cacheSeconds * 1000)
+  return getData().then((data: T) => {
+    responseCache.set(cacheKey, {expires: newExpirationTime, data: data})
+    return data
+  })
+}
+
+export function fetchCachedJSON<T>(cacheKey: string, cacheSeconds: number, url: string, opts?: RequestOpts, feedback = false): Promise<T> {
+  return getFromCacheOr(cacheKey, cacheSeconds, () => {
+    return request<T>(url, 'json', opts, feedback)
+  })
+}
+
 export function fetchText(url: string, opts?: RequestOpts, feedback = false): Promise<string> {
   return request<string>(url, 'text', opts, feedback)
 }

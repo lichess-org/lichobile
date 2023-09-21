@@ -358,7 +358,7 @@ export function autofocus(vnode: Mithril.VnodeDOM<any, any>): void {
 
 export function renderRatingDiff(player: Player | UserGamePlayer): Mithril.Children {
   if (player.ratingDiff === undefined) return null
-  if (player.ratingDiff === 0) return h('span.rp.null', ' +0')
+  if (player.ratingDiff === 0) return h('span.rp.null', ' \u00B10') // unicode plusminus
   if (player.ratingDiff > 0) return h('span.rp.up', ' +' + player.ratingDiff)
   if (player.ratingDiff < 0) return h('span.rp.down', ' ' + player.ratingDiff)
 

@@ -1,12 +1,14 @@
+import * as xhr from './studyXhr'
+
+import { PagerCategory, PagerData, PagerOrder } from '../../lichess/interfaces/study'
+
+import { Paginator } from '../../lichess/interfaces'
+import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import debounce from 'lodash-es/debounce'
 import { fromNow } from '../../i18n'
 import { handleXhrError } from '../../utils'
-import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import redraw from '../../utils/redraw'
 import router from '../../router'
-import { Paginator } from '../../lichess/interfaces'
-import { PagerData, PagerCategory, PagerOrder } from '../../lichess/interfaces/study'
-import * as xhr from './studyXhr'
 
 export interface PagerDataWithDate extends PagerData {
   date: string
@@ -96,12 +98,12 @@ export default class StudyIndexCtrl {
 
   public readonly onCatChange = (e: Event): void => {
     const cat = (e.target as HTMLSelectElement).value
-    router.setQueryParams({ cat }, true)
+    router.setQueryParams({cat: cat, order: this.order  }, true)
   }
 
   public readonly onOrderChange = (e: Event): void => {
     const order = (e.target as HTMLSelectElement).value
-    router.setQueryParams({ order }, true)
+    router.setQueryParams({ cat: this.cat, order: order  }, true)
   }
 
   public readonly onScroll = (e: Event): void => {

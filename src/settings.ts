@@ -393,7 +393,7 @@ export default {
   },
 
   training: {
-    puzzleBufferLen: 50,
+    puzzleBufferLen: 200,
     ratingDiffThreshold: 100
   },
 

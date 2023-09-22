@@ -35,14 +35,16 @@ export default {
         h('form.defaultForm.login', {
           onsubmit: onLogin
         }, [
-          formError && !isTotpError(formError) ?  h('div.form-error', formError) : null,
+          formError && !isTotpError(formError) ? h('div.form-error', formError) : null,
           formError === 'InvalidTotpToken' ? h('div.form-error', i18n('invalidAuthenticationCode')) : null,
           h('div.field', [
             h('input#username', {
               type: isTotpError(formError) ? 'hidden' : 'text',
               className: formError ? 'form-error' : '',
+              name: 'username',
+              'aria-label': 'Username',
               placeholder: i18n('username'),
-              autocomplete: 'off',
+              autocomplete: 'username',
               autocapitalize: 'off',
               autocorrect: 'off',
               spellcheck: false,
@@ -53,7 +55,10 @@ export default {
             h('input#password', {
               type: isTotpError(formError) ? 'hidden' : 'password',
               className: formError ? 'form-error' : '',
+              name: 'password',
+              'aria-label': 'Password',
               placeholder: i18n('password'),
+              autocomplete: 'current-password',
               required: true
             }),
           ]),
@@ -72,8 +77,10 @@ export default {
             ]),
           ] : null,
           h('div.submit', [
-            h('button.defaultButton', {
-              disabled: loading
+            h('button.defaultButton[type=submit]', {
+              disabled: loading,
+              value: 'LOGIN',
+              'aria-label': 'Sign In',
             }, i18n('signIn'))
           ])
         ]),

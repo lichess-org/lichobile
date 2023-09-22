@@ -11,7 +11,11 @@ export interface OpeningConf {
 }
 
 export function openingXhr(variant: VariantKey, fen: string, config: OpeningConf, withGames: boolean): Promise<OpeningData> {
-  const query: any = { fen, variant }
+  const query: any = {
+    fen,
+    variant,
+    source: 'mobile'
+  }
   if (!withGames) {
     query.topGames = 0
     query.recentGames = 0

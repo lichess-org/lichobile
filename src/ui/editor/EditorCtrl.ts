@@ -18,6 +18,7 @@ import continuePopup, { Controller as ContinuePopupCtrl } from '../shared/contin
 import i18n from '../../i18n'
 import drag from './drag'
 import { EditorState, BoardPosition, BoardPositionCategory, CastlingToggle, CastlingToggles, CASTLING_TOGGLES } from './interfaces'
+import {setPieceInHand} from '../../chessground/board'
 
 export default class EditorCtrl {
   public menu: MenuInterface
@@ -121,8 +122,29 @@ export default class EditorCtrl {
     redraw()
   }
 
-  public onstart = (e: TouchEvent): void => drag(this, e)
+
+  private pickUp = (e: TouchEvent) => {
+    if (e.touches && e.touches.length > 1) return // support one finger touch only
+    const role = (e.target as HTMLElement).getAttribute('data-role'),
+    color = (e.target as HTMLElement).getAttribute('data-color')
+    if (!role || !color) return
+    e.stopPropagation()
+    e.preventDefault()
+
+    const piece = {
+      role: (role as Role),
+      color: (color as Color)
+    }
+
+    setPieceInHand(this.chessground.state, piece, true)
+  }
+
+  public onstart = (e: TouchEvent): void => {
+    this.pickUp(e)
+    drag(this, e)
+  }
   public onmove = (e: TouchEvent): void => cgDrag.move(this.chessground, e)
+
   public onend = (e: TouchEvent): void => cgDrag.end(this.chessground, e)
 
   public editorOnCreate = (vn: Mithril.VnodeDOM): void => {

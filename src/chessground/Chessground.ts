@@ -69,7 +69,11 @@ export default class Chessground {
     if (!isViewOnly) {
       board.addEventListener('touchstart', (e: TouchEvent) => drag.start(this, e))
       board.addEventListener('touchmove', (e: TouchEvent) => drag.move(this, e))
-      board.addEventListener('touchend', (e: TouchEvent) => drag.end(this, e))
+      board.addEventListener('touchend', (e: TouchEvent) => {
+        const { clientX, clientY } = e.changedTouches[0]
+        drag.placePieceInHand(this, [clientX, clientY], bounds)
+        drag.end(this, e)
+      })
       board.addEventListener('touchcancel', () => drag.cancel(this))
     }
 

@@ -5,6 +5,7 @@ import Chessground from './Chessground'
 import * as board from './board'
 import * as util from './util'
 import { anim } from './anim'
+import {apiNewPiece} from './board'
 
 export interface DragCurrent {
   orig: Key // orig key of dragging piece
@@ -204,6 +205,22 @@ export function cancel(ctrl: Chessground) {
   if (state.draggable.current) {
     state.draggable.current = null
     board.unselect(state)
+  }
+}
+
+export function placePieceInHand(ctrl: Chessground, position: NumberPair, bounds: ClientRect) {
+  const state = ctrl.state
+
+  if (state.pieceInHand) {
+    const [x, y] = position
+    const key = getKeyAtDomPos(state, [x, y], bounds)
+
+    if (key) {
+      apiNewPiece(state, state.pieceInHand, key, state.pieceInHand.force)
+    }
+    state.pieceInHand = null
+
+    ctrl.redraw()
   }
 }
 

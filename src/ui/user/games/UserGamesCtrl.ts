@@ -47,7 +47,7 @@ const filters: StringMap = {
   draw: 'nbDraws',
   bookmark: 'nbBookmarks',
   me: 'nbGamesWithYou',
-  import: 'nbImportedGames',
+  imported: 'nbImportedGames',
   playing: 'nbPlaying'
 }
 

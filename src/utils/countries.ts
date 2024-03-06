@@ -229,7 +229,7 @@ const countries: StringMap = {
   TM: 'Turkmenistan',
   TN: 'Tunisia',
   TO: 'Tonga',
-  TR: 'Turkey',
+  TR: 'Turkiye',
   TT: 'Trinidad and Tobago',
   TV: 'Tuvalu',
   TW: 'Taiwan',

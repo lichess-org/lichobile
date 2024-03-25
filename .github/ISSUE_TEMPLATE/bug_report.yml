@@ -1,0 +1,62 @@
+name: Bug report
+description: Create a report to help us improve
+labels: ['bug']
+body:
+  - type: input
+    id: bug-summary
+    attributes:
+      label: What happened?
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: bug-repro
+    attributes:
+      label: How can we reproduce the bug?
+      description: List clear steps that we can follow to reliably reproduce the bug.
+      placeholder: |
+        1. Go to "..."
+        2. Click on "..."
+        3. Scroll down to "..."
+        4. See error
+    validations:
+      required: true
+  - type: input
+    id: bug-expected-behavior
+    attributes:
+      label: Expected behavior
+      description: Write a clear and concise description of what you expected to happen.
+    validations:
+      required: true
+  - type: input
+    id: bug-device
+    attributes:
+      label: Device
+      placeholder: iPhone 6
+    validations:
+      required: true
+  - type: input
+    id: bug-os
+    attributes:
+      label: Operating system
+      placeholder: iOS 11.5
+    validations:
+      required: true
+  - type: input
+    id: bug-app-version
+    attributes:
+      label: App version
+      description: This can be found at the bottom of the in-app settings page.
+      placeholder: v7.6.5
+    validations:
+      required: true
+  - type: textarea
+    id: bug-screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, upload screenshots to help explain the problem.
+  - type: textarea
+    id: bug-extra
+    attributes:
+      label: Additional context
+      description: Any other information you think might be relevant to solving the problem.

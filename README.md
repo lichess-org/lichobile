@@ -1,3 +1,10 @@
+> [!WARNING]
+> ## Deprecation notice
+>
+> This repository is deprecated. Maintainers may respond only to reports of critical bugs and security issues.
+> The application is being rewritten from the ground up in Flutter [here](https://github.com/lichess-org/mobile).
+> Until it is published, if you run into issues with this app, we suggest you use the mobile website.
+
 [lichess.org/mobile](http://lichess.org/mobile)
 --------------------
 

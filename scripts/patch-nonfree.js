@@ -73,8 +73,8 @@ function patchAppBuildGradle() {
     (content) => {
       content = removeNonFreeSections(content)
       content = content.replaceAll(
-        'applicationId "org.lichess.mobileapp"',
-        'applicationId "org.lichess.mobileapp.free"',
+        'applicationId "com.vovagorodok.blichess"',
+        'applicationId "com.vovagorodok.blichess.free"',
       )
       return content
     }

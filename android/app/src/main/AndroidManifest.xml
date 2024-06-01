@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="org.lichess.mobileapp"
+  package="com.vovagorodok.blichess"
   xmlns:tools="http://schemas.android.com/tools"
   android:versionCode="8000000"
   android:versionName="8.0.0"
@@ -32,7 +32,7 @@
         <activity
             android:exported="true"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
-            android:name="org.lichess.mobileapp.MainActivity"
+            android:name="com.vovagorodok.blichess.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch">
 

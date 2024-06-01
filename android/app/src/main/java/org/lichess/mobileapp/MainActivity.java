@@ -1,4 +1,4 @@
-package org.lichess.mobileapp;
+package com.vovagorodok.blichess;
 
 import android.content.Context;
 import android.content.Intent;

@@ -2,8 +2,8 @@
 import { CapacitorConfig } from '@capacitor/cli'
 
 const config: CapacitorConfig = {
-  appId: 'org.lichess.mobileapp',
-  appName: 'lichess',
+  appId: 'com.vovagorodok.blichess',
+  appName: 'blichess',
   bundledWebRuntime: false,
   webDir: 'www',
   backgroundColor: '000000ff',

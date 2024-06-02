@@ -28,10 +28,10 @@ Multi-variant chess library is brought by [a JavaScript version of scalachess](h
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
-     height="80">](https://f-droid.org/packages/org.lichess.mobileapp.free/)
+     height="80">](https://f-droid.org/packages/com.vovagorodok.blichess.free/)
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
      alt="Get it on Google Play"
-     height="80">](https://play.google.com/store/apps/details?id=org.lichess.mobileapp)
+     height="80">](https://play.google.com/store/apps/details?id=com.vovagorodok.blichess)
 
 or get the APK from the [Releases section](https://github.com/lichess-org/lichobile/releases/latest)
 

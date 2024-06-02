@@ -9,7 +9,7 @@ android {
         //     force 'androidx.core:core-ktx:1.6.0'
         //   }
         // }
-        applicationId "org.lichess.mobileapp"
+        applicationId "com.vovagorodok.blichess"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

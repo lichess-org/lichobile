@@ -1,12 +1,13 @@
 {
     "name": "lichobile",
     "version": "8.0.0",
-    "description": "lichess.org mobile application",
+    "description": "lichess.org mobile application with Bluetooth e-boards support",
     "repository": {
         "type": "git",
-        "url": "https://github.com/lichess-org/lichobile.git"
+        "url": "https://github.com/vovagorodok/lichobile.git"
     },
     "keywords": [
+        "blichess",
         "lichess",
         "chess",
         "application",

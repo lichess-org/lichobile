@@ -3,7 +3,7 @@
     "apps": [],
     "details": [
       {
-        "appIDs": [ "HP5YLVDU97.org.lichess.mobileapp.official" ],
+        "appIDs": [ "HP5YLVDU97.com.vovagorodok.blichess.unofficial" ],
         "components": [
           {
             "/": "/features",
@@ -68,7 +68,7 @@
         ]
       },
       {
-        "appID": "HP5YLVDU97.org.lichess.mobileapp.official",
+        "appID": "HP5YLVDU97.com.vovagorodok.blichess.unofficial",
         "paths": [
           "NOT /features",
           "NOT /practice",
@@ -95,6 +95,6 @@
     ]
   },
   "webcredentials": {
-    "apps": [ "HP5YLVDU97.org.lichess.mobileapp.official" ]
+    "apps": [ "HP5YLVDU97.com.vovagorodok.blichess.unofficial" ]
   }
 }

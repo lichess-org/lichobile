@@ -75,15 +75,15 @@ export default class Chessground {
     }
 
     if (!isViewOnly) {
-      external.subscribeToDeviceMoves((orig: Key, dest: Key, prom?: Role) => this.externalMove(orig, dest, prom))
-      external.onBoardConfigured(this.state)
+      external.subscribeToPeripheralMoves((orig: Key, dest: Key, prom?: Role) => this.externalMove(orig, dest, prom))
+      external.onCentralStateCreated(this.state)
     }
 
     window.addEventListener('resize', this.onOrientationChange)
   }
 
   detach = () => {
-    external.unsubscribeFromDeviceMoves()
+    external.unsubscribeFromPeripheralMoves()
     this.dom = undefined
     window.removeEventListener('resize', this.onOrientationChange)
   }
@@ -158,12 +158,12 @@ export default class Chessground {
 
   set(config: cg.SetConfig): void {
     anim(state => setNewBoardState(state, config), this)
-    external.onBoardStateChanged(this.state)
+    external.onCentralStateChanged()
   }
 
   reconfigure(config: cg.InitConfig): void {
     anim(state => configureBoard(state, config), this)
-    external.onBoardConfigured(this.state)
+    external.onCentralStateCreated(this.state)
   }
 
   toggleOrientation = (): void => {
@@ -218,7 +218,7 @@ export default class Chessground {
 
       if (config) {
         setNewBoardState(state, config)
-        external.onBoardStateChanged(state)
+        external.onCentralStateChanged()
       }
 
     }, this)
@@ -238,7 +238,7 @@ export default class Chessground {
       return board.userMove(state, orig, dest, prom)
     }, this)
     if (!result)
-      external.onMoveRejectedFromBoard(this.state)
+      external.onMoveRejectedByCentral()
   }
 
   playPremove = (): boolean => {

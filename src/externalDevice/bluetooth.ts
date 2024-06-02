@@ -2,11 +2,9 @@ import { BleClient, BleDevice, textToDataView, dataViewToText } from '@capacitor
 import settings from '../settings'
 import redraw from '../utils/redraw'
 import i18n from '../i18n'
+import { State, makeDefaults } from '../chessground/state'
 import { Toast } from '@capacitor/toast'
-import { delay } from './utils'
-import { TestProtocol } from './TestProtocol'
-import { UciProtocol } from './UciProtocol'
-import { CecpProtocol } from './CecpProtocol'
+import { BleChessProtocol } from './BleChessProtocol'
 import { dummyProtocol } from './DummyProtocol'
 
 interface ChessServiceUUIDs {
@@ -23,20 +21,13 @@ const SUPPOTRED_SERVICES: ChessService[] = [
   { uuids: { srv:  'f5351050-b2c9-11ec-a0c0-b3bc53b08d33',
              txCh: 'f53513ca-b2c9-11ec-a0c1-639b8957db99',
              rxCh: 'f535147e-b2c9-11ec-a0c2-8bbd706ec4e6' },
-    protocol: CecpProtocol },
-  { uuids: { srv:  'f535151e-b2c9-11ec-a0c3-1f8edc817d5a',
-             txCh: 'f53515fa-b2c9-11ec-a0c4-5fae981f8945',
-             rxCh: 'f53516fe-b2c9-11ec-a0c5-a792c62e5941' },
-    protocol: UciProtocol },
-  { uuids: { srv:  'f53517f8-b2c9-11ec-a0c6-0b0444f1fbcf',
-             txCh: 'f53518e8-b2c9-11ec-a0c7-37a4d530b37c',
-             rxCh: 'f53519ce-b2c9-11ec-a0c8-bf55a9cd833d' },
-    protocol: TestProtocol }
+    protocol: BleChessProtocol }
 ]
 
 class BluetoothConnection {
   isConnected: boolean = false
   protocol: any = dummyProtocol
+  centralState: State = makeDefaults()
   private uuids?: ChessServiceUUIDs
 
   private getDeviceId(): string {
@@ -73,7 +64,7 @@ class BluetoothConnection {
     await BleClient.connect(this.getDeviceId(), deviceId => this.onDisconnect(deviceId))
     await this.setupService()
     await this.registerCallback()
-    this.protocol.init()
+    this.protocol.init(this.centralState)
     this.isConnected = true
     Toast.show({ text: i18n('connectedToBluetoothDevice') })
   }
@@ -85,13 +76,12 @@ class BluetoothConnection {
     await BleClient.disconnect(this.getDeviceId())
   }
 
-  async sendMsgToDevice(msg: string) {
-    await delay(20); // temporery woraround: https://github.com/capacitor-community/bluetooth-le/issues/341
-    await BleClient.write(this.getDeviceId(), this.uuids!.srv, this.uuids!.txCh, textToDataView(msg))
+  async sendCommandToPeripheral(cmd: string) {
+    await BleClient.write(this.getDeviceId(), this.uuids!.srv, this.uuids!.txCh, textToDataView(cmd))
   }
 
   private async reciveData(data: DataView) {
-    this.protocol.onReceiveMsgFromDevice(dataViewToText(data))
+    this.protocol.onPeripheralCommand(dataViewToText(data))
   }
 
   private async registerCallback() {
@@ -109,8 +99,11 @@ export default {
   protocol() {
     return bluetoothConnection.protocol
   },
-  sendMsgToDevice(msg: string) {
-    bluetoothConnection.sendMsgToDevice(msg)
+  saveCentralState(st: State) {
+    bluetoothConnection.centralState = st
+  },
+  sendCommandToPeripheral(cmd: string) {
+    bluetoothConnection.sendCommandToPeripheral(cmd)
   },
   init() {
     if (settings.general.bluetooth.useDevice()) {

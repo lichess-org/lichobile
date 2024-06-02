@@ -1288,5 +1288,8 @@ export default {
   "connectedToBluetoothDevice": "Connected to bluetooth device",
   "disconnectedFromBluetoothDevice": "Disconnected from bluetooth device",
   "rejected": "Rejected",
+  "synchronized": "Synchronized",
+  "unsynchronized": "Unsynchronized",
+  "unexpected": "Unexpected",
   "bgThemeSyncWithSystem": "Sync with System"
 }

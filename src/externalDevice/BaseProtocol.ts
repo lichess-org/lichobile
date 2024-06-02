@@ -9,17 +9,17 @@ export class BaseProtocol {
     this.state.onEnter()
   }
 
-  onReceiveMsgFromDevice(msg: string) {
-    this.state?.onReceiveMsgFromDevice(msg)
+  onPeripheralCommand(cmd: string) {
+    this.state?.onPeripheralCommand(cmd)
   }
-  onBoardConfigured(st: State) {
-    this.state?.onBoardConfigured(st)
+  onCentralStateCreated(st: State) {
+    this.state?.onCentralStateCreated(st)
   }
-  onBoardStateChanged(st: State) {
-    this.state?.onBoardStateChanged(st)
+  onCentralStateChanged() {
+    this.state?.onCentralStateChanged()
   }
-  onMoveRejectedFromBoard(st: State) {
-    this.state?.onMoveRejectedFromBoard(st)
+  onMoveRejectedByCentral() {
+    this.state?.onMoveRejectedByCentral()
   }
 }
 const dummyBaseProtocol = new BaseProtocol
@@ -35,8 +35,8 @@ export class BaseState {
   }
 
   onEnter() {}
-  onReceiveMsgFromDevice(_msg: string) {}
-  onBoardConfigured(_st: State) {}
-  onBoardStateChanged(_st: State) {}
-  onMoveRejectedFromBoard(_st: State) {}
+  onPeripheralCommand(_cmd: string) {}
+  onCentralStateCreated(_st: State) {}
+  onCentralStateChanged() {}
+  onMoveRejectedByCentral() {}
 }

@@ -5,23 +5,24 @@ type MoveCallback = (orig: Key, dest: Key, prom?: Role) => void
 let callback: MoveCallback | undefined
 
 export default {
-  onBoardConfigured(st: State) {
-    bluetooth.protocol().onBoardConfigured(st)
+  onCentralStateCreated(st: State) {
+    bluetooth.protocol().onCentralStateCreated(st)
+    bluetooth.saveCentralState(st)
   },
-  onBoardStateChanged(st: State) {
-    bluetooth.protocol().onBoardStateChanged(st)
+  onCentralStateChanged() {
+    bluetooth.protocol().onCentralStateChanged()
   },
-  onMoveRejectedFromBoard(st: State) {
-    bluetooth.protocol().onMoveRejectedFromBoard(st)
+  onMoveRejectedByCentral() {
+    bluetooth.protocol().onMoveRejectedByCentral()
   },
-  sendMoveToBoard(orig: Key, dest: Key, prom?: Role) {
+  sendMoveToCentral(orig: Key, dest: Key, prom?: Role) {
     if (callback)
       callback(orig, dest, prom)
   },
-  subscribeToDeviceMoves(moveCallback: MoveCallback) {
+  subscribeToPeripheralMoves(moveCallback: MoveCallback) {
     callback = moveCallback
   },
-  unsubscribeFromDeviceMoves() {
+  unsubscribeFromPeripheralMoves() {
     callback = undefined
   }
 }

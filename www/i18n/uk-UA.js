@@ -1389,5 +1389,8 @@ export default {
   "connectedToBluetoothDevice": "Підключено до пристрою bluetooth",
   "disconnectedFromBluetoothDevice": "Відключено від пристрою bluetooth",
   "rejected": "Відхилено",
+  "synchronized": "Синхронізовано",
+  "unsynchronized": "Розсинхронізовано",
+  "unexpected": "Неочікувано",
   "bgThemeSyncWithSystem": "Синхронізація з системою"
 }

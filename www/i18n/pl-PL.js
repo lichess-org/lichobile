@@ -1400,6 +1400,9 @@ export default {
   "bluetooth": "Bluetooth",
   "connectedToBluetoothDevice": "Podłączono urządzenie bluetooth",
   "disconnectedFromBluetoothDevice": "Rozłączono urządzenie bluetooth",
-  "rejected": "Odrzucony",
+  "rejected": "Odrzucono",
+  "synchronized": "Zsynchronizowano",
+  "unsynchronized": "Rozsynchronizowano",
+  "unexpected": "Nieoczekiwano",
   "bgThemeSyncWithSystem": "Synchronizuj z systemem"
 }

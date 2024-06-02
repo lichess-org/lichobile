@@ -4,6 +4,10 @@ import fen from '../chessground/fen'
 import bluetooth from './bluetooth'
 import external from '../externalDevice'
 
+export function isCentralStateCreated(st: State): boolean {
+    return st.pieces.size !== 0
+}
+
 export function isUserTurn(st: State): boolean {
     return st.otb || st.orientation === st.turnColor
 }
@@ -23,18 +27,41 @@ export function lastMoveToUci(st: State): string {
         st.lastPromotion ? st.lastPromotion : undefined)
 }
 
-export function sendMsgToDevice(msg: string) {
-    bluetooth.sendMsgToDevice(msg)
+export function sendCommandToPeripheral(cmd: string) {
+    bluetooth.sendCommandToPeripheral(cmd)
 }
 
-export function sendMoveToBoard(uci: string) {
+export function sendMoveToCentral(uci: string) {
     const move = chessFormat.uciToMove(uci)
     const prom = chessFormat.uciToProm(uci)
-    external.sendMoveToBoard(move[0], move[1], prom)
+    external.sendMoveToCentral(move[0], move[1], prom)
 }
 
-export function getCommandParams(msg: string): string {
-    return msg.substring(msg.indexOf(' ') + 1)
+export function getCommandParams(cmd: string): string {
+    return cmd.substring(cmd.indexOf(' ') + 1)
+}
+
+export function isUciWithPromotion(uci: string): boolean {
+    return chessFormat.uciToProm(uci) !== undefined
+}
+
+export function areFenCharsSame(lchar: string, rchar: string): boolean {
+    return lchar === rchar ||
+           (lchar === '?' && 'prbnkqPRBNKQ'.includes(rchar)) ||
+           (rchar === '?' && 'prbnkqPRBNKQ'.includes(lchar)) ||
+           (lchar === 'w' && 'PRBNKQ'.includes(rchar)) ||
+           (rchar === 'w' && 'PRBNKQ'.includes(lchar)) ||
+           (lchar === 'b' && 'prbnkq'.includes(rchar)) ||
+           (rchar === 'b' && 'prbnkq'.includes(lchar))
+}
+
+export function areFensSame(lfen: string, rfen: string): boolean {
+    const minLength = Math.min(lfen.length, rfen.length)
+    for (var i = 0; i < minLength; i++) {
+        if (!areFenCharsSame(lfen[i], rfen[i]))
+            return false
+    }
+    return true
 }
 
 export function delay(milliseconds : number) {

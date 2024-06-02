@@ -1,8 +1,8 @@
 export class DummyProtocol {
   init() {}
-  onReceiveMsgFromDevice() {}
-  onBoardConfigured() {}
-  onBoardStateChanged() {}
-  onMoveRejectedFromBoard() {}
+  onPeripheralCommand() {}
+  onCentralStateCreated() {}
+  onCentralStateChanged() {}
+  onMoveRejectedByCentral() {}
 }
 export const dummyProtocol = new DummyProtocol

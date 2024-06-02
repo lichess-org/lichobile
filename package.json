@@ -1,6 +1,6 @@
 {
     "name": "lichobile",
-    "version": "8.0.0",
+    "version": "8.0.0+ble1",
     "description": "lichess.org mobile application with Bluetooth e-boards support",
     "repository": {
         "type": "git",

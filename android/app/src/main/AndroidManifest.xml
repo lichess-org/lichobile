@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.vovagorodok.blichess"
   xmlns:tools="http://schemas.android.com/tools"
-  android:versionCode="8000000"
-  android:versionName="8.0.0"
+  android:versionCode="1"
+  android:versionName="8.0.0+ble1"
   android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />

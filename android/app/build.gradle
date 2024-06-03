@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace "org.lichess.mobileapp"
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         // configurations.all {

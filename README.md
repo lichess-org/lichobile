@@ -1,3 +1,8 @@
+# BLICHESS
+
+<img src="./android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png" width="100">\
+Fork of lichess.org mobile application with Bluetooth e-boards support
+
 > [!WARNING]
 > ## Deprecation notice
 >

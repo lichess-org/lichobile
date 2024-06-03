@@ -38,7 +38,7 @@ Multi-variant chess library is brought by [a JavaScript version of scalachess](h
      alt="Get it on Google Play"
      height="80">](https://play.google.com/store/apps/details?id=com.vovagorodok.blichess)
 
-or get the APK from the [Releases section](https://github.com/lichess-org/lichobile/releases/latest)
+or get the APK from the [Releases section](https://github.com/vovagorodok/lichobile/releases/latest)
 
 ## Required dependencies
 

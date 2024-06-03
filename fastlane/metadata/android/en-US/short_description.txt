@@ -1,1 +1,1 @@
-free online chess
+Play lichess games over Bluetooth

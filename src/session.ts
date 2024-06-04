@@ -335,9 +335,9 @@ async function backgroundRefresh(): Promise<void> {
 
 function sendUUID(): void {
   Device.getId()
-  .then(({ uuid }) => {
-    if (uuid !== 'web') {
-      fetchText(`/auth/set-fp/${uuid}/0`, { method: 'POST' })
+  .then(({ identifier }) => {
+    if (identifier !== 'web') {
+      fetchText(`/auth/set-fp/${identifier}/0`, { method: 'POST' })
     }
   })
 }

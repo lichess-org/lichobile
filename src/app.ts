@@ -33,7 +33,7 @@ export default function appInit(
   window.deviceInfo = {
     platform: deviceInfo.platform,
     osVersion: deviceInfo.osVersion,
-    uuid: deviceId.uuid,
+    uuid: deviceId.identifier,
     appVersion: appInfo.version,
     cpuCores,
     stockfishMaxMemory: Math.ceil(sfMaxMem / 16.0) * 16,

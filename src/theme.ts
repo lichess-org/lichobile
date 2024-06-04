@@ -100,7 +100,7 @@ function createStylesheetRule(
     styleEl.type = 'text/css'
     document.head.appendChild(styleEl)
   }
-  const cleanData = data.replace(/\n/g, '') // FIXME should be fixed in capacitor
+  const cleanData = data // FIXME should be fixed in capacitor
   const ext = filename.split('.').pop()
   const mime = ext === 'png' ?
     'data:image/png;base64,' : 'data:image/jpeg;base64,'

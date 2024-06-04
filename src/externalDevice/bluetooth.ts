@@ -28,6 +28,7 @@ class BluetoothConnection {
   isConnected: boolean = false
   protocol: any = dummyProtocol
   centralState: State = makeDefaults()
+  centralMove: KeyPair | null = null
   private uuids?: ChessServiceUUIDs
 
   private getDeviceId(): string {
@@ -101,6 +102,13 @@ export default {
   },
   saveCentralState(st: State) {
     bluetoothConnection.centralState = st
+    this.saveCentralMove()
+  },
+  saveCentralMove() {
+    bluetoothConnection.centralMove = bluetoothConnection.centralState.lastMove
+  },
+  isRepeatedCentralMove() {
+    return bluetoothConnection.centralMove === bluetoothConnection.centralState.lastMove
   },
   sendCommandToPeripheral(cmd: string) {
     bluetoothConnection.sendCommandToPeripheral(cmd)

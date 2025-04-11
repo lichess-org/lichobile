@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const util = require('util')
-const exec = util.promisify(require('child_process').exec)
+const execFile = util.promisify(require('child_process').execFile)
 const path = require('path')
 const fs = require('fs')
 
@@ -14,7 +14,7 @@ async function compile(entry) {
   const locale = entry.name
   const module = path.join(source, locale, 'index.js')
   try {
-    const { stderr } = await exec(`npx rollup ${module} -c ${rollupConf} --file ${destDir}/${locale}.js`)
+    const { stderr } = await execFile('npx', ['rollup', module, '-c', rollupConf, '--file', `${destDir}/${locale}.js`])
     console.log(stderr)
   } catch (err) {
     if (err) {

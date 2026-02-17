@@ -335,5 +335,5 @@ function renderAllGames() {
   return h('div.games_carousel', {
     oncreate: wrapperOnCreate,
     onremove: wrapperOnRemove,
-  }, allCards)
+  }, helper.isPortrait() ? h('div', allCards.map(card => h('div', card))) : allCards)
 }

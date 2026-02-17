@@ -34,8 +34,10 @@ export async function set(a?: Announcement): Promise<void> {
       return
     }
   }
-  announce = a
-  redraw()
+  if (announce !== a) {
+    announce = a
+    redraw()
+  }
 }
 
 export async function dismiss(): Promise<void> {

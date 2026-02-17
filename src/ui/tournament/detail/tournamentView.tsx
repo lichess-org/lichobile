@@ -75,7 +75,7 @@ export function renderFooter(ctrl: TournamentCtrl): Mithril.Child {
           }
         </button> : h.fragment({key: 'noChat'}, [])
       }
-      { ctrl.hasJoined ? withdrawButton(ctrl, t) : joinButton(ctrl, t) }
+      { ctrl.hasJoined ? withdrawButton(ctrl) : joinButton(ctrl) }
     </div>
   )
 }
@@ -181,7 +181,8 @@ function tournamentSpotlightInfo(spotlight: Spotlight) {
   )
 }
 
-function joinButton(ctrl: TournamentCtrl, t: Tournament) {
+function joinButton(ctrl: TournamentCtrl) {
+  const t = ctrl.tournament
   if (!session.isConnected() ||
     t.isFinished ||
     settings.game.supportedVariants.indexOf(t.variant) < 0 ||
@@ -189,9 +190,9 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
     (t.teamBattle && t.teamBattle.joinWith.length === 0)) {
     return h.fragment({key: 'noJoinButton'}, [])
   }
-  const action = ((t.private || t.teamBattle) && !previouslyJoined(t)) ?
-    () => joinForm.open(ctrl) :
-    () => ctrl.join()
+  const action = () => ((ctrl.tournament.private || ctrl.tournament.teamBattle) && !previouslyJoined(ctrl.tournament)) ?
+    joinForm.open(ctrl) :
+    ctrl.join()
 
   return (
     <button key="joinButton" className="action_bar_button fa fa-play" oncreate={helper.ontap(
@@ -202,7 +203,8 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
   )
 }
 
-function withdrawButton(ctrl: TournamentCtrl, t: Tournament) {
+function withdrawButton(ctrl: TournamentCtrl) {
+  const t = ctrl.tournament
   if (t.isFinished || settings.game.supportedVariants.indexOf(t.variant) < 0) {
     return h.fragment({key: 'noWithdrawButton'}, [])
   }

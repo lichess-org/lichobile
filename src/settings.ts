@@ -113,6 +113,7 @@ export default {
         ['letter' ],
         ['horsey'],
         ['anarcandy'],
+        ['kiwen-suwi', 'Kiwen Suwi'],
       ],
       background: prop('bgTheme', 'dark'),
       board: prop('theme.board', 'brown'),

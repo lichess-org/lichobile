@@ -66,8 +66,8 @@ export function apiMove(state: State, orig: Key, dest: Key): boolean {
   return baseMove(state, orig, dest)
 }
 
-export function apiNewPiece(state: State, piece: Piece, key: Key): boolean {
-  return baseNewPiece(state, piece, key)
+export function apiNewPiece(state: State, piece: Piece, key: Key, force = false): boolean {
+  return baseNewPiece(state, piece, key, force)
 }
 
 export function userMove(state: State, orig: Key, dest: Key): boolean {
@@ -134,6 +134,10 @@ export function setSelected(state: State, key: Key | null): void {
 export function unselect(state: State): void {
   state.selected = null
   state.premovable.dests = null
+}
+
+export function setPieceInHand(state: State, piece: Piece | null, force = false): void {
+  state.pieceInHand = piece ? { ...piece, force } : null
 }
 
 export function isMovable(state: State, orig: Key): boolean {

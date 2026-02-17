@@ -37,6 +37,11 @@ public class MainActivity extends BridgeActivity {
 
     PackageInfo pInfo = getCurrentWebViewPackageInfo();
     if (pInfo != null) {
+      // Skip check for Huawei phones
+      if (pInfo.packageName.startsWith("com.huawei.")) {
+        return;
+      }
+
       try {
         Integer majorVersion = Integer.parseInt(pInfo.versionName.split(Pattern.quote("."))[0]);
         if (majorVersion < MIN_VERSION) {

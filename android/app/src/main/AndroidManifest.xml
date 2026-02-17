@@ -77,6 +77,9 @@
                 <data
                   android:host="lichess.org" android:scheme="https"
                   android:pathPattern="/......../white" />
+                <data
+                  android:host="lichess.org" android:scheme="https"
+                  android:pathPattern="/@/......../tv" />
             </intent-filter>
 
         </activity>
